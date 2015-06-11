@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.park.dao.AccessDAO">
+	<resultMap id="AccessMapper" type="Access">
+		<id property="Id" column="Id" />
+		<result property="channelId" column="channelId" />
+		<result property="date" column="date"/>
+		<result property="isDeleted" column="isDeleted"/>
+	</resultMap> 
+	
+	<select id="getAccesses" resultMap="AccessMapper">
+		select * from access
+	</select>
+	
+	<insert id="insertAccess" parameterType="Access" keyProperty="id">
+	    insert into access(Id,channelId,date,isDeleted) values (#{Id},#{channelId},#{date}, #{isDeleted})
+	</insert>
+	
+	<update id="updateAccess" parameterType="Access" >
+		update access set channelId = #{channelId}, date = #{date}, isDeleted = #{isDeleted} where Id = #{Id}
+	</update>
+	
+	<delete id="deleteAccess" parameterType="int">
+		delete from access where Id = #{Id}
+	</delete>
+</mapper>

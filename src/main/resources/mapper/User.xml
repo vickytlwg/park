@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.park.dao.UserDAO">
+  	<resultMap id="UserMapper" type="User">
+		<id property="Id" column="Id" />
+		<result property="userName" column="userName" />
+		<result property="number" column="number"/>
+		<result property="passwd" column="passwd"/>
+	</resultMap>    
+
+
+	<select id="getUserPassword" parameterType="java.lang.String" resultType="java.lang.String">
+		select passwd from users where userName=#{param1}
+	</select>
+	
+
+	<select id="getUserCountByNumber" parameterType="java.lang.String" resultType="int">
+		select count(*) from users where number=#{param1}
+	</select>
+	
+	<select id="getUserCountByUserName" parameterType="java.lang.String" resultType="int">
+		select count(*) from users where userName=#{param1}
+	</select>
+	
+	<select id="getUsers" resultMap="UserMapper">
+		select * from users
+	</select>
+	
+	
+	<insert id="insertUser" parameterType="User"  keyProperty="Id" >
+	    insert into users(userName, number, passwd) values (#{userName},#{number},#{passwd})
+	</insert>
+       
+          
+</mapper>

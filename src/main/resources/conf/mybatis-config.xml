@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+        <!-- 命名空间 -->
+    <typeAliases>
+         
+         <typeAlias alias="Carport" type="com.park.model.Carport"/>
+         <typeAlias alias="User" type="com.park.model.User"/> 
+         <typeAlias alias="Access" type="com.park.model.Access"/>
+  		 
+          <typeAlias alias="Channel" type="com.park.model.Channel"/>    
+          <typeAlias alias="Park" type="com.park.model.Park"/> 
+        
+    </typeAliases>
+ 
+    <!-- 映射map -->
+    <mappers>
+    </mappers>
+</configuration>
