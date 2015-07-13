@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
-
 import com.park.controller.UserController;
 import com.park.dao.UserDAO;
 import com.park.model.User;
+import com.park.model.UserDetail;
 import com.park.service.UserService;
 
 @Transactional
@@ -32,11 +32,13 @@ public class UserServiceImpl implements UserService{
 		if(userExistByNumber(userItem.getNumber())){
 			ret.put("status", "1003");
 			ret.put("message", "user exists");
+			ret.put("Id", getUserIdByNumber(userItem.getNumber()));
 			logger.info("user exists: userName: " + userItem.getUserName() + "number: " + userItem.getNumber());
 		}else{
 			if(userDAO.insertUser(userItem) > 0){
 				ret.put("status", "1001");
 				ret.put("message", "register success");
+				ret.put("Id", getUserIdByNumber(userItem.getNumber()));
 				logger.info("insert user success: userName: " + userItem.getUserName() + "number: " + userItem.getNumber());
 			}else{
 				ret.put("status", "1002");
@@ -71,6 +73,21 @@ public class UserServiceImpl implements UserService{
 	public List<User> getUsers() {
 		
 		return userDAO.getUsers();
+	}
+
+	@Override
+	public int getUserIdByNumber(String number) {
+		return userDAO.getUserIdByNumber(number);
+	}
+
+	@Override
+	public List<UserDetail> getUserDetail(int low, int count) {
+		return userDAO.getUserDetail(low, count);
+	}
+
+	@Override
+	public int getUserCount() {
+		return userDAO.getUserCount();
 	}
 
 }

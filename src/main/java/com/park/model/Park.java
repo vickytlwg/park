@@ -1,12 +1,13 @@
 package com.park.model;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Park {
-	@JsonIgnore
-	private int Id;
+	private int id;
 	private String name;
 	private int portCount;
 	private int channelCount;
@@ -19,7 +20,6 @@ public class Park {
 	private int floor;
 	private int type;
 	private String position;
-	@JsonIgnore
 	private Date date;
 	@JsonIgnore
 	private int isDeleted;
@@ -27,7 +27,7 @@ public class Park {
 	
 	
 	public int getId() {
-		return Id;
+		return id;
 	}
 	public String getName() {
 		return name;
@@ -72,7 +72,7 @@ public class Park {
 		return isDeleted;
 	}
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -110,8 +110,13 @@ public class Park {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	
+	public void setDate(String date) {
+		try {
+			this.date = new SimpleDateFormat(Constants.DATEFORMAT).parse(date);
+		} catch (ParseException e) {		
+			e.printStackTrace();
+		}
 	}
 	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;

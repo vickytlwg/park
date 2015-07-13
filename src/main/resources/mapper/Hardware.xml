@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.park.dao.HardwareDAO">
+  	<resultMap id="HardwareMapper" type="com.park.model.Hardware">
+		<id property="id" column="id" />
+		<result property="mac" column="mac" />
+		<result property="type" column="type" />
+		<result property="status" column="status"/>
+		<result property="description" column="description" />
+		<result property="date" column="date"/>
+	</resultMap>    
+ 	<resultMap id="HardwareDetailMapper" type="com.park.model.HardwareDetail">
+		<id property="id" column="id" />
+		<result property="mac" column="mac" />
+		<result property="type" column="type" />
+		<result property="status" column="status"/>
+		<result property="description" column="description" />
+		<result property="date" column="date"/>
+	</resultMap> 
+
+ 	<select id="getHardwares" resultMap="HardwareMapper">
+		select * from hardware
+	</select> 
+	
+	<select id="getHardwareById" resultMap="HardwareMapper">
+		select * from hardware where id = #{param1}
+	</select> 
+	
+	<select id="getUnusedHardwares" resultMap="HardwareMapper">
+		select * from hardware where status = 1
+	</select> 
+	
+	<select id="getUnboundHardwares" resultMap="HardwareMapper">
+		select * from hardware where status = 1 and type = #{type}
+	</select>
+	
+	<select id="getHardwareDetail" resultMap="HardwareDetailMapper">
+		select * from hardware limit #{low}, #{count}
+	</select>
+	
+	<select id="getHardwareCount"  resultType="int">
+		select count(*) from hardware
+	</select>
+	
+	<select id="macToId" resultType="int">
+		select id from hardware where mac = #{param1}
+	</select>
+
+	<insert id="insertHardware" parameterType="com.park.model.Hardware" keyProperty="id">
+		insert into hardware(mac, type, status, description, date) values(#{mac}, #{type}, #{status}, #{description}, #{date})
+	</insert>
+	
+	<update id="updateHardware" parameterType="com.park.model.Hardware" >
+		update hardware set mac = #{mac}, type = #{type}, status = #{status}, description = #{description}, date = #{date} where id = #{id}
+	</update> 
+	
+ 	<delete id="deleteHardware" parameterType="int">
+		delete from hardware where id = #{id}
+	</delete> 
+        
+          
+</mapper>

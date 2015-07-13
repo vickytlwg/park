@@ -1,0 +1,34 @@
+<script src="/park/script/user.js"></script>
+
+<div id="user">
+	<div class="btn-group">
+		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> Add</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> Update</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> Delete</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"> Search</span></button>
+	</div>
+	
+	<div id= 'userDiv'>
+		<table id='userTable' class="table table-hover table-bordered">
+			<caption></caption>
+		<thead>
+			<tr>
+				<th><input type="checkbox" /></th>
+				<th>Id</th>		
+				<th>用户名</th>
+				<th>联系电话</th>
+			</tr>
+			</thead>
+			<tbody id="userBody"></tbody>
+		</table>
+	</div>
+	<div id='pagination'></div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$("#userBody").user.initial();
+});
+
+</script>

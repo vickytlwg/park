@@ -9,8 +9,22 @@
 		<result property="userName" column="userName" />
 		<result property="number" column="number"/>
 		<result property="passwd" column="passwd"/>
-	</resultMap>    
+	</resultMap>   
+	
+	<resultMap id="UserDetailMapper" type="com.park.model.UserDetail">
+		<id property="Id" column="Id" />
+		<result property="userName" column="userName" />
+		<result property="number" column="number"/>
+	</resultMap> 
 
+
+	<select id="getUserDetail" resultMap="UserDetailMapper">
+		select * from users limit #{low}, #{count}
+	</select>
+	
+	<select id="getUserCount"  resultType="int">
+		select count(*) from users
+	</select>
 
 	<select id="getUserPassword" parameterType="java.lang.String" resultType="java.lang.String">
 		select passwd from users where userName=#{param1}
@@ -20,6 +34,11 @@
 	<select id="getUserCountByNumber" parameterType="java.lang.String" resultType="int">
 		select count(*) from users where number=#{param1}
 	</select>
+	
+	<select id="getUserIdByNumber" parameterType="java.lang.String" resultType="int">
+		select Id from users where number=#{param1}
+	</select>
+	
 	
 	<select id="getUserCountByUserName" parameterType="java.lang.String" resultType="int">
 		select count(*) from users where userName=#{param1}

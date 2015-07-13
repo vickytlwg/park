@@ -18,7 +18,9 @@ public interface CarportService {
 	 */
 	List<Carport> getCarports();
 	
-	List<Carport> getSpecifyCarports(int low, int high, String field, String order);
+	List<Carport> getSpecifyCarports(int start, int counts, String field, String order);
+	
+	List<Carport> getConditionCarports(int start, int counts, String field, String order, String queryCondition);
 	
 	/**
 	 * 添加车位

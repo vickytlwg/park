@@ -1,0 +1,37 @@
+<script src="/park/script/access.js"></script>
+
+<div id="access">
+	<div class="btn-group">
+		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> Add</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> Update</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> Delete</span></button>
+		<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"> Search</span></button>
+	</div>
+	
+	<div id='accessDiv'>
+		<table id='accessTable' class="table table-hover table-bordered">
+			<caption class="text-primary"></caption>
+			<thead>
+				<tr>
+					<th><input type="checkbox" /></th>
+					<th>Id</th>		
+					<th>车库</th>
+					<th>进出口</th>
+					<th>出入日期</th>			
+				</tr>
+			</thead>
+			<tbody id="access_body">		
+			</tbody>
+		</table>
+	</div>
+	
+	<div id='pagination'></div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$("#access_body").access.initial();
+});
+
+</script>

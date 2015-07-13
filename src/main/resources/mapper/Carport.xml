@@ -7,13 +7,17 @@
   	<resultMap id="CarportMapper" type="Carport">
 		<id property="Id" column="Id" />
 		<result property="name" column="name" />
+		<result property="isout" column="isout" />
 		<result property="province" column="province"/>
 		<result property="city" column="city" />
 		<result property="district" column="district"/>
 		<result property="street" column="street" />
-		<result property="coordinate" column="coordinate" />
+		<result property="longitude" column="longitude" />
+		<result property="latitude" column="latitude" />
+		<result property="uid" column="uid" />
 		<result property="parkId" column="parkId"/>
 		<result property="price" column="price" />
+		<result property="unit" column="unit" />
 		<result property="tenancy" column="tenancy" />
 		<result property="contact" column="contact" />
 		<result property="number" column="number" />
@@ -23,21 +27,25 @@
 
 
 	<select id="getCarportById" parameterType="int" resultMap="CarportMapper">
-		select * from carports where Id=#{param1}
+		select * from carport where Id=#{param1}
 	</select>
 	
 
 	<select id="getCarports" resultMap="CarportMapper">
-		select * from carports
+		select * from carport
 	</select>
 	
 	<select id="getSpecifyCarports" resultMap="CarportMapper">
-		select * from carports order by #{field} #{order} limit #{low}, #{high}
+		select * from carport order by ${field} ${order} limit #{start}, #{counts}
+	</select>
+	
+	<select id="getConditionCarports" resultMap="CarportMapper">
+		select * from carport where ${queryCondition} order by ${field} ${order} limit #{start}, #{counts}
 	</select>
 	
 	<insert id="insertCarport" parameterType="Carport" keyProperty="id">
-	    insert into carports(name,province,city,district,street,coordinate,parkId,price,tenancy,contact,number,description,date) 
-	    values (#{name},#{province},#{city},#{district},#{street},#{coordinate},#{parkId},#{price},#{tenancy},#{contact},#{number},#{description},#{date})
+	    insert into carport(name,isout,province,city,district,street,longitude,latitude,uid, parkId,price,unit,tenancy,contact,number,description,date) 
+	    values (#{name}, #{isout},#{province},#{city},#{district},#{street},#{longitude},#{latitude},#{uid}, #{parkId},#{price},#{unit}, #{tenancy},#{contact},#{number},#{description},#{date})
 	</insert>
        
           

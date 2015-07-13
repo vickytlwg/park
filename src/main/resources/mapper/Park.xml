@@ -5,7 +5,7 @@
 
 <mapper namespace="com.park.dao.ParkDAO">
   	<resultMap id="ParkMapper" type="Park">
-		<id property="Id" column="Id" />
+		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="portCount" column="portCount"/>
 		<result property="channelCount" column="channelCount"/>
@@ -21,25 +21,61 @@
 		<result property="date" column="date"/>
 		<result property="isDeleted" column="isDeleted"/>
 	</resultMap>    
+	
+	<resultMap id="ParkDetailMapper" type="com.park.model.ParkDetail">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="portCount" column="portCount"/>
+		<result property="channelCount" column="channelCount"/>
+		<result property="portLeftCount" column="portLeftCount" />
+		<result property="charge" column="charge"/>
+		<result property="charge1" column="charge1"/>
+		<result property="charge2" column="charge2"/>
+		<result property="status" column="status" />
+		<result property="isFree" column="isFree"/>
+		<result property="floor" column="floor"/>
+		<result property="type" column="type"/>
+		<result property="position" column="position" />
+		<result property="date" column="date"/>
+	</resultMap> 
 
 
 	<select id="getParks" resultMap="ParkMapper">
 		select * from park
 	</select>
 	
-
-	<insert id="insertPark" parameterType="Park" keyProperty="Id">
-		insert into park(name, portCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, position, date, isDeleted) 
-		values(#{name}, #{portCount}, #{channelCount},#{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{position}, #{date}, #{isDeleted})
+	<select id="nameToId" resultType="int">
+		select id from park where name = #{param1}
+	</select>
+	
+	<select id="getParkByName" resultMap="ParkMapper">
+		select * from park where name = #{param1}
+	</select>
+	
+	<select id="getParkDetail" resultMap="ParkDetailMapper">
+		select * from park limit #{low}, #{count}
+	</select>
+	
+	<select id="getParkCount"  resultType="int">
+		select count(*) from park
+	</select>
+	
+	<insert id="insertPark" parameterType="Park" keyProperty="id">
+		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, position, date, isDeleted) 
+		values(#{name}, #{portCount}, #{channelCount}, #{portLeftCount}, #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{position}, #{date}, #{isDeleted})
 	</insert>
 	
 	<update id="updatePark" parameterType="Park" >
-		update channel set name = #{name}, portCount = #{portCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
-		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where Id = #{Id}
+		update park set name = #{name}, portCount = #{portCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
+		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where id = #{id}
+	</update>
+	
+	<update id="updateLeftPortCount">
+		update park set portLeftCount = #{portLeftCount} where id = #{id} 
 	</update>
 	
 	<delete id="deletePark" parameterType="int">
-		delete from park where Id = #{Id}
+		delete from park where id = #{id}
 	</delete>
 	     
           

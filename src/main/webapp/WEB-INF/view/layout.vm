@@ -1,28 +1,61 @@
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-        <!-- 新 Bootstrap 核心 CSS 文件 -->
-		<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-
-		<!-- 可选的Bootstrap主题文件（一般不使用） 
-		<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css"></script>
-		-->
-		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-		<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
-
-		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-		<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+    
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<!--<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script> -->
+	<script src="/park/script/jquery.min.js"></script>
+	
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <!--
+	<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+	-->
+	<!-- 可选的Bootstrap主题文件（一般不使用） 
+	<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet"></link>
+	-->
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<!--
+	<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	-->
+	
+	<script src="/park/script/bootstrap.min.js"></script>
+	<link href="/park/css/bootstrap.min.css" rel="stylesheet">
+	<link src="/park/css/bootstrap-theme.min.css" rel="stylesheet"></link>
+	<link href="/park/css/main.css" rel="stylesheet">
+	
+	<script src="/park/script/utility.js"></script>
+	<script src="/park/script/jquery.shCircleLoader-min.js"></script>
+	<script src="/park/script/jquery.json-2.4.min.js"></script>
+	
+	<title>Park Manager</title>
+</head>
+<body>
+<div class="panel panel-primary fullheight">
+	<div class="panel-heading">
+		<h3 class="panel-title">停车管理系统</h3>
+	</div>
+	<div class="panel-body fullheight">
+		<div class="row fullheight">
+			<div id="navigate" class="col-xs-2">
+				<div class="list-group">
+					<a class="list-group-item active">导航</a>
+					<a class="list-group-item" href="/park/access">出入口实时流量管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
+					<a class="list-group-item" href="/park/parks">停车场管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>	
+					<a class="list-group-item" href="/park/channel">出入口管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
+					<a class="list-group-item" href="/park/businessCarport">停车位管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
+					<a class="list-group-item" href="/park/hardware">硬件设备管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>		
+					<a class="list-group-item" href="/park/users">APP用户管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
+				</div>
+			</div>
+			<div id="content" class="col-xs-10">
+    			$screen_content
+    		<div>
+    	</div>
+	</div>
+</div>
+<
 		
-		<script src="/script/utility.js"></script>
-		
-		<title>Park Manager</title>
-    </head>
-    <body>
-        <h1>Park Manager</h1>
-
-        	$screen_content
-
-        <hr />
-        Copyright &copy 2014 park
-    </body>
+       
+</body>
 </html>

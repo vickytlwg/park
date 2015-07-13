@@ -1,23 +1,22 @@
 package com.park.model;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 public class Channel {
 	
-	@JsonIgnore
-	private int Id;
+	private int id = -1;
 	private int parkId;
-	private String mac;
+	private int macId;
 	private int channelId;
 	private int channelFlag;
-	@JsonIgnore
 	private Date date;
 	private int status;
 	private int isEffective;
-	@JsonIgnore
 	private String description;
 	@JsonIgnore
 	private int isDeleted;
@@ -48,8 +47,8 @@ public class Channel {
 	}
 	
 	
-	public String getMac() {
-		return mac;
+	public int getMacId() {
+		return macId;
 	}
 
 	public int getChannelId() {
@@ -60,8 +59,8 @@ public class Channel {
 		return channelFlag;
 	}
 
-	public void setMac(String mac) {
-		this.mac = mac;
+	public void setMac(int mac) {
+		this.macId = mac;
 	}
 
 	public void setChannelId(int channelId) {
@@ -75,7 +74,7 @@ public class Channel {
 	
 	
 	public int getId() {
-		return Id;
+		return id;
 	}
 
 	public Date getDate() {
@@ -85,10 +84,15 @@ public class Channel {
 		return isDeleted;
 	}
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	
+	public void setDate(String date) {
+		try {
+			this.date = new SimpleDateFormat(Constants.DATEFORMAT).parse(date);
+		} catch (ParseException e) {		
+			e.printStackTrace();
+		}
 	}
 	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;

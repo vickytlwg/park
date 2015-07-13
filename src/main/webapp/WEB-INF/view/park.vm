@@ -1,0 +1,149 @@
+<script src="/park/script/park.js"></script>
+
+<div id="park">
+	<div class="btn-group">
+		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+		<button id='addPark' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> Add</span></button>
+		<button id='updatePark' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> Update</span></button>
+		<button id='deletePark' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> Delete</span></button>
+		<button id='searchPark' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"> Search</span></button>
+	</div>
+	
+	<div id= 'parkDiv'>
+		<table id='parkTable' class="table table-hover table-bordered">
+			<caption></caption>
+			<thead>
+				<tr>
+					<th><input type="checkbox" /></th>
+					<th>Id</th>		
+					<th>名称</th>
+					<th>进出口数</th>
+					<th>车位数</th>		
+					<th>剩余车位数</th>
+					<th>计费标准(白天)</th>
+					<th>计费标准(晚上)</th>
+					<th>状态</th>		
+					<th>是否免费</th>
+					<th>楼层数</th>
+					<th>类型</th>		
+					<th>位置</th>
+					<th>日期</th>
+				</tr>
+			</thead>
+			<tbody id="parkBody"></tbody>
+		</table>
+	</div>
+	<div id='pagination'></div>
+</div>
+
+<div class="modal fade" id="addParkModal" tabindex="-1" role="dialog" aria-labelledby='addParkLabel' aria-hidden='true'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+		
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+				<h4 class='modal-title' id='addParkLabel'>停车场信息</h4>
+			</div>
+			
+			<div class='modal-body'>
+				<form class='form-horizontal' id='addParkForm' role='form'>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='parkName'>名称</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='parkName' placeholder='请输入名称'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='channelCount'>进出口数</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='portCount'>车位数</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='portCount' placeholder='请输入车位数'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='leftPortCount'>剩余车位数</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='leftPortCount' placeholder='请输入剩余车位数'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='chargeDaytime'>计费标准(白天)</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='chargeDaytime' placeholder='请输入计费标准(白天)'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='chargeNight'>计费标准(晚上)</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='chargeNight' placeholder='请输入计费标准(晚上)'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='status'>状态</label>
+						<div class='col-sm-8'>
+							<select class='form-control' id='parkStatus'>
+								<option value=0>可用</option>
+								<option value=1>不可用</option>
+							</select>
+						</div>
+					</div>
+					<div class='form-group'>
+						<div class='col-sm-offset-2 col-sm-8'>
+							<div class='checkbox'>
+								<label >
+									<input type='checkbox' id='isFree'>免费
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='floorCount'>楼层数</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='floorCount' placeholder='请输入楼层数'>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='parkType'>类型</label>
+						<div class='col-sm-8'>
+							<select class='form-control' id='parkType'>
+								<option value=0>室内</option>
+								<option value=1>室外</option>
+								<option value=2>其它</option>
+							</select>
+						</div>
+					</div>
+					<div class='form-group'>
+						<label class='col-sm-2 control-label' for='position'>位置</label>
+						<div class='col-sm-8'>
+							<input type='text' class='form-control' id='position' placeholder='请输入停车场位置'>
+						</div>
+					</div>
+					<div id='addParkResult'>						
+					</div>
+			</div>
+			
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>
+				<button id="submitParkBtn" type='button' class='btn btn-primary'>提交</button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+<div id='showMessage'>
+</div>
+
+<div id='showErrorMessage'>
+</div>
+
+<script>
+$(document).ready(function(){
+	$.fn.park.initial()
+});
+
+</script>

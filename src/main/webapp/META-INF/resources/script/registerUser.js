@@ -1,7 +1,7 @@
 (function($){
 	
-	var register_user = {};
-	register_user.initial = function(){
+	$.fn.register_user = {};
+	$.fn.register_user.initial = function(){
 		$("#submit_btn").on('click', $(this), function(){
 			var username = $('input[name="userName"]').val();
 			var number = $('input[name="number"]').val();
@@ -15,7 +15,7 @@
 			var data_json = $.toJSON(data);
 
 			$.ajax({
-				url:""+ "/insert/user",
+				url:$.config.webroot + "/insert/user",
 				type: 'post',
 				contentType: 'application/json;charset=utf-8',			
 				datatype: 'json',

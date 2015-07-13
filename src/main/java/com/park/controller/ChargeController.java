@@ -23,7 +23,7 @@ public class ChargeController {
 	@Autowired
 	private ChargeService chargeService;
 	
-	private static Log logger = LogFactory.getLog(UserController.class);
+	private static Log logger = LogFactory.getLog(ChargeController.class);
 	
 	@RequestMapping(value = "/getCharge", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

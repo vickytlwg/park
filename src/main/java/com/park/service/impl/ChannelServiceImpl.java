@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.park.dao.ChannelDAO;
+import com.park.dao.HardwareDAO;
 import com.park.model.Channel;
+import com.park.model.ChannelDetail;
+import com.park.model.Hardware;
+import com.park.model.Status;
 import com.park.service.ChannelService;
 
 @Transactional
@@ -18,21 +22,16 @@ import com.park.service.ChannelService;
 public class ChannelServiceImpl implements ChannelService{
 	@Autowired
 	private ChannelDAO channelDAO;
+	@Autowired
+	private HardwareDAO hardwareDAO;
 	
 	public List<Channel> getChannels(){
 		return channelDAO.getChannels();
 	}
 	
-	public String insertChannel(Channel channel){
-		Map<String, Object> map = new HashMap<String, Object>();
-		if(channelDAO.insertChannel(channel) > 0){
-			map.put("status", "1001");
-			map.put("message", "insert success");
-		}else{
-			map.put("status", "1002");
-			map.put("message", "insert fail");
-		}
-		return new Gson().toJson(map);
+	
+	public boolean insertChannel(Channel channel){
+		return channelDAO.insertChannel(channel) > 0;
 	}
 	
 	public String insertChannelList(List<Channel> channels){
@@ -51,16 +50,8 @@ public class ChannelServiceImpl implements ChannelService{
 		return new Gson().toJson(map);
 	}
 	
-	public String updateChannel(Channel channel){
-		Map<String, Object> map = new HashMap<String, Object>();
-		if(channelDAO.updateChannel(channel) > 0){
-			map.put("status", "1001");
-			map.put("message", "update success");
-		}else{
-			map.put("status", "1002");
-			map.put("message", "update fail");
-		}
-		return new Gson().toJson(map);
+	public boolean updateChannel(Channel channel){
+		return channelDAO.updateChannel(channel) > 0;
 	}
 	
 	public String deleteChannel(int Id){
@@ -73,6 +64,35 @@ public class ChannelServiceImpl implements ChannelService{
 			map.put("message", "delete fail");
 		}
 		return new Gson().toJson(map);
+	}
+
+	@Override
+	public List<ChannelDetail> getChannelDetail(int low, int count) {
+		return channelDAO.getChannelDetail(low, count);
+	}
+
+	@Override
+	public int getchannelCount() {
+		
+		return channelDAO.getChannelCount();
+	}
+
+	@Override
+	public int getChannelIdByMacId(int macId) {
+		Hardware hardware = hardwareDAO.getHardwareById(macId);
+		if(hardware.getStatus() == Status.UNUSED.getValue())
+			return -1;
+		return channelDAO.getChannelIdByMacId(macId);
+	}
+
+	@Override
+	public int getChannelIdByMac(String mac) {
+		return this.getChannelIdByMacId(hardwareDAO.macToId(mac));
+	}
+
+	@Override
+	public Channel getChannelsById(int id) {
+		return channelDAO.getChannelById(id);
 	}
 
 }

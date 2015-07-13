@@ -23,8 +23,9 @@ public interface CarportDAO {
 	 */
 	List<Carport> getCarports();
 	
-	public List<Carport> getSpecifyCarports(@Param("low")int low, @Param("high")int high, @Param("field")String field, @Param("order")String order);
+	public List<Carport> getSpecifyCarports(@Param("start")int start, @Param("counts")int counts, @Param("field")String field, @Param("order")String order);
 	
+	List<Carport> getConditionCarports(@Param("start")int start, @Param("counts")int counts, @Param("field")String field, @Param("order")String order, @Param("queryCondition")String queryCondition);
 	/**
 	 * 添加车位
 	 * @param carport

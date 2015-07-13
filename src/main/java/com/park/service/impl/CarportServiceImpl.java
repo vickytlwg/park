@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.CarportDAO;
 import com.park.model.Carport;
-import com.park.service.CarportService;;
+import com.park.service.CarportService;
 
 @Transactional
 @Service
@@ -37,10 +37,16 @@ public class CarportServiceImpl implements CarportService{
 	}
 	
 	@Override
-	public List<Carport> getSpecifyCarports(int low, int high, String field, String order) {
+	public List<Carport> getSpecifyCarports(int start, int counts, String field, String order) {
 		
-		List<Carport> carports = carportDAO.getSpecifyCarports(low, high, field, order);
+		List<Carport> carports = carportDAO.getSpecifyCarports(start, counts, field, order);
 		return carports;
+	}
+	@Override
+	public List<Carport> getConditionCarports(int start, int counts,
+			String field, String order, String queryCondition) {
+		return carportDAO.getConditionCarports(start, counts, field, order, queryCondition);
+		
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.park.model;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -8,7 +9,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class Access {
 	
 	@JsonIgnore
-	private int Id;
+	private int id;
 	private int channelId;
 	@JsonIgnore
 	private Date date;
@@ -17,7 +18,7 @@ public class Access {
 	
 	
 	public int getId() {
-		return Id;
+		return id;
 	}
 	public int getChannelId() {
 		return channelId;
@@ -29,7 +30,7 @@ public class Access {
 		return isDeleted;
 	}
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 	public void setChannelId(int channelId) {
 		this.channelId = channelId;

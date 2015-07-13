@@ -17,9 +17,27 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Utility {
 
+	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	
+	public static String createJsonMsg(Object status, Object message, Object body){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", status);
+		ret.put("message", message);
+		ret.put("body", body);
+		return gson.toJson(ret);
+	}
+	
+	public static String createJsonMsg(Object status, Object message){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", status);
+		ret.put("message", message);
+		return gson.toJson(ret);
+	}
+	
 	public static Map<String, Object> post(String url, Map<String, Object> argMap){
 		  
 		  HttpClient httpClient = new DefaultHttpClient();
@@ -58,6 +76,5 @@ public class Utility {
 	    	  
 	      }
 	      return resultMap;
-	      
 	}
 }

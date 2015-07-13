@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.park.model.User;
+import com.park.model.UserDetail;
 import com.park.service.UserService;
+import com.park.service.Utility;
 
 
 @Controller
@@ -33,9 +35,41 @@ public class UserController {
 		List<User> userList = userService.getUsers();
 		modelMap.put("users", userList);
 		logger.info("info test");				
-		return "userList";
+		return "user";
 	}
 	
+	
+	@RequestMapping(value = "/getUserCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getuserCount(){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> body = new HashMap<String, Object>();
+		int count = userService.getUserCount();
+		body.put("count", count);
+	
+		ret.put("status", "1001");
+		ret.put("message", "get user detail success");
+		ret.put("body", Utility.gson.toJson(body));
+		
+		return Utility.gson.toJson(ret);					
+	}
+	
+	@RequestMapping(value = "/getUserDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<UserDetail> userDetail = userService.getUserDetail(low, count);
+		if(userDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get user detail success");
+			ret.put("body", Utility.gson.toJson(userDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get user detail fail");
+		}
+		return Utility.gson.toJson(ret);
+		
+	}
 	@RequestMapping(value = "/insert/user", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertUser(@RequestBody User user){
@@ -55,10 +89,4 @@ public class UserController {
 		return "registerUser";
 	}
 	
-	
-	@RequestMapping(value = "/test", method = RequestMethod.POST)
-	public  String test(@RequestBody Map<String, Object> map){
-		logger.info("Id:" + map.get("Id"));
-		return "registerUser";
-	}
 }
