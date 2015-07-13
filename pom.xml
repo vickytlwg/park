@@ -16,6 +16,7 @@
   	<log4j.version>1.2.12</log4j.version>
   </properties>
   <dependencies>
+  
 <!-- spring核心包 -->
         <!-- springframe start -->
         <dependency>
@@ -180,7 +181,12 @@
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		
+		  <dependency>            
+		  	<groupId>joda-time</groupId>            
+		  	<artifactId>joda-time</artifactId>            
+		  	<version>2.4</version>        
+		  </dependency>
+		  
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
@@ -222,6 +228,18 @@
     
   </dependencies>
   <build>
+  	
     <finalName>park</finalName>
+	<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

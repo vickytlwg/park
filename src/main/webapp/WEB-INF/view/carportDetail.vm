@@ -1,3 +1,0 @@
-<p>Id: ${carport.Id}</p>
-<p>State: ${carport.state}</p>
-<p>Description: ${carport.desc}</p>
