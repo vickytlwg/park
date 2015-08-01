@@ -32,13 +32,11 @@
 </head>
 <body>
 <div class="panel panel-primary fullheight">
-	<div class="panel-heading">
-		<h3 class="panel-title">停车管理系统</h3>
-	</div>
+	<div class="panel-heading">停车管理系统</div>
 	<div class="panel-body fullheight">
 		<div class="row fullheight">
 			<div id="navigate" class="col-xs-2">
-				<div class="list-group">
+				<div id = "navBar" class="list-group">
 					<a class="list-group-item active">导航</a>
 					<a class="list-group-item" href="/park/access">出入口实时流量管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
 					<a class="list-group-item" href="/park/parks">停车场管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>	
@@ -54,8 +52,7 @@
     	</div>
 	</div>
 </div>
-<
-		
        
 </body>
+
 </html>

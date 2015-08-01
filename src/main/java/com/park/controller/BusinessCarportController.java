@@ -43,10 +43,10 @@ public class BusinessCarportController {
 	
 	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getBusinessCarportCount(){
+	public String getBusinessCarportCount(@RequestParam(value = "parkId", required = false) Integer parkId){
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
-		int count = businessCarportService.getBusinessCarportCount();
+		int count = businessCarportService.getBusinessCarportCount(parkId);
 		body.put("count", count);
 	
 		ret.put("status", "1001");
@@ -58,9 +58,12 @@ public class BusinessCarportController {
 	
 	@RequestMapping(value = "/getBusinessCarportDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+	public String accessIndex(@RequestParam("low")int low, 
+			@RequestParam("count")int count,
+			@RequestParam(value = "parkId", required = false) Integer parkId){	
+		
 		Map<String, Object> ret = new HashMap<String, Object>();
-		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count);
+		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count, parkId);
 		if(businessCarportDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get businessCarport detail success");

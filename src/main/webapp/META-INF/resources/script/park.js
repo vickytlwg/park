@@ -156,9 +156,7 @@
 			var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
 			if(checkedTr > 1)
 				return;
-			var modal = new $.Modal();
-			modal.setTitle("删除停车场");
-			modal.setTitle("是否删除停车场!");
+			var modal = new $.Modal("parkDelete","删除停车场","是否删除停车场!" );
 			var callback = deleteClickHandle;
 			modal.setSubmitClickHandle(callback);
 			$('#showMessage').html(modal.get());

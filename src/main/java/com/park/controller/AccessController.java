@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,9 +48,9 @@ public class AccessController {
 	
 	@RequestMapping(value = "/getAccessDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count, @RequestParam(value = "parkId", required = false) Integer parkId){	
 		Map<String, Object> ret = new HashMap<String, Object>();
-		List<AccessDetail> accessDetail = accessService.getAccessDetail(low, count);
+		List<AccessDetail> accessDetail = accessService.getAccessDetail(low, count, parkId);
 		if(accessDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get access detail success");
@@ -64,10 +65,10 @@ public class AccessController {
 	
 	@RequestMapping(value = "/getAccessCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getAccessCount(){	
+	public String getAccessCount(@RequestParam(value = "parkId", required = false) Integer parkId){	
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
-		int count = accessService.getAccessCount();
+		int count = accessService.getAccessCount(parkId);
 		body.put("count", count);
 		
 		ret.put("status", "1001");
@@ -201,9 +202,9 @@ public class AccessController {
 		return accessService.updateAccess(access);
 	}
 	
-	@RequestMapping(value = "/delete/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/delete/access/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String deletePark(@RequestBody  Map<String, Object> accessMap){
-		return accessService.deleteAccess((int)accessMap.get("Id"));
+	public String deletePark(@PathVariable int id){
+		return accessService.deleteAccess(id);
 	}
 }

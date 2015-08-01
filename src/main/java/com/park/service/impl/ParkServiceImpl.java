@@ -25,6 +25,11 @@ public class ParkServiceImpl implements ParkService{
 		
 	}
 	
+	@Override
+	public Park getParkById(int id) {
+		return parkDAO.getParkById(id);
+	}
+	
 	public int nameToId(String name){
 		return parkDAO.nameToId(name);
 	}
@@ -101,6 +106,8 @@ public class ParkServiceImpl implements ParkService{
 		
 		return parkDAO.getParkDetail(low, count);
 	}
+
+
 
 	
 

@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -43,15 +44,20 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	}
 	
 	@Override
-	public int getBusinessCarportCount() {
-		return businessCarportDAO.getBusinessCarportCount();
+	public int getBusinessCarportCount(Integer parkId) {
+		if(parkId == null || parkId.intValue() == -1)
+			return businessCarportDAO.getBusinessCarportCount();
+		else
+			return businessCarportDAO.getParkBusinessCarportCount(parkId.intValue());
 	}
 
 	@Override
 	public List<BusinessCarportDetail> getBusinessCarportDetail(int low,
-			int count) {
-		List<BusinessCarportDetail>  details = businessCarportDAO.getBusinessCarportDetail(low, count);
-		return details;
+			int count, Integer parkId) {
+		if(parkId == null || parkId.intValue() == -1)
+			return businessCarportDAO.getBusinessCarportDetail(low, count);
+		else
+			return businessCarportDAO.getParkBusinessCarportDetail(low, count, parkId.intValue());
 	}
 
 	@Override
@@ -90,7 +96,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		BusinessCarport carport = businessCarportDAO.getBusinessCarportByMacId(macId);
 		carport.setStatus(status);
 		
-		int ret = businessCarportDAO.updateBusinessCarportStatus(macId, status);
+		int ret = businessCarportDAO.updateBusinessCarportStatus(macId, status, new Date());
 		int parkId = carport.getParkId();
 		int leftPort = businessCarportDAO.getParkLeftPort(parkId);
 		parkDAO.updateLeftPortCount(parkId, leftPort);

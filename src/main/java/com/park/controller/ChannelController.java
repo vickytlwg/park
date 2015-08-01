@@ -90,14 +90,16 @@ public class ChannelController {
 	@RequestMapping(value = "/update/channel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updateChannel(@RequestBody Channel channel){
-		int newMacId = channel.getMacId();
-		Hardware hardware = hardwareService.getHardwareById(newMacId);
-		if(hardware.getStatus() == Status.USED.getValue())
-			return Utility.createJsonMsg("1003", "hardware is being used");
+		
 		Channel orignChannel = channelService.getChannelsById(channel.getId());
 		int oldMacId = orignChannel.getMacId();
+		int newMacId = channel.getMacId();
+		
 		if(channelService.updateChannel(channel)){
 			if(newMacId != oldMacId){
+				Hardware hardware = hardwareService.getHardwareById(newMacId);
+				if(hardware.getStatus() == Status.USED.getValue())
+					return Utility.createJsonMsg("1003", "hardware is being used");
 				hardwareService.changeHardwareStatus(oldMacId, Status.UNUSED.getValue());
 				hardwareService.changeHardwareStatus(newMacId, Status.USED.getValue());
 			}

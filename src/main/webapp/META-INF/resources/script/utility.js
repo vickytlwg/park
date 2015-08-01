@@ -45,7 +45,7 @@
 	
 	
 	$.fn.page = {};
-	$.fn.page.pageSize = 10;
+	$.fn.page.pageSize = 50;
 	$.fn.page.currentPage = 1;
 	$.fn.page.pageCount = 1;
 	$.fn.page.pageShowCount = 10;

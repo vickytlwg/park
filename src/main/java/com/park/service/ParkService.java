@@ -10,6 +10,8 @@ public interface ParkService {
 	
 	public List<Park> getParks();
 	
+	public Park getParkById(int id);
+	
 	public int nameToId(String name);
 	
 	public List<Park> getParkByName(String name);

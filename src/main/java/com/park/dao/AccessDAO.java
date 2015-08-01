@@ -32,10 +32,14 @@ public interface AccessDAO {
 	
 	public int getAccessCount();
 	
+	public int getParkAccessCount(int parkId);
+	
 	public int updateAccess(Access access);
 	
 	public int deleteAccess(int id);
 	
 	public List<AccessDetail> getAccessDetail(@Param("low")int low, @Param("count")int count);
+	
+	public List<AccessDetail> getParkAccessDetail(@Param("low")int low, @Param("count")int count, @Param("parkId")int parkId);
 
 }

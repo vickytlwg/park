@@ -11,9 +11,9 @@ public interface BusinessCarportService {
 	
 	public BusinessCarport getBusinessCarportById(int id);
 	
-	public int getBusinessCarportCount();
+	public int getBusinessCarportCount(Integer parkId);
 	
-	public List<BusinessCarportDetail> getBusinessCarportDetail(int low, int count);
+	public List<BusinessCarportDetail> getBusinessCarportDetail(int low, int count, Integer parkId);
 	
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	

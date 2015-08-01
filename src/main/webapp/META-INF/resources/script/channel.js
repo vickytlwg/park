@@ -202,7 +202,7 @@
 		$('#deleteChannel').on('click', $(this), function(){
 			var checkedTr = $('#channelBody').find('input[type="checkbox"]:checked').parents('tr');
 			
-			if(checkedTr > 1)
+			if(checkedTr.length != 1)
 				return;
 			var modal = new $.Modal("channelDelete", "删除通道", "是否删除出(入)口!");
 			$('#showMessage').html(modal.get());

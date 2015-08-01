@@ -11,7 +11,9 @@
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
 		renderBusinessCarport(0, $.fn.page.pageSize);
-		renderPagination();
+		
+		fillSearchPark();
+		bindSearchParkChange();
 	};
 	
 	/**bind tr click*/
@@ -33,6 +35,35 @@
 		
 	};
 	
+	/** bind search park change event **/
+	var bindSearchParkChange = function(){
+		$('select#searchPark').on('change', $(this), function(){
+			
+			renderBusinessCarport(0, $.fn.page.pageSize);
+		});
+	};
+	
+	/** fill search park **/
+	var fillSearchPark = function(){
+		var successFunc = function(data){
+			data = data['body'];
+			var parkNameSelect = $('select#searchPark');
+			
+			for(var i = 0; i < data.length; i++){
+				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+			}
+		};
+		var errorFunc = function(data){
+		};
+		$.ajax({
+			url:$.fn.config.webroot + '/getParks?_t=' + (new Date()).getTime(),
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',			
+			success: function(data){successFunc(data);},
+			error: function(data){errorFunc(data);}
+		});
+	};
+	
 	/**bind add BusinessCarport click**/
 	var bindAddBtnClick = function(){
 		$('#addBusinessCarport').on('click', $(this), function(){
@@ -42,6 +73,7 @@
 	
 	var addBtnClickHandle = function(){
 		$('#addBusinessCarportForm')[0].reset();
+		$('select#businessCarportStatus').removeAttr('disabled');
 		$('select#parkName').removeAttr('BusinessCarportId');
 		$('select#parkName').removeAttr('disabled');
 		$('select#parkName').html('');
@@ -62,6 +94,8 @@
 			for(var i = 0; i < data.length; i++){
 				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
 			}
+			if($('#searchPark').val() != -1)
+				parkNameSelect.val($('#searchPark').val());
 		};
 		var errorFunc = function(data){
 			$.fn.loader.removeLoader('#parkNameLoader');
@@ -121,7 +155,8 @@
 			return;
 		}else
 			assignAddBusinessCarportForm($(checkedTr[0]));
-		$('#addBusinessCarportModal').modal('show');
+			$('#businessCarportStatus').attr('disabled', 'disabled');
+			$('#addBusinessCarportModal').modal('show');
 	};
 	
 	var assignAddBusinessCarportForm = function(checkedTr){
@@ -237,13 +272,13 @@
 	
 	/*** get table businessCarport item ***/
 	var renderBusinessCarport = function(low, count){
-		
+		renderPagination();
 		var cols = $('#businessCarportTable').find('thead tr th').length;
 		$("#businessCarportBody").html('<tr><td colspan="' + cols + '"></td></tr>');
 		$.fn.loader.appendLoader($('#businessCarportBody').find('td'));
-
+		var parkId = $('select#searchPark').val();
 		$.ajax({
-			url:$.fn.config.webroot + "/getBusinessCarportDetail?low=" + low + "&count=" + count + "&_t=" + (new Date()).getTime(),
+			url:$.fn.config.webroot + "/getBusinessCarportDetail?low=" + low + "&count=" + count +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime(),
 			type: 'get',
 			success: function(data){
 				fillBusinessCarportTbody(data);
@@ -267,7 +302,7 @@
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			tr.append('<td>' + data[i]['carportNumber']+ '</td>');
 			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
-			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "已使用":"未使用")+ '</td>');
+			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "有车":"无车")+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 			tr.append('<td>' + data[i]['position']+ '</td>');
 			
@@ -294,9 +329,9 @@
 	
 	/***render pagination****/
 	var renderPagination = function(){
-
+		var parkId = $('select#searchPark').val();
 		$.ajax({
-			url:$.fn.config.webroot + "/getBusinessCarportCount",
+			url:$.fn.config.webroot + "/getBusinessCarportCount?parkId=" + parkId,
 			type: 'get',
 			success: function(data){
 				data = data["body"];

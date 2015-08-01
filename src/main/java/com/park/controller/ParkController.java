@@ -32,6 +32,17 @@ public class ParkController {
 		return "park";
 	}
 	
+	@RequestMapping(value = "/getPark/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkById(@PathVariable int id, ModelMap modelMap, HttpServletRequest request){
+		Park park = parkService.getParkById(id);
+	
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		ret.put("body", park);
+		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
 	
 	@RequestMapping(value = "/getParks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

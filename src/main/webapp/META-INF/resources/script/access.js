@@ -4,13 +4,16 @@
 	$.fn.access.initial = function(){
 		bindTrClick();
 		bindRefreshClick();
+		bindDeleteClick();
 		renderAccess(0, $.fn.page.pageSize);
-		renderPagination();
+		
+		fillSearchPark();
+		bindSearchParkChange();
 	};
 	
 	/**bind tr click*/
 	var bindTrClick = function(){
-		var accessBody = $("#access_body");
+		var accessBody = $("#accessBody");
 		accessBody.on('click', 'tr', function(event){
 			if(event.target.nodeName.toLowerCase() != 'input')
 				$(this).find('input[type="checkbox"]').click();
@@ -26,16 +29,48 @@
 		
 	};
 	
+	/** bind search park change event **/
+	var bindSearchParkChange = function(){
+		$('select#searchPark').on('change', $(this), function(){
+			
+			renderAccess(0, $.fn.page.pageSize);
+		});
+	};
+	
+	/** fill search park **/
+	var fillSearchPark = function(){
+		var successFunc = function(data){
+			data = data['body'];
+			var parkNameSelect = $('select#searchPark');
+			
+			for(var i = 0; i < data.length; i++){
+				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+			}
+		};
+		var errorFunc = function(data){
+		};
+		$.ajax({
+			url:$.fn.config.webroot + '/getParks?_t=' + (new Date()).getTime(),
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',			
+			success: function(data){successFunc(data);},
+			error: function(data){errorFunc(data);}
+		});
+	};
+	
+	
 	/*** get table access item ***/
 	var renderAccess = function(low, count){
-		
+		renderPagination();
 		var cols = $('#accessTable').find('thead tr th').length;
-		$("#access_body").html('<tr><td colspan="' + cols + '"></td></tr>');
-		$.fn.loader.appendLoader($('#access_body').find('td'));
+		$("#accessBody").html('<tr><td colspan="' + cols + '"></td></tr>');
+		$.fn.loader.appendLoader($('#accessBody').find('td'));
 
-		var accessBody = $("#access_body");
+		var accessBody = $("#accessBody");
+		
+		var parkId = $('select#searchPark').val();
 		$.ajax({
-			url:$.fn.config.webroot + "/getAccessDetail?low=" + low + "&count=" + count,
+			url:$.fn.config.webroot + "/getAccessDetail?low=" + low + "&count=" + count + "&parkId=" + parkId,
 			type: 'get',
 			success: function(data){
 				fillAccessTbody(data);
@@ -48,7 +83,7 @@
 	
 	
 	var fillAccessTbody = function(data){
-		var accessBody = $("#access_body");
+		var accessBody = $("#accessBody");
 		$.fn.loader.removeLoader($('#accessDiv'));
 		accessBody.html('');
 		data = $.parseJSON(data["body"]);
@@ -72,11 +107,45 @@
 		alert("get accesses failed");
 	};
 	
+	
+	/**
+	 * delete access
+	 */
+	var bindDeleteClick = function(){
+		$('#deleteAccess').on('click', $(this), function(){
+			var checkedTr = $('#accessBody').find('input[type="checkbox"]:checked').parents('tr');
+			
+			if(checkedTr.length != 1)
+				return;
+			var modal = new $.Modal("accessDelete", "删除访问记录", "是否访问记录!");
+			$('#showMessage').html(modal.get());
+			modal.show();
+			var callback = deleteClickHandle;
+			modal.setSubmitClickHandle(callback);
+		});
+		
+	}
+	var deleteClickHandle = function(){
+		var checkedTr = $('#accessBody').find('input[type="checkbox"]:checked').parents('tr');
+		var id = parseInt($(checkedTr.find('td')[1]).text());
+		$.ajax({
+			url:$.fn.config.webroot + '/delete/access/' + id,
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',
+			success: function(data){
+				$('#refresh').click();
+			},
+			error: function(data){
+				errorHandle(data);
+			}
+		});
+	};
+	
 	/***render pagination****/
 	var renderPagination = function(){
-
+		var parkId = $('select#searchPark').val();
 		$.ajax({
-			url:$.fn.config.webroot + "/getAccessCount",
+			url:$.fn.config.webroot + "/getAccessCount?&parkId=" + parkId,
 			type: 'get',
 			success: function(data){
 				data = $.parseJSON(data["body"]);

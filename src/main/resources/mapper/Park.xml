@@ -52,6 +52,10 @@
 		select * from park where name = #{param1}
 	</select>
 	
+	<select id="getParkById" resultMap="ParkMapper">
+		select * from park where id = #{id}
+	</select>
+	
 	<select id="getParkDetail" resultMap="ParkDetailMapper">
 		select * from park limit #{low}, #{count}
 	</select>
@@ -66,7 +70,7 @@
 	</insert>
 	
 	<update id="updatePark" parameterType="Park" >
-		update park set name = #{name}, portCount = #{portCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
+		update park set name = #{name}, portCount = #{portCount}, portLeftCount = #{portLeftCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
 		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where id = #{id}
 	</update>
 	

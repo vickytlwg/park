@@ -12,7 +12,7 @@ public interface AccessService {
 	
 	public String insertAccess(Access item);
 	
-	public int getAccessCount();
+	public int getAccessCount(Integer parkId);
 	
 	
 	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
@@ -34,6 +34,6 @@ public interface AccessService {
 	
 	public String deleteAccess(int Id);
 	
-	public List<AccessDetail> getAccessDetail(int low, int count);
+	public List<AccessDetail> getAccessDetail(int low, int count,Integer parkId);
 
 }

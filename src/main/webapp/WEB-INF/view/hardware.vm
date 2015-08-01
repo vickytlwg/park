@@ -1,12 +1,16 @@
 <script src="/park/script/mac.js"></script>
 
 <div id="mac">
+	<div class="panel">
+		<span class="label label-default">硬件设备管理</span>
+	</div>
+
 	<div class="btn-group">
-		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
-		<button id='addMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> Add</span></button>
-		<button id='updateMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> Update</span></button>
-		<button id='deleteMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> Delete</span></button>
-		<button id='searchMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"> Search</span></button>
+		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+		<button id='addMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Add</button>
+		<button id='updateMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Update</button>
+		<button id='deleteMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+		<button id='searchMac' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
 	</div>
 	
 	<div id= 'macDiv'>

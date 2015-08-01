@@ -1,6 +1,5 @@
 package com.park.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.park.dao.AccessDAO;
+import com.park.dao.BusinessCarportDAO;
 import com.park.dao.HardwareDAO;
 import com.park.model.Access;
 import com.park.model.AccessDetail;
+import com.park.model.BusinessCarport;
+import com.park.model.Channel;
 import com.park.model.ChannelType;
+import com.park.model.Park;
 import com.park.service.AccessService;
+import com.park.service.ChannelService;
+import com.park.service.ParkService;
 
 @Transactional
 @Service
@@ -27,19 +32,34 @@ public class AccessServiceImpl implements AccessService{
 	@Autowired
 	private HardwareDAO hardwareDAO;
 	
+	@Autowired
+	private BusinessCarportDAO businessCarportDAO;
+	
+	@Autowired
+	private ChannelService channelService;
+	
+	@Autowired
+	private ParkService parkService;
+	
 	@Override
 	public List<Access> getAccesses(){
 		return accessDAO.getAccesses();
 	}
 	
 	@Override
-	public List<AccessDetail> getAccessDetail(int low, int count) {
-		return accessDAO.getAccessDetail(low, count);
+	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId) {
+		if(parkId == null || parkId.intValue() == -1)
+			return accessDAO.getAccessDetail(low, count);
+		else
+			return accessDAO.getParkAccessDetail(low, count, parkId.intValue());
 	}
 
 	@Override
-	public int getAccessCount() {
-		return accessDAO.getAccessCount();
+	public int getAccessCount(Integer parkId) {
+		if(parkId == null || parkId.intValue() == -1)
+			return accessDAO.getAccessCount();
+		else
+			return accessDAO.getParkAccessCount(parkId.intValue());
 	}
 
 	
@@ -141,6 +161,7 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}
 
+	
 	@Override
 	public Map<Integer, Integer> getChannelMonthCount(int macId, int year) {
 		List<Map<String, Object>> rets = accessDAO.getChannelMonthCount(macId, year);
@@ -153,9 +174,22 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}
 	
+	public void updateParkPorts(int channelId){
+		Channel channel = channelService.getChannelsById(channelId);
+		Park park = parkService.getParkById(channel.getParkId());
+		List<BusinessCarport> carports = businessCarportDAO.getBusinessCarportByParkId(park.getId(), 0, 1);
+		if(carports == null || carports.size() == 0 || carports.get(0).getMacId() < 0){ 
+			//carport has no hardware, use channel update left port
+			int updateCount = (channel.getChannelFlag() == ChannelType.EXIT.getValue() ? 1 : -1);
+			int leftPorts = park.getPortLeftCount() + updateCount;
+			parkService.updateLeftPortCount(park.getId(), leftPorts < 0 ? 0 : leftPorts);
+		}
+	}
 	
 	@Override
 	public String insertAccess(Access item){
+		
+		updateParkPorts(item.getChannelId());	
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(accessDAO.insertAccess(item) > 0){
 			map.put("status", "1001");

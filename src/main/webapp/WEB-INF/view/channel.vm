@@ -1,12 +1,16 @@
 <script src="/park/script/channel.js"></script>
 
 <div id="channel">
+
+	<div class="panel">
+		<span class="label label-default">出入口管理</span>
+	</div>
 	<div class="btn-group">
-		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
-		<button id='addChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> Add</span></button>
-		<button id='updateChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> Update</span></button>
-		<button id='deleteChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> Delete</span></button>
-		<button id='searchChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"> Search</span></button>
+		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+		<button id='addChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Add</button>
+		<button id='updateChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Update</button>
+		<button id='deleteChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+		<button id='searchChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
 	</div>
 	
 	<div id= 'channelDiv'>
@@ -120,4 +124,3 @@ $(document).ready(function(){
 
 </script>
 
-</script>

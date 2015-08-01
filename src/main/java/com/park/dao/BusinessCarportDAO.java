@@ -1,5 +1,6 @@
 package com.park.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -14,6 +15,8 @@ public interface BusinessCarportDAO {
 
 	public List<BusinessCarport> getBusinessCarports();
 	
+	public List<BusinessCarport> getBusinessCarportByParkId(int parkId, int low, int count);
+	
 	public BusinessCarport getBusinessCarportById(int id);
 	
 	public BusinessCarport getBusinessCarportByMacId(int macId);
@@ -22,9 +25,13 @@ public interface BusinessCarportDAO {
 	
 	public int getBusinessCarportCount();
 	
+	public int getParkBusinessCarportCount(int parkId);
+	
 	public List<BusinessCarportDetail> getBusinessCarportDetail(@Param("low")int low, @Param("count")int count);
 	
-	public int updateBusinessCarportStatus(int macId, int status);
+	public List<BusinessCarportDetail> getParkBusinessCarportDetail(@Param("low")int low, @Param("count")int count, @Param("parkId")int parkId);
+	
+	public int updateBusinessCarportStatus(int macId, int status, Date date);
 	
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	
