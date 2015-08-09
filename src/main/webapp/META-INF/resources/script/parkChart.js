@@ -32,7 +32,9 @@ $.fn.parkChart.initial = function(){
 	
 	$.fn.parkChart.renderChart(chatContent);
 	
+	$('#parkName').text($('#park-select').find('option:selected').text());
 	$('#park-select').on('change', $(this), function(){
+		$('#parkName').text($('#park-select').find('option:selected').text());
 		$.fn.parkChart.renderChart(chatContent);
 	});
 	$('#date').on('change', $(this), function(){
@@ -112,13 +114,22 @@ var parseAccessData = function(data, isMonthAccess){
 	var exitAccess = [];
 	var entranceSumAccess = 0;
 	var exitSumAccess = 0;
-	$.each(data.entrance, function(key, value){
-		dateTime.push(key + ":00"),
-		entranceAccess.push(value);
-		entranceSumAccess += value;
-		exitAccess.push(data.exit[key]);
-		exitSumAccess += data.exit[key];
-	});
+	
+	for(var i = 0; i < 24; i++){
+		var entranceValue = data.entrance[i];
+		var exitValue = data.exit[i];
+		if(entranceValue != undefined || exitValue != undefined){
+			dateTime.push(i + ":00");
+			entranceValue = (entranceValue == undefined ? 0 : entranceValue);
+			exitValue = (exitValue == undefined ? 0 : exitValue);
+			entranceAccess.push(entranceValue);
+			exitAccess.push(exitValue);
+			entranceSumAccess += entranceValue;
+			exitSumAccess += exitValue;
+			
+		}
+	}
+	
 	
 	if(entranceAccess.length == 0){
 		for(var i = 0; i < 24; i++){
@@ -161,8 +172,10 @@ $.fn.parkChart.updateDayAccess = function(){
 		var exitSeries = chart.series[1];
 		entranceSeries.setData(chartData['entranceAccess']);
 		exitSeries.setData(chartData['exitAccess']);
-		chart.setTitle(null, {text:"本日(入口"+ $.fn.parkChart.dayAccess['entranceAccess']+ " 出口:"+ $.fn.parkChart.dayAccess['exitAccess'] +" )" 
-				+ "本月(入口:" +$.fn.parkChart.monthAccess['entranceAccess'] + " 出口:" + $.fn.parkChart.monthAccess['exitAccess']+ " )"})
+		//chart.setTitle(null, {text:"本日(入口"+ $.fn.parkChart.dayAccess['entranceAccess']+ " 出口:"+ $.fn.parkChart.dayAccess['exitAccess'] +" )" 
+		//		+ "本月(入口:" +$.fn.parkChart.monthAccess['entranceAccess'] + " 出口:" + $.fn.parkChart.monthAccess['exitAccess']+ " )"})
+	
+		$('#dayAccessVal').text($.fn.parkChart.dayAccess['entranceAccess'] + $.fn.parkChart.dayAccess['exitAccess']);
 	};	
 	
 	
@@ -193,8 +206,10 @@ $.fn.parkChart.updateMonthAccess = function(){
 	
 	var successFunc = function(data){
 		var chartData = parseAccessData(data, true);
-		chart.setTitle(null, {text:"日流量(入口："+ $.fn.parkChart.dayAccess['entranceAccess']+ " 出口:"+ $.fn.parkChart.dayAccess['exitAccess'] +" )" 
-				+ " 月流量(入口:" +$.fn.parkChart.monthAccess['entranceAccess'] + " 出口:" + $.fn.parkChart.monthAccess['exitAccess']+ " )"});
+		//chart.setTitle(null, {text:"日流量(入口："+ $.fn.parkChart.dayAccess['entranceAccess']+ " 出口:"+ $.fn.parkChart.dayAccess['exitAccess'] +" )" 
+		//		+ " 月流量(入口:" +$.fn.parkChart.monthAccess['entranceAccess'] + " 出口:" + $.fn.parkChart.monthAccess['exitAccess']+ " )"});
+		
+		$('#monthAccessVal').text($.fn.parkChart.monthAccess['entranceAccess'] + $.fn.parkChart.monthAccess['exitAccess']);
 	};	
 	
 	
@@ -227,7 +242,7 @@ $.fn.parkChart.updateLeftPort = function(){
 		contentType: 'application/json;charset=utf-8',			
 		success: function(data){
 			if(data.status == 1001){
-				var series = chart.series[2];
+			/*	var series = chart.series[2];
 				var seriesData = [{
 		            name: '无车',
 		            y: data.body.portLeftCount,
@@ -238,7 +253,8 @@ $.fn.parkChart.updateLeftPort = function(){
 		            color: Highcharts.getOptions().colors[1] 
 		        }];
 		       
-				series.setData(seriesData);
+				series.setData(seriesData); */
+				$('#leftPortVal').text(data.body.portLeftCount);
 			}
 		},
 		error: function(data){}
@@ -271,14 +287,14 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
 	    xAxis: {
 	        categories: chartData['dateTime']
 	    },
-	    labels: {
+	   /* labels: {
 	        items: [{
 	            html: '剩余车位(' + new Date().format('yyyy-MM-dd hh:mm:ss')+')',
 	            style: {left: '35px',
 	                top: '-40',
 	                color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'}
 	        }]
-	    },
+	    },*/
 	    series: [{
 	        type: 'column',
 	        name: '入口',
@@ -315,7 +331,7 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
                     textShadow: '0 0 3px black'
                 }
             }
-	    },  {
+	    }/*,  {
 	        type: 'pie',
 	        name: '车位状况',
 	        data: [{
@@ -334,7 +350,7 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
 	            enabled: true,
 	            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
 	        }
-	    }]
+	    }*/]
 	});
 };
 

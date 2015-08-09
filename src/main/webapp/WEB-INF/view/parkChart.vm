@@ -1,4 +1,11 @@
 #set($layout = "nullLayout.vm")
+<div class="well">
+	   <p>停车场名称：<span id="parkName"></span></p>	
+	   <p>本日流量信息: <span id="dayAccessVal"></span></p>
+	   <p>本月流量信息: <span id="monthAccessVal"></span></p>
+	   <p>剩余车位信息: <span id="leftPortVal"></span><p>
+
+</div>
 <div id="chart-header">
 	<div class="row">
 		
