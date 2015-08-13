@@ -8,6 +8,7 @@
 		bindAddBtnClick();
 		bindUpdateBtnClick();
 		bindSubmitMacBtnClick();
+		bindSearchSubmitMacBtnClick();
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
 		renderMac(0, $.fn.page.pageSize);
@@ -40,7 +41,7 @@
 		});
 	};
 	
-	var addBtnClickHandle = function(){
+	var addBtnClickHandle = function(){	
 		$('#addMacForm')[0].reset();
 		$('#addMacResult').html('');	
 		$('#addMacModal').modal('show');
@@ -89,6 +90,7 @@
 			}
 			
 			var addMacResultDiv = $('#addMacResult');
+			
 			$.fn.loader.appendLoader(addMacResultDiv);
 			
 			$.ajax({
@@ -113,6 +115,45 @@
 		});
 	};
 	
+var bindSearchSubmitMacBtnClick = function(){
+		
+		$('#submitSearchMacBtn').on('click', $(this), function(){	
+			
+			var url = '';
+			var MacFields = getSearchMacFormValue();
+			
+			url = $.fn.config.webroot + '/search/hardware';
+			//var addMacResultDiv = $('#addMacResult');
+			var data1='';
+			data1="mac="+$('input#macsearch').val();
+			//$.fn.loader.appendLoader(addMacResultDiv);
+			
+			$.ajax({
+				url:url,
+				type: 'post',
+				contentType: 'application/x-www-form-urlencoded;charset=utf-8',			
+				datatype: 'json',
+				data: data1,
+				success: function(data){
+					//alert("success!!");
+				//	alert(JSON.stringify(data));
+					if(data['state'] == 1001){
+						//$.fn.loader.removeLoader(addMacResultDiv);
+						//addMacResultDiv.append($.fn.tip.success('提交操作完成'));
+				//		alert("success!!");
+						fillMacTbody(data);
+						
+					}
+				},
+				error: function(data){
+					alert("fail!!");
+					$.fn.loader.removeLoader(addMacResultDiv);
+					addMacResultDiv.append($.fn.tip.error('操作未完成'));
+					setTimeout('$("#addMacResult").html("");', 3000);
+				}
+			});
+		});
+	};
 	var getAddMacFormValue = function(){
 		var MacFields = {};
 		var MacId = $('input#mac').attr('macId');
@@ -125,6 +166,21 @@
 		MacFields['status'] = parseFloat($('select#macStatus').val());
 		MacFields['description'] = $('input#macDesc').val();
 		MacFields['date'] = (new Date()).format('yyyy-MM-dd hh:mm:ss');
+		return MacFields;
+
+	};
+	var getSearchMacFormValue = function(){
+		var MacFields = {};
+	//	var MacId = $('input#mac').attr('macId');
+	//	if( MacId != undefined && MacId != null){
+		//	MacFields['id'] = parseInt(MacId);
+	//	}
+			
+		MacFields['mac'] = $('input#macsearch').val();
+	//	MacFields['type'] = parseInt($('select#macType').val());
+		//MacFields['status'] = parseFloat($('select#macStatus').val());
+		//MacFields['description'] = $('input#macDesc').val();
+		//MacFields['date'] = (new Date()).format('yyyy-MM-dd hh:mm:ss');
 		return MacFields;
 
 	};
@@ -167,6 +223,10 @@
 	
 	/**bind search Mac click **/
 	var bindSeacherBtnClick = function(){
+		$("#searchMac").on('click',$(this),function(){
+		
+			$("#searchMacModal").modal('show');
+		});
 		
 	};
 	
