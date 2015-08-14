@@ -31,28 +31,27 @@
 	<title>Park Manager</title>
 </head>
 <body>
-<div class="panel panel-primary fullheight">
-	<div class="panel-heading">停车管理系统</div>
-	<div class="panel-body fullheight">
-		<div class="row fullheight">
-			<div id="navigate" class="col-xs-2">
-				<div id = "navBar" class="list-group">
-					<a class="list-group-item active">导航</a>
-					<a class="list-group-item" href="/park/access">出入口实时流量管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
-					<a class="list-group-item" href="/park/parks">停车场管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>	
-					<a class="list-group-item" href="/park/channel">出入口管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
-					<a class="list-group-item" href="/park/businessCarport">停车位管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
-					<a class="list-group-item" href="/park/hardware">硬件设备管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>		
-					<a class="list-group-item" href="/park/users">APP用户管理<span class="glyphicon glyphicon-chevron-right pull-right"></a>
-				</div>
-			</div>
-			<div id="content" class="col-xs-10">
+<nav class="navbar navbar-default" role="navigation">
+   <div class="navbar-header">
+      <a class="navbar-brand" href="#" >停车管理系统</a>
+   </div>
+   <div class="daohang">
+      <ul class="nav navbar-nav" id="daohang">
+         <li class="active"  style="border: 2px solid #fff;"><a href="/park/access;">出入口实时流量管理</a></li>
+         <li class="active" style="border: 2px solid #fff;"><a href="/park/parks">停车场管理</a></li>
+         <li class="active" style="border: 2px solid #fff;"><a href="/park/channel">出入口管理</a></li>
+         <li class="active" style="border: 2px solid #fff;"><a href="/park/businessCarport">停车位管理</a></li>
+         <li class="active" style="border: 2px solid #fff;"><a href="/park/hardware">硬件设备管理</a></li>
+         <li class="active" style="border: 2px solid #fff;"><a href="/park/users">APP用户管理</a></li>
+         
+      </ul>
+   </div>
+</nav>
+
+
+    	<div id="content" class="col-xs-12">
     			$screen_content
-    		<div>
-    	</div>
-	</div>
-</div>
-       
+    		<div>   
 </body>
 
 </html>

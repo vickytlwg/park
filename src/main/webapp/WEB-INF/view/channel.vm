@@ -12,7 +12,13 @@
 		<button id='deleteChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
 		<button id='searchChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
 	</div>
-	
+<div class="input-group col-md-3 pull-right">
+			 	<span class="input-group-addon"><span class="glyphicon glyphicon-search"> </span></span>
+	        	<select class='form-control' id='searchPark'>
+								<option value=-1>所有停车场</option>
+				</select>
+				
+	   </div>
 	<div id= 'channelDiv'>
 		<table id='channelTable' class="table table-hover table-bordered">
 			<caption></caption>

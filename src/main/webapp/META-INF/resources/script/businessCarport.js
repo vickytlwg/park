@@ -25,6 +25,8 @@
 		});
 	};
 	
+	
+	
 	/**bind refresh click***/
 	var bindRefreshClick = function(){
 		var refreshBtn = $('#refresh');

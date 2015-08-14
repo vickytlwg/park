@@ -11,6 +11,8 @@
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
 		renderchannel(0, $.fn.page.pageSize);
+		fillSearchPark();
+		bindSearchParkChange();
 		renderPagination();
 	};
 	
@@ -20,6 +22,26 @@
 		channelBody.on('click', 'tr', function(event){
 			if(event.target.nodeName.toLowerCase() != 'input')
 				$(this).find('input[type="checkbox"]').click();
+		});
+	};
+	
+	var fillSearchPark = function(){
+		var successFunc = function(data){
+			data = data['body'];
+			var parkNameSelect = $('select#searchPark');
+			
+			for(var i = 0; i < data.length; i++){
+				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+			}
+		};
+		var errorFunc = function(data){
+		};
+		$.ajax({
+			url:$.fn.config.webroot + '/getParks?_t=' + (new Date()).getTime(),
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',			
+			success: function(data){successFunc(data);},
+			error: function(data){errorFunc(data);}
 		});
 	};
 	
@@ -33,6 +55,97 @@
 		
 	};
 	
+	var bindSearchParkChange = function(){
+		$('select#searchPark').on('change', $(this), function(){
+			
+			renderChannelCarport(0, $.fn.page.pageSize);
+		});
+	};
+	
+	var renderChannelCarport = function(low, count){
+		renderPagination();
+		var cols = $('#channelTable').find('thead tr th').length;
+		$("#channelBody").html('<tr><td colspan="' + cols + '"></td></tr>');
+		
+		var url='';
+		var parkId = $('select#searchPark').val();
+			if (parkId<1) {
+				url=$.fn.config.webroot + "/getchannelDetail?low=" + low + "&count=" + count  +"&_t=" + (new Date()).getTime();
+			} else {
+				url=$.fn.config.webroot + "/getParkchannelDetail?low=" + low + "&count=" + count +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime();
+			}
+		$.ajax({
+			url:url,
+			type: 'get',
+			success: function(data){
+				//alert("renderchannelcarport success");
+				
+				fillchannelTbody(data);
+			},
+			error: function(data){
+				alert("操作失败~~~");
+				errorHandle(data);
+			}
+		});
+	};
+	var renderPagination = function(){
+		var parkId = $('select#searchPark').val();
+		$.ajax({
+			url:$.fn.config.webroot + "/getchannelCount?parkId=" + parkId,
+			type: 'get',
+			success: function(data){
+				data = data["body"];
+				var paginationUl = $.fn.page.initial(data['count'], pageClickFunc);
+				$('#pagination').append(paginationUl);
+			},
+			error: function(data){
+				
+			}
+		});
+	};
+	var pageClickFunc = function(index){
+		renderBusinessCarport($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
+	};
+	
+	$.fn.page.initial = function(itemCount, func){
+		$.fn.page.pageCount = Math.ceil(itemCount / $.fn.page.pageSize);
+		$.fn.page.pageFunction = func;
+		$.fn.page.pagination();
+		return $.fn.page.paginationUl;
+	};
+	var fillChannelCarportTbody = function(data){
+		alert("fillchannelcarport");
+		var businessCarportBody = $("#ChannelBody");
+		$.fn.loader.removeLoader($('#ChannelDiv'));
+		businessCarportBody.html('');
+		data = data["body"];
+		alert(data.length);
+		for(var i = 0; i < data.length; i++){
+			var tr = $("<tr></tr>");
+			tr.append('<td><input type="checkbox" /></td>');
+			tr.append('<td>' + data[i]['id']+ '</td>');
+			tr.append('<td>' + data[i]['parkName']+ '</td>');
+			//alert(data[i]['parkName']+data[i]['carportNumber']);
+			tr.append('<td>' + data[i]['carportNumber']+ '</td>');
+			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "有车":"无车")+ '</td>');
+	//		tr.append('<td>' + data[i]['floor']+ '</td>');
+			tr.append('<td>' + data[i]['position']+ '</td>');
+			
+			var desc ='';
+			if(data[i]['description'] != undefined)
+				desc = data[i]['description'];
+			tr.append('<td>' + desc + '</td>');
+			
+			tr.append('<td>' + data[i]['date']+ '</td>');
+			if( i % 2 == 0){
+				tr.addClass('success');
+			}else{
+				tr.addClass('active');
+			}
+			businessCarportBody.append(tr);
+		}
+	};
 	/**bind add Channel click**/
 	var bindAddBtnClick = function(){
 		$('#addChannel').on('click', $(this), function(){
@@ -258,6 +371,7 @@
 		$.fn.loader.removeLoader($('#channelDiv'));
 		channelBody.html('');
 		data = $.parseJSON(data["body"]);
+	//	alert(data.length);
 		for(var i = 0; i < data.length; i++){
 			var tr = $("<tr></tr>");
 			tr.append('<td><input type="checkbox" /></td>');

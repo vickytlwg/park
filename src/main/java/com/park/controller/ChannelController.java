@@ -3,6 +3,7 @@ package com.park.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.support.logging.Log;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 import com.park.model.Hardware;
@@ -59,7 +61,23 @@ public class ChannelController {
 	@ResponseBody
 	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
 		Map<String, Object> ret = new HashMap<String, Object>();
+		
 		List<ChannelDetail> channelDetail = channelService.getChannelDetail(low, count);
+		if(channelDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get channel detail success");
+			ret.put("body", Utility.gson.toJson(channelDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get channel detail fail");
+		}
+		return Utility.gson.toJson(ret);		
+	}
+	@RequestMapping(value = "/getParkchannelDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String accessIndexpark(@RequestParam("low")int low, @RequestParam("count")int count,@RequestParam("parkId") Integer parkId){	
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<ChannelDetail> channelDetail = channelService.getParkChannelDetail(low, count,parkId);
 		if(channelDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get channel detail success");
@@ -71,7 +89,6 @@ public class ChannelController {
 		return Utility.gson.toJson(ret);
 		
 	}
-	
 	@RequestMapping(value = "/insert/channel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertChannel1(@RequestBody Channel channel){

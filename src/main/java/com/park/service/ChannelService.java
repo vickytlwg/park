@@ -14,7 +14,7 @@ public interface ChannelService {
 	public int getchannelCount();
 	
 	public List<ChannelDetail> getChannelDetail(int low, int count);
-	
+	public List<ChannelDetail> getParkChannelDetail(int low, int count,Integer parkId);
 	public int getChannelIdByMacId(int macId);
 	
 	public int getChannelIdByMac(String mac);

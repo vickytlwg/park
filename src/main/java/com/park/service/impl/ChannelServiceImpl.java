@@ -70,7 +70,9 @@ public class ChannelServiceImpl implements ChannelService{
 	public List<ChannelDetail> getChannelDetail(int low, int count) {
 		return channelDAO.getChannelDetail(low, count);
 	}
-
+	public List<ChannelDetail> getParkChannelDetail(int low, int count, Integer parkId) {
+		return channelDAO.getParkChannelDetail(low, count, parkId.intValue());
+	}
 	@Override
 	public int getchannelCount() {
 		
