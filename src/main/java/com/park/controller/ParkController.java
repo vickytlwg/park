@@ -56,6 +56,37 @@ public class ParkController {
 		return Utility.gson.toJson(ret);
 	}
 	
+	@RequestMapping(value = "/getNearParks", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getNearParks(@RequestBody Map<String, Object> args){
+		
+		double longitude = Double.parseDouble(args.get("longitude").toString());
+		double latitude = Double.parseDouble(args.get("latitude").toString());
+		double radius = Double.parseDouble(args.get("radius").toString());
+		List<Park> parkList = parkService.getNearParks(longitude, latitude, radius);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		ret.put("body", parkList);
+		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
+	
+	@RequestMapping(value = "/getParkWithName/{name}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkWithName(@PathVariable String name){
+		
+		List<Park> parks = parkService.getParkByName(name);
+	
+		if(parks != null){
+			if( parks.size() != 0)
+				return Utility.createJsonMsg(1001, "get park success", parks.get(0));
+			else
+				return Utility.createJsonMsg(1002, "park not exist");
+				
+		}
+		return Utility.createJsonMsg(1002, "get park fail");
+	}
+	
 	@RequestMapping(value = "/getParkByName", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkByName(@RequestParam("name") String name){
@@ -87,9 +118,11 @@ public class ParkController {
 		return Utility.gson.toJson(ret);					
 	}
 	
-	@RequestMapping(value = "/getParkDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/getParkDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+	public  String  accessIndex( @RequestBody Map<String, Object> args){
+		int low = (int)args.get("low");
+		int count = (int)args.get("count");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<Park> parkDetail = parkService.getParkDetail(low, count);
 		if(parkDetail != null){

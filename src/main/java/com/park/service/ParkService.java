@@ -10,6 +10,8 @@ public interface ParkService {
 	
 	public List<Park> getParks();
 	
+	public List<Park> getNearParks(double longitude, double latitude, double radius);
+	
 	public Park getParkById(int id);
 	
 	public int nameToId(String name);

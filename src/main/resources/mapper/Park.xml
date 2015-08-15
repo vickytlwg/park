@@ -18,6 +18,9 @@
 		<result property="floor" column="floor"/>
 		<result property="type" column="type"/>
 		<result property="position" column="position" />
+		<result property="longitude" column="longitude" />
+		<result property="latitude" column="latitude" />
+		<result property="alias" column="alias" />
 		<result property="date" column="date"/>
 		<result property="isDeleted" column="isDeleted"/>
 	</resultMap>    
@@ -35,6 +38,9 @@
 		<result property="isFree" column="isFree"/>
 		<result property="floor" column="floor"/>
 		<result property="type" column="type"/>
+		<result property="longitude" column="longitude" />
+		<result property="latitude" column="latitude" />
+		<result property="alias" column="alias" />
 		<result property="position" column="position" />
 		<result property="date" column="date"/>
 	</resultMap> 
@@ -65,13 +71,13 @@
 	</select>
 	
 	<insert id="insertPark" parameterType="Park" keyProperty="id">
-		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, position, date, isDeleted) 
-		values(#{name}, #{portCount}, #{channelCount}, #{portLeftCount}, #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{position}, #{date}, #{isDeleted})
+		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, longitude, latitude, alias, position, date, isDeleted) 
+		values(#{name}, #{portCount}, #{channelCount}, #{portLeftCount}, #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{position}, #{date}, #{isDeleted})
 	</insert>
 	
 	<update id="updatePark" parameterType="Park" >
 		update park set name = #{name}, portCount = #{portCount}, portLeftCount = #{portLeftCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
-		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where id = #{id}
+		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, longitude=#{longitude}, latitude=#{latitude}, alias=#{alias}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where id = #{id}
 	</update>
 	
 	<update id="updateLeftPortCount">

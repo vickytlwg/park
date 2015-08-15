@@ -16,6 +16,9 @@ public class ParkDetail {
 	private int isFree;
 	private int floor;
 	private int type;
+	private double longitude = -1;
+	private double latitude = -1;
+	private String alias = "";
 	private String position;
 	private String date;
 	
@@ -103,6 +106,24 @@ public class ParkDetail {
 	}
 	public void setDate(String date) {
 		this.date = date;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+	public String getAlias() {
+		return alias;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 	
 	
