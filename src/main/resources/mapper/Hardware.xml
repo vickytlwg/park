@@ -48,7 +48,9 @@
 	<select id="macToId" resultType="int">
 		select id from hardware where mac = #{param1}
 	</select>
-
+	<select id="searchHardware" resultMap="HardwareMapper">
+	select * from hardware where mac = #{param1}
+	</select>
 	<insert id="insertHardware" parameterType="com.park.model.Hardware" keyProperty="id">
 		insert into hardware(mac, type, status, description, date) values(#{mac}, #{type}, #{status}, #{description}, #{date})
 	</insert>

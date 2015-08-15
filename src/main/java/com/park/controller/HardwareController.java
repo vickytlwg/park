@@ -90,7 +90,23 @@ public class HardwareController {
 		return Utility.gson.toJson(ret);
 		
 	}
-	
+	@RequestMapping(value = "/search/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String searchHardware(@RequestParam("mac")String mac){
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		List<Hardware> hardware= hardwareService.searchHardware(mac);
+		if(hardware != null)
+		{
+			retMap.put("state", "1001");
+			retMap.put("message", "search hardware success");
+			retMap.put("body", hardware);
+		}
+		else{
+			retMap.put("state", "1002");
+			retMap.put("message", "search hardware fail");
+		}
+		return  Utility.gson.toJson(retMap);
+	}
 	@RequestMapping(value = "/insert/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertHardware1(@RequestBody Hardware hardware){

@@ -30,6 +30,6 @@ public interface HardwareService {
 	public int deleteHardware(int id);
 	
 	public boolean bindHardware(int id);
-	
+	public List<Hardware> searchHardware(String mac);
 	public boolean changeHardwareStatus(int id, int status);
 }

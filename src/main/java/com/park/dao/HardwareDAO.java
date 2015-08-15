@@ -28,6 +28,6 @@ public interface HardwareDAO {
 	public int insertHardware(Hardware hardware);
 	
 	public int updateHardware(Hardware hardware);
-	
+	public List<Hardware> searchHardware( @Param("mac")String mac);
 	public int deleteHardware(int id);
 }
