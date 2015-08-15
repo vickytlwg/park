@@ -35,14 +35,14 @@
    <div class="navbar-header">
       <a class="navbar-brand" href="#" >停车管理系统</a>
    </div>
-   <div class="daohang">
-      <ul class="nav navbar-nav" id="daohang">
-         <li class="active"  style="border: 2px solid #fff;"><a href="/park/access;">出入口实时流量管理</a></li>
-         <li class="active" style="border: 2px solid #fff;"><a href="/park/parks">停车场管理</a></li>
-         <li class="active" style="border: 2px solid #fff;"><a href="/park/channel">出入口管理</a></li>
-         <li class="active" style="border: 2px solid #fff;"><a href="/park/businessCarport">停车位管理</a></li>
-         <li class="active" style="border: 2px solid #fff;"><a href="/park/hardware">硬件设备管理</a></li>
-         <li class="active" style="border: 2px solid #fff;"><a href="/park/users">APP用户管理</a></li>
+   <div class="daohang" >
+      <ul class="nav navbar-nav" id="daohang" >
+         <li class="active divider-vertical"  style="border: 2px solid #fff;"><a href="/park/access;">出入口实时流量管理</a></li>
+         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/parks">停车场管理</a></li>
+         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/channel">出入口管理</a></li>
+         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/businessCarport">停车位管理</a></li>
+         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/hardware">硬件设备管理</a></li>
+         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/users">APP用户管理</a></li>
          
       </ul>
    </div>
