@@ -19,6 +19,9 @@ public class Park {
 	private int isFree;
 	private int floor;
 	private int type;
+	private double longitude = -1;
+	private double latitude = -1;
+	private String alias = "";
 	private String position;
 	private Date date;
 	@JsonIgnore
@@ -106,6 +109,25 @@ public class Park {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	public double getLongitude() {
+		return longitude;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+	public String getAlias() {
+		return alias;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 	public void setPosition(String position) {
 		this.position = position;

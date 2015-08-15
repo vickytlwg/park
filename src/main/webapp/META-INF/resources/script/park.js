@@ -81,7 +81,10 @@
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
 		$('input#floorCount').val($(tds[10]).text());
 		$('select#parkType').val($(tds[11]).attr('data'));
-		$('input#position').val($(tds[12]).text());
+		var positionInput = $('input#position');
+		positionInput.val($(tds[12]).text());
+		$('input#longitude').val($(tds[12]).attr('longitude'));
+		$('input#latitude').val($(tds[12]).attr('latitude'));
 		
 		
 	};
@@ -145,6 +148,8 @@
 		parkFields['floor'] = parseInt($('input#floorCount').val());
 		parkFields['type'] = parseInt($('select#parkType').val());
 		parkFields['position'] = $('input#position').val();
+		parkFields['longitude'] = parseFloat($('input#longitude').val());
+		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['date'] = (new Date()).format('yyyy-MM-dd hh:mm:ss');
 		return parkFields;
 
@@ -195,10 +200,15 @@
 		var loaderTd = $('#parkBody').find('td');
 		loaderTd.append(loader.get());
 		loader.show();
-
+		
+		var data = {'low': low, 'count': count, 'T': new Date().getTime()};
 		$.ajax({
-			url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
-			type: 'get',
+			//url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
+			url: $.fn.config.webroot + "/getParkDetail" ,
+			type: 'post',
+			contentType: 'application/json;charset=utf-8',			
+			datatype: 'json',
+			data: $.toJSON(data),
 			success: function(data){
 				loader.remove();
 				fillParkTbody(data);
@@ -239,7 +249,7 @@
 			else 
 				type='其它';
 			tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
-			tr.append('<td>' + data[i]['position']+ '</td>');
+			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
 				tr.addClass('success');

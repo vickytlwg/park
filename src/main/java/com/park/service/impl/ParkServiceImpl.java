@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import com.google.gson.Gson;
 import com.park.dao.ParkDAO;
 import com.park.model.Park;
 import com.park.service.ParkService;
+import com.park.service.Utility;
 
 @Transactional
 @Service
@@ -23,6 +25,20 @@ public class ParkServiceImpl implements ParkService{
 	public List<Park> getParks(){
 		return parkDAO.getParks();
 		
+	}
+	
+	public List<Park> getNearParks(double longitude, double latitude, double radius){
+		List<Park> parks = this.getParks();
+		List<Park> nearParks = new ArrayList<Park>();
+		for(int i = 0; i < parks.size(); i++){
+			Park tempPark = parks.get(i);
+			
+			double distance = Utility.GetDistance(latitude, longitude, tempPark.getLatitude(), tempPark.getLongitude());
+			if(distance < radius){
+				nearParks.add(tempPark);
+			}
+		}
+		return nearParks;
 	}
 	
 	@Override

@@ -182,6 +182,7 @@ public class AccessServiceImpl implements AccessService{
 			//carport has no hardware, use channel update left port
 			int updateCount = (channel.getChannelFlag() == ChannelType.EXIT.getValue() ? 1 : -1);
 			int leftPorts = park.getPortLeftCount() + updateCount;
+			leftPorts = (leftPorts > park.getPortCount() ? park.getPortCount() : leftPorts);
 			parkService.updateLeftPortCount(park.getId(), leftPorts < 0 ? 0 : leftPorts);
 		}
 	}
