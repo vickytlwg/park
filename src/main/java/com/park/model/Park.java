@@ -23,6 +23,7 @@ public class Park {
 	private double latitude = -1;
 	private String alias = "";
 	private String position;
+	private String mapAddr;
 	private Date date;
 	@JsonIgnore
 	private int isDeleted;
@@ -142,6 +143,12 @@ public class Park {
 	}
 	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public String getMapAddr() {
+		return mapAddr;
+	}
+	public void setMapAddr(String mapAddr) {
+		this.mapAddr = mapAddr;
 	}
 	
 	

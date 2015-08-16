@@ -20,6 +20,7 @@ public class ParkDetail {
 	private double latitude = -1;
 	private String alias = "";
 	private String position;
+	private String mapAddr;
 	private String date;
 	
 	
@@ -124,6 +125,12 @@ public class ParkDetail {
 	}
 	public void setAlias(String alias) {
 		this.alias = alias;
+	}
+	public String getMapAddr() {
+		return mapAddr;
+	}
+	public void setMapAddr(String mapAddr) {
+		this.mapAddr = mapAddr;
 	}
 	
 	

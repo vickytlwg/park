@@ -85,6 +85,7 @@
 		positionInput.val($(tds[12]).text());
 		$('input#longitude').val($(tds[12]).attr('longitude'));
 		$('input#latitude').val($(tds[12]).attr('latitude'));
+		$('input#mapAddr').val(checkedTr.attr('mapAddr'));
 		
 		
 	};
@@ -150,6 +151,7 @@
 		parkFields['position'] = $('input#position').val();
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
+		parkFields['mapAddr'] = $('input#mapAddr').val();
 		parkFields['date'] = (new Date()).format('yyyy-MM-dd hh:mm:ss');
 		return parkFields;
 
@@ -240,7 +242,7 @@
 			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
 			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
-			
+			tr.attr('mapAddr', data[i]['mapAddr']);
 			var type='';
 			if(data[i]['type'] == 0)
 				type='室内';
