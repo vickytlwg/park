@@ -25,29 +25,31 @@
 	<link href="/park/css/main.css" rel="stylesheet">
 	
 	<script src="/park/script/utility.js"></script>
+	<script src="/park/script/clickjs.js"></script>
 	<script src="/park/script/jquery.shCircleLoader-min.js"></script>
 	<script src="/park/script/jquery.json-2.4.min.js"></script>
-	
+	<script>
+
+	</script>
 	<title>Park Manager</title>
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
    <div class="navbar-header">
-      <a class="navbar-brand" href="#" >停车管理系统</a>
+      <a class="navbar-brand"  >停车管理系统</a>
    </div>
-   <div class="daohang" >
-      <ul class="nav navbar-nav" id="daohang" >
-         <li class="active divider-vertical"  style="border: 2px solid #fff;"><a href="/park/access;">出入口实时流量管理</a></li>
-         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/parks">停车场管理</a></li>
-         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/channel">出入口管理</a></li>
-         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/businessCarport">停车位管理</a></li>
-         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/hardware">硬件设备管理</a></li>
-         <li class="active divider-vertical" style="border: 2px solid #fff;"><a href="/park/users">APP用户管理</a></li>
+
+      <ul class="nav nav-pills " id="daohang" >
+         <li  class="daohang1 " style="border: 2px solid #fff;"><a href="/park/access">出入口实时流量管理</a></li>
+         <li  class="daohang2" style="border: 2px solid #fff;"><a href="/park/parks">停车场管理</a></li>
+         <li  class="daohang3" style="border: 2px solid #fff;"><a href="/park/channel">出入口管理</a></li>
+         <li  class="daohang4" style="border: 2px solid #fff;"><a href="/park/businessCarport">停车位管理</a></li>
+         <li  class="daohang5" style="border: 2px solid #fff;"><a href="/park/hardware">硬件设备管理</a></li>
+         <li  class="daohang6" style="border: 2px solid #fff;"><a href="/park/users">APP用户管理</a></li>
          
       </ul>
-   </div>
-</nav>
 
+</nav>
 
     	<div id="content" class="col-xs-12">
     			$screen_content

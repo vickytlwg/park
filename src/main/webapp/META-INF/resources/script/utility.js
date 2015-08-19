@@ -10,7 +10,7 @@
 		this.conponent = $('<div style="height:'+ this.height +'px">load...</div>');
 		
 	};
-	
+
 	$.Loader.prototype.get = function(){
 		return this.conponent;
 	};
