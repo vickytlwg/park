@@ -1,45 +1,47 @@
 <script src="/park/script/channel.js"></script>
-
+<link href="/park/cssmb/tables.css" rel="stylesheet">
+<link href="/park/cssmb/master.css" rel="stylesheet">
 <div id="channel">
-
-	<div class="panel">
-		<span class="label label-default">出入口管理</span>
-	</div>
-	<div class="btn-group">
-		<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-		<button id='addChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Add</button>
-		<button id='updateChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Update</button>
-		<button id='deleteChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
-		<button id='searchChannel' type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
-	</div>
-<div class="input-group col-md-3 pull-right">
-			 	<span class="input-group-addon"><span class="glyphicon glyphicon-search"> </span></span>
-	        	<select class='form-control' id='searchPark'>
+<div class="row" style="width:100%">
+<div class="box grid_12" style="width:100%">
+        <div class="box-head" style="height:40px"><h2 >出入口实时流量管理</h2></div>     
+              <div class="input-group col-md-3 pull-right" style="padding:1px;">
+			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
+	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
 								<option value=-1>所有停车场</option>
-				</select>
-				
-	   </div>
-	<div id= 'channelDiv'>
-		<table id='channelTable' class="table table-hover table-bordered">
-			<caption></caption>
-			<thead>
-				<tr>
-					<th><input type="checkbox" /></th>
-					<th>Id</th>	
-					<th>停车场名称</th>	
-					<th>通道编号</th>
-					<th>MAC Id</th>
-					<th>标志</th>
-					<th>状态</th>
-					<th>描述</th>
-					<th>日期</th>
-				</tr>
-			</thead>
-			<tbody id="channelBody"></tbody>
-		</table>
-	</div>
-	<div id='pagination'></div>
-</div>
+				</select>				
+	   </div>	   
+        <div class="box-content no-pad">
+         <ul class="table-toolbar">
+         
+            <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
+            <li id='addChannel'><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           
+            <li id='updateChannel'><a href="#"><img src="img/icons/basic/up.png" alt="" /> 更新</a></li>
+            <li id='deleteChannel'><a href="#"><img src="img/icons/basic/delete.png" alt="" /> 删除</a></li>
+             <li id='searchChannel'><a href="#"><img src="img/icons/basic/Search.png" style="width:18px;height:auto;" alt="" /> 查找</a></li>
+          </ul>
+          <table class="display table table-hover  table-condensed" id='channelTable' style="font-size:12px">
+           <thead>
+            <tr>
+            
+             <th><span style=""><input type="checkbox" /></div></th>
+					<th ><span style="padding-left:15%">Id</div></th>		
+					<th><span style="padding-left:15%">停车场名称</div></th>
+					<th><span style="padding-left:15%">通道编号</div></th>
+					<th><span style="padding-left:15%">MAC Id</div></th>
+					<th><span style="padding-left:15%">标志</div></th>
+					<th><span style="padding-left:15%">状态</div></th>
+					<th><span style="padding-left:15%">描述</div></th>
+					<th><span style="padding-left:15%">日期</div></th>	
+            </tr>
+          </thead>
+          <tbody id="channelBody"></tbody>
+          </table>
+		    </div>
+		    <div id='pagination'></div>
+        </div>
+        </div>
+
 
 
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby='addChannelLabel' aria-hidden='true'>

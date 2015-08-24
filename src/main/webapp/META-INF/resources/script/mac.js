@@ -224,7 +224,7 @@ var bindSearchSubmitMacBtnClick = function(){
 	/**bind search Mac click **/
 	var bindSeacherBtnClick = function(){
 		$("#searchMac").on('click',$(this),function(){
-		
+			//alert("search  c");
 			$("#searchMacModal").modal('show');
 		});
 		

@@ -382,6 +382,9 @@
 			tr.append('<td data=' + data[i]['channelFlag'] + '>' + (data[i]['channelFlag']==1?"入口":"出口")+ '</td>');
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 1 ? "可用":"不可用")+ '</td>');
 			
+				{
+				
+				}
 			var desc ='';
 			if(data[i]['description'] != undefined)
 				desc = data[i]['description'];

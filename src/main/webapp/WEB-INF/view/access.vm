@@ -1,48 +1,49 @@
 <script src="/park/script/access.js"></script>
+<link href="/park/cssmb/tables.css" rel="stylesheet">
+<link href="/park/cssmb/master.css" rel="stylesheet">
 
-<div id="access">
-	<div class="panel">
-		<span class="label label-default">出入口实时流量管理</span>
-	</div>
-	
-	<div>
-		<div class="btn-group">
-			<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"> </span> Add</button>
-			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"> </span> Update</button>
-			<button id="deleteAccess" type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"> </span> Delete</button>
-	      	
-		</div>
-		
-		<div class="input-group col-md-3 pull-right">
-			 	<span class="input-group-addon"><span class="glyphicon glyphicon-search"> </span></span>
-	        	<select class='form-control' id='searchPark'>
+<div  id="access">
+<div class="row" style="width:100%">
+<div class="" style="width:100%">
+        <div class="box-head" style="height:40px"><h2 >出入口实时流量管理</h2></div>
+        
+              <div class="input-group col-md-3 pull-right" >
+			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
+	        	<select class='form-control' style="font-size:14px;height:28px" id='searchPark'>
 								<option value=-1>所有停车场</option>
 				</select>
 				
 	   </div>
-   </div>
-	
-	<div id='accessDiv'>
-		<table id='accessTable' class="table table-hover table-bordered">
-			<caption class="text-primary"></caption>
-			<thead>
-				<tr>
-					<th><input type="checkbox" /></th>
-					<th>Id</th>		
-					<th>车库</th>
-					<th>进出口</th>
-					<th>出入日期</th>			
-				</tr>
-			</thead>
-			<tbody id="accessBody">		
+        
+      
+	   
+        <div class="box-content no-pad">
+         <ul class="table-toolbar">
+         
+            <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
+            <li><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           
+            <li><a href="#"><img src="img/icons/basic/up.png" alt="" /> 更新</a></li>
+            <li  id="deleteAccess"><a href="#"><img src="img/icons/basic/delete.png" alt="" /> 删除</a></li>
+          </ul>
+          <table class="display table table-hover  table-condensed"  style="font-size:12px" id='accessTable' >
+           <thead>
+            <tr>
+             <th><span style=""><input type="checkbox" /></div></th>
+					<th ><span style="padding-left:15%">Id</div></th>		
+					<th><span style="padding-left:15%">车库</div></th>
+					<th><span style="padding-left:15%">进出口</div></th>
+					<th><span style="padding-left:15%">出入日期</div></th>	
+            </tr>
+          </thead>
+          	<tbody id="accessBody">		
 			</tbody>
-		</table>
-	</div>
+          </table>
+		    </div>
+		    <div id='pagination'></div>
+        </div>
+        </div>
+	<div >
 	
-	<div id='pagination'></div>
-</div>
-
 <div id='showMessage'>
 </div>
 

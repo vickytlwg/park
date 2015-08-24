@@ -8,28 +8,28 @@ $(function(){
 	var url=window.location.href;
 	var subUrl=url.substring(url.length-4);
 	//alert(subUrl);
-	$('#daohang li').removeClass("active");
+	$('#daohang li a').removeClass("active");
 	switch (subUrl) {
 	case "cess":
-		$('.daohang1').addClass("active");
+		$('.daohang1 a').addClass("active");
 		break;
 	case "ark/":
-		$('.daohang1').addClass("active");
+		$('.daohang1 a').addClass("active");
 		break;
 	case "arks":
-		$('.daohang2').addClass("active");
+		$('.daohang2 a').addClass("active");
 		break;
 	case "nnel":
-		$('.daohang3').addClass("active");
+		$('.daohang3 a').addClass("active");
 		break;
 	case "port":
-		$('.daohang4').addClass("active");
+		$('.daohang4 a').addClass("active");
 		break;
 	case "ware":
-		$('.daohang5').addClass("active");
+		$('.daohang5 a').addClass("active");
 		break;
 	case "sers":
-		$('.daohang6').addClass("active");
+		$('.daohang6 a').addClass("active");
 		break;
 	default:
 		//alert("unknow url");

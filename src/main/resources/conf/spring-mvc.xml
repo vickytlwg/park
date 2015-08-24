@@ -73,9 +73,13 @@
 	<!-- 对静态资源文件的访问  -->
 	<mvc:resources mapping="/image/**" location="/META-INF/resources/image/"
     	cache-period="31556926" />
+    	<mvc:resources mapping="/img/**" location="/META-INF/resources/img/"
+    	cache-period="31556926" />
 	<mvc:resources mapping="/script/**" location="/META-INF/resources/script/"
     	cache-period="31556926" />
 	<mvc:resources mapping="/css/**" location="/META-INF/resources/css/"
+    	cache-period="31556926" />
+    	<mvc:resources mapping="/cssmb/**" location="/META-INF/resources/cssmb/"
     	cache-period="31556926" />
     	<mvc:resources mapping="/fonts/**" location="/META-INF/resources/fonts/"
     	cache-period="31556926" />

@@ -1,49 +1,52 @@
 <script src="/park/script/businessCarport.js"></script>
+<link href="/park/cssmb/tables.css" rel="stylesheet">
+<link href="/park/cssmb/master.css" rel="stylesheet">
 
 <div id="businessCarport">
 
-	<div class="panel">
-		<span class="label label-default">停车位管理</span>
-	</div>
-	<div>
-		<div class="btn-group">
-			<button id="refresh" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-			<button id='addBusinessCarport' type="button" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Add</button>
-			<button id='updateBusinessCarport' type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> Update</button>
-			<button id='deleteBusinessCarport' type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</button>
-		</div>
-		
-		<div class="input-group col-md-3 pull-right">
-			 	<span class="input-group-addon"><span class="glyphicon glyphicon-search"> </span></span>
-	        	<select class='form-control' id='searchPark'>
+<div class="row" style="width:100%">
+<div class="box grid_12" style="width:100%">
+        <div class="box-head" style="height:40px"><h2 >停车位管理</h2></div>     
+              <div class="input-group col-md-3 pull-right" style="padding:1px;">
+			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
+	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
 								<option value=-1>所有停车场</option>
-				</select>
-				
-	   </div>
-	</div>
+				</select>				
+	   </div>	   
+        <div class="box-content no-pad">
+         <ul class="table-toolbar">
+         
+            <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
+            <li id='addBusinessCarport'><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           
+            <li id='updateBusinessCarport'><a href="#"><img src="img/icons/basic/up.png" alt="" /> 更新</a></li>
+            <li id='deleteBusinessCarport'><a href="#"><img src="img/icons/basic/delete.png" alt="" /> 删除</a></li>
+            
+          </ul>
+          <table class="display table table-hover  table-condensed" id='businessCarportTable' style="font-size:12px">
+           <thead>
+            <tr>
+            
+             <th><span style=""><input type="checkbox" /></div></th>
+					<th ><span style="padding-left:15%">Id</div></th>		
+					<th><span style="padding-left:15%">停车场名称</div></th>
+					<th><span style="padding-left:15%">停车位编号</div></th>
+					<th><span style="padding-left:15%">MAC Id</div></th>
+					<th><span style="padding-left:15%">标志</div></th>
+					<th><span style="padding-left:15%">状态</div></th>
+					<th><span style="padding-left:15%">楼层</div></th>
+					<th><span style="padding-left:15%">描述</div></th>
+					<th><span style="padding-left:15%">日期</div></th>	
+            </tr>
+          </thead>
+          <tbody id="businessCarportBody"></tbody>
+          </table>
+		    </div>
+		    <div id='pagination' ></div>
+        </div>
+        </div>
+
+
 	
-	<div id= 'businessCarportDiv'>
-		<table id='businessCarportTable' class="table table-hover table-bordered">
-			<caption></caption>
-			<thead>
-				<tr>
-					<th><input type="checkbox" /></th>
-					<th>Id</th>	
-					<th>停车场名称</th>	
-					<th>停车位编号</th>
-					<th>MAC Id</th>
-					<th>状态</th>
-					<th>楼层</th>
-					<th>位置</th>
-					<th>描述</th>
-					<th>日期</th>
-				</tr>
-			</thead>
-			<tbody id="businessCarportBody"></tbody>
-		</table>
-	</div>
-	<div id='pagination'></div>
-</div>
 
 
 <div class="modal fade" id="addBusinessCarportModal" tabindex="-1" role="dialog" aria-labelledby='addBusinessCarportLabel' aria-hidden='true'>

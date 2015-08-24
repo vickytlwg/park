@@ -23,6 +23,7 @@
 	var bindRefreshClick = function(){
 		var refreshBtn = $('#refresh');
 		refreshBtn.on('click', $(this), function(){
+			
 			renderAccess($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 			$(this).blur();
 		});
