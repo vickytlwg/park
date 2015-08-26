@@ -4,19 +4,14 @@
 
 <div  id="access">
 <div class="row" style="width:100%">
-<div class="" style="width:100%">
-        <div class="box-head" style="height:40px"><h2 >出入口实时流量管理</h2></div>
-        
+<div class="box" style="width:100%">
+        <div class="box-head" style="height:40px"><h2 >出入口实时流量管理</h2></div>       
               <div class="input-group col-md-3 pull-right" >
 			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
 	        	<select class='form-control' style="font-size:14px;height:28px" id='searchPark'>
 								<option value=-1>所有停车场</option>
-				</select>
-				
-	   </div>
-        
-      
-	   
+				</select>				
+	   </div>	   
         <div class="box-content no-pad">
          <ul class="table-toolbar">
          
@@ -42,7 +37,7 @@
 		    <div id='pagination'></div>
         </div>
         </div>
-	<div >
+	<div>
 	
 <div id='showMessage'>
 </div>

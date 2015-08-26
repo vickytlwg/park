@@ -6,6 +6,7 @@ $.fn.parkChart.chart;
 $.fn.parkChart.dayAccess = {'entranceAccess': 0, 'exitAccess':0};
 $.fn.parkChart.monthAccess = {'entranceAccess':0, 'exitAccess':0};
 $.fn.parkChart.yearAccess = {'entranceAccess': 0, 'exitAccess':0};
+
 /**
  * init content
  */
@@ -26,12 +27,12 @@ $.fn.parkChart.initial = function(){
 	    weekStart: 1,
 	    yearSuffix: "年",
 	    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
-		
+	
 	});
 		
-	
+	Highcharts.setOptions(Highcharts.themeGray);
 	$.fn.parkChart.renderChart(chatContent);
-	
+
 	$('#parkName').text($('#park-select').find('option:selected').text());
 	$('#park-select').on('change', $(this), function(){
 		$('#parkName').text($('#park-select').find('option:selected').text());
@@ -70,6 +71,7 @@ $.fn.parkChart.initial = function(){
 	
 		$.fn.parkChart.renderChart(chatContent);
 	})
+	
 };
 
 

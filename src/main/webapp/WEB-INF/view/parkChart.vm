@@ -35,7 +35,7 @@
 				<label for="theme" class="control-label">主题</label>
 				<select id="theme" class="form-control">
 					<option value=0>默认</option>
-					<option value=1>灰色</option>
+					<option value=1 selected="selected">灰色</option>
 					<option value=2>深蓝色</option>
 					<option value=3>深绿色</option>
 					<option value=4>黑色</option>
@@ -55,6 +55,7 @@
 <script>
 $(document).ready(function(){
 	$.fn.parkChart.initial();
+	
 });
 
 </script>
