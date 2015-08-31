@@ -51,7 +51,8 @@ public class ParkServiceImpl implements ParkService{
 	}
 	
 	public List<Park> getParkByName(String name){
-		return parkDAO.getParkByName(name);
+		// use like function to find park
+		return parkDAO.getParkByName("%" + name + "%");
 	}
 	
 	public int getParkCount(){

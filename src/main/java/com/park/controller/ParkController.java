@@ -1,11 +1,15 @@
 package com.park.controller;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Park;
@@ -25,6 +28,8 @@ public class ParkController {
 
 	@Autowired
 	private ParkService parkService;
+	
+	private static Log logger = LogFactory.getLog(ParkController.class);
 	
 	@RequestMapping(value = "/parks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String parks(ModelMap modelMap, HttpServletRequest request){
@@ -75,29 +80,37 @@ public class ParkController {
 	@ResponseBody
 	public String getParkWithName(@PathVariable String name){
 		
+		logger.info("get park with name: " + name);
 		List<Park> parks = parkService.getParkByName(name);
 	
 		if(parks != null){
-			if( parks.size() != 0)
-				return Utility.createJsonMsg(1001, "get park success", parks.get(0));
-			else
+			if( parks.size() != 0){
+				return Utility.createJsonMsg(1001, "get park success", parks);
+			}else{
+				logger.debug("park not exist : " + name);
 				return Utility.createJsonMsg(1002, "park not exist");
+				
+			}
 				
 		}
 		return Utility.createJsonMsg(1002, "get park fail");
 	}
 	
-	@RequestMapping(value = "/getParkByName", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/getParkByName", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getParkByName(@RequestParam("name") String name){
-		
+	public String getParkByName(@RequestBody Map<String, Object> args){
+		String name = (String)args.get("name");
+		logger.info("get park with name: " + name);
 		List<Park> parks = parkService.getParkByName(name);
 	
 		if(parks != null){
 			if( parks.size() != 0)
-				return Utility.createJsonMsg(1001, "get park success", parks.get(0));
-			else
+				return Utility.createJsonMsg(1001, "get park success", parks);
+			else{
+				logger.debug("park not exist : " + name);
 				return Utility.createJsonMsg(1002, "park not exist");
+			}
+				
 				
 		}
 		return Utility.createJsonMsg(1002, "get park fail");
@@ -151,11 +164,42 @@ public class ParkController {
 		return parkService.updatePark(park);
 	}
 	
-	@RequestMapping(value = "/update/park1", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/update/parkFields", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String updatePark1(@RequestBody Park park){
+	public String updatePark1(@RequestBody Map<String, Object> args){
+		if(!args.containsKey("id"))
+			return Utility.createJsonMsg("1002", "need park id");
+		int parkId = (int) args.get("id");
+		Park park = parkService.getParkById(parkId);
+		if(park == null){
+			return Utility.createJsonMsg("1003", "no this park, cannot update");
+		}
+		
+		Method[] methods = null;
+		try {
+			methods = Class.forName("com.park.model.Park").getMethods();
+		} catch (SecurityException | ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		for(int i = 0; i < methods.length; i++){
+			String methodName = methods[i].getName();
+			if(!methodName.substring(0, 3).equals("set"))
+				continue;
+			String fieldInMethod = methodName.substring(3).toLowerCase();
+			if(args.containsKey(fieldInMethod)){
+				try {
+					methods[i].invoke(park, args.get(fieldInMethod));
+				} catch (IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		return parkService.updatePark(park);
 	}
+	
+	
 	@RequestMapping(value = "/delete/park/{Id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String deletePark(@PathVariable int Id){

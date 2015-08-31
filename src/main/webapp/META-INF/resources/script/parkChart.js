@@ -279,7 +279,7 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
                 	 $.fn.parkChart.updateChart();
                 	 setInterval(function(){
                 		 $.fn.parkChart.updateChart();
-                	 }, 1000 * 30);
+                	 }, 1000 * 2);
                  }                                                               
              }   
 		},
