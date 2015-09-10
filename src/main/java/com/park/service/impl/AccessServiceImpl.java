@@ -77,10 +77,8 @@ public class AccessServiceImpl implements AccessService{
 				 exitMap.put((int)item.get("hour"), Integer.parseInt(item.get("count").toString()));
 			}else{
 				entranceMap.put((int)item.get("hour"), Integer.parseInt(item.get("count").toString()));
-			}
-			
-		}
-		
+			}	
+		}		
 		body.put("exit", exitMap);
 		body.put("entrance", entranceMap);
 		return body;

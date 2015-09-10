@@ -8,7 +8,7 @@
         <div class="box-head" style="height:40px"><h2 >出入口实时流量管理</h2></div>       
               <div class="input-group col-md-3 pull-right" >
 			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
-	        	<select class='form-control' style="font-size:14px;height:28px" id='searchPark'>
+	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
 								<option value=-1>所有停车场</option>
 				</select>				
 	   </div>	   
