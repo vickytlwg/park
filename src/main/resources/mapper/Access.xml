@@ -69,7 +69,7 @@
 	
 	 
 	<select id="getParkAccessDetail" resultMap="AccessDetailMapper">
-	{call p1(#{low,jdbcType=INTEGER,mode=IN},#{count,jdbcType=INTEGER,mode=IN})}
+	{call P_getParkAccessDetail(#{low,jdbcType=INTEGER,mode=IN},#{count,jdbcType=INTEGER,mode=IN})}
 	</select> 
 	
 	<select id="getAccessCount"  resultType="int">
