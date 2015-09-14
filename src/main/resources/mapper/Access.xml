@@ -69,7 +69,11 @@
 	
 	 
 	<select id="getParkAccessDetail" resultMap="AccessDetailMapper">
-	{call P_getParkAccessDetail(#{low,jdbcType=INTEGER,mode=IN},#{count,jdbcType=INTEGER,mode=IN})}
+	select access.id as access_Id, park.name as park_name, channel.channelId as channel_channelId, access.date as access_date from access 
+	left join channel on access.channelId = channel.Id 
+	left join park on channel.parkId = park.Id 
+	where channel.parkId = #{parkId} 
+	order by access.date desc limit #{low}, #{count}
 	</select> 
 	
 	<select id="getAccessCount"  resultType="int">
