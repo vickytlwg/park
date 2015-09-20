@@ -47,11 +47,13 @@ public class AccessServiceImpl implements AccessService{
 	}
 	
 	@Override
-	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId) {
+	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId,String table) {
 		if(parkId == null || parkId.intValue() == -1)
 			return accessDAO.getAccessDetail(low, count);
 		else
-			return accessDAO.getParkAccessDetail(low, count, parkId.intValue());
+		{
+			return accessDAO.getParkAccessDetail(low, count, parkId.intValue(),table);
+			}
 	}
 
 	@Override
@@ -64,8 +66,8 @@ public class AccessServiceImpl implements AccessService{
 
 	
 	@Override
-	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date) {
-		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date);
+	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date,String table) {
+		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date,table);
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		Map<Integer, Integer> exitMap = new HashMap<Integer, Integer>();
@@ -186,11 +188,11 @@ public class AccessServiceImpl implements AccessService{
 	}
 	
 	@Override
-	public String insertAccess(Access item){
-		
+	public String insertAccess(Access item,String table){
+		//String table ="access" ;
 		updateParkPorts(item.getChannelId());	
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(accessDAO.insertAccess(item) > 0){
+		if(accessDAO.insertAccess(item,table) > 0){
 			map.put("status", "1001");
 			map.put("message", "insert success");
 		}else{
@@ -201,11 +203,12 @@ public class AccessServiceImpl implements AccessService{
 	}
 
 	@Override
-	public String insertAccessList(List<Access> accesses){
+	public String insertAccessList(List<Access> accesses,String table){
 		Map<String, Object> map = new HashMap<String, Object>();
 		int sum = 0;
+		
 		for(Access access: accesses){
-			sum += accessDAO.insertAccess(access);
+			sum += accessDAO.insertAccess(access,table);
 		}
 		if(sum == accesses.size()){
 			map.put("status", "1001");
@@ -218,9 +221,10 @@ public class AccessServiceImpl implements AccessService{
 	}
 	
 	@Override
-	public String updateAccess(Access access){
+	public String updateAccess(Access access,String table){
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(accessDAO.updateAccess(access) > 0){
+
+		if(accessDAO.updateAccess(access,table) > 0){
 			map.put("status", "1001");
 			map.put("message", "update success");
 		}else{
@@ -231,9 +235,10 @@ public class AccessServiceImpl implements AccessService{
 	}
 	
 	@Override
-	public String deleteAccess(int Id){
+	public String deleteAccess(int Id,String table){
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(accessDAO.deleteAccess(Id)> 0){
+
+		if(accessDAO.deleteAccess(Id,table)> 0){
 			map.put("status", "1001");
 			map.put("message", "delete success");
 		}else{
@@ -241,6 +246,12 @@ public class AccessServiceImpl implements AccessService{
 			map.put("message", "delete fail");
 		}
 		return new Gson().toJson(map); 
+	}
+
+	@Override
+	public int getParkIdByChanellId(int channelId) {
+		return accessDAO.getParkIdByChanellId(channelId);
+
 	}
 
 

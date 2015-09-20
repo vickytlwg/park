@@ -10,12 +10,12 @@ public interface AccessService {
 	
 	public List<Access> getAccesses();
 	
-	public String insertAccess(Access item);
+	public String insertAccess(Access item,String table);
 	
 	public int getAccessCount(Integer parkId);
 	
 	
-	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
+	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date,String table);
 	
 	public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date);
 	
@@ -27,13 +27,13 @@ public interface AccessService {
 	
 	public Map<Integer, Integer> getChannelMonthCount(int macId, int year);
 	
+	public int getParkIdByChanellId(int channelId);
+	public String insertAccessList(List<Access> accesses,String table);
 	
-	public String insertAccessList(List<Access> accesses);
+	public String updateAccess(Access access,String table);
 	
-	public String updateAccess(Access access);
+	public String deleteAccess(int Id,String table);
 	
-	public String deleteAccess(int Id);
-	
-	public List<AccessDetail> getAccessDetail(int low, int count,Integer parkId);
+	public List<AccessDetail> getAccessDetail(int low, int count,Integer parkId,String table);
 
 }

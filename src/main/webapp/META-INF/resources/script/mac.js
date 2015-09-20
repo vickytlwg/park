@@ -260,7 +260,7 @@ var bindSearchSubmitMacBtnClick = function(){
 			tr.append('<td><input type="checkbox" /></td>');
 			tr.append('<td>' + data[i]['id']+ '</td>');
 			tr.append('<td>' + data[i]['mac']+ '</td>');
-			tr.append('<td data=' + data[i]['type'] + '>' + (data[i]['type'] == 0 ? "车位MAC":"出入口MAC") + '</td>');
+			tr.append('<td data=' + data[i]['type'] + '>' + (data[i]['type'] == 0 ? "停车位探测器":"车流量探测器") + '</td>');
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "已使用":"未使用")+ '</td>');
 			
 			var desc ='';
