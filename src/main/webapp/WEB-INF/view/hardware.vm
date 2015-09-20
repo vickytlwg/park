@@ -94,8 +94,8 @@
 						<label class='col-sm-2 control-label' for='macType'>type</label>
 						<div class='col-sm-8'>
 							<select class='form-control' id='macType'>
-								<option value=0>车位MAC</option>
-								<option value=1>出入口MAC</option>
+								<option value=0>停车位探测器</option>
+								<option value=1>车流量探测器</option>
 							</select>
 						</div>
 					</div>

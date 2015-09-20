@@ -5,7 +5,7 @@
 		bindTrClick();
 		bindRefreshClick();
 		bindDeleteClick();
-		renderAccess(0, $.fn.page.pageSize);
+//		renderAccess(0, $.fn.page.pageSize);
 		
 		fillSearchPark();
 		bindSearchParkChange();
