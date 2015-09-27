@@ -9,9 +9,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
          <typeAlias alias="Carport" type="com.park.model.Carport"/>
          <typeAlias alias="User" type="com.park.model.User"/> 
          <typeAlias alias="Access" type="com.park.model.Access"/>
-  		 
           <typeAlias alias="Channel" type="com.park.model.Channel"/>    
           <typeAlias alias="Park" type="com.park.model.Park"/> 
+          <typeAlias alias="AuthUser" type="com.park.model.AuthUser"/> 
         
     </typeAliases>
  

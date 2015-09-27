@@ -33,7 +33,7 @@
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                         请输入账户名和密码进行登录
                     </div>
-                    <form method="post" action="/park/loginA" class="bootstrap-admin-login-form">
+                    <form method="post" action="/park/authority" class="bootstrap-admin-login-form">
                         <h1>登录</h1>
                         <div class="form-group">
                             <input class="form-control" type="text" name="username" placeholder="账户">

@@ -25,21 +25,12 @@ public class loginInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-		// TODO Auto-generated method stub
-		String url = request.getRequestURI();
-		
-		if(url.contains("login")){
-			//如果进行登陆提交，放行
-			return true;
-		}
+		//String url = request.getRequestURI();
 		HttpSession session  = request.getSession();
-		//从session中取出用户身份信息
-		String username = (String) session.getAttribute("username");
-		
-		if(username != null){
-			//身份存在，放行
+		Object username = session.getAttribute("username");
+		if(username != null)
 			return true;
-		}
+		
 		request.getRequestDispatcher("/login").forward(request, response);
 		return false;
 	}

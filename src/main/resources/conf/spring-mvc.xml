@@ -68,13 +68,20 @@
 	</bean>
 	
 	<!-- 拦截器 -->
-	<!-- <mvc:interceptors> <bean class="com.core.mvc.MyInteceptor" /> </mvc:interceptors> -->
-<mvc:interceptors>
-<mvc:interceptor>	
-<mvc:mapping path=""/>
-<bean class="com.park.interceptor.loginInterceptor"></bean>
-</mvc:interceptor>
-</mvc:interceptors>
+	<mvc:interceptors>
+		<mvc:interceptor>	
+		<mvc:mapping path="/access"/>
+		<mvc:mapping path="/businessCarport"/>
+		<mvc:mapping path="/channel"/>
+		<mvc:mapping path="/hardware"/>
+		<mvc:mapping path="/chart"/>
+		<mvc:mapping path="/parks"/>
+		<mvc:mapping path="/users"/>
+		<mvc:mapping path="/register/user"/>						
+		<bean class="com.park.interceptor.loginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 	<!-- 对静态资源文件的访问  -->
 	<mvc:resources mapping="/image/**" location="/META-INF/resources/image/"
     	cache-period="31556926" />
