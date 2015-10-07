@@ -2,8 +2,6 @@ package com.park.controller;
 
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +53,7 @@ public class AccessController {
 	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count, @RequestParam(value = "parkId", required = false) Integer parkId){	
 		Map<String, Object> ret = new HashMap<String, Object>();
 				
-		int x_mo=parkId%200;
-		Calendar cc=Calendar.getInstance();
-		cc.setTime(new Date());
-		int y_month=cc.get(Calendar.MONTH);
-		String table="access_"+String.format("%04d", x_mo)+"_"+String.format("%02d",y_month);
-		
-		List<AccessDetail> accessDetail = accessService.getAccessDetail(low, count, parkId,table);
+		List<AccessDetail> accessDetail = accessService.getAccessDetail(low, count, parkId);
 		if(accessDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get access detail success");
@@ -103,19 +95,12 @@ public class AccessController {
 		}
 		
 		String date = (String)args.get("date");
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-		Date dt=sdf.parse(date);
-		int x_mo=parkId%200;
-		Calendar cc=Calendar.getInstance();
-		cc.setTime(dt);
-		int y_month=cc.get(Calendar.MONTH);
-		String table="access_"+String.format("%04d", x_mo)+"_"+String.format("%02d",y_month);
-		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByPark(parkId, date,table);
+		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByPark(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
 	}
 	
-	@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+/*	@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getHourCountByChannel(@RequestBody Map<String, Object> args){	
 		int parkId = -1;
@@ -129,7 +114,7 @@ public class AccessController {
 		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByChannel(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}
+	}*/
 	
 	@RequestMapping(value = "/getMonthCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
@@ -147,7 +132,7 @@ public class AccessController {
 		
 	}
 	
-	@RequestMapping(value = "/getMonthCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+/*	@RequestMapping(value = "/getMonthCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getMonthCountByChannel(@RequestBody Map<String, Object> args){	
 		int parkId = -1;
@@ -161,10 +146,10 @@ public class AccessController {
 		Map<String, Map<Integer, Integer>> body = accessService.getMonthCountByChannel(parkId, year);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}
+	}*/
 	
 	
-	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+/*	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getChannelHourCount(@RequestBody Map<String, Object> args){	
 		int macId = -1;
@@ -178,10 +163,10 @@ public class AccessController {
 		Map<Integer, Integer> body = accessService.getChannelHourCount(macId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}
+	}*/
 	
 	
-	@RequestMapping(value = "/getChannelMonthCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+/*	@RequestMapping(value = "/getChannelMonthCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getChannelMonthCount(@RequestBody Map<String, Object> args){	
 		int macId = -1;
@@ -195,7 +180,7 @@ public class AccessController {
 		Map<Integer, Integer> body = accessService.getChannelMonthCount(macId, year);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}
+	}*/
 	
 	
 	@RequestMapping(value = "/insert/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
@@ -212,27 +197,18 @@ public class AccessController {
 		access.setDate(date);
 		access.setChannelId(channelId);
 		
-		int parkId=accessService.getParkIdByChanellId(channelId);
-		int x_mo=parkId%200;
-		Calendar cc=Calendar.getInstance();
-		cc.setTime(new Date());
-		int y_month=cc.get(Calendar.MONTH);
-		String table="access_"+String.format("%04d", x_mo)+"_"+String.format("%02d",y_month);
-		
-		return accessService.insertAccess(access,table) + "\neof\n";
+		return accessService.insertAccess(access) + "\neof\n";
 	}
 
-	@RequestMapping(value = "/update/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+/*	@RequestMapping(value = "/update/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updatePark(@RequestBody Access access){
-		String table="access";
-		return accessService.updateAccess(access,table);
+		return accessService.updateAccess(access);
 	}
 	
 	@RequestMapping(value = "/delete/access/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String deletePark(@PathVariable int id){
-		String table="access";
-		return accessService.deleteAccess(id,table);
-	}
+		return accessService.deleteAccess(id);
+	}*/
 }

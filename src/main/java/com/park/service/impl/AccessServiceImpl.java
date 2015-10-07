@@ -1,5 +1,8 @@
 package com.park.service.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +20,12 @@ import com.park.model.AccessDetail;
 import com.park.model.BusinessCarport;
 import com.park.model.Channel;
 import com.park.model.ChannelType;
+import com.park.model.Constants;
 import com.park.model.Park;
 import com.park.service.AccessService;
 import com.park.service.ChannelService;
 import com.park.service.ParkService;
+import com.park.service.Utility;
 
 @Transactional
 @Service
@@ -41,33 +46,40 @@ public class AccessServiceImpl implements AccessService{
 	@Autowired
 	private ParkService parkService;
 	
-	@Override
-	public List<Access> getAccesses(){
-		return accessDAO.getAccesses();
+	
+	private String findAccessTable(int parkId){
+		
+		int parkIdHash = parkId % Constants.ACCESSTABLESCOUNT;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int month=calendar.get(Calendar.MONTH);
+		return "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
 	}
 	
+	
 	@Override
-	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId,String table) {
-		if(parkId == null || parkId.intValue() == -1)
-			return accessDAO.getAccessDetail(low, count);
+	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId) {
+		if(parkId == null || parkId.intValue() < 0)
+			//return accessDAO.getAccessDetail(low, count);
+			return new ArrayList<AccessDetail>();
 		else
 		{
-			return accessDAO.getParkAccessDetail(low, count, parkId.intValue(),table);
+			return accessDAO.getParkAccessDetail(low, count, parkId.intValue(),findAccessTable(parkId));
 			}
 	}
 
 	@Override
 	public int getAccessCount(Integer parkId) {
-		if(parkId == null || parkId.intValue() == -1)
-			return accessDAO.getAccessCount();
+		if(parkId == null || parkId.intValue() < 0)
+			return 0;
 		else
-			return accessDAO.getParkAccessCount(parkId.intValue());
+			return accessDAO.getParkAccessCount(parkId.intValue(), findAccessTable(parkId));
 	}
 
 	
 	@Override
-	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date,String table) {
-		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date,table);
+	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date) {
+		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date,findAccessTable(parkId));
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		Map<Integer, Integer> exitMap = new HashMap<Integer, Integer>();
@@ -86,7 +98,7 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}
 
-	@Override
+/*	@Override
 	public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date) {
 		
 		List<Map<String, Object>> rets = accessDAO.getHourCountByChannel(parkId, date);
@@ -105,12 +117,12 @@ public class AccessServiceImpl implements AccessService{
 		}
 		
 		return body;
-	}
+	}*/
 
 	@Override
 	public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId, int year) {
 		
-		List<Map<String, Object>> rets =accessDAO.getMonthCountByPark(parkId, year);
+		List<Map<String, Object>> rets =accessDAO.getMonthCountByPark(parkId, year, findAccessTable(parkId));
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		Map<Integer, Integer> exitMap = new HashMap<Integer, Integer>();
@@ -130,7 +142,7 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}
 
-	@Override
+/*	@Override
 	public Map<String, Map<Integer, Integer>> getMonthCountByChannel(int parkId, int year) {
 		List<Map<String, Object>> rets = accessDAO.getMonthCountByChannel(parkId, year);
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
@@ -146,10 +158,10 @@ public class AccessServiceImpl implements AccessService{
 			macMap.put((int)item.get("month"), Integer.parseInt(item.get("count").toString()));
 		}
 		return body;
-	}
+	}*/
 	
 	
-	@Override
+/*	@Override
 	public Map<Integer, Integer> getChannelHourCount(int macId, String date) {
 		List<Map<String, Object>> rets = accessDAO.getChannelHourCount(macId, date);
 		Map<Integer, Integer> body = new HashMap<Integer, Integer>();
@@ -159,10 +171,10 @@ public class AccessServiceImpl implements AccessService{
 			body.put((int)item.get("hour"), Integer.parseInt(item.get("count").toString()));
 		}
 		return body;
-	}
+	}*/
 
 	
-	@Override
+/*	@Override
 	public Map<Integer, Integer> getChannelMonthCount(int macId, int year) {
 		List<Map<String, Object>> rets = accessDAO.getChannelMonthCount(macId, year);
 		Map<Integer, Integer> body = new HashMap<Integer, Integer>();
@@ -172,7 +184,7 @@ public class AccessServiceImpl implements AccessService{
 			body.put((int)item.get("month"), Integer.parseInt(item.get("count").toString()));
 		}
 		return body;
-	}
+	}*/
 	
 	public void updateParkPorts(int channelId){
 		Channel channel = channelService.getChannelsById(channelId);
@@ -188,11 +200,11 @@ public class AccessServiceImpl implements AccessService{
 	}
 	
 	@Override
-	public String insertAccess(Access item,String table){
-		//String table ="access" ;
+	public String insertAccess(Access item){
 		updateParkPorts(item.getChannelId());	
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(accessDAO.insertAccess(item,table) > 0){
+		int parkId = getParkIdByChanelId(item.getChannelId());
+		if(accessDAO.insertAccess(item,findAccessTable(parkId)) > 0){
 			map.put("status", "1001");
 			map.put("message", "insert success");
 		}else{
@@ -203,25 +215,22 @@ public class AccessServiceImpl implements AccessService{
 	}
 
 	@Override
-	public String insertAccessList(List<Access> accesses,String table){
-		Map<String, Object> map = new HashMap<String, Object>();
-		int sum = 0;
+	public String insertAccessList(List<Access> accesses){
 		
+		int sum = 0;
 		for(Access access: accesses){
-			sum += accessDAO.insertAccess(access,table);
+			int parkId = getParkIdByChanelId(access.getChannelId());
+			sum += accessDAO.insertAccess(access,findAccessTable(parkId));
 		}
 		if(sum == accesses.size()){
-			map.put("status", "1001");
-			map.put("message", "insert success");
+			return Utility.createJsonMsg("1001", "insert success");
 		}else{
-			map.put("status", "1002");
-			map.put("message",  sum + " success " + accesses.size() + " fail");
+			return Utility.createJsonMsg("1002", sum + " success " + accesses.size() + " fail");
 		}
-		return new Gson().toJson(map);
 	}
 	
-	@Override
-	public String updateAccess(Access access,String table){
+	/*@Override
+	public String updateAccess(Access access){
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if(accessDAO.updateAccess(access,table) > 0){
@@ -232,10 +241,10 @@ public class AccessServiceImpl implements AccessService{
 			map.put("message", "update fail");
 		}
 		return new Gson().toJson(map);
-	}
+	}*/
 	
-	@Override
-	public String deleteAccess(int Id,String table){
+/*	@Override
+	public String deleteAccess(int Id){
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if(accessDAO.deleteAccess(Id,table)> 0){
@@ -246,12 +255,11 @@ public class AccessServiceImpl implements AccessService{
 			map.put("message", "delete fail");
 		}
 		return new Gson().toJson(map); 
-	}
+	}*/
 
 	@Override
-	public int getParkIdByChanellId(int channelId) {
+	public int getParkIdByChanelId(int channelId) {
 		return accessDAO.getParkIdByChanellId(channelId);
-
 	}
 
 

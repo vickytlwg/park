@@ -18,32 +18,33 @@
 		<result property="date" column="access_date"/>
 	</resultMap> 
 	
-	<select id="getAccesses" resultMap="AccessMapper">
+<!-- 	<select id="getAccesses" resultMap="AccessMapper">
 		select * from access
-	</select>
+	</select> -->
 	
 	<select id="getHourCountByPark" resultType="java.util.HashMap" statementType="STATEMENT">
 		select channel.parkId, channel.channelFlag,  HOUR(${table}.date) as hour, count(*) as count from ${table} 
 		left join channel on ${table}.channelId = channel.id  where channel.parkId=${parkId} and Date(${table}.date)='${date}'
 		group by channel.channelFlag,${table}.dateIndex
 	</select>
-	<select id="getParkIdByChanellId" parameterType="int" resultType="int">
+	
+	<!-- <select id="getParkIdByChanellId" parameterType="int" resultType="int">
 	select parkId from channel where id = #{param1}
-	</select>
-	<select id="getHourCountByChannel" resultType="java.util.HashMap">
+	</select> -->
+	
+	<!-- <select id="getHourCountByChannel" resultType="java.util.HashMap">
 		select channel.parkId, channel.macId, channel.channelFlag, HOUR(access.date) as hour, count(*) as count from access
 		left join channel on access.channelId = channel.id where channel.parkId=#{parkId} and Date(access.date)=#{date}
 		group by channel.macId, date_format(access.date, '%Y-%m-%d %H')
-		
-	</select>
+	</select> -->
 	
 	<select id="getMonthCountByPark" resultType="java.util.HashMap">
-		select channel.parkId, channel.channelFlag, MONTH(access.date) as month, count(*) as count from access 
-		left join channel on access.channelId = channel.id  where channel.parkId=#{parkId} and YEAR(access.date) = #{year}
-		group by channel.channelFlag,date_format(access.date, '%Y-%m')
+		select channel.parkId, channel.channelFlag, MONTH(${table}.date) as month, count(*) as count from ${table} 
+		left join channel on ${table}.channelId = channel.id  where channel.parkId=#{parkId} and YEAR(${table}.date) = #{year}
+		group by channel.channelFlag,date_format(${table}.date, '%Y-%m')
 	</select>
 	
-	<select id="getMonthCountByChannel" resultType="java.util.HashMap">
+	<!-- <select id="getMonthCountByChannel" resultType="java.util.HashMap">
 		select channel.parkId, channel.macId, channel.channelFlag, MONTH(access.date) as month, count(*) as count from access 
 		left join channel on access.channelId = channel.id where channel.parkId=#{parkId} and YEAR(access.date) = #{year}
 		group by channel.macId, date_format(access.date, '%Y-%m')
@@ -68,7 +69,7 @@
 		order by access.date desc
 		limit #{low}, #{count}
 	</select> 
-	
+	 -->
 	
 	 
 	<select id="getParkAccessDetail" resultMap="AccessDetailMapper" statementType="STATEMENT">
@@ -79,26 +80,26 @@
 	order by ${table}.date desc limit ${low}, ${count}
 	</select> 
 	
-	<select id="getAccessCount"  resultType="int">
+	<!-- <select id="getAccessCount"  resultType="int">
 		select count(*) from access
-	</select>
+	</select> -->
 	
 	
 	<select id="getParkAccessCount"  resultType="int">
-		select count(*) from access 
-		left join channel on access.channelId = channel.Id
-		where channel.parkId = #{param1}
+		select count(*) from ${table} 
+		left join channel on ${table}.channelId = channel.Id
+		where channel.parkId = #{parkId}
 	</select>
 	
 	<insert id="insertAccess" keyProperty="id" statementType="STATEMENT">
 	    insert into ${table}(channelId,date,isDeleted,dateIndex) values (${item.channelId},NOW(), ${item.isDeleted},DATE_FORMAT(NOW(), '%Y-%m-%d %H'))
 	</insert>
 	
-	<update id="updateAccess" statementType="STATEMENT">
+	<!-- <update id="updateAccess" statementType="STATEMENT">
 		update ${table} set channelId = ${access.channelId}, date = '${access.date}', isDeleted = ${access.isDeleted} where Id = ${Id}
 	</update>
 	
 	<delete id="deleteAccess"  statementType="STATEMENT">
 		delete from ${table} where id = #{id}
-	</delete>
+	</delete> -->
 </mapper>
