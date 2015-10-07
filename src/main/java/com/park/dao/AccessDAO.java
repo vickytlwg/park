@@ -19,7 +19,7 @@ public interface AccessDAO {
 
 	//public List<Map<String, Object>> getHourCountByChannel(@Param("parkId")int parkId, @Param("date")String date);
 
-	public List<Map<String, Object>> getMonthCountByPark(@Param("parkId")int parkId, @Param("year")int year, @Param("table")String table);
+	public List<Map<String, Object>> getDayCountByPark(@Param("parkId")int parkId, @Param("date")String date, @Param("table")String table);
 
 	//public List<Map<String, Object>> getMonthCountByChannel(@Param("parkId")int parkId, @Param("year")int year);
 	
@@ -27,7 +27,7 @@ public interface AccessDAO {
 	
 	//public List<Map<String, Object>> getChannelMonthCount(@Param("macId")int macId, @Param("year")int year);
 	
-	public int getParkIdByChanellId(int channelId);
+	public int getParkIdByChanelId(int channelId);
 	
 	public int insertAccess(@Param("item")Access item,@Param("table")String table);
 	

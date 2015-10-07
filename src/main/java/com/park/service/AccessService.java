@@ -18,7 +18,10 @@ public interface AccessService {
 	
 	//public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date);
 	
-	public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId, int year);
+	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date);
+	
+	
+	//public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId, String date);
 	
 	//public Map<String, Map<Integer, Integer>> getMonthCountByChannel(int parkId, int year);
 	

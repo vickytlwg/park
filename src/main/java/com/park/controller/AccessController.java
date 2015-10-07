@@ -116,7 +116,7 @@ public class AccessController {
 		
 	}*/
 	
-	@RequestMapping(value = "/getMonthCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/getDayCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getMonthCountByPark(@RequestBody Map<String, Object> args){	
 		int parkId = -1;
@@ -126,8 +126,8 @@ public class AccessController {
 			String parkName = (String)args.get("parkName");
 			parkId = parkService.nameToId(parkName);
 		}
-		int year = (int)args.get("year");
-		Map<String, Map<Integer, Integer>> body = accessService.getMonthCountByPark(parkId, year);
+		String date = (String)args.get("date");
+		Map<String, Map<Integer, Integer>> body = accessService.getDayCountByPark(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
 	}

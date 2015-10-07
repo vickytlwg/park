@@ -118,18 +118,13 @@ var parseAccessData = function(data, isMonthAccess){
 	var exitSumAccess = 0;
 	
 	for(var i = 0; i < 24; i++){
-		var entranceValue = data.entrance[i];
-		var exitValue = data.exit[i];
-		if(entranceValue != undefined || exitValue != undefined){
-			dateTime.push(i + ":00");
-			entranceValue = (entranceValue == undefined ? 0 : entranceValue);
-			exitValue = (exitValue == undefined ? 0 : exitValue);
-			entranceAccess.push(entranceValue);
-			exitAccess.push(exitValue);
-			entranceSumAccess += entranceValue;
-			exitSumAccess += exitValue;
-			
-		}
+		var entranceValue = data.entrance[i] || 0;
+		var exitValue = data.exit[i] || 0;
+		dateTime.push(i + ":00");
+		entranceAccess.push(entranceValue);
+		exitAccess.push(exitValue);
+		entranceSumAccess += entranceValue;
+		exitSumAccess += exitValue;
 	}
 	
 	
@@ -142,15 +137,18 @@ var parseAccessData = function(data, isMonthAccess){
 	}
 	
 	if(isMonthAccess == true){
-		var date = $('#date').val();
-		var month = date.split('-')[1];
-		if(month[0] == "0")
-			month = month[1];
-		var monthEntranceAccess = data.entrance[''+month];
-		var monthExitAccess = data.exit[''+month];
+		
+		var monthEntranceAccess = 0;
+		var monthExitAccess = 0;
+		for(var i = 0; i < 31; i++){
+			var entranceValue = data.entrance[i] || 0;
+			var exitValue = data.exit[i] || 0;
+			monthEntranceAccess += entranceValue;
+			monthExitAccess += exitValue;
+		}
+		
 		$.fn.parkChart.monthAccess['entranceAccess'] = monthEntranceAccess == undefined ? 0 : monthEntranceAccess;
 		$.fn.parkChart.monthAccess['exitAccess'] = monthExitAccess == undefined ? 0 : monthExitAccess;
-		$.fn.parkChart.yearAccess = {"entranceAccess":entranceSumAccess, 'exitAccess': exitSumAccess};
 	}else{
 		$.fn.parkChart.dayAccess = {"entranceAccess":entranceSumAccess, 'exitAccess': exitSumAccess};
 	}
@@ -202,9 +200,8 @@ $.fn.parkChart.updateMonthAccess = function(){
 	var chart = $.fn.parkChart.chart;
 	var parkId = parseInt($('#park-select').val());
 	var date = $('#date').val();
-	var year = parseInt(date.split('-')[0]);
 	$.fn.parkChart.monthAccess['entranceAccess']
-	var url = $.fn.config.webroot + '/getMonthCountByPark?_t=' + (new Date()).getTime();
+	var url = $.fn.config.webroot + '/getDayCountByPark?_t=' + (new Date()).getTime();
 	
 	var successFunc = function(data){
 		var chartData = parseAccessData(data, true);
@@ -220,7 +217,7 @@ $.fn.parkChart.updateMonthAccess = function(){
 		type: 'post',
 		contentType: 'application/json;charset=utf-8',			
 		datatype: 'json',
-		data: $.toJSON({'parkId':parkId, 'year':year}),
+		data: $.toJSON({'parkId':parkId, 'date':date}),
 		success: function(data){
 			successFunc(data['body']);
 		},
@@ -279,7 +276,7 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
                 	 $.fn.parkChart.updateChart();
                 	 setInterval(function(){
                 		 $.fn.parkChart.updateChart();
-                	 }, 1000 * 2);
+                	 }, 1000 * 10);
                  }                                                               
              }   
 		},

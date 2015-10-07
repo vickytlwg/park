@@ -28,9 +28,9 @@
 		group by channel.channelFlag,${table}.dateIndex
 	</select>
 	
-	<!-- <select id="getParkIdByChanellId" parameterType="int" resultType="int">
+	 <select id="getParkIdByChanelId" parameterType="int" resultType="int">
 	select parkId from channel where id = #{param1}
-	</select> -->
+	</select>
 	
 	<!-- <select id="getHourCountByChannel" resultType="java.util.HashMap">
 		select channel.parkId, channel.macId, channel.channelFlag, HOUR(access.date) as hour, count(*) as count from access
@@ -38,10 +38,10 @@
 		group by channel.macId, date_format(access.date, '%Y-%m-%d %H')
 	</select> -->
 	
-	<select id="getMonthCountByPark" resultType="java.util.HashMap">
-		select channel.parkId, channel.channelFlag, MONTH(${table}.date) as month, count(*) as count from ${table} 
-		left join channel on ${table}.channelId = channel.id  where channel.parkId=#{parkId} and YEAR(${table}.date) = #{year}
-		group by channel.channelFlag,date_format(${table}.date, '%Y-%m')
+	<select id="getDayCountByPark" resultType="java.util.HashMap">
+		select channel.parkId, channel.channelFlag, DAY(${table}.date) as day, count(*) as count from ${table} 
+		left join channel on ${table}.channelId = channel.id  where channel.parkId=#{parkId} and date_format(${table}.date, '%Y-%m') = date_format(#{date}, '%Y-%m')
+		group by channel.channelFlag,date_format(${table}.date, '%Y-%m-%d')
 	</select>
 	
 	<!-- <select id="getMonthCountByChannel" resultType="java.util.HashMap">

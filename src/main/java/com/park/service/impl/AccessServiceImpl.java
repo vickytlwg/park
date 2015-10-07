@@ -1,5 +1,7 @@
 package com.park.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,14 +55,29 @@ public class AccessServiceImpl implements AccessService{
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		int month=calendar.get(Calendar.MONTH);
-		return "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
+		String table =  "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
+		return table;
+	}
+	
+	private String findAccessTable(int parkId, String date){
+		
+		int parkIdHash = parkId % Constants.ACCESSTABLESCOUNT;
+		Calendar calendar = Calendar.getInstance();
+		try {
+			calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		int month=calendar.get(Calendar.MONTH);
+		String table =  "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
+		return table;
+		
 	}
 	
 	
 	@Override
 	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId) {
 		if(parkId == null || parkId.intValue() < 0)
-			//return accessDAO.getAccessDetail(low, count);
 			return new ArrayList<AccessDetail>();
 		else
 		{
@@ -79,7 +96,7 @@ public class AccessServiceImpl implements AccessService{
 	
 	@Override
 	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date) {
-		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date,findAccessTable(parkId));
+		List<Map<String, Object>> rets = accessDAO.getHourCountByPark(parkId, date,findAccessTable(parkId, date));
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		Map<Integer, Integer> exitMap = new HashMap<Integer, Integer>();
@@ -120,9 +137,9 @@ public class AccessServiceImpl implements AccessService{
 	}*/
 
 	@Override
-	public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId, int year) {
+	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date) {
 		
-		List<Map<String, Object>> rets =accessDAO.getMonthCountByPark(parkId, year, findAccessTable(parkId));
+		List<Map<String, Object>> rets =accessDAO.getDayCountByPark(parkId, date, findAccessTable(parkId, date));
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		Map<Integer, Integer> exitMap = new HashMap<Integer, Integer>();
@@ -131,9 +148,9 @@ public class AccessServiceImpl implements AccessService{
 			Map<String, Object> item = rets.get(i);
 			
 			if((int)item.get("channelFlag") == ChannelType.EXIT.getValue()){
-				 exitMap.put((int)item.get("month"), Integer.parseInt(item.get("count").toString()));
+				 exitMap.put((int)item.get("day"), Integer.parseInt(item.get("count").toString()));
 			}else{
-				entranceMap.put((int)item.get("month"), Integer.parseInt(item.get("count").toString()));
+				entranceMap.put((int)item.get("day"), Integer.parseInt(item.get("count").toString()));
 			}
 			
 		}
@@ -259,7 +276,7 @@ public class AccessServiceImpl implements AccessService{
 
 	@Override
 	public int getParkIdByChanelId(int channelId) {
-		return accessDAO.getParkIdByChanellId(channelId);
+		return accessDAO.getParkIdByChanelId(channelId);
 	}
 
 
