@@ -279,5 +279,11 @@ public class AccessServiceImpl implements AccessService{
 		return accessDAO.getParkIdByChanelId(channelId);
 	}
 
+	@Override
+	public int getAllAccessCount(int xmo, int ymonth) {
+		// TODO Auto-generated method stub
+		return accessDAO.getAllAccessCount(xmo, ymonth);
+	}
+
 
 }

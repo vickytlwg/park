@@ -26,7 +26,7 @@ public interface ChannelDAO {
 	public int insertChannel(Channel channel);
 	
 	public int updateChannel(Channel channel);
-	
+	public void updateDateByHardwareMac(@Param("mac")String mac);
 	public int deleteChannel(int id);
 
 }

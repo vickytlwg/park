@@ -75,7 +75,9 @@
 	<update id="updateChannel" parameterType="Channel" >
 		update channel set macId = #{macId}, channelId = #{channelId}, channelFlag = #{channelFlag}, date = #{date}, status = #{status}, isEffective = #{isEffective}, description = #{description}, isDeleted = #{isDeleted} where id = #{id}
 	</update>
-	
+	<update	id="updateDateByHardwareMac">
+	{call updatechannelDateByhardwareMac(#{mac,jdbcType=CHAR,mode=IN})}
+	</update>
 	<delete id="deleteChannel" parameterType="int">
 		delete from channel where id = #{id}
 	</delete>

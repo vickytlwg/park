@@ -196,10 +196,18 @@ public class AccessController {
 		Access access = new Access();
 		access.setDate(date);
 		access.setChannelId(channelId);
-		
+		channelService.updateChannelDateByMac(mac);
 		return accessService.insertAccess(access) + "\neof\n";
 	}
-
+@RequestMapping(value="/getAllAccessCount",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
+@ResponseBody
+public String getAllAccessCount()
+	{
+		int count=accessService.getAllAccessCount(200, 12);
+		HashMap<String, Integer>  num=new HashMap<String,Integer>();
+		num.put("num", count);
+		return Utility.gson.toJson(num);
+	}
 /*	@RequestMapping(value = "/update/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updatePark(@RequestBody Access access){

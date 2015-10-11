@@ -27,6 +27,6 @@ public interface ChannelService {
 	
 	public String deleteChannel(int Id);
 	
-
+	public void updateChannelDateByMac(String mac);
 
 }

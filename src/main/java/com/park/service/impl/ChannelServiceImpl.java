@@ -97,4 +97,11 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDAO.getChannelById(id);
 	}
 
+
+	@Override
+	public void updateChannelDateByMac(String mac) {
+		// TODO Auto-generated method stub
+		channelDAO.updateDateByHardwareMac(mac);
+	}
+
 }

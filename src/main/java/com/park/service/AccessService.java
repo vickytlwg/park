@@ -32,7 +32,7 @@ public interface AccessService {
 	public int getParkIdByChanelId(int channelId);
 	
 	public String insertAccessList(List<Access> accesses);
-	
+	public int getAllAccessCount(int xmo,int ymonth);
 	//public String updateAccess(Access access);
 	
 	//public String deleteAccess(int Id);

@@ -6,7 +6,7 @@
 		bindRefreshClick();
 		bindDeleteClick();
 //		renderAccess(0, $.fn.page.pageSize);
-		
+		getAllAccessCount();
 		fillSearchPark();
 		bindSearchParkChange();
 	};
@@ -108,7 +108,19 @@
 		alert("get accesses failed");
 	};
 	
-	
+	var getAllAccessCount=function(){
+		$.ajax({
+			url:$.fn.config.webroot+'/getAllAccessCount',
+			type:'get',
+			contentType:'application/json;charset=utf-8',
+			success:function(data){
+			//	alert(data);
+				$("h2").html("出入口实时流量管理  	数据总量: "+data["num"]);
+				//alert(data["num"]);
+			}
+		}
+				);
+	};
 	/**
 	 * delete access
 	 */
@@ -142,6 +154,7 @@
 		});
 	};
 	
+
 	/***render pagination****/
 	var renderPagination = function(){
 		var parkId = $('select#searchPark').val();
