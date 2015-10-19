@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -7,9 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Park;
@@ -149,7 +153,22 @@ public class ParkController {
 		return Utility.gson.toJson(ret);
 		
 	}
-	
+	@RequestMapping(value = "/search/parkBykeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkByLocationkeywords(@RequestBody Map<String, Object> args){
+		String str=(String) args.get("keywords");
+		List<Park> parkDetail=parkService.getParkDetailByKeywords(str);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if(parkDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get park detail success");
+			ret.put("body", Utility.gson.toJson(parkDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get park detail fail");
+		}
+		return Utility.gson.toJson(ret);
+	}
 	
 	@RequestMapping(value = "/insert/park", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

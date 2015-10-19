@@ -19,6 +19,7 @@ public interface ParkDAO {
 	public List<Park> getParkByName(String name);
 	
 	public List<Park> getParkDetail(@Param("low")int low, @Param("count")int count);
+	public List<Park> getParkDetailByKeywords(@Param("param1")String keywords);
 	
 	public int getParkCount();
 	

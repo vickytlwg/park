@@ -6,12 +6,14 @@
 		bindTrClick();
 		bindRefreshClick();
 		bindAddBtnClick();
+		bindSearchBtnClick();
 		bindUpdateBtnClick();
 		bindSubmitParkBtnClick();
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
 		renderPark(0, $.fn.page.pageSize);
 		renderPagination();
+		searchParkByLocation();
 	};
 	
 	/**bind tr click*/
@@ -48,14 +50,38 @@
 	};
 	
 	
-	
+	var bindSearchBtnClick=function(){
+			
+		$('#searchParkl').on('click', $(this), function(){
+			$('#searchParkByLocation').modal('show');
+		});
+		};
 	/**bind update park click **/
 	var bindUpdateBtnClick = function(){
 		$('#updatePark').on('click', $(this), function(){
 			updateBtnClickHandle();
 		});
 	};
-	
+	var searchParkByLocation=function(){
+	//	alert('searchParkByLocation');	
+		$('#submitSearchParkBtn').on('click', $(this), function(){
+			var locationKey={'keywords': $('input#locationKeyWords').val()};
+			var url= $.fn.config.webroot + '/search/parkBykeywords';
+			$.ajax({
+				url:url,
+				type: 'post',
+				contentType: 'application/json;charset=utf-8',			
+				datatype: 'json',
+				data:$.toJSON(locationKey),
+				success: function(data){
+					fillParkTbody(data);
+				},
+				error: function(data){
+					alert("获取数据出错");
+				}
+			});
+		});
+	};
 	var updateBtnClickHandle = function(){
 		$('#addParkForm')[0].reset();
 		$('#addParkResult').html('');
@@ -148,7 +174,7 @@
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
 		parkFields['type'] = parseInt($('select#parkType').val());
-		parkFields['position'] = $('input#position').val();
+		parkFields['position'] = getAreaNamebyID(getAreaID())+' '+$('input#positionlast').val();
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['mapAddr'] = $('input#mapAddr').val();
@@ -156,6 +182,34 @@
 		return parkFields;
 
 	};
+	
+	function getAreaID(){
+		var area = 0;          
+		if($("#seachdistrict").val() != "0"){
+			area = $("#seachdistrict").val();                
+		}else if ($("#seachcity").val() != "0"){
+			area = $("#seachcity").val();
+		}else{
+			area = $("#seachprov").val();
+		}
+		return area;
+	}
+
+
+	function getAreaNamebyID(areaID){
+		var areaName = "";
+		if(areaID.length == 2){
+			areaName = area_array[areaID];
+		}else if(areaID.length == 4){
+			var index1 = areaID.substring(0, 2);
+			areaName = area_array[index1] + "-" + sub_array[index1][areaID];
+		}else if(areaID.length == 6){
+			var index1 = areaID.substring(0, 2);
+			var index2 = areaID.substring(0, 4);
+			areaName = area_array[index1] + "-" + sub_array[index1][index2] + "-" + sub_arr[index2][areaID];
+		}
+		return areaName;
+	}
 	
 	/**bind delete park click **/
 	var bindDeleteBtnClick = function(){

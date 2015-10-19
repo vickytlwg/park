@@ -67,7 +67,9 @@
 	<select id="getParkDetail" resultMap="ParkDetailMapper">
 		select * from park limit #{low}, #{count}
 	</select>
-	
+	<select id="getParkDetailByKeywords" parameterType="String" resultMap="ParkDetailMapper" statementType="STATEMENT">
+		select * from park where position like '%${param1}%'
+	</select>
 	<select id="getParkCount"  resultType="int">
 		select count(*) from park
 	</select>

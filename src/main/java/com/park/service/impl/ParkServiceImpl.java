@@ -124,6 +124,12 @@ public class ParkServiceImpl implements ParkService{
 		return parkDAO.getParkDetail(low, count);
 	}
 
+	@Override
+	public List<Park> getParkDetailByKeywords(String keywords) {
+		// TODO Auto-generated method stub
+		return parkDAO.getParkDetailByKeywords(keywords);
+	}
+
 
 
 	

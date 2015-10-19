@@ -19,7 +19,7 @@ public interface ParkService {
 	public List<Park> getParkByName(String name);
 	
 	public List<Park> getParkDetail(int low, int count);
-	
+	public List<Park> getParkDetailByKeywords(String keywords);
 	public int getParkCount();
 	
 	public String insertPark(Park park);
