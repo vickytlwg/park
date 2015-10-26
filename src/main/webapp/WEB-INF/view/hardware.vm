@@ -96,6 +96,7 @@
 							<select class='form-control' id='macType'>
 								<option value=0>停车位探测器</option>
 								<option value=1>车流量探测器</option>
+								<option value=2>剩余车位发布器</option>
 							</select>
 						</div>
 					</div>

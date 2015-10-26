@@ -87,6 +87,7 @@
 							<select class='form-control' id='channelFlag'>
 								<option value=0>出口</option>
 								<option value=1>入口</option>
+								<option value=2>剩余车位发布器</option>
 							</select>
 						</div>
 					</div>

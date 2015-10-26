@@ -1,6 +1,7 @@
 package com.park.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,7 @@ public interface HardwareDAO {
 	public List<HardwareDetail> getHardwareDetail(@Param("low")int low, @Param("count")int count);
 	
 	public int insertHardware(Hardware hardware);
-	
+	public Map<String, Object> getInfoByMac(@Param("mac")String mac);
 	public int updateHardware(Hardware hardware);
 	public List<Hardware> searchHardware( @Param("mac")String mac);
 	public int deleteHardware(int id);

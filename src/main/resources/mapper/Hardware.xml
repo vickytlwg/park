@@ -34,7 +34,7 @@
 	</select> 
 	
 	<select id="getUnboundHardwares" resultMap="HardwareMapper">
-		select * from hardware where status = 1 and type = #{type}
+		select * from hardware where status = 1 and type != 0
 	</select>
 	
 	<select id="getHardwareDetail" resultMap="HardwareDetailMapper">
@@ -47,6 +47,12 @@
 	
 	<select id="macToId" resultType="int">
 		select id from hardware where mac = #{param1}
+	</select>
+	<select id="getInfoByMac" resultType="java.util.HashMap">
+	 SELECT businessCarport.parkId AS parkID, park.name AS NAME,hardware.mac AS mac FROM hardware 
+	 LEFT JOIN businessCarport ON businessCarport.macId=hardware.id 
+	 LEFT JOIN park ON park.id=businessCarport.parkId
+	 WHERE mac=#{mac}
 	</select>
 	<select id="searchHardware" resultMap="HardwareMapper">
 	select * from hardware where mac = #{param1}

@@ -1,6 +1,7 @@
 package com.park.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -28,7 +29,7 @@ public interface HardwareService {
 	public int updateHardware(Hardware hardware);
 	
 	public int deleteHardware(int id);
-	
+	public Map<String,Object>getInfoByMac(String mac);
 	public boolean bindHardware(int id);
 	public List<Hardware> searchHardware(String mac);
 	public boolean changeHardwareStatus(int id, int status);

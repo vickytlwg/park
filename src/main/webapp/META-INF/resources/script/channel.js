@@ -379,7 +379,16 @@
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			tr.append('<td>' + data[i]['channelId']+ '</td>');
 			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
-			tr.append('<td data=' + data[i]['channelFlag'] + '>' + (data[i]['channelFlag']==1?"入口":"出口")+ '</td>');
+			if (data[i]['channelFlag']==1) {
+				tr.append('<td data=' + data[i]['channelFlag'] + '>' + "入口"+ '</td>');
+			}
+			if (data[i]['channelFlag']==0) {
+				tr.append('<td data=' + data[i]['channelFlag'] + '>' + "出口"+ '</td>');
+			}
+			
+			if (data[i]['channelFlag']==2) {
+				tr.append('<td data=' + data[i]['channelFlag'] + '>' + "剩余车位发布器"+ '</td>');
+			}
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 1 ? "可用":"不可用")+ '</td>');
 			
 				{

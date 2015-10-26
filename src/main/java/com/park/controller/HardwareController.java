@@ -122,7 +122,15 @@ public class HardwareController {
 		}
 		return Utility.gson.toJson(retMap);
 	}
-	
+	@RequestMapping(value = "/register/getInfoByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getInfoByMac(@RequestBody Map<String, Object> argMap)
+	{
+		String mac = (String)argMap.get("mac");
+		Map<String, Object> data=hardwareService.getInfoByMac(mac);
+		return  Utility.gson.toJson(data);
+
+	}
 	@RequestMapping(value = "/update/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updateHardware(@RequestBody Hardware hardware){
