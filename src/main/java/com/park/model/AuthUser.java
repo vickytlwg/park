@@ -5,12 +5,19 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class AuthUser {
 
 	@JsonIgnore
-	private int Id;
+	private int id;
 	private String username;
 	private String password;
+	private int role;
 	
+	public int getRole() {
+		return role;
+	}
+	public void setRole(int role) {
+		this.role = role;
+	}
 	public int getId() {
-		return Id;
+		return id;
 	}
 	public String getUsername() {
 		return username;
@@ -19,7 +26,7 @@ public class AuthUser {
 		return password;
 	}
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 	public void setUsername(String userName) {
 		this.username = userName;

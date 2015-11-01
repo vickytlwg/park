@@ -1,6 +1,5 @@
 package com.park.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -8,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.validator.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Park;
@@ -55,8 +52,12 @@ public class ParkController {
 	
 	@RequestMapping(value = "/getParks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getParks(ModelMap modelMap, HttpServletRequest request){
+	public String getParks(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		List<Park> parkList = parkService.getParks();
+		
+		String username = (String) session.getAttribute("username");
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
 	
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("status", 1001);
@@ -137,11 +138,15 @@ public class ParkController {
 	
 	@RequestMapping(value = "/getParkDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public  String  accessIndex( @RequestBody Map<String, Object> args){
+	public  String  accessIndex( @RequestBody Map<String, Object> args,HttpSession session){
 		int low = (int)args.get("low");
 		int count = (int)args.get("count");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<Park> parkDetail = parkService.getParkDetail(low, count);
+		String username = (String) session.getAttribute("username");
+		if(username != null)
+			parkDetail = parkService.filterPark(parkDetail, username);
+	
 		if(parkDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get park detail success");

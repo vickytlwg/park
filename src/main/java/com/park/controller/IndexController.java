@@ -36,7 +36,7 @@ public class IndexController {
 	@RequestMapping(value = "authority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public String authority(@RequestParam("username") String username,@RequestParam("password") String password,HttpSession session){
 		if(authService.checkUserAccess(username, password)){
-			session.setAttribute("username", "admin");
+			session.setAttribute("username", username);
 			return "access";
 		}else{
 			return "login";

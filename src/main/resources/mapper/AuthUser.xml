@@ -5,14 +5,23 @@
 
 <mapper namespace="com.park.dao.AuthorityDAO">
   	<resultMap id="AuthUserMapper" type="AuthUser">
-		<id property="Id" column="Id" />
+		<id property="id" column="id" />
 		<result property="username" column="username" />
 		<result property="password" column="password"/>
+		<result property="role" column="role" />
 	</resultMap>   
 
 	<select id="getUserPasswd" parameterType="java.lang.String" resultType="java.lang.String">
 		select password from authUsers where username=#{param1}
 	</select>
 	
+	
+	<select id="getUsers" resultMap="AuthUserMapper">
+		select * from authUsers
+	</select>
+	
+	<select id="getUser" parameterType="java.lang.String" resultMap="AuthUserMapper">
+		select * from authUsers where username=#{param1}
+	</select>
           
 </mapper>
