@@ -102,7 +102,18 @@ public class HardwareSerivceImpl implements HardwareService{
 	@Override
 	public Map<String, Object> getInfoByMac(String mac) {
 		// TODO Auto-generated method stub
-		return hardwareDAO.getInfoByMac(mac);
+		if (macToType(mac)!=0) {
+			return hardwareDAO.getInfoByMac(mac);
+		} else {
+			return hardwareDAO.getInfoByMacCarport(mac);
+		}
+		
+	}
+
+	@Override
+	public int macToType(String mac) {
+		// TODO Auto-generated method stub
+		return hardwareDAO.macToType(mac);
 	}
 
 	

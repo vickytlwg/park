@@ -23,11 +23,13 @@ public interface HardwareDAO {
 	public int getHardwareCount();
 	
 	public int macToId(String mac);
+	public int macToType(@Param("mac")String mac);
 	
 	public List<HardwareDetail> getHardwareDetail(@Param("low")int low, @Param("count")int count);
 	
 	public int insertHardware(Hardware hardware);
 	public Map<String, Object> getInfoByMac(@Param("mac")String mac);
+	public Map<String, Object> getInfoByMacCarport(@Param("mac")String mac);
 	public int updateHardware(Hardware hardware);
 	public List<Hardware> searchHardware( @Param("mac")String mac);
 	public int deleteHardware(int id);

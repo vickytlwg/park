@@ -1,11 +1,16 @@
 package com.park.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.language.Caverphone1;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.Channel;
 import com.park.model.Hardware;
 import com.park.model.HardwareDetail;
 import com.park.model.Status;
+import com.park.service.ChannelService;
 import com.park.service.HardwareService;
 import com.park.service.Utility;
 
@@ -27,7 +34,8 @@ public class HardwareController {
 	
 	@Autowired
 	private HardwareService hardwareService;
-	
+	@Autowired
+	private ChannelService channelService;
 	
 	@RequestMapping(value = "/hardware", produces = {"application/json;charset=UTF-8"})
 	public String hardwares(ModelMap modelMap, HttpServletRequest request){
@@ -53,11 +61,57 @@ public class HardwareController {
 		List<Hardware> hardwareList = hardwareService.getUnusedHardwares();
 		ret.put("status", "1001");
 		ret.put("message", "get hardware detail success");
-		ret.put("body", hardwareList);
-		
+		ret.put("body", hardwareList);		
 		return Utility.gson.toJson(ret);
 	}
-	
+	@RequestMapping(value="/register/channel",method = RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String registerChannel(@RequestBody Map<String, Object> args){
+		String macId=(String)args.get("mac");
+		String parkId=(String)args.get("parkId");
+		String channelId=(String)args.get("channelId");
+		String channelFlag=(String)args.get("channelFlag");
+		String hdDescription=(String)args.get("hardwareDescription");
+		String channelDescription =(String)args.get("channelDescription");
+		Hardware hd=new Hardware();
+		hd.setMac(macId);
+		if (Integer.parseInt(channelFlag)==2) {
+			hd.setType(2);
+		} else {
+			hd.setType(1);
+		}
+		hd.setStatus(1);
+		hd.setDescription(hdDescription);
+		Date date=new Date();
+		DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time=format.format(date);
+		hd.setDate(time);
+		Channel chl=new Channel();
+		
+		if (hardwareService.insertHardware(hd)>0) {
+			int macid=hardwareService.macToId(macId);
+			chl.setMac(macid);
+			chl.setChannelId(Integer.parseInt(channelId));
+			chl.setChannelFlag(Integer.parseInt(channelFlag));		
+			chl.setParkId(Integer.parseInt(parkId));
+			chl.setStatus(1);
+			chl.setIsEffective(1);
+			chl.setDescription(channelDescription);
+			chl.setDate(time);
+			Hardware hardware = hardwareService.getHardwareById(macid);
+			if(hardware.getStatus() == Status.USED.getValue())
+				return Utility.createJsonMsg("msg", "hardare is being used");
+			if(channelService.insertChannel(chl)){
+				hardwareService.bindHardware(macid);
+				return Utility.createJsonMsg("msg", "success");
+		} else {
+			return Utility.createJsonMsg("msg","register failure");
+		}
+	}
+		else {
+			return Utility.createJsonMsg("msg", "insert hardware error");
+		}	
+	}
 	@RequestMapping(value = "/getUnBoundHardwares/{type}", produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getUnBoundHardwares(@PathVariable int type){

@@ -48,7 +48,16 @@
 	<select id="macToId" resultType="int">
 		select id from hardware where mac = #{param1}
 	</select>
+	<select id="macToType" resultType="int">
+	SELECT type FROM hardware WHERE mac = #{mac};
+	</select>
 	<select id="getInfoByMac" resultType="java.util.HashMap">
+	 SELECT channel.parkId AS parkID, park.name AS NAME,hardware.mac AS mac FROM hardware 
+	 LEFT JOIN channel ON channel.macId=hardware.id 
+	 LEFT JOIN park ON park.id=channel.parkId
+	 WHERE mac=#{mac}
+	</select>
+	<select id="getInfoByMacCarport" resultType="java.util.HashMap">
 	 SELECT businessCarport.parkId AS parkID, park.name AS NAME,hardware.mac AS mac FROM hardware 
 	 LEFT JOIN businessCarport ON businessCarport.macId=hardware.id 
 	 LEFT JOIN park ON park.id=businessCarport.parkId

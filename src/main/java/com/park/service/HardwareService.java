@@ -25,7 +25,7 @@ public interface HardwareService {
 	public List<HardwareDetail> getHardwareDetail(int low, int count);
 	
 	public int insertHardware(Hardware hardware);
-	
+	public int macToType(String mac);
 	public int updateHardware(Hardware hardware);
 	
 	public int deleteHardware(int id);
