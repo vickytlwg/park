@@ -1,10 +1,12 @@
 package com.park.service.impl;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.AuthorityDAO;
+import com.park.model.AuthUser;
 import com.park.service.AuthorityService;
 
 @Transactional
@@ -16,8 +18,10 @@ public class AuthorityServiceImpl implements AuthorityService{
 	
 	@Override
 	public boolean checkUserAccess(String username, String password) {
-		String pwd = authDao.getUserPasswd(username);
-		return password.equals(pwd);
+		AuthUser user = authDao.getUser(username);
+		if(user == null)
+			return false;
+		return password.equals(user.getPassword());
 	}
 
 }

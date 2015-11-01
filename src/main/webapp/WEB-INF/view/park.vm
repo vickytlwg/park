@@ -11,7 +11,7 @@
               <div class="input-group col-md-3 pull-right" style="padding:1px;">
 			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
 	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
-								<option value=-1>所有停车场</option>
+								<option value=-1>所有停车场</option> 
 				</select>				
 	   </div>	   
         <div class="box-content no-pad">

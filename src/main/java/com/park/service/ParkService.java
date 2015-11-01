@@ -8,6 +8,10 @@ import com.park.model.Park;
 
 public interface ParkService {
 	
+	public List<Park> filterPark(List<Park> parks, String username);
+	
+	public List<Park> filterPark(List<Park> parks, int userId);
+	
 	public List<Park> getParks();
 	
 	public List<Park> getNearParks(double longitude, double latitude, double radius);

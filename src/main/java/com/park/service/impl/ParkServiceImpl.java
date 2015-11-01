@@ -2,17 +2,23 @@ package com.park.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
+import com.park.dao.AuthorityDAO;
 import com.park.dao.ParkDAO;
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.Park;
 import com.park.service.ParkService;
+import com.park.service.UserParkService;
 import com.park.service.Utility;
 
 @Transactional
@@ -22,10 +28,49 @@ public class ParkServiceImpl implements ParkService{
 	@Autowired
 	private ParkDAO parkDAO;
 	
+	@Autowired
+	private AuthorityDAO authDAO;
+	
+	@Autowired
+	private UserParkService userParkService;
+	
 	public List<Park> getParks(){
 		return parkDAO.getParks();
 		
 	}
+	
+	
+	@Override
+	public List<Park> filterPark(List<Park> parks, String username) {
+		if(parks == null)
+			return null;
+		 AuthUser authUser = authDAO.getUser(username);
+		 if(authUser == null)
+			return null;
+		else if(authUser.getRole() == AuthUserRole.ADMIN.getValue())
+			return parks;
+		else
+			return filterPark(parks, authUser.getId());
+	}
+
+	@Override
+	public List<Park> filterPark(List<Park> parks, int userId) {
+		if(parks == null)
+			return parks;
+		
+		List<Integer> filterParkIds = userParkService.getOwnParkId(userId);
+		Set<Integer> filterParkIdSet = new HashSet<Integer>(filterParkIds);
+		
+		List<Park> resultParks = new ArrayList<Park>();
+		for(Park park : parks){
+			if(filterParkIdSet.contains(park.getId()))
+				resultParks.add(park);
+		}
+		
+		return resultParks;
+	}
+	
+	
 	
 	public List<Park> getNearParks(double longitude, double latitude, double radius){
 		List<Park> parks = this.getParks();
@@ -129,6 +174,8 @@ public class ParkServiceImpl implements ParkService{
 		// TODO Auto-generated method stub
 		return parkDAO.getParkDetailByKeywords(keywords);
 	}
+
+
 
 
 
