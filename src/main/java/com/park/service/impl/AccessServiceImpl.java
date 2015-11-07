@@ -26,6 +26,7 @@ import com.park.model.Constants;
 import com.park.model.Park;
 import com.park.service.AccessService;
 import com.park.service.ChannelService;
+import com.park.service.HardwareService;
 import com.park.service.ParkService;
 import com.park.service.Utility;
 
@@ -115,26 +116,34 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}
 
-/*	@Override
+@Override
 	public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date) {
 		
-		List<Map<String, Object>> rets = accessDAO.getHourCountByChannel(parkId, date);
+		List<Map<String, Object>> rets = accessDAO.getHourCountByChannel(parkId, date,findAccessTable(parkId, date));
 		Map<String, Map<Integer, Integer>> body = new HashMap<String, Map<Integer, Integer>>();
 		
 		for(int i = 0 ; i < rets.size(); i++){
 			Map<String, Object> item = rets.get(i);
 			int macId = (int)item.get("macId");
-			String mac = hardwareDAO.getHardwareById(macId).getMac();
-			if(!body.containsKey(mac)){
-				body.put(mac, new HashMap<Integer, Integer>());
+			String channelname;
+			if ((int)item.get("channelFlag")==0) {
+				channelname="出口";
 			}
-			Map<Integer, Integer> macMap = body.get(mac);
+			else {
+				channelname="入口";
+			}
+			String channelId=channelname+":"+item.get("channelId").toString();
+	//		String mac = hardwareDAO.getHardwareById(macId).getMac();
+			if(!body.containsKey(channelId)){
+				body.put(channelId, new HashMap<Integer, Integer>());
+			}
+			Map<Integer, Integer> macMap = body.get(channelId);
 			macMap.put((int)item.get("hour"), Integer.parseInt(item.get("count").toString()));
 				
 		}
 		
 		return body;
-	}*/
+	}
 
 	@Override
 	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date) {
@@ -177,10 +186,13 @@ public class AccessServiceImpl implements AccessService{
 		return body;
 	}*/
 	
-	
-/*	@Override
-	public Map<Integer, Integer> getChannelHourCount(int macId, String date) {
-		List<Map<String, Object>> rets = accessDAO.getChannelHourCount(macId, date);
+	@Autowired
+	private HardwareService hardwareservice;
+	@Override
+	public Map<Integer, Integer> getChannelHourCount(String mac,int macId, String date) {
+		Map<String, Object> macinfo=hardwareservice.getInfoByMac(mac);
+		int parkId=(int)macinfo.get("parkID");
+		List<Map<String, Object>> rets = accessDAO.getChannelHourCount(macId, date,findAccessTable(parkId, date));
 		Map<Integer, Integer> body = new HashMap<Integer, Integer>();
 		
 		for(int i = 0 ; i < rets.size(); i++){
@@ -188,7 +200,7 @@ public class AccessServiceImpl implements AccessService{
 			body.put((int)item.get("hour"), Integer.parseInt(item.get("count").toString()));
 		}
 		return body;
-	}*/
+	}
 
 	
 /*	@Override

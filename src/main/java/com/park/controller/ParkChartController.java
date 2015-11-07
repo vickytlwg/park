@@ -27,5 +27,10 @@ public class ParkChartController {
 		modelMap.addAttribute("parks", parkList);
 		return "parkChart";
 	}
-
+	@RequestMapping(value="/flow",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
+	public String parkFlow(ModelMap modelMap, HttpServletRequest request){
+		List<Park> parkList = parkService.getParks();
+		modelMap.addAttribute("parks", parkList);
+		return "flow";
+	}
 }

@@ -49,7 +49,7 @@
 		select id from hardware where mac = #{param1}
 	</select>
 	<select id="macToType" resultType="int">
-	SELECT type FROM hardware WHERE mac = #{mac};
+	SELECT type FROM hardware WHERE mac = #{mac}
 	</select>
 	<select id="getInfoByMac" resultType="java.util.HashMap">
 	 SELECT channel.parkId AS parkID, park.name AS NAME,hardware.mac AS mac FROM hardware 

@@ -17,13 +17,13 @@ public interface AccessDAO {
 
 	public List<Map<String, Object>> getHourCountByPark(@Param("parkId")int parkId, @Param("date")String date,@Param("table")String table);
 
-	//public List<Map<String, Object>> getHourCountByChannel(@Param("parkId")int parkId, @Param("date")String date);
+	public List<Map<String, Object>> getHourCountByChannel(@Param("parkId")int parkId, @Param("date")String date,@Param("table")String table);
 
 	public List<Map<String, Object>> getDayCountByPark(@Param("parkId")int parkId, @Param("date")String date, @Param("table")String table);
 
 	//public List<Map<String, Object>> getMonthCountByChannel(@Param("parkId")int parkId, @Param("year")int year);
 	
-	//public List<Map<String, Object>> getChannelHourCount(@Param("macId")int macId, @Param("date")String date);
+	public List<Map<String, Object>> getChannelHourCount(@Param("macId")int macId, @Param("date")String date,@Param("table")String table);
 	
 	//public List<Map<String, Object>> getChannelMonthCount(@Param("macId")int macId, @Param("year")int year);
 	

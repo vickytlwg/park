@@ -1,6 +1,7 @@
-<script src="/park/script/channel.js"></script>
+<script src="/park/script/access.js"></script>
 <link href="/park/cssmb/tables.css" rel="stylesheet">
 <link href="/park/cssmb/master.css" rel="stylesheet">
+
 <div id="channel">
 <div class="row" style="width:100%">
 <div class="box grid_12" style="width:100%">
@@ -49,7 +50,7 @@
 		
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-				<h4 class='modal-title' id='addChannelLabel'>出入口信息</h4>
+				<h4 class='modal-title' id='addChannelLabel'>路边车位探测</h4>
 			</div>
 			
 			<div class='modal-body'>
@@ -118,17 +119,3 @@
 		</div>
 	</div>
 </div>
-
-<div id='showMessage'>
-</div>
-
-<div id='showErrorMessage'>
-</div>
-
-<script>
-$(document).ready(function(){
-	$.fn.channel.initial();
-});
-
-</script>
-

@@ -103,13 +103,13 @@ public class HardwareController {
 				return Utility.createJsonMsg("msg", "hardare is being used");
 			if(channelService.insertChannel(chl)){
 				hardwareService.bindHardware(macid);
-				return Utility.createJsonMsg("msg", "success");
+				return Utility.createJsonMsg(1001, "success");
 		} else {
-			return Utility.createJsonMsg("msg","register failure");
+			return Utility.createJsonMsg("1002","register failure");
 		}
 	}
 		else {
-			return Utility.createJsonMsg("msg", "insert hardware error");
+			return Utility.createJsonMsg("1002", "insert hardware error");
 		}	
 	}
 	@RequestMapping(value = "/getUnBoundHardwares/{type}", produces = {"application/json;charset=UTF-8"})

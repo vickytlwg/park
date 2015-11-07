@@ -100,7 +100,7 @@ public class AccessController {
 		
 	}
 	
-/*	@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getHourCountByChannel(@RequestBody Map<String, Object> args){	
 		int parkId = -1;
@@ -114,7 +114,7 @@ public class AccessController {
 		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByChannel(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}*/
+	}
 	
 	@RequestMapping(value = "/getDayCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
@@ -149,21 +149,22 @@ public class AccessController {
 	}*/
 	
 	
-/*	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getChannelHourCount(@RequestBody Map<String, Object> args){	
 		int macId = -1;
+		String mac="";
 		if(args.containsKey("macId")){
 			macId = (int)args.get("macId");
 		}else{
-			String mac = (String)args.get("mac");
+			mac = (String)args.get("mac");
 			macId = hardwareService.macToId(mac);
 		}
 		String date = (String)args.get("date");
-		Map<Integer, Integer> body = accessService.getChannelHourCount(macId, date);
+		Map<Integer, Integer> body = accessService.getChannelHourCount(mac,macId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
 		
-	}*/
+	}
 	
 	
 /*	@RequestMapping(value = "/getChannelMonthCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
