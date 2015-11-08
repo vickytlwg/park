@@ -17,7 +17,7 @@
       
 	   
         <div class="box-content no-pad">
-         <ul class="table-toolbar">
+         <ul class="table-toolbar" #if(!$isAdmin) hidden#end>
          
             <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
             <li><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           

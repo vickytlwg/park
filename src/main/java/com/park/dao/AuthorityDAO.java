@@ -10,7 +10,18 @@ import com.park.model.AuthUser;
 public interface AuthorityDAO {
 	
 	public List<AuthUser> getUsers();
+	
+	public int getUserCount();
+	
 	public String getUserPasswd(String username);
 	
 	public AuthUser getUser(String username);
+	
+	public int insertUser(AuthUser user);
+	
+	public int deleteUser(int id);
+	
+	public int updateUser(AuthUser user);
+	
+	
 }

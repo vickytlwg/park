@@ -10,7 +10,7 @@
 		bindSubmitBusinessCarportBtnClick();
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
-		renderBusinessCarport(0, $.fn.page.pageSize);
+		//renderBusinessCarport(0, $.fn.page.pageSize);
 		
 		fillSearchPark();
 		bindSearchParkChange();
@@ -54,6 +54,8 @@
 			for(var i = 0; i < data.length; i++){
 				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
 			}
+			if(data.length > 0)
+				parkNameSelect.change();
 		};
 		var errorFunc = function(data){
 		};

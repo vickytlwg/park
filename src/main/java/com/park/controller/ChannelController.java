@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.support.logging.Log;
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 import com.park.model.Hardware;
 import com.park.model.Status;
+import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.HardwareService;
 import com.park.service.Utility;
@@ -34,11 +38,25 @@ public class ChannelController {
 	@Autowired
 	private HardwareService hardwareService;
 
+	@Autowired
+	private AuthorityService authService;
+	
 	
 	@RequestMapping(value = "/channel", produces = {"application/json;charset=UTF-8"})
-	public String getChannels(ModelMap modelMap, HttpServletRequest request){
-		List<Channel> channelList = channelService.getChannels();
-		modelMap.put("channels", channelList);					
+	public String getChannels(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		//List<Channel> channelList = channelService.getChannels();
+		//modelMap.put("channels", channelList);
+		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		
 		return "channel";
 	}
 	

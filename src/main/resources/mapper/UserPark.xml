@@ -13,6 +13,21 @@
 	<select id="getOwnParkId" parameterType="int" resultType="int">
 		select parkId from userPark where userId=#{param1}
 	</select>   
+	
+	<select id="getOwnParkName" parameterType="int" resultType="String">
+		select park.name from userPark 
+		left join park on userPark.parkId = park.id 
+		where userPark.userId=#{param1}
+	</select>  
+	
+	<insert id="insertUserParkMap" parameterType="UserPark" keyProperty="id">
+		insert into userPark(userId, parkId)
+		values(#{userId}, #{parkId})
+	</insert>
+	
+	 <delete id="deleteUserParkMap" parameterType="int">
+		delete from userPark where userId = #{param1}
+	</delete>
 
 </mapper>
 	

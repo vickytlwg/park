@@ -20,8 +20,24 @@
 		select * from authUsers
 	</select>
 	
+	<select id="getUserCount" resultType="int">
+		select count(*) from authUsers
+	</select>
+	
 	<select id="getUser" parameterType="java.lang.String" resultMap="AuthUserMapper">
 		select * from authUsers where username=#{param1}
 	</select>
+	
+	<insert id="insertUser" parameterType="AuthUser" keyProperty="id">
+		insert into authUsers(username, password, role)
+		values(#{username}, #{password}, #{role})
+	</insert>
+	
+	<update id="updateUser" parameterType="AuthUser" >
+		update authUsers set username = #{username}, password=#{password}, role=#{role} where id = #{id}
+	</update>
           
+    <delete id="deleteUser" parameterType="int">
+		delete from authUsers where id = #{param1}
+	</delete>
 </mapper>

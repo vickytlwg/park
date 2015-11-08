@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.User;
 import com.park.model.UserDetail;
+import com.park.service.AuthorityService;
 import com.park.service.UserService;
 import com.park.service.Utility;
 
@@ -28,13 +33,27 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private AuthorityService authService;
+	
 	private static Log logger = LogFactory.getLog(UserController.class);
 	
 	@RequestMapping(value = "/users", produces = {"application/json;charset=UTF-8"})
-	public String getUsers(ModelMap modelMap, HttpServletRequest request){
+	public String getUsers(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		List<User> userList = userService.getUsers();
 		modelMap.put("users", userList);
-		logger.info("info test");				
+		logger.info("info test");		
+		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		
 		return "user";
 	}
 	

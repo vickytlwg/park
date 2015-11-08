@@ -12,8 +12,8 @@
 								<option value=-1>所有停车场</option>
 				</select>				
 	   </div>	   
-        <div class="box-content no-pad">
-         <ul class="table-toolbar">
+        <div class="box-content no-pad" >
+         <ul class="table-toolbar" #if(!$isAdmin) hidden#end>
          
             <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
             <li id='addMac'><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           

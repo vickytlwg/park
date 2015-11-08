@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
 import com.park.model.Status;
+import com.park.service.AuthorityService;
 import com.park.service.BusinessCarportService;
 import com.park.service.HardwareService;
 import com.park.service.Utility;
@@ -32,12 +36,25 @@ public class BusinessCarportController {
 	private BusinessCarportService businessCarportService;
 	
 	@Autowired
+	private AuthorityService authService;
+	
+	@Autowired
 	private HardwareService hardwareService;
 	
 	private static Log logger = LogFactory.getLog(BusinessCarportController.class);
 	
 	@RequestMapping(value = "/businessCarport", produces = {"application/json;charset=UTF-8"})
-	public String getBusinessCarports(ModelMap modelMap, HttpServletRequest request){
+	public String getBusinessCarports(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		
 		return "businessCarport";
 	}
 	

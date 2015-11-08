@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.language.Caverphone1;
 import org.joda.time.DateTime;
@@ -21,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.Channel;
 import com.park.model.Hardware;
 import com.park.model.HardwareDetail;
 import com.park.model.Status;
+import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.HardwareService;
 import com.park.service.Utility;
@@ -37,8 +41,21 @@ public class HardwareController {
 	@Autowired
 	private ChannelService channelService;
 	
+	@Autowired
+	private AuthorityService authService;
+	
 	@RequestMapping(value = "/hardware", produces = {"application/json;charset=UTF-8"})
-	public String hardwares(ModelMap modelMap, HttpServletRequest request){
+	public String hardwares(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		
 		return "hardware";
 	}
 	

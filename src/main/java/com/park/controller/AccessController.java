@@ -7,8 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Access;
 import com.park.model.AccessDetail;
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.service.AccessService;
+import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.HardwareService;
 import com.park.service.ParkService;
@@ -36,6 +43,8 @@ public class AccessController {
 	@Autowired
 	private ParkService parkService;
 	
+	@Autowired
+	private AuthorityService authService;
 	
 	@Autowired
 	private ChannelService channelService;
@@ -44,7 +53,16 @@ public class AccessController {
 	
 	
 	@RequestMapping(value = "/access", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String accessIndex(){	
+	public String accessIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){	
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
 		return "access";
 	}
 	

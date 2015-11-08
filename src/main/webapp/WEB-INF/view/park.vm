@@ -11,11 +11,12 @@
               <div class="input-group col-md-3 pull-right" style="padding:1px;">
 			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
 	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
-								<option value=-1>所有停车场</option> 
-				</select>				
+								
+				</select>			
 	   </div>	   
         <div class="box-content no-pad">
-         <ul class="table-toolbar">
+        
+         <ul class="table-toolbar" #if(!$isAdmin) hidden#end>
          
             <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
             <li id='addPark'><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           

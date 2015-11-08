@@ -38,12 +38,12 @@
 <div class="body-nav body-nav-horizontal ">
                         <div class="container">                       
                             <ul id="daohang" class="list-group">             
-                                <li class="daohang1 ">
+                                <li class="daohang1" >
                                     <a href="/park/access">
                                         <i class="icon-dashboard icon-large"></i> 出入口流量
                                     </a>
                                 </li>
-                                <li class="daohang2 ">
+                                <li class="daohang2">
                                     <a href="/park/parks" class="active">
                                         <i class="icon-map-marker icon-large "></i> 停车场管理
                                     </a>
@@ -68,16 +68,23 @@
                                       <i class="icon-list icon-large"></i> 室内车位管理
                                     </a>
                                 </li>
-                                  <li class="daohang5 ">
-                                    <a href="/park/hardware">
+                                  <li class="daohang5 " #if(!$isAdmin) hidden#end >
+                                    <a href="/park/hardware" >
                                         <i class=" icon-hdd icon-large"></i> 硬件设备管理
                                     </a>
                                 </li>
-                                <li class="daohang6 ">
+                                <li class="daohang6 " #if(!$isAdmin) hidden#end>
                                     <a href="/park/users">
-                                        <i class="icon-user icon-large"></i> app用户管理
+                                        <i class="icon-user icon-large" ></i> app用户管理
                                     </a>
                                 </li>
+                                
+                                <li class="daohang7" #if(!$isAdmin) hidden#end>
+                                    <a href="/park/parkUsers">
+                                        <i class="icon-user icon-large" ></i>用户管理
+                                    </a>
+                                </li>
+                                
                                 <li>
                                     <a href="/park/chart">
                                         <i class="icon-bar-chart icon-large"></i> 流量图

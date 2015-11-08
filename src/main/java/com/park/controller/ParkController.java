@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.Park;
+import com.park.service.AuthorityService;
 import com.park.service.ParkService;
 import com.park.service.Utility;
 
@@ -30,11 +33,24 @@ public class ParkController {
 	@Autowired
 	private ParkService parkService;
 	
+	@Autowired
+	private AuthorityService authService;
+	
 	private static Log logger = LogFactory.getLog(ParkController.class);
 	
 	@RequestMapping(value = "/parks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String parks(ModelMap modelMap, HttpServletRequest request){
+	public String parks(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+			
 		return "park";
 	}
 	
