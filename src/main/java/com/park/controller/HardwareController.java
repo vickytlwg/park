@@ -48,15 +48,17 @@ public class HardwareController {
 	public String hardwares(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
+		boolean isAdmin = false;
 		if(user != null){
 			modelMap.addAttribute("user", user);
-			boolean isAdmin = false;
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
-		
-		return "hardware";
+		if(isAdmin)
+			return "hardware";
+		else
+			return "/login";
 	}
 	
 	@RequestMapping(value = "/getHardwares", produces = {"application/json;charset=UTF-8"})
@@ -178,6 +180,7 @@ public class HardwareController {
 		}
 		return  Utility.gson.toJson(retMap);
 	}
+	
 	@RequestMapping(value = "/insert/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertHardware1(@RequestBody Hardware hardware){
@@ -186,13 +189,26 @@ public class HardwareController {
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		if(ret > 0 ){
 			retMap.put("status", "1001");
-			retMap.put("message", "get hardware detail success");
+			retMap.put("message", "insert hardware detail success");
 		}else{
 			retMap.put("status", "1002");
-			retMap.put("message", "get hardware detail fail");
+			retMap.put("message", "mac exist");
 		}
 		return Utility.gson.toJson(retMap);
 	}
+	
+	@RequestMapping(value = "/hardware/exist", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String checkHardwareExist(@RequestBody Map<String, Object> args){
+		String mac = (String)args.get("mac");
+		if(hardwareService.checkHardwareExist(mac))
+			return Utility.createJsonMsg("1002", "mac exists");
+		else 
+			return Utility.createJsonMsg("1001", "mac does not exist");
+				
+	}
+	
+	
 	@RequestMapping(value = "/register/getInfoByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getInfoByMac(@RequestBody Map<String, Object> argMap)
@@ -200,8 +216,8 @@ public class HardwareController {
 		String mac = (String)argMap.get("mac");
 		Map<String, Object> data=hardwareService.getInfoByMac(mac);
 		return  Utility.gson.toJson(data);
-
 	}
+	
 	@RequestMapping(value = "/update/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updateHardware(@RequestBody Hardware hardware){

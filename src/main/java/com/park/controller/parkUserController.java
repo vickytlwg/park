@@ -55,15 +55,17 @@ public class parkUserController {
 		
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
+		boolean isAdmin = false;
 		if(user != null){
 			modelMap.addAttribute("user", user);
-			boolean isAdmin = false;
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
-		
-		return "parkUser";
+		if(isAdmin)
+			return "parkUser";
+		else
+			return "/login";
 	}
 	
 	

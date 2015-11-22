@@ -100,10 +100,16 @@
 				datatype: 'json',
 				data: $.toJSON(MacFields),
 				success: function(data){
-					if(data['status'] = 1001){
+					if(data['status'] == 1001){
 						$.fn.loader.removeLoader(addMacResultDiv);
 						addMacResultDiv.append($.fn.tip.success('提交操作完成'));
 						setTimeout('$("#addMacResult").html(""); $("#addMacModal").modal("hide");$("#refresh").click()', 500);
+					}else{
+						data["message"] = "该硬件已存在";
+						errorHandle(data);
+						//$.fn.loader.removeLoader(addMacResultDiv);
+						//addMacResultDiv.append($.fn.tip.error('该硬件已存在！ '));
+						//setTimeout('$("#addMacResult").html("");', 1000);
 					}
 				},
 				error: function(data){

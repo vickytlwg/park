@@ -5,15 +5,15 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
         <!-- 命名空间 -->
     <typeAliases>
-         
          <typeAlias alias="Carport" type="com.park.model.Carport"/>
          <typeAlias alias="User" type="com.park.model.User"/> 
          <typeAlias alias="Access" type="com.park.model.Access"/>
-          <typeAlias alias="Channel" type="com.park.model.Channel"/>    
-          <typeAlias alias="Park" type="com.park.model.Park"/> 
-          <typeAlias alias="AuthUser" type="com.park.model.AuthUser"/> 
-           <typeAlias alias="UserPark" type="com.park.model.UserPark"/>
-        
+         <typeAlias alias="Channel" type="com.park.model.Channel"/>    
+         <typeAlias alias="Park" type="com.park.model.Park"/> 
+         <typeAlias alias="AuthUser" type="com.park.model.AuthUser"/> 
+         <typeAlias alias="UserPark" type="com.park.model.UserPark"/>
+         <typeAlias alias="DataUsageCard" type="com.park.model.DataUsageCard"/> 
+         <typeAlias alias="DataUsageCardDetail" type="com.park.model.DataUsageCardDetail"/> 
     </typeAliases>
  
     <!-- 映射map -->
