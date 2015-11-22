@@ -11,8 +11,7 @@ $.fn.parkChart.yearAccess = {'entranceAccess': 0, 'exitAccess':0};
  * init content
  */
 $.fn.parkChart.initial = function(){
-	var chatContent = $('#chart-content');
-	
+	var chatContent = $('#chart-content');	
 	$('#date').val(new Date().format('yyyy-MM-dd'));
 	$('#date').datepicker({
 		autoClose: true,

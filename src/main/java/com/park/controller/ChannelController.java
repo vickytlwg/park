@@ -43,10 +43,7 @@ public class ChannelController {
 	
 	
 	@RequestMapping(value = "/channel", produces = {"application/json;charset=UTF-8"})
-	public String getChannels(ModelMap modelMap, HttpServletRequest request, HttpSession session){
-		//List<Channel> channelList = channelService.getChannels();
-		//modelMap.put("channels", channelList);
-		
+	public String getChannels(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
@@ -55,8 +52,7 @@ public class ChannelController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-		}
-		
+		}		
 		return "channel";
 	}
 	
