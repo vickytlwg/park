@@ -1,6 +1,8 @@
 package com.park.service;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,5 +98,28 @@ public class Utility {
 	    	  
 	      }
 	      return resultMap;
+	}
+	
+	public static void updateObjectField(Object item, String className,  Map<String, Object> args){
+		Method[] methods = null;
+		try {
+			methods = Class.forName(className).getMethods();
+		} catch (SecurityException | ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		for(int i = 0; i < methods.length; i++){
+			String methodName = methods[i].getName();
+			if(!methodName.substring(0, 3).equals("set"))
+				continue;
+			String fieldInMethod = methodName.substring(3).toLowerCase();
+			if(args.containsKey(fieldInMethod)){
+				try {
+					methods[i].invoke(item, args.get(fieldInMethod));
+				} catch (IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

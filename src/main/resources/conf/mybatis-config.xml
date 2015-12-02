@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
          <typeAlias alias="UserPark" type="com.park.model.UserPark"/>
          <typeAlias alias="DataUsageCard" type="com.park.model.DataUsageCard"/> 
          <typeAlias alias="DataUsageCardDetail" type="com.park.model.DataUsageCardDetail"/> 
+         <typeAlias alias="Merchant" type="com.park.model.Merchant"/> 
     </typeAliases>
  
     <!-- 映射map -->
