@@ -24,6 +24,10 @@
 		<result property="mapAddr" column="mapAddr" />
 		<result property="date" column="date"/>
 		<result property="isDeleted" column="isDeleted"/>
+		<result property="contact" column="contact" />
+		<result property="number" column="number" />
+		<result property="pictureUri" column="pictureUri"/>
+		<result property="description" column="description"/>
 	</resultMap>    
 	
 	<resultMap id="ParkDetailMapper" type="com.park.model.ParkDetail">
@@ -45,6 +49,10 @@
 		<result property="mapAddr" column="mapAddr" />
 		<result property="position" column="position" />
 		<result property="date" column="date"/>
+		<result property="contact" column="contact" />
+		<result property="number" column="number" />
+		<result property="pictureUri" column="pictureUri"/>
+		<result property="description" column="description"/>
 	</resultMap> 
 
 
@@ -75,13 +83,14 @@
 	</select>
 	
 	<insert id="insertPark" parameterType="Park" keyProperty="id">
-		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, longitude, latitude, alias, mapAddr, position, date, isDeleted) 
-		values(#{name}, #{portCount}, #{channelCount}, #{portLeftCount}, #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{mapAddr}, #{position}, #{date}, #{isDeleted})
+		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, longitude, latitude, alias, mapAddr, position, date, isDeleted, contact, number, description, pictureUri) 
+		values(#{name}, #{portCount}, #{channelCount}, #{portLeftCount}, #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{mapAddr}, #{position}, #{date}, #{isDeleted}, #{contact}, #{number}, #{description}, #{pictureUri})
 	</insert>
 	
 	<update id="updatePark" parameterType="Park" >
 		update park set name = #{name}, portCount = #{portCount}, portLeftCount = #{portLeftCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
-		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, longitude=#{longitude}, latitude=#{latitude}, alias=#{alias}, mapAddr=#{mapAddr}, position = #{position}, date = #{date}, isDeleted = #{isDeleted} where id = #{id}
+		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, longitude=#{longitude}, latitude=#{latitude}, alias=#{alias}, mapAddr=#{mapAddr}, position = #{position}, date = #{date}, 
+		 isDeleted = #{isDeleted}, contact=#{contact}, number=#{number}, description=#{description}, pictureUri=#{pictureUri} where id = #{id}
 	</update>
 	
 	<update id="updateLeftPortCount">

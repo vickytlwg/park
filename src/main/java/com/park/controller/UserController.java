@@ -1,14 +1,24 @@
 package com.park.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.aspectj.apache.bcel.classfile.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,99 +27,234 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Constants;
 import com.park.model.User;
 import com.park.model.UserDetail;
 import com.park.service.AuthorityService;
 import com.park.service.UserService;
 import com.park.service.Utility;
 
-
 @Controller
 public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthorityService authService;
-	
+
 	private static Log logger = LogFactory.getLog(UserController.class);
-	
-	@RequestMapping(value = "/users", produces = {"application/json;charset=UTF-8"})
-	public String getUsers(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/users", produces = { "application/json;charset=UTF-8" })
+	public String getUsers(ModelMap modelMap, HttpServletRequest request,
+			HttpSession session) {
 		List<User> userList = userService.getUsers();
 		modelMap.put("users", userList);
-		logger.info("info test");		
-		
+		logger.info("info test");
+
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		boolean isAdmin = false;
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
-		
-		if(isAdmin)
+
+		if (isAdmin)
 			return "user";
 		else
 			return "/login";
-		
+
 	}
-	
-	
-	@RequestMapping(value = "/getUserCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getUserCount", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getuserCount(){
+	public String getuserCount() {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
 		int count = userService.getUserCount();
 		body.put("count", count);
-	
+
 		ret.put("status", "1001");
 		ret.put("message", "get user detail success");
 		ret.put("body", Utility.gson.toJson(body));
-		
-		return Utility.gson.toJson(ret);					
+
+		return Utility.gson.toJson(ret);
 	}
-	
-	@RequestMapping(value = "/getUserDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getUserDetail", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+	public String accessIndex(@RequestParam("low") int low,
+			@RequestParam("count") int count) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<UserDetail> userDetail = userService.getUserDetail(low, count);
-		if(userDetail != null){
+		if (userDetail != null) {
 			ret.put("status", "1001");
 			ret.put("message", "get user detail success");
 			ret.put("body", Utility.gson.toJson(userDetail));
-		}else{
+		} else {
 			ret.put("status", "1002");
 			ret.put("message", "get user detail fail");
 		}
 		return Utility.gson.toJson(ret);
-		
+
 	}
-	@RequestMapping(value = "/insert/user", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/insert/user", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String insertUser(@RequestBody User user){
-		logger.info("userName: " + user.getUserName() + " number: " + user.getNumber() + " passwd: " + user.getPasswd());
+	public String insertUser(@RequestBody User user) {
+		logger.info("userName: " + user.getUserName() + " number: "
+				+ user.getNumber());
 		return userService.insertUser(user);
 	}
-	
-	
+
+	@RequestMapping(value = "/update/user", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String updateUser(@RequestBody Map<String, Object> args) {
+		String username = (String) args.get("userName");
+		User user = userService.getUserByUsername(username);
+		Utility.updateObjectField(user, "com.park.model.User", args);
+		if (userService.updateUser(user) > 0)
+			return Utility.createJsonMsg(1001, "update successful");
+		else
+			return Utility.createJsonMsg(1002, "update failed");
+
+	}
+
 	@RequestMapping(value = "/user/passwd", method = RequestMethod.POST)
 	@ResponseBody
-	public String getUserPasswd(@RequestParam("userName")String userName){
+	public String getUserPasswd(@RequestParam("userName") String userName) {
 		return userService.getUserPassword(userName);
 	}
-	
+
 	@RequestMapping(value = "/register/user")
-	public String registerUser(User user){
+	public String registerUser(User user) {
 		return "registerUser";
 	}
-	
+
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String appUserLogin(@RequestBody Map<String, Object> args) {
+		String username = (String) args.get("userName");
+		String password = (String) args.get("password");
+		User user = userService.getUserByUsername(username);
+		if (user == null)
+			return Utility.createJsonMsg(1002, "no this user");
+		if (!user.getPasswd().equals(password))
+			return Utility.createJsonMsg(1003, "password is incorrect");
+		else
+			return Utility.createJsonMsg(1001, "login successfully", user);
+
+	}
+
+	@RequestMapping(value = "/user/changePassword", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String changeUserPassword(@RequestBody Map<String, Object> args) {
+		String username = (String) args.get("userName");
+		String password = (String) args.get("newPassword");
+		if (userService.changeUserPassword(username, password) > 0)
+			return Utility.createJsonMsg(1001, "change password successfully");
+		else
+			return Utility.createJsonMsg(1002, "user no exists");
+	}
+
+
+	/**
+	 * 这里这里用的是MultipartFile[] myfiles参数,所以前台就要用<input type="file"
+	 * name="myfiles"/>
+	 * 上传文件完毕后返回给前台[0`filepath],0表示上传成功(后跟上传后的文件路径),1表示失败(后跟失败描述)
+	 */
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadPicture(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		// 创建一个通用的多部分解析器
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+				request.getSession().getServletContext());
+		// 判断 request 是否有文件上传,即多部分请求
+		if (multipartResolver.isMultipart(request)) {
+			// 转换成多部分request
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			// 取得request中的所有文件名
+			Iterator<String> iter = multiRequest.getFileNames();
+			Map<String, Object> body = new HashMap<String, Object>();
+			List<String> uriList = new ArrayList<String>();
+			while (iter.hasNext()) {
+				// 记录上传过程起始时的时间，用来计算上传时间
+				// 取得上传文件
+				MultipartFile file = multiRequest.getFile(iter.next());
+				if (file != null) {
+					// 取得当前上传文件的文件名称
+					String myFileName = file.getOriginalFilename();
+					// 如果名称不为“”,说明该文件存在，否则说明该文件不存在
+					if (myFileName.trim() != "") {
+						// 重命名上传后的文件名
+						String fileName = "" + new Date().getTime() + file.getOriginalFilename();
+						// 定义上传路径
+						String path = Constants.UPLOADDIR + fileName;
+						File localFile = new File(path);
+						try {
+							file.transferTo(localFile);
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+							break;
+						}
+						uriList.add(Constants.URL + fileName);
+					}
+				}
+			}
+
+			body.put("uri", uriList);
+			return Utility.createJsonMsg(1001, "upload file success", body);
+
+		}
+		return Utility.createJsonMsg(1002, "upload failed");
+	}
+
+	/**
+	 * 这里这里用的是MultipartFile[] myfiles参数,所以前台就要用<input type="file"
+	 * name="myfiles"/>
+	 * 上传文件完毕后返回给前台[0`filepath],0表示上传成功(后跟上传后的文件路径),1表示失败(后跟失败描述)
+	 */
+	@RequestMapping(value = "/upload1", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadFile(@RequestParam MultipartFile userPic,
+			HttpServletRequest request, HttpServletResponse response) {
+		// 可以在上传文件的同时接收其它参数
+		String realPath = Constants.UPLOADDIR;
+		// 设置响应给前台内容的数据格式
+		// 上传文件的原名(即上传前的文件名字)
+		String originalFilename = null;
+		// 如果想上传多个文件,那么这里就要用MultipartFile[]类型来接收文件,并且要指定@RequestParam注解
+		// 上传多个文件时,前台表单中的所有<input
+		// type="file"/>的name都应该是myfiles,否则参数里的myfiles无法获取到所有上传的文件
+		if (userPic.isEmpty())
+			return Utility.createJsonMsg(1002, "file is null");
+		originalFilename = userPic.getOriginalFilename();
+		originalFilename += new Date().getTime();
+
+		try {
+			// 这里不必处理IO流关闭的问题,因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
+			// 此处也可以使用Spring提供的MultipartFile.transferTo(File dest)方法实现文件的上传
+			FileUtils.copyInputStreamToFile(userPic.getInputStream(), new File(
+					realPath, originalFilename));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Utility.createJsonMsg(1003, "upload file is failed");
+		}
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("uri", Constants.URL + originalFilename);
+		return Utility.createJsonMsg(1001, "upload file success", body);
+
+	}
+
 }

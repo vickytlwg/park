@@ -70,15 +70,18 @@
 	<!-- 拦截器 -->
 	<mvc:interceptors>
 		<mvc:interceptor>	
-		<mvc:mapping path="/access"/>
-		<mvc:mapping path="/businessCarport"/>
-		<mvc:mapping path="/channel"/>
-		<mvc:mapping path="/hardware"/>
-		<mvc:mapping path="/chart"/>
-		<mvc:mapping path="/parks"/>
-		<mvc:mapping path="/users"/>
-		<mvc:mapping path="/parkUsers"/>
-		<mvc:mapping path="/register/user"/>						
+		<mvc:mapping path="/*/**"/>
+		<mvc:exclude-mapping path="/login"/>
+		<mvc:exclude-mapping path="/authority"/>
+		<mvc:exclude-mapping path="/image/**"/>
+		<mvc:exclude-mapping path="/img/**"/>
+		<mvc:exclude-mapping path="/script/**"/>
+		<mvc:exclude-mapping path="/css/**"/>
+		<mvc:exclude-mapping path="/cssmb/**"/>
+		<mvc:exclude-mapping path="/fonts/**"/>
+		<mvc:exclude-mapping path="/font/**"/>
+		<mvc:exclude-mapping path="static/**"/>
+							
 		<bean class="com.park.interceptor.loginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -103,10 +106,11 @@
      <mvc:annotation-driven /> 
   
 	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
-		p:prefix="/WEB-INF/view/" p:suffix=".jsp" /> -->
-
-	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
-		<property name="defaultEncoding"> <value>UTF-8</value> </property> <property 
-		name="maxUploadSize"> <value>32505856</value>上传文件大小限制为31M，31*1024*1024 </property> 
-		<property name="maxInMemorySize"> <value>4096</value> </property> </bean> -->
+		p:prefix="/WEB-INF/view/" p:suffix=".jsp" /> 
+ -->
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		<property name="defaultEncoding"> <value>UTF-8</value> </property> 
+		<property name="maxUploadSize"> <value>32505856</value></property> 
+		<property name="maxInMemorySize"> <value>40960</value> </property> </bean> 
+		
 </beans>

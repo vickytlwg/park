@@ -90,4 +90,18 @@ public class UserServiceImpl implements UserService{
 		return userDAO.getUserCount();
 	}
 
+	@Override
+	public User getUserByUsername(String username) {
+		return userDAO.getUserByUsername(username);
+	}
+	
+	public int changeUserPassword(String username, String password){
+		return userDAO.changeUserPassword(username, password);
+	}
+
+	@Override
+	public int updateUser(User user) {
+		return userDAO.updateUser(user);
+	}
+
 }

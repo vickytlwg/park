@@ -27,4 +27,9 @@ public interface UserDAO {
 	
 	int getUserIdByNumber(String number);
 	
+	public User getUserByUsername(String username);
+	
+	public int changeUserPassword(String username, String password);
+	
+	public int updateUser(User user);
 }

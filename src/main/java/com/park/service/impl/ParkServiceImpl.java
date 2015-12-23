@@ -14,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 import com.park.dao.AuthorityDAO;
 import com.park.dao.ParkDAO;
+import com.park.dao.ParkNewsDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Park;
+import com.park.model.ParkNews;
 import com.park.service.ParkService;
 import com.park.service.UserParkService;
 import com.park.service.Utility;
@@ -30,6 +32,9 @@ public class ParkServiceImpl implements ParkService{
 	
 	@Autowired
 	private AuthorityDAO authDAO;
+	
+	@Autowired
+	private ParkNewsDAO parkNewsDAO;
 	
 	@Autowired
 	private UserParkService userParkService;
@@ -171,13 +176,41 @@ public class ParkServiceImpl implements ParkService{
 
 	@Override
 	public List<Park> getParkDetailByKeywords(String keywords) {
-		// TODO Auto-generated method stub
 		return parkDAO.getParkDetailByKeywords(keywords);
 	}
 
 
+	@Override
+	public List<ParkNews> getSearchParkLatestNews(double longitude, double latitude,
+			double radius, int offset, int pageSize) {
+		
+		List<Park> searchParks = this.getNearParks(longitude, latitude, radius);
+		int start = (offset - 1) * pageSize;
+		int end = start + pageSize;
+		
+		int index = 0;
+		List<ParkNews> parkNews = new ArrayList<ParkNews>();
+		
+		for(Park park : searchParks){
+			ParkNews news = parkNewsDAO.getLatestParkNews(park.getId());
+			if(news == null)
+				continue;
+			if(news != null)
+				++index;
+			if(index >= end)
+				break;
+			else if(index >= start)
+				parkNews.add(news);
+			else
+				continue;
+		}
+		
+		return parkNews;
+	}
 
 
+	
+	
 
 	
 

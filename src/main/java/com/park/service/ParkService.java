@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.park.model.Park;
+import com.park.model.ParkNews;
 
 public interface ParkService {
 	
@@ -23,7 +24,9 @@ public interface ParkService {
 	public List<Park> getParkByName(String name);
 	
 	public List<Park> getParkDetail(int low, int count);
+	
 	public List<Park> getParkDetailByKeywords(String keywords);
+	
 	public int getParkCount();
 	
 	public String insertPark(Park park);
@@ -35,5 +38,7 @@ public interface ParkService {
 	public int updateLeftPortCount(int parkId, int leftPortCount);
 	
 	public String deletePark(int Id);
+	
+	public List<ParkNews> getSearchParkLatestNews(double longitude, double latitude, double radius, int offset, int pageSize);
 
 }

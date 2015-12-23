@@ -4,6 +4,8 @@ public class UserDetail {
 	private int Id;
 	private String userName;
 	private String number;
+	private String headerUri;
+	private String nickname;
 	
 	public int getId() {
 		return Id;
@@ -22,6 +24,18 @@ public class UserDetail {
 	}
 	public void setNumber(String number) {
 		this.number = number;
+	}
+	public String getHeaderUri() {
+		return headerUri;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setHeaderUri(String headerUri) {
+		this.headerUri = headerUri;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 	

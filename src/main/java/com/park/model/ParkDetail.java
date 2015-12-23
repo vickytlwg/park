@@ -23,6 +23,10 @@ public class ParkDetail {
 	private String mapAddr;
 	private String date;
 	
+	private String contact;
+	private String number;
+	private String pictureUri;
+	private String description;
 	
 	public int getId() {
 		return id;
@@ -131,6 +135,30 @@ public class ParkDetail {
 	}
 	public void setMapAddr(String mapAddr) {
 		this.mapAddr = mapAddr;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public String getPictureUri() {
+		return pictureUri;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	public void setPictureUri(String pictureUri) {
+		this.pictureUri = pictureUri;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

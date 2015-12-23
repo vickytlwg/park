@@ -9,12 +9,16 @@
 		<result property="userName" column="userName" />
 		<result property="number" column="number"/>
 		<result property="passwd" column="passwd"/>
+		<result property="headerUri" column="headerUri"/>
+		<result property="nickname" column="nickname"/>
 	</resultMap>   
 	
 	<resultMap id="UserDetailMapper" type="com.park.model.UserDetail">
 		<id property="Id" column="Id" />
 		<result property="userName" column="userName" />
 		<result property="number" column="number"/>
+		<result property="headerUri" column="headerUri"/>
+		<result property="nickname" column="nickname"/>
 	</resultMap> 
 
 
@@ -48,9 +52,20 @@
 		select * from users
 	</select>
 	
+	<select id="getUserByUsername" resultMap="UserMapper">
+		select * from users where username = #{param1}
+	</select>
+	
+	<update id="changeUserPassword">
+		update users set passwd = #{param2} where username=#{param1}
+	</update>
+	
+	<update id="updateUser" parameterType="User">
+		update users set userName = #{userName}, number = #{number},passwd = #{passwd},headerUri = #{headerUri},nickname = #{nickname} where Id=#{Id}
+	</update>
 	
 	<insert id="insertUser" parameterType="User"  keyProperty="Id" >
-	    insert into users(userName, number, passwd) values (#{userName},#{number},#{passwd})
+	    insert into users(userName, number, passwd, headerUri, nickname) values (#{userName},#{number},#{passwd}, #{headerUri}, #{nickname})
 	</insert>
        
           

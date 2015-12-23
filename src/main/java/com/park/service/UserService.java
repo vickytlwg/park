@@ -15,6 +15,8 @@ public interface UserService {
 	
 	String insertUser(User userItem);
 	
+	public int updateUser(User user);
+	
 	String getUserPassword(String userName);
 	
 	public boolean userExistByUserName(String userName);
@@ -22,4 +24,8 @@ public interface UserService {
 	public boolean userExistByNumber(String number);
 	
 	public int getUserIdByNumber(String number);
+	
+	public User getUserByUsername(String username);
+	
+	public int changeUserPassword(String username, String password);
 }

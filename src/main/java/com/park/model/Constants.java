@@ -6,5 +6,7 @@ public class  Constants{
 	public static  String PINGAPPID = "app_K8aH0444i5G8qvTO";
 	public static  String DATEFORMAT = "yyyy-MM-dd hh:mm:ss";
 	public static  int ACCESSTABLESCOUNT = 200;
+	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
+	public static  String UPLOADDIR = "/alidata/server/tomcat7/webapps/parkpictures/";
 
 }

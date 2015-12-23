@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,23 @@ public class BusinessCarportController {
 		}
 		
 		return Utility.gson.toJson(retMap) + "eof\n";
+	}
+	
+	@RequestMapping(value = "/update/status/businessCarports", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args){
+		List<String> updatedMac = new ArrayList<String>();
+		List<Object> carportsStatus = (List<Object>)args.get("carportStatus");
+		for(Object item : carportsStatus){
+			Map<String, Object> arg = (Map<String, Object>)item;
+			String mac = (String)arg.get("mac");
+			int status = Integer.parseInt((String)arg.get("status").toString());
+			int ret = businessCarportService.updateBusinessCarportStatus(mac, status);
+			if(ret > 0)
+				updatedMac.add(mac);
+		}
+						
+		return Utility.createJsonMsg(1001, "updated mac", updatedMac) + "eof\n";
 	}
 	
 	@RequestMapping(value = "/delete/businessCarport/{Id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})

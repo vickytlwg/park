@@ -2,6 +2,7 @@ package com.park.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Park;
+import com.park.model.ParkNews;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
 import com.park.service.Utility;
@@ -244,5 +246,50 @@ public class ParkController {
 	@ResponseBody
 	public String deletePark(@PathVariable int Id){
 		return parkService.deletePark(Id);
+	}
+	
+	@RequestMapping(value = "/dynamicNews/queryList", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getSearchParkNews(@RequestBody Map<String, Object> args){
+		int pageSize = (int)args.get("pageSize");
+		int offset = (int)args.get("offset");
+		double longitude = (double)args.get("longitude");
+		double latitude = (double)args.get("latitude");
+		double radius = (double)args.get("radius");
+		List<ParkNews> parkNewsList = parkService.getSearchParkLatestNews(longitude, latitude, radius, offset, pageSize);
+		
+		return Utility.createJsonMsg(1001, "get news successfully", parkNewsList);
+		
+	}
+	
+	@RequestMapping(value = "/search/parking", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getSearchParks(@RequestBody Map<String, Object> args){
+		
+		if(args.containsKey("parkingName")){
+			String parkName = (String)args.get("parkingName");
+			List<Park> parkList = parkService.getParkByName(parkName);
+			return Utility.createJsonMsg(1001, "get park successfully", parkList);
+		}
+		
+		double longitude = (double)args.get("userLocationlongitude");
+		double latitude = (double)args.get("userLocationlatitude");
+		double radius = (double)args.get("distance");
+
+		List<Park> searchPark = parkService.getNearParks(longitude, latitude, radius);
+		if(!args.containsKey("portLeftCount")){
+			return Utility.createJsonMsg(1001, "get parks successfully", searchPark);
+			
+		}else{
+			List<Park> filterPark = new ArrayList<Park>();
+			
+			int portLeftCount = (int)args.get("portLeftCount");
+			for(Park park : searchPark){
+				if(park.getPortLeftCount() >=  portLeftCount)
+					filterPark.add(park);
+			}
+			return Utility.createJsonMsg(1001, "get parks successfully", filterPark);
+		}
+		
 	}
 }

@@ -9,6 +9,8 @@ public class User {
 	private String userName;
 	private String number;
 	private String passwd;
+	private String headerUri;
+	private String nickname;
 	
 	public String getUserName() {
 		return userName;
@@ -34,6 +36,19 @@ public class User {
 	public void setId(int id) {
 		Id = id;
 	}
+	public String getHeaderUri() {
+		return headerUri;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setHeaderUri(String headerUri) {
+		this.headerUri = headerUri;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	
 	
 	
 }
