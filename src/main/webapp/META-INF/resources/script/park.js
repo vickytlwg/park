@@ -15,7 +15,7 @@
 		renderPagination();
 		searchParkByLocation();
 	};
-	
+	var positiondata='';
 	/**bind tr click*/
 	var bindTrClick = function(){
 		var parkBody = $("#parkBody");
@@ -104,6 +104,7 @@
 		$('input#chargeDaytime').val($(tds[6]).text());
 		$('input#chargeNight').val($(tds[7]).text());	
 		$('select#parkStatus').val($(tds[8]).attr('data'));
+		positiondata=$(tds[12]).text();
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
 		$('input#floorCount').val($(tds[10]).text());
 		$('select#parkType').val($(tds[11]).attr('data'));
@@ -174,7 +175,12 @@
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
 		parkFields['type'] = parseInt($('select#parkType').val());
-		parkFields['position'] = getAreaNamebyID(getAreaID())+' '+$('input#positionlast').val();
+		parkFields['position'] =positiondata;
+		var positionpark=getAreaNamebyID(getAreaID())+' '+$('input#positionlast').val();
+		if (positionpark.length>9&&positionpark!=undefined) {
+			parkFields['position'] = positionpark;
+		}
+		
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['mapAddr'] = $('input#mapAddr').val();
