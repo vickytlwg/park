@@ -9,5 +9,7 @@ import com.park.model.ParkNews;
 public interface ParkNewsDAO {
 	
 	public ParkNews getLatestParkNews(int parkId);
+	
+	public int insertParkNews(ParkNews parkNews);
 
 }

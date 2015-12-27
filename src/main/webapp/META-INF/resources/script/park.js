@@ -14,6 +14,7 @@
 		renderPark(0, $.fn.page.pageSize);
 		renderPagination();
 		searchParkByLocation();
+		//bindPictureBtn();
 	};
 	
 	/**bind tr click*/
@@ -24,6 +25,7 @@
 				$(this).find('input[type="checkbox"]').click();
 		});
 	};
+		
 	
 	/**bind refresh click**/
 	var bindRefreshClick = function(){
@@ -55,13 +57,15 @@
 		$('#searchParkl').on('click', $(this), function(){
 			$('#searchParkByLocation').modal('show');
 		});
-		};
+	};
+	
 	/**bind update park click **/
 	var bindUpdateBtnClick = function(){
 		$('#updatePark').on('click', $(this), function(){
 			updateBtnClickHandle();
 		});
 	};
+	
 	var searchParkByLocation=function(){
 	//	alert('searchParkByLocation');	
 		$('#submitSearchParkBtn').on('click', $(this), function(){
@@ -82,6 +86,7 @@
 			});
 		});
 	};
+	
 	var updateBtnClickHandle = function(){
 		$('#addParkForm')[0].reset();
 		$('#addParkResult').html('');
@@ -113,7 +118,36 @@
 		$('input#latitude').val($(tds[12]).attr('latitude'));
 		$('input#mapAddr').val(checkedTr.attr('mapAddr'));
 		
+		var position = checkedTr.attr('position');
 		
+		var pos_selects = ['select#seachprov', 'select#seachcity', 'select#seachdistrict'];
+		for(var i = 0; i < 3; i++)
+			$(pos_selects[i]).val(0);
+		$('#positionlast').val("");
+		
+		var positions = position.split(" ");
+		if(positions.length == 2){
+			$('#positionlast').val(positions[1]);
+		}
+		var areas = positions[0].split("-");
+		if(areas.length > 1 ){
+			
+	
+			for(var i = 0; i < areas.length; i++){
+				var select = $(pos_selects[i]);
+				var options = select.find('option');
+				for(var j = 0; j < options.length; j++){
+					if($(options[j]).text() == areas[i]){
+						$(options[j]).attr('selected', 'true');
+						select.change();
+					}
+				}
+			}				
+			
+		}
+		
+		$('input#number').val(checkedTr.attr('number'));
+		$('input#contact').val(checkedTr.attr('contact'));
 	};
 	
 	/**bind submit button of adding and updating park */
@@ -170,6 +204,8 @@
 		parkFields['charge'] = parseFloat($('input#chargeDaytime').val());
 		parkFields['charge1'] = parseFloat($('input#chargeNight').val());
 		parkFields['charge2'] = 0.00;
+		parkFields['contact'] = $('input#contact').val();
+		parkFields['number'] = $('input#number').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
@@ -297,6 +333,11 @@
 			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 			tr.attr('mapAddr', data[i]['mapAddr']);
+			tr.attr('contact', data[i]['contact']);
+			tr.attr('number', data[i]['number']);
+			tr.attr('pictureUri', data[i]['pictureUri']);
+			tr.attr('position', data[i]['position']);
+			
 			var type='';
 			if(data[i]['type'] == 0)
 				type='室内';

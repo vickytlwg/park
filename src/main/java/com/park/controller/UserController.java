@@ -15,6 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -186,6 +189,7 @@ public class UserController {
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			// 取得request中的所有文件名
 			Iterator<String> iter = multiRequest.getFileNames();
+			
 			Map<String, Object> body = new HashMap<String, Object>();
 			List<String> uriList = new ArrayList<String>();
 			while (iter.hasNext()) {
@@ -227,34 +231,37 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/upload1", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadFile(@RequestParam MultipartFile userPic,
-			HttpServletRequest request, HttpServletResponse response) {
-		// 可以在上传文件的同时接收其它参数
-		String realPath = Constants.UPLOADDIR;
-		// 设置响应给前台内容的数据格式
-		// 上传文件的原名(即上传前的文件名字)
-		String originalFilename = null;
-		// 如果想上传多个文件,那么这里就要用MultipartFile[]类型来接收文件,并且要指定@RequestParam注解
-		// 上传多个文件时,前台表单中的所有<input
-		// type="file"/>的name都应该是myfiles,否则参数里的myfiles无法获取到所有上传的文件
-		if (userPic.isEmpty())
-			return Utility.createJsonMsg(1002, "file is null");
-		originalFilename = userPic.getOriginalFilename();
-		originalFilename += new Date().getTime();
-
-		try {
-			// 这里不必处理IO流关闭的问题,因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
-			// 此处也可以使用Spring提供的MultipartFile.transferTo(File dest)方法实现文件的上传
-			FileUtils.copyInputStreamToFile(userPic.getInputStream(), new File(
-					realPath, originalFilename));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Utility.createJsonMsg(1003, "upload file is failed");
+	public String uploadFile(HttpServletRequest request, HttpServletResponse response) {
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		
+		try{
+			Map<String, Object> body = new HashMap<String, Object>();
+			List<String> uriList = new ArrayList<String>();
+			
+			List<FileItem> items = upload.parseRequest(request);
+			Iterator<FileItem> iter = items.iterator();
+			while(iter.hasNext()){
+				FileItem item = (FileItem)iter.next();
+				if(item.isFormField()){
+					String orgName = item.getFieldName();
+				}else{
+					String orgName = item.getFieldName();
+					String newName = new Date().getTime() + orgName;
+					File saveFile = new File(Constants.UPLOADDIR + newName);
+					item.write(saveFile);
+					
+					uriList.add(Constants.URL + newName);
+				}
+			}
+			body.put("uri", uriList);
+			return Utility.createJsonMsg(1001, "upload file success", body);
+			
+		}catch(Exception ex){
+			
 		}
-		Map<String, Object> body = new HashMap<String, Object>();
-		body.put("uri", Constants.URL + originalFilename);
-		return Utility.createJsonMsg(1001, "upload file success", body);
-
+		return Utility.createJsonMsg(1002, "upload failed");
+		
 	}
 
 }

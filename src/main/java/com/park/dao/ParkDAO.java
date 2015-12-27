@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.Park;
+import com.park.model.ParkNews;
 
 @Repository
 public interface ParkDAO {
@@ -33,4 +34,6 @@ public interface ParkDAO {
 	public int updateLeftPortCount(@Param("id")int parkId, @Param("portLeftCount") int leftPortCount);
 	
 	public int deletePark(int id);
+	
+	
 }

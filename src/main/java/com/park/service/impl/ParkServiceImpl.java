@@ -209,7 +209,9 @@ public class ParkServiceImpl implements ParkService{
 	}
 
 
-	
+	public int insertParkNews(ParkNews parkNews){
+		return parkNewsDAO.insertParkNews(parkNews);
+	}
 	
 
 	

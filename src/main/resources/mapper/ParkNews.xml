@@ -17,4 +17,9 @@
 		select * from parkNews where parkId=#{param1} order by date desc limit 0, 1;
 	</select>
 	
+	<insert id="insertParkNews" parameterType="ParkNews" keyProperty="id">
+		insert into parkNews(parkId, header, content, pictureUri, date) 
+		values(#{parkId}, #{header}, #{content}, #{pictureUri}, #{date})
+	</insert>
+	
 </mapper>

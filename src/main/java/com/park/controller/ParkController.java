@@ -3,6 +3,7 @@ package com.park.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,6 +262,16 @@ public class ParkController {
 		return Utility.createJsonMsg(1001, "get news successfully", parkNewsList);
 		
 	}
+	
+	@RequestMapping(value = "/insert/parkNews", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String insertParkNews(@RequestBody ParkNews parkNews){
+		parkNews.setDate(new Date());
+		parkService.insertParkNews(parkNews);
+		return Utility.createJsonMsg(1001, "insert news successfully");
+		
+	}
+	
 	
 	@RequestMapping(value = "/search/parking", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
