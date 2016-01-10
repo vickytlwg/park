@@ -14,8 +14,37 @@
 		renderPark(0, $.fn.page.pageSize);
 		renderPagination();
 		searchParkByLocation();
-		//bindPictureBtn();
+		bindUploadPicBtn();
+		bindSubmitPicBtn();
 	};
+	
+	var bindUploadPicBtn = function(){
+		$("#uploadPic").on('click', $(this), function(){
+			var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
+			if(checkedTr.length != 1)
+				return;
+			$("#uploadParkPic").modal('show');
+			$("#pictureForm")[0].reset();
+		});
+		
+	}
+	
+	var bindSubmitPicBtn = function(){
+		var btn = $("#submitPicBtn");
+		btn.on('click', $(this), function(){
+			var form = $("#pictureForm");
+			var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
+			var tds = checkedTr.find('td');
+			var parkId = parseInt($(tds[1]).text());
+			$("#parkId").val(parkId);
+			//form.attr("action", form.attr("action") + parkId);
+			form[0].submit();
+			//windows.location="/parks";
+			//$("#uploadParkPic").modal('hide');
+		});
+		
+		
+	}
 	
 	/**bind tr click*/
 	var bindTrClick = function(){
