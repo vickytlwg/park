@@ -175,11 +175,12 @@ public class UserController {
 	 * name="myfiles"/>
 	 * 上传文件完毕后返回给前台[0`filepath],0表示上传成功(后跟上传后的文件路径),1表示失败(后跟失败描述)
 	 */
+	static public int filePrefix = 0;
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseBody
 	public String uploadPicture(HttpServletRequest request,
 			HttpServletResponse response) {
-
+		
 		// 创建一个通用的多部分解析器
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
 				request.getSession().getServletContext());
@@ -202,7 +203,9 @@ public class UserController {
 					// 如果名称不为“”,说明该文件存在，否则说明该文件不存在
 					if (myFileName.trim() != "") {
 						// 重命名上传后的文件名
-						String fileName = "" + new Date().getTime() + file.getOriginalFilename();
+						UserController.filePrefix++;
+						//String fileName = "" + new Date().getTime() + file.getOriginalFilename();
+						String fileName = "" + new Date().getTime() + UserController.filePrefix;
 						// 定义上传路径
 						String path = Constants.UPLOADDIR + fileName;
 						File localFile = new File(path);

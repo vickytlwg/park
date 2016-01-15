@@ -73,8 +73,7 @@ public class Utility {
 	      
 	      Map<String, Object> resultMap = new HashMap<String, Object>();
 	      try {
-	          HttpResponse response = httpClient.execute(post);         
-	          
+	          HttpResponse response = httpClient.execute(post);                   
 	          StatusLine status = response.getStatusLine();	          	          
 	          int code = status.getStatusCode();
 	          resultMap.put("status", code);
