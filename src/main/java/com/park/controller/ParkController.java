@@ -1,14 +1,18 @@
 package com.park.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -20,10 +24,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Constants;
 import com.park.model.Park;
 import com.park.model.ParkNews;
 import com.park.service.AuthorityService;
@@ -66,6 +75,23 @@ public class ParkController {
 		ret.put("status", 1001);
 		ret.put("body", park);
 		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
+	
+	@RequestMapping(value = "/getParkLeftPort/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkLeftPort(@PathVariable int id, ModelMap modelMap, HttpServletRequest request){
+		Park park = parkService.getParkById(id);
+		
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> body = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		if(park != null)
+			body.put("leftPort", park.getPortLeftCount());
+		else
+			body.put("leftPort", "null");
+		ret.put("body", body);
+		ret.put("message", "get park port success");
 		return Utility.gson.toJson(ret);
 	}
 	
@@ -155,9 +181,10 @@ public class ParkController {
 		return Utility.gson.toJson(ret);					
 	}
 	
+
 	@RequestMapping(value = "/getParkDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public  String  accessIndex( @RequestBody Map<String, Object> args,HttpSession session){
+	public  String  getParkDetail( @RequestBody Map<String, Object> args,HttpSession session){
 		int low = (int)args.get("low");
 		int count = (int)args.get("count");
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -302,5 +329,71 @@ public class ParkController {
 			return Utility.createJsonMsg(1001, "get parks successfully", filterPark);
 		}
 		
+	}
+	
+
+	/**
+	 * 这里这里用的是MultipartFile[] myfiles参数,所以前台就要用<input type="file"
+	 * name="myfiles"/>
+	 * 上传文件完毕后返回给前台[0`filepath],0表示上传成功(后跟上传后的文件路径),1表示失败(后跟失败描述)
+	 */
+	static public int filePrefix = 0;
+	@RequestMapping(value = "/upload/parkPic", method = RequestMethod.POST)
+	public String uploadParkPicture(@RequestParam(value ="parkId") int parkId, HttpServletRequest request,
+			HttpServletResponse response) {
+		int id = parkId;
+		// 创建一个通用的多部分解析器
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+				request.getSession().getServletContext());
+		// 判断 request 是否有文件上传,即多部分请求
+		if (multipartResolver.isMultipart(request)) {
+			// 转换成多部分request
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			// 取得request中的所有文件名
+			Iterator<String> iter = multiRequest.getFileNames();
+			
+			Map<String, Object> body = new HashMap<String, Object>();
+			String picUri = null;
+			if (iter.hasNext()) {
+				// 记录上传过程起始时的时间，用来计算上传时间
+				// 取得上传文件
+				MultipartFile file = multiRequest.getFile(iter.next());
+				
+				if (file != null) {
+					// 取得当前上传文件的文件名称
+					String myFileName = file.getOriginalFilename();
+					// 如果名称不为“”,说明该文件存在，否则说明该文件不存在
+					if (myFileName.trim() != "") {
+						// 重命名上传后的文件名
+						UserController.filePrefix++;
+						//String fileName = "" + new Date().getTime() + file.getOriginalFilename();
+						String fileName = "" + new Date().getTime() + UserController.filePrefix;
+						// 定义上传路径
+						String path = Constants.UPLOADDIR + fileName;
+						File localFile = new File(path);
+						try {
+							file.transferTo(localFile);
+						} catch (IllegalStateException | IOException e) {
+							e.printStackTrace();
+						}
+						picUri = Constants.URL + fileName;
+					}
+				}
+			}
+			if(picUri != null){
+				Park park = parkService.getParkById(id);
+				if(park != null){
+					park.setPictureUri(picUri);
+					parkService.updatePark(park);
+				}
+									
+				//return Utility.createJsonMsg(1001, "upload file success", body);
+				
+			}else{
+				//return Utility.createJsonMsg(1002, "upload failed");
+			}
+		}
+		//return Utility.createJsonMsg(1002, "upload failed");
+		return "redirect:/parks";
 	}
 }
