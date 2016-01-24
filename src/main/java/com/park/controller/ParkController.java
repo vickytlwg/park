@@ -86,12 +86,17 @@ public class ParkController {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
 		ret.put("status", 1001);
-		if(park != null)
+		if(park != null){
 			body.put("leftPort", park.getPortLeftCount());
-		else
+			body.put("parkId", park.getId());
+			body.put("parkName", park.getName());
+			ret.put("message", "get park port success");
+		}else{
 			body.put("leftPort", "null");
+			ret.put("message", "park not exist");
+		}
 		ret.put("body", body);
-		ret.put("message", "get park port success");
+		
 		return Utility.gson.toJson(ret);
 	}
 	

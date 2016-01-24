@@ -54,6 +54,10 @@
 		select * from dataUsageCard where id=#{param1}
 	</select>
 	
+	<select id="getCardsByParkId" resultMap="DataUsageCardMapper">
+		select * from dataUsageCard where parkId=#{param1}
+	</select>
+	
 	<select id="getCardByCardNumber" resultMap="DataUsageCardDetailMapper">
 		select d.id, d.cardNumber, d.phoneNumber, d.type, d.status, d.dataUsage, d.parkId, d.position, d.longitude, d.latitude, p.name as parkName
 		from dataUsageCard as d

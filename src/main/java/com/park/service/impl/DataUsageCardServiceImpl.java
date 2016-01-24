@@ -23,6 +23,11 @@ public class DataUsageCardServiceImpl implements DataUsageCardService{
 	public int getCardCount() {
 		return cardDAO.getCardCount();
 	}
+	
+	@Override
+	public List<DataUsageCardDetail> getCardsByParkId(int parkId) {
+		return cardDAO.getCardsByParkId(parkId);
+	}
 
 	@Override
 	public List<DataUsageCardDetail> getCardDetail(int low, int count) {
@@ -62,6 +67,18 @@ public class DataUsageCardServiceImpl implements DataUsageCardService{
 	@Override
 	public int deleteCard(int id) {
 		return cardDAO.deleteCard(id);
+	}
+
+	@Override
+	public void fillUsage(List<DataUsageCard> cards) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fillDetailUsage(
+			List<DataUsageCardDetail> cards) {
+		// TODO Auto-generated method stub
 	}
 
 }

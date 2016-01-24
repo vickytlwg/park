@@ -46,6 +46,10 @@
 		select count(*) from businessCarport where status = 1 and parkId = #{param1};
 	</select>
 	
+	<select id="checkMacExist" resultType="int">
+		select count(*) from businessCarport where macId = #{param2} and parkId = #{param1};
+	</select>
+	
 	<select id="getBusinessCarportByMacId" resultMap="BusinessCarportMapper">
 		select * from businessCarport where macId = #{param1}
 	</select>

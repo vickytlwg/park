@@ -382,6 +382,19 @@
 			}else{
 				tr.addClass('active');
 			}
+		
+			var picUri = data[i]['pictureUri']
+			if(picUri != undefined && picUri != null && picUri != "" )
+				tr.append('<td><a href="#" ref="' + picUri + '"> 显示图片</a></td>');
+			else
+				tr.append('<td>暂无图片</td>')
+			
+			tr.find('a').on('click', $(this), function(){
+				var modal = new $.Modal('showPic', "停车场图片", '<center><img width=300 height=300 src="' + $(this).attr("ref") + '"></img></center>');
+				$('#showPicture').html(modal.get());
+				modal.show();
+			});
+			
 			parkBody.append(tr);
 		}
 	};

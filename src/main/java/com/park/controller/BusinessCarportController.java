@@ -100,13 +100,11 @@ public class BusinessCarportController {
 		
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		int carportRet = 0;
-		int macId = businessCarport.getMacId();
 		carportRet =  businessCarportService.insertBusinessCarport(businessCarport);
- 		if(carportRet > 0 && hardwareService.bindHardware(macId)){
+ 		if(carportRet > 0){
 			retMap.put("status", "1001");
 			retMap.put("message", "insert businessCarport success");
 			return Utility.gson.toJson(retMap);
-			
 		}
 		retMap.put("status", "1002");
 		retMap.put("message", "insert businessCarport fail, mac has already been used");
@@ -117,13 +115,8 @@ public class BusinessCarportController {
 	@ResponseBody
 	public String updateBusinessCarport(@RequestBody BusinessCarport businessCarport){
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		BusinessCarport oldBusinessCarport = businessCarportService.getBusinessCarportById(businessCarport.getId());
 		int ret = businessCarportService.updateBusinessCarport(businessCarport);
 		if(ret > 0 ){
-			if(oldBusinessCarport.getMacId() != businessCarport.getMacId()){
-				hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
-				hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
-			}
 			retMap.put("status", "1001");
 			retMap.put("message", "update businessCarport success");
 		}else{
