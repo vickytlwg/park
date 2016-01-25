@@ -18,6 +18,8 @@ import com.park.model.Hardware;
 import com.park.model.HardwareType;
 import com.park.model.Status;
 import com.park.service.BusinessCarportService;
+import com.park.service.HardwareService;
+import com.park.service.Utility;
 
 @Transactional
 @Service
@@ -27,6 +29,9 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	
 	@Autowired
 	private HardwareDAO hardwareDAO;
+	
+	@Autowired
+	private HardwareService hardwareService;
 	
 	@Autowired
 	private ParkDAO parkDAO;
@@ -62,15 +67,36 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 
 	@Override
 	public int insertBusinessCarport(BusinessCarport businessCarport) {
-		return businessCarportDAO.insertBusinessCarport(businessCarport);
+		
+		int carportRet = 0;
+		int macId = businessCarport.getMacId();
+		//check if mackId exist 
+		if(businessCarportDAO.checkMacExist(businessCarport.getParkId(), macId) > 0)
+			return 0;
+		carportRet =  businessCarportDAO.insertBusinessCarport(businessCarport);
+ 		if(carportRet > 0 && hardwareService.bindHardware(macId)){
+			return 1;
+		}else
+			return 0;
 	}
+	
 
 	@Override
 	public int updateBusinessCarport(BusinessCarport businessCarport) {
 		//update park left port
+		BusinessCarport oldBusinessCarport = this.getBusinessCarportById(businessCarport.getId());
+		int oldMacId = oldBusinessCarport.getMacId();
+		int newMacId = businessCarport.getMacId();
+		if(businessCarportDAO.checkMacExist(businessCarport.getParkId(), newMacId) > 0)
+			return 0;
+		if(oldMacId != newMacId){			
+			hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
+			hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
+		}
 		
-		
-		return businessCarportDAO.updateBusinessCarport(businessCarport);
+		int ret = this.updateBusinessCarport(businessCarport);
+			
+		return ret;
 	}
 
 	@Override

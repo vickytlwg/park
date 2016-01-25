@@ -25,6 +25,8 @@ public interface BusinessCarportDAO {
 	
 	public int getBusinessCarportCount();
 	
+	public int checkMacExist(int parkId, int macId);
+	
 	public int getParkBusinessCarportCount(int parkId);
 	
 	public List<BusinessCarportDetail> getBusinessCarportDetail(@Param("low")int low, @Param("count")int count);

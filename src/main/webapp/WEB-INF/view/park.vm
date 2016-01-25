@@ -43,6 +43,7 @@
 					<th><span style="padding-left:15%">类型</div></th>
 					<th><span style="padding-left:15%">位置</div></th>
 					<th><span style="padding-left:15%">日期</div></th>	
+					<th><span style="padding-left:15%">图片</div></th>	
             </tr>
           </thead>
           <tbody id="parkBody"></tbody>
@@ -264,6 +265,9 @@
 </div>
 
 <div id='showErrorMessage'>
+</div>
+
+<div id='showPicture'>
 </div>
 
 <script>

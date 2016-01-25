@@ -53,8 +53,8 @@ public class HardwareSerivceImpl implements HardwareService{
 	
 	@Override
 	public int insertHardware(Hardware hardware) {
-		if(checkHardwareExist(hardware.getMac()))
-			return 0;
+		//if(checkHardwareExist(hardware.getMac()))
+		//	return 0;
 		return hardwareDAO.insertHardware(hardware);
 	}
 

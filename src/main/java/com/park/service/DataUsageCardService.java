@@ -11,9 +11,15 @@ public interface DataUsageCardService {
 	
 	public List<DataUsageCardDetail> getCardDetail(int low, int count);
 	
+	public List<DataUsageCardDetail> getCardsByParkId(int parkId);
+	
 	public List<DataUsageCardDetail> getCardById(int id);
 	
 	public List<DataUsageCard> getUsageCardById(int id);
+	
+	public void fillUsage(List<DataUsageCard> cards);
+	
+	public void fillDetailUsage(List<DataUsageCardDetail> cards);
 	
 	public List<DataUsageCardDetail> getCardByCardNumber(String cardNumber);
 	

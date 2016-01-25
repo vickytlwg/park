@@ -74,6 +74,16 @@ public class DataUsageCardController {
 		
 	}
 	
+	@RequestMapping(value = "/getParkCards/{parkId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getCardsByParkId(@PathVariable int parkId){
+		List<DataUsageCardDetail> cards = cardService.getCardsByParkId(parkId);
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("cards", cards);
+		return Utility.createJsonMsg(1001, "get card success", body);
+	}
+	
+	
 	@RequestMapping(value = "/getCardById/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getCardById(@PathVariable int id){
