@@ -44,7 +44,7 @@
 <div id="chart-content" style="min-height:1400px"></div>
 
 <script src="/park/script/chartFlow.js"></script>
-
+<script src="/park/script/jquery.cookie.js"></script>
 <script>
 $(document).ready(function(){
 	$.fn.parkChart.initial();

@@ -3,6 +3,7 @@ $.fn.parkChart = {};
 $.fn.parkChart.theme = Highcharts.getOptions();
 $.fn.parkChart.chart;
 $.fn.parkChart.initial = function(){
+
 	var chatContent = $('#chart-content');	
 	$('#date').val(new Date().format('yyyy-MM-dd'));
 	$('#date').datepicker({
@@ -19,22 +20,26 @@ $.fn.parkChart.initial = function(){
 	    yearSuffix: "年",
 	    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
 	
-	});
-		
+	});	
 	Highcharts.setOptions(Highcharts.themeGray);
-	$.fn.parkChart.renderChart(chatContent);
-
 	$('#parkName').text($('#park-select').find('option:selected').text());
+	bindParkSelectChange(chatContent);
+	$('#date').on('change', $(this), function(){
+		$.fn.parkChart.renderChart(chatContent);		
+	});
+	bindThemeChange();
+	readCookieSetSelect();
+	$.fn.parkChart.renderChart(chatContent);
+};
+var bindParkSelectChange=function(chatContent){
 	$('#park-select').on('change', $(this), function(){
 		$('#parkName').text($('#park-select').find('option:selected').text());
 		$.fn.parkChart.renderChart(chatContent);
+		$.cookie('selectValue',$(this).val(),{path:'/',expires:10});
 	});
-	$('#date').on('change', $(this), function(){
-		$.fn.parkChart.renderChart(chatContent);
-	});
-	
-	$('#theme').on('change', $(this), function(){
-		
+}
+var bindThemeChange=function(){
+	$('#theme').on('change', $(this), function(){		
 		var value = $(this).val();
 		var options;
 		switch(parseInt(value)){
@@ -61,14 +66,19 @@ $.fn.parkChart.initial = function(){
 		}	
 		$.fn.parkChart.renderChart(chatContent);
 	})
-};
-
-$.fn.parkChart.renderChart = function(chatContent){
+}
+var readCookieSetSelect=function(){
+	if($.cookie('selectValue')){
+		$('#park-select').val($.cookie('selectValue'));
+		if($('#park-select').find("option:selected").text().length<3){
+			$('#park-select option:last').attr('selected','selected');
+		}
+	}	
+}
+var renderchart=function(chatContent){
 	var parkId = parseInt($('#park-select').val());
 	var date = $('#date').val();
-	
 	var url = $.fn.config.webroot + '/getHourCountByChannel?_t=' + (new Date()).getTime();
-		
 	$.ajax({
 		url:url,
 		type: 'post',
@@ -82,6 +92,11 @@ $.fn.parkChart.renderChart = function(chatContent){
 		},
 		error: function(data){}
 	});
+};
+
+$.fn.parkChart.renderChart = function(chatContent){
+	//setInterval(renderchart,10000,chatContent);	
+	renderchart(chatContent);
 };
 
 var parseAccessData = function(data, isMonthAccess){
@@ -103,7 +118,7 @@ var parseAccessData = function(data, isMonthAccess){
 			}
 		}
 		series[i]={ 
-				type:'bar',
+	//			type:'bar',
 				name:key,
 				data:accessFlow,
 		};
@@ -111,18 +126,40 @@ var parseAccessData = function(data, isMonthAccess){
 	}
 	return {'dateTime': dateTime, 'series': series};
 };
+$.fn.parkChart.updateChart=function(){
+	var parkId = parseInt($('#park-select').val());
+	var date = $('#date').val();
+	var chart = $.fn.parkChart.chart;
+	var url = $.fn.config.webroot + '/getHourCountByChannel?_t=' + (new Date()).getTime();
+	$.ajax({
+		url:url,
+		type: 'post',
+		contentType: 'application/json;charset=utf-8',			
+		datatype: 'json',
+		data: $.toJSON({'parkId':parkId, 'date':date}),
+		success: function(data){
+			if(data.status == 1001){
+				var chartData = parseAccessData(data.body);	
+				var seriesData=chartData['series'];
+				$.each(seriesData,function(name,value){
+					$.fn.parkChart.chart.series[name].setData(value.data);
+				});
+		}
+		},
+		error: function(data){}
+	});
+}
 $.fn.parkChart.renderChartContent = function(data, chatContent){
 	var chartData = parseAccessData(data);	
 	chatContent.highcharts({
-		chart: {
-			 
+		chart: {		
+			type: 'bar' ,
 			 events: {  
                  load: function() {  
                 	 $.fn.parkChart.chart = this;
-                	 $.fn.parkChart.updateChart();
                 	 setInterval(function(){
                 		 $.fn.parkChart.updateChart();
-                	 }, 1000 * 10);
+                	 }, 1000 * 3);
                  }                                                               
              }   
 		},
@@ -132,6 +169,13 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
 	    xAxis: {
 	        categories: chartData['dateTime']
 	    },
+	    plotOptions: {                                                     
+            bar: {                                                         
+                dataLabels: {                                              
+                    enabled: true                                          
+                }                                                          
+            }                                                              
+        },       
 	    series:chartData['series']
 	});
 };
