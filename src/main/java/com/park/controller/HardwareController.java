@@ -237,12 +237,7 @@ public class HardwareController {
 	@ResponseBody
 	public String deleteHardware(@PathVariable int Id){
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		Hardware hardware = hardwareService.getHardwareById(Id);
-		if(hardware.getStatus() == Status.USED.getValue()){
-			retMap.put("status", "1003");
-			retMap.put("message", "delete failed, please unbind the hardware ");
-			return Utility.gson.toJson(retMap);
-		}
+		
 		int ret = hardwareService.deleteHardware(Id);
 		
 		if(ret > 0 ){

@@ -7,11 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.park.dao.BusinessCarportDAO;
 import com.park.dao.HardwareDAO;
+import com.park.model.BusinessCarport;
+import com.park.model.Channel;
 import com.park.model.Hardware;
 import com.park.model.HardwareDetail;
+import com.park.model.HardwareType;
 import com.park.model.Status;
+import com.park.service.BusinessCarportService;
+import com.park.service.ChannelService;
 import com.park.service.HardwareService;
+import com.park.service.Utility;
 
 @Transactional
 @Service
@@ -19,6 +26,12 @@ public class HardwareSerivceImpl implements HardwareService{
 
 	@Autowired
 	private HardwareDAO hardwareDAO;
+	
+	@Autowired
+	private ChannelService channelService;
+	
+	@Autowired
+	private BusinessCarportDAO businessCarportDao;
 	
 	//private static Log logger = LogFactory.getLog(UserController.class);
 	@Override
@@ -65,6 +78,25 @@ public class HardwareSerivceImpl implements HardwareService{
 
 	@Override
 	public int deleteHardware(int id) {
+		Hardware hardware = this.getHardwareById(id);
+		if(hardware.getStatus() == Status.USED.getValue()){
+			hardware.setMac("-1");
+			hardware.setDescription("无效硬件,如需删除，需先解绑");
+			this.updateHardware(hardware);
+			return 1;
+//			if(hardware.getType() == HardwareType.CARPORT.getValue()){
+//				
+//				BusinessCarport carport = businessCarportDao.getBusinessCarportByMacId(id);
+//				carport.setMacId(-1);
+//				businessCarportDao.updateBusinessCarport(carport);
+//			}
+//			if(hardware.getType() == HardwareType.CHANNEL.getValue()){
+//				int channelId = channelService.getChannelIdByMacId(id);
+//				Channel channel = channelService.getChannelsById(channelId);
+//				channel.setMac(-1);
+//				channelService.updateChannel(channel);
+//			}
+		}
 		return hardwareDAO.deleteHardware(id);
 	}
 

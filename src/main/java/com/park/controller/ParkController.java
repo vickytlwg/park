@@ -90,6 +90,7 @@ public class ParkController {
 			body.put("leftPort", park.getPortLeftCount());
 			body.put("parkId", park.getId());
 			body.put("parkName", park.getName());
+			body.put("portCount", park.getPortCount());
 			ret.put("message", "get park port success");
 		}else{
 			body.put("leftPort", "null");
