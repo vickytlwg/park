@@ -36,8 +36,6 @@ public class DataUsageCardController {
 	
 	@Autowired
 	private AuthorityService authService;
-	
-	
 	@RequestMapping(value = "", produces = {"application/json;charset=UTF-8"})
 	public String getCardPage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -53,8 +51,6 @@ public class DataUsageCardController {
 		else
 			return "/login";
 	}
-	
-	
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getCount(){

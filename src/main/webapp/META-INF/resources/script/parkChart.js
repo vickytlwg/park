@@ -171,8 +171,6 @@ $.fn.parkChart.updateDayAccess = function(){
 		var exitSeries = chart.series[1];
 		entranceSeries.setData(chartData['entranceAccess']);
 		exitSeries.setData(chartData['exitAccess']);
-		//chart.setTitle(null, {text:"本日(入口"+ $.fn.parkChart.dayAccess['entranceAccess']+ " 出口:"+ $.fn.parkChart.dayAccess['exitAccess'] +" )" 
-		//		+ "本月(入口:" +$.fn.parkChart.monthAccess['entranceAccess'] + " 出口:" + $.fn.parkChart.monthAccess['exitAccess']+ " )"})
 	
 		$('#dayAccessVal').text($.fn.parkChart.dayAccess['entranceAccess'] + $.fn.parkChart.dayAccess['exitAccess']);
 	};	
@@ -274,7 +272,7 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
                 	 $.fn.parkChart.chart = this;
                 	 $.fn.parkChart.updateChart();
                 	 setInterval(function(){
-                		 $.fn.parkChart.updateChart();
+               		 $.fn.parkChart.updateChart();
                 	 }, 1000 * 10);
                  }                                                               
              }   
