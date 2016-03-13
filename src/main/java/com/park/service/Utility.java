@@ -3,8 +3,10 @@ package com.park.service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -121,5 +123,9 @@ public class Utility {
 				}
 			}
 		}
+	}
+	
+	static public String createToken(){
+		return UUID.randomUUID().toString() + "-" + new Date().getTime();
 	}
 }

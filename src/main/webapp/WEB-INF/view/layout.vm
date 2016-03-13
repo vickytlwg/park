@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     
-    
+  
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 	<!--<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script> -->
 	<script src="/park/script/jquery.min.js"></script>
@@ -82,6 +82,11 @@
                                 <li class="daohang7" #if(!$isAdmin) hidden#end>
                                     <a href="/park/parkUsers">
                                         <i class="icon-user icon-large" ></i>用户管理
+                                    </a>
+                                </li>
+                                 <li class="daohang9" #if(!$isAdmin) hidden#end>
+                                    <a href="/park/api/user/index">
+                                        <i class="icon-user icon-large" ></i>用户Token
                                     </a>
                                 </li>
                                 <li class="daohang8" #if(!$isAdmin) hidden#end>

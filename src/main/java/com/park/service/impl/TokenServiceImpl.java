@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.TokenDAO;
+import com.park.model.Token;
 import com.park.service.TokenService;
+import com.park.service.Utility;
 
 @Transactional
 @Service
@@ -19,6 +21,26 @@ public class TokenServiceImpl implements TokenService{
 		if(tokenDAO.getTokenCount(token) > 0)
 			return true;
 		return false;
+	}
+	
+	public int getTokenId(String token){
+		return tokenDAO.getTokenId(token);
+	}
+
+	@Override
+	public int insertToken() {
+		Token token = new Token();
+		token.setToken(Utility.createToken());
+		int ret = tokenDAO.insertToken(token);
+		if(ret == 0)
+			return ret;
+		else
+			return tokenDAO.getTokenId(token.getToken());
+		
+	}
+	
+	public String getToken(int id){
+		return tokenDAO.getToken(id);
 	}
 
 }
