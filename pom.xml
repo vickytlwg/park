@@ -127,13 +127,13 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <!-- 阿里巴巴数据源包 -->
+        <!-- 阿里巴巴数据源包 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.0.2</version>
         </dependency>
-        
+        -->
         <dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

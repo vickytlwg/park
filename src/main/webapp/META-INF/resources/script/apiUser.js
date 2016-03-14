@@ -1,12 +1,16 @@
-var apiUserApp = angular.module("apiUserApp", []);
-apiUserApp.controller("apiUserCtrl", function($scope, $http){
+var apiUserApp = angular.module("apiUserApp", ['ui.bootstrap']);
+
+apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$uibModal', function($scope, $http, $uibModal){
 	$scope.apiUsers = [];
 	$scope.currentCheckedUserIndex = -1;
-	$scope.newUser = {
+	
+	$scope.tempUser = {
 			'username':'',
+			'companyInfo':'',
 			'contact':'',
 			'number':'',			
 	};
+	
 	
 	$scope.userCount = 0;
 	$scope.currentPage = 1;
@@ -53,8 +57,71 @@ apiUserApp.controller("apiUserCtrl", function($scope, $http){
 		});
 	};
 	
+	$scope.addUserModal = function(){
+		$scope.tempUser.username='';
+		$scope.tempUser.companyInfo='';
+		$scope.tempUser.contact='';
+		$scope.tempUser.number='';		
+		$uibModal.open({
+			templateUrl: '/park/views/template/ucApiUser.html',
+			controller: 'userModifyController',
+			scope:$scope			
+		});
+	};
+	
+	$scope.updateUserModal = function(){
+		$scope.tempUser = $scope.$scope.apiUsers[$scope.currentCheckedUserIndex];		
+		$uibModal.open({
+			templateUrl: '/park/views/template/ucApiUser.html',
+			controller: 'userModifyController',
+			scope:$scope			
+		});
+	};
+	
+	$scope.modalContent = "";
+	
+	$scope.deleteUserModal = function(){
+		$scope.modalContent="确定删除?"
+		$scope.tempUser = $scope.$scope.apiUsers[$scope.currentCheckedUserIndex];		
+		$uibModal.open({
+			templateUrl: 'template/ucApiUserToken.html',
+			controller: 'userModifyController',
+			scope:$scope			
+		});
+	};
+	
+
+	$scope.tokenModal = function(){
+		var tokenId = $scope.apiUsers[$scope.currentCheckedUserIndex].tokenId;
+		$http.get('/park/token/' + tokenId).success(function(response){
+			if(response.status == 1001)
+				$scope.modalContent = response.body.token;
+			else
+				alert('error');
+		}).error(function(){
+			alert("error");
+		});
+		
+	};
+	
+	
+	$scope.checked = function(index){
+		$scope.currentCheckedUserIndex = index;
+	};
+	
+	$scope.nextPage = function(index){
+		$scope.currentPage = index;
+		$scope.refreshUser();
+	}
+	
+	$scope.refreshUser();
+	
+}])
+.controller('userModifyController', ['$scope', '$http', function($scope, $http){
+	
+	
 	$scope.insertUser = function(){
-		$http.post('insert', $scope.newUser)
+		$http.post('insert', $scope.tempUser)
 		.success(function(response){
 			alert("success");
 		}).error(function(){
@@ -88,28 +155,4 @@ apiUserApp.controller("apiUserCtrl", function($scope, $http){
 		});
 		
 	};
-	
-	$scope.getToken = function(){
-		var tokenId = $scope.apiUsers[$scope.currentCheckedUserIndex].tokenId;
-		$http.get('/park/token/' + tokenId).success(function(response){
-			if(response.status == 1001)
-				alert(response.body.token);
-			else
-				alert('error');
-		}).error(function(){
-			alert("error");
-		});
-		
-	}
-	
-	$scope.checked = function(index){
-		$scope.currentCheckedUserIndex = index;
-	}
-	
-	$scope.nextPage = function(index){
-		$scope.currentPage = index;
-		$scope.refreshUser();
-	}
-	
-	$scope.refreshUser();
-});
+}]);

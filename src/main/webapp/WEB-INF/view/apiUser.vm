@@ -1,5 +1,13 @@
-  <script src="/park/script/angular.min.js"></script>
+<script src="//cdn.bootcss.com/angular.js/1.4.8/angular.min.js"></script>
+<script src="//cdn.bootcss.com/angular.js/1.4.8/angular-animate.min.js"></script>
+<script src="//cdn.bootcss.com/angular.js/1.4.8/angular-loader.min.js"></script>
+<script src="//cdn.bootcss.com/angular-ui-bootstrap/1.2.1/ui-bootstrap-tpls.min.js"></script>
+
+<!--
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
+-->
 <script src="/park/script/apiUser.js"></script>
+
 
 <link href="/park/cssmb/tables.css" rel="stylesheet">
 <link href="/park/cssmb/master.css" rel="stylesheet">
@@ -7,10 +15,10 @@
 <div ng-app="apiUserApp" ng-controller="apiUserCtrl" >
 	<div class="box-content no-pad" >
          <ul class="table-toolbar" #if(!$isAdmin) hidden#end>       
-            <li  ng-click="$scope.refreshUser()"><a  href="#" ><img src="/park/img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
-            <li ng-click="insertUser()"><a href="#"><img src="/park/img/icons/basic/plus.png" alt="" /> 添加</a></li>           
-            <li ng-click="updateUser()"><a href="#"><img src="/park/img/icons/basic/up.png" alt="" /> 更新</a></li>
-            <li ng-click="deleteUser()"><a href="#"><img src="/park/img/icons/basic/delete.png" alt="" /> 删除</a></li>
+            <li  ng-click="refreshUser()"><a  href="#" ><img src="/park/img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
+            <li ng-click="addUserModal()"><a href="#"><img src="/park/img/icons/basic/plus.png" alt="" /> 添加</a></li>           
+            <li ng-click="updateUserModal()"><a href="#"><img src="/park/img/icons/basic/up.png" alt="" /> 更新</a></li>
+            <li ng-click="deleteUserModal()"><a href="#"><img src="/park/img/icons/basic/delete.png" alt="" /> 删除</a></li>
             
           </ul>
           <table class="display table table-hover  table-condensed" id='channelTable' style="font-size:12px">
@@ -36,7 +44,7 @@
           		<td>{{item.contact}}</td>
           		<td>{{item.number}}</td>
           		<td>{{item.tokenId}}</td>
-          		<td><a>显示token</a></td>
+          		<td><a class="button" ng-click="tokenModal">显示token</a></td>
           </table>
 		    </div>
 		    <div id='pagination'>
