@@ -21,11 +21,9 @@
 <!--
 	<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 -->
-<script src="/park/script/bootstrap.min.js"></script>
-<link href="/park/css/bootstrap.min.css" rel="stylesheet">
-<link src="/park/css/bootstrap-theme.min.css" rel="stylesheet"></link>
-<link href="/park/css/main.css" rel="stylesheet">
-<link href="/park/css/datepicker.css" rel="stylesheet">
+<script src="/park/bootstrap/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="/park/bootstrap/css/bootstrap.min.css">
+<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/jquery.shCircleLoader-min.js"></script>

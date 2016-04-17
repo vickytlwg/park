@@ -11,7 +11,7 @@ public interface TokenDAO {
 	
 	public int getTokenId(String token);
 	
-	public int insertToken(Token token);
+	public int insert(Token token);
 	
 	public String getToken(int id);
 

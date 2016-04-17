@@ -1,27 +1,15 @@
-var apiUserApp = angular.module("apiUserApp", ['ui.bootstrap']);
+var apiUserApp = angular.module("apiUserApp", ['ui.bootstrap', 'ngActivityIndicator']);
 
-apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$uibModal', function($scope, $http, $uibModal){
+apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$modal', '$timeout', function($scope, $http, $uibModal, $timeout){
 	$scope.apiUsers = [];
-	$scope.currentCheckedUserIndex = -1;
-	
-	$scope.tempUser = {
-			'username':'',
-			'companyInfo':'',
-			'contact':'',
-			'number':'',			
-	};
-	
+	$scope.selectedIndex = -1;
 	
 	$scope.userCount = 0;
 	$scope.currentPage = 1;
 	$scope.pageSize = 20;
 	$scope.pageNumber = 0;
 	
-	$scope.showGetUserError = false;
-	
-	
-	$scope.refreshUser = function(){
-		
+	$scope.refreshUser = function(){	
 		$http.post('items', {'start': ($scope.currentPage - 1) * $scope.pageSize, 'len': $scope.pageSize})
 		.success(function(response){
 			$scope.showGetUserLoading = false;
@@ -57,56 +45,66 @@ apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$uibModal', function(
 		});
 	};
 	
-	$scope.addUserModal = function(){
-		$scope.tempUser.username='';
-		$scope.tempUser.companyInfo='';
-		$scope.tempUser.contact='';
-		$scope.tempUser.number='';		
+
+	$scope.insertUserModal = function(){	
 		$uibModal.open({
-			templateUrl: '/park/views/template/ucApiUser.html',
-			controller: 'userModifyController',
-			scope:$scope			
+			templateUrl: '/park/views/template/ucNewApiUser.html',
+			controller: 'modifyCrtl',
+			scope:$scope,
+			resolve: {
+				user: function(){
+						return undefined;
+				}
+			}
 		});
 	};
 	
 	$scope.updateUserModal = function(){
-		$scope.tempUser = $scope.$scope.apiUsers[$scope.currentCheckedUserIndex];		
-		$uibModal.open({
-			templateUrl: '/park/views/template/ucApiUser.html',
-			controller: 'userModifyController',
-			scope:$scope			
+				
+		$scope.updateModal = $uibModal.open({
+			templateUrl: '/park/views/template/ucNewApiUser.html',
+			controller: 'modifyCrtl',
+			scope:$scope,
+			resolve:{
+				user:function(){
+					return $scope.apiUsers[$scope.selectedIndex];
+				}
+			}
 		});
 	};
-	
-	$scope.modalContent = "";
+
 	
 	$scope.deleteUserModal = function(){
-		$scope.modalContent="确定删除?"
-		$scope.tempUser = $scope.$scope.apiUsers[$scope.currentCheckedUserIndex];		
-		$uibModal.open({
-			templateUrl: 'template/ucApiUserToken.html',
-			controller: 'userModifyController',
-			scope:$scope			
+		
+		if($scope.selectedIndex < 0)
+			return;
+		$scope.deleteModal = $uibModal.open({
+			templateUrl: '/park/views/template/ucApiUserInfo.html',
+			controller: 'deleteCtrl',
+			scope:$scope,
+			resolve:{
+				id: function(){return $scope.apiUsers[$scope.selectedIndex].id;}
+				}
 		});
 	};
 	
-
-	$scope.tokenModal = function(){
-		var tokenId = $scope.apiUsers[$scope.currentCheckedUserIndex].tokenId;
-		$http.get('/park/token/' + tokenId).success(function(response){
-			if(response.status == 1001)
-				$scope.modalContent = response.body.token;
-			else
-				alert('error');
-		}).error(function(){
-			alert("error");
-		});
+	$scope.showTokenModal = function(index){
 		
+		if(index < 0)
+			return;
+		$scope.deleteModal = $uibModal.open({
+			templateUrl: '/park/views/template/ucApiUserInfo.html',
+			controller: 'showTokenCtrl',
+			scope:$scope,
+			resolve:{
+				tokenId: function(){return $scope.apiUsers[index].tokenId;}
+				}
+		});
 	};
 	
 	
 	$scope.checked = function(index){
-		$scope.currentCheckedUserIndex = index;
+		$scope.selectedIndex = index;
 	};
 	
 	$scope.nextPage = function(index){
@@ -116,43 +114,110 @@ apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$uibModal', function(
 	
 	$scope.refreshUser();
 	
-}])
-.controller('userModifyController', ['$scope', '$http', function($scope, $http){
-	
-	
-	$scope.insertUser = function(){
-		$http.post('insert', $scope.tempUser)
-		.success(function(response){
-			alert("success");
-		}).error(function(){
-			alert("failed");
-		});
-	};
-	
-	$scope.updateUser = function(){
-		var checkedUser = $scope.apiUsers[$scope.currentCheckedUserIndex];
-		$http.post('update', checkedUser)
-		.success(function(response){
-			alert("success");
-		}).error(function(){
-			alert("failed");
-		});
-		
-	};
-	
-	$scope.deleteUser = function(){
-		if($scope.currentCheckedUserIndex <= 0)
-			return;
-		var userId = $scope.apiUsers[$scope.currentCheckedUserIndex].id;
-		$http.get('delete/' + userId)
-		.success(function(response){
-			if(response.status == 1001)
-				alert('delete sucessully');
-			else
-				alert('delete failed');
-		}).error(function(){
-			alert('delete failed');
-		});
-		
-	};
 }]);
+
+apiUserApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $timeout, user){
+	$scope.tempUser = { 'username':'','companyInfo':'','contact':'','number':''};
+	var url = 'insert';
+	if(user != undefined){
+		$scope.tempUser = user;
+		url = 'update';
+	}
+	
+	$scope.showLoader = false;
+	$scope.showResult = false;
+	$scope.result = "";
+	
+	
+	$scope.submit = function(){
+		$scope.showLoader = true;
+		$http.post(url, $scope.tempUser)
+		.success(function(response){	
+			$scope.showLoader = false;
+			$scope.showResult = true;
+			if(response.status == 1001){
+				$scope.result="成功";
+				$timeout(function(){
+					$scope.result="";
+					$modalInstance.close('ok');
+					$scope.$parent.refreshUser();
+				}, 2000);
+			}else{
+				$scope.result="失败,用户名不可以相同";
+				
+			}			
+		}).error(function(){
+			$scope.showLoader = false;
+			$scope.showResult = true;
+			$scope.result="失败";
+			$modalInstance.close('faled');
+		});
+	};
+	
+	$scope.close = function(){
+		$modalInstance.close('cancel');
+	};
+
+});
+
+
+apiUserApp.controller('deleteCtrl', function($scope, $modalInstance, $http, $timeout, id){
+	$scope.info="  确定删除Token信息!";
+	$scope.showLoader = false;
+	$scope.showResult = false;
+	$scope.result = "";
+	$scope.submit = function(){	
+		$scope.showLoader = true;
+		$scope.showResult = false;
+		$http.get('delete/' + id)
+		.success(function(response){
+			$scope.showLoader = false;
+			$scope.showResult = true;
+			if(response.status == 1001){
+				$scope.result = "成功";
+				$timeout(function(){
+					$scope.close();
+					$scope.$parent.refreshUser();
+				},2000);
+				
+			}else{
+				$scope.result = "失败";
+			}
+			
+			
+		}).error(function(){
+			$scope.showLoader = false;
+			$scope.showResult = true;
+			$scope.result = "失败";
+		});
+		
+	};
+	
+	$scope.close = function(){
+		$modalInstance.close('cancel');
+	};
+});
+
+apiUserApp.controller('showTokenCtrl', function($scope, $modalInstance, $http, $timeout, tokenId){
+	$scope.info="";
+	$scope.showLoader = false;
+	
+	$http.get('/park/token/' + tokenId).success(function(response){
+		if(response.status == 1001){
+			$scope.info = response.body.token;
+		}
+		else
+			$scope.info="获取token失败，请稍后重试";
+	}).error(function(){
+		$scope.info="获取token失败，请稍后重试";
+	});
+	
+	$scope.submit = function(){
+		$modalInstance.close('cancel');
+	};
+	
+	$scope.close = function(){
+		$modalInstance.close('cancel');
+	};
+
+});

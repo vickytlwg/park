@@ -16,6 +16,6 @@ public interface TokenUsageDAO {
 	
 	public List<UserTokenUsage> getUsage(int userId);
 	
-	public int insert(TokenUsage usage);
+	public int insertUsage(TokenUsage usage);
 
 }

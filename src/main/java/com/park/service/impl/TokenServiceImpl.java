@@ -31,7 +31,7 @@ public class TokenServiceImpl implements TokenService{
 	public int insertToken() {
 		Token token = new Token();
 		token.setToken(Utility.createToken());
-		int ret = tokenDAO.insertToken(token);
+		int ret = tokenDAO.insert(token);
 		if(ret == 0)
 			return ret;
 		else

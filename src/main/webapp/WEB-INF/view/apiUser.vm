@@ -1,58 +1,83 @@
-<script src="//cdn.bootcss.com/angular.js/1.4.8/angular.min.js"></script>
-<script src="//cdn.bootcss.com/angular.js/1.4.8/angular-animate.min.js"></script>
-<script src="//cdn.bootcss.com/angular.js/1.4.8/angular-loader.min.js"></script>
-<script src="//cdn.bootcss.com/angular-ui-bootstrap/1.2.1/ui-bootstrap-tpls.min.js"></script>
-
-<!--
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
--->
+<script src="/park/script/loader.min.js"></script>
 <script src="/park/script/apiUser.js"></script>
 
+<link href="/park/css/ngActivityIndicator.min.css" rel="stylesheet">
 
-<link href="/park/cssmb/tables.css" rel="stylesheet">
-<link href="/park/cssmb/master.css" rel="stylesheet">
+<div class="content-wrapper" ng-app="apiUserApp" ng-controller="apiUserCtrl">
+	<section class="content-header">
+          <h1>
+            Data Tables
+            <small>advanced tables</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data tables</li>
+          </ol>
+    </section>
 
-<div ng-app="apiUserApp" ng-controller="apiUserCtrl" >
-	<div class="box-content no-pad" >
-         <ul class="table-toolbar" #if(!$isAdmin) hidden#end>       
-            <li  ng-click="refreshUser()"><a  href="#" ><img src="/park/img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
-            <li ng-click="addUserModal()"><a href="#"><img src="/park/img/icons/basic/plus.png" alt="" /> 添加</a></li>           
-            <li ng-click="updateUserModal()"><a href="#"><img src="/park/img/icons/basic/up.png" alt="" /> 更新</a></li>
-            <li ng-click="deleteUserModal()"><a href="#"><img src="/park/img/icons/basic/delete.png" alt="" /> 删除</a></li>
-            
-          </ul>
-          <table class="display table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-           <thead>
-            <tr>
-            
-             <th><span style=""><input type="checkbox" /></div></th>
-					<th ><span style="padding-left:15%">Id</div></th>		
-					<th><span style="padding-left:15%">用户名</div></th>
-					<th><span style="padding-left:15%">公司信息</div></th>
-					<th><span style="padding-left:15%">联系人</div></th>
-					<th><span style="padding-left:15%">电话</div></th>
-					<th><span style="padding-left:15%">TokenId</div></th>
-					<th><span style="padding-left:15%">显示token</div></th>
-            </tr>
-          </thead>
-          <tbody id="channelBody"></tbody>
-          	<tr ng-repeat = "item in apiUsers">
-          		<td><input type="checkbox" ng-click="checked($index)"/></td>
-          		<td>{{item.id}}</td>
-          		<td>{{item.username}}</td>
-          		<td>{{item.companyInfo}}</td>   		
-          		<td>{{item.contact}}</td>
-          		<td>{{item.number}}</td>
-          		<td>{{item.tokenId}}</td>
-          		<td><a class="button" ng-click="tokenModal">显示token</a></td>
-          </table>
-		    </div>
-		    <div id='pagination'>
-		    	<ul class="pagination" ng-repeat = "x in range(1, pageNumber)">
-		    		<li><a href='#'>{{x}}</a></li>
-		    	</ul>
-		    
-		    </div>
+    <section class="content">
+       <div class="row">
+            <div class="col-xs-12">
+              	<div class="box">
+	                <div class="box-header">
+	                  <h3 class="box-title">Hover Data Table</h3>
+	                </div><!-- /.box-header -->
+	                <div class="box-body">  
+		                	<div class="btn-group">
+		                		<button #if(!$isAdmin) disabled#end ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="insertUserModal()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> Add</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="updateUserModal()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> Update</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="deleteUserModal()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+		                	</div>
+	                	<div class="pull-right">
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
+	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
+	                	</select>
+	                	</div>
+	                	
+	                	<br/>   
+	                    <br/> 
+						<div>
+						 <table class="display table table-hover  table-condensed" id='channelTable' style="font-size:12px">
+				            <tr>
+				            
+				             <th><span style=""><input type="checkbox" /></div></th>
+									<th ><span style="padding-left:15%">Id</div></th>		
+									<th><span style="padding-left:15%">用户名</div></th>
+									<th><span style="padding-left:15%">公司信息</div></th>
+									<th><span style="padding-left:15%">联系人</div></th>
+									<th><span style="padding-left:15%">电话</div></th>
+									<th><span style="padding-left:15%">TokenId</div></th>
+									<th><span style="padding-left:15%">显示token</div></th>
+				            </tr>
+				          <tbody id="channelBody"></tbody>
+				          	<tr ng-repeat = "item in apiUsers">
+				          		<td><input type="checkbox" ng-click="checked($index)"/></td>
+				          		<td>{{item.id}}</td>
+				          		<td>{{item.username}}</td>
+				          		<td>{{item.companyInfo}}</td>   		
+				          		<td>{{item.contact}}</td>
+				          		<td>{{item.number}}</td>
+				          		<td>{{item.tokenId}}</td>
+				          		<td><a class="button" ng-click="showTokenModal($index)">显示token</a></td>
+				          </table>
+    					</div>
+    				</div>
+    				<div class="box-footer clearfix">
+      					 <div id='pagination'>
+					    	<ul class="pagination" ng-repeat = "x in range(1, pageNumber)">
+					    		<li><a href='#'>{{x}}</a></li>
+					    	</ul>
+					    
+					    </div>
+      				</div>
+	            </div>
+            </div>
         </div>
-        </div>
+
+    </section>
+						
 </div>
+
+

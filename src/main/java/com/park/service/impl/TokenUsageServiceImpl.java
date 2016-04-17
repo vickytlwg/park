@@ -43,11 +43,15 @@ public class TokenUsageServiceImpl implements TokenUsageService{
 
 	@Override
 	public int insert(TokenUsage usage) {
-		return tokenUsageDao.insert(usage);
+		return tokenUsageDao.insertUsage(usage);
 	}
 	
 	@Override
 	public int insertRecord(String token, String url){
+		
+		if(url.contains("access"))
+			return 1;
+		
 		int tokenId = tokenService.getTokenId(token);
 		TokenUsage usage = new TokenUsage();
 		usage.setTokenId(tokenId);

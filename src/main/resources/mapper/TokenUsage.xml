@@ -3,7 +3,7 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.park.dao.AccessDAO">
+<mapper namespace="com.park.dao.TokenUsageDAO">
 	<resultMap id="TokenUsageMapper" type="TokenUsage">
 		<id property="id" column="id" />
 		<result property="tokenId" column="tokenId" />
@@ -38,7 +38,7 @@
 		group by t.tokenId, t.uri	
 	</select>
 	
-	<insert id="insert" parameterType="TokenUsage" keyProperty="id">
+	<insert id="insertUsage" parameterType="TokenUsage" keyProperty="id">
 		insert into tokenUsage(tokenId, uri, date) values(#{tokenId}, #{uri}, #{date})
 	</insert>
 </mapper>

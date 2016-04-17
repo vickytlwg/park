@@ -4,13 +4,14 @@
         <title>智慧云停车场 后台登录</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link rel="stylesheet" media="screen" href="/park/css/bootstrap.min.css">
-        <link rel="stylesheet" media="screen" href="/park/css/bootstrap-theme.min.css">
-		<script src="/park/script/jquery.cookie.js"></script>
-		<script src="/park/script/jquery.min.js"></script>
-        <!-- Bootstrap Admin Theme -->
-        <link rel="stylesheet" media="screen" href="css/bootstrap-admin-theme.css">
+		<!-- Bootstrap 3.3.5 -->
+    	<link rel="stylesheet" href="/park/bootstrap/css/bootstrap.min.css">
+
+		 <!-- jQuery 2.1.4 -->
+	    <script src="/park/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+	    <!-- Bootstrap 3.3.5 -->
+	    <script src="/park/bootstrap/js/bootstrap.min.js"></script>
+
 
         <!-- Custom styles -->
         <style type="text/css">
@@ -22,8 +23,8 @@
     </head>
     <body class="bootstrap-admin-without-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
+            <div class="row" style="margin:200px">
+                <div class="col-lg-offset-3 col-lg-5">
                     <div class="alert alert-info">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                         请输入账户名和密码进行登录

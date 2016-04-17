@@ -27,6 +27,7 @@
 	
 	<update id="update" parameterType="ApiUser">
 		update apiUsers set username=#{username}, companyInfo=#{companyInfo}, contact=#{contact}, number=#{number}
+		where id=#{id}
 	</update>
 	
 	<delete id="delete" parameterType="int">

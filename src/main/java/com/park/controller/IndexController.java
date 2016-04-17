@@ -48,9 +48,9 @@ public class IndexController {
 					isAdmin=true;
 				modelMap.addAttribute("isAdmin", isAdmin);
 			}
-			return "access";
+			return "redirect:parks";
 		}else{
-			return "login";
+			return "redirect:login";
 		}
 		
 	}

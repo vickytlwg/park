@@ -81,7 +81,10 @@
 		<mvc:exclude-mapping path="/fonts/**"/>
 		<mvc:exclude-mapping path="/font/**"/>
 		<mvc:exclude-mapping path="static/**"/>
-		<mvc:exclude-mapping path="/views/**"/>					
+		<mvc:exclude-mapping path="/views/**"/>	
+		<mvc:exclude-mapping path="/bootstrap/**"/>	
+		<mvc:exclude-mapping path="/dist/**"/>	
+		<mvc:exclude-mapping path="/plugins/**"/>					
 		<bean class="com.park.interceptor.loginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -101,7 +104,12 @@
     	cache-period="31556926" />
     	<mvc:resources mapping="/views/**" location="/WEB-INF/view/"
     	cache-period="31556926" />
-    	
+    	<mvc:resources mapping="/bootstrap/**" location="/META-INF/resources/bootstrap/"
+    	cache-period="31556926" />
+    	<mvc:resources mapping="/dist/**" location="/META-INF/resources/dist/"
+    	cache-period="31556926" />
+    	<mvc:resources mapping="/plugins/**" location="/META-INF/resources/plugins/"
+    	cache-period="31556926" />
     	<mvc:resources mapping="/font/**" location="/META-INF/resources/fonts/"
     	cache-period="31556926" />
     
