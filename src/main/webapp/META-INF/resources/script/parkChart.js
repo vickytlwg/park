@@ -6,6 +6,7 @@ $.fn.parkChart.chart;
 $.fn.parkChart.dayAccess = {'entranceAccess': 0, 'exitAccess':0};
 $.fn.parkChart.monthAccess = {'entranceAccess':0, 'exitAccess':0};
 $.fn.parkChart.yearAccess = {'entranceAccess': 0, 'exitAccess':0};
+$.fn.parkChart.intervalHandler = null;
 
 /**
  * init content
@@ -167,6 +168,8 @@ $.fn.parkChart.updateDayAccess = function(){
 	
 	var successFunc = function(data){
 		var chartData = parseAccessData(data);
+		if(chart.series == undefined || chart.series.length <2)
+			return;
 		var entranceSeries = chart.series[0];
 		var exitSeries = chart.series[1];
 		entranceSeries.setData(chartData['entranceAccess']);
@@ -261,9 +264,13 @@ $.fn.parkChart.updateLeftPort = function(){
  * render chart content
  */
 $.fn.parkChart.renderChartContent = function(data, chatContent){
-
+	
+	if($.fn.parkChart.intervalHandler != null || $.fn.parkChart.intervalHandler != undefined){
+		clearInterval($.fn.parkChart.intervalHandler);
+		$.fn.parkChart.intervalHandler = null;
+	}
+	
 	var chartData = parseAccessData(data);
-
 		
 	chatContent.highcharts({
 		chart: {
@@ -271,9 +278,12 @@ $.fn.parkChart.renderChartContent = function(data, chatContent){
                  load: function() {  
                 	 $.fn.parkChart.chart = this;
                 	 $.fn.parkChart.updateChart();
-                	 setInterval(function(){
-               		 $.fn.parkChart.updateChart();
+
+                	 
+                	 $.fn.parkChart.intervalHandler = setInterval(function(){
+                		 $.fn.parkChart.updateChart();
                 	 }, 1000 * 10);
+
                  }                                                               
              }   
 		},
