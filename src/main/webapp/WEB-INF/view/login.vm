@@ -22,9 +22,9 @@
 
     </head>
     <body class="bootstrap-admin-without-padding">
-        <div class="container">
-            <div class="row" style="margin:200px">
-                <div class="col-lg-offset-3 col-lg-5">
+        <div class="container" style="margin-top:10%">
+            <div class="row" >
+                <div class="col-sm-offset-3 col-sm-5">
                     <div class="alert alert-info">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                         请输入账户名和密码进行登录
