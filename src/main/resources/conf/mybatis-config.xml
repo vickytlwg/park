@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
          <typeAlias alias="ApiUser" type="com.park.model.ApiUser"/> 
          <typeAlias alias="TokenUsage" type="com.park.model.TokenUsage"/> 
           <typeAlias alias="UserTokenUsage" type="com.park.model.UserTokenUsage"/> 
+          <typeAlias alias="CarportStatusDetail" type="com.park.model.CarportStatusDetail"/>
           <typeAlias alias="Token" type="com.park.model.Token"/>
     </typeAliases>
  

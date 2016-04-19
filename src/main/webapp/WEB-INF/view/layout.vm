@@ -127,8 +127,8 @@
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>出入口管理</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位管理</a></li>
-                 <li><a href="/park/businessCarport"><i class="fa fa-circle-o"></i>室内车位管理</a></li>
-                <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i> 硬件设备管理</a></li>
+                 <li><a href="/park/businessCarport"><i class="fa fa-circle-o"></i>车位管理</a></li>
+                <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i>硬件设备管理</a></li>
               </ul>
             </li>
 

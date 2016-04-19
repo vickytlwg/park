@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.CarportStatusDetail;
 
 public interface BusinessCarportService {
 
@@ -22,5 +23,16 @@ public interface BusinessCarportService {
 	public int updateBusinessCarportStatus(String mac, int status);
 	
 	public int deleteBusinessCarport(int id);
+	
+	public int getCarportStatusDetailCount();
+	
+	public List<CarportStatusDetail> getCarportStatusDetail();
+	
+	public List<CarportStatusDetail> getLimitCarportStatusDetail(int start, int len);
+	
+	
+	public List<CarportStatusDetail> getDetailByCarportId(int carportId);
+	
+	public CarportStatusDetail getLatestDetailByCarportId(int carportId);
 	
 }

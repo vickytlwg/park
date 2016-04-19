@@ -63,76 +63,7 @@
 </div>
 
 
-<div id="mac">
 
-<div class="row" style="width:100%">
-<div class="box grid_12" style="width:100%">
-        <div class="box-head" style="height:40px"><h2 >硬件设备管理</h2></div>     
-              <div class="input-group col-md-3 pull-right" style="padding:1px;">
-			  <span class="input-group-addon" style="height:26px"><span class="glyphicon glyphicon-search"> </span> </span>
-	        	<select class='form-control' style="padding:1px;font-size:14px;height:28px" id='searchPark'>
-								<option value=-1>所有停车场</option>
-				</select>				
-	   </div>	   
-        <div class="box-content no-pad" >
-         <ul class="table-toolbar" #if(!$isAdmin) hidden#end>
-         
-            <li id="refresh" ><a  href="#" ><img src="img/icons/basic/refresh.png" style="width:18px;height:auto;" alt="" /> 刷新</a></li>
-            <li id='addMac'><a href="#"><img src="img/icons/basic/plus.png" alt="" /> 添加</a></li>           
-            <li id='updateMac'><a href="#"><img src="img/icons/basic/up.png" alt="" /> 更新</a></li>
-            <li id='deleteMac'><a href="#"><img src="img/icons/basic/delete.png" alt="" /> 删除</a></li>
-            <li id='searchMac'><a href="#"><img src="img/icons/basic/Search.png" style="width:18px;height:auto;" alt="" /> 查找</a></li>
-          </ul>
-          <table class="display table table-hover  table-condensed" id='macTable' style="font-size:12px">
-           <thead>
-            <tr>
-            
-             <th><span style=""><input type="checkbox" /></div></th>
-					<th ><span style="padding-left:15%">Id</div></th>		
-					<th><span style="padding-left:15%">mac</div></th>
-					<th><span style="padding-left:15%">类型</div></th>
-				
-					<th><span style="padding-left:15%">状态</div></th>
-				
-					<th><span style="padding-left:15%">描述</div></th>
-					<th><span style="padding-left:15%">日期</div></th>	
-            </tr>
-          </thead>
-          <tbody id="macBody"></tbody>
-          </table>
-		    </div>
-		    <div id='pagination' ></div>
-        </div>
-        </div>
-
-
-
-	<div class="modal fade" id="searchMacModal" tabindex="1" role="dialog" aria-labelledby='searchMac' aria-hidden='true'>
-	<div class='modal-dialog'>
-		<div class='modal-content'>
-				<div class='modal-header'>
-				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-				<h4 class='modal-title' id='addMacLabel'>查找硬件</h4>
-			</div>
-			<div class='modal-body'>
-			
-				<form class='form-horizontal' id='searchMacForm' role='form'>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='Tt'>MAC</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='macsearch' placeholder='MAC地址'>
-						</div>
-					</div>	
-					</form>			
-					</div>		
-					<div class="addMacResult"></div>
-			<div class='modal-footer'>
-				<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>
-				<button id="submitSearchMacBtn" type='button' class='btn btn-primary'>查找</button>
-			</div>
-		</div>
-		</div>
-		</div>
 
 <div class="modal fade" id="addMacModal" tabindex="-1" role="dialog" aria-labelledby='addMacLabel' aria-hidden='true'>
 	<div class='modal-dialog'>

@@ -24,6 +24,7 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.CarportStatusDetail;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
 import com.park.service.BusinessCarportService;
@@ -72,6 +73,51 @@ public class BusinessCarportController {
 		ret.put("body", body);
 		
 		return Utility.gson.toJson(ret);					
+	}
+	
+	@RequestMapping(value = "/getCarportStatusDetailCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getCarportStatusDetailCount(){
+
+		int count = businessCarportService.getCarportStatusDetailCount();
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("count", count);
+		return Utility.createJsonMsg(1001, "get count success", body);					
+	}
+	
+	@RequestMapping(value = "/getCarportStatusDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getCarportStatusDetail(){
+
+		List<CarportStatusDetail> details = businessCarportService.getCarportStatusDetail();
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("carportStatusDetail", details);
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
+	}
+	
+	@RequestMapping(value = "/getLimitCarportStatusDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getLimitCarportStatusDetail(@RequestParam("low")int low, 
+			@RequestParam("count")int count){
+
+		List<CarportStatusDetail> details = businessCarportService.getLimitCarportStatusDetail(low, count);
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("carportStatusDetail", details);
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
+	}
+	
+	@RequestMapping(value = "/getDetailByCarportId", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getDetailByCarportId(@RequestParam("carportId")int carportId){
+
+		List<CarportStatusDetail> details = businessCarportService.getDetailByCarportId(carportId);
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("carportStatusDetail", details);
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
 	}
 	
 	@RequestMapping(value = "/getBusinessCarportDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})

@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.BusinessCarportDAO;
+import com.park.dao.CarportStatusDetailDAO;
 import com.park.dao.HardwareDAO;
 import com.park.dao.ParkDAO;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.CarportStatusDetail;
 import com.park.model.Hardware;
 import com.park.model.HardwareType;
 import com.park.model.Status;
@@ -32,6 +34,9 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	
 	@Autowired
 	private HardwareService hardwareService;
+	
+	@Autowired
+	private CarportStatusDetailDAO carportStatusDetailDAO;
 	
 	@Autowired
 	private ParkDAO parkDAO;
@@ -126,8 +131,58 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		int parkId = carport.getParkId();
 		int leftPort = businessCarportDAO.getParkLeftPort(parkId);
 		parkDAO.updateLeftPortCount(parkId, leftPort);
+		
+		//get carport status detail
+		if(status == 0){//have a car , insert new record
+			CarportStatusDetail detail= new CarportStatusDetail();
+			detail.setCarportId(carport.getId());
+			detail.setStartTime(new Date());
+			detail.setCharged(0);
+			carportStatusDetailDAO.insert(detail);
+			
+		}else{ //car leave, update old record
+			CarportStatusDetail detail = carportStatusDetailDAO.getLatestDetailByCarportId(carport.getId());
+			if(detail != null)
+			{
+				detail.setEndTime(new Date());
+				carportStatusDetailDAO.update(detail);	
+				
+			}
+					
+		}
 			
 		return ret;
 	}
+
+	@Override
+	public int getCarportStatusDetailCount() {
+		
+		return carportStatusDetailDAO.count();
+	}
+
+	@Override
+	public List<CarportStatusDetail> getCarportStatusDetail() {
+		return carportStatusDetailDAO.get();
+	}
+
+	@Override
+	public List<CarportStatusDetail> getLimitCarportStatusDetail(int start,
+			int len) {
+		
+		return carportStatusDetailDAO.limitGet(start, len);
+	}
+
+	@Override
+	public List<CarportStatusDetail> getDetailByCarportId(int carportId) {
+		
+		return carportStatusDetailDAO.getDetailByCarportId(carportId);
+	}
+
+	@Override
+	public CarportStatusDetail getLatestDetailByCarportId(int carportId) {
+		
+		return carportStatusDetailDAO.getLatestDetailByCarportId(carportId);
+	}
+
 
 }
