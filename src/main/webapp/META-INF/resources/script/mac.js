@@ -275,6 +275,9 @@ var bindSearchSubmitMacBtnClick = function(){
 			if (data[i]['type'] == 2) {
 				tr.append('<td data=' + data[i]['type'] + '>' + "剩余车位发布器" + '</td>');
 			}
+			if (data[i]['type'] == 3) {
+				tr.append('<td data=' + data[i]['type'] + '>' + "室内停车位探测器" + '</td>');
+			}
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "已使用":"未使用")+ '</td>');
 			
 			var desc ='';

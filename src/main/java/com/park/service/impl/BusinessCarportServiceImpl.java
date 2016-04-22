@@ -119,10 +119,10 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			return 0;
 		}
 		
-		if(hardware.getType() != HardwareType.CARPORT.getValue()){
-			logger.info("hardware is not bound to carport");
-			return 0;
-		}
+//		if(hardware.getType() != HardwareType.CARPORT.getValue()){
+//			logger.info("hardware is not bound to carport");
+//			return 0;
+//		}
 		
 		BusinessCarport carport = businessCarportDAO.getBusinessCarportByMacId(macId);
 		carport.setStatus(status);

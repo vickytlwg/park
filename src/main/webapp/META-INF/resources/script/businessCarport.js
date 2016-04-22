@@ -3,6 +3,7 @@
 	$.fn.businessCarport = {};
 	
 	$.fn.businessCarport.initial = function(){
+		
 		bindTrClick();
 		bindRefreshClick();
 		bindAddBtnClick();
@@ -10,8 +11,7 @@
 		bindSubmitBusinessCarportBtnClick();
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
-		//renderBusinessCarport(0, $.fn.page.pageSize);
-		
+		//renderBusinessCarport(0, $.fn.page.pageSize);					
 		fillSearchPark();
 		bindSearchParkChange();
 	};
@@ -25,7 +25,16 @@
 		});
 	};
 	
-	
+	var readCookieSetSelect=function(){
+		if($.cookie('selectValue')){
+			var aa=$.cookie('selectValue');
+			$('select#searchPark').val($.cookie('selectValue'));
+			if($('select#searchPark').find("option:selected").text().length<3){
+				$('select#searchPark option:last').attr('selected','selected');
+			}
+		}
+		
+	}
 	
 	/**bind refresh click***/
 	var bindRefreshClick = function(){
@@ -40,7 +49,10 @@
 	/** bind search park change event **/
 	var bindSearchParkChange = function(){
 		$('select#searchPark').on('change', $(this), function(){
-			
+			var aa=$(this).val();
+			if(aa!=-1){
+				$.cookie('selectValue',$(this).val(),{path:'/',expires:10});
+			}
 			renderBusinessCarport(0, $.fn.page.pageSize);
 		});
 	};
@@ -56,6 +68,7 @@
 			}
 			if(data.length > 0)
 				parkNameSelect.change();
+			readCookieSetSelect();
 		};
 		var errorFunc = function(data){
 		};
@@ -280,7 +293,10 @@
 		var cols = $('#businessCarportTable').find('thead tr th').length;
 		$("#businessCarportBody").html('<tr><td colspan="' + cols + '"></td></tr>');
 		$.fn.loader.appendLoader($('#businessCarportBody').find('td'));
-		var parkId = $('select#searchPark').val();
+		var parkId=-1;
+		if($.cookie('selectValue')){
+			parkId = $.cookie('selectValue');
+		};
 		$.ajax({
 			url:$.fn.config.webroot + "/getBusinessCarportDetail?low=" + low + "&count=" + count +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime(),
 			type: 'get',
