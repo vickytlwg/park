@@ -6,14 +6,10 @@
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>
-            Data Tables
-            <small>advanced tables</small>
+            停车场管理
+            <small>九比特科技</small>
           </h1>
-          <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#">Tables</a></li>
-            <li class="active">Data tables</li>
-          </ol>
+       
     </section>
 
     <section class="content">
@@ -21,21 +17,21 @@
             <div class="col-xs-12">
               	<div class="box">
 	                <div class="box-header">
-	                  <h3 class="box-title">Hover Data Table</h3>
+	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 	                	<div class="btn-group" >
-	                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-	                		<button #if(!$isAdmin) disabled#end id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> Add</button>
-	                		<button #if(!$isAdmin) disabled#end id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> Update</button>
-	                		<button #if(!$isAdmin) disabled#end id='deletePark' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+	                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+	                		<button #if(!$isAdmin) disabled#end id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+	                		<button #if(!$isAdmin) disabled#end id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+	                		<button #if(!$isAdmin) disabled#end id='deletePark' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
 	                		<button #if(!$isAdmin) disabled#end id='uploadPic' type="button" class="btn  btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>                			                		
 	                	</div>
 
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover" id='parkTable' style="font-size:12px">
+							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">
 					          
 					            <tr>
 					            
@@ -44,11 +40,11 @@
 										<th><span style="padding-left:15%">名称</div></th>
 										<th><span style="padding-left:15%">进出口数</div></th>
 										<th><span style="padding-left:15%">车位数</div></th>
-										<th><span style="padding-left:15%">剩余车位数</div></th>
-										<th><span style="padding-left:15%">计费标准(白天)</div></th>
-										<th><span style="padding-left:15%">计费标准(晚上)</div></th>
+										<th><span style="padding-left:15%">剩余车位</div></th>
+										<th><span style="padding-left:15%">计费(白天)</div></th>
+										<th><span style="padding-left:15%">计费(晚上)</div></th>
 										<th><span style="padding-left:15%">状态</div></th>
-										<th><span style="padding-left:15%">是否免费</div></th>
+										<th><span style="padding-left:15%">免费</div></th>
 										<th><span style="padding-left:15%">楼层</div></th>	
 										<th><span style="padding-left:15%">类型</div></th>
 										<th><span style="padding-left:15%">位置</div></th>
@@ -207,8 +203,9 @@
 						<label class='col-sm-2 control-label' for='parkType'>类型</label>
 						<div class='col-sm-8'>
 							<select class='form-control' id='parkType'>
-								<option value=0>室内</option>
-								<option value=1>室外</option>
+								<option value=0>室内停车场</option>
+								<option value=1>室外停车场</option>
+								<option value=3>路边停车场</option>
 								<option value=2>其它</option>
 							</select>
 						</div>

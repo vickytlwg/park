@@ -3,14 +3,10 @@
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>
-            Data Tables
-            <small>advanced tables</small>
+            网站用户管理
+            <small>九比特科技</small>
           </h1>
-          <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#">Tables</a></li>
-            <li class="active">Data tables</li>
-          </ol>
+       
     </section>
 
     <section class="content">
@@ -18,14 +14,14 @@
             <div class="col-xs-12">
               	<div class="box">
 	                <div class="box-header">
-	                  <h3 class="box-title">Hover Data Table</h3>
+	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 		                	<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> Add</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> Update</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+		                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end id='addUser' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button #if(!$isAdmin) disabled#end id='updateUser' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteUser' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
 		                	</div>
 	                	<div class="pull-right">
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">

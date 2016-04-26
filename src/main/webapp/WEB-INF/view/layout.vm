@@ -78,7 +78,7 @@
                   <!-- The user image in the navbar-->
                   <img src="/park/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs">#if(!$isAdmin) Guest #else Administrator#end</span>
+                  <span class="hidden-xs">#if(!$isAdmin) 游客 #else 管理员#end</span>
                 </a>
               </li>
 
@@ -98,29 +98,24 @@
               <img src="/park/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>#if(!$isAdmin) Guest #else Administrator #end</p>
+              <p>#if(!$isAdmin) 游客 #else 管理员 #end</p>
               <!-- Status -->
-              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+              <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
             </div>
           </div>
 
           <!-- search form (Optional) -->
           <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
+
           </form>
           <!-- /.search form -->
 
           <!-- Sidebar Menu -->
           <ul class="sidebar-menu">
-            <li class="header">HEADER</li>
+            <li class="header">功能区</li>
             <!-- Optionally, you can add icons to the links -->
 
-            <li class="treeview">
+            <li class="treeview active">
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="/park/parks"><i class="fa fa-circle-o"></i>停车场管理</a></li>
@@ -132,7 +127,7 @@
               </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-user"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin) hidden#end><a href="/park/users"><i class="fa fa-circle-o"></i>App用户管理</a></li>
@@ -141,7 +136,7 @@
               </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-steam"></i> <span>流量管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin) hidden#end><a href="/park/dataUsage"><i class="fa fa-circle-o"></i>流量卡管理</a></li>

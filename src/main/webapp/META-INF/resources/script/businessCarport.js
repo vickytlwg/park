@@ -64,7 +64,10 @@
 			var parkNameSelect = $('select#searchPark');
 			
 			for(var i = 0; i < data.length; i++){
+				if(data[i]['type']==3)
+				{
 				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+				}
 			}
 			if(data.length > 0)
 				parkNameSelect.change();
@@ -109,7 +112,10 @@
 			var parkNameSelect = $('select#parkName');
 			parkNameSelect.html('');
 			for(var i = 0; i < data.length; i++){
-				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+			
+					parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+					
+				
 			}
 			if($('#searchPark').val() != -1)
 				parkNameSelect.val($('#searchPark').val());
@@ -324,7 +330,7 @@
 			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "有车":"无车")+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
-			tr.append('<td>' + data[i]['position']+ '</td>');
+		//	tr.append('<td>' + data[i]['position']+ '</td>');
 			
 			var desc ='';
 			if(data[i]['description'] != undefined)
