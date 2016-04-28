@@ -320,6 +320,8 @@
 		var businessCarportBody = $("#businessCarportBody");
 		$.fn.loader.removeLoader($('#businessCarportDiv'));
 		businessCarportBody.html('');
+		var wuche="<button type='button' class='btn btn-success'>无车</button>";
+		var youche="<button type='button' class='btn btn-danger'>有车</button>";
 		data = data["body"];
 		for(var i = 0; i < data.length; i++){
 			var tr = $("<tr></tr>");
@@ -328,7 +330,7 @@
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			tr.append('<td>' + data[i]['carportNumber']+ '</td>');
 			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
-			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "无车":"有车")+ '</td>');
+			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 		//	tr.append('<td>' + data[i]['position']+ '</td>');
 			
