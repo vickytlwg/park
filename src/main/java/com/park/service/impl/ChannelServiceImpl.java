@@ -31,6 +31,8 @@ public class ChannelServiceImpl implements ChannelService{
 	
 	
 	public boolean insertChannel(Channel channel){
+		if(channel.getMacId() < 0)
+			channel.setMac(null);
 		return channelDAO.insertChannel(channel) > 0;
 	}
 	

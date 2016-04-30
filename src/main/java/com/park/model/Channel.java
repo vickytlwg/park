@@ -11,7 +11,7 @@ public class Channel {
 	
 	private int id = -1;
 	private int parkId;
-	private int macId;
+	private Integer macId;
 	private int channelId;
 	private int channelFlag;
 	private Date date;
@@ -47,7 +47,7 @@ public class Channel {
 	}
 	
 	
-	public int getMacId() {
+	public Integer getMacId() {
 		return macId;
 	}
 
@@ -59,7 +59,7 @@ public class Channel {
 		return channelFlag;
 	}
 
-	public void setMac(int mac) {
+	public void setMac(Integer mac) {
 		this.macId = mac;
 	}
 

@@ -35,5 +35,5 @@ public interface HardwareService {
 	
 	public boolean checkHardwareExist(String mac);
 	
-	public boolean changeHardwareStatus(int id, int status);
+	public boolean changeHardwareStatus(Integer id, int status);
 }

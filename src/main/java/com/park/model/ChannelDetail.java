@@ -6,7 +6,7 @@ public class ChannelDetail {
 	private int parkId;
 	private String parkName;
 	private int channelId;
-	private int macId;
+	private Integer macId;
 	private String mac;
 	private String channelFlag;
 	private String status;
@@ -73,7 +73,7 @@ public class ChannelDetail {
 		return parkId;
 	}
 
-	public int getMacId() {
+	public Integer getMacId() {
 		return macId;
 	}
 
@@ -81,7 +81,7 @@ public class ChannelDetail {
 		this.parkId = parkId;
 	}
 
-	public void setMacId(int macId) {
+	public void setMacId(Integer macId) {
 		this.macId = macId;
 	}
 	

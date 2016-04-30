@@ -190,7 +190,8 @@
 		$('select#parkName').attr('disabled', 'true');
 		$('input#businessCarportNumber').val(parseInt($(tds[3]).text()));
 		var additionalOption = [];
-		additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
+		if($tds[4].attr("data") != undefined)
+			additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
 		fillMacInfo(additionalOption);
 		
 		$('select#businessCarportStatus').val(parseInt($(tds[5]).attr('data')));
@@ -328,7 +329,10 @@
 			tr.append('<td>' + data[i]['id']+ '</td>');
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			tr.append('<td>' + data[i]['carportNumber']+ '</td>');
-			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			if(data[i]['macId'] != undefined)
+				tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			else
+				tr.append('<td></td>');
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 		//	tr.append('<td>' + data[i]['position']+ '</td>');

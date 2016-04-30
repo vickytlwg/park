@@ -32,7 +32,7 @@ import com.park.service.Utility;
 
 
 @Controller
-public class parkUserController {
+public class ParkUserController {
 
 	@Autowired
 	private UserService userService;
@@ -40,7 +40,7 @@ public class parkUserController {
 	@Autowired
 	private AuthorityService authService;
 	
-	private static Log logger = LogFactory.getLog(parkUserController.class);
+	private static Log logger = LogFactory.getLog(ParkUserController.class);
 	
 	@RequestMapping(value = "/parkUsers", produces = {"application/json;charset=UTF-8"})
 	public String getUsers(ModelMap modelMap, HttpServletRequest request, HttpSession session){

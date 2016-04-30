@@ -80,22 +80,19 @@ public class HardwareSerivceImpl implements HardwareService{
 	public int deleteHardware(int id) {
 		Hardware hardware = this.getHardwareById(id);
 		if(hardware.getStatus() == Status.USED.getValue()){
-			hardware.setMac("-1");
-			hardware.setDescription("无效硬件,如需删除，需先解绑");
-			this.updateHardware(hardware);
-			return 1;
-//			if(hardware.getType() == HardwareType.CARPORT.getValue()){
-//				
-//				BusinessCarport carport = businessCarportDao.getBusinessCarportByMacId(id);
-//				carport.setMacId(-1);
-//				businessCarportDao.updateBusinessCarport(carport);
-//			}
-//			if(hardware.getType() == HardwareType.CHANNEL.getValue()){
-//				int channelId = channelService.getChannelIdByMacId(id);
-//				Channel channel = channelService.getChannelsById(channelId);
-//				channel.setMac(-1);
-//				channelService.updateChannel(channel);
-//			}
+
+			if(hardware.getType() == HardwareType.CARPORT.getValue()){				
+				BusinessCarport carport = businessCarportDao.getBusinessCarportByMacId(id);
+				carport.setMacId(null);
+				businessCarportDao.updateBusinessCarport(carport);
+			}else if(hardware.getType() == HardwareType.CHANNEL.getValue()){
+				int channelId = channelService.getChannelIdByMacId(id);
+				Channel channel = channelService.getChannelsById(channelId);
+				channel.setMac(null);
+				channelService.updateChannel(channel);
+			}else{
+				return 0;
+			}
 		}
 		return hardwareDAO.deleteHardware(id);
 	}
@@ -107,6 +104,8 @@ public class HardwareSerivceImpl implements HardwareService{
 
 	@Override
 	public boolean bindHardware(int id) {
+		if(id < 0)
+			return true;
 		Hardware hardware = this.getHardwareById(id);
 		if(hardware.getStatus() == Status.USED.getValue())
 			return false;
@@ -116,7 +115,9 @@ public class HardwareSerivceImpl implements HardwareService{
 	}
 
 	@Override
-	public boolean changeHardwareStatus(int id, int status) {
+	public boolean changeHardwareStatus(Integer id, int status) {
+		if(id== null || id < 0)
+			return true;
 		Hardware hardware = this.getHardwareById(id);
 		int ret = 0;
 		if(hardware.getStatus() != status){

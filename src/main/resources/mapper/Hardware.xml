@@ -34,7 +34,7 @@
 	</select> 
 	
 	<select id="getUnboundHardwares" resultMap="HardwareMapper">
-		select * from hardware where status = 1 and type != 0
+		select * from hardware where status = 1 and type = #{param1}
 	</select>
 	
 	<select id="getHardwareDetail" resultMap="HardwareDetailMapper">

@@ -9,7 +9,7 @@ public class BusinessCarportDetail {
 	private int parkId;
 	private String parkName;
 	private int carportNumber;
-	private int macId;
+	private Integer macId;
 	private String mac;
 	private int status;
 	private int floor;
@@ -25,7 +25,7 @@ public class BusinessCarportDetail {
 	public int getCarportNumber() {
 		return carportNumber;
 	}
-	public int getMacId() {
+	public Integer getMacId() {
 		return macId;
 	}
 	public int getStatus() {
@@ -50,7 +50,7 @@ public class BusinessCarportDetail {
 	public void setCarportNumber(int carportNumber) {
 		this.carportNumber = carportNumber;
 	}
-	public void setMacId(int macId) {
+	public void setMacId(Integer macId) {
 		this.macId = macId;
 	}
 	public void setStatus(int status) {

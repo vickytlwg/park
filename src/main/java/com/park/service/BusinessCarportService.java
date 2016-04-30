@@ -26,7 +26,7 @@ public interface BusinessCarportService {
 	
 	public int getCarportStatusDetailCount();
 	
-	public List<CarportStatusDetail> getCarportStatusDetail();
+	public List<CarportStatusDetail> getCarportStatusDetailByCarportId(int carportId);
 	
 	public List<CarportStatusDetail> getLimitCarportStatusDetail(int start, int len);
 	

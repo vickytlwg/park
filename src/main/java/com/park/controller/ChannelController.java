@@ -106,12 +106,14 @@ public class ChannelController {
 	@RequestMapping(value = "/insert/channel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertChannel1(@RequestBody Channel channel){
-		int macId = channel.getMacId();
+		Integer macId = channel.getMacId();
 		Hardware hardware = hardwareService.getHardwareById(macId);
-		if(hardware.getStatus() == Status.USED.getValue())
+		
+		if(hardware!= null && hardware.getStatus() == Status.USED.getValue())
 			return Utility.createJsonMsg("1003", "hard is being used");
 		if(channelService.insertChannel(channel)){
-			hardwareService.bindHardware(macId);
+			if(hardware != null)
+				hardwareService.bindHardware(macId);
 			return Utility.createJsonMsg("1001", "insert success");
 		}else{
 			return Utility.createJsonMsg("1002","insert failed");
@@ -123,16 +125,19 @@ public class ChannelController {
 	public String updateChannel(@RequestBody Channel channel){
 		
 		Channel orignChannel = channelService.getChannelsById(channel.getId());
-		int oldMacId = orignChannel.getMacId();
-		int newMacId = channel.getMacId();
+		Integer oldMacId = orignChannel.getMacId();
+		Integer newMacId = channel.getMacId();
+		if(newMacId < 0)
+			channel.setMac(null);
 		
 		if(channelService.updateChannel(channel)){
 			if(newMacId != oldMacId){
 				Hardware hardware = hardwareService.getHardwareById(newMacId);
-				if(hardware.getStatus() == Status.USED.getValue())
+				if(hardware != null && hardware.getStatus() == Status.USED.getValue())
 					return Utility.createJsonMsg("1003", "hardware is being used");
 				hardwareService.changeHardwareStatus(oldMacId, Status.UNUSED.getValue());
-				hardwareService.changeHardwareStatus(newMacId, Status.USED.getValue());
+				if(hardware != null)
+					hardwareService.changeHardwareStatus(newMacId, Status.USED.getValue());
 			}
 			return Utility.createJsonMsg("1001", "update success");
 		}
@@ -143,7 +148,8 @@ public class ChannelController {
 	@ResponseBody
 	public String deleteChannel(@PathVariable int Id){
 		Channel channel = channelService.getChannelsById(Id);
-		hardwareService.changeHardwareStatus(channel.getMacId(), Status.UNUSED.getValue());
+		if(channel.getMacId()!= null && channel.getMacId() > 0)
+			hardwareService.changeHardwareStatus(channel.getMacId(), Status.UNUSED.getValue());
 		return channelService.deleteChannel(Id);
 	}
 

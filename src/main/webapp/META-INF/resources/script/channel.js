@@ -129,7 +129,12 @@
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			//alert(data[i]['parkName']+data[i]['carportNumber']);
 			tr.append('<td>' + data[i]['carportNumber']+ '</td>');
-			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			if(data[i]['mac'] != undefined)
+				tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			else
+				tr.append('<td></td>');
+			
+			
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? "有车":"无车")+ '</td>');
 	//		tr.append('<td>' + data[i]['floor']+ '</td>');
 			tr.append('<td>' + data[i]['position']+ '</td>');
@@ -198,7 +203,9 @@
 			data = data['body'];
 			var macIdSelect = $('select#macId');
 			macIdSelect.html('');
+			macIdSelect.append($('<option value =-1>暂不绑定硬件</option>'));
 			for(var i = 0; i < data.length; i++){
+				
 				macIdSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['mac'] +'</option>'));
 			}
 			if(additionalOption != undefined){
@@ -251,7 +258,8 @@
 		$('select#channelStatus').val(parseInt($(tds[6]).attr('data')));
 		$('input#channelDesc').val($(tds[7]).text());
 		var additionalOption = [];
-		additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
+		if($tds[4].attr("data") != undefined)
+			additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
 		fillMacInfo(additionalOption);
 			
 	};
@@ -380,7 +388,10 @@
 			tr.append('<td>' + data[i]['id']+ '</td>');
 			tr.append('<td>' + data[i]['parkName']+ '</td>');
 			tr.append('<td>' + data[i]['channelId']+ '</td>');
-			tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			if(data[i]['macId'] != undefined)
+				tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
+			else
+				tr.append('<td></td>');
 			if (data[i]['channelFlag']==1) {
 				tr.append('<td data=' + data[i]['channelFlag'] + '>' + "入口"+ '</td>');
 			}

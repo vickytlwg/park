@@ -74,12 +74,17 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	public int insertBusinessCarport(BusinessCarport businessCarport) {
 		
 		int carportRet = 0;
-		int macId = businessCarport.getMacId();
+		Integer macId = businessCarport.getMacId();
 		//check if mackId exist 
 		if(businessCarportDAO.checkMacExist(businessCarport.getParkId(), macId) > 0)
 			return 0;
+		if(macId < 0)
+			businessCarport.setMacId(null);
 		carportRet =  businessCarportDAO.insertBusinessCarport(businessCarport);
- 		if(carportRet > 0 && hardwareService.bindHardware(macId)){
+		if(carportRet >0)
+		{
+			if(macId >= 0)
+				return hardwareService.bindHardware(macId) ? 1 : 0;
 			return 1;
 		}else
 			return 0;
@@ -90,22 +95,29 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	public int updateBusinessCarport(BusinessCarport businessCarport) {
 		//update park left port
 		BusinessCarport oldBusinessCarport = this.getBusinessCarportById(businessCarport.getId());
-		int oldMacId = oldBusinessCarport.getMacId();
-		int newMacId = businessCarport.getMacId();
+		Integer oldMacId = oldBusinessCarport.getMacId();
+		Integer newMacId = businessCarport.getMacId();
+		if(newMacId < 0)
+			businessCarport.setMacId(null);
 		if(businessCarportDAO.checkMacExist(businessCarport.getParkId(), newMacId) > 0)
 			return 0;
 		if(oldMacId != newMacId){			
-			hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
-			hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
+			if(oldMacId > 0)
+				hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
+			if(newMacId > 0)
+				hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
 		}
 		
-		int ret = this.updateBusinessCarport(businessCarport);
+		int ret = businessCarportDAO.updateBusinessCarport(businessCarport);
 			
 		return ret;
 	}
 
 	@Override
 	public int deleteBusinessCarport(int id) {
+		BusinessCarport carport = this.getBusinessCarportById(id);
+		if(carport.getMacId() != null && carport.getMacId() > 0)
+			hardwareService.changeHardwareStatus(carport.getMacId(), Status.UNUSED.getValue());
 		return businessCarportDAO.deleteBusinessCarport(id);
 	}
 
@@ -113,7 +125,6 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	public int updateBusinessCarportStatus(String mac, int status) {
 		int macId = hardwareDAO.macToId(mac);
 		Hardware hardware = hardwareDAO.getHardwareById(macId);
-		logger.info("hardware : " + hardware.getId() + ", mac: " + hardware.getMac() + " status: " + hardware.getStatus() + " hardware: " );
 		if(hardware.getStatus() == Status.UNUSED.getValue()){
 			logger.info("hardware is unused" );
 			return 0;
@@ -161,8 +172,8 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	}
 
 	@Override
-	public List<CarportStatusDetail> getCarportStatusDetail() {
-		return carportStatusDetailDAO.get();
+	public List<CarportStatusDetail> getCarportStatusDetailByCarportId(int carportId) {
+		return carportStatusDetailDAO.getByCarportId(carportId);
 	}
 
 	@Override

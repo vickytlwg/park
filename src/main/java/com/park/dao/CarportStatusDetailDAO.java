@@ -7,7 +7,7 @@ import com.park.model.CarportStatusDetail;
 public interface CarportStatusDetailDAO {
 	
 	public int count();
-	public List<CarportStatusDetail> get();
+	public List<CarportStatusDetail> getByCarportId(int carportId);
 	
 	public List<CarportStatusDetail> limitGet(int start, int len);
 	

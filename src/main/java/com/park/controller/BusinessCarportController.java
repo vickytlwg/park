@@ -88,9 +88,9 @@ public class BusinessCarportController {
 	
 	@RequestMapping(value = "/getCarportStatusDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getCarportStatusDetail(){
+	public String getCarportStatusDetail(@RequestParam("carportId") int carportId){
 
-		List<CarportStatusDetail> details = businessCarportService.getCarportStatusDetail();
+		List<CarportStatusDetail> details = businessCarportService.getCarportStatusDetailByCarportId(carportId);
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("carportStatusDetail", details);
@@ -108,6 +108,8 @@ public class BusinessCarportController {
 		body.put("carportStatusDetail", details);
 		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
 	}
+	
+
 	
 	@RequestMapping(value = "/getDetailByCarportId", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
