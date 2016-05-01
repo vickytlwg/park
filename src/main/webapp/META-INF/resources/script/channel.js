@@ -51,7 +51,7 @@
 	var bindRefreshClick = function(){
 		var refreshBtn = $('#refresh');
 		refreshBtn.on('click', $(this), function(){
-			renderchannel($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
+			renderChannelCarport($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 			$(this).blur();
 		});
 		
@@ -258,7 +258,7 @@
 		$('select#channelStatus').val(parseInt($(tds[6]).attr('data')));
 		$('input#channelDesc').val($(tds[7]).text());
 		var additionalOption = [];
-		if($tds[4].attr("data") != undefined)
+		if($(tds[4]).attr("data") != undefined)
 			additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
 		fillMacInfo(additionalOption);
 			

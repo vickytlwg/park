@@ -39,6 +39,6 @@
 	</insert>
 	
 	<update id="update" parameterType="CarportStatusDetail" >
-		update carportStatusDetail set startTime = #{startTime}, endTime = #{endTime}, charged = #{charged}, expense = #{expense}, actualExpense = #{actualExpense} where carportId = #{carportId}
+		update carportStatusDetail set startTime = #{startTime}, endTime = #{endTime}, charged = #{charged}, expense = #{expense}, actualExpense = #{actualExpense} where id = #{id}
 	</update>
 </mapper>

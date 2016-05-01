@@ -333,7 +333,7 @@
 				tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
 			else
 				tr.append('<td></td>');
-			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
+			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 1 ? wuche:youche)+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 		//	tr.append('<td>' + data[i]['position']+ '</td>');
 			
@@ -348,6 +348,9 @@
 			}else{
 				tr.addClass('active');
 			}
+			
+			var statusButton = tr.find('td button');
+			statusButton.on('click', $(this), function(){renderCarportStatus($(this))});
 			businessCarportBody.append(tr);
 		}
 	};
@@ -356,6 +359,35 @@
 		var modal = new $.Modal('errorHandle', "失败", "操作失败" + data['message']);
 		$('#showErrorMessage').html(modal.get());
 		modal.show();
+	};
+	
+	var renderCarportStatus = function(button){
+		var id = $($(button).parents('tr').find('td')[1]).text();
+		$('#carportUsage').modal('show');
+		$.ajax({
+			url:$.fn.config.webroot + "/getCarportStatusDetail?carportId="+id + "&_t=" + (new Date()).getTime(),
+			type: 'get',
+			success: function(data){
+				
+				var carportUsage = data['body']['carportStatusDetail'];
+				var tbody = $('#carportUsageTbody');
+				tbody.html('');
+				for(var i = 0; i < carportUsage.length; i++){
+					var tr = $('<tr></tr>');
+					tr.append('<td>' + (carportUsage[i]['carportId']) + '</td>');
+					tr.append('<td>' + (carportUsage[i]['startTime'] == undefined ? '' : carportUsage[i]['startTime']) + '</td>');
+					tr.append('<td>' + (carportUsage[i]['endTime'] == undefined ? '' : carportUsage[i]['endTime']) + '</td>');
+					tr.append('<td>' + (carportUsage[i]['expense'] == undefined ? '' : carportUsage[i]['expense']) + '</td>');
+					tr.append('<td>' + (carportUsage[i]['actualExpense'] == undefined ? '' : carportUsage[i]['actualExpense']) + '</td>');
+					tbody.append(tr);
+					
+				}
+				
+			},
+			error: function(data){
+				errorHandle(data);
+			}
+		});
 	};
 	
 	/***render pagination****/
