@@ -144,7 +144,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		parkDAO.updateLeftPortCount(parkId, leftPort);
 		
 		//get carport status detail
-		if(status == 0){//have a car , insert new record
+		if(status == 1){//have a car , insert new record
 			CarportStatusDetail detail= new CarportStatusDetail();
 			detail.setCarportId(carport.getId());
 			detail.setStartTime(new Date());
