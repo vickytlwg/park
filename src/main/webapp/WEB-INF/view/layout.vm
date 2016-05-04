@@ -144,6 +144,14 @@
                   <li><a href="/park/flow"><i class="fa fa-circle-o"></i>流量诊断</a></li>               
               </ul>
             </li>
+			
+			 <li class="treeview active">
+                <a href="#"><i class="fa fa-fw fa-steam"></i> <span>费用管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
+             
+              </ul>
+            </li>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->

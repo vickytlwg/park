@@ -16,184 +16,33 @@
     <result column="RealMoney" property="realmoney" jdbcType="DECIMAL" />
     <result column="ReturnMoney" property="returnmoney" jdbcType="DECIMAL" />
     <result column="StartTime" property="starttime" jdbcType="VARCHAR" />
+    <result column="EndTime" property="endtime" jdbcType="VARCHAR" />
+    <result column="SysID" property="sysid" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, CredenceSnr, CardSnr, CardType, Sitename, BackByte, Mode, UserID, PosSnr, Money, 
-    Giving, RealMoney, ReturnMoney, StartTime
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from posdata
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from posdata
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
+
   <insert id="insert" parameterType="com.park.model.Posdata" >
     insert into posdata (id, CredenceSnr, CardSnr, 
       CardType, Sitename, BackByte, 
       Mode, UserID, PosSnr, 
       Money, Giving, RealMoney, 
-      ReturnMoney, StartTime)
+      ReturnMoney, StartTime, EndTime, 
+      SysID, memo)
     values (#{id,jdbcType=BIGINT}, #{credencesnr,jdbcType=VARCHAR}, #{cardsnr,jdbcType=VARCHAR}, 
       #{cardtype,jdbcType=VARCHAR}, #{sitename,jdbcType=VARCHAR}, #{backbyte,jdbcType=VARCHAR}, 
       #{mode,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{possnr,jdbcType=VARCHAR}, 
       #{money,jdbcType=DECIMAL}, #{giving,jdbcType=DECIMAL}, #{realmoney,jdbcType=DECIMAL}, 
-      #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=VARCHAR})
+      #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, 
+      #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.park.model.Posdata" >
-    insert into posdata
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="credencesnr != null" >
-        CredenceSnr,
-      </if>
-      <if test="cardsnr != null" >
-        CardSnr,
-      </if>
-      <if test="cardtype != null" >
-        CardType,
-      </if>
-      <if test="sitename != null" >
-        Sitename,
-      </if>
-      <if test="backbyte != null" >
-        BackByte,
-      </if>
-      <if test="mode != null" >
-        Mode,
-      </if>
-      <if test="userid != null" >
-        UserID,
-      </if>
-      <if test="possnr != null" >
-        PosSnr,
-      </if>
-      <if test="money != null" >
-        Money,
-      </if>
-      <if test="giving != null" >
-        Giving,
-      </if>
-      <if test="realmoney != null" >
-        RealMoney,
-      </if>
-      <if test="returnmoney != null" >
-        ReturnMoney,
-      </if>
-      <if test="starttime != null" >
-        StartTime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="credencesnr != null" >
-        #{credencesnr,jdbcType=VARCHAR},
-      </if>
-      <if test="cardsnr != null" >
-        #{cardsnr,jdbcType=VARCHAR},
-      </if>
-      <if test="cardtype != null" >
-        #{cardtype,jdbcType=VARCHAR},
-      </if>
-      <if test="sitename != null" >
-        #{sitename,jdbcType=VARCHAR},
-      </if>
-      <if test="backbyte != null" >
-        #{backbyte,jdbcType=VARCHAR},
-      </if>
-      <if test="mode != null" >
-        #{mode,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="possnr != null" >
-        #{possnr,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null" >
-        #{money,jdbcType=DECIMAL},
-      </if>
-      <if test="giving != null" >
-        #{giving,jdbcType=DECIMAL},
-      </if>
-      <if test="realmoney != null" >
-        #{realmoney,jdbcType=DECIMAL},
-      </if>
-      <if test="returnmoney != null" >
-        #{returnmoney,jdbcType=DECIMAL},
-      </if>
-      <if test="starttime != null" >
-        #{starttime,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Posdata" >
-    update posdata
-    <set >
-      <if test="credencesnr != null" >
-        CredenceSnr = #{credencesnr,jdbcType=VARCHAR},
-      </if>
-      <if test="cardsnr != null" >
-        CardSnr = #{cardsnr,jdbcType=VARCHAR},
-      </if>
-      <if test="cardtype != null" >
-        CardType = #{cardtype,jdbcType=VARCHAR},
-      </if>
-      <if test="sitename != null" >
-        Sitename = #{sitename,jdbcType=VARCHAR},
-      </if>
-      <if test="backbyte != null" >
-        BackByte = #{backbyte,jdbcType=VARCHAR},
-      </if>
-      <if test="mode != null" >
-        Mode = #{mode,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null" >
-        UserID = #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="possnr != null" >
-        PosSnr = #{possnr,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null" >
-        Money = #{money,jdbcType=DECIMAL},
-      </if>
-      <if test="giving != null" >
-        Giving = #{giving,jdbcType=DECIMAL},
-      </if>
-      <if test="realmoney != null" >
-        RealMoney = #{realmoney,jdbcType=DECIMAL},
-      </if>
-      <if test="returnmoney != null" >
-        ReturnMoney = #{returnmoney,jdbcType=DECIMAL},
-      </if>
-      <if test="starttime != null" >
-        StartTime = #{starttime,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.park.model.Posdata" >
-    update posdata
-    set CredenceSnr = #{credencesnr,jdbcType=VARCHAR},
-      CardSnr = #{cardsnr,jdbcType=VARCHAR},
-      CardType = #{cardtype,jdbcType=VARCHAR},
-      Sitename = #{sitename,jdbcType=VARCHAR},
-      BackByte = #{backbyte,jdbcType=VARCHAR},
-      Mode = #{mode,jdbcType=INTEGER},
-      UserID = #{userid,jdbcType=VARCHAR},
-      PosSnr = #{possnr,jdbcType=VARCHAR},
-      Money = #{money,jdbcType=DECIMAL},
-      Giving = #{giving,jdbcType=DECIMAL},
-      RealMoney = #{realmoney,jdbcType=DECIMAL},
-      ReturnMoney = #{returnmoney,jdbcType=DECIMAL},
-      StartTime = #{starttime,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+  select * from posdata
+  </select>
+  <select id="selectPosdataByPage" resultMap="BaseResultMap">
+  select * from posdata limit #{low},#{count}
+  </select>
+  <select id="getPosdataCount" resultType="int">
+  select count(*) from posdata</select>
 </mapper>

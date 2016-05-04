@@ -31,6 +31,12 @@ public class Posdata {
 
     private String starttime;
 
+    private String endtime;
+
+    private String sysid;
+
+    private String memo;
+
     public Long getId() {
         return id;
     }
@@ -141,5 +147,29 @@ public class Posdata {
 
     public void setStarttime(String starttime) {
         this.starttime = starttime == null ? null : starttime.trim();
+    }
+
+    public String getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(String endtime) {
+        this.endtime = endtime == null ? null : endtime.trim();
+    }
+
+    public String getSysid() {
+        return sysid;
+    }
+
+    public void setSysid(String sysid) {
+        this.sysid = sysid == null ? null : sysid.trim();
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo == null ? null : memo.trim();
     }
 }
