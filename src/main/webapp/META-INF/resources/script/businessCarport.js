@@ -333,7 +333,7 @@
 				tr.append('<td data=' + data[i]['macId'] + '>' + data[i]['mac']+ '</td>');
 			else
 				tr.append('<td></td>');
-			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 1 ? wuche:youche)+ '</td>');
+			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
 			tr.append('<td>' + data[i]['floor']+ '</td>');
 		//	tr.append('<td>' + data[i]['position']+ '</td>');
 			
