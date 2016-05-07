@@ -31,7 +31,7 @@
 										<th ><span style="padding-left:15%">Id</div></th>		
 						
 										<th><span style="padding-left:15%">车牌</div></th>
-										<th><span style="padding-left:15%">车型</div></th>
+										
 										<th><span style="padding-left:15%">停车场名</div></th>
 										<th><span style="padding-left:15%">车位号</div></th>
 										<th><span style="padding-left:15%">出入场</div></th>
@@ -43,8 +43,7 @@
 										<th><span style="padding-left:15%">返还</div></th>	
 										<th><span style="padding-left:15%">进场时间</div></th>	
 										<th><span style="padding-left:15%">离场时间</div></th>
-										<th><span style="padding-left:15%">app版本</div></th>	
-										<th><span style="padding-left:15%">备注</div></th>
+							
 					            </tr>
 					          
 					          <tbody id="parkBody"></tbody>

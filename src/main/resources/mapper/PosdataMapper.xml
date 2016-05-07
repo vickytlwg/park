@@ -38,10 +38,10 @@
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap">
-  select * from posdata
+  select * from posdata order by id desc
   </select>
   <select id="selectPosdataByPage" resultMap="BaseResultMap">
-  select * from posdata limit #{low},#{count}
+  select * from posdata order by id desc limit #{low},#{count}
   </select>
   <select id="getPosdataCount" resultType="int">
   select count(*) from posdata</select>

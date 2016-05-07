@@ -152,6 +152,14 @@
              
               </ul>
             </li>
+			
+			 <li class="treeview active">
+                <a href="#"><i class="fa fa-fw fa-steam"></i> <span>停车位利用率</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="/park/pos/carportUsage"><i class="fa fa-circle-o"></i>停车位利用率</a></li>
+             
+              </ul>
+            </li>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->

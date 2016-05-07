@@ -6,12 +6,10 @@
 
 		renderPark(0, $.fn.page.pageSize);
 		renderPagination();
-
+		intervalRenderPagination();
 	};
-
 	
-
-
+	
 	/*** get table park item ***/
 	var renderPark = function(low, count){
 		
@@ -54,8 +52,8 @@
 			tr.append('<td>' + data[i]['id']+ '</td>');
 		//	tr.append('<td>' + data[i]['credencesnr']+ '</td>');
 			tr.append('<td>' + data[i]['cardsnr']+ '</td>');
-			var type=data[i]['cardtype']=="1"?"小车":"大车";
-			tr.append('<td>' + type + '</td>');
+		//	var type=data[i]['cardtype']=="1"?"小车":"大车";
+		//	tr.append('<td>' + type + '</td>');
 			tr.append('<td>' + data[i]['sitename']+ '</td>');
 			
 			tr.append('<td>' + data[i]['backbyte']+ '</td>');
@@ -71,8 +69,8 @@
 			tr.append('<td>' + data[i]['starttime']+ '</td>');
 			
 			tr.append('<td>' + data[i]['endtime']+ '</td>');
-			tr.append('<td>' + data[i]['sysid']+ '</td>');
-			tr.append('<td>' + data[i]['memo']+ '</td>');
+	//		tr.append('<td>' + data[i]['sysid']+ '</td>');
+	//		tr.append('<td>' + data[i]['memo']+ '</td>');
 			
 		
 			if( i % 2 == 0){
@@ -93,8 +91,8 @@
 	};
 	
 	/***render pagination****/
-	var renderPagination = function(){
-
+	 $.fn.renderPagination = function(){
+		
 		$.ajax({
 			url:$.fn.config.webroot + "/pos/getPosdataCount",
 			type: 'get',
@@ -108,7 +106,23 @@
 			}
 		});
 	};
-	
+	function renderPagination(){
+		$.ajax({
+			url:$.fn.config.webroot + "/pos/getPosdataCount",
+			type: 'get',
+			success: function(data){
+				
+				var paginationUl = $.fn.page.initial(data['count'], pageClickFunc);
+				$('#pagination').append(paginationUl);
+			},
+			error: function(data){
+				
+			}
+		});
+	}
+	var intervalRenderPagination=function(){
+		setInterval("$.fn.renderPagination()",5000);
+	}
 	var pageClickFunc = function(index){
 		renderPark($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 	};

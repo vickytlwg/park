@@ -378,6 +378,20 @@
 					var tr = $('<tr></tr>');
 					tr.append('<td>' + (carportUsage[i]['carportId']) + '</td>');
 					tr.append('<td>' + (carportUsage[i]['startTime'] == undefined ? '' : carportUsage[i]['startTime']) + '</td>');
+					if(carportUsage[i]['startTime']!=undefined&&carportUsage[i]['endTime']!=undefined){
+						var date1=new Date(carportUsage[i]['startTime']);
+						var date2=new Date(carportUsage[i]['endTime']);					
+						var miliseconds=date2-date1;			
+						var days  = miliseconds/1000/60/60/24;
+						var daysRound = Math.floor(days);
+						var hours = miliseconds/1000/60/60-(24 * daysRound);
+						var hoursRound = Math.floor(hours);
+						var minutes = miliseconds/1000/60-(24 * 60 * daysRound) - (60 * hoursRound);
+						var minutesRound = Math.floor(minutes);
+						var seconds = miliseconds/1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
+						alert("时间占用 小时："+hoursRound+"  分钟："+minutesRound+"  秒: "+seconds);
+					}
+					
 					tr.append('<td>' + (carportUsage[i]['endTime'] == undefined ? '' : carportUsage[i]['endTime']) + '</td>');
 					tr.append('<td>' + (carportUsage[i]['expense'] == undefined ? '' : carportUsage[i]['expense']) + '</td>');
 					tr.append('<td>' + (carportUsage[i]['actualExpense'] == undefined ? '' : carportUsage[i]['actualExpense']) + '</td>');
