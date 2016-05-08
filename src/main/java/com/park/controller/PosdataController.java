@@ -1,5 +1,8 @@
 package com.park.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +132,47 @@ public String getPosdataCount(){
 	}
 	return Utility.gson.toJson(retMap);
 }
+
+@RequestMapping(value="getParkCharge",method=RequestMethod.GET)
+@ResponseBody
+public String getParkCharge(@RequestParam("parkId") int parkId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(endDay);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Map<String, Object> result = posdataService.getParkCharge(parkId, parsedStartDay, parsedEndDay);
+	return Utility.createJsonMsg(1001, "success", result);
+}
+
+@RequestMapping(value="getCarportCharge",method=RequestMethod.GET)
+@ResponseBody
+public String getCarportCharge(@RequestParam("carport") int carportId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(endDay);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Map<String, Object> result = posdataService.getCarportCharge(carportId, parsedStartDay, parsedEndDay);
+	return Utility.createJsonMsg(1001, "success", result);
+}
+
 
 @RequestMapping(value="selectPosdataByPage",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody

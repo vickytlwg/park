@@ -1,6 +1,8 @@
 package com.park.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,27 @@ public class PosdataServiceImpl implements PosdataService {
 	public int getPosdataCount() {
 		// TODO Auto-generated method stub
 		return posdataDAO.getPosdataCount();
+	}
+	
+	@Override
+	public Map<String, Object> getCarportCharge(int carportId, Date startDay, Date endDay) {
+		List<Posdata> carportData = getCarportData(carportId, startDay, endDay);
+		return null;
+	}
+	
+	private List<Posdata> getCarportData(int carportId, Date startDay, Date endDay){
+		return posdataDAO.getCarportData(carportId, startDay, endDay);
+		
+	}
+	
+	private List<Posdata> getParkData(int parkId, Date startDay, Date endDay){
+		return posdataDAO.getParkData(parkId, startDay, endDay);
+	}
+	
+	@Override
+	public Map<String, Object> getParkCharge(int parkId, Date startDay, Date endDay) {
+		List<Posdata> parkData = getParkData(parkId, startDay, endDay);
+		return null;
 	}
 
 }

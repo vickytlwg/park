@@ -36,11 +36,11 @@
 									</div>
 								</div>
 				
-
+							
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="date" class="control-label">日期</label>
-										<input type="text" id="date"  class="form-control">									
+										<input type="text" id="date"  class="form-control date">									
 									</div>
 								</div>								
 							</div>							
@@ -52,6 +52,24 @@
 							<div id="chart-content-park" class="col-md-6">
 							
 							</div>
+                        </div>
+                        <div class="row">
+                        	<div class="col-md-3">
+								<div class="form-group">
+									<label for="parkStartDate" class="control-label">起始日期</label>
+									<input type="text" id="parkStartDate"  class="form-control date">									
+								</div>
+							</div>		
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="parkEndDate" class="control-label">结束日期</label>
+									<input type="text" id="parkEndDate"  class="form-control date">									
+								</div>
+							</div>		
+                        </div>
+                        <div class="row">
+                        	<div id = "chart-park-period-charge">
+                        	</div>
                         </div>
                         <div class="row">
 							 <div class="col-md-3">
@@ -71,6 +89,25 @@
 							</div>
                         </div>
                         <div class="row" id="chart-content-carport-usage"></div>
+                        
+                        <div class="row">
+                        	<div class="col-md-3">
+								<div class="form-group">
+									<label for="carportStartDate" class="control-label">起始日期</label>
+									<input type="text" id="carportStartDate"  class="form-control date">									
+								</div>
+							</div>		
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="carportEndDate" class="control-label">结束日期</label>
+									<input type="text" id="carportEndDate"  class="form-control date">									
+								</div>
+							</div>		
+                        </div>
+                        <div class="row">
+                        	<div id = "chart-carport-period-charge">
+                        	</div>
+                        </div>
     				<div class="box-footer clearfix">
       					
       				</div>

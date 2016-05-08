@@ -1,5 +1,5 @@
 (function($){
-	
+	 
 	$.fn.businessCarport = {};
 	
 	$.fn.businessCarport.initial = function(){
@@ -352,7 +352,19 @@
 			}
 			
 			var statusButton = tr.find('td button');
-			statusButton.on('click', $(this), function(){renderCarportStatus($(this))});
+			statusButton.on('click', $(this), function(){
+				var button = $(this);
+				dateInitial();
+				$('#carportUsage').modal('show');
+				var curDate = new Date();
+				var nextDate = new Date();
+				nextDate.setDate(nextDate.getDate() + 1);
+				$('#carportStartDate').val(curDate.format('yyyy-MM-dd'));
+				$('#carportEndDate').val(nextDate.format('yyyy-MM-dd'));
+				$('#carportEndDate').on('change', $(this), function(){renderCarportStatusChart(button);});
+				renderCarportStatusTable(button);
+				renderCarportStatusChart(button);
+			});
 			businessCarportBody.append(tr);
 		}
 	};
@@ -363,9 +375,96 @@
 		modal.show();
 	};
 	
-	var renderCarportStatus = function(button){
+	var dateInitial=function(){
+		$('.date').val(new Date().format('yyyy-MM-dd'));
+		$('.date').datepicker({
+			autoClose: true,
+		    dateFormat: "yyyy-mm-dd",
+		    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+		    daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+		    daysMin: ["日", "一", "二", "三", "四", "五", "六"],
+		    months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+		    monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+		    showMonthAfterYear: true,
+		    viewStart: 0,
+		    weekStart: 1,
+		    yearSuffix: "年",
+		    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
+		
+		});
+	}
+	
+	var renderCarportStatusChart = function(button){
 		var id = $($(button).parents('tr').find('td')[1]).text();
-		$('#carportUsage').modal('show');
+		var startDay = $('#carportStartDate').val();
+		var endDay = $('#carportEndDate').val();
+		$.ajax({
+			url:$.fn.config.webroot + "/getDayCarportStatusDetail?carportId="+ id + "&startDay=" + startDay + "&endDay=" + endDay,
+			type:'get',
+			success: function(data){
+				var carportUsage = data['body']['carportStatusDetail'];
+				if(carportUsage.length == 0)
+					return;
+				var chartData = [];
+				var parsedStartDay = Date.parse(startDay);
+				var parsedEndDay = Date.parse(endDay);
+				chartData.push([parsedStartDay, null, null]);
+				for(var i = 0; i < carportUsage.length; i++){
+					var startTime = carportUsage[i]['startTime'];
+					var endTime = carportUsage[i]['endTime'];
+					if(startTime == undefined || endTime == undefined)
+						continue;
+					var startMilliSec = Date.parse(startTime);
+					startMilliSec = startMilliSec > parsedStartDay ? startMilliSec : parsedStartDay;					
+					var endTimeMillSec = Date.parse(endTime);
+					endTimeMillSec = endTimeMillSec < parsedEndDay ? endTimeMillSec : parsedEndDay;
+					chartData.push([startMilliSec,null, null ]);
+					chartData.push([startMilliSec,0, 1 ]);
+					chartData.push([endTimeMillSec,0, 1 ]);
+					chartData.push([endTimeMillSec,null, null ]);
+				}
+				chartData.push([parsedEndDay, null, null]);
+				$('#carportUsageChart').highcharts({
+					 chart: {
+					        type: 'arearange',
+					        zoomType: 'x'
+					    },
+					    
+					    title: {
+					        text: '停车位使用分布情况'
+					    },
+					
+					    xAxis: {
+					        type: 'datetime'
+					    },
+					    
+					    yAxis: {
+					        title: {
+					            text: null
+					        }
+					    },
+					
+					    tooltip: {
+					        crosshairs: true,
+					        shared: true,
+					        valueSuffix: ''
+					    },
+					    
+					    legend: {
+					        enabled: false
+					    },
+					    series: [{
+					        name: '正在使用',
+					        data: chartData
+					    }]
+				});
+			}
+		});
+	};
+	
+	var renderCarportStatusTable = function(button){
+		var id = $($(button).parents('tr').find('td')[1]).text();
+		
 		$.ajax({
 			url:$.fn.config.webroot + "/getCarportStatusDetail?carportId="+id + "&_t=" + (new Date()).getTime(),
 			type: 'get',
@@ -389,7 +488,7 @@
 						var minutes = miliseconds/1000/60-(24 * 60 * daysRound) - (60 * hoursRound);
 						var minutesRound = Math.floor(minutes);
 						var seconds = miliseconds/1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
-						alert("时间占用 小时："+hoursRound+"  分钟："+minutesRound+"  秒: "+seconds);
+						//alert("时间占用 小时："+hoursRound+"  分钟："+minutesRound+"  秒: "+seconds);
 					}
 					
 					tr.append('<td>' + (carportUsage[i]['endTime'] == undefined ? '' : carportUsage[i]['endTime']) + '</td>');

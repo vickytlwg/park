@@ -1,7 +1,11 @@
 <script src="/park/script/businessCarport.js"></script>
 <script src="/park/script/jquery.cookie.js"></script>
-<link href="/park/cssmb/tables.css" rel="stylesheet">
-<link href="/park/cssmb/master.css" rel="stylesheet">
+<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
+<script src="/park/script/datepicker.js"></script>
+<script src="/park/script/highcharts.js"></script>
+<script src="/park/script/exporting.js"></script>
+<script src="/park/script/HighchartTheme.js"></script>
+<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
 
 
 
@@ -157,19 +161,41 @@
 			</div>
 			
 			<div class='modal-body'>
-				<table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
-					<thead>
-					<tr>
-						<th>ID</th>
-						<th>开始时间</th>
-						<th>结束时间</th>
-						<th>应付</th>
-						<th>实付</th>
-					</tr>
-					</thead>
-					<tbody id="carportUsageTbody">
-					</tbody>
-				</table>
+				<div>
+					<ul id="myTab" class="nav nav-tabs">
+   						<li class="active"><a href="#usageChart" data-toggle="tab">图表</a></li>
+   						<li><a href="#usageTable" data-toggle="tab">表格</a></li>
+   					</ul>
+				</div>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="usageChart">
+						<div class="form-group">
+							<label for="carportStartDate" class="control-label">开始日期</label>
+							<input type="text" id="carportStartDate"  class="form-control date">									
+						</div>
+						<div class="form-group">
+							<label for="carportEndDate" class="control-label">结束日期</label>
+							<input type="text" id="carportEndDate"  class="form-control date">									
+						</div>
+						<div id = "carportUsageChart">
+						</div>
+					</div>
+					<div class="tab-pane fade" id="usageTable">
+						<table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
+							<thead>
+							<tr>
+								<th>ID</th>
+								<th>开始时间</th>
+								<th>结束时间</th>
+								<th>应付</th>
+								<th>实付</th>
+							</tr>
+							</thead>
+							<tbody id="carportUsageTbody">
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 			
 			<div class='modal-footer'>

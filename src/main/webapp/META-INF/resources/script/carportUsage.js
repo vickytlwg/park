@@ -5,13 +5,15 @@
 		chartCarport();
 		chartPark();
 		chartParkCharge();
+		chartParkPeriodCharge();
 		chartCarportCharge();
-		chartCarportUsage();
+		chartCarportUsage();	
+		chartCarportPeriodCharge();
 	};
 	
 	var dateInitial=function(){
-		$('#date').val(new Date().format('yyyy-MM-dd'));
-		$('#date').datepicker({
+		$('.date').val(new Date().format('yyyy-MM-dd'));
+		$('.date').datepicker({
 			autoClose: true,
 		    dateFormat: "yyyy-mm-dd",
 		    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
@@ -72,6 +74,91 @@
 		var chartposition=$('#chart-content-park-charge');
 		renderchartcolumn(title,chartposition,data);
 	}
+	
+	var chartParkPeriodCharge = function(){
+		var title="停车场费用";
+		var chartposition = $('#chart-park-period-charge');
+		chartposition.highcharts({
+	        chart: {
+	            type: 'line'
+	        },
+	        title: {
+	            text: title
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: ['一月', '二月', '三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+	        },
+	        yAxis: {
+	            title: {
+	                text: '万元'
+	            }
+	        },
+	        tooltip: {
+	            enabled: false,
+	            formatter: function() {
+	                return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y + "万元";
+	            }
+	        },
+	        plotOptions: {
+	            line: {
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: false
+	            }
+	        },
+	        series: [{
+	            name: '停车场',
+	            data: [7.0, 6.9, 9.5, 8.5, 10.4, 11.5, 6.2, 7.5, 11.3, 10.3, 9.9, 7.6]
+	        }]
+	    });
+	};
+	
+	var chartCarportPeriodCharge = function(){
+		var title="停车位费用";
+		var chartposition = $('#chart-carport-period-charge');
+		chartposition.highcharts({
+	        chart: {
+	            type: 'line'
+	        },
+	        title: {
+	            text: title
+	        },
+	        subtitle: {
+	            text: ''
+	        },
+	        xAxis: {
+	            categories: ['一月', '二月', '三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+	        },
+	        yAxis: {
+	            title: {
+	                text: '万元'
+	            }
+	        },
+	        tooltip: {
+	            enabled: false,
+	            formatter: function() {
+	                return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y + "万元";
+	            }
+	        },
+	        plotOptions: {
+	            line: {
+	                dataLabels: {
+	                    enabled: true
+	                },
+	                enableMouseTracking: false
+	            }
+	        },
+	        series: [{
+	            name: '停车位',
+	            data: [0.4, 0.9, 0.5, 0.8, 0.4, 0.5, 0.2, 0.5, 0.3, 0.3, 0.9, 0.6]
+	        }]
+	    });
+	};
+	
 	var chartCarportCharge=function(){
 		var title="停车位费用";
 		var data=[{
@@ -86,8 +173,9 @@
 		var title="停车位时段使用率";
 		var data=[];
 		var chartpostion=$('#chart-content-carport-usage');
-		renderChartLine(title,chartpostion,data);
-	}
+		renderChartArea(title,chartpostion,data);
+	};
+	
 	var renderchart=function(title,chartposition,data){
 		chartposition.highcharts({
 		        chart: {
@@ -134,7 +222,7 @@
 	        yAxis: {
 	            min: 0,
 	            title: {
-	                text: '万元'
+	                text: '元'
 	            }
 	        },
 	        tooltip: {
@@ -155,7 +243,8 @@
 	    });
 	}
 	
-	var renderChartLine=function(title,chartposition,data){
+
+	var renderChartArea=function(title,chartposition,data){
 		chartposition.highcharts({
 	        chart: {
 	            zoomType: 'x',
