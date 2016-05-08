@@ -1,5 +1,6 @@
 package com.park.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.park.model.CarportStatusDetail;
@@ -14,6 +15,8 @@ public interface CarportStatusDetailDAO {
 	public List<CarportStatusDetail> getDetailByCarportId(int carportId);
 	
 	public CarportStatusDetail getLatestDetailByCarportId(int carportId);
+	
+	public List<CarportStatusDetail> getDayCarportStatusDetail(int carportId, Date day, Date nextDay);
 	
 	public int insert(CarportStatusDetail detail);
 	

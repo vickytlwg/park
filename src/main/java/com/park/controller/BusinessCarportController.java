@@ -1,6 +1,9 @@
 package com.park.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,123 +36,152 @@ import com.park.service.Utility;
 
 @Controller
 public class BusinessCarportController {
-	
+
 	@Autowired
 	private BusinessCarportService businessCarportService;
-	
+
 	@Autowired
 	private AuthorityService authService;
-	
+
 	@Autowired
 	private HardwareService hardwareService;
-	
+
 	private static Log logger = LogFactory.getLog(BusinessCarportController.class);
-	
-	@RequestMapping(value = "/businessCarport", produces = {"application/json;charset=UTF-8"})
-	public String getBusinessCarports(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/businessCarport", produces = { "application/json;charset=UTF-8" })
+	public String getBusinessCarports(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
-		
+
 		return "businessCarport";
 	}
-	
-	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getBusinessCarportCount(@RequestParam(value = "parkId", required = false) Integer parkId){
+	public String getBusinessCarportCount(@RequestParam(value = "parkId", required = false) Integer parkId) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
 		int count = businessCarportService.getBusinessCarportCount(parkId);
 		body.put("count", count);
-	
+
 		ret.put("status", "1001");
 		ret.put("message", "get businessCarport detail success");
 		ret.put("body", body);
-		
-		return Utility.gson.toJson(ret);					
+
+		return Utility.gson.toJson(ret);
 	}
-	
-	@RequestMapping(value = "/getCarportStatusDetailCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getCarportStatusDetailCount", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getCarportStatusDetailCount(){
+	public String getCarportStatusDetailCount() {
 
 		int count = businessCarportService.getCarportStatusDetailCount();
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("count", count);
-		return Utility.createJsonMsg(1001, "get count success", body);					
+		return Utility.createJsonMsg(1001, "get count success", body);
 	}
-	
-	@RequestMapping(value = "/getCarportStatusDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getCarportStatusDetail", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getCarportStatusDetail(@RequestParam("carportId") int carportId){
+	public String getCarportStatusDetail(@RequestParam("carportId") int carportId) {
 
 		List<CarportStatusDetail> details = businessCarportService.getCarportStatusDetailByCarportId(carportId);
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("carportStatusDetail", details);
-		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);
 	}
-	
-	@RequestMapping(value = "/getLimitCarportStatusDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getLimitCarportStatusDetail", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getLimitCarportStatusDetail(@RequestParam("low")int low, 
-			@RequestParam("count")int count){
+	public String getLimitCarportStatusDetail(@RequestParam("low") int low, @RequestParam("count") int count) {
 
 		List<CarportStatusDetail> details = businessCarportService.getLimitCarportStatusDetail(low, count);
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("carportStatusDetail", details);
-		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);
 	}
-	
 
-	
-	@RequestMapping(value = "/getDetailByCarportId", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "/getDayCarportStatusDetail", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getDetailByCarportId(@RequestParam("carportId")int carportId){
+	public String getDayCarportStatusDetail(@RequestParam("carportId") int carportId,
+			@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		
+		List<CarportStatusDetail> details = businessCarportService.getDayCarportStatusDetail(carportId, parsedStartDay, parsedEndDay);
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("carportStatusDetail", details);
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);
+	}
+
+	@RequestMapping(value = "/getDetailByCarportId", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getDetailByCarportId(@RequestParam("carportId") int carportId) {
 
 		List<CarportStatusDetail> details = businessCarportService.getDetailByCarportId(carportId);
 
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("carportStatusDetail", details);
-		return Utility.createJsonMsg(1001, "get carportStatus success", body);					
+		return Utility.createJsonMsg(1001, "get carportStatus success", body);
 	}
-	
-	@RequestMapping(value = "/getBusinessCarportDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getBusinessCarportDetail", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, 
-			@RequestParam("count")int count,
-			@RequestParam(value = "parkId", required = false) Integer parkId){	
-		
+	public String accessIndex(@RequestParam("low") int low, @RequestParam("count") int count,
+			@RequestParam(value = "parkId", required = false) Integer parkId) {
+
 		Map<String, Object> ret = new HashMap<String, Object>();
-		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count, parkId);
-		if(businessCarportDetail != null){
+		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
+				parkId);
+		if (businessCarportDetail != null) {
 			ret.put("status", "1001");
 			ret.put("message", "get businessCarport detail success");
 			ret.put("body", businessCarportDetail);
-		}else{
+		} else {
 			ret.put("status", "1002");
 			ret.put("message", "get businessCarport detail fail");
 		}
 		return Utility.gson.toJson(ret);
-		
+
 	}
-	
-	@RequestMapping(value = "/insert/businessCarport", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/insert/businessCarport", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String insertBusinessCarport(@RequestBody BusinessCarport businessCarport){
-		
+	public String insertBusinessCarport(@RequestBody BusinessCarport businessCarport) {
+
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		int carportRet = 0;
-		carportRet =  businessCarportService.insertBusinessCarport(businessCarport);
- 		if(carportRet > 0){
+		carportRet = businessCarportService.insertBusinessCarport(businessCarport);
+		if (carportRet > 0) {
 			retMap.put("status", "1001");
 			retMap.put("message", "insert businessCarport success");
 			return Utility.gson.toJson(retMap);
@@ -158,70 +190,74 @@ public class BusinessCarportController {
 		retMap.put("message", "insert businessCarport fail, mac has already been used");
 		return Utility.gson.toJson(retMap);
 	}
-	
-	@RequestMapping(value = "/update/businessCarport", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/update/businessCarport", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updateBusinessCarport(@RequestBody BusinessCarport businessCarport){
+	public String updateBusinessCarport(@RequestBody BusinessCarport businessCarport) {
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		int ret = businessCarportService.updateBusinessCarport(businessCarport);
-		if(ret > 0 ){
+		if (ret > 0) {
 			retMap.put("status", "1001");
 			retMap.put("message", "update businessCarport success");
-		}else{
+		} else {
 			retMap.put("status", "1002");
 			retMap.put("message", "update businessCarport fail, change mac status or update carport fail");
 		}
-		
+
 		return Utility.gson.toJson(retMap);
 	}
-	
-	@RequestMapping(value = "/update/status/businessCarport", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/update/status/businessCarport", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updateBusinessCarportStatus(@RequestBody Map<String, Object> args){
+	public String updateBusinessCarportStatus(@RequestBody Map<String, Object> args) {
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		String mac = (String)args.get("mac");
-		int status = Integer.parseInt((String)args.get("status"));
+		String mac = (String) args.get("mac");
+		int status = Integer.parseInt((String) args.get("status"));
 		int ret = businessCarportService.updateBusinessCarportStatus(mac, status);
 		logger.info("updateBusinessCarportStatus resutl: " + ret);
-		if(ret > 0 ){
+		if (ret > 0) {
 			retMap.put("status", "1001");
 			retMap.put("message", "update businessCarport success");
-		}else{
+		} else {
 			retMap.put("status", "1002");
 			retMap.put("message", "update businessCarport fail, mac may not be used");
 		}
-		
+
 		return Utility.gson.toJson(retMap) + "eof\n";
 	}
-	
-	@RequestMapping(value = "/update/status/businessCarports", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/update/status/businessCarports", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args){
+	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args) {
 		List<String> updatedMac = new ArrayList<String>();
-		List<Object> carportsStatus = (List<Object>)args.get("carportStatus");
-		for(Object item : carportsStatus){
-			Map<String, Object> arg = (Map<String, Object>)item;
-			String mac = (String)arg.get("mac");
-			int status = Integer.parseInt((String)arg.get("status").toString());
+		List<Object> carportsStatus = (List<Object>) args.get("carportStatus");
+		for (Object item : carportsStatus) {
+			Map<String, Object> arg = (Map<String, Object>) item;
+			String mac = (String) arg.get("mac");
+			int status = Integer.parseInt((String) arg.get("status").toString());
 			int ret = businessCarportService.updateBusinessCarportStatus(mac, status);
-			if(ret > 0)
+			if (ret > 0)
 				updatedMac.add(mac);
 		}
-						
+
 		return Utility.createJsonMsg(1001, "updated mac", updatedMac) + "eof\n";
 	}
-	
-	@RequestMapping(value = "/delete/businessCarport/{Id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/delete/businessCarport/{Id}", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String deleteBusinessCarport(@PathVariable int Id){
+	public String deleteBusinessCarport(@PathVariable int Id) {
 		BusinessCarport carport = businessCarportService.getBusinessCarportById(Id);
 		hardwareService.changeHardwareStatus(carport.getMacId(), Status.UNUSED.getValue());
 		int ret = businessCarportService.deleteBusinessCarport(Id);
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		if(ret > 0 ){
+		if (ret > 0) {
 			retMap.put("status", "1001");
 			retMap.put("message", "delete businessCarport success");
-		}else{
+		} else {
 			retMap.put("status", "1002");
 			retMap.put("message", "delete businessCarport fail");
 		}

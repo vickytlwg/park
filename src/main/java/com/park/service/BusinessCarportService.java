@@ -1,5 +1,6 @@
 package com.park.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.park.model.BusinessCarport;
@@ -15,6 +16,8 @@ public interface BusinessCarportService {
 	public int getBusinessCarportCount(Integer parkId);
 	
 	public List<BusinessCarportDetail> getBusinessCarportDetail(int low, int count, Integer parkId);
+	
+	public List<CarportStatusDetail> getDayCarportStatusDetail(int carportId, Date starDday, Date endDay);
 	
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	
