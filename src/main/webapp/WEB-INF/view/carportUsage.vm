@@ -35,13 +35,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="park-select" class="control-label">停车位</label>
-										<select id="carport-select" class="form-control">
-                                        </select>
-                                    </div>
-                                </div>
+				
 
 								<div class="col-md-3">
 									<div class="form-group">
@@ -52,14 +46,31 @@
 							</div>							
 						</div>
 						<div class="row">
-							<div id="chart-content-carport" class="col-md-6">
+							<div id="chart-content-park-charge" class="col-md-6">
 							
 							</div>
 							<div id="chart-content-park" class="col-md-6">
 							
 							</div>
                         </div>
-						
+                        <div class="row">
+							 <div class="col-md-3">
+								<div class="form-group">
+										<label for="park-select" class="control-label">停车位</label>
+										<select id="carport-select" class="form-control">
+                                        </select>
+                                   </div>
+                               </div>
+						</div>
+						<div class="row" >
+							<div id="chart-content-carport-charge" class="col-md-6">
+							
+							</div>
+							<div id="chart-content-carport" class="col-md-6">
+							
+							</div>
+                        </div>
+                        <div class="row" id="chart-content-carport-usage"></div>
     				<div class="box-footer clearfix">
       					
       				</div>
