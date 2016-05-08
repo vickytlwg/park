@@ -352,18 +352,20 @@
 			}
 			
 			var statusButton = tr.find('td button');
+			
 			statusButton.on('click', $(this), function(){
 				var button = $(this);
 				dateInitial();
 				$('#carportUsage').modal('show');
+				$('#carportUsage').attr('carportId', $($(button).parents('tr').find('td')[1]).text());
 				var curDate = new Date();
 				var nextDate = new Date();
 				nextDate.setDate(nextDate.getDate() + 1);
 				$('#carportStartDate').val(curDate.format('yyyy-MM-dd'));
 				$('#carportEndDate').val(nextDate.format('yyyy-MM-dd'));
-				$('#carportEndDate').on('change', $(this), function(){renderCarportStatusChart(button);});
-				renderCarportStatusTable(button);
-				renderCarportStatusChart(button);
+				$('#carportEndDate').on('change', $(this), function(){renderCarportStatusChart();});
+				renderCarportStatusTable();
+				renderCarportStatusChart();
 			});
 			businessCarportBody.append(tr);
 		}
@@ -394,8 +396,9 @@
 		});
 	}
 	
-	var renderCarportStatusChart = function(button){
-		var id = $($(button).parents('tr').find('td')[1]).text();
+	var renderCarportStatusChart = function(){
+		event.stopPropagation();
+		var id = $('#carportUsage').attr('carportId');
 		var startDay = $('#carportStartDate').val();
 		var endDay = $('#carportEndDate').val();
 		$.ajax({
@@ -403,8 +406,11 @@
 			type:'get',
 			success: function(data){
 				var carportUsage = data['body']['carportStatusDetail'];
-				if(carportUsage.length == 0)
+				if(carportUsage.length == 0){
+					$('#carportUsageChart').html('');
 					return;
+				}
+					
 				var chartData = [];
 				var parsedStartDay = Date.parse(startDay);
 				var parsedEndDay = Date.parse(endDay);
@@ -463,7 +469,7 @@
 	};
 	
 	var renderCarportStatusTable = function(button){
-		var id = $($(button).parents('tr').find('td')[1]).text();
+		var id = $('#carportUsage').attr('carportId');
 		
 		$.ajax({
 			url:$.fn.config.webroot + "/getCarportStatusDetail?carportId="+id + "&_t=" + (new Date()).getTime(),
