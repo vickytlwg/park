@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -193,6 +194,11 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	public CarportStatusDetail getLatestDetailByCarportId(int carportId) {
 		
 		return carportStatusDetailDAO.getLatestDetailByCarportId(carportId);
+	}
+
+	@Override
+	public List<CarportStatusDetail> getDayCarportStatusDetail(int carportId, Date startDay, Date endDay) {
+		return carportStatusDetailDAO.getDayCarportStatusDetail(carportId, startDay, endDay);
 	}
 
 

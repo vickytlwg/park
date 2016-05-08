@@ -22,6 +22,12 @@
 		select * from carportStatusDetail where carportId = #{param1}
 	</select>
 	
+	<select id="getDayCarportStatusDetail" resultMap="CarportStatusDetailMapper">
+		<![CDATA[
+		select * from carportStatusDetail where carportId = #{param1} and startTime < #{param3} and endTime > #{param2}
+		]]>
+	</select>
+	
 	<select id="getLatestDetailByCarportId" resultMap="CarportStatusDetailMapper">
 		select * from carportStatusDetail where carportId = #{param1} order by startTime desc limit 0, 1
 	</select>
