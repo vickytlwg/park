@@ -139,6 +139,7 @@
 			data = data['body'];
 			var macIdSelect = $('select#macId');
 			macIdSelect.html('');
+			macIdSelect.append($('<option value =-1>暂不绑定硬件</option>'));
 			for(var i = 0; i < data.length; i++){
 				macIdSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['mac'] +'</option>'));
 			}
@@ -190,7 +191,7 @@
 		$('select#parkName').attr('disabled', 'true');
 		$('input#businessCarportNumber').val(parseInt($(tds[3]).text()));
 		var additionalOption = [];
-		if($tds[4].attr("data") != undefined)
+		if($(tds[4]).attr("data") != undefined)
 			additionalOption.push($('<option value=' + parseInt($(tds[4]).attr('data')) + ' selected>' + $(tds[4]).text() + '</option>'));
 		fillMacInfo(additionalOption);
 		
@@ -337,7 +338,7 @@
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
 
 			tr.append('<td>' + data[i]['floor']+ '</td>');
-		//	tr.append('<td>' + data[i]['position']+ '</td>');
+			tr.append('<td>' + data[i]['position']+ '</td>');
 			
 			var desc ='';
 			if(data[i]['description'] != undefined)
