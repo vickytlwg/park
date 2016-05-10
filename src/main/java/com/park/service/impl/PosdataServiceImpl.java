@@ -55,5 +55,10 @@ public class PosdataServiceImpl implements PosdataService {
 		List<Posdata> parkData = getParkData(parkId, startDay, endDay);
 		return null;
 	}
+	@Override
+	public List<Posdata> selectPosdataByCarportAndRange(String parkName, Date startDay, Date endDay) {
+		// TODO Auto-generated method stub
+		return posdataDAO.selectPosdataByCarportAndRange(parkName, startDay, endDay);
+	}
 
 }

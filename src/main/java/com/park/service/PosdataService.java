@@ -11,6 +11,7 @@ public interface PosdataService {
  public List<Posdata> selectAll();
  public List<Posdata> selectPosdataByPage(int low,int count);
  public int getPosdataCount();
+ public List<Posdata> selectPosdataByCarportAndRange(String parkName, Date startDay, Date endDay);
  
  public Map<String, Object> getCarportCharge(int carportId, Date startDay, Date endDay);
  

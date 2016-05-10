@@ -199,5 +199,30 @@ public String selectPosdataByPage(@RequestBody Map<String,Object> args){
 	}
 	return Utility.gson.toJson(retMap);
 }
-
+@RequestMapping(value="/selectPosdataByCarportAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String selectPosdataByCarportAndRange(@RequestBody Map<String,Object> args){
+	String parkName=(String)args.get("parkName");
+	String startDay=(String)args.get("startDay");
+	String endDay=(String)args.get("endDay");
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(endDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	List<Posdata> posdatas=posdataService.selectPosdataByCarportAndRange(parkName, parsedStartDay, parsedEndDay);
+	retMap.put("status", 1001);
+	retMap.put("message", "success");
+	retMap.put("body", posdatas);
+	return Utility.gson.toJson(retMap);
+}
 }
