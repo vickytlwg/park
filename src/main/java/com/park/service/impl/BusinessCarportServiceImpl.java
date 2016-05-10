@@ -102,12 +102,12 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			businessCarport.setMacId(null);
 		if(businessCarportDAO.checkMacExist(businessCarport.getParkId(), newMacId) > 0)
 			return 0;
-		if(oldMacId != newMacId){			
-			if(oldMacId > 0)
-				hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
-			if(newMacId > 0)
-				hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
-		}
+				
+		if(oldMacId!=null && oldMacId > 0)
+			hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
+		if(newMacId > 0)
+			hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
+	
 		
 		int ret = businessCarportDAO.updateBusinessCarport(businessCarport);
 			
