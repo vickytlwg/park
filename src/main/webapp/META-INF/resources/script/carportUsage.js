@@ -35,10 +35,11 @@
             type: 'pie',
             name: '使用率',
             data: [
-                ['空闲时间',   70],
+                {name:'空闲时间',   y:70,color:"#778588"},
                 {
                     name: '停车时间',
                     y: 30,
+                    color:"#F73809",
                     sliced: true,
                     selected: true
                 },
@@ -52,10 +53,12 @@
 		var data=[{
             type: 'pie',
             name: '使用率',
+         
             data: [
-                ['整体空闲',   55],
+                {name:'整体空闲', y:55,color:"#22DD6D"},
                 {
                     name: '整体使用',
+                    color:"#CC3370",
                     y: 45,
                     sliced: true,
                     selected: true
@@ -69,7 +72,7 @@
 		var title="停车场费用";
 		var data=[{
             name: "停车场费用",
-            data: [842, 735]
+            data: [{color:"#DDDF00",y:842},{ color:"#3D11EE",y:735}]
         }]
 		var chartposition=$('#chart-content-park-charge');
 		renderchartcolumn(title,chartposition,data);
@@ -163,7 +166,7 @@
 		var title="停车位费用";
 		var data=[{
             name: "停车位费用",
-            data: [89, 71.5]
+            data: [{color:"#FF9655",y:89}, {color:"#F73809",y:71.5}]
         }]
 		var chartposition=$('#chart-content-carport-charge');
 		
@@ -212,7 +215,10 @@
 	        title: {
 	            text: title
 	        },
-	  
+	        colors:[
+	                'red',
+	                'yellow'
+	                ],
 	        xAxis: {
 	            categories: [
 	                '应收金额',
@@ -324,8 +330,7 @@
 	                0.7527, 0.7498, 0.7493, 0.7504, 0.75, 0.7491, 0.7491, 0.7485, 0.7484, 0.7492,
 	                0.7471, 0.7459, 0.7477, 0.7477, 0.7483, 0.7458, 0.7448, 0.743, 0.7399, 0.7395,
 	                0.7395, 0.7378, 0.7382, 0.7362, 0.7355, 0.7348, 0.7361, 0.7361, 0.7365, 0.7362,
-	               
-	             
+	               	             
 	             
 	            ]
 	        }]

@@ -2,6 +2,7 @@ package com.park.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -96,12 +97,16 @@ public String chargeDetail(ModelMap modelMap, HttpServletRequest request, HttpSe
 @RequestMapping(value="/carportUsage")
 public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 	List<Park> parkList = parkService.getParks();
-	
-	
 	String username = (String) session.getAttribute("username");
 	if(username != null)
 		parkList = parkService.filterPark(parkList, username);
-	modelMap.addAttribute("parks", parkList);
+	List<Park> parkl = new ArrayList<>();
+	for (Park park : parkList) {
+		if (park.getType()==3) {
+			parkl.add(park);
+		}
+	}
+	modelMap.addAttribute("parks", parkl);
 	
 	AuthUser user = authService.getUserByUsername(username);
 	if(user != null){

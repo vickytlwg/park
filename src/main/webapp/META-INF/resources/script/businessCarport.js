@@ -49,8 +49,8 @@
 	/** bind search park change event **/
 	var bindSearchParkChange = function(){
 		$('select#searchPark').on('change', $(this), function(){
-			var aa=$(this).val();
-			if(aa!=-1){
+			
+			if($(this).val()!=-1){
 				$.cookie('selectValue',$(this).val(),{path:'/',expires:10});
 			}
 			renderBusinessCarport(0, $.fn.page.pageSize);
