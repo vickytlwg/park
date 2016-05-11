@@ -4,11 +4,24 @@
 		dateInitial();
 		chartCarport();
 		chartPark();
-		chartParkCharge();
+		
 		chartParkPeriodCharge();
 		chartCarportCharge();
 		chartCarportUsage();	
 		chartCarportPeriodCharge();
+		getTotalCharge();
+		getcarportCount();
+		
+		$('#date').on('change', $(this), function(){
+			getTotalCharge();
+		//	calZhouzhuanlv();
+		//	getcarportCount();
+		});
+		$('#park-select').on('change', $(this), function(){
+			getTotalCharge(); 
+			getcarportCount();
+			//calZhouzhuanlv();
+		});
 	};
 	
 	var dateInitial=function(){
@@ -48,6 +61,63 @@
 		var chartposition=$('#chart-content-carport')
 		renderchart(title,chartposition,data);
 	}
+	
+	var getTotalCharge=function(){
+		var date = $('#date').val();
+		var parkid=$('#park-select').val();
+		var dateStart=date;
+		var dateInit=new Date(date);
+		dateInit.setDate(dateInit.getDate()+1);
+		var dateEnd=dateInit.getFullYear()+"-"+(dateInit.getMonth()+1)+"-"+dateInit.getDate();
+		var data={"parkId":parkid,"startDay":dateStart,"endDay":dateEnd};
+		$.ajax({
+			url: '/park/pos/selectPosdataByCarportAndRange',
+			type: 'post',
+			contentType: 'application/json;charset=utf-8',			
+			datatype: 'json',
+			data:$.toJSON(data),
+			success: function(data){
+				data=data['body'];
+				var chargeTotal=0;
+				var realReceiveMoney=0;
+				var parkTimes=0;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i]['mode']==1) {
+						chargeTotal=chargeTotal+data[i]['money'];
+						realReceiveMoney=realReceiveMoney+data[i]['giving']+data[i]['realmoney']-data[i]['returnmoney'];
+						parkTimes++;
+					}
+				}
+				$.fn.carportUsage.chargeTotal=chargeTotal;
+				$.fn.carportUsage.realReceiveMoney=realReceiveMoney;
+				$('#totalMoney').text(realReceiveMoney);
+				$('#totalparkTimes').text(parkTimes);
+				calZhouzhuanlv();
+			}
+		})
+	}
+	var getcarportCount=function(){	
+		var parkid=$('#park-select').val();	
+		$.ajax({
+			url: '/park/getBusinessCarportCount?parkId='+parkid,
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',			
+			datatype: 'json',			
+			success: function(data){
+				data=data['body'];			
+				$('#carportCount').text(data['count']);
+				calZhouzhuanlv();
+			}
+		})
+		
+	}
+	var calZhouzhuanlv=function(){
+		var corportCount=parseFloat($('#carportCount').text());
+		var totalparkTime=parseFloat($('#totalparkTimes').text());
+		var tmpresult=totalparkTime/corportCount;
+		$('#zhouzhuanlv').text(tmpresult.toFixed(2));
+		chartParkCharge();
+	}
 	var chartPark=function(){
 		var title="停车场使用率";
 		var data=[{
@@ -72,7 +142,7 @@
 		var title="停车场费用";
 		var data=[{
             name: "停车场费用",
-            data: [{color:"#DDDF00",y:842},{ color:"#3D11EE",y:735}]
+            data: [{color:"#DDDF00",y:$.fn.carportUsage.chargeTotal},{color:"#3D11EE",y:$.fn.carportUsage.realReceiveMoney}]
         }]
 		var chartposition=$('#chart-content-park-charge');
 		renderchartcolumn(title,chartposition,data);
@@ -214,12 +284,14 @@
 	        },
 	        title: {
 	            text: title
-	        },
-	        colors:[
-	                'red',
-	                'yellow'
-	                ],
+	        },	      
 	        xAxis: {
+	        	  labels: {
+	  	        	style: {
+	  	        		fontSize:'18px',
+	  	        		fontWeight:'bold'
+	  	        	},
+	  	        },
 	            categories: [
 	                '应收金额',
 	                '实收金额',	      
@@ -229,16 +301,10 @@
 	            min: 0,
 	            title: {
 	                text: '元'
-	            }
+	            },
+	      
 	        },
-	        tooltip: {
-	            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-	            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-	                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
-	            footerFormat: '</table>',
-	            shared: true,
-	            useHTML: true
-	        },
+	  
 	        plotOptions: {
 	            column: {
 	                pointPadding: 0.2,

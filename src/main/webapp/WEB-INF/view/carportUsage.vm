@@ -24,11 +24,11 @@
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 						<div id="chart-header">
-							<div class="row">							
+							<div class="row" >							
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="park-select" class="control-label">停车场</label>
-										<select id="park-select" class="form-control">
+										<select id="park-select" class="form-control" style="font-weight:bold">
 											#foreach( $park in $parks)
 												<option value=$park.id>$park.name</option>
 											#end
@@ -47,61 +47,62 @@
 						</div>
 
                         
-      <div class="row">
+      <div class="row" style="padding-top:25px">
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3>150</h3>
-                  <p>New Orders</p>
+                  <h3 id="totalMoney">0</h3>
+                 
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">今日总收入 <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
-                  <p>Bounce Rate</p>
+                  <h3 id="totalparkTimes">0</h3>
+                 
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">今日停车次数 <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-yellow">
                 <div class="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
+                  <h3 id="carportCount">0</h3>
+                 
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">总泊位数<i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
+                  <h3 id="zhouzhuanlv">0</h3>
+
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">泊位周转率<i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
           </div>
-             	<div class="row">
+		  
+             	<div class="row" style="padding-top:25px">
 							<div id="chart-content-park-charge" class="col-md-6">
 							
 							</div>
@@ -110,7 +111,7 @@
 							</div>
                         </div>
 						
-                        <div class="row">
+                        <div class="row" style="padding-top:25px">
                         	<div class="col-md-3">
 								<div class="form-group">
 									<label for="parkStartDate" class="control-label">起始日期</label>
@@ -128,7 +129,7 @@
                         	<div id = "chart-park-period-charge">
                         	</div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="padding-top:25px">
 							 <div class="col-md-3">
 								<div class="form-group">
 										<label for="park-select" class="control-label">停车位</label>
@@ -147,7 +148,7 @@
                         </div>
                         <div class="row" id="chart-content-carport-usage"></div>
                         
-                        <div class="row">
+                        <div class="row" style="padding-top:25px">
                         	<div class="col-md-3">
 								<div class="form-group">
 									<label for="carportStartDate" class="control-label">起始日期</label>
@@ -161,7 +162,7 @@
 								</div>
 							</div>		
                         </div>
-                        <div class="row">
+                        <div class="row" >
                         	<div id = "chart-carport-period-charge">
                         	</div>
                         </div>

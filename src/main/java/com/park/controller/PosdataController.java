@@ -24,6 +24,7 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Park;
 import com.park.model.Posdata;
+import com.park.model.posdataReceive;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
 import com.park.service.PosdataService;
@@ -42,12 +43,42 @@ private AuthorityService authService;
 
 @RequestMapping(value = "/insertChargeDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 @ResponseBody
-public String insertPosdata(@RequestBody List<Posdata> posdata ){
-	int listnum=posdata.size();
+public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
+	int listnum=posdatarecv.size();
 	int num=0;
 	for(int i=0;i<listnum;i++)
 	{
-		num+=posdataService.insert(posdata.get(i));
+		Posdata posdata=new Posdata();
+		posdata.setBackbyte(posdatarecv.get(i).getBackbyte());
+		posdata.setCardsnr(posdatarecv.get(i).getCardsnr());
+		posdata.setCardtype(posdatarecv.get(i).getCardtype());
+		posdata.setCredencesnr(posdatarecv.get(i).getCredencesnr());
+		posdata.setGiving(posdatarecv.get(i).getGiving());
+		posdata.setMemo(posdatarecv.get(i).getMemo());
+		posdata.setMode(posdatarecv.get(i).getMode());
+		posdata.setMoney(posdatarecv.get(i).getMoney());
+		posdata.setPossnr(posdatarecv.get(i).getPossnr());
+		posdata.setRealmoney(posdatarecv.get(i).getRealmoney());
+		posdata.setReturnmoney(posdatarecv.get(i).getReturnmoney());
+		posdata.setSitename(posdatarecv.get(i).getSitename());
+		posdata.setSysid(posdatarecv.get(i).getSysid());
+		posdata.setUserid(posdatarecv.get(i).getUserid());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStarttime = null;
+		try {
+			parsedStarttime = sdf.parse(posdatarecv.get(i).getStarttime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		posdata.setStarttime(parsedStarttime);
+		Date parseEndtime=null;
+		try {
+			parseEndtime=sdf.parse(posdatarecv.get(i).getEndtime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		posdata.setEndtime(parseEndtime);
+		num+=posdataService.insert(posdata);
 	}
 	
 	Map<String, Object> retMap = new HashMap<String, Object>();
@@ -202,7 +233,9 @@ public String selectPosdataByPage(@RequestBody Map<String,Object> args){
 @RequestMapping(value="/selectPosdataByCarportAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String selectPosdataByCarportAndRange(@RequestBody Map<String,Object> args){
-	String parkName=(String)args.get("parkName");
+	int parkId=Integer.parseInt((String)args.get("parkId"));
+	Park park = parkService.getParkById(parkId);
+	String parkName=park.getName();
 	String startDay=(String)args.get("startDay");
 	String endDay=(String)args.get("endDay");
 	Map<String, Object> retMap = new HashMap<String, Object>();
