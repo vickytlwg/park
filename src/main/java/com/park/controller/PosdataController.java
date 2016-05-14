@@ -261,6 +261,35 @@ public String selectPosdataByParkAndRange(@RequestBody Map<String,Object> args){
 	retMap.put("body", posdatas);
 	return Utility.gson.toJson(retMap);
 }
+@RequestMapping(value="/selectPosdataByParkAndCarportId",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String selectPosdataByParkAndCarportId(@RequestBody Map<String,Object> args){
+	int parkId=Integer.parseInt((String)args.get("parkId"));
+	Park park = parkService.getParkById(parkId);
+	String parkName=park.getName();
+	String startDay=(String)args.get("startDay");
+	String endDay=(String)args.get("endDay");
+	String carportId=(String)args.get("carportId");
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(endDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	List<Posdata> posdatas=posdataService.getPosdataByCarportAndRange(parkName,carportId, parsedStartDay, parsedEndDay);
+	retMap.put("status", 1001);
+	retMap.put("message", "success");
+	retMap.put("body", posdatas);
+	return Utility.gson.toJson(retMap);
+}
 @RequestMapping(value="/getChargeByParkidAndRange",method = RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getChargeByParkidAndRange(@RequestBody Map<String, Object> args){
@@ -364,13 +393,13 @@ public String getCarportChargeByRange(@RequestBody Map<String, Object> args){
 	Long endTime = end.getTimeInMillis();
 	Long oneDay = 1000 * 60 * 60 * 24l;
 	Long time = startTime;  
-	Map<Date, Object> comparemap=new TreeMap<>();
+	Map<Long, Object> comparemap=new TreeMap<>();
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	 while (time <= endTime) {  
 	        Date d = new Date(time);  
 	          
 	        Map<String,Object> tmpmap=posdataService.getCarpotChargeByDay(parkId, carportId, df.format(d));
-	        comparemap.put(d, tmpmap);
+	        comparemap.put(d.getTime(), tmpmap);
 	    //    retMap.put(df.format(d), tmpmap);
 	        time += oneDay;  
 	    }

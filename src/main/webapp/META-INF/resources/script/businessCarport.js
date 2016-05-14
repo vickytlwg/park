@@ -476,8 +476,7 @@
 		$.ajax({
 			url:$.fn.config.webroot + "/getCarportStatusDetail?carportId="+id + "&_t=" + (new Date()).getTime(),
 			type: 'get',
-			success: function(data){
-				
+			success: function(data){				
 				var carportUsage = data['body']['carportStatusDetail'];
 				var tbody = $('#carportUsageTbody');
 				tbody.html('');

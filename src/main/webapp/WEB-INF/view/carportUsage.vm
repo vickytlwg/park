@@ -6,7 +6,7 @@
 <script src="/park/script/highcharts.js"></script>
 <script src="/park/script/exporting.js"></script>
 <script src="/park/script/HighchartTheme.js"></script>
-
+<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>
@@ -127,7 +127,7 @@
                         <div class="row" style="padding-top:25px">
 							 <div class="col-md-3">
 								<div class="form-group">
-										<label for="park-select" class="control-label">停车位</label>
+										<label for="carport-select" class="control-label">停车位</label>
 										<select id="carport-select" class="form-control">
                                         </select>
                                    </div>
@@ -141,24 +141,22 @@
 							
 							</div>
                         </div>
-                        <div class="row" id="chart-content-carport-usage"></div>
                         
                         <div class="row" style="padding-top:25px">
-                        	<div class="col-md-3">
-								<div class="form-group">
-									<label for="carportStartDate" class="control-label">起始日期</label>
-									<input type="text" id="carportStartDate"  class="form-control date">									
-								</div>
-							</div>		
+                        		
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="carportEndDate" class="control-label">结束日期</label>
-									<input type="text" id="carportEndDate"  class="form-control date">									
+									<label for="carportMonth" class="control-label">选择月份</label>
+									<input type="text" id="carportMonth"  class="form-control date">									
 								</div>
 							</div>		
                         </div>
                         <div class="row" >
-                        	<div id = "chart-carport-period-charge">
+                        	<div id = "carportUsageChart">
+                        	</div>
+                        </div>
+						<div class="row" >
+                        	<div id = "carportChargeChart">
                         	</div>
                         </div>
     				<div class="box-footer clearfix">

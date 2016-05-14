@@ -8,25 +8,40 @@
 		chartPark();		
 		//chartParkPeriodCharge();
 		getParkChargeData();
-		chartCarportCharge();
+//		chartCarportCharge();
 		chartCarportUsage();	
 		chartCarportPeriodCharge();
 		getTotalCharge();
 		getcarportCount();
+		getCarport();
+		getCarportCharge();
+		getCarportChargeData();
 	//	dateInitialparkcharge();
 		$('#date').on('change', $(this), function(){
 			getTotalCharge();
+			getCarportCharge();
 		//	calZhouzhuanlv();
 		//	getcarportCount();
 		});
 		$('#park-select').on('change', $(this), function(){
 			getTotalCharge(); 
 			getcarportCount();
+			getCarport();
+			getParkChargeData();
+			getCarportCharge();
 			//calZhouzhuanlv();
 		});
 		$('#parkMonth').on('change', $(this), function(){
 			getParkChargeData();
 		});
+		$('#carport-select').on('change',$(this),function(){
+		    getCarportCharge();
+		    getCarportChargeData();
+		})
+		$('#carportMonth').on('change',$(this),function(){
+		    renderCarportStatusChart();
+		    getCarportChargeData();
+		})
 	};
 	
 	var dateInitial=function(){
@@ -48,8 +63,8 @@
 		});
 	}
 	var dateInitialparkcharge=function(){
-		$('#parkMonth').val(new Date().format('yyyy-MM'));
-		$('#parkMonth').datepicker({
+		$('#parkMonth,#carportMonth').val(new Date().format('yyyy-MM'));
+		$('#parkMonth,#carportMonth').datepicker({
 			autoClose: true,
 		    dateFormat: "yyyy-mm",
 		//    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
@@ -84,7 +99,39 @@
 		var chartposition=$('#chart-content-carport')
 		renderchart(title,chartposition,data);
 	}
-	
+	var getCarportCharge=function(){
+	    var date = $('#date').val();
+        var parkid=$('#park-select').val();
+        var carportId=$('#carport-select').val();
+        var dateStart=date;
+        var dateInit=new Date(date);
+        dateInit.setDate(dateInit.getDate()+1);
+        var dateEnd=dateInit.getFullYear()+"-"+(dateInit.getMonth()+1)+"-"+dateInit.getDate();
+        var data={"parkId":parkid,"startDay":dateStart,"endDay":dateEnd,"carportId":carportId};
+        $.ajax({
+            url: '/park/pos/selectPosdataByParkAndCarportId',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data:$.toJSON(data),
+            success: function(data){
+                data=data['body'];
+                var chargeTotal=0;
+                var realReceiveMoney=0;
+                if(data!=undefined&&data!=null){
+                   for (var i = 0; i < data.length; i++) {
+                    if (data[i]['mode']==1) {
+                        chargeTotal=chargeTotal+data[i]['money'];
+                        realReceiveMoney=realReceiveMoney+data[i]['giving']+data[i]['realmoney']-data[i]['returnmoney'];
+                        
+                    }}}
+                
+                    $.fn.carportUsage.carportTotalMoney=chargeTotal;
+                    $.fn.carportUsage.carportRealMoney=realReceiveMoney;
+                    chartCarportCharge();
+                    renderCarportStatusChart();
+            }});
+	}
 	var getTotalCharge=function(){
 		var date = $('#date').val();
 		var parkid=$('#park-select').val();
@@ -164,6 +211,26 @@
 		var chartposition=$('#chart-content-park');
 		renderchart(title,chartposition,data);
 	}
+	var getCarport=function(){
+		var parkId=$('#park-select').val();
+		$.ajax({
+			url:$.fn.config.webroot + "/getBusinessCarportDetail?low=" + 0 + "&count=" + 300 +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime(),
+			type: 'get',
+			success: function(data){
+				data=data['body'];
+				data.sort(
+					function(a,b){
+						return a['carportNumber']>b['carportNumber']? 1:-1;
+					}	
+				);
+				var carportSelect=$('#carport-select');
+				carportSelect.html('');
+				for(var i = 0; i < data.length; i++){					
+					carportSelect.append($('<option value = ' + data[i]['carportNumber']+' id='+data[i]['id'] + '>' + data[i]['carportNumber'] +'</option>'));																		
+				}
+			}
+		});
+	}
 	var chartParkCharge=function(){
 		var title="停车场费用";
 		var data=[{
@@ -201,13 +268,129 @@
 					totalMoney.push(value['totalMoney']);
 					realMoney.push(value['realMoney']);
 				})
-				chartParkPeriodCharge(catagory,totalMoney,realMoney);
+				var chartposition = $('#chart-park-period-charge');
+				var title="停车场费用";
+				chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
 			}
 		})
 	}
-	var chartParkPeriodCharge = function(catagory,totalMoney,realMoney){
-		var title="停车场费用";
-		var chartposition = $('#chart-park-period-charge');
+	
+	   var getCarportChargeData=function(){   
+        $.fn.loader.appendLoader($('#carportChargeChart'));
+        var dateselect=$('#parkMonth').val();
+        var parkid=$('#park-select').val();
+        var carportId=$('#carport-select').val();
+        var dateStart=new Date(dateselect.substring(0,7)+'-01');
+        var dateEnd=dateStart;
+            dateEnd.setMonth(dateStart.getMonth()+2);
+
+        var data={"parkId":parkid,"carportId":carportId,"startDay":dateselect.substring(0,7)+'-01',"endDay":dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01'};
+        $.ajax({
+            url:"/park/pos/getCarportChargeByRange",
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data:$.toJSON(data),
+            success: function(data){
+                $.fn.loader.removeLoader($('#carportChargeChart'));
+                var catagory=[];
+                var totalMoney=[];
+                var realMoney=[];
+                $.each(data,function(name,value){
+                    var date=new Date(parseInt(name));
+                    var month=date.getMonth()+1;
+                    var day=date.getDate();
+                    catagory.push(month+'-'+day);
+                    totalMoney.push(value['totalMoney']);
+                    realMoney.push(value['realMoney']);
+                })
+                var chartposition = $('#carportChargeChart');
+                var title="停车位费用";
+                chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
+            }
+        })
+    }
+    
+	var renderCarportStatusChart = function(){
+        event.stopPropagation();
+        var id = $('#carport-select').find("option:selected").attr("id");
+        var dateselect=$('#carportMonth').val();
+        var parkid=$('#park-select').val();
+        var dateStart=new Date(dateselect.substring(0,7)+'-01');
+        var dateEnd=dateStart;
+            dateEnd.setMonth(dateStart.getMonth()+2);
+            
+        var startDay = dateselect.substring(0,7)+'-01';
+        var endDay = dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01';
+        $.ajax({
+            url:$.fn.config.webroot + "/getDayCarportStatusDetail?carportId="+ id + "&startDay=" + startDay + "&endDay=" + endDay,
+            type:'get',
+            success: function(data){
+                var carportUsage = data['body']['carportStatusDetail'];
+                if(carportUsage.length == 0){
+                    $('#carportUsageChart').html('');
+                    return;
+                }                    
+                var chartData = [];
+                var parsedStartDay = Date.parse(startDay);
+                var parsedEndDay = Date.parse(endDay);
+                chartData.push([parsedStartDay, null, null]);
+                for(var i = 0; i < carportUsage.length; i++){
+                    var startTime = carportUsage[i]['startTime'];
+                    var endTime = carportUsage[i]['endTime'];
+                    if(startTime == undefined || endTime == undefined)
+                        continue;
+                    var startMilliSec = Date.parse(startTime);
+                    startMilliSec = startMilliSec > parsedStartDay ? startMilliSec : parsedStartDay;                    
+                    var endTimeMillSec = Date.parse(endTime);
+                    endTimeMillSec = endTimeMillSec < parsedEndDay ? endTimeMillSec : parsedEndDay;
+                    chartData.push([startMilliSec,null, null ]);
+                    chartData.push([startMilliSec,0, 1]);
+                    chartData.push([endTimeMillSec,0, 1]);
+                    chartData.push([endTimeMillSec,null, null ]);
+                }
+                chartData.push([parsedEndDay, null, null]);
+                $('#carportUsageChart').highcharts({
+                     chart: {
+                            type: 'arearange',
+                            zoomType: 'x'
+                        },
+                        
+                        title: {
+                            text: '停车位使用分布情况'
+                        },
+                    
+                        xAxis: {
+                            type: 'datetime'
+                        },
+                        
+                        yAxis: {
+                              max:1,
+                            title: {
+                                text: null
+                            }
+                        },
+                    
+                        tooltip: {
+                            crosshairs: true,
+                            shared: true,
+                            valueSuffix: ''
+                        },
+                        
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: '正在使用',
+                            data: chartData
+                        }]
+                });
+            }
+        });
+    };
+	var chartParkPeriodCharge = function(chartposition,catagory,totalMoney,realMoney,title){
+		
+		
 		chartposition.highcharts({
 	        chart: {
 	            type: 'line'
@@ -224,7 +407,7 @@
 	        },
 	        yAxis: {
 	            title: {
-	                text: '万元',
+	                text: '元',
 	            },
 	       
 	        },
@@ -242,9 +425,11 @@
 	        },
 	        series: [{
 	            name: '应收金额',
+	            color:'red',
 	            data: totalMoney
 	        },{
 	            name: '实收金额',
+	            color:'blue',
 	            data: realMoney
 	        }]
 	    });
@@ -298,8 +483,7 @@
 	var chartCarportCharge=function(){
 		var title="停车位费用";
 		var data=[{
-            name: "停车位费用",
-            data: [{color:"#FF9655",y:89}, {color:"#F73809",y:71.5}]
+            data: [{color:"#F7F709",y:$.fn.carportUsage.carportTotalMoney}, {color:"#1A1AE6",y:$.fn.carportUsage.carportRealMoney}]
         }]
 		var chartposition=$('#chart-content-carport-charge');
 		
