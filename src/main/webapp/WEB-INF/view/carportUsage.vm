@@ -112,16 +112,11 @@
                         </div>
 						
                         <div class="row" style="padding-top:25px">
-                        	<div class="col-md-3">
-								<div class="form-group">
-									<label for="parkStartDate" class="control-label">起始日期</label>
-									<input type="text" id="parkStartDate"  class="form-control date">									
-								</div>
-							</div>		
+                       
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="parkEndDate" class="control-label">结束日期</label>
-									<input type="text" id="parkEndDate"  class="form-control date">									
+									<label for="parkMonth" class="control-label">选择月份</label>
+									<input type="text" id="parkMonth"  class="form-control date">									
 								</div>
 							</div>		
                         </div>

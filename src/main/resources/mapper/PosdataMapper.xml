@@ -46,12 +46,17 @@
   <select id="getPosdataCount" resultType="int">
   	select count(*) from posdata
   </select>
-  <select id="selectPosdataByCarportAndRange" resultMap="BaseResultMap">
+  <select id="selectPosdataByParkAndRange" resultMap="BaseResultMap">
   <![CDATA[
-  select * from posdata where StartTime < #{endDay} and EndTime > #{startDay} and Sitename=#{parkName}
+  select * from posdata where StartTime <= #{endDay} and StartTime >= #{startDay} and Sitename=#{parkName}
   ]]>
   </select>
-
+  <select id="getPosdataByCarportAndRange" resultMap="BaseResultMap">
+  <![CDATA[
+  select * from posdata where StartTime <= #{endDay} and StartTime >= #{startDay} and Sitename=#{parkName} 
+  and BackByte=#{carportid}
+  ]]>
+  </select>
    
    
 </mapper>

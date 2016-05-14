@@ -426,8 +426,8 @@
 					var endTimeMillSec = Date.parse(endTime);
 					endTimeMillSec = endTimeMillSec < parsedEndDay ? endTimeMillSec : parsedEndDay;
 					chartData.push([startMilliSec,null, null ]);
-					chartData.push([startMilliSec,0, 1 ]);
-					chartData.push([endTimeMillSec,0, 1 ]);
+					chartData.push([startMilliSec,0, 1]);
+					chartData.push([endTimeMillSec,0, 1]);
 					chartData.push([endTimeMillSec,null, null ]);
 				}
 				chartData.push([parsedEndDay, null, null]);
@@ -446,6 +446,7 @@
 					    },
 					    
 					    yAxis: {
+					    	  max:1,
 					        title: {
 					            text: null
 					        }
