@@ -54,7 +54,11 @@
 			tr.append('<td>' + data[i]['realmoney']+ '</td>');
 			tr.append('<td>' + data[i]['returnmoney']+ '</td>');
 			tr.append('<td>' + data[i]['starttime']+ '</td>');	
-			tr.append('<td>' + data[i]['endtime']+ '</td>');
+			var endtime=data[i]['endtime']
+			if (data[i]['endtime']==undefined) {
+			    endtime='';
+			};
+			tr.append('<td>' + endtime+ '</td>');
 	//		tr.append('<td>' + data[i]['sysid']+ '</td>');
 	//		tr.append('<td>' + data[i]['memo']+ '</td>');			
 		

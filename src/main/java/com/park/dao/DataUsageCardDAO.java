@@ -2,6 +2,7 @@ package com.park.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.DataUsageCard;
@@ -23,6 +24,8 @@ public interface DataUsageCardDAO {
 	public List<DataUsageCardDetail> getCardByCardNumber(String cardNumber);
 	
 	public List<DataUsageCardDetail> getCardByPhoneNumber(String phoneNumber);
+	
+	public List<DataUsageCardDetail> getCardDetailByKeywords(@Param("param")String keyWords);
 	
 	public int insertCard(DataUsageCard card);
 	

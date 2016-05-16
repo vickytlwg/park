@@ -10,8 +10,9 @@
 		bindSubmitDataCardBtnClick();
 		bindDeleteBtnClick();
 		renderDataCard(0, $.fn.page.pageSize);
-		fillParkName();
+	//	fillParkName();
 		renderPagination();
+		bindKeywordsSearch();
 	};
 	
 	/**bind tr click*/
@@ -27,12 +28,12 @@
 		var successFunc = function(data){
 			data = data['body'];
 			var parkNameSelect = $('select#parkName');
-			
+			parkNameSelect.append($('<option value = -1>所有停车场</option>'));
 			for(var i = 0; i < data.length; i++){
 				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
 			}
-			if(data.length > 0)
-				parkNameSelect.change();
+		//	if(data.length > 0)
+			//	parkNameSelect.change();
 		};
 		var errorFunc = function(data){
 		};
@@ -60,6 +61,26 @@
 			
 			renderDataCardCarport(0, $.fn.page.pageSize);
 		});
+	};
+	
+	var bindKeywordsSearch=function(){
+	    $('#keywordsSearch').on('click',$(this),function(){
+	        var keywords=$('#keywords').val();
+	        if (keywords=="") {
+	            alert("请输入关键字!");
+	            return;
+	        };
+	        $.ajax({
+	            url: $.fn.config.webroot+ "/dataUsage/getCardDetailByKeywords",
+	            type:'post',
+	            data:$.toJSON({"keywords":keywords}),
+	            contentType: 'application/json;charset=utf-8', 
+	            success:function(data){
+	                fillDataCardTbody(data['body']);
+	                $('#pagination').html('');
+	            }
+	        });
+	    });
 	};
 	
 	var renderDataCardCarport = function(low, count){

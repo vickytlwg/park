@@ -20,6 +20,7 @@
 		$('#date').on('change', $(this), function(){
 			getTotalCharge();
 			getCarportCharge();
+			chartPark();
 		//	calZhouzhuanlv();
 		//	getcarportCount();
 		});
@@ -29,6 +30,7 @@
 			getCarport();
 			getParkChargeData();
 			getCarportCharge();
+			chartPark();
 			//calZhouzhuanlv();
 		});
 		$('#parkMonth').on('change', $(this), function(){
@@ -194,15 +196,32 @@
 	}
 	var chartPark=function(){
 		var title="停车场使用率";
+		var date = $('#date').val();
+        var parkid=$('#park-select').val();
+        var dateStart=date;
+        var dateInit=new Date(date);
+        dateInit.setDate(dateInit.getDate()+1);
+        var dateEnd=dateInit.getFullYear()+"-"+(dateInit.getMonth()+1)+"-"+dateInit.getDate();
+        var unused=0;
+        var used=0;
+		$.ajax({
+		    url:$.fn.config.webroot+"getCarportUsage?carportId="+parkid+"&startDay="+dateStart+"&endDay="+dateEnd,
+		    type:'get',
+		    success:function(data){
+		        data=data['body'];
+		        unused=parseFloat(data['unusage']);
+		        used=parseFloat(data['usage']);
+		    }
+		})
 		var data=[{
             type: 'pie',
             name: '使用率',         
             data: [
-                {name:'整体空闲', y:55,color:"#22DD6D"},
+                {name:'整体空闲', y:unused,color:"#22DD6D"},
                 {
                     name: '整体使用',
                     color:"#CC3370",
-                    y: 45,
+                    y: used,
                     sliced: true,
                     selected: true
                 },
@@ -308,7 +327,7 @@
                 var title="停车位费用";
                 chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
             }
-        })
+        });
     }
     
 	var renderCarportStatusChart = function(){

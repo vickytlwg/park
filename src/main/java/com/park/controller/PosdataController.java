@@ -290,30 +290,7 @@ public String selectPosdataByParkAndCarportId(@RequestBody Map<String,Object> ar
 	retMap.put("body", posdatas);
 	return Utility.gson.toJson(retMap);
 }
-@RequestMapping(value="/getChargeByParkidAndRange",method = RequestMethod.POST,produces={"application/json;charset=utf-8"})
-@ResponseBody
-public String getChargeByParkidAndRange(@RequestBody Map<String, Object> args){
-	int parkId=Integer.parseInt((String)args.get("parkId"));
-	Park park = parkService.getParkById(parkId);
-	String parkName=park.getName();
-	String startDay=(String)args.get("startDay");
-	String endDay=(String)args.get("endDay");
-	Map<String, Object> retMap = new HashMap<String, Object>();
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-	Date parsedStartDay = null;
-	try {
-		parsedStartDay = sdf.parse(startDay + " 00:00:00");
-	} catch (ParseException e) {
-		e.printStackTrace();
-	}	
-	Date parsedEndDay  = null;
-	try {
-		parsedEndDay = sdf.parse(endDay + " 00:00:00");
-	} catch (ParseException e) {
-		e.printStackTrace();
-	}	
-	return Utility.gson.toJson(retMap);
-}
+
 
 @RequestMapping(value="/getParkChargeByRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody

@@ -81,4 +81,10 @@ public class DataUsageCardServiceImpl implements DataUsageCardService{
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public List<DataUsageCardDetail> getCardDetailByKeywords(String keyWords) {
+		// TODO Auto-generated method stub
+		return cardDAO.getCardDetailByKeywords(keyWords);
+	}
+
 }

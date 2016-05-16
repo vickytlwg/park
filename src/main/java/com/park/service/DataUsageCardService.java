@@ -25,6 +25,8 @@ public interface DataUsageCardService {
 	
 	public List<DataUsageCardDetail> getCardByPhoneNumber(String phoneNumber);
 	
+	public List<DataUsageCardDetail> getCardDetailByKeywords(String keyWords);
+	
 	public int insertCard(DataUsageCard card);
 	
 	public int updateCard(DataUsageCard card);

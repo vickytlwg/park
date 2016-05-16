@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -98,6 +99,21 @@ public class DataUsageCardController {
 		return Utility.createJsonMsg(1001, "get card success", body);
 	}
 	
+	@RequestMapping(value="/getCardDetailByKeywords",method=RequestMethod.POST,produces={"appliction/json;charset=utf-8"})
+	@ResponseBody
+	public String getCardDetailByKeywords(@RequestBody Map<String, String> args){
+		String keyWords=args.get("keywords");
+		keyWords=keyWords.trim();
+		Map<String, Object> body = new HashMap<String, Object>();
+		if (keyWords.equals("")) {
+			body.put("message","输入错误");
+		}
+		else {
+			List<DataUsageCardDetail> cards=cardService.getCardDetailByKeywords(keyWords);
+			body.put("cards", cards);
+		}						
+		return Utility.createJsonMsg(1001, "get card success", body);
+	}
 	@RequestMapping(value = "/getCardByPhoneNumber/{number}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getCardByPhoneNumber(@PathVariable String number){

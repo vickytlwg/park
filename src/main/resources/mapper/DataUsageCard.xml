@@ -41,7 +41,12 @@
 		left join park as p on d.parkId = p.id
 		limit #{param1}, #{param2} 
 	</select>
-	
+	<select id="getCardDetailByKeywords" resultMap="DataUsageCardDetailMapper" statementType="STATEMENT">
+        select d.id, d.cardNumber, d.phoneNumber, d.type, d.status, d.dataUsage, d.parkId, d.position, d.longitude, d.latitude, p.name as parkName
+        from dataUsageCard as d
+        left join park as p on d.parkId = p.id
+        where d.cardNumber LIKE '%${param}%' OR d.position LIKE '%${param}%' OR p.name LIKE '%${param}%'
+    </select>
 	
 	<select id="getCardById" resultMap="DataUsageCardDetailMapper">
 		select d.id, d.cardNumber, d.phoneNumber, d.type, d.status, d.dataUsage, d.parkId, d.position, d.longitude, d.latitude, p.name as parkName
