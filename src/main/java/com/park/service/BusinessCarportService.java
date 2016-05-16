@@ -19,6 +19,10 @@ public interface BusinessCarportService {
 	
 	public List<CarportStatusDetail> getDayCarportStatusDetail(int carportId, Date starDday, Date endDay);
 	
+	public double getCarportUsage(int carportId, Date startDay, Date endDay);
+	
+	public double getParkUsage(int parkId, Date startDay, Date endDay);
+	
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	
 	public int updateBusinessCarport(BusinessCarport businessCarport);
