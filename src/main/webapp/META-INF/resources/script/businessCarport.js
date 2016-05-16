@@ -416,6 +416,7 @@
 				var parsedStartDay = Date.parse(startDay);
 				var parsedEndDay = Date.parse(endDay);
 				chartData.push([parsedStartDay, null, null]);
+				var summary = 0;
 				for(var i = 0; i < carportUsage.length; i++){
 					var startTime = carportUsage[i]['startTime'];
 					var endTime = carportUsage[i]['endTime'];
@@ -429,7 +430,12 @@
 					chartData.push([startMilliSec,0, 1]);
 					chartData.push([endTimeMillSec,0, 1]);
 					chartData.push([endTimeMillSec,null, null ]);
+					summary += (endTimeMillSec - startMilliSec);
 				}
+				var rate = summary / ((parsedEndDay - parsedStartDay) * 1.0);
+				rate *= 100;
+				rate = rate.toFixed(2);
+				
 				chartData.push([parsedEndDay, null, null]);
 				$('#carportUsageChart').highcharts({
 					 chart: {
@@ -438,7 +444,7 @@
 					    },
 					    
 					    title: {
-					        text: '停车位使用分布情况'
+					        text: '停车位使用分布情况'+ "(利用率:" + rate + "%)"
 					    },
 					
 					    xAxis: {
@@ -466,8 +472,11 @@
 					        data: chartData
 					    }]
 				});
+				
 			}
+			
 		});
+		
 	};
 	
 	var renderCarportStatusTable = function(button){

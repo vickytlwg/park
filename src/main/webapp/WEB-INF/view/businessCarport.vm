@@ -178,6 +178,8 @@
 							<label for="carportEndDate" class="control-label">结束日期</label>
 							<input type="text" id="carportEndDate"  class="form-control date">									
 						</div>
+						<div id = "carportUsageRateChart">
+						</div>
 						<div id = "carportUsageChart">
 						</div>
 					</div>

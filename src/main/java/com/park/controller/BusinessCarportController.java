@@ -139,6 +139,58 @@ public class BusinessCarportController {
 		body.put("carportStatusDetail", details);
 		return Utility.createJsonMsg(1001, "get carportStatus success", body);
 	}
+	
+	@RequestMapping(value = "/getCarportUsage", method = RequestMethod.GET, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getCarportUsage(@RequestParam("carportId") int carportId,
+		@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		
+		double usageRate = businessCarportService.getCarportUsage(carportId, parsedStartDay, parsedEndDay);
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("usage", usageRate);
+		body.put("unusage", 1 - usageRate);
+		return Utility.createJsonMsg(1001, "get carportUsage success", body);
+	}
+	
+	@RequestMapping(value = "/getParkUsage", method = RequestMethod.GET, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getParkUsage(@RequestParam("parkId") int parkId,
+		@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		
+		double usage = businessCarportService.getParkUsage(parkId, parsedStartDay, parsedEndDay);
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("usage", usage);
+		body.put("unusage", 1 - usage);
+		return Utility.createJsonMsg(1001, "get park usage success", body);
+	}
 
 	@RequestMapping(value = "/getDetailByCarportId", method = RequestMethod.GET, produces = {
 			"application/json;charset=UTF-8" })

@@ -201,5 +201,39 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		return carportStatusDetailDAO.getDayCarportStatusDetail(carportId, startDay, endDay);
 	}
 
+	@Override
+	public double getCarportUsage(int carportId, Date startDay, Date endDay) {
+		List<CarportStatusDetail> carportUsages = getDayCarportStatusDetail(carportId, startDay, endDay);
+		
+		long usage = 0;
+		for (CarportStatusDetail c : carportUsages)
+		{
+			if(c.getStartTime() == null || c.getEndTime() == null)
+				continue;
+			Date carportStart = c.getStartTime();
+			Date carportEnd = c.getEndTime();
+			if(carportStart.before(startDay)){
+				carportStart = startDay;
+			}
+			if(carportEnd.after(endDay))
+				carportEnd = endDay;
+			usage = usage + carportEnd.getTime() - carportStart.getTime();
+		}
+		
+		double rate = usage / (24.0 * 60.0 * 60.0 * 1000.0);
+		return rate;
+	}
 
+	@Override
+	public double getParkUsage(int parkId, Date startDay, Date endDay) {
+		int count = getBusinessCarportCount(parkId);
+		List<BusinessCarport> carports = businessCarportDAO.getBusinessCarportByParkId(parkId, 0, count);
+		double rate = 0.0;
+		for(BusinessCarport carport : carports){
+			rate += this.getCarportUsage(carport.getId(), startDay, endDay);
+		}
+		return rate / count;
+	}
+
+	
 }
