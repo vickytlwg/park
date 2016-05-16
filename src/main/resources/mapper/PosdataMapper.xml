@@ -15,8 +15,8 @@
     <result column="Giving" property="giving" jdbcType="DECIMAL" />
     <result column="RealMoney" property="realmoney" jdbcType="DECIMAL" />
     <result column="ReturnMoney" property="returnmoney" jdbcType="DECIMAL" />
-    <result column="StartTime" property="starttime" jdbcType="VARCHAR" />
-    <result column="EndTime" property="endtime" jdbcType="VARCHAR" />
+    <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endtime" jdbcType="TIMESTAMP" />
     <result column="SysID" property="sysid" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
   </resultMap>
@@ -33,7 +33,7 @@
       #{cardtype,jdbcType=VARCHAR}, #{sitename,jdbcType=VARCHAR}, #{backbyte,jdbcType=VARCHAR}, 
       #{mode,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{possnr,jdbcType=VARCHAR}, 
       #{money,jdbcType=DECIMAL}, #{giving,jdbcType=DECIMAL}, #{realmoney,jdbcType=DECIMAL}, 
-      #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, 
+      #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
       #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
   </insert>
 
@@ -46,8 +46,17 @@
   <select id="getPosdataCount" resultType="int">
   	select count(*) from posdata
   </select>
-  
-
+  <select id="selectPosdataByParkAndRange" resultMap="BaseResultMap">
+  <![CDATA[
+  select * from posdata where StartTime <= #{endDay} and StartTime >= #{startDay} and Sitename=#{parkName}
+  ]]>
+  </select>
+  <select id="getPosdataByCarportAndRange" resultMap="BaseResultMap">
+  <![CDATA[
+  select * from posdata where StartTime <= #{endDay} and StartTime >= #{startDay} and Sitename=#{parkName} 
+  and BackByte=#{carportid}
+  ]]>
+  </select>
    
    
 </mapper>

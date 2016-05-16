@@ -49,8 +49,8 @@
 	/** bind search park change event **/
 	var bindSearchParkChange = function(){
 		$('select#searchPark').on('change', $(this), function(){
-			var aa=$(this).val();
-			if(aa!=-1){
+			
+			if($(this).val()!=-1){
 				$.cookie('selectValue',$(this).val(),{path:'/',expires:10});
 			}
 			renderBusinessCarport(0, $.fn.page.pageSize);
@@ -427,8 +427,8 @@
 					var endTimeMillSec = Date.parse(endTime);
 					endTimeMillSec = endTimeMillSec < parsedEndDay ? endTimeMillSec : parsedEndDay;
 					chartData.push([startMilliSec,null, null ]);
-					chartData.push([startMilliSec,0, 1 ]);
-					chartData.push([endTimeMillSec,0, 1 ]);
+					chartData.push([startMilliSec,0, 1]);
+					chartData.push([endTimeMillSec,0, 1]);
 					chartData.push([endTimeMillSec,null, null ]);
 					summary += (endTimeMillSec - startMilliSec);
 				}
@@ -452,6 +452,7 @@
 					    },
 					    
 					    yAxis: {
+					    	  max:1,
 					        title: {
 					            text: null
 					        }
@@ -484,8 +485,7 @@
 		$.ajax({
 			url:$.fn.config.webroot + "/getCarportStatusDetail?carportId="+id + "&_t=" + (new Date()).getTime(),
 			type: 'get',
-			success: function(data){
-				
+			success: function(data){				
 				var carportUsage = data['body']['carportStatusDetail'];
 				var tbody = $('#carportUsageTbody');
 				tbody.html('');

@@ -1,9 +1,8 @@
 package com.park.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class Posdata {
+public class posdataReceive {
     private Long id;
 
     private String credencesnr;
@@ -30,9 +29,9 @@ public class Posdata {
 
     private BigDecimal returnmoney;
 
-    private Date starttime;
+    private String starttime;
 
-    private Date endtime;
+    private String endtime;
 
     private String sysid;
 
@@ -142,19 +141,19 @@ public class Posdata {
         this.returnmoney = returnmoney;
     }
 
-    public Date getStarttime() {
+    public String getStarttime() {
         return starttime;
     }
 
-    public void setStarttime(Date starttime) {
+    public void setStarttime(String starttime) {
         this.starttime = starttime;
     }
 
-    public Date getEndtime() {
+    public String getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(Date endtime) {
+    public void setEndtime(String endtime) {
         this.endtime = endtime;
     }
 

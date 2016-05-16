@@ -6,7 +6,7 @@
 <script src="/park/script/highcharts.js"></script>
 <script src="/park/script/exporting.js"></script>
 <script src="/park/script/HighchartTheme.js"></script>
-
+<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>
@@ -24,11 +24,11 @@
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 						<div id="chart-header">
-							<div class="row">							
+							<div class="row" >							
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="park-select" class="control-label">停车场</label>
-										<select id="park-select" class="form-control">
+										<select id="park-select" class="form-control" style="font-weight:bold">
 											#foreach( $park in $parks)
 												<option value=$park.id>$park.name</option>
 											#end
@@ -45,7 +45,64 @@
 								</div>								
 							</div>							
 						</div>
-						<div class="row">
+
+                        
+      <div class="row" style="padding-top:25px">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3 id="totalMoney">0</h3>
+                 
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">今日总收入 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3 id="totalparkTimes">0</h3>
+                 
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">今日停车次数 <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3 id="carportCount">0</h3>
+                 
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">总泊位数<i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3 id="zhouzhuanlv">0</h3>
+
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="#" class="small-box-footer" style="font-size:20;font-weight:bold">泊位周转率<i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+          </div>
+		  
+             	<div class="row" style="padding-top:25px">
 							<div id="chart-content-park-charge" class="col-md-6">
 							
 							</div>
@@ -53,17 +110,13 @@
 							
 							</div>
                         </div>
-                        <div class="row">
-                        	<div class="col-md-3">
-								<div class="form-group">
-									<label for="parkStartDate" class="control-label">起始日期</label>
-									<input type="text" id="parkStartDate"  class="form-control date">									
-								</div>
-							</div>		
+						
+                        <div class="row" style="padding-top:25px">
+                       
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="parkEndDate" class="control-label">结束日期</label>
-									<input type="text" id="parkEndDate"  class="form-control date">									
+									<label for="parkMonth" class="control-label">选择月份</label>
+									<input type="text" id="parkMonth"  class="form-control date">									
 								</div>
 							</div>		
                         </div>
@@ -71,10 +124,10 @@
                         	<div id = "chart-park-period-charge">
                         	</div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="padding-top:25px">
 							 <div class="col-md-3">
 								<div class="form-group">
-										<label for="park-select" class="control-label">停车位</label>
+										<label for="carport-select" class="control-label">停车位</label>
 										<select id="carport-select" class="form-control">
                                         </select>
                                    </div>
@@ -88,24 +141,22 @@
 							
 							</div>
                         </div>
-                        <div class="row" id="chart-content-carport-usage"></div>
                         
-                        <div class="row">
-                        	<div class="col-md-3">
-								<div class="form-group">
-									<label for="carportStartDate" class="control-label">起始日期</label>
-									<input type="text" id="carportStartDate"  class="form-control date">									
-								</div>
-							</div>		
+                        <div class="row" style="padding-top:25px">
+                        		
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="carportEndDate" class="control-label">结束日期</label>
-									<input type="text" id="carportEndDate"  class="form-control date">									
+									<label for="carportMonth" class="control-label">选择月份</label>
+									<input type="text" id="carportMonth"  class="form-control date">									
 								</div>
 							</div>		
                         </div>
-                        <div class="row">
-                        	<div id = "chart-carport-period-charge">
+                        <div class="row" >
+                        	<div id = "carportUsageChart">
+                        	</div>
+                        </div>
+						<div class="row" >
+                        	<div id = "carportChargeChart">
                         	</div>
                         </div>
     				<div class="box-footer clearfix">
