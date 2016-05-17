@@ -4,7 +4,7 @@
 		dateInitialparkcharge();
 		dateInitial();
 		dateInitialparkcharge();
-		chartCarport();
+		
 		chartPark();		
 		//chartParkPeriodCharge();
 		getParkChargeData();
@@ -16,6 +16,7 @@
 		getCarport();
 		getCarportCharge();
 		getCarportChargeData();
+		chartCarport();
 	//	dateInitialparkcharge();
 		$('#date').on('change', $(this), function(){
 			getTotalCharge();
@@ -39,10 +40,12 @@
 		$('#carport-select').on('change',$(this),function(){
 		    getCarportCharge();
 		    getCarportChargeData();
+		    chartCarport();
 		})
 		$('#carportMonth').on('change',$(this),function(){
 		    renderCarportStatusChart();
 		    getCarportChargeData();
+		    chartCarport();
 		})
 	};
 	
@@ -84,22 +87,40 @@
 	}
 	var chartCarport=function(){
 		var title="停车位使用率";
-		var data=[{
+		var dateselect=$('#parkMonth').val();
+        var parkid=$('#park-select').val();
+        var carportId=$('#carport-select').val();
+        var dateStart=new Date(dateselect.substring(0,7)+'-01');
+        var dateEnd=dateStart;
+            dateEnd.setMonth(dateStart.getMonth()+2);
+          var unused=0;
+        var used=0;
+        $.ajax({
+            url:$.fn.config.webroot+"/getCarportUsage?carportId="+carportId+"&startDay="+dateselect.substring(0,7)+'-01'+"&endDay="+dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01',
+            type:'get',
+            success:function(data){
+                data=data['body'];
+                unused=parseFloat(data['unusage']);
+                used=parseFloat(data['usage']);  
+                
+            var data=[{
             type: 'pie',
             name: '使用率',
             data: [
-                {name:'空闲时间',   y:70,color:"#778588"},
+                {name:'空闲率',   y:unused,color:"#778588"},
                 {
-                    name: '停车时间',
-                    y: 30,
+                    name: '停车率',
+                    y: used,
                     color:"#F73809",
                     sliced: true,
                     selected: true
                 },
             ]
         }]
-		var chartposition=$('#chart-content-carport')
-		renderchart(title,chartposition,data);
+        var chartposition=$('#chart-content-carport')
+        renderchart(title,chartposition,data);
+                }}) 
+		
 	}
 	var getCarportCharge=function(){
 	    var date = $('#date').val();
@@ -205,15 +226,14 @@
         var unused=0;
         var used=0;
 		$.ajax({
-		    url:$.fn.config.webroot+"getCarportUsage?carportId="+parkid+"&startDay="+dateStart+"&endDay="+dateEnd,
+		    url:$.fn.config.webroot+"/getParkUsage?parkId="+parkid+"&startDay="+dateStart+"&endDay="+dateEnd,
 		    type:'get',
 		    success:function(data){
 		        data=data['body'];
 		        unused=parseFloat(data['unusage']);
 		        used=parseFloat(data['usage']);
-		    }
-		})
-		var data=[{
+		        
+		    var data=[{
             type: 'pie',
             name: '使用率',         
             data: [
@@ -227,8 +247,11 @@
                 },
             ]
         }]
-		var chartposition=$('#chart-content-park');
-		renderchart(title,chartposition,data);
+        var chartposition=$('#chart-content-park');
+        renderchart(title,chartposition,data);
+		    }
+		})
+		
 	}
 	var getCarport=function(){
 		var parkId=$('#park-select').val();
@@ -294,6 +317,7 @@
 		})
 	}
 	
+	   
 	   var getCarportChargeData=function(){   
         $.fn.loader.appendLoader($('#carportChargeChart'));
         var dateselect=$('#parkMonth').val();
