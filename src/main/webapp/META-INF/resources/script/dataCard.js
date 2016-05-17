@@ -76,7 +76,46 @@
 	            data:$.toJSON({"keywords":keywords}),
 	            contentType: 'application/json;charset=utf-8', 
 	            success:function(data){
-	                fillDataCardTbody(data['body']);
+	                data=data['body']['cards'];
+	                data.sort(function(a,b){
+	                  return  b['dataUsage']-a['dataUsage'];
+	                })
+	              var dataCardBody = $("#dataCardBody");
+        dataCardBody.html('');
+   
+        for(var i = 0; i < data.length; i++){
+            var tr = $("<tr></tr>");
+            tr.append('<td><input type="checkbox" /></td>');
+            tr.append('<td>' + data[i]['id']+ '</td>');
+            tr.append('<td>' + data[i]['parkName']+ '</td>');
+            tr.append('<td>' + data[i]['cardNumber']+ '</td>');
+            tr.append('<td>' + data[i]['phoneNumber']+ '</td>');
+            var typeMessage = "";
+            if(data[i]['type'] == 0)
+                typeMessage = '出入口卡';
+            else if(data[i]['type'] == 1)
+                typeMessage = '车位发布器卡';
+            else if(data[i]['type'] == 2)
+                typeMessage = '室外车位卡';
+            else
+                typeMessage = '室内车位卡';
+            tr.append('<td>' + typeMessage + '</td>');
+            tr.append('<td>' + data[i]['position']+ '</td>');
+            tr.append('<td>(' + data[i]['longitude'] +', '+data[i]['latitude']+ ')</td>');
+            tr.append('<td>' + data[i]['status']+ '</td>');
+            tr.append('<td>' + data[i]['dataUsage']+ '</td>');
+            if( i % 2 == 0){
+                tr.addClass('success');
+            }else{
+                tr.addClass('active');
+            }
+            tr.attr("id", data[i]['id']);
+            tr.attr("parkId", data[i]["parkId"]);
+            tr.attr("type", data[i]["type"]);
+            tr.attr("longitude", data[i]["longitude"]);
+            tr.attr("latitude", data[i]["latitude"]);
+            dataCardBody.append(tr);
+        }
 	                $('#pagination').html('');
 	            }
 	        });
