@@ -15,7 +15,7 @@ public class DataUsageCardDetail {
 	
 	private int status;
 	
-	private String dataUsage;
+	private float dataUsage;
 	
 	private int parkId;
 	
@@ -47,7 +47,7 @@ public class DataUsageCardDetail {
 		return status;
 	}
 
-	public String getDataUsage() {
+	public float getDataUsage() {
 		return dataUsage;
 	}
 
@@ -87,7 +87,7 @@ public class DataUsageCardDetail {
 		this.status = status;
 	}
 
-	public void setDataUsage(String dataUsage) {
+	public void setDataUsage(float dataUsage) {
 		this.dataUsage = dataUsage;
 	}
 
