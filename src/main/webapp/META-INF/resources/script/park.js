@@ -16,7 +16,40 @@
 		searchParkByLocation();
 		bindUploadPicBtn();
 		bindSubmitPicBtn();
+		bindSearchPark();
 	};
+	
+	var bindSearchPark = function(){
+		$('#searchContent').keypress(function(e){
+			var key = e.which;
+			if(key == 13){
+				var val = $('searchContent').val();
+				searchPark(val);
+			}
+				
+		});
+		$('#searchButton').on('click', $(this), function(){
+			var val = $('#searchContent').val();
+			searchPark(val);
+		});
+	}
+	
+	var searchPark = function(parkName){
+		$.ajax({
+			//url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
+			url: $.fn.config.webroot + "/getParkByName"  ,
+			type: 'post',	
+			contentType: 'application/json;charset=utf-8',	
+			datatype: 'json',
+			data:$.toJSON({"name":parkName}),
+			success: function(data){
+				fillParkTbody(data);
+			},
+			error: function(data){
+				errorHandle(data);
+			}
+		});
+	}
 	
 	var bindUploadPicBtn = function(){
 		$("#uploadPic").on('click', $(this), function(){
@@ -345,7 +378,8 @@
 	var fillParkTbody = function(data){
 		var parkBody = $("#parkBody");
 		parkBody.html('');
-		data = $.parseJSON(data["body"]);
+		//data = $.parseJSON(data["body"]);
+		data = data["body"];
 		for(var i = 0; i < data.length; i++){
 			var tr = $('<tr></tr>');
 			tr.append('<td><input type="checkbox" /></td>');

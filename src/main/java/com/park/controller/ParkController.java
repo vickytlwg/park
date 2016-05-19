@@ -215,7 +215,7 @@ public class ParkController {
 		if(parkDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get park detail success");
-			ret.put("body", Utility.gson.toJson(parkDetail));
+			ret.put("body", parkDetail);
 		}else{
 			ret.put("status", "1002");
 			ret.put("message", "get park detail fail");
