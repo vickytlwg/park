@@ -10,7 +10,7 @@
 		bindSubmitDataCardBtnClick();
 		bindDeleteBtnClick();
 		renderDataCard(0, $.fn.page.pageSize);
-	//	fillParkName();
+		fillParkName();
 		renderPagination();
 		bindKeywordsSearch();
 	};
@@ -24,27 +24,6 @@
 		});
 	};
 	
-	var fillParkName = function(){
-		var successFunc = function(data){
-			data = data['body'];
-			var parkNameSelect = $('select#parkName');
-			parkNameSelect.append($('<option value = -1>所有停车场</option>'));
-			for(var i = 0; i < data.length; i++){
-				parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
-			}
-		//	if(data.length > 0)
-			//	parkNameSelect.change();
-		};
-		var errorFunc = function(data){
-		};
-		$.ajax({
-			url:$.fn.config.webroot + '/getParks?_t=' + (new Date()).getTime(),
-			type: 'get',
-			contentType: 'application/json;charset=utf-8',			
-			success: function(data){successFunc(data);},
-			error: function(data){errorFunc(data);}
-		});
-	};
 	
 	/**bind refresh click***/
 	var bindRefreshClick = function(){
