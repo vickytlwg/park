@@ -37,8 +37,8 @@
 	
 	<select id="getCardDetail" resultMap="DataUsageCardDetailMapper">
 		select d.id, d.cardNumber, d.phoneNumber, d.type, d.status, d.dataUsage, d.parkId, d.position, d.longitude, d.latitude, p.name as parkName
-		from dataUsageCard as d
-		left join park as p on d.parkId = p.id
+		from dataUsageCard as d 
+		left join park as p on d.parkId = p.id  order by d.dataUsage desc
 		limit #{param1}, #{param2} 
 	</select>
 	<select id="getCardDetailByKeywords" resultMap="DataUsageCardDetailMapper" statementType="STATEMENT">
