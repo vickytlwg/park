@@ -66,7 +66,7 @@
 		    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
 		
 		});
-	}
+	};
 	var dateInitialparkcharge=function(){
 		$('#parkMonth,#carportMonth').val(new Date().format('yyyy-MM'));
 		$('#parkMonth,#carportMonth').datepicker({
@@ -84,12 +84,12 @@
 		    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
 		
 		});
-	}
+	};
 	var chartCarport=function(){
 		var title="停车位使用率";
 		var dateselect=$('#parkMonth').val();
         var parkid=$('#park-select').val();
-        var carportId=$('#carport-select').val();
+        var carportId= $('#carport-select').find("option:selected").attr("id");
         var dateStart=new Date(dateselect.substring(0,7)+'-01');
         var dateEnd=dateStart;
             dateEnd.setMonth(dateStart.getMonth()+2);
@@ -121,7 +121,7 @@
         renderchart(title,chartposition,data);
                 }}) 
 		
-	}
+	};
 	var getCarportCharge=function(){
 	    var date = $('#date').val();
         var parkid=$('#park-select').val();
@@ -154,7 +154,7 @@
                     chartCarportCharge();
                     renderCarportStatusChart();
             }});
-	}
+	};
 	var getTotalCharge=function(){
 		var date = $('#date').val();
 		var parkid=$('#park-select').val();
