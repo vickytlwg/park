@@ -16,7 +16,7 @@
 		getCarport();
 		getCarportCharge();
 		getCarportChargeData();
-		chartCarport();
+		
 	//	dateInitialparkcharge();
 		$('#date').on('change', $(this), function(){
 			getTotalCharge();
@@ -270,6 +270,7 @@
 				for(var i = 0; i < data.length; i++){					
 					carportSelect.append($('<option value = ' + data[i]['carportNumber']+' id='+data[i]['id'] + '>' + data[i]['carportNumber'] +'</option>'));																		
 				}
+				chartCarport();
 			}
 		});
 	}
