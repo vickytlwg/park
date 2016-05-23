@@ -218,8 +218,8 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			if(carportEnd.after(endDay))
 				carportEnd = endDay;
 			usage = usage + carportEnd.getTime() - carportStart.getTime();
-		}
-		double rate = usage / (endDay.getTime() - startDay.getTime()) * 1.0;
+		}		
+		double rate = usage / ((endDay.getTime() - startDay.getTime()) * 1.0);
 		return rate;
 	}
 
