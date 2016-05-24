@@ -9,7 +9,7 @@
 		//chartParkPeriodCharge();
 		getParkChargeData();
 //		chartCarportCharge();
-		chartCarportUsage();	
+//		chartCarportUsage();	
 		chartCarportPeriodCharge();
 		getTotalCharge();
 		getcarportCount();
@@ -92,8 +92,8 @@
         var carportId= $('#carport-select').find("option:selected").attr("id");
         var dateStart=new Date(dateselect.substring(0,7)+'-01');
         var dateEnd=dateStart;
-            dateEnd.setMonth(dateStart.getMonth()+2);
-          var unused=0;
+        dateEnd.setMonth(dateStart.getMonth()+2);
+        var unused=0;
         var used=0;
         $.ajax({
             url:$.fn.config.webroot+"/getCarportUsage?carportId="+carportId+"&startDay="+dateselect.substring(0,7)+'-01'+"&endDay="+dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01',
@@ -101,8 +101,7 @@
             success:function(data){
                 data=data['body'];
                 unused=parseFloat(data['unusage']);
-                used=parseFloat(data['usage']);  
-                
+                used=parseFloat(data['usage']);                 
             var data=[{
             type: 'pie',
             name: '使用率',
@@ -271,6 +270,7 @@
 					carportSelect.append($('<option value = ' + data[i]['carportNumber']+' id='+data[i]['id'] + '>' + data[i]['carportNumber'] +'</option>'));																		
 				}
 				chartCarport();
+		//		renderCarportStatusChart();
 			}
 		});
 	}
@@ -283,6 +283,7 @@
 		var chartposition=$('#chart-content-park-charge');
 		renderchartcolumn(title,chartposition,data);
 	}	
+	//获取停车场的收费信息
 	var getParkChargeData=function(){	
 		$.fn.loader.appendLoader($('#chart-park-period-charge'));
 		var dateselect=$('#parkMonth').val();
@@ -318,7 +319,7 @@
 		})
 	}
 	
-	   
+	  //获取停车位的收费信息 
 	   var getCarportChargeData=function(){   
         $.fn.loader.appendLoader($('#carportChargeChart'));
         var dateselect=$('#parkMonth').val();
@@ -432,9 +433,7 @@
             }
         });
     };
-	var chartParkPeriodCharge = function(chartposition,catagory,totalMoney,realMoney,title){
-		
-		
+	var chartParkPeriodCharge = function(chartposition,catagory,totalMoney,realMoney,title){				
 		chartposition.highcharts({
 	        chart: {
 	            type: 'line'
@@ -537,7 +536,7 @@
 		var title="停车位时段使用率";
 		var data=[];
 		var chartpostion=$('#chart-content-carport-usage');
-		renderChartArea(title,chartpostion,data);
+//		renderChartArea(title,chartpostion,data);
 	};
 	
 	var renderchart=function(title,chartposition,data){
@@ -609,71 +608,5 @@
 	        series: data
 	    });
 	}
-	var renderChartArea=function(title,chartposition,data){
-		chartposition.highcharts({
-	        chart: {
-	            zoomType: 'x',
-	            spacingRight: 20
-	        },
-	        title: {
-	            text: title
-	        },	       
-	        xAxis: {
-	            type: 'datetime',
-	            maxZoom: 14 * 24 * 3600000, // fourteen days
-	            title: {
-	                text: null
-	            }
-	        },
-	        yAxis: {
-	            title: {
-	                text: 'Exchange rate'
-	            }
-	        },
-	        tooltip: {
-	            shared: true
-	        },
-	        legend: {
-	            enabled: false
-	        },
-	        plotOptions: {
-	            area: {
-	                fillColor: {
-	                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-	                    stops: [
-	                        [0, Highcharts.getOptions().colors[0]],
-	                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-	                    ]
-	                },
-	                lineWidth: 1,
-	                marker: {
-	                    enabled: false
-	                },
-	                shadow: false,
-	                states: {
-	                    hover: {
-	                        lineWidth: 1
-	                    }
-	                },
-	                threshold: null
-	            }
-	        },
-	        series: [{
-	            type: 'area',
-	            name: 'USD to EUR',
-	            pointInterval: 24 * 3600 * 1000,
-	            pointStart: Date.UTC(2006, 0, 01),
-	            data:[	               
-	                0.7878, 0.7868, 0.7883, 0.7893, 0.7892, 0.7876, 0.785, 0.787, 0.7873, 0.7901,
-	                0.7936, 0.7939, 0.7938, 0.7956, 0.7975, 0.7978, 0.7972, 0.7995, 0.7995, 0.7994,
-	                0.7976, 0.7977, 0.796, 0.7922, 0.7928, 0.7929, 0.7948, 0.797, 0.7953, 0.7907,
-	                0.7872, 0.7852, 0.7852, 0.786, 0.7862, 0.7836, 0.7837, 0.784, 0.7867, 0.7867,
-	                0.7869, 0.7837, 0.7827, 0.7825, 0.7779, 0.7791, 0.779, 0.7787, 0.78, 0.7807,
-	                0.7803, 0.7817, 0.7799, 0.7799, 0.7795, 0.7801, 0.7765, 0.7725, 0.7683, 0.7641,
-	                0.7639, 0.7616, 0.7608, 0.759, 0.7582, 0.7539, 0.75, 0.75, 0.7507, 0.7505,
-	                0.7516, 0.7522, 0.7531, 0.7577, 0.7577, 0.7582, 0.755, 0.7542, 0.7576, 0.7616,
-	            ]
-	        }]
-	    });
-	}
+	
 })(jQuery)

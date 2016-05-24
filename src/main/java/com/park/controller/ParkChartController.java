@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,15 +29,18 @@ public class ParkChartController {
 	private AuthorityService authService;
 	
 	@RequestMapping(value = "/chart", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String parkChart(ModelMap modelMap, HttpServletRequest request, HttpSession session){
-		
+	public String parkChart(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
 		List<Park> parkList = parkService.getParks();
-		
-		
 		String username = (String) session.getAttribute("username");
 		if(username != null)
 			parkList = parkService.filterPark(parkList, username);
-		modelMap.addAttribute("parks", parkList);
+		List<Park> parkl = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType()!=3) {
+				parkl.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", parkl);
 		
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
