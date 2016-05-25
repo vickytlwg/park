@@ -14,16 +14,29 @@
 
 		</div>
 
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<div class="form-group">
 				<label for="date" class="control-label">日期</label>
 				<input type="text" id="date"  class="form-control">
 					
 			</div>
-
 		</div>
+		<div class="col-md-4 ">
+			<label for="autocompletetag" class="control-label">关键字搜索</label>
+			<div class="row">
+				<div class="col-md-9">
+				<input type="text" id="autocompletetag" class="form-control"></input>
+				</div>
+                <div class="col-md-3">
+				<button type="button" id="autocompletebtn" class="btn btn-danger">查看</button>	
+				</div>
+				
+            </div>
+			
+			
+        </div>
 		
-		<div class="col-md-2 col-md-offset-4">
+		<div class="col-md-2 col-md-offset-1">
 			<div class="form-group">
 				<label for="theme" class="control-label">主题</label>
 				<select id="theme" class="form-control">
@@ -42,9 +55,11 @@
 	
 </div>
 <div id="chart-content" style="min-height:1400px"></div>
-
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 <script src="/park/script/chartFlow.js"></script>
 <script src="/park/script/jquery.cookie.js"></script>
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
 <script>
 $(document).ready(function(){
 	$.fn.parkChart.initial();

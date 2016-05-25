@@ -73,7 +73,7 @@
 	</select>
 	
 	<select id="getParkDetail" resultMap="ParkMapper">
-		select * from park order by type desc limit #{low}, #{count}
+		select * from park order by id  limit #{low}, #{count}
 	</select>
 	<select id="getParkDetailByKeywords" parameterType="String" resultMap="ParkMapper" statementType="STATEMENT">
 		select * from park where position like '%${param1}%'
