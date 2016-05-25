@@ -65,7 +65,7 @@
 	</select>
 	
 	<select id="getParkByName" resultMap="ParkMapper">
-		select * from park where name like #{param1}
+		select * from park where name like #{param1} or position like #{param1}
 	</select>
 	
 	<select id="getParkById" resultMap="ParkMapper">

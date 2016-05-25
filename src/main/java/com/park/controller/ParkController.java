@@ -209,9 +209,12 @@ public class ParkController {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<Park> parkDetail = parkService.getParkDetail(low, count);
 		String username = (String) session.getAttribute("username");
-		if(username != null)
+		if(username != null)			
 			parkDetail = parkService.filterPark(parkDetail, username);
-	
+			if (parkDetail.size()<50) {
+				parkDetail = parkService.getParks();
+				parkDetail = parkService.filterPark(parkDetail, username);
+			}
 		if(parkDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get park detail success");

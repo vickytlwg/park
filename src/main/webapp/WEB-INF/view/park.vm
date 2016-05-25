@@ -3,7 +3,7 @@
 <script src="/park/script/AreaData_min.js" type="text/javascript"></script>
 
 
-<div class="content-wrapper">
+<div class="content-wrapper" onkeydown="keydownEvent()">
 	<section class="content-header">
           <h1>
             停车场管理
@@ -34,7 +34,7 @@
 	                	
 						<div class="pull-right" style="width:300px">
 	                	<div class="input-group">
-			               <input type="text" class="form-control" id="searchContent">
+			               <input type="text" class="form-control" id="searchContent" onkeydown="keydownEvent()">
 			               <span class="input-group-btn">
 			                  <button class="btn btn-default" type="button" id="searchButton">
 			                     Go!
@@ -229,7 +229,7 @@
 					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='position'>位置</label>
 						<div class='col-sm-8'>
-							<select id="seachprov" name="seachprov" onChange="changeComplexProvince(this.value, sub_array, 'seachcity', 'seachdistrict');"></select>&nbsp;
+							<select  id="seachprov" name="seachprov" onChange="changeComplexProvince(this.value, sub_array, 'seachcity', 'seachdistrict');"></select>&nbsp;
 <select id="seachcity" name="homecity" onChange="changeCity(this.value,'seachdistrict','seachdistrict');"></select>&nbsp;
 <span id="seachdistrict_div"><select id="seachdistrict" name="seachdistrict"></select></span>&nbsp;<input style="width:80px;" type='text'  id="positionlast">
 						</div>
@@ -305,8 +305,14 @@
 
 <script>
 $(document).ready(function(){
-	initComplexArea('seachprov', 'seachcity', 'seachdistrict', area_array, sub_array, '44', '0', '0');
 	$.fn.park.initial()
+	initComplexArea('seachprov', 'seachcity', 'seachdistrict', area_array, sub_array, '44', '0', '0');
+$('#searchContent').keyup(function (event) {
+ if (event.keyCode == "13") {
+ $('#searchButton').click();
+ }
+})
+	 
 });
 
 </script>

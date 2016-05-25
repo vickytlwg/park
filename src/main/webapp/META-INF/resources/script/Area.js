@@ -84,12 +84,14 @@ function changeCity(c, a, t) {
     var _d = sub_arr[c];
     var str = "";     
     str += "<option value='0' >请选择</option>";
+    if (_d!=undefined) {
     for (var i = c * 100; i < _d.length; i++) {
         if (_d[i] == undefined) continue; 
         str += "<option value='" + i + "' >" + _d[i] + "</option>";
     }
     $("#" + a).html(str);
-    
+    };
+   
 }
 
 function removeOptions(c) {

@@ -17,6 +17,7 @@
 		bindUploadPicBtn();
 		bindSubmitPicBtn();
 		bindSearchPark();
+		
 	};
 	
 	var bindSearchPark = function(){
@@ -183,8 +184,8 @@
 		var position = checkedTr.attr('position');
 		
 		var pos_selects = ['select#seachprov', 'select#seachcity', 'select#seachdistrict'];
-		for(var i = 0; i < 3; i++)
-			$(pos_selects[i]).val(0);
+		for(var i = 0; i < 1; i++)
+			$(pos_selects[i]).val(32);
 		$('#positionlast').val("");
 		
 		var positions = position.split(" ");
@@ -192,18 +193,28 @@
 			$('#positionlast').val(positions[1]);
 		}
 		var areas = positions[0].split("-");
-		if(areas.length > 1 ){
-			
-	
+		if(areas.length > 1 ){	
 			for(var i = 0; i < areas.length; i++){
 				var select = $(pos_selects[i]);
 				var options = select.find('option');
+				var tmpdata=[];
+				if (options==null||options==undefined||options.length<1) {
+					break;
+				}
 				for(var j = 0; j < options.length; j++){
-					if($(options[j]).text() == areas[i]){
-						$(options[j]).attr('selected', 'true');
+					tmpdata.push($(options[j]).text());
+					if($(options[j]).text() == areas[i]){	
+		//			    alert($(options[j]).val());
+					   // select.find("option:selected").removeAttr('selected');				
+						//$(options[j]).attr('selected', true);
+						select.val($(options[j]).val());
 						select.change();
+						setTimeout(function(){},1000);
 					}
 				}
+	//			alert(tmpdata.join(','));
+			//	select.val(32);
+	//			alert(select.find("option:selected").text());
 			}				
 			
 		}

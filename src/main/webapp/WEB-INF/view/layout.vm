@@ -122,7 +122,7 @@
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>出入口管理</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位管理</a></li>
-                 <li><a href="/park/businessCarport"><i class="fa fa-circle-o"></i>车位管理</a></li>
+                 <li  #if(!$isAdmin) hidden#end><a href="/park/businessCarport"><i class="fa fa-circle-o"></i>车位管理</a></li>
                 <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i>硬件设备管理</a></li>
               </ul>
             </li>
@@ -148,7 +148,7 @@
 			 <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-steam"></i> <span>费用管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                  <li><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
+                  <li  #if(!$isAdmin) hidden#end><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
              
               </ul>
             </li>

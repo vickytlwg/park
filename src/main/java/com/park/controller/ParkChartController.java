@@ -57,9 +57,11 @@ public class ParkChartController {
 	@RequestMapping(value="/flow",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
 	public String parkFlow(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		List<Park> parkList = parkService.getParks();
-		modelMap.addAttribute("parks", parkList);
 		
 		String username = (String) session.getAttribute("username");
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		modelMap.addAttribute("parks", parkList);
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
 			modelMap.addAttribute("user", user);

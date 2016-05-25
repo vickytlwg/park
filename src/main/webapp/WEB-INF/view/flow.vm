@@ -55,11 +55,15 @@
 	
 </div>
 <div id="chart-content" style="min-height:1400px"></div>
-<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-<script src="/park/script/chartFlow.js"></script>
-<script src="/park/script/jquery.cookie.js"></script>
-<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
 
+<script src="/park/script/chartFlow.js"></script>
+ <link rel="stylesheet" href="/park/css/jquery-ui.css">
+<script src="/park/script/jquery-ui.min.js"></script>
+<script src="/park/script/jquery.cookie.js"></script>
+ <link rel="stylesheet" href="/park/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/park/dist/css/AdminLTE.min.css">
+ <script href="/park/script/jquery.min.js"></script>
+    </script>
 <script>
 $(document).ready(function(){
 	$.fn.parkChart.initial();
