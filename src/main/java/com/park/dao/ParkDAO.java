@@ -23,6 +23,8 @@ public interface ParkDAO {
 	
 	public List<Park> getParkDetailByKeywords(@Param("param1")String keywords);
 	
+	public Park getLastPark();
+	
 	public int getParkCount();
 	
 	public int insertPark(Park park);

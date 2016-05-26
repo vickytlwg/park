@@ -212,6 +212,13 @@ public class ParkServiceImpl implements ParkService{
 	public int insertParkNews(ParkNews parkNews){
 		return parkNewsDAO.insertParkNews(parkNews);
 	}
+
+
+	@Override
+	public Park getLastPark() {
+		// TODO Auto-generated method stub
+		return parkDAO.getLastPark();
+	}
 	
 
 	

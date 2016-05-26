@@ -10,11 +10,11 @@
 		getParkChargeData();
 //		chartCarportCharge();
 //		chartCarportUsage();	
-		chartCarportPeriodCharge();
+	//	chartCarportPeriodCharge();
 		getTotalCharge();
 		getcarportCount();
 		getCarport();
-		getCarportCharge();
+		
 		getCarportChargeData();
 		
 	//	dateInitialparkcharge();
@@ -124,6 +124,7 @@
 	var getCarportCharge=function(){
 	    var date = $('#date').val();
         var parkid=$('#park-select').val();
+       
         var carportId=$('#carport-select').val();
         var dateStart=date;
         var dateInit=new Date(date);
@@ -148,7 +149,9 @@
                         
                     }}}
                 
+                    if(chargeTotal!=undefined)                
                     $.fn.carportUsage.carportTotalMoney=chargeTotal;
+                    if(realReceiveMoney!=undefined)
                     $.fn.carportUsage.carportRealMoney=realReceiveMoney;
                     chartCarportCharge();
                     renderCarportStatusChart();
@@ -269,7 +272,9 @@
 				for(var i = 0; i < data.length; i++){					
 					carportSelect.append($('<option value = ' + data[i]['carportNumber']+' id='+data[i]['id'] + '>' + data[i]['carportNumber'] +'</option>'));																		
 				}
+				 $('#carport-select').val(8);
 				chartCarport();
+				getCarportCharge();
 		//		renderCarportStatusChart();
 			}
 		});
@@ -317,7 +322,7 @@
 				chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
 			}
 		})
-	}
+	};
 	
 	  //获取停车位的收费信息 
 	   var getCarportChargeData=function(){   
@@ -354,7 +359,7 @@
                 chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
             }
         });
-    }
+    };
     
 	var renderCarportStatusChart = function(){
         event.stopPropagation();
@@ -478,55 +483,12 @@
 	    });
 	};
 	
-	var chartCarportPeriodCharge = function(){
-		var title="停车位费用";
-		var chartposition = $('#chart-carport-period-charge');
-		chartposition.highcharts({
-	        chart: {
-	            type: 'line'
-	        },
-	        title: {
-	            text: title
-	        },
-	        subtitle: {
-	            text: ''
-	        },
-	        xAxis: {
-	            categories: ['一月', '二月', '三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
-	        },
-	        yAxis: {
-	            title: {
-	                text: '万元'
-	            }
-	        },
-	        tooltip: {
-	            enabled: false,
-	            formatter: function() {
-	                return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y + "万元";
-	            }
-	        },
-	        legend: {
-		        enabled: false
-		    },
-	        plotOptions: {
-	            line: {
-	                dataLabels: {
-	                    enabled: true
-	                },
-	                enableMouseTracking: false
-	            }
-	        },
-	        series: [{
-	            name: '停车位',
-	            data: [0.4, 0.9, 0.5, 0.8, 0.4, 0.5, 0.2, 0.5, 0.3, 0.3, 0.9, 0.6]
-	        }]
-	    });
-	};
-	
-	var chartCarportCharge=function(){
+
+var chartCarportCharge=function(){
 		var title="停车位费用";
 		var data=[{
-            data: [{color:"#F7F709",y:$.fn.carportUsage.carportTotalMoney}, {color:"#1A1AE6",y:$.fn.carportUsage.carportRealMoney}]
+            data: [{name:"应收金额",color:"#F7F709",y:$.fn.carportUsage.carportTotalMoney, dataLabels: {enable:true}}, 
+            {name:"实收金额",color:"#1A1AE6",y:$.fn.carportUsage.carportRealMoney,dataLabels:{enable:true}}]
         }]
 		var chartposition=$('#chart-content-carport-charge');
 		
@@ -602,7 +564,7 @@
 	        plotOptions: {
 	            column: {
 	                pointPadding: 0.2,
-	                borderWidth: 0
+	               // borderWidth: 0
 	            }
 	        },
 	        series: data

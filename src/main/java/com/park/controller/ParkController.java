@@ -209,12 +209,17 @@ public class ParkController {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<Park> parkDetail = parkService.getParkDetail(low, count);
 		String username = (String) session.getAttribute("username");
-		if(username != null)			
+		
+		if(username != null){
 			parkDetail = parkService.filterPark(parkDetail, username);
-			if (parkDetail.size()<50) {
+			AuthUser user = authService.getUserByUsername(username);
+			if(user.getRole() != AuthUserRole.ADMIN.getValue()&&user!=null)
+			{
 				parkDetail = parkService.getParks();
 				parkDetail = parkService.filterPark(parkDetail, username);
 			}
+		}			
+
 		if(parkDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get park detail success");
@@ -320,8 +325,14 @@ public class ParkController {
 		return Utility.createJsonMsg(1001, "insert news successfully");
 		
 	}
-	
-	
+	@RequestMapping(value="getLastPark",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getLastPark(){
+		Map<String, Object> ret=new HashMap<>();
+		Park park=parkService.getLastPark();
+		ret.put("park", park);
+		return Utility.gson.toJson(ret);
+	}
 	@RequestMapping(value = "/search/parking", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getSearchParks(@RequestBody Map<String, Object> args){

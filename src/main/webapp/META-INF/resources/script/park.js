@@ -21,19 +21,23 @@
 	};
 	
 	var bindSearchPark = function(){
-		$('#searchContent').keypress(function(e){
-			var key = e.which;
-			if(key == 13){
-				var val = $('searchContent').val();
-				searchPark(val);
-			}
-				
-		});
+		$('#searchContent').keyup(function (event) {
+    if (event.keyCode == "13") {
+    var val = $('#searchContent').val();
+    if(val!="")
+    searchPark(val);
+ }
+});
 		$('#searchButton').on('click', $(this), function(){
 			var val = $('#searchContent').val();
+			if(val==""||val==null)
+			{
+			    return;
+			}
 			searchPark(val);
+			
 		});
-	}
+	};
 	
 	var searchPark = function(parkName){
 		$.ajax({
@@ -45,12 +49,13 @@
 			data:$.toJSON({"name":parkName}),
 			success: function(data){
 				fillParkTbody(data);
+				$('#pagination').html('');
 			},
 			error: function(data){
 				errorHandle(data);
 			}
 		});
-	}
+	};
 	
 	var bindUploadPicBtn = function(){
 		$("#uploadPic").on('click', $(this), function(){
@@ -61,7 +66,7 @@
 			$("#pictureForm")[0].reset();
 		});
 		
-	}
+	};
 	
 	var bindSubmitPicBtn = function(){
 		var btn = $("#submitPicBtn");
@@ -75,10 +80,9 @@
 			form[0].submit();
 			//windows.location="/parks";
 			//$("#uploadParkPic").modal('hide');
-		});
+		});		
 		
-		
-	}
+	};
 	
 	/**bind tr click*/
 	var bindTrClick = function(){
@@ -93,7 +97,9 @@
 	/**bind refresh click**/
 	var bindRefreshClick = function(){
 		var refreshBtn = $('#refresh');
+		
 		refreshBtn.on('click', $(this), function(){
+		    renderPagination();
 			renderPark($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 			$(this).blur();
 		});
@@ -111,6 +117,46 @@
 		$('#addParkForm')[0].reset();
 		$('input#parkName').removeAttr('parkId');
 		$('#addParkResult').html('');
+		$.ajax({
+		    url:"/park/getLastPark",
+		    type:'get',
+		    datatype: 'json',
+		    success:function(data){
+		  data=data['park'];
+		  var position=data['position'];
+	    var pos_selects = ['select#seachprov', 'select#seachcity', 'select#seachdistrict'];
+  
+        $('#positionlast').val("");
+        
+        var positions = position.split(" ");
+        if(positions.length == 2){
+            $('#positionlast').val(positions[1]);
+        }
+        var areas = positions[0].split("-");
+        if(areas.length >= 1 ){  
+            for(var i = 0; i < areas.length; i++){
+                var select = $(pos_selects[i]);
+                var options = select.find('option');
+                var tmpdata=[];
+                if (options==null||options==undefined||options.length<1) {
+                    break;
+                }
+                for(var j = 0; j < options.length; j++){
+                    tmpdata.push($(options[j]).text());
+                    if($(options[j]).text() == areas[i]){   
+        //              alert($(options[j]).val());
+                       // select.find("option:selected").removeAttr('selected');                
+                        //$(options[j]).attr('selected', true);
+                        select.val($(options[j]).val());
+                        select.change();
+                        setTimeout(function(){},1000);
+                    }
+                }
+            }               
+            
+        }
+		    },
+		});
 		$('#addParkModal').modal('show');
 	};
 	
@@ -212,9 +258,6 @@
 						setTimeout(function(){},1000);
 					}
 				}
-	//			alert(tmpdata.join(','));
-			//	select.val(32);
-	//			alert(select.find("option:selected").text());
 			}				
 			
 		}
@@ -459,6 +502,7 @@
 			success: function(data){
 				data = $.parseJSON(data["body"]);
 				var paginationUl = $.fn.page.initial(data['count'], pageClickFunc);
+				$('#pagination').html('');
 				$('#pagination').append(paginationUl);
 			},
 			error: function(data){

@@ -38,7 +38,7 @@
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h4 id="parkName"></h4>
+                  <h3 id="parkName"></h3>
                  
                 </div>
                 <div class="icon">
@@ -51,7 +51,7 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h4 id="dayAccessVal">0</h4>
+                  <h3 id="dayAccessVal">0</h3>
                  
                 </div>
                 <div class="icon">
@@ -64,7 +64,7 @@
               <!-- small box -->
               <div class="small-box bg-yellow">
                 <div class="inner">
-                  <h4 id="monthAccessVal">0</h4>
+                  <h3 id="monthAccessVal">0</h3>
                  
                 </div>
                 <div class="icon">
@@ -77,7 +77,7 @@
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h4 id="leftPortVal">0</h4>
+                  <h3 id="leftPortVal">0</h3>
 
                 </div>
                 <div class="icon">
@@ -105,13 +105,25 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="date" class="control-label">日期</label>
-										<input type="text" id="date"  class="form-control">
-											
+										<input type="text" id="date"  class="form-control">											
 									</div>
-
 								</div>
+		<div class="col-md-4 ">
+			<label for="autocompletetag" class="control-label">关键字搜索</label>
+			<div class="row">
+				<div class="col-md-9">
+				<input type="text" id="autocompletetag" class="form-control"></input>
+				</div>
+                <div class="col-md-3">
+				<button type="button" id="autocompletebtn" class="btn btn-danger">查看</button>	
+				</div>
+				
+            </div>
+			
+			
+        </div>
 								
-								<div class="col-md-2 col-md-offset-4">
+								<div class="col-md-2 ">
 									<div class="form-group">
 										<label for="theme" class="control-label">主题</label>
 										<select id="theme" class="form-control">
@@ -141,9 +153,8 @@
 						
 </div>
 
-
-
-
+<link rel="stylesheet" href="/park/css/jquery-ui.css">
+<script src="/park/script/jquery-ui.min.js"></script>
 <script src="/park/script/parkChart.js"></script>
 
 <script>

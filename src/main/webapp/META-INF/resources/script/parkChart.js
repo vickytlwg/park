@@ -16,23 +16,19 @@ $.fn.parkChart.initial = function(){
 	$('#date').val(new Date().format('yyyy-MM-dd'));
 	$('#date').datepicker({
 		autoClose: true,
-	    dateFormat: "yyyy-mm-dd",
-	    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-	    daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-	    daysMin: ["日", "一", "二", "三", "四", "五", "六"],
-	    months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-	    monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-	    showMonthAfterYear: true,
-	    viewStart: 0,
-	    weekStart: 1,
-	    yearSuffix: "年",
-	    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
+        dateFormat: "yyyy-mm-dd",
+        nextText:"下月",
+        preText:"上月",       
+        dayNames:["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+        dayNamesMin:["日", "一", "二", "三", "四", "五", "六"],
+        monthNames:["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+       monthNamesShort:["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 	
 	});
 		
 	Highcharts.setOptions(Highcharts.themeGray);
 	$.fn.parkChart.renderChart(chatContent);
-
+    autocomplete();
 	$('#parkName').text($('#park-select').find('option:selected').text());
 	$('#park-select').on('change', $(this), function(){
 		$('#parkName').text($('#park-select').find('option:selected').text());
@@ -74,14 +70,46 @@ $.fn.parkChart.initial = function(){
 	
 };
 
+var autocomplete=function(){
+    var selectdata=[];
+    var tmpdata={};
+    $('#park-select option').each(function(){
+        var data=$(this).text();
+        var val=$(this).val();
+        if(data!=undefined){
+            selectdata.push(data);
+        }
+        tmpdata[val]=data;
+    });
+    $('#autocompletetag').autocomplete(
+        {
+            source:selectdata
+        }
+    )
+    $('#autocompletebtn').on('click',$(this),function(){
+        var selectedtxt=$('#autocompletetag').val();
+    //      $("#park-select").find("option:selected").attr("selected",false);
+    //      var txt="option[text='"+selectedtxt+"']";
+     //   var id = $("#park-select").find(txt).val();
+     var id;
+     $.each(tmpdata,function(key,value){
+         if(value==selectedtxt){
+             id=key;
+         }
+     })
+        $("#park-select").val(id);
+    })
 
+}
 /**
  * render chart
  */
 $.fn.parkChart.renderChart = function(chatContent){
 	var parkId = parseInt($('#park-select').val());
 	var date = $('#date').val();
-	
+	var aa=date.split('-');
+    date=aa[0].substring(0,4)+'-'+aa[1]+'-'+aa[2];
+    $('#date').val(date);
 	var url = $.fn.config.webroot + '/getHourCountByPark?_t=' + (new Date()).getTime();
 		
 	$.ajax({

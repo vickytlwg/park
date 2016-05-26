@@ -42,4 +42,6 @@ public interface ParkService {
 	public List<ParkNews> getSearchParkLatestNews(double longitude, double latitude, double radius, int offset, int pageSize);
 
 	public int insertParkNews(ParkNews parkNews);
+	
+	public Park getLastPark();
 }

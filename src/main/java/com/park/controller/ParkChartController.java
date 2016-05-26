@@ -60,7 +60,7 @@ public class ParkChartController {
 		
 		String username = (String) session.getAttribute("username");
 		if(username != null)
-			parkList = parkService.filterPark(parkList, username);
+		parkList = parkService.filterPark(parkList, username);
 		modelMap.addAttribute("parks", parkList);
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){

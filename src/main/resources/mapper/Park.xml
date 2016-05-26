@@ -81,7 +81,9 @@
 	<select id="getParkCount"  resultType="int">
 		select count(*) from park
 	</select>
-	
+	<select id="getLastPark" resultMap="ParkMapper">
+		select * from park order by id desc limit 1;
+	</select>
 	<insert id="insertPark" parameterType="Park" keyProperty="id">
 		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, longitude, latitude, alias, mapAddr, position, date, isDeleted, contact, number, description, pictureUri) 
 		values(#{name}, #{portCount}, #{portLeftCount}, #{channelCount},  #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{mapAddr}, #{position}, #{date}, #{isDeleted}, #{contact}, #{number}, #{description}, #{pictureUri})

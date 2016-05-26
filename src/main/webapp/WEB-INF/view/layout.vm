@@ -31,7 +31,7 @@
     <script src="/park/bootstrap/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/park/dist/js/app.min.js"></script>
-
+	<script src="/park/script/layout.js">
    <!-- <script src="/park/plugins/fastclick/fastclick.min.js"></script>
     <script src="/park/dist/js/demo.js"></script> -->
 
@@ -78,7 +78,7 @@
                   <!-- The user image in the navbar-->
                   <img src="/park/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs">#if(!$isAdmin) 游客 #else 管理员#end</span>
+                  <span class="hidden-xs">#if(!$isAdmin) 行业客户#else 管理员#end</span>
                 </a>
               </li>
 
@@ -98,7 +98,7 @@
               <img src="/park/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>#if(!$isAdmin) 游客 #else 管理员 #end</p>
+              <p id="shenfen">#if(!$isAdmin) 行业客户 #else 管理员 #end</p>			
               <!-- Status -->
               <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
             </div>
@@ -120,9 +120,9 @@
               <ul class="treeview-menu">
                 <li><a href="/park/parks"><i class="fa fa-circle-o"></i>停车场管理</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>出入口管理</a></li>
-                <li><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
-                <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位管理</a></li>
-                 <li  #if(!$isAdmin) hidden#end><a href="/park/businessCarport"><i class="fa fa-circle-o"></i>车位管理</a></li>
+                <li hidden><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
+                <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位牌管理</a></li>
+                 <li  ><a href="javascript:$.fn.layout.cheweiguanli()" ><i class="fa fa-circle-o"></i>车位管理</a></li>
                 <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i>硬件设备管理</a></li>
               </ul>
             </li>
@@ -188,6 +188,8 @@
     
  </div>				 
 
+
+</script>
 
  
 </body>
