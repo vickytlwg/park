@@ -26,8 +26,10 @@
 		                	</div>
                 
 	             <div class="pull-right">		
-				<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="parkName">
-	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
+				<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="parkNamesearch">
+	                #foreach( $park in $parks)
+						<option value=$park.id>$park.name</option>
+					#end           		
 	            </select>					                	
 	                	</div>
 	            <div class="pull-right" style="padding-right:40px">

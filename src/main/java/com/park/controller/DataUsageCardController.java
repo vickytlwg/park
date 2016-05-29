@@ -23,8 +23,10 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.DataUsageCard;
 import com.park.model.DataUsageCardDetail;
+import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.DataUsageCardService;
+import com.park.service.ParkService;
 import com.park.service.Utility;
 
 @Controller
@@ -33,12 +35,17 @@ public class DataUsageCardController {
 
 	@Autowired
 	private DataUsageCardService cardService;
-	
+	@Autowired
+	private ParkService parkService;
 	@Autowired
 	private AuthorityService authService;
 	@RequestMapping(value = "", produces = {"application/json;charset=UTF-8"})
 	public String getCardPage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		modelMap.addAttribute("parks", parkList);
 		AuthUser user = authService.getUserByUsername(username);
 		boolean isAdmin = false;
 		if(user != null){
