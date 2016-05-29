@@ -38,18 +38,19 @@ public class loginInterceptor implements HandlerInterceptor{
 		
 		String token = request.getHeader("token");
 		if(token != null && tokenService.validToken(token)){
-			tokenUsageService.insertRecord(token, url);
+			if(!url.contains("access"))
+				tokenUsageService.insertRecord(token, url);
 			return true;
 		}
 		HttpSession session  = request.getSession();
 		Object username = session.getAttribute("username");
 		if(username != null)
 			return true;
-		/*else
+		else
 			request.getRequestDispatcher("/login").forward(request, response);
 		return false;
-		*/
-		return true;
+		
+		//return true;
 		
 	}
 

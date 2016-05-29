@@ -114,7 +114,11 @@
           <ul class="sidebar-menu">
             <li class="header">功能区</li>
             <!-- Optionally, you can add icons to the links -->
-
+            
+			<li  class="treeview" active>
+				 <a href="/park/demo"><i class="fa fa-fw fa-cab"></i> <span>Demo Page</span> <i class="fa fa-angle-left pull-right"></i></a>
+			</li>
+			
             <li class="treeview active">
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">

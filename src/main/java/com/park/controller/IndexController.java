@@ -60,6 +60,12 @@ public class IndexController {
 		return "login";
 	}
 	
+	@RequestMapping(value = "demo", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	public String demo(){
+		
+		return "demo";
+	}
+	
 	@RequestMapping(value = "uploadTest", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String uploadTest(){
 		
