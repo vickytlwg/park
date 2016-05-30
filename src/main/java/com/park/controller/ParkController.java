@@ -91,7 +91,16 @@ public class ParkController {
 		return Utility.createJsonMsg(1001, "get parks successfully", parks);
 	}
 	@RequestMapping(value="/parkmap")
-	public String parkmap(){
+	public String parkmap(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
 		return "parkmap";
 	}
 	@RequestMapping(value = "/getParkLeftPort/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})

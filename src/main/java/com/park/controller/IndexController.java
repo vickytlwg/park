@@ -1,6 +1,7 @@
 package com.park.controller;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,16 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "demo", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String demo(){
-		
+	public String demo(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
 		return "demo";
 	}
 	
