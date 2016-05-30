@@ -31,15 +31,15 @@
     <script src="/park/bootstrap/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/park/dist/js/app.min.js"></script>
-	<script src="/park/script/layout.js">
-   <!-- <script src="/park/plugins/fastclick/fastclick.min.js"></script>
-    <script src="/park/dist/js/demo.js"></script> -->
+    <script src="/park/script/layout.js"></script>
+
+    <script src="/park/dist/js/demo.js"></script> 
 
     <script src="/park/plugins/angular/angular.min.js"></script>
    	<script src="/park/plugins/angular/angular-animate.min.js"></script>
     <script src="/park/plugins/angular/angular-cookies.min.js"></script>
-    <!-- <script src="/park/plugins/angular/angular-ui-router.min.js"></script>
-    <script src="/park/plugins/angular/ocLazyLoad.min.js"></script>  -->
+     <script src="/park/plugins/angular/angular-ui-router.min.js"></script>
+    <script src="/park/plugins/angular/ocLazyLoad.min.js"></script>  
     <script src="/park/plugins/angular/ui-bootstrap-tpls.min.js"></script>
 
     <script src="/park/dist/js/main.js"></script>
@@ -123,6 +123,7 @@
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="/park/parks"><i class="fa fa-circle-o"></i>停车场管理</a></li>
+				<li><a href="/park/parkmap"><i class="fa fa-circle-o"></i>停车场分布</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>出入口管理</a></li>
                 <li hidden><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位牌管理</a></li>
@@ -175,7 +176,7 @@
 	  <div>   
 	  
 
-      <footer class="main-footer">
+      <footer class="main-footer" id="footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
          

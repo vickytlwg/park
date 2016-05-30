@@ -90,7 +90,10 @@ public class ParkController {
 		}
 		return Utility.createJsonMsg(1001, "get parks successfully", parks);
 	}
-	
+	@RequestMapping(value="/parkmap")
+	public String parkmap(){
+		return "parkmap";
+	}
 	@RequestMapping(value = "/getParkLeftPort/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkLeftPort(@PathVariable int id, ModelMap modelMap, HttpServletRequest request){
