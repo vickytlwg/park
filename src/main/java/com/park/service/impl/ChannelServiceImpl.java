@@ -106,4 +106,11 @@ public class ChannelServiceImpl implements ChannelService{
 		channelDAO.updateDateByHardwareMac(mac);
 	}
 
+
+	@Override
+	public List<ChannelDetail> getChannelDetailByDate(String startday, String endday) {
+		// TODO Auto-generated method stub
+		return channelDAO.getChannelDetailByDate(startday, endday);
+	}
+
 }

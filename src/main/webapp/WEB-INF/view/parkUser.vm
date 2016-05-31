@@ -100,8 +100,8 @@
 					
 					<div class='form-group' id="parkNameDiv" hidden="false">
 						<label class='col-sm-2 control-label' for='parkId'>停车场</label>
-						<div class='col-sm-8'>
-							<select class='form-control' multiple id='parkSelect'>					
+						<div class='col-sm-8' >
+							<select class='form-control' multiple id='parkSelect' style="height:350px">					
 							</select>
 						</div>
 					</div>

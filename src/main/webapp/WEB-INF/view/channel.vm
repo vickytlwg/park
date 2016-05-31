@@ -28,7 +28,17 @@
 	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
 	                	</select>
 	                	</div>
-	                	
+	                	 <div class="pull-right" style="padding-right:40px">
+					<div class="row">
+					<div class="col-md-9">
+						<input type="text" class="form-control" id="daynum" placeholder="输入天数">
+                    </div>
+					<div class="col-md-3">
+					<button type="button" id="daysearch" class="btn btn-success">查询</button>
+					</div>
+                    </div>
+					</div>
+					
 	                	<br/>   
 	                    <br/> 
 						<div>

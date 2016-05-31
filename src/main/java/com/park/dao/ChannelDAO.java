@@ -21,6 +21,8 @@ public interface ChannelDAO {
 	
 	public List<ChannelDetail> getParkChannelDetail(@Param("low")int low, @Param("count")int count,@Param("parkId")int parkId);
 	
+	public List<ChannelDetail> getChannelDetailByDate(@Param("startday")String startday,@Param("endday")String endday);
+	
 	public int getChannelIdByMacId(@Param("macId")int macId);
 	
 	public int insertChannel(Channel channel);

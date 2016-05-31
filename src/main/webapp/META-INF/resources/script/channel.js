@@ -14,6 +14,7 @@
 		fillSearchPark();
 		bindSearchParkChange();
 		renderPagination();
+		bindSearchBtn();
 	};
 	
 	/**bind tr click*/
@@ -90,6 +91,37 @@
 			}
 		});
 	};
+	
+	var bindSearchBtn=function(){
+	  //  $('#daynum').val(2);
+	    $('#daysearch').on('click',$(this),function(){
+	        var day=$('#daynum').val();
+	        if(day==undefined||day=="")
+	        {
+	            alert("请输入天数");
+	            return;
+	        }
+	       if(isNaN(day))
+	       {
+	           alert('输入数字');
+	           return;
+	       }
+            var url=$.fn.config.webroot + "/getChannelDetailByDate?day=-"+day;
+            $.ajax({
+            url:url,
+            type: 'get',
+            success: function(data){
+                $('#pagination').html('');
+                fillchannelTbody(data);
+            },
+            error: function(data){
+                alert("操作失败~~~");
+                errorHandle(data);
+            }
+        });
+	    });
+	};
+	
 	var renderPagination = function(){
 		var parkId = $('select#searchPark').val();
 		$.ajax({

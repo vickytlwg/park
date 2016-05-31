@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +106,26 @@ public class ChannelController {
 		}
 		return Utility.gson.toJson(ret);
 		
+	}
+	@RequestMapping(value="/getChannelDetailByDate",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getChannelDetailByDate(@RequestParam("day")int day){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Calendar cal = Calendar.getInstance();
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String endday=df.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, day);
+		String startday=df.format(cal.getTime());
+		List<ChannelDetail> channelDetail = channelService.getChannelDetailByDate(startday, endday);
+		if(channelDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get channel detail success");
+			ret.put("body", Utility.gson.toJson(channelDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get channel detail fail");
+		}
+		return Utility.gson.toJson(ret);
 	}
 	@RequestMapping(value = "/insert/channel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

@@ -159,17 +159,9 @@ public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSe
 public String getPosdataCount(){
 	Map<String, Object> retMap = new HashMap<String, Object>();
 	Integer count=posdataService.getPosdataCount();
-	if(count!=null)
-	{
-		retMap.put("status", 1001);
-		retMap.put("message", "success");
-		retMap.put("count", count);
-	}
-	else
-	{
-		retMap.put("status", 1002);
-		retMap.put("message", "failure");
-	}
+	retMap.put("status", 1001);
+	retMap.put("message", "success");
+	retMap.put("count", count);
 	return Utility.gson.toJson(retMap);
 }
 @RequestMapping(value="getParkCharge",method=RequestMethod.GET)
