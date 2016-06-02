@@ -108,8 +108,8 @@
 						<label class='col-sm-2 control-label' for='businessCarportStatus'>状态</label>
 						<div class='col-sm-8'>
 							<select class='form-control' id='businessCarportStatus'>
-								<option value=1>无车</option>
-								<option value=0>有车</option>
+								<option value=0>无车</option>
+								<option value=1>有车</option>
 							</select>
 						</div>
 					</div>
