@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Carport;
+import com.park.model.CarportStatusDetail;
 import com.park.service.CarportService;
 import com.park.service.Utility;
 
@@ -91,7 +92,11 @@ public class CarportController {
 		retMap.put("body", carports);
 		return Utility.gson.toJson(retMap);	
 	}
-
+	
+	@RequestMapping(value="/carportstatus")
+	public String carportstatus(){
+		return "carportStatusShow";
+	}
 	
 	@RequestMapping(value = "/specify/carports", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

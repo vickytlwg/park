@@ -140,8 +140,7 @@
 	
 	var bindAddButton = function(){
 		$('#addUser').on('click', $(this), function(){
-			$('#addUserForm')[0].reset();
-			
+			$('#addUserForm')[0].reset();			
 			$('#addUserResult').html('');
 			$('#addUserModal').modal('show');
 		});

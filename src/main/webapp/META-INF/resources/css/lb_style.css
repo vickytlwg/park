@@ -1,0 +1,31 @@
+.container-fluid {
+    min-width: 1600px;  
+}
+.lb-car {
+    margin: 15px;
+}
+.lb-car img, .lb-road img {
+    width: 100%;
+}
+.lb-car img {
+    text-align: center;
+    padding: 10px;
+    border: 1px dashed #000;
+}
+.lb-car p {
+    text-align: center;
+    margin: 10px;
+    font-size: 1em;
+}
+.lb-road {
+    margin: 15px 0;
+}
+.lb-car span {
+    font-weight: bold;
+}
+.glyphicon-remove {
+    color: #f00;
+}
+.glyphicon-ok {
+    color: #91dc5a;
+}
