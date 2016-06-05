@@ -397,6 +397,8 @@
 		});
 	}
 	
+	Highcharts.setOptions({ global: { useUTC: false } });   
+	
 	var renderCarportStatusChart = function(){
 		event.stopPropagation();
 		var id = $('#carportUsage').attr('carportId');

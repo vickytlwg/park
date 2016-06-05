@@ -3,7 +3,7 @@
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <script src="/park/script/datepicker.js"></script>
 <script src="/park/script/highcharts.js"></script>
-<script src="/park/script/exporting.js"></script>
+<!--<script src="/park/script/exporting.js"></script>-->
 <script src="/park/script/HighchartTheme.js"></script>
 <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
 
