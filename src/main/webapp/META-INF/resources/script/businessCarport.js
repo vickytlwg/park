@@ -397,7 +397,7 @@
 		});
 	}
 	
-	Highcharts.setOptions({ global: { useUTC: false } });   
+	//Highcharts.setOptions({ global: { useUTC: false } });   
 	
 	var renderCarportStatusChart = function(){
 		event.stopPropagation();
