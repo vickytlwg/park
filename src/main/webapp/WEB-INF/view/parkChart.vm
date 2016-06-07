@@ -99,7 +99,6 @@
 											#end
 										</select>
 									</div>
-
 								</div>
 
 								<div class="col-md-3">
@@ -116,11 +115,8 @@
 				</div>
                 <div class="col-md-3">
 				<button type="button" id="autocompletebtn" class="btn btn-danger">查看</button>	
-				</div>
-				
-            </div>
-			
-			
+				</div>				
+            </div>			
         </div>
 								
 								<div class="col-md-2 ">

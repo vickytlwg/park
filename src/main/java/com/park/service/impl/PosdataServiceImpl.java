@@ -140,5 +140,10 @@ public class PosdataServiceImpl implements PosdataService {
 		retmap.put("realMoney", realReceiveMoney);
 		return retmap;
 	}
+	@Override
+	public List<Map<String, Object>> getCountByCard() {
+		// TODO Auto-generated method stub
+		return posdataDAO.getCountByCard();
+	}
 
 }

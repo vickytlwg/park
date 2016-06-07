@@ -1,10 +1,29 @@
 (function($){	
-	$.fn.park = {}	
+	$.fn.park = {};	
 	$.fn.park.initial = function(){
 		renderPark(0, $.fn.page.pageSize);
 		renderPagination();
 		intervalRenderPagination();
+		rendnumcard();
 	};	
+	
+	var rendnumcard=function(){
+		$.ajax({
+			url:$.fn.config.webroot + "/pos/getCountsByCard" ,
+			type:'get',
+			datatype:'json',
+			success:function(data){
+				if (data['status']==1001) {
+					data=data['body'];
+					var strp='';
+				    for(var i=0;i<data.length;i++){
+				        strp+="车牌号: "+data[i]['CardSnr']+"  次数:"+data[i]['num']+"    ";
+				    }	
+				    $('#carnumshow').text(strp);
+				}
+			}
+		});
+	};
 	/*** get table park item ***/
 	var renderPark = function(low, count){
 		var cols = $('#parkTable').find('thead tr th').length;

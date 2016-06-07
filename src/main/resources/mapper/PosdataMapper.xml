@@ -57,6 +57,7 @@
   and BackByte=#{carportid}
   ]]>
   </select>
-   
-   
+   <select id="getCountByCard" resultType="java.util.Map">
+   	SELECT COUNT(*) AS num ,CardSnr FROM posdata GROUP BY CardSnr ORDER BY num DESC LIMIT 0,10
+   </select>
 </mapper>

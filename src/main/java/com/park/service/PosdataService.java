@@ -19,7 +19,7 @@ public interface PosdataService {
  public Map<String, Object> getCarportCharge(int carportId, Date startDay, Date endDay);
  
  public Map<String, Object> getParkCharge(int parkId, Date startDay, Date endDay);
- 
+ public List<Map<String, Object>> getCountByCard();
  public Map<String, Object> getParkChargeByDay(int parkId,String day);
  public Map<String, Object> getCarpotChargeByDay(int parkId,String carportId,String day);
 }

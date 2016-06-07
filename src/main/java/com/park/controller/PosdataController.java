@@ -330,6 +330,17 @@ public String getParkChargeByRange(@RequestBody Map<String, Object> args){
 	
 	return Utility.gson.toJson(comparemap);
 }
+@RequestMapping(value="getCountsByCard",produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getCountsByCard(){
+	Map<String, Object> ret=new HashMap<>();
+	List<Map<String, Object>> data=posdataService.getCountByCard();
+	if (data!=null) {
+		ret.put("status", 1001);
+	}
+	ret.put("body", data);
+	return Utility.gson.toJson(ret);
+}
 @RequestMapping(value="/getCarportChargeByRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getCarportChargeByRange(@RequestBody Map<String, Object> args){

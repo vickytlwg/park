@@ -8,6 +8,12 @@
     var map;
     var point;
     var mapClusterer;
+	var myIconred = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/red.png", new BMap.Size(32, 47),{
+    });
+	var myIcongreen = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/green.png", new BMap.Size(32, 47),{
+    });
+	var myIconyellow = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/yellow.png", new BMap.Size(32, 47),{
+    });   
     var mapInitial=function(){
         map = new BMap.Map("parkmap");
         point = new BMap.Point(118.8, 32.0625);
@@ -57,11 +63,23 @@
         mapClusterer.clearMarkers();
         for(var i=0;i<data_info.length;i++){
             var point=new BMap.Point(data_info[i][0],data_info[i][1]);
-            var marker = new BMap.Marker(point);  // 创建标注
+            var marker ;  // 创建标注
+            if(data_info[i][3]==0)
+		    {
+		        marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIconred});  
+		    }
+			 else if(data_info[i][3]<10)
+			 {
+			     marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIconyellow}); 
+			 }
+			 else
+			 {
+			     marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIcongreen}); 
+			 }
             var content = data_info[i][2];
             var opts = {
                       position : point,    // 指定文本标注所在的地理位置
-                //    offset   : new BMap.Size(30, -30)    //设置文本偏移量
+                 //    offset   : new BMap.Size(30, -30)    //设置文本偏移量
                 };
             var label = new BMap.Label(data_info[i][3], opts);
             label.setStyle({color:"blue", "font-weight":"bold"});
@@ -81,7 +99,7 @@
 
                 data_info=new Array(parkdata.length);
                 for(var i=0;i<parkdata.length;i++){
-                    console.log(parkdata[i].name+'\n');
+              //      console.log(parkdata[i].name+'\n');
                     var tmparray=new Array(4);
                     tmparray[0]=parkdata[i].longitude;
                     tmparray[1]=parkdata[i].latitude;
