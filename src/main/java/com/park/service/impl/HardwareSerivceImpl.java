@@ -163,6 +163,12 @@ public class HardwareSerivceImpl implements HardwareService{
 			return true;
 	}
 
+	@Override
+	public List<Hardware> searchHardwareByKeywords(String mac) {
+		// TODO Auto-generated method stub
+		return hardwareDAO.searchHardwareByKeywords(mac);
+	}
+
 	
 
 

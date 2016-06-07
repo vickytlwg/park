@@ -127,8 +127,9 @@
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>出入口管理</a></li>
                 <li hidden><a href="/park/channel"><i class="fa fa-circle-o"></i>路边车位探测</a></li>
                 <li><a href="/park/channel"><i class="fa fa-circle-o"></i>剩余泊位牌管理</a></li>
-                 <li  ><a href="javascript:$.fn.layout.cheweiguanli()" ><i class="fa fa-circle-o"></i>车位管理</a></li>
-				  <li><a href="/park/carportstatus"><i class="fa fa-circle-o"></i>车位状态查看</a></li>
+                <li><a href="javascript:$.fn.layout.cheweiguanli()" ><i class="fa fa-circle-o"></i>车位管理</a></li>
+				<li><a href="/park/carportstatus"><i class="fa fa-circle-o"></i>车位状态查看</a></li>
+				<li><a href="/park/qhq_carportstatus"><i class="fa fa-circle-o"></i>秦淮区状态图</a></li>
                 <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i>硬件设备管理</a></li>
               </ul>
             </li>

@@ -97,6 +97,10 @@ public class CarportController {
 	public String carportstatus(){
 		return "carportStatusShow";
 	}
+	@RequestMapping(value="/qhq_carportstatus")
+	public String qhq_carportstatus(){
+		return "qhq_carport";
+	}
 	
 	@RequestMapping(value = "/specify/carports", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

@@ -5,7 +5,7 @@
     <title> 路边停车 </title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/lb_style.css" />
+    <link rel="stylesheet" href="css/lbty_style.css" />
 	<script src="/park/script/jquery.min.js"></script>
 	<script src="/park/script/carportStatusShow.js"></script>
 </head>

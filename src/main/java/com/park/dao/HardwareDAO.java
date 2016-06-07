@@ -32,5 +32,6 @@ public interface HardwareDAO {
 	public Map<String, Object> getInfoByMacCarport(@Param("mac")String mac);
 	public int updateHardware(Hardware hardware);
 	public List<Hardware> searchHardware( @Param("mac")String mac);
+	public List<Hardware> searchHardwareByKeywords(@Param("mac")String mac);
 	public int deleteHardware(int id);
 }

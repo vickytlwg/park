@@ -32,7 +32,7 @@ public interface HardwareService {
 	public Map<String,Object>getInfoByMac(String mac);
 	public boolean bindHardware(int id);
 	public List<Hardware> searchHardware(String mac);
-	
+	public List<Hardware> searchHardwareByKeywords(String mac);
 	public boolean checkHardwareExist(String mac);
 	
 	public boolean changeHardwareStatus(Integer id, int status);
