@@ -56,7 +56,7 @@
 				    i++;
 				});
 				i=0;
-				$('#row2 .col-xs-1').each(function(){
+				$('.row2 ').each(function(){
 				    var status=data[26-i]["status"];
 				    if (status==0) {
 				        $(this).find('img').attr('src','img/gcar.png');
