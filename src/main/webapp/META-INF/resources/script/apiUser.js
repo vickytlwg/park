@@ -201,6 +201,8 @@ apiUserApp.controller('deleteCtrl', function($scope, $modalInstance, $http, $tim
 apiUserApp.controller('showTokenCtrl', function($scope, $modalInstance, $http, $timeout, tokenId){
 	$scope.info="";
 	$scope.showLoader = false;
+	$scope.showCount = false;
+	$scope.tokenCount=0;
 	
 	$http.get('/park/token/' + tokenId).success(function(response){
 		if(response.status == 1001){
@@ -210,6 +212,17 @@ apiUserApp.controller('showTokenCtrl', function($scope, $modalInstance, $http, $
 			$scope.info="获取token失败，请稍后重试";
 	}).error(function(){
 		$scope.info="获取token失败，请稍后重试";
+	});
+	
+	$http.get('/park/token/usage/count/' + tokenId).success(function(response){
+		if(response.status == 1001){
+			$scope.showCount = true;
+			$scope.tokenCount = response.body.count;
+		}
+		else
+			$scope.tokenCount="获取tokenCount失败，请稍后重试";
+	}).error(function(){
+		$scope.tokenCount="获取tokenCount失败，请稍后重试";
 	});
 	
 	$scope.submit = function(){

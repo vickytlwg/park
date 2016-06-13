@@ -24,10 +24,14 @@
 		select count(distinct(tokenId)) from tokenUsage
 	</select>
 	
+	<select id="tokenCount" resultType="int">
+		select count(*) from tokenUsage where tokenId=#{param1}
+	</select>
+	
 	<select id="get" resultMap="UserTokenUsageMapper">
 		select u.id as userId, u.username, u.companyInfo, t.tokenId, t.uri, count(*) as count from tokenUsage as t 
 		left join apiUsers u on t.tokenId = u.tokenId 
-		group by t.tokenId, t.uri 
+		group by t.tokenId
 		limit #{param1}, #{param2}
 	</select>
 	
@@ -35,7 +39,7 @@
 		select u.id as userId, u.username, u.companyInfo, t.tokenId, t.uri, count(*) as count from tokenUsage as t 
 		left join apiUsers u on t.tokenId = u.tokenId 
 		where u.id = #{param1}
-		group by t.tokenId, t.uri	
+		group by t.tokenId	
 	</select>
 	
 	<insert id="insertUsage" parameterType="TokenUsage" keyProperty="id">

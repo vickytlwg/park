@@ -5,11 +5,15 @@
 	</div>
 	
 	<div class='modal-body'>			
-		<div class='info' >{{info}}</div>	
+		<div class='info' >
+		<p class="text-info">token内容: <b>{{info}}</b></p>
+		<p class="text-info" ng-show='showCount'>调用次数: <b>{{tokenCount}}</b></p>
+		</div>	
 		
 		<div class="alert alert-info" ng-show="(showResult || showLoader)">
-						<span  ng-show='showLoader'  skip-ng-show= "yes" ng-activity-indicator= "CircledGrey"></span>
-						<span ng-show='showResult'>{{result}}</span>
+						<p  ng-show='showLoader'  skip-ng-show= "yes" ng-activity-indicator= "CircledGrey"></p>
+						<p class="text-info" ng-show='showResult'>token:{{result}}</p>
+						
 		</div>
 	</div>			
 	<div class='modal-footer'>

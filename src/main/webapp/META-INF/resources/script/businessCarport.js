@@ -415,6 +415,8 @@
 				}
 					
 				var chartData = [];
+				startDay = startDay + " 00:00:00";
+				endDay = endDay + " 00:00:00";
 				var parsedStartDay = Date.parse(startDay);
 				var parsedEndDay = Date.parse(endDay);
 				chartData.push([parsedStartDay, null, null]);
