@@ -37,6 +37,8 @@ public interface BusinessCarportDAO {
 	
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	
+	public int insertBusinessCarportNum(@Param("parkId")int parkid,@Param("carportnum")int carportnum);
+	
 	public int updateBusinessCarport(BusinessCarport businessCarport);
 	
 	public int deleteBusinessCarport(int id);

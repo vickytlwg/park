@@ -14,6 +14,8 @@
 		//renderBusinessCarport(0, $.fn.page.pageSize);					
 		fillSearchPark();
 		bindSearchParkChange();
+		bindaddBusinessCarportNum();
+		bindaddCarportSubmit();
 	};
 	
 	/**bind tr click*/
@@ -24,7 +26,33 @@
 				$(this).find('input[type="checkbox"]').click();
 		});
 	};
-	
+	var bindaddCarportSubmit=function(){
+	    $('#addCarportSubmit').on('click',function(){
+	        var carportstart=parseInt($('#carportStartNum').val());
+	        var carporttotal=parseInt($('#carportTotalNum').val());
+	        var parkid=parseInt($('#parkNameSelect').val());
+	        if(carportstart==''||carporttotal==''||isNaN(carportstart)||isNaN(carporttotal)){
+	            alert("输入错误,请检查");
+	            return;
+	        }
+	        var data={"carportStart":carportstart,"carportTotal":carporttotal,"parkId":parkid};
+	        $.ajax({
+	            url:$.fn.config.webroot +"/insertBusinessCarportNum",
+	            type:'post',
+	            dataType:'json',
+	            contentType: 'application/json;charset=utf-8',
+	            data:$.toJSON(data),
+	            success:function(data){
+	                $('#insertCarportNumResult').append($.fn.tip.success('提交操作完成,插入车位数'+data['num']));
+	                setTimeout('$("#insertCarportNumResult").html(""); $("#addCarportNum").modal("hide");$("#refresh").click()', 1000);
+	            },
+	            error:function(){
+	                 $('#insertCarportNumResult').append($.fn.tip.error('提交操作失败'));
+	                 setTimeout( $('#insertCarportNumResult').html(''),3000);
+	            }
+	        });
+	    });
+	};
 	var readCookieSetSelect=function(){
 		if($.cookie('selectValue')){
 			var aa=$.cookie('selectValue');
@@ -34,7 +62,7 @@
 			}
 		}
 		
-	}
+	};
 	
 	/**bind refresh click***/
 	var bindRefreshClick = function(){
@@ -90,6 +118,12 @@
 			addBtnClickHandle();
 		});
 	};
+	var bindaddBusinessCarportNum=function(){
+	    $('#addBusinessCarportNum').on('click',function(){
+	        fillParkName1();
+	        $('#addCarportNum').modal('show');
+	    });
+	};
 	
 	var addBtnClickHandle = function(){
 		$('#addBusinessCarportForm')[0].reset();
@@ -103,7 +137,35 @@
 		fillMacInfo();
 	};
 	
-	
+	var fillParkName1 = function(){
+        $.fn.loader.appendLoader($('#parkNameLoader1'));
+        var successFunc = function(data){
+            $.fn.loader.removeLoader($('#parkNameLoader1'));
+            data = data['body'];
+            var parkNameSelect = $('select#parkNameSelect');
+            parkNameSelect.html('');
+            for(var i = 0; i < data.length; i++){
+                if(data[i]['type']==3){
+                    parkNameSelect.append($('<option value = ' + data[i]['id'] + '>' + data[i]['name'] +'</option>'));
+                }                                                       
+            }
+            if($('#searchPark').val() != -1)
+                parkNameSelect.val($('#searchPark').val());
+        };
+        var errorFunc = function(data){
+            $.fn.loader.removeLoader('#parkNameLoader1');
+            $('#parkNameLoader1').append('<span>获取停车场名称失败，请稍后重试</span>');
+        };
+        $.ajax({
+            url:$.fn.config.webroot + '/getParks?_t=' + (new Date()).getTime(),
+            type: 'get',
+            contentType: 'application/json;charset=utf-8',          
+            success: function(data){successFunc(data);},
+            error: function(data){errorFunc(data);}
+        });
+    };
+    
+    
 	var fillParkName = function(){
 		$.fn.loader.appendLoader($('#parkNameLoader'));
 		var successFunc = function(data){
@@ -338,6 +400,8 @@
 			tr.append('<td data=' + data[i]['status'] + '>' + (data[i]['status'] == 0 ? wuche:youche)+ '</td>');
 
 			tr.append('<td>' + data[i]['floor']+ '</td>');
+			if(data[i]['position']==undefined)
+			data[i]['position']='';
 			tr.append('<td>' + data[i]['position']+ '</td>');
 			
 			var desc ='';
@@ -395,7 +459,7 @@
 		    isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
 		
 		});
-	}
+	};
 	
 	//Highcharts.setOptions({ global: { useUTC: false } });   
 	

@@ -94,6 +94,10 @@
 		update businessCarport set status=#{param2}, date=#{param3} where macId = #{param1}
 	</update>
 	
+	<insert id="insertBusinessCarportNum">
+		insert into businessCarport(parkId,carportNumber,date) values (#{parkId},#{carportnum},NOW()) 
+	</insert>
+	
 	<delete id="deleteBusinessCarport" parameterType="int">
 		delete from businessCarport where id = #{id}
 	</delete>

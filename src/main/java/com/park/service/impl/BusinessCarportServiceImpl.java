@@ -234,5 +234,18 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		return rate / count;
 	}
 
+	@Override
+	public int insertBusinessCarportNum(int parkid, int carportstart, int carporttotal) {
+		// TODO Auto-generated method stub
+		int carportend=carportstart+carporttotal;
+		int insertnum=0;
+		for(int i=carportstart;i<carportend;i++){
+			if (businessCarportDAO.insertBusinessCarportNum(parkid, i)==1) {
+				insertnum++;
+			}
+		}
+		return insertnum;
+	}
+
 	
 }

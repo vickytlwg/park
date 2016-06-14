@@ -315,4 +315,16 @@ public class BusinessCarportController {
 		}
 		return Utility.gson.toJson(retMap);
 	}
+	@RequestMapping(value="/insertBusinessCarportNum",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String insertBusinessCarportNum(@RequestBody Map<String, Object> args){
+		Integer carportstart=(Integer) args.get("carportStart");
+		Integer carporttotal=(Integer) args.get("carportTotal");
+		Integer parkid=(Integer) args.get("parkId");
+		int insertnum=businessCarportService.insertBusinessCarportNum(parkid, carportstart, carporttotal);
+		Map<String, Object> ret=new HashMap<>();
+		ret.put("num", insertnum);
+		return Utility.gson.toJson(ret);
+		
+	}
 }

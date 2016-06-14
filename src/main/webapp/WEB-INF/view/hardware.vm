@@ -19,7 +19,6 @@
 		                		<button #if(!$isAdmin) disabled#end id='addMac' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
 		                		<button #if(!$isAdmin) disabled#end id='updateMac' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
 		                		<button #if(!$isAdmin) disabled#end id='deleteMac' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
-		                		<button #if(!$isAdmin) disabled#end id='searchMac' type="button" class="btn  btn-primary"><span class="glyphicon glyphicon-search"></span> 查找</button>
 		                	</div>
 							
 			<div class="pull-right" style="padding-left:50px">
@@ -34,7 +33,7 @@
 				<input type="text" id="searmacinput" class="form-control"></input>
 				</div>
                 <div class="col-md-3">
-				<button type="button" id="searchmacbtn" class="btn btn-danger">查看</button>	
+				<button type="button" id="searchmacbtn" class="btn btn-danger">查找</button>	
 				</div>				
             </div>
 		</div>

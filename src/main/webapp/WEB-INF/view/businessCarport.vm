@@ -30,7 +30,8 @@
 		                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
 		                		<button #if(!$isAdmin) disabled#end id='addBusinessCarport' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
 		                		<button #if(!$isAdmin) disabled#end id='updateBusinessCarport' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
 		                	</div>
 	                	<div class="pull-right">
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
@@ -151,7 +152,57 @@
 <div id='showErrorMessage'>
 </div>
 
-
+<div class="modal fade" id="addCarportNum" tabindex="-1" role="dialog"  aria-hidden='true'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+		
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+				<h4 class='modal-title' >停车位自动生成</h4>
+            </div>
+			<div class="modal-body">
+				<div class='row'>
+						<label class='col-sm-2 control-label' for='parkNameSelect'>停车场</label>
+						<div class='col-sm-8'>
+							<select class='form-control' id='parkNameSelect'>
+							<option>请选择停车场</option>
+							</select>
+						</div>
+						<div id='parkNameLoader1'>
+						</div>
+					</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label class="control-label" sytle="float:right">开始序号
+                        </label>
+                    </div>
+					<div class="col-md-8">
+						<input type="text" id="carportStartNum" class="form-control"/>
+                    </div>
+                </div>
+				<div class="row" style="padding-top:10px">
+					<div class="col-md-2">
+						<label class="control-label">车位数
+                        </label>
+                    </div>
+					<div class="col-md-8">
+						<input type="text" id="carportTotalNum" class="form-control"/>
+                    </div>
+                </div>
+				<div id="insertCarportNumResult">
+                </div>
+            </div>
+		<div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" id="addCarportSubmit">
+				添加车位
+            </button>
+         </div>
+        </div>
+    </div>
+	 </div>
 <div class="modal fade" id="carportUsage" tabindex="-1" role="dialog"  aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>

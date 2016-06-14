@@ -37,6 +37,7 @@ public interface BusinessCarportService {
 	
 	public List<CarportStatusDetail> getLimitCarportStatusDetail(int start, int len);
 	
+	public int insertBusinessCarportNum(int parkid,int carportstart,int carporttotal);
 	
 	public List<CarportStatusDetail> getDetailByCarportId(int carportId);
 	
