@@ -45,7 +45,7 @@
 									<th><span style="padding-left:15%">联系人</div></th>
 									<th><span style="padding-left:15%">电话</div></th>
 									<th><span style="padding-left:15%">TokenId</div></th>
-									<th><span style="padding-left:15%">显示token</div></th>
+									<th><span style="padding-left:15%">token详情</div></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
 				          	<tr ng-repeat = "item in apiUsers">
@@ -56,7 +56,7 @@
 				          		<td>{{item.contact}}</td>
 				          		<td>{{item.number}}</td>
 				          		<td>{{item.tokenId}}</td>
-				          		<td><a class="button" ng-click="showTokenModal($index)">显示token</a></td>
+				          		<td><a class="button" ng-click="showTokenModal($index)">点击查看</a></td>
 				          </table>
     					</div>
     				</div>

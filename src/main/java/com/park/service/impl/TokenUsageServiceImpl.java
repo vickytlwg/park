@@ -64,4 +64,10 @@ public class TokenUsageServiceImpl implements TokenUsageService{
 		
 	}
 
+	@Override
+	public int tokenCount(int tokenId) {
+		
+		return tokenUsageDao.tokenCount(tokenId);
+	}
+
 }

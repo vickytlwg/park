@@ -9,6 +9,8 @@ public interface TokenUsageService {
 	
 	public int count();
 	
+	public int tokenCount(int tokenId);
+	
 	public List<UserTokenUsage> get(int begin, int len);
 	
 	public List<UserTokenUsage> getUsage(int userId);

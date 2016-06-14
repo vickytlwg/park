@@ -58,6 +58,15 @@ public class TokenUsageController {
 		return Utility.createJsonMsg(1001, "get count sucessfully", body);
 	}
 	
+	@RequestMapping(value = "/count/{tokenId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String tokenCount(@PathVariable int tokenId){
+		Map<String, Object> body = new HashMap<String, Object>();
+		int count = usageService.tokenCount(tokenId);
+		body.put("count", count);
+		return Utility.createJsonMsg(1001, "get count sucessfully", body);
+	}
+	
 	@RequestMapping(value = "/items", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String get(@RequestBody Map<String, Object> args){
