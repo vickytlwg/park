@@ -8,10 +8,8 @@
           <h1>
             用户token管理
             <small>九比特信息系统</small>
-          </h1>
-      
+          </h1>     
     </section>
-
     <section class="content">
        <div class="row">
             <div class="col-xs-12">
@@ -30,16 +28,14 @@
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
 	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
 	                	</select>
-	                	</div>
-	                	
+	                	</div>	                	
 	                	<br/>   
 	                    <br/> 
 						<div>
 						 <table class="display table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-				            <tr>
-				            
+				            <tr>				            
 				             <th><span style=""><input type="checkbox" /></div></th>
-									<th ><span style="padding-left:15%">Id</div></th>		
+									<th><span style="padding-left:15%">Id</div></th>		
 									<th><span style="padding-left:15%">用户名</div></th>
 									<th><span style="padding-left:15%">公司信息</div></th>
 									<th><span style="padding-left:15%">联系人</div></th>

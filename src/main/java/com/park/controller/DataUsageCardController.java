@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -7,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +32,7 @@ import com.park.model.DataUsageCardDetail;
 import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.DataUsageCardService;
+import com.park.service.ExcelServiceImpl;
 import com.park.service.ParkService;
 import com.park.service.Utility;
 
@@ -191,5 +198,24 @@ public class DataUsageCardController {
 			return Utility.createJsonMsg(1002, "delete card fail");
 	}
 	
+	@Autowired
+	private ExcelServiceImpl<DataUsageCardDetail> usagecardExcel;
+	@RequestMapping(value="/getCardExcel")
+	@ResponseBody
+	public void getUsageCardExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+		List<DataUsageCardDetail> cardDetails=cardService.getAllCardDetail();		
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"Id","停车场名称","卡号","电话号码","类型","安装位置","经度","纬度","状态","停车场id","本月流量"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "export2003_b.xls");
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		usagecardExcel.produceSheetData("流量卡", headers, cardDetails, workbook, "yyyy-MM-dd");
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "export2003_b.xls", response);
+	}
 	
 }

@@ -41,6 +41,11 @@
 		left join park as p on d.parkId = p.id  order by d.dataUsage desc
 		limit #{param1}, #{param2} 
 	</select>
+	<select id="getAllCardDetail" resultMap="DataUsageCardDetailMapper">
+		select d.id, p.name as parkName, d.cardNumber, d.phoneNumber, d.type, d.position, d.parkId, d.longitude, d.latitude, d.status, d.dataUsage
+		from dataUsageCard as d 
+		left join park as p on d.parkId = p.id  order by d.dataUsage desc		
+	</select>
 	<select id="getCardDetailByKeywords" resultMap="DataUsageCardDetailMapper" statementType="STATEMENT">
         select d.id, d.cardNumber, d.phoneNumber, d.type, d.status, d.dataUsage, d.parkId, d.position, d.longitude, d.latitude, p.name as parkName
         from dataUsageCard as d

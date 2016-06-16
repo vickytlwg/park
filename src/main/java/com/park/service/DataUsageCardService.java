@@ -11,6 +11,8 @@ public interface DataUsageCardService {
 	
 	public List<DataUsageCardDetail> getCardDetail(int low, int count);
 	
+	public List<DataUsageCardDetail> getAllCardDetail();
+	
 	public List<DataUsageCardDetail> getCardsByParkId(int parkId);
 	
 	public List<DataUsageCardDetail> getCardById(int id);

@@ -7,17 +7,13 @@ public class DataUsageCardDetail {
 	@JsonIgnore
 	private int id = -1;
 	
+	private String parkName;
+	
 	private String cardNumber;
 	
 	private String phoneNumber;
 	
 	private int type;
-	
-	private int status;
-	
-	private float dataUsage;
-	
-	private int parkId;
 	
 	private String position;
 	
@@ -25,7 +21,13 @@ public class DataUsageCardDetail {
 	
 	private double latitude;
 	
-	private String parkName;
+	private int status;
+
+	private int parkId;
+	
+	private float dataUsage;
+		
+	
 
 	public int getId() {
 		return id;

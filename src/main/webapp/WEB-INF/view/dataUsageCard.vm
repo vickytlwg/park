@@ -23,6 +23,7 @@
 		                		<button #if(!$isAdmin) disabled#end id='addDataCard' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
 		                		<button #if(!$isAdmin) disabled#end id='updateDataCard' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
 		                		<button #if(!$isAdmin) disabled#end id='deleteDataCard' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+								<button #if(!$isAdmin) disabled#end onclick="window.open('dataUsage/getCardExcel')" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 导出excel</button>
 		                	</div>
                 
 	             <div class="pull-right">		
