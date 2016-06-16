@@ -32,7 +32,7 @@ public class ExcelServiceImpl <T>  {
 		// 生成一个表格
 		HSSFSheet sheet = workbook.createSheet(title);
 		// 设置表格默认列宽度为15个字节
-		sheet.setDefaultColumnWidth((short) 15);
+		sheet.setDefaultColumnWidth( 15);		
 		// 生成一个样式
 		HSSFCellStyle style = workbook.createCellStyle();
 		// 设置这些样式
@@ -66,15 +66,7 @@ public class ExcelServiceImpl <T>  {
 		// 把字体应用到当前的样式
 		style2.setFont(font2);
 		// 声明一个画图的顶级管理器
-		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();
-		// 定义注释的大小和位置,详见文档
-		HSSFComment comment = patriarch.createComment(new HSSFClientAnchor(0,
-				0, 0, 0, (short) 4, 2, (short) 6, 5));
-		// 设置注释内容
-		comment.setString(new HSSFRichTextString("可以在POI中添加注释！"));
-		// 设置注释作者，当鼠标移动到单元格上是可以在状态栏中看到该内容.
-		comment.setAuthor("leno");
-		// 产生表格标题行
+		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();			
 		
 		// 产生表格标题行
 		HSSFRow row = sheet.createRow(0);

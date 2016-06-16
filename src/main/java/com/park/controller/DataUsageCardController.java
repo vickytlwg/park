@@ -32,6 +32,7 @@ import com.park.model.DataUsageCardDetail;
 import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.DataUsageCardService;
+import com.park.service.ExcelExportService;
 import com.park.service.ExcelServiceImpl;
 import com.park.service.ParkService;
 import com.park.service.Utility;
@@ -200,6 +201,8 @@ public class DataUsageCardController {
 	
 	@Autowired
 	private ExcelServiceImpl<DataUsageCardDetail> usagecardExcel;
+	@Autowired
+	private ExcelExportService excelExportService;
 	@RequestMapping(value="/getCardExcel")
 	@ResponseBody
 	public void getUsageCardExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
@@ -207,9 +210,11 @@ public class DataUsageCardController {
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 		String[] headers={"Id","停车场名称","卡号","电话号码","类型","安装位置","经度","纬度","状态","停车场id","本月流量"};
+		String[] headers1={"Id","停车场名称","卡号","电话号码","类型","安装位置","经纬度","本月流量"};
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "export2003_b.xls");
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		usagecardExcel.produceSheetData("流量卡", headers, cardDetails, workbook, "yyyy-MM-dd");
+	//	usagecardExcel.produceSheetData("流量卡", headers, cardDetails, workbook, "yyyy-MM-dd");
+		excelExportService.produceExceldataDataUsage("流量卡", headers1, cardDetails, workbook);
 		try {
 			workbook.write(out);
 		} catch (IOException e) {
