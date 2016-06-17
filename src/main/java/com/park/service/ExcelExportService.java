@@ -67,21 +67,25 @@ public class ExcelExportService {
 			HSSFRow row1 = sheet.createRow(j+1);
 			DataUsageCardDetail dataUsageCardDetail=dataset.get(j);
 		
-				HSSFCell cell0 = row1.createCell(0);				
-				cell0.setCellStyle(style2);
-				cell0.setCellValue(dataUsageCardDetail.getId());
+//				HSSFCell cell0 = row1.createCell(0);				
+//				cell0.setCellStyle(style2);
+//				cell0.setCellValue(dataUsageCardDetail.getId());
 			
-				HSSFCell cell1 = row1.createCell(1);				
+				HSSFCell cell1 = row1.createCell(0);				
 				cell1.setCellStyle(style2);
 				cell1.setCellValue(dataUsageCardDetail.getParkName());
 				
-				HSSFCell cell2 = row1.createCell(2);				
+				HSSFCell cell2 = row1.createCell(1);				
 				cell2.setCellStyle(style2);
 				cell2.setCellValue(dataUsageCardDetail.getCardNumber());
 			
-				HSSFCell cell3 = row1.createCell(3);				
+				HSSFCell cell3 = row1.createCell(2);				
 				cell3.setCellStyle(style2);
 				cell3.setCellValue(dataUsageCardDetail.getPhoneNumber());
+				
+				HSSFCell cell7 = row1.createCell(3);				
+				cell7.setCellStyle(style2);			
+				cell7.setCellValue(dataUsageCardDetail.getDataUsage());
 				
 				HSSFCell cell4 = row1.createCell(4);				
 				cell4.setCellStyle(style2);
@@ -112,9 +116,7 @@ public class ExcelExportService {
 				dataUsageCardDetail.getLongitude()+")";
 				cell6.setCellValue(zuobiao);
 				
-				HSSFCell cell7 = row1.createCell(7);				
-				cell7.setCellStyle(style2);			
-				cell7.setCellValue(dataUsageCardDetail.getDataUsage());
+				
 				
 			
 		}
