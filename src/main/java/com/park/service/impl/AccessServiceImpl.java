@@ -297,5 +297,11 @@ public class AccessServiceImpl implements AccessService{
 		return accessDAO.getAllAccessCount(xmo, ymonth);
 	}
 
+	@Override
+	public int getAccessCountByDate(int xmo, int ymonth, String accessDate) {
+		// TODO Auto-generated method stub
+		return accessDAO.getAccessCountByDate(xmo, ymonth, accessDate);
+	}
+
 
 }

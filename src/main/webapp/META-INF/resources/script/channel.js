@@ -15,6 +15,7 @@
 		bindSearchParkChange();
 		renderPagination();
 		bindSearchBtn();
+		bindKeywordsSearch();
 	};
 	
 	/**bind tr click*/
@@ -24,6 +25,33 @@
 			if(event.target.nodeName.toLowerCase() != 'input')
 				$(this).find('input[type="checkbox"]').click();
 		});
+	};
+	
+	var bindKeywordsSearch=function(){
+	    $('#keywordsSearch').on('click',function(){
+	        var keywords=$('#keywordsInput').val();
+	        if(keywords=='')
+	        {
+	            alert("请输入查询内容");
+	            return;
+	        }
+	        var errorHandle=function(){
+	          alert("发送请求失败");  
+	        };
+	        var data={"keywords":keywords};
+	        $.ajax({
+	            url:$.fn.config.webroot + "/getChannelDetailByKeywords",
+	            type:'post',
+	            dataType:'json',
+	            contentType:'application/json;charset=utf-8',
+	            data:$.toJSON(data),
+	            success:function(data){
+	                fillchannelTbody(data);
+	                $('#pagination').html('');
+	            },
+	            error:errorHandle
+	        });
+	    });
 	};
 	
 	var fillSearchPark = function(){
@@ -148,12 +176,12 @@
 		return $.fn.page.paginationUl;
 	};
 	var fillChannelCarportTbody = function(data){
-		alert("fillchannelcarport");
+	//	alert("fillchannelcarport");
 		var businessCarportBody = $("#ChannelBody");
 		$.fn.loader.removeLoader($('#ChannelDiv'));
 		businessCarportBody.html('');
 		data = data["body"];
-		alert(data.length);
+//		alert(data.length);
 		for(var i = 0; i < data.length; i++){
 			var tr = $("<tr></tr>");
 			tr.append('<td><input type="checkbox" /></td>');

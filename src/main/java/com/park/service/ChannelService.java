@@ -15,6 +15,8 @@ public interface ChannelService {
 	
 	public List<ChannelDetail> getChannelDetail(int low, int count);
 	
+	public List<ChannelDetail> getChannelDetailByKeywords(String keywords);
+	
 	public List<ChannelDetail> getParkChannelDetail(int low, int count,Integer parkId);
 	
 	public List<ChannelDetail> getChannelDetailByDate(String startday,String endday);

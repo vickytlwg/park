@@ -1,6 +1,5 @@
 package com.park.controller;
 
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,181 +35,182 @@ public class AccessController {
 
 	@Autowired
 	private AccessService accessService;
-	
+
 	@Autowired
 	private HardwareService hardwareService;
-	
+
 	@Autowired
 	private ParkService parkService;
-	
+
 	@Autowired
 	private AuthorityService authService;
-	
+
 	@Autowired
 	private ChannelService channelService;
-	//private static Log logger = LogFactory.getLog(UserController.class);
-	
-	
-	
-	@RequestMapping(value = "/access", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String accessIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){	
+	// private static Log logger = LogFactory.getLog(UserController.class);
+
+	@RequestMapping(value = "/access", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
+	public String accessIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
 		return "access";
 	}
-	
-	@RequestMapping(value = "/getAccessDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getAccessDetail", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count, @RequestParam(value = "parkId", required = false) Integer parkId){	
+	public String accessIndex(@RequestParam("low") int low, @RequestParam("count") int count,
+			@RequestParam(value = "parkId", required = false) Integer parkId) {
 		Map<String, Object> ret = new HashMap<String, Object>();
-				
+
 		List<AccessDetail> accessDetail = accessService.getAccessDetail(low, count, parkId);
-		if(accessDetail != null){
+		if (accessDetail != null) {
 			ret.put("status", "1001");
 			ret.put("message", "get access detail success");
 			ret.put("body", Utility.gson.toJson(accessDetail));
-		}else{
+		} else {
 			ret.put("status", "1002");
 			ret.put("message", "get access detail fail");
 		}
 		return Utility.gson.toJson(ret);
-		
+
 	}
-	
-	@RequestMapping(value = "/getAccessCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getAccessCount", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getAccessCount(@RequestParam(value = "parkId", required = false) Integer parkId){	
+	public String getAccessCount(@RequestParam(value = "parkId", required = false) Integer parkId) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> body = new HashMap<String, Object>();
 		int count = accessService.getAccessCount(parkId);
 		body.put("count", count);
-		
+
 		ret.put("status", "1001");
 		ret.put("message", "get access detail success");
 		ret.put("body", Utility.gson.toJson(body));
-		
+
 		return Utility.gson.toJson(ret);
-		
+
 	}
-	
-	@RequestMapping(value = "/getHourCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getHourCountByPark", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getHourCountByPark(@RequestBody Map<String, Object> args) throws ParseException{
-		
+	public String getHourCountByPark(@RequestBody Map<String, Object> args) throws ParseException {
+
 		int parkId = -1;
-		if(args.containsKey("parkId")){
-			parkId = (int)args.get("parkId");
-		}else{
-			String parkName = (String)args.get("parkName");
+		if (args.containsKey("parkId")) {
+			parkId = (int) args.get("parkId");
+		} else {
+			String parkName = (String) args.get("parkName");
 			parkId = parkService.nameToId(parkName);
 		}
-		
-		String date = (String)args.get("date");
+
+		String date = (String) args.get("date");
 		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByPark(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
-		
+
 	}
-	
-@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getHourCountByChannel", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getHourCountByChannel(@RequestBody Map<String, Object> args){	
+	public String getHourCountByChannel(@RequestBody Map<String, Object> args) {
 		int parkId = -1;
-		if(args.containsKey("parkId")){
-			parkId = (int)args.get("parkId");
-		}else{
-			String parkName = (String)args.get("parkName");
+		if (args.containsKey("parkId")) {
+			parkId = (int) args.get("parkId");
+		} else {
+			String parkName = (String) args.get("parkName");
 			parkId = parkService.nameToId(parkName);
 		}
-		String date = (String)args.get("date");
+		String date = (String) args.get("date");
 		Map<String, Map<Integer, Integer>> body = accessService.getHourCountByChannel(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
-		
+
 	}
-	
-	@RequestMapping(value = "/getDayCountByPark", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getDayCountByPark", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getMonthCountByPark(@RequestBody Map<String, Object> args){	
+	public String getMonthCountByPark(@RequestBody Map<String, Object> args) {
 		int parkId = -1;
-		if(args.containsKey("parkId")){
-			parkId = (int)args.get("parkId");
-		}else{
-			String parkName = (String)args.get("parkName");
+		if (args.containsKey("parkId")) {
+			parkId = (int) args.get("parkId");
+		} else {
+			String parkName = (String) args.get("parkName");
 			parkId = parkService.nameToId(parkName);
 		}
-		String date = (String)args.get("date");
+		String date = (String) args.get("date");
 		Map<String, Map<Integer, Integer>> body = accessService.getDayCountByPark(parkId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
-		
+
 	}
-	
-/*	@RequestMapping(value = "/getMonthCountByChannel", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	/*
+	 * @RequestMapping(value = "/getMonthCountByChannel", method =
+	 * RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	 * 
+	 * @ResponseBody public String getMonthCountByChannel(@RequestBody
+	 * Map<String, Object> args){ int parkId = -1;
+	 * if(args.containsKey("parkId")){ parkId = (int)args.get("parkId"); }else{
+	 * String parkName = (String)args.get("parkName"); parkId =
+	 * parkService.nameToId(parkName); } int year = (int)args.get("year");
+	 * Map<String, Map<Integer, Integer>> body =
+	 * accessService.getMonthCountByChannel(parkId, year); return
+	 * Utility.createJsonMsg(1001, "get count success", body);
+	 * 
+	 * }
+	 */
+
+	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getMonthCountByChannel(@RequestBody Map<String, Object> args){	
-		int parkId = -1;
-		if(args.containsKey("parkId")){
-			parkId = (int)args.get("parkId");
-		}else{
-			String parkName = (String)args.get("parkName");
-			parkId = parkService.nameToId(parkName);
-		}
-		int year = (int)args.get("year");
-		Map<String, Map<Integer, Integer>> body = accessService.getMonthCountByChannel(parkId, year);
-		return Utility.createJsonMsg(1001, "get count success", body);
-		
-	}*/
-	
-	
-@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	@ResponseBody
-	public String getChannelHourCount(@RequestBody Map<String, Object> args){	
+	public String getChannelHourCount(@RequestBody Map<String, Object> args) {
 		int macId = -1;
-		String mac="";
-		if(args.containsKey("macId")){
-			macId = (int)args.get("macId");
-		}else{
-			mac = (String)args.get("mac");
+		String mac = "";
+		if (args.containsKey("macId")) {
+			macId = (int) args.get("macId");
+		} else {
+			mac = (String) args.get("mac");
 			macId = hardwareService.macToId(mac);
 		}
-		String date = (String)args.get("date");
-		Map<Integer, Integer> body = accessService.getChannelHourCount(mac,macId, date);
+		String date = (String) args.get("date");
+		Map<Integer, Integer> body = accessService.getChannelHourCount(mac, macId, date);
 		return Utility.createJsonMsg(1001, "get count success", body);
-		
+
 	}
-	
-	
-/*	@RequestMapping(value = "/getChannelMonthCount", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	/*
+	 * @RequestMapping(value = "/getChannelMonthCount", method =
+	 * RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	 * 
+	 * @ResponseBody public String getChannelMonthCount(@RequestBody Map<String,
+	 * Object> args){ int macId = -1; if(args.containsKey("macId")){ macId =
+	 * (int)args.get("macId"); }else{ String mac = (String)args.get("mac");
+	 * macId = hardwareService.macToId(mac); } int year = (int)args.get("year");
+	 * Map<Integer, Integer> body = accessService.getChannelMonthCount(macId,
+	 * year); return Utility.createJsonMsg(1001, "get count success", body);
+	 * 
+	 * }
+	 */
+
+	@RequestMapping(value = "/insert/access", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getChannelMonthCount(@RequestBody Map<String, Object> args){	
-		int macId = -1;
-		if(args.containsKey("macId")){
-			macId = (int)args.get("macId");
-		}else{
-			String mac = (String)args.get("mac");
-			macId = hardwareService.macToId(mac);
-		}
-		int year = (int)args.get("year");
-		Map<Integer, Integer> body = accessService.getChannelMonthCount(macId, year);
-		return Utility.createJsonMsg(1001, "get count success", body);
-		
-	}*/
-	
-	
-	@RequestMapping(value = "/insert/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	@ResponseBody
-	public String insertPark(@RequestBody Map<String, Object> argMap){
-		
-		String mac = (String)argMap.get("mac");
+	public String insertPark(@RequestBody Map<String, Object> argMap) {
+
+		String mac = (String) argMap.get("mac");
 		Date date = new Date();
 		int channelId = channelService.getChannelIdByMac(mac);
-		if(channelId < 0){
-			return Utility.createJsonMsg("1003","the hardware is not bound") + "\neof\n";
+		if (channelId < 0) {
+			return Utility.createJsonMsg("1003", "the hardware is not bound") + "\neof\n";
 		}
 		Access access = new Access();
 		access.setDate(date);
@@ -218,24 +218,37 @@ public class AccessController {
 		channelService.updateChannelDateByMac(mac);
 		return accessService.insertAccess(access) + "\neof\n";
 	}
-@RequestMapping(value="/getAllAccessCount",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
-@ResponseBody
-public String getAllAccessCount()
-	{
-		int count=accessService.getAllAccessCount(200, 12);
-		HashMap<String, Integer>  num=new HashMap<String,Integer>();
+
+	@RequestMapping(value = "/getAllAccessCount", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getAllAccessCount() {
+		int count = accessService.getAllAccessCount(200, 12);
+		HashMap<String, Integer> num = new HashMap<String, Integer>();
 		num.put("num", count);
 		return Utility.gson.toJson(num);
 	}
-/*	@RequestMapping(value = "/update/access", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getAccessCountByDate", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updatePark(@RequestBody Access access){
-		return accessService.updateAccess(access);
+	public String getAccessCountByDate(@RequestBody Map<String, Object> args) {
+		String accessDate=(String) args.get("date");
+		int count = accessService.getAccessCountByDate(200, 12,accessDate);
+		HashMap<String, Integer> num = new HashMap<String, Integer>();
+		num.put("num", count);
+		return Utility.gson.toJson(num);
 	}
-	
-	@RequestMapping(value = "/delete/access/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	@ResponseBody
-	public String deletePark(@PathVariable int id){
-		return accessService.deleteAccess(id);
-	}*/
+	/*
+	 * @RequestMapping(value = "/update/access", method = RequestMethod.POST,
+	 * produces = {"application/json;charset=UTF-8"})
+	 * 
+	 * @ResponseBody public String updatePark(@RequestBody Access access){
+	 * return accessService.updateAccess(access); }
+	 * 
+	 * @RequestMapping(value = "/delete/access/{id}", method =
+	 * RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	 * 
+	 * @ResponseBody public String deletePark(@PathVariable int id){ return
+	 * accessService.deleteAccess(id); }
+	 */
 }

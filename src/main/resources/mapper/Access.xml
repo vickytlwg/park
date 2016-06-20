@@ -94,8 +94,11 @@
 	<insert id="insertAccess" keyProperty="id" statementType="STATEMENT">
 	    insert into ${table}(channelId,date,isDeleted,dateIndex) values (${item.channelId},NOW(), ${item.isDeleted},DATE_FORMAT(NOW(), '%Y-%m-%d %H'))
 	</insert>
-<select id="getAllAccessCount" resultType ="int">
+	<select id="getAllAccessCount" resultType ="int">
 	{call getAccessCount(#{xmo,jdbcType=INTEGER,mode=IN},#{ymonth,jdbcType=INTEGER,mode=IN})}
+	</select>
+	<select id="getAccessCountByDate" resultType ="int">
+	{call getAccessCountByDateIndex(#{xmo,jdbcType=INTEGER,mode=IN},#{ymonth,jdbcType=INTEGER,mode=IN},#{accessDate,jdbcType=VARCHAR,mode=IN})}
 	</select>
 	<!-- <update id="updateAccess" statementType="STATEMENT">
 		update ${table} set channelId = ${access.channelId}, date = '${access.date}', isDeleted = ${access.isDeleted} where Id = ${Id}

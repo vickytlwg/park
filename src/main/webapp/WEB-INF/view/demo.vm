@@ -1,5 +1,12 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
+<script src="/park/script/demo.js">
+</script>
+<script >
+$(function(){
+$.fn.demo.initial();
+});
+</script>
 <section class="content-header">
   <h1>
     Dashboard
@@ -19,8 +26,8 @@
       <div class="info-box">
         <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">CPU Traffic</span>
-          <span class="info-box-number">90<small>%</small></span>
+          <span class="info-box-text">总车流量</span>
+          <span class="info-box-number" id="totalAccessCount"></span>
         </div><!-- /.info-box-content -->
       </div><!-- /.info-box -->
     </div><!-- /.col -->
@@ -28,8 +35,8 @@
       <div class="info-box">
         <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">Likes</span>
-          <span class="info-box-number">41,410</span>
+          <span class="info-box-text">总停车场数</span>
+          <span class="info-box-number" id="carportCount"></span>
         </div><!-- /.info-box-content -->
       </div><!-- /.info-box -->
     </div><!-- /.col -->
@@ -41,8 +48,8 @@
       <div class="info-box">
         <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">Sales</span>
-          <span class="info-box-number">760</span>
+          <span class="info-box-text">今日总车流量</span>
+          <span class="info-box-number" id="todayAccessCount"></span>
         </div><!-- /.info-box-content -->
       </div><!-- /.info-box -->
     </div><!-- /.col -->
@@ -50,8 +57,8 @@
       <div class="info-box">
         <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">New Members</span>
-          <span class="info-box-number">2,000</span>
+          <span class="info-box-text">昨日总车流量</span>
+          <span class="info-box-number" id="yestodayAccessCount"></span>
         </div><!-- /.info-box-content -->
       </div><!-- /.info-box -->
     </div><!-- /.col -->
@@ -90,34 +97,34 @@
             </div><!-- /.col -->
             <div class="col-md-4">
               <p class="text-center">
-                <strong>Goal Completion</strong>
+                <strong>停车场车位情况</strong>
               </p>
               <div class="progress-group">
-                <span class="progress-text">Add Products to Cart</span>
-                <span class="progress-number"><b>160</b>/200</span>
+                <span class="progress-text">江宁万达停车场</span>
+                <span class="progress-number"><b>671</b>/1200</span>
                 <div class="progress sm">
-                  <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                  <div class="progress-bar progress-bar-aqua" style="width: 60%"></div>
                 </div>
               </div><!-- /.progress-group -->
               <div class="progress-group">
-                <span class="progress-text">Complete Purchase</span>
-                <span class="progress-number"><b>310</b>/400</span>
+                <span class="progress-text">牛首山停车场</span>
+                <span class="progress-number"><b>1364</b>/1624</span>
                 <div class="progress sm">
-                  <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                  <div class="progress-bar progress-bar-red" style="width: 90%"></div>
                 </div>
               </div><!-- /.progress-group -->
               <div class="progress-group">
-                <span class="progress-text">Visit Premium Page</span>
-                <span class="progress-number"><b>480</b>/800</span>
+                <span class="progress-text">军区总医院</span>
+                <span class="progress-number"><b>12</b>/525</span>
                 <div class="progress sm">
-                  <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                  <div class="progress-bar progress-bar-green" style="width: 98%"></div>
                 </div>
               </div><!-- /.progress-group -->
               <div class="progress-group">
-                <span class="progress-text">Send Inquiries</span>
-                <span class="progress-number"><b>250</b>/500</span>
+                <span class="progress-text">金鹰商城停车场</span>
+                <span class="progress-number"><b>982</b>/1800</span>
                 <div class="progress sm">
-                  <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                  <div class="progress-bar progress-bar-yellow" style="width: 58%"></div>
                 </div>
               </div><!-- /.progress-group -->
             </div><!-- /.col -->

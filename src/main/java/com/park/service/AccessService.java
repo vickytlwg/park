@@ -34,7 +34,7 @@ public interface AccessService {
 	public String insertAccessList(List<Access> accesses);
 	public int getAllAccessCount(int xmo,int ymonth);
 	//public String updateAccess(Access access);
-	
+	public int getAccessCountByDate(int xmo,int ymonth,String accessDate);
 	//public String deleteAccess(int Id);
 	
 	public List<AccessDetail> getAccessDetail(int low, int count,Integer parkId);

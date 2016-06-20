@@ -74,7 +74,7 @@ public class ChannelController {
 		
 		return Utility.gson.toJson(ret);					
 	}
-	
+
 	@RequestMapping(value = "/getchannelDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
@@ -91,6 +91,23 @@ public class ChannelController {
 		}
 		return Utility.gson.toJson(ret);		
 	}
+	@RequestMapping(value = "/getChannelDetailByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getChannelDetailByKeywords(@RequestBody Map<String, Object> args){	
+		Map<String, Object> ret = new HashMap<String, Object>();
+		String keywords=(String) args.get("keywords");
+		List<ChannelDetail> channelDetail = channelService.getChannelDetailByKeywords(keywords);
+		if(channelDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get channel detail success");
+			ret.put("body", Utility.gson.toJson(channelDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get channel detail fail");
+		}
+		return Utility.gson.toJson(ret);		
+	}
+	
 	@RequestMapping(value = "/getParkchannelDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String accessIndexpark(@RequestParam("low")int low, @RequestParam("count")int count,@RequestParam("parkId") Integer parkId){	

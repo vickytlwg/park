@@ -48,7 +48,17 @@
 		left join hardware on channel.macId = hardware.id
 		limit #{low}, #{count}
 	</select>
-		<select id="getChannelDetailByDate" resultMap="ChannelDetailMapper">
+	<select id="getChannelDetailByKeywords" resultMap="ChannelDetailMapper" statementType="STATEMENT">
+		select channel.id as channel_Id, channel.parkId as channel_parkId, park.name as park_name, 
+		channel.macId as channel_macId, hardware.mac as hardware_mac, channel.channelId as channel_channelId, 
+		channel.channelFlag as channel_flag, channel.status as channel_status, 
+		channel.description as channel_description, channel.date as channel_date
+		from channel left join park on channel.parkId = park.Id
+		left join hardware on channel.macId = hardware.id
+		where park.name like '%${keywords}%' or hardware.mac like '%${keywords}%' or 
+		channel.description like '%${keywords}%'
+	</select>
+	<select id="getChannelDetailByDate" resultMap="ChannelDetailMapper">
 		select channel.id as channel_Id, channel.parkId as channel_parkId, park.name as park_name, 
 		channel.macId as channel_macId, hardware.mac as hardware_mac, channel.channelId as channel_channelId, 
 		channel.channelFlag as channel_flag, channel.status as channel_status, 

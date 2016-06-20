@@ -28,20 +28,23 @@
 	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
 	                	</select>
 	                	</div>
-	                	 <div class="pull-right" style="padding-right:40px">
-					<div class="row">
-					<div class="col-md-9">
-						<input type="text" class="form-control" id="daynum" placeholder="输入天数">
+	           
+					<div class="row" style="margin-top:15px">
+					<div class="col-md-4">
+					<input type="text" class="form-control" id="keywordsInput" placeholder="输入关键字"/>
                     </div>
-					<div class="col-md-3">
+					<div class="col-md-2">
+					<button type="button" id="keywordsSearch" class="btn btn-success">查询</button>
+					</div>					
+					<div class="col-md-4">
+						<input type="text" class="form-control" id="daynum" placeholder="输入天数"/>
+                    </div>
+					<div class="col-md-2">
 					<button type="button" id="daysearch" class="btn btn-success">查询</button>
 					</div>
                     </div>
-					</div>
-					
-	                	<br/>   
-	                    <br/> 
-						<div>
+					<br/>
+					<div>
 							 <table class="table table-bordered table-hover" style="font-size:12px">
 								<tr>
 								 	<th><span style=""><input type="checkbox" /></div></th>

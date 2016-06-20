@@ -113,4 +113,11 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDAO.getChannelDetailByDate(startday, endday);
 	}
 
+
+	@Override
+	public List<ChannelDetail> getChannelDetailByKeywords(String keywords) {
+		// TODO Auto-generated method stub
+		return channelDAO.getChannelDetailByKeywords(keywords);
+	}
+
 }

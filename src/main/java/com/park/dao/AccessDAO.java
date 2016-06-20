@@ -43,4 +43,5 @@ public interface AccessDAO {
 	
 	public List<AccessDetail> getParkAccessDetail(@Param("low")int low, @Param("count")int count, @Param("parkId")int parkId, @Param("table")String table);
 	public int getAllAccessCount(@Param("xmo")int xmo,@Param("ymonth")int ymonth);
+	public int getAccessCountByDate(@Param("xmo")int xmo,@Param("ymonth")int ymonth,@Param("accessDate")String accessDate);
 }
