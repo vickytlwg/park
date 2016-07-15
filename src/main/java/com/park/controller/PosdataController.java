@@ -154,7 +154,7 @@ public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSe
 	
 	return "carportUsage";
 }
-@RequestMapping(value="getPosdataCount",method=RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+@RequestMapping(value="/getPosdataCount",method=RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 @ResponseBody
 public String getPosdataCount(){
 	Map<String, Object> retMap = new HashMap<String, Object>();
@@ -164,7 +164,7 @@ public String getPosdataCount(){
 	retMap.put("count", count);
 	return Utility.gson.toJson(retMap);
 }
-@RequestMapping(value="getParkCharge",method=RequestMethod.GET)
+@RequestMapping(value="/getParkCharge",method=RequestMethod.GET)
 @ResponseBody
 public String getParkCharge(@RequestParam("parkId") int parkId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -184,7 +184,7 @@ public String getParkCharge(@RequestParam("parkId") int parkId, @RequestParam("s
 	return Utility.createJsonMsg(1001, "success", result);
 }
 
-@RequestMapping(value="getCarportCharge",method=RequestMethod.GET)
+@RequestMapping(value="/getCarportCharge",method=RequestMethod.GET)
 @ResponseBody
 public String getCarportCharge(@RequestParam("carport") int carportId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -205,7 +205,7 @@ public String getCarportCharge(@RequestParam("carport") int carportId, @RequestP
 }
 
 
-@RequestMapping(value="selectPosdataByPage",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@RequestMapping(value="/selectPosdataByPage",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String selectPosdataByPage(@RequestBody Map<String,Object> args){
 	int low=(Integer)args.get("low");
@@ -330,7 +330,7 @@ public String getParkChargeByRange(@RequestBody Map<String, Object> args){
 	
 	return Utility.gson.toJson(comparemap);
 }
-@RequestMapping(value="getCountsByCard",produces={"application/json;charset=utf-8"})
+@RequestMapping(value="/getCountsByCard",produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getCountsByCard(){
 	Map<String, Object> ret=new HashMap<>();

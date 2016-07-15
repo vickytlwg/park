@@ -49,7 +49,7 @@ $.fn.demo.initial();
         <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
         <div class="info-box-content">
           <span class="info-box-text">今日总车流量</span>
-          <span class="info-box-number" id="todayAccessCount"></span>
+          <span class="info-box-text" style="font-color:blue" id="todayAccessCount"></span>
         </div><!-- /.info-box-content -->
       </div><!-- /.info-box -->
     </div><!-- /.col -->

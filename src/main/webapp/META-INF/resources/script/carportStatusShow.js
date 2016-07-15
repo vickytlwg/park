@@ -1,7 +1,6 @@
 (function($) {
 	$.fn.carportstatus={};
 	$.fn.carportstatus.initial = function(){
-
 	    fillSearchPark();
 	    bindSearchParkChange();
 	};

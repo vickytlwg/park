@@ -96,10 +96,8 @@
             datatype: 'json',
             success: function(data){
                 var parkdata=data.body;
-
                 data_info=new Array(parkdata.length);
                 for(var i=0;i<parkdata.length;i++){
-              //      console.log(parkdata[i].name+'\n');
                     var tmparray=new Array(4);
                     tmparray[0]=parkdata[i].longitude;
                     tmparray[1]=parkdata[i].latitude;
