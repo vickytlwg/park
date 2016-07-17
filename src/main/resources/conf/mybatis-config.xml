@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
           <typeAlias alias="CarportStatusDetail" type="com.park.model.CarportStatusDetail"/>
           <typeAlias alias="Token" type="com.park.model.Token"/>
           <typeAlias alias="Posdata" type="com.park.model.Posdata"/> 
+          <typeAlias alias="CarportExpense" type="com.park.model.CarportExpense"/> 
     </typeAliases>
  
     <!-- 映射map -->

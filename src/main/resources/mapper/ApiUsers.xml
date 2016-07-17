@@ -13,6 +13,11 @@
 		<result property="tokenId" column="tokenId"/>
 	</resultMap> 
 	
+	
+
+	
+	
+	
 	<select id="count" resultType="int">
 		select count(*) from apiUsers
 	</select>

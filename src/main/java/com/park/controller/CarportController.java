@@ -1,6 +1,7 @@
 package com.park.controller;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Carport;
 import com.park.model.CarportStatusDetail;
+import com.park.model.ParkNews;
 import com.park.service.CarportService;
 import com.park.service.Utility;
 
@@ -159,4 +161,24 @@ public class CarportController {
 		retMap.put("body", carports);
 		return Utility.gson.toJson(retMap);	
 	}
+	
+	@RequestMapping(value = "/carportExpense", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getSpecifyCarports1(@RequestBody Map<String, Object> args, HttpServletRequest request){
+		
+		String name = args.get("parkName").toString();
+		String carportNumber = args.get("carportNumber").toString();
+		String cardNumber = args.get("cardNumber").toString();
+		int type = (int)args.get("type");
+		
+		double sum = carportService.calExpense(name, carportNumber, cardNumber, type);
+		
+		if(sum > 0)
+			return Utility.createJsonMsg(1002, "get expense success", sum);
+		else
+			return Utility.createJsonMsg(1001, "insert expense success");
+			
+	}
+	
+
 }

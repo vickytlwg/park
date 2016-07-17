@@ -337,6 +337,10 @@ public class ParkController {
 		return Utility.createJsonMsg(1001, "insert news successfully");
 		
 	}
+	
+
+	
+	
 	@RequestMapping(value="getLastPark",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String getLastPark(){

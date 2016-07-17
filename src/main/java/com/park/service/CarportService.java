@@ -28,4 +28,6 @@ public interface CarportService {
 	 * @return 
 	 */	
 	public int insertCarport(Carport carportItem);
+	
+	public double calExpense(String name, String carportNumber, String cardNumber, int type);
 }
