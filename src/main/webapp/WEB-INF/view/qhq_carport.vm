@@ -11,7 +11,7 @@
 <body>
 <div class="container-fluid"> 
 	<div class="row lb-title"> 
-        <p> 秦淮区停车泊位状态图 </p>
+        <p>秦淮区停车泊位状态图 </p>
     </div>
 	<div class="lb-main">
                 <div class="lb-car row">
