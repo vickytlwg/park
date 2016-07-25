@@ -19,7 +19,11 @@
 	                <div class="box-header">
                       <p id='carnumshow'></p>
 	                </div><!-- /.box-header -->
-	                <div class="box-body">  	                
+	                <div class="box-body"> 
+						<div class="btn-group">
+		                		<button #if(!$isAdmin) disabled#end onclick="window.open('getExcel')" id="excelBtn" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 导出excel</button>
+		             
+		                	</div>
 	                    <br/>   
 	                    <br/>    	
 						<div>

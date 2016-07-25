@@ -131,10 +131,17 @@
 				<li><a href="/park/carportstatus"><i class="fa fa-circle-o"></i>车位状态查看</a></li>
 				<li><a href="/park/qhq_carportstatus"><i class="fa fa-circle-o"></i>秦淮区状态图</a></li>
                 <li #if(!$isAdmin) hidden#end><a href="/park/hardware"><i class="fa fa-circle-o"></i>硬件设备管理</a></li>
-				<li><a href="/park/repair"><i class="fa fa-circle-o"></i>维护工单</a></li>
+				
               </ul>
             </li>
-
+			
+			  <li class="treeview active">
+                <a href="#"><i class="fa fa-fw fa-user"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="/park/repair"><i class="fa fa-circle-o"></i>工单管理</a></li>
+              </ul>
+            </li>
+			
             <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-user"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -157,7 +164,9 @@
                 <a href="#"><i class="fa fa-fw fa-steam"></i> <span>费用管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li  #if(!$isAdmin) hidden#end><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
-             
+				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>日报表</a></li>
+				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>周报表</a></li>
+				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>月报表</a></li>
               </ul>
             </li>
 			

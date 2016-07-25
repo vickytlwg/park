@@ -1,70 +1,56 @@
 #set($layout = "loginlayout.vm")
-<html class="bootstrap-admin-vertical-centered">
-    <head>
-        <title>智慧云停车场 后台登录</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Bootstrap 3.3.5 -->
-    	<link rel="stylesheet" href="/park/bootstrap/css/bootstrap.min.css">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+    <title> 登录 </title>
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/loginmain.css">
+</head>
+<body id="singIn">
+<div class="my-container float-fix">
+    <div class="am-u-sm-offset-4 am-u-sm-4">
+        <img class="am-img-responsive" alt="140*140" src="img/loginlogo.png">
+    </div>
 
-		 <!-- jQuery 2.1.4 -->
-	    <script src="/park/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-	    <!-- Bootstrap 3.3.5 -->
-	    <script src="/park/bootstrap/js/bootstrap.min.js"></script>
-
-
-        <!-- Custom styles -->
-        <style type="text/css">
-            .alert{
-                margin: 0 auto 20px;
-            }
-        </style>
-
-    </head>
-    <body class="bootstrap-admin-without-padding">
-        <div class="container" style="margin-top:10%">
-            <div class="row" >
-                <div class="col-sm-offset-3 col-sm-5">
-                    <div class="alert alert-info">
-                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                        请输入账户名和密码进行登录
-                    </div>
-                    <form method="post" action="/park/authority" class="bootstrap-admin-login-form">
-                        <h1>登录</h1>
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="username" id="username" placeholder="账户">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" type="password" name="password" id="password" placeholder="密码">
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" name="remember_me" id="check">
-                                记住我
-                            </label>
-                        </div>
-                        <button class="btn btn-lg btn-primary" type="submit">登录</button>
-                    </form>
+    <div class="am-u-sm-12 am-u-md-10 am-u-md-offset-1 am-u-lg-6 am-u-lg-offset-3 am-u-end"> <!-- 此处不足12分，不加end会右浮动 -->
+        <form method="post" action="/park/authority" class="am-form am-form-horizontal">
+            <div class="am-form-group am-form-icon">
+                <div>
+                    <i class="am-icon-user"></i>
+                    <input type="text" name="username" id="username" class="am-form-field" placeholder="请输入用户名">
                 </div>
             </div>
-        </div>
-        <script type="text/javascript" src="/park/script/bootstrap.min.js"></script>
-        <script type="text/javascript">
-            $(function() {
-                // Setting focus
-                $('input[name="username"]').focus();
-				
-                // Setting width of the alert box
-                var alert = $('.alert');
-                var formWidth = $('.bootstrap-admin-login-form').innerWidth();
-                var alertPadding = parseInt($('.alert').css('padding'));
-                if (isNaN(alertPadding)) {
-                    alertPadding = parseInt($(alert).css('padding-left'));
-                }
-                $('.alert').width(formWidth - 2 * alertPadding);
-                
-              
-            });
-        </script>
-    </body>
+
+            <div class="am-form-group am-form-icon">
+                <i class="am-icon-lock"></i>
+                <input type="password" name="password" id="password" class="am-form-field" placeholder="请输入密码">
+            </div>
+
+            <div class="am-form-group am-form-inline">
+                <div class="am-u-sm-5">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> 记住密码
+                        </label>
+                    </div>
+                </div>
+                <div class="am-u-sm-offset-2 am-u-sm-5">
+                    <label style="float: right;">
+                        <a href="javascript:void(0)"> 忘记密码？ </a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <div>
+                    <button type="submit" class="am-btn am-btn-default am-btn-block"> 登录 </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
 </html>

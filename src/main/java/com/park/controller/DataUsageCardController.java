@@ -209,7 +209,7 @@ public class DataUsageCardController {
 		List<DataUsageCardDetail> cardDetails=cardService.getAllCardDetail();		
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"Id","停车场名称","卡号","电话号码","类型","安装位置","经度","纬度","状态","停车场id","本月流量"};
+	//	String[] headers={"Id","停车场名称","卡号","电话号码","类型","安装位置","经度","纬度","状态","停车场id","本月流量"};
 		String[] headers1={"停车场名称","卡号","电话号码","本月流量","类型","安装位置","经纬度"};
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "export2003_b.xls");
 		HSSFWorkbook workbook = new HSSFWorkbook();

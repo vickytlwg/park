@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,10 +16,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +33,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.DataUsageCardDetail;
 import com.park.model.Park;
 import com.park.model.Posdata;
 import com.park.model.posdataReceive;
 import com.park.service.AuthorityService;
+import com.park.service.ExcelExportService;
 import com.park.service.ParkService;
 import com.park.service.PosdataService;
 import com.park.service.Utility;
+import com.park.service.impl.ExcelServiceImpl;
 
 @Controller
 @RequestMapping("/pos")
@@ -45,6 +55,8 @@ private ParkService parkService;
 @Autowired
 private AuthorityService authService;
 
+@Autowired
+private ExcelExportService excelService;
 @RequestMapping(value = "/insertChargeDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 @ResponseBody
 public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
@@ -164,6 +176,26 @@ public String getPosdataCount(){
 	retMap.put("count", count);
 	return Utility.gson.toJson(retMap);
 }
+
+@RequestMapping("/getExcel")
+@ResponseBody
+public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+	List<Posdata> posdatas=posdataService.selectPosdataByPage(0,500);
+	String docsPath = request.getSession().getServletContext().getRealPath("/");
+	final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+	String[] headers={"车牌","停车场名","车位号","出入场","操作员id","终端机号","应收费","押金","补交","返还","进场时间","离场时间"};
+	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xls");
+	HSSFWorkbook workbook = new HSSFWorkbook();
+	excelService.produceExceldataPosData("收费明细", headers, posdatas, workbook);
+	
+	try {
+		workbook.write(out);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xls", response);
+}
+
 @RequestMapping(value="/getParkCharge",method=RequestMethod.GET)
 @ResponseBody
 public String getParkCharge(@RequestParam("parkId") int parkId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){
@@ -385,4 +417,5 @@ public String getCarportChargeByRange(@RequestBody Map<String, Object> args){
 	    }
 	 return Utility.gson.toJson(comparemap);
 }
+
 }

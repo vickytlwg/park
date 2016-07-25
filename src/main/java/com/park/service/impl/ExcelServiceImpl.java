@@ -109,11 +109,7 @@ public class ExcelServiceImpl <T>  {
 //										textValue = "女";
 //									}
 //								} else 
-									if (value instanceof Date) {
-									Date date = (Date) value;
-									SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-									textValue = sdf.format(date);
-								} else if (value instanceof byte[]) {
+									 if (value instanceof byte[]) {
 									// 有图片时，设置行高为60px;
 									row.setHeightInPoints(60);
 									// 设置图片所在列宽度为80px,注意这里单位的一个换算
@@ -127,6 +123,10 @@ public class ExcelServiceImpl <T>  {
 											bsValue, HSSFWorkbook.PICTURE_TYPE_JPEG));
 								} else {
 									// 其它数据类型都当作字符串简单处理
+									if (value==null) {
+										textValue="";
+									}
+									else
 									textValue = value.toString();
 								}
 								// 如果不是图片数据，就利用正则表达式判断textValue是否全部由数字组成
