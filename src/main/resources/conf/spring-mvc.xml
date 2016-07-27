@@ -112,6 +112,8 @@
     	cache-period="31556926" />
     	<mvc:resources mapping="/font/**" location="/META-INF/resources/fonts/"
     	cache-period="31556926" />
+    	<mvc:resources mapping="/**" location="/META-INF/resources/"
+    	cache-period="31556926" />
     
      <mvc:annotation-driven /> 
   

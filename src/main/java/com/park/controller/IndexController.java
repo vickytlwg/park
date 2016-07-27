@@ -68,13 +68,13 @@ public class IndexController {
 		}
 		
 	}
-	@RequestMapping(value = "login", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "login")
 	public String login(){
 		
 		return "login";
 	}
 	
-	@RequestMapping(value = "demo", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "demo")
 	public String demo(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
@@ -88,9 +88,60 @@ public class IndexController {
 		return "demo";
 	}
 	
-	@RequestMapping(value = "uploadTest", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@RequestMapping(value = "uploadTest")
 	public String uploadTest(){
 		
 		return "uploadTest";
+	}
+	@RequestMapping("/finance")
+	public String finance(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		return "finance";
+	}
+	@RequestMapping("/operation")
+	public String operation(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		return "operation";
+	}
+	@RequestMapping("/data")
+	public String data(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		return "data";
+	}
+	@RequestMapping("/finance2")
+	public String finance2(){
+		return "finance2";
+	}
+	@RequestMapping("/operation2")
+	public String operation2(){
+		return "operation2";
+	}
+	@RequestMapping("/data2")
+	public String data2(){
+		return "data2";
 	}
 }

@@ -15,7 +15,11 @@
 		fillSearchPark();
 		bindSearchParkChange();
 		bindaddBusinessCarportNum();
-		bindaddCarportSubmit();
+		bindaddCarportSubmit();		
+		setInterval(function(){
+			renderBusinessCarport($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
+
+		}, 5000);
 	};
 	
 	/**bind tr click*/

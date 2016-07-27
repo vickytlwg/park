@@ -9,13 +9,15 @@ body{min-width:1024px;}
     background-size: 100%;
 }
 #singIn .am-btn-default {
-    background-color: #91dc5a;
+  color:#fff;
+  background-color: #007cc2;
 }
 #singIn .am-form input[type=text], #singIn .am-form-field {
     background-color: rgba(255, 255, 255, 0.3);
-    color: #91dc5a;
+    color: #000;
 }
 #singIn .checkbox {
     color: #555;
 }
+body,html{min-height:0}
 

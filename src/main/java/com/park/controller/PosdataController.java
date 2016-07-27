@@ -131,6 +131,10 @@ public String getChargeDetail(){
 @RequestMapping(value="/chargeDetail")
 public String chargeDetail(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 	String username = (String) session.getAttribute("username");
+	List<Park> parkList = parkService.getParks();
+	if(username != null)
+		parkList = parkService.filterPark(parkList, username);
+	modelMap.addAttribute("parks", parkList);
 	AuthUser user = authService.getUserByUsername(username);
 	if(user != null){
 		modelMap.addAttribute("user", user);

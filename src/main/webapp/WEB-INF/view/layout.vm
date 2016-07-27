@@ -115,7 +115,7 @@
             <li class="header">功能区</li>
             <!-- Optionally, you can add icons to the links -->
             
-			<li #if(!$isAdmin) hidden #end class="treeview" active>
+			<li  hidden class="treeview" active>
 				 <a href="/park/demo"><i class="fa fa-fw fa-cab"></i> <span>Demo Page</span> <i class="fa fa-angle-left pull-right"></i></a>
 			</li>
 			
@@ -161,12 +161,13 @@
             </li>
 			
 			 <li class="treeview active">
-                <a href="#"><i class="fa fa-fw fa-steam"></i> <span>费用管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-fw fa-steam"></i> <span>报表管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                  <li  #if(!$isAdmin) hidden#end><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
-				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>日报表</a></li>
-				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>周报表</a></li>
-				  <li  #if(!$isAdmin) hidden#end><a href="#"><i class="fa fa-circle-o"></i>月报表</a></li>
+                  <li  ><a href="/park/pos/chargeDetail"><i class="fa fa-circle-o"></i>费用明细</a></li>
+				  <li  ><a href="/park/finance"><i class="fa fa-circle-o"></i>财务概况</a></li>
+				  <li  ><a href="/park/operation"><i class="fa fa-circle-o"></i>停车运营分析</a></li>
+				  <li  ><a href="#"><i class="fa fa-circle-o"></i>泊位占有率</a></li>
+				  <li  ><a href="/park/data"><i class="fa fa-circle-o"></i>停车数据分析</a></li>
               </ul>
             </li>
 			
