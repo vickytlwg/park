@@ -134,7 +134,13 @@ public String chargeDetail(ModelMap modelMap, HttpServletRequest request, HttpSe
 	List<Park> parkList = parkService.getParks();
 	if(username != null)
 		parkList = parkService.filterPark(parkList, username);
-	modelMap.addAttribute("parks", parkList);
+	List<Park> parkl = new ArrayList<>();
+	for (Park park : parkList) {
+		if (park.getType()==3) {
+			parkl.add(park);
+		}
+	}
+	modelMap.addAttribute("parks", parkl);
 	AuthUser user = authService.getUserByUsername(username);
 	if(user != null){
 		modelMap.addAttribute("user", user);
