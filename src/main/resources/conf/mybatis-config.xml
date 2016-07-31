@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
           <typeAlias alias="Token" type="com.park.model.Token"/>
           <typeAlias alias="Posdata" type="com.park.model.Posdata"/> 
           <typeAlias alias="CarportExpense" type="com.park.model.CarportExpense"/> 
+          <typeAlias alias="FeeCriterion" type="com.park.model.FeeCriterion"/> 
     </typeAliases>
  
     <!-- 映射map -->

@@ -1,0 +1,69 @@
+<script src="/park/script/service/textModalService.js"></script>
+
+<script src="/park/script/feeCriterion.js"></script>
+
+
+
+<div class="content-wrapper" ng-app="feeCriterionApp" ng-controller="feeCriterionCtrl">
+	<section class="content-header">
+          <h1>
+            收费标准管理
+            <small>九比特信息系统</small>
+          </h1>     
+    </section>
+    <section class="content">
+       <div class="row">
+            <div class="col-xs-12">
+              	<div class="box">
+	                <div class="box-header">
+	                  <h3 class="box-title"></h3>
+	                </div><!-- /.box-header -->
+	                <div class="box-body">  
+		                	<div class="btn-group">
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.refresh()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.update()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                	</div>
+                	
+	                	<br/>   
+	                    <br/> 
+						<div>
+						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
+				            <tr>				            
+				             <th><span style=""><input type="checkbox" /></div></th>
+									<th><span >Id</div></th>		
+									<th><span>名称</div></th>
+									<th><span >免费时段/分</div></th>
+									<th><span >起步价</div></th>
+									<th><span >超时加收/元</div></th>
+									<th><span >时间间隔/分</div></th>
+									<th><span>最高收费</div></th>
+									<th><span>夜间时段</div></th>
+									<th><span>是否按次收费</div></th>
+									<th><span>价格/次</div></th>
+				            </tr>
+				          <tbody id="channelBody"></tbody>
+				          	<tr  ng-repeat = "item in criterion.items">
+				          		<td ><input type="checkbox" ng-model="item.checked" ng-click="criterion.checked($index)"/></td>
+				          		<td ng-bind="item.id"></td>
+				          		<td ng-bind="item.name"></td>
+				          		<td ng-bind="item.freeMins"></td>
+				          		<td ng-bind="item.startExpense"></td>
+				          		<td ng-bind="item.timeoutPrice"></td>
+				          		<td ng-bind="item.timeoutPriceInterval"></td>
+				          		<td ng-bind="item.maxExpense"></td>
+				          		<td ng-bind="item.nightStartTime + '--' + item.nightEndTime"></td>
+				          		<td ng-bind="item.isOneTimeExpense"></td>
+				          		<td ng-bind="item.oneTimeExpense"></td>
+				          </table>
+    					</div>
+    				</div>
+
+	            </div>
+            </div>
+        </div>
+
+    </section>
+						
+</div>
