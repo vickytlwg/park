@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.park.dao.FeeCriterionDAO">
+	<resultMap id="FeeCriterionMapper" type="FeeCriterion">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="freeMins" column="freeMins"/>
+		<result property="startExpense" column="startExpense"/>
+		<result property="timeoutPrice" column="timeoutPrice" />
+		<result property="timeoutPriceInterval" column="timeoutPriceInterval"/>
+		<result property="maxExpense" column="maxExpense"/>
+		<result property="nightStartTime" column="nightStartTime" />
+		<result property="nightEndTime" column="nightEndTime"/>
+		<result property="isOneTimeExpense" column="isOneTimeExpense"/>
+		<result property="oneTimeExpense" column="oneTimeExpense"/>
+	</resultMap> 
+
+
+	<select id="get" resultMap="FeeCriterionMapper">
+		select id, name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense from feeCriterion
+	</select>
+	
+<!-- 	
+	<insert id="insert" parameterType="FeeCriterion" keyProperty="id">
+		insert into feeCriterion(name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense)
+		values(#{name}, #{freeMins}, #{startExpense}, #{timeoutPriceInterval}, #{maxExpense}, #{nightStartTime},  #{nightEndTime}, #{isOneTimeExpense}, #{oneTimeExpense})
+	</insert>
+	
+	<update id="modify" parameterType="FeeCriterion">
+		update feeCriterion set name=#{name}, freeMins=#{freeMins}, startExpense=#{startExpense}, timeoutPriceInterval=#{timeoutPriceInterval}, maxExpense=#{maxExpense},
+		nightStartTime=#{nightStartTime}, nightEndTime=#{nightEndTime}, isOneTimeExpense=#{isOneTimeExpense}, oneTimeExpense=#{oneTimeExpense}
+		where id=#{id}
+	</update>
+	-->
+ 		
+	<insert id="insert" parameterType="FeeCriterion" keyProperty="id">
+		insert into feeCriterion(name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense)
+		values(#{name}, #{freeMins}, #{startExpense}, #{timeoutPrice}, #{timeoutPriceInterval}, #{maxExpense}, #{nightStartTime},  #{nightEndTime}, #{isOneTimeExpense}, #{oneTimeExpense})
+	</insert>
+	
+	<update id="modify" parameterType="FeeCriterion">
+		update feeCriterion set name=#{name}, freeMins=#{freeMins}, startExpense=#{startExpense}, timeoutPrice = #{timeoutPrice},timeoutPriceInterval=#{timeoutPriceInterval}, maxExpense=#{maxExpense},
+		nightStartTime=#{nightStartTime}, nightEndTime=#{nightEndTime}, isOneTimeExpense=#{isOneTimeExpense}, oneTimeExpense=#{oneTimeExpense}
+		where id=#{id}
+	</update>
+
+
+
+	
+	<delete id="delete">
+		delete from feeCriterion
+		where id=#{param1}
+	</delete>
+	
+</mapper>
