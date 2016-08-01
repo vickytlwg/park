@@ -157,6 +157,29 @@ public class ParkController {
 		return Utility.gson.toJson(ret);
 	}
 	
+	@RequestMapping(value="/getParksByType", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParksByType(@RequestParam(value="type",required=false)Integer type,HttpServletRequest request, HttpSession session){
+		
+		List<Park> parkList = parkService.getParks();
+		String username = (String) session.getAttribute("username");
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		if (type==null) {
+			type=3;
+		}
+		List<Park> parkl = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType()==type) {
+				parkl.add(park);
+			}
+		}
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		ret.put("body", parkl);
+		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	};
 	@RequestMapping(value = "/getParkWithName/{name}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkWithName(@PathVariable String name){

@@ -26,6 +26,7 @@
 		                	</div>
 				<div class="pull-right">		
 				<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="parkNamesearch">
+						<option value=-1>所有停车场</option>
 	                #foreach( $park in $parks)
 						<option value=$park.id>$park.name</option>
 					#end           		

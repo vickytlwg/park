@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -157,6 +158,7 @@ public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSe
 	String username = (String) session.getAttribute("username");
 	if(username != null)
 		parkList = parkService.filterPark(parkList, username);
+
 	List<Park> parkl = new ArrayList<>();
 	for (Park park : parkList) {
 		if (park.getType()==3) {
@@ -181,6 +183,16 @@ public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSe
 public String getPosdataCount(){
 	Map<String, Object> retMap = new HashMap<String, Object>();
 	Integer count=posdataService.getPosdataCount();
+	retMap.put("status", 1001);
+	retMap.put("message", "success");
+	retMap.put("count", count);
+	return Utility.gson.toJson(retMap);
+}
+@RequestMapping(value="/getPosdataCountByPark/{parkId}",method=RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+@ResponseBody
+public String getPosdataCountByPark(@PathVariable("parkId")Integer parkId){
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	Integer count=posdataService.getPosdataCountByPark(parkId);
 	retMap.put("status", 1001);
 	retMap.put("message", "success");
 	retMap.put("count", count);
@@ -267,6 +279,28 @@ public String selectPosdataByPage(@RequestBody Map<String,Object> args){
 	}
 	return Utility.gson.toJson(retMap);
 }
+@RequestMapping(value="/selectPosdataByPageAndPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String selectPosdataByPageAndPark(@RequestBody Map<String,Object> args){
+	int low=(Integer)args.get("low");
+	int count=(Integer)args.get("count");
+	int parkId=(Integer)args.get("parkId");
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	List<Posdata> posdatas=posdataService.selectPosdataByPageAndPark(parkId, low, count);
+	if(posdatas!=null)
+	{
+		retMap.put("status", 1001);
+		retMap.put("message", "success");
+		retMap.put("body", posdatas);
+	}
+	else
+	{
+		retMap.put("status", 1002);
+		retMap.put("message", "failure");
+	}
+	return Utility.gson.toJson(retMap);
+}
+
 @RequestMapping(value="/selectPosdataByParkAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String selectPosdataByParkAndRange(@RequestBody Map<String,Object> args){

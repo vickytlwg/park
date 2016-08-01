@@ -145,5 +145,19 @@ public class PosdataServiceImpl implements PosdataService {
 		// TODO Auto-generated method stub
 		return posdataDAO.getCountByCard();
 	}
+	@Override
+	public List<Posdata> selectPosdataByPageAndPark(int parkId, int low, int count) {
+		// TODO Auto-generated method stub
+		Park park = parkService.getParkById(parkId);
+		String parkName=park.getName();
+		return posdataDAO.selectPosdataByPageAndPark(parkName, low, count);
+	}
+	@Override
+	public int getPosdataCountByPark(int parkId) {
+		// TODO Auto-generated method stub
+		Park park = parkService.getParkById(parkId);
+		String parkName=park.getName();
+		return posdataDAO.getPosdataCountByPark(parkName);
+	}
 
 }

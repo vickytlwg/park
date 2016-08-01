@@ -1,10 +1,12 @@
 (function($){	
 	$.fn.park = {};	
+	parkId=-1;
 	$.fn.park.initial = function(){
-		renderPark(0, $.fn.page.pageSize);
+		renderPark(-1,0, $.fn.page.pageSize);
 		renderPagination();
 		intervalRenderPagination();
 		rendnumcard();
+		bindParkChange();
 	};	
 	
 	var rendnumcard=function(){
@@ -24,18 +26,31 @@
 			}
 		});
 	};
+	
+	var bindParkChange=function(){
+		$('#parkNamesearch').on('change',function(){
+		 parkId=$('#parkNamesearch').val();
+		renderPark(parkId,0, $.fn.page.pageSize);
+        renderPagination();
+		});
+	};
 	/*** get table park item ***/
-	var renderPark = function(low, count){
+	var renderPark = function(parkId,low, count){
 		var cols = $('#parkTable').find('thead tr th').length;
 		$("#parkBody").html('<tr><td colspan="' + cols + '"></td></tr>');		
 		var loader = new $.Loader();
 		var loaderTd = $('#parkBody').find('td');
 		loaderTd.append(loader.get());
 		loader.show();	
+		var url="/pos/selectPosdataByPage";
 		var data = {'low': low, 'count': count, 'T': new Date().getTime()};
+		if(parkId!=-1){
+		    url="/pos/selectPosdataByPageAndPark";
+		    data = {'parkId':parseInt(parkId),'low': low, 'count': count, 'T': new Date().getTime()};
+		}
 		$.ajax({
 			//url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
-			url: $.fn.config.webroot + "/pos/selectPosdataByPage" ,
+			url: $.fn.config.webroot + url ,
 			type: 'post',
 			contentType: 'application/json;charset=utf-8',			
 			datatype: 'json',
@@ -49,6 +64,31 @@
 				errorHandle(data);
 			}
 		});
+	};
+	var renderParkByPark=function(parkId,low,count){
+	    var cols = $('#parkTable').find('thead tr th').length;
+        $("#parkBody").html('<tr><td colspan="' + cols + '"></td></tr>');       
+        var loader = new $.Loader();
+        var loaderTd = $('#parkBody').find('td');
+        loaderTd.append(loader.get());
+        loader.show();  
+        var data = {'parkId':parkId,'low': low, 'count': count, 'T': new Date().getTime()};
+        $.ajax({
+            //url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
+            url: $.fn.config.webroot + "/pos/selectPosdataByPageAndPark" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){
+                loader.remove();
+                fillParkTbody(data);
+            },
+            error: function(data){
+                loader.remove();
+                errorHandle(data);
+            }
+        });
 	};
 	var fillParkTbody = function(data){
 		var parkBody = $("#parkBody");
@@ -95,22 +135,15 @@
 		modal.show();
 	};
 	/***render pagination****/
-	 $.fn.renderPagination = function(){		
-		$.ajax({
-			url:$.fn.config.webroot + "/pos/getPosdataCount",
-			type: 'get',
-			success: function(data){
-				
-				var paginationUl = $.fn.page.initial(data['count'], pageClickFunc);
-				$('#pagination').append(paginationUl);
-			},
-			error: function(data){		
-			}
-		});
-	};
+	
 	function renderPagination(){
+	   var url='/pos/getPosdataCount';
+         if(parkId!=-1)
+         {
+             url='/pos/getPosdataCountByPark/'+parkId;
+         }  
 		$.ajax({
-			url:$.fn.config.webroot + "/pos/getPosdataCount",
+			url:$.fn.config.webroot + url,
 			type: 'get',
 			success: function(data){				
 				var paginationUl = $.fn.page.initial(data['count'], pageClickFunc);
@@ -121,9 +154,9 @@
 		});
 	}
 	var intervalRenderPagination=function(){
-		setInterval("$.fn.renderPagination()",5000);
-	}
+		setInterval(renderPagination,5000);
+	};
 	var pageClickFunc = function(index){
-		renderPark($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
+		renderPark(parkId,$.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 	};	
 })(jQuery);
