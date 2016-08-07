@@ -19,9 +19,12 @@
 					data=data['body'];
 					var strp='';
 				    for(var i=0;i<data.length;i++){
-				        strp+="车牌号: "+data[i]['CardSnr']+"  次数:"+data[i]['num']+"    ";
+				        strp+='车牌号:<span style="color:#003399;"><strong>'+data[i]['CardSnr']+'</strong></span>&nbsp;&nbsp; 停车次数:<span style="color:#E53333;"><strong>'+data[i]['num'] +'</strong></span>&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;';
+                        if((i+1)%3==0){
+                            strp+="</br>";
+                        }
 				    }	
-				    $('#carnumshow').text(strp);
+				    $('#carnumshow').html(strp);
 				}
 			}
 		});

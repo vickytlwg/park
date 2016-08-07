@@ -62,7 +62,7 @@ public class IndexController {
 					isAdmin=true;
 				modelMap.addAttribute("isAdmin", isAdmin);
 			}
-			return "redirect:parks";
+			return "redirect:platformShow";
 		}else{
 			return "redirect:login";
 		}
@@ -143,5 +143,22 @@ public class IndexController {
 	@RequestMapping("/data2")
 	public String data2(){
 		return "data2";
+	}
+	@RequestMapping("/platformShow")
+	public String platformShow(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		return "platformShow";
+	}
+	@RequestMapping("/maptest")
+	public String maptest(){
+		return "maptest";
 	}
 }

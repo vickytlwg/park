@@ -54,9 +54,6 @@ chargeApp.controller("feeCriterionCtrl", ['$scope', '$http',  'textModal', '$mod
 		});
 	};
 	
-	
-
-	
 	$scope.criterion.insert = function(){	
 		$uibModal.open({
 			templateUrl: '/park/views/template/ucNewFeeCriterion.html',
