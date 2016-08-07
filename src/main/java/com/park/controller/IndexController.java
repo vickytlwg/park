@@ -36,7 +36,7 @@ public class IndexController {
 					isAdmin=true;
 				modelMap.addAttribute("isAdmin", isAdmin);
 			}
-			return "redirect:parks";
+			return "redirect:platformShow";
 		}
 	}
 	
