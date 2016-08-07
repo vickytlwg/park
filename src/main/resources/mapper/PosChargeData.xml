@@ -24,11 +24,11 @@
 	</resultMap> 
 	
 	<select id="get" resultMap="PosChargeDataMapper">
-		select * from posChargeData;
+		select * from posChargeData
 	</select>
 	
 	<select id="getUnCompleted" resultMap="PosChargeDataMapper">
-		select * from posChargeData where paidCompleted = 0;
+		select * from posChargeData where paidCompleted = 0
 	</select>
 	
 	<select id="getById" resultMap="PosChargeDataMapper">
@@ -40,11 +40,11 @@
 	</select>
 	
 	<select id="count" resultType="int">
-		select count(*) from posChargeData;
+		select count(*) from posChargeData
 	</select>
 	
-	<select id="getDebt" resultType="int">
-		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1};
+	<select id="getDebt" resultMap="PosChargeDataMapper">
+		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1}
 	</select>
 	
  		
@@ -52,7 +52,7 @@
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
 		paidMoney, unPaidMoney, changeMoney, isOneTimeExpense, paidCompleted, entranceDate, exitDate)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
-		 #{paidMoney}, #{unPaidMoney},#{changeMoney}, #{isOneTimeExpense},0,#{entranceDate}, #{exitDate},)
+		 #{paidMoney}, #{unPaidMoney},#{changeMoney}, #{isOneTimeExpense},0,#{entranceDate}, #{exitDate})
 	</insert>
 	
 	<update id="update" parameterType="PosChargeData">

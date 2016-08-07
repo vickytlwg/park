@@ -28,7 +28,7 @@ public class PosChargeData {
 	
 	double changeMoney;
 	
-	boolean isOneTimeExpense;
+	int isOneTimeExpense;
 	
 	boolean paidCompleted;
 	
@@ -151,11 +151,12 @@ public class PosChargeData {
 		this.exitDate = exitDate;
 	}
 
-	public boolean isOneTimeExpense() {
+
+	public int getIsOneTimeExpense() {
 		return isOneTimeExpense;
 	}
 
-	public void setOneTimeExpense(boolean isOneTimeExpense) {
+	public void setIsOneTimeExpense(int isOneTimeExpense) {
 		this.isOneTimeExpense = isOneTimeExpense;
 	}
 

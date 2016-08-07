@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -108,15 +109,29 @@ public class PosChargeDataServiceImpl implements PosChargeDataService{
 		
 		FeeCriterion criterion = criterionService.getById(criterionId);
 		
-		charge.setExitDate(new Date());
+		Date enterDate = charge.getEntranceDate();
+		Date now = new Date();
+		if(enterDate.getDay() < now.getDay()){
+			int nightHour = Integer.parseInt(criterion.getNightStartTime().split(":")[0]);
+			Calendar cld = Calendar.getInstance();
+			cld.setTime(enterDate);
+			cld.set(Calendar.HOUR_OF_DAY, nightHour);
+			charge.setExitDate(cld.getTime());
+		}else{
+			charge.setExitDate(new Date());
+		}
+			
+		
 		
 		double expense = 0;
-		if(charge.isOneTimeExpense()){
+		if(charge.getIsOneTimeExpense() == 1){
 			expense = criterion.getOneTimeExpense() - charge.getPaidMoney();
 			
 		}else{
 			long diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime())/(1000 * 60);
-			long intervals = (diffMin - criterion.getFreeMins()) / criterion.getTimeoutPriceInterval();
+			long intervals = 0;
+			if(diffMin > criterion.getFreeMins())
+				intervals= (diffMin - criterion.getFreeMins()) / criterion.getTimeoutPriceInterval();
 			expense = intervals * criterion.getTimeoutPriceInterval() + criterion.getStartExpense();			
 		}
 		

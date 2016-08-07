@@ -2,6 +2,7 @@ package com.park.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,9 +65,10 @@ public class PosChargeDataController {
 	}
 	
 	
-	@RequestMapping(value = "/unpaid/{cardNumber}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String getDebt(@PathVariable String cardNumber){
-		List<PosChargeData> unpaidCharges;
+	@RequestMapping(value = "/unpaid", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String getDebt(@RequestBody Map<String, Object> args){
+		String cardNumber = (String) args.get("cardNumber");
+		List<PosChargeData> unpaidCharges = null;
 		try {
 			unpaidCharges = chargeSerivce.getDebt(cardNumber);
 		} catch (Exception e) {
@@ -76,8 +78,11 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", unpaidCharges);
 	}
 	
-	@RequestMapping(value = "/pay/{cardNumber}/{money}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String getDebt(@PathVariable String cardNumber, @PathVariable double money){
+	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String pay(@RequestBody Map<String, Object> args){
+		String cardNumber = (String) args.get("cardNumber");
+		double money = (double) args.get("money");
+		
 		List<PosChargeData> payRet =  null;
 		try {
 			payRet = chargeSerivce.pay(cardNumber, money);
