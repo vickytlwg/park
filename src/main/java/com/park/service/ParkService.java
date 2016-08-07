@@ -2,12 +2,14 @@ package com.park.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.park.model.Park;
+import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
 
 public interface ParkService {
+	
+	public List<ParkDetail> filterParkDetail(List<ParkDetail> parks, String username);
 	
 	public List<Park> filterPark(List<Park> parks, String username);
 	
@@ -23,7 +25,7 @@ public interface ParkService {
 	
 	public List<Park> getParkByName(String name);
 	
-	public List<Park> getParkDetail(int low, int count);
+	public List<ParkDetail> getParkDetail(int low, int count);
 	
 	public List<Park> getParkDetailByKeywords(String keywords);
 	

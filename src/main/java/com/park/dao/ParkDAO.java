@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.Park;
+import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
 
 @Repository
@@ -19,7 +20,7 @@ public interface ParkDAO {
 	
 	public List<Park> getParkByName(String name);
 	
-	public List<Park> getParkDetail(@Param("low")int low, @Param("count")int count);
+	public List<ParkDetail> getParkDetail(@Param("low")int low, @Param("count")int count);
 	
 	public List<Park> getParkDetailByKeywords(@Param("param1")String keywords);
 	

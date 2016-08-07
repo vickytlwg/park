@@ -14,4 +14,6 @@ public interface FeeCriterionService {
 
 	int delete(int id);
 
+	FeeCriterion getById(Integer criterionId);
+
 }

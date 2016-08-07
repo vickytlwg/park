@@ -12,9 +12,8 @@ public class Park {
 	private int portCount;
 	private int channelCount;
 	private int portLeftCount;
-	private double charge;
-	private double charge1;
-	private double charge2;
+	private Integer feeCriterionId;
+
 	private int status;
 	private int isFree;
 	private int floor;
@@ -50,15 +49,7 @@ public class Park {
 	public int getPortLeftCount() {
 		return portLeftCount;
 	}
-	public double getCharge() {
-		return charge;
-	}
-	public double getCharge1() {
-		return charge1;
-	}
-	public double getCharge2() {
-		return charge2;
-	}
+
 	public int getStatus() {
 		return status;
 	}
@@ -95,14 +86,13 @@ public class Park {
 	public void setPortLeftCount(int portLeftCount) {
 		this.portLeftCount = portLeftCount;
 	}
-	public void setCharge(double charge) {
-		this.charge = charge;
+	
+	
+	public Integer getFeeCriterionId() {
+		return feeCriterionId;
 	}
-	public void setCharge1(double charge1) {
-		this.charge1 = charge1;
-	}
-	public void setCharge2(double charge2) {
-		this.charge2 = charge2;
+	public void setFeeCriterionId(Integer feeCriterionId) {
+		this.feeCriterionId = feeCriterionId;
 	}
 	public void setStatus(int status) {
 		this.status = status;

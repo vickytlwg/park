@@ -17,6 +17,8 @@
 		bindUploadPicBtn();
 		bindSubmitPicBtn();
 		bindSearchPark();
+		initFeeCriterionSelect();
+		
 		
 	};
 	
@@ -117,6 +119,10 @@
 		$('#addParkForm')[0].reset();
 		$('input#parkName').removeAttr('parkId');
 		$('#addParkResult').html('');
+		
+		
+		initFeeCriterionSelect();
+		
 		$.ajax({
 		    url:"/park/getLastPark",
 		    type:'get',
@@ -207,6 +213,35 @@
 		$('#addParkModal').modal('show');
 	};
 	
+	
+	var initFeeCriterionSelect = function(selectedId){
+		url = $.fn.config.webroot + '/fee/criterion/get';
+	
+		$.ajax({
+			url:url,
+			type: 'get',
+			contentType: 'application/json;charset=utf-8',			
+			success: function(data){
+				if(data.status == 1001){
+					$('select#feeCriterion').html('');
+					var criterions = data.body;
+					
+					$('select#feeCriterion').append('<option value=-1>未绑定</option>');
+					for(var i = 0; i < criterions.length; i++)
+					{
+						$('select#feeCriterion').append('<option value=' + criterions[i].id+ '>' + criterions[i].name + '</option>')
+					}
+					if(selectedId != undefined)
+						$('select#feeCriterion').val(selectedId);
+				}
+			},
+			error: function(data){
+				
+			}
+		});
+	};
+	
+	
 	var assignAddParkForm = function(checkedTr){
 		
 		var tds = checkedTr.find('td');
@@ -215,8 +250,13 @@
 		$('input#channelCount').val($(tds[3]).text());
 		$('input#portCount').val($(tds[4]).text());
 		$('input#leftPortCount').val($(tds[5]).text());
-		$('input#chargeDaytime').val($(tds[6]).text());
-		$('input#chargeNight').val($(tds[7]).text());	
+		
+		if($('select#feeCriterion option').length == 0)
+			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'))
+		else
+			$('select#feeCriterion').val($(checkedTr).attr('feeCriterionId'));
+		
+		//$('input#chargeNight').val($(tds[7]).text());	
 		$('select#parkStatus').val($(tds[8]).attr('data'));
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
 		$('input#floorCount').val($(tds[10]).text());
@@ -317,9 +357,13 @@
 		parkFields['channelCount'] = parseInt($('input#channelCount').val());
 		parkFields['portCount'] = parseInt($('input#portCount').val());
 		parkFields['portLeftCount'] = parseInt($('input#leftPortCount').val());
-		parkFields['charge'] = parseFloat($('input#chargeDaytime').val());
-		parkFields['charge1'] = parseFloat($('input#chargeNight').val());
-		parkFields['charge2'] = 0.00;
+		
+		var feeCriterionId = parseInt($('select#feeCriterion').val());
+		if(feeCriterionId >= 0 )
+			parkFields['feeCriterionId'] = feeCriterionId;
+
+		parkFields['feeCriterionId'] = $('select#feeCriterion').val();
+		
 		parkFields['contact'] = $('input#contact').val();
 		parkFields['number'] = $('input#number').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());
@@ -442,8 +486,17 @@
 			tr.append('<td>' + data[i]['channelCount']+ '</td>');
 			tr.append('<td>' + data[i]['portCount']+ '</td>');
 			tr.append('<td>' + data[i]['portLeftCount']+ '</td>');
-			tr.append('<td data=' + data[i]['charge'] + ' >' + data[i]['charge']+ '</td>');
-			tr.append('<td data=' + data[i]['charge1'] + ' >' + data[i]['charge1']+ '</td>');
+			var feeCriterionId = data[i]['feeCriterionId'];
+			var feeCriterionName = data[i]['feeCriterionName'];
+			if(feeCriterionId == undefined || feeCriterionId < 0){
+				feeCriterionId = -1;
+				feeCriterionName = "未绑定"
+			}
+
+			tr.append('<td data=' + feeCriterionId + ' >' + feeCriterionName + '</td>');
+			tr.attr('feeCriterionId', feeCriterionId);
+			
+			
 			var status = data[i]['status'] == 0 ? '可用':'不可用';
 			tr.append('<td data=' + data[i]['status'] + ' >' + status + '</td>');
 			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';

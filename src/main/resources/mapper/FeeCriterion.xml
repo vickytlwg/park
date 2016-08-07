@@ -23,6 +23,11 @@
 		select id, name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense from feeCriterion
 	</select>
 	
+	<select id="getById" resultMap="FeeCriterionMapper">
+		select id, name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense 
+		from feeCriterion where id = #{param1}
+	</select>
+	
 <!-- 	
 	<insert id="insert" parameterType="FeeCriterion" keyProperty="id">
 		insert into feeCriterion(name, freeMins, startExpense, timeoutPrice, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, oneTimeExpense)

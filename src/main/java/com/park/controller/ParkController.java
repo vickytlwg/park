@@ -34,6 +34,7 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Constants;
 import com.park.model.Park;
+import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
@@ -242,27 +243,24 @@ public class ParkController {
 		int low = (int)args.get("low");
 		int count = (int)args.get("count");
 		Map<String, Object> ret = new HashMap<String, Object>();
-		List<Park> parkDetail = parkService.getParkDetail(low, count);
+		List<ParkDetail> parkDetail = parkService.getParkDetail(low, count);
 		String username = (String) session.getAttribute("username");
 		
 		if(username != null){
-			parkDetail = parkService.filterPark(parkDetail, username);
+			
 			AuthUser user = authService.getUserByUsername(username);
-			if(user.getRole() != AuthUserRole.ADMIN.getValue()&&user!=null)
+			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
 			{
-				parkDetail = parkService.getParks();
-				parkDetail = parkService.filterPark(parkDetail, username);
+				parkDetail = parkService.filterParkDetail(parkDetail, username);
+				//parkDetail = parkService.getPark();
+				//parkDetail = parkService.filterPark(parkDetail, username);
 			}
 		}			
 
-		if(parkDetail != null){
-			ret.put("status", "1001");
-			ret.put("message", "get park detail success");
-			ret.put("body", parkDetail);
-		}else{
-			ret.put("status", "1002");
-			ret.put("message", "get park detail fail");
-		}
+		ret.put("status", "1001");
+		ret.put("message", "get park detail success");
+		ret.put("body", parkDetail);
+
 		return Utility.gson.toJson(ret);
 		
 	}

@@ -36,6 +36,11 @@ public class FeeCriterionServiceImpl implements FeeCriterionService{
 	public int delete(int id) {
 		return criterionDAO.delete(id);
 	}
+
+	@Override
+	public FeeCriterion getById(Integer criterionId) {
+		return criterionDAO.getById(criterionId);
+	}
 	
 	
 

@@ -2,16 +2,14 @@ package com.park.model;
 
 
 public class ParkDetail {
-	
-	
+		
 	private int id;
 	private String name;
 	private int portCount;
 	private int channelCount;
 	private int portLeftCount;
-	private double charge;
-	private double charge1;
-	private double charge2;
+	private String feeCriterionName;
+	private Integer feeCriterionId;
 	private int status;
 	private int isFree;
 	private int floor;
@@ -43,14 +41,13 @@ public class ParkDetail {
 	public int getPortLeftCount() {
 		return portLeftCount;
 	}
-	public double getCharge() {
-		return charge;
+
+
+	public Integer getFeeCriterionId() {
+		return feeCriterionId;
 	}
-	public double getCharge1() {
-		return charge1;
-	}
-	public double getCharge2() {
-		return charge2;
+	public void setFeeCriterionId(Integer feeCriterionId) {
+		this.feeCriterionId = feeCriterionId;
 	}
 	public int getStatus() {
 		return status;
@@ -85,15 +82,13 @@ public class ParkDetail {
 	public void setPortLeftCount(int portLeftCount) {
 		this.portLeftCount = portLeftCount;
 	}
-	public void setCharge(double charge) {
-		this.charge = charge;
+	public String getFeeCriterionName() {
+		return feeCriterionName;
 	}
-	public void setCharge1(double charge1) {
-		this.charge1 = charge1;
+	public void setFeeCriterionName(String feeCriterionName) {
+		this.feeCriterionName = feeCriterionName;
 	}
-	public void setCharge2(double charge2) {
-		this.charge2 = charge2;
-	}
+
 	public void setStatus(int status) {
 		this.status = status;
 	}

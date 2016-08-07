@@ -10,9 +10,7 @@
 		<result property="portCount" column="portCount"/>
 		<result property="channelCount" column="channelCount"/>
 		<result property="portLeftCount" column="portLeftCount" />
-		<result property="charge" column="charge"/>
-		<result property="charge1" column="charge1"/>
-		<result property="charge2" column="charge2"/>
+		<result property="feeCriterionId" column="feeCriterionId"/>
 		<result property="status" column="status" />
 		<result property="isFree" column="isFree"/>
 		<result property="floor" column="floor"/>
@@ -36,9 +34,8 @@
 		<result property="portCount" column="portCount"/>
 		<result property="channelCount" column="channelCount"/>
 		<result property="portLeftCount" column="portLeftCount" />
-		<result property="charge" column="charge"/>
-		<result property="charge1" column="charge1"/>
-		<result property="charge2" column="charge2"/>
+		<result property="feeCriterionName" column="feeCriterionName"/>
+		<result property="feeCriterionId" column="feeCriterionId"/>
 		<result property="status" column="status" />
 		<result property="isFree" column="isFree"/>
 		<result property="floor" column="floor"/>
@@ -72,11 +69,20 @@
 		select * from park where id = #{id}
 	</select>
 	
-	<select id="getParkDetail" resultMap="ParkMapper">
-		select * from park order by id  limit #{low}, #{count}
+	
+	
+	<select id="getParkDetail" resultMap="ParkDetailMapper">
+		select park.id, park.name, park.portCount, park.channelCount, portLeftCount, feeCriterion.name as feeCriterionName, 
+		feeCriterion.id as feeCriterionId, park.status, park.isFree, park.floor, park.type,
+		 park.longitude, park.latitude, park.alias, park.mapAddr, park.position, park.date,
+		  park.contact, park.number, park.pictureUri, park.description 
+		  from park left join feeCriterion on park.feeCriterionId = feeCriterion.id	
+		order by id  limit #{low}, #{count}
 	</select>
+	
+	
 	<select id="getParkDetailByKeywords" parameterType="String" resultMap="ParkMapper" statementType="STATEMENT">
-		select * from park where position like '%${param1}%'
+		  select * from park where park.position like '%${param1}%'
 	</select>
 	<select id="getParkCount"  resultType="int">
 		select count(*) from park
@@ -85,13 +91,13 @@
 		select * from park order by id desc limit 1;
 	</select>
 	<insert id="insertPark" parameterType="Park" keyProperty="id">
-		insert into park(name, portCount, portLeftCount, channelCount, charge, charge1, charge2, status, isFree, floor, type, longitude, latitude, alias, mapAddr, position, date, isDeleted, contact, number, description, pictureUri) 
-		values(#{name}, #{portCount}, #{portLeftCount}, #{channelCount},  #{charge}, #{charge1}, #{charge2}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{mapAddr}, #{position}, #{date}, #{isDeleted}, #{contact}, #{number}, #{description}, #{pictureUri})
+		insert into park(name, portCount, portLeftCount, channelCount, feeCriterionId,  status, isFree, floor, type, longitude, latitude, alias, mapAddr, position, date, isDeleted, contact, number, description, pictureUri) 
+		values(#{name}, #{portCount}, #{portLeftCount}, #{channelCount},  #{feeCriterionId}, #{status}, #{isFree}, #{floor}, #{type}, #{longitude}, #{latitude}, #{alias}, #{mapAddr}, #{position}, #{date}, #{isDeleted}, #{contact}, #{number}, #{description}, #{pictureUri})
 	</insert>
 	
 	<update id="updatePark" parameterType="Park" >
-		update park set name = #{name}, portCount = #{portCount}, portLeftCount = #{portLeftCount}, channelCount = #{channelCount}, charge = #{charge}, charge1 = #{charge1},
-		 charge2 = #{charge2}, status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, longitude=#{longitude}, latitude=#{latitude}, alias=#{alias}, mapAddr=#{mapAddr}, position = #{position}, date = #{date}, 
+		update park set name = #{name}, portCount = #{portCount}, portLeftCount = #{portLeftCount}, channelCount = #{channelCount}, feeCriterionId = #{feeCriterionId}, 
+		 status = #{status}, isFree = #{isFree}, floor = #{floor}, type = #{type}, longitude=#{longitude}, latitude=#{latitude}, alias=#{alias}, mapAddr=#{mapAddr}, position = #{position}, date = #{date}, 
 		 isDeleted = #{isDeleted}, contact=#{contact}, number=#{number}, description=#{description}, pictureUri=#{pictureUri} where id = #{id}
 	</update>
 	

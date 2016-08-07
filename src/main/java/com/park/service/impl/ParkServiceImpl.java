@@ -18,6 +18,7 @@ import com.park.dao.ParkNewsDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Park;
+import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
 import com.park.service.ParkService;
 import com.park.service.UserParkService;
@@ -36,6 +37,8 @@ public class ParkServiceImpl implements ParkService{
 	@Autowired
 	private ParkNewsDAO parkNewsDAO;
 	
+	
+	
 	@Autowired
 	private UserParkService userParkService;
 	
@@ -44,6 +47,31 @@ public class ParkServiceImpl implements ParkService{
 		
 	}
 	
+	
+	@Override
+	public List<ParkDetail> filterParkDetail(List<ParkDetail> parks, String username) {
+		if(parks == null)
+			return null;
+		 AuthUser authUser = authDAO.getUser(username);
+		 if(authUser == null)
+			return null;
+		else if(authUser.getRole() == AuthUserRole.ADMIN.getValue())
+			return parks;
+		
+		int userId = authUser.getId();
+		List<Integer> filterParkIds = userParkService.getOwnParkId(userId);
+		Set<Integer> filterParkIdSet = new HashSet<Integer>(filterParkIds);
+		
+		List<ParkDetail> resultParks = new ArrayList<ParkDetail>();
+		for(ParkDetail park : parks){
+			if(filterParkIdSet.contains(park.getId()))
+				resultParks.add(park);
+		}
+		
+		return resultParks;
+		 
+		 
+	}
 	
 	@Override
 	public List<Park> filterPark(List<Park> parks, String username) {
@@ -111,6 +139,8 @@ public class ParkServiceImpl implements ParkService{
 	
 	public String insertPark(Park park){
 		Map<String, Object> map = new HashMap<String, Object>();
+		if(park.getFeeCriterionId() == -1)
+			park.setFeeCriterionId(null);
 		if(parkDAO.insertPark(park) > 0){
 			map.put("status", "1001");
 			map.put("message", "insert success");
@@ -125,6 +155,8 @@ public class ParkServiceImpl implements ParkService{
 		Map<String, Object> map = new HashMap<String, Object>();
 		int sum = 0;
 		for (Park park : parks) {
+			if(park.getFeeCriterionId() == -1)
+				park.setFeeCriterionId(null);
 			sum += parkDAO.insertPark(park);
 		}
 		if(sum == parks.size()){
@@ -140,6 +172,8 @@ public class ParkServiceImpl implements ParkService{
 	
 	public String updatePark(Park park){
 		Map<String, Object> map = new HashMap<String, Object>();
+		if(park.getFeeCriterionId() == -1)
+			park.setFeeCriterionId(null);
 		if(parkDAO.updatePark(park) > 0){
 			map.put("status", "1001");
 			map.put("message", "update success");
@@ -169,7 +203,7 @@ public class ParkServiceImpl implements ParkService{
 	}
 
 	@Override
-	public List<Park> getParkDetail(int low, int count) {
+	public List<ParkDetail> getParkDetail(int low, int count) {
 		
 		return parkDAO.getParkDetail(low, count);
 	}
@@ -219,6 +253,9 @@ public class ParkServiceImpl implements ParkService{
 		// TODO Auto-generated method stub
 		return parkDAO.getLastPark();
 	}
+
+
+
 	
 
 	

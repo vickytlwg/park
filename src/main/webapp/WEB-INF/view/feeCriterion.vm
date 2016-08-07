@@ -38,7 +38,7 @@
 									<th><span >起步价</div></th>
 									<th><span >超时加收/元</div></th>
 									<th><span >时间间隔/分</div></th>
-									<th><span>最高收费</div></th>
+									<th><span>最高收费/元</div></th>
 									<th><span>夜间时段</div></th>
 									<th><span>是否按次收费</div></th>
 									<th><span>价格/次</div></th>
@@ -54,7 +54,10 @@
 				          		<td ng-bind="item.timeoutPriceInterval"></td>
 				          		<td ng-bind="item.maxExpense"></td>
 				          		<td ng-bind="item.nightStartTime + '--' + item.nightEndTime"></td>
-				          		<td ng-bind="item.isOneTimeExpense"></td>
+				          		<td>
+				          			<span ng-if="item.isOneTimeExpense == 0">否</span>
+				          			<span ng-if="item.isOneTimeExpense == 1">是</span>
+				          		</td>
 				          		<td ng-bind="item.oneTimeExpense"></td>
 				          </table>
     					</div>
