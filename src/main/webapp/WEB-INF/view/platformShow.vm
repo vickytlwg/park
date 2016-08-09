@@ -9,7 +9,7 @@
        
 		  <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
         <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>            
-		 <script type="text/javascript" src="/park/script/jquery.min.js"></script>
+		
         <script type="text/javascript" src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 		<script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
         <script type="text/javascript" src="/park/script/utility.js"></script>
@@ -20,7 +20,7 @@
   <section class="content-header">
           <h1>
            系统主界面
-            <small>九比特信息系统</small>
+            <small></small>
           </h1>
       
     </section>

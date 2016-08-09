@@ -224,7 +224,7 @@
                 color : 'rgba(0,0,0,0)'
             }
         };
-        var radius = [50, 55];
+        var radius = [40, 47];
         option = {
             legend : {
                 x : 'center',

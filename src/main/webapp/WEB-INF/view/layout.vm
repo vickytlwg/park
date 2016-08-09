@@ -115,11 +115,11 @@
             <li class="header">功能区</li>
             <!-- Optionally, you can add icons to the links -->
             
-			<li  hidden class="treeview" active>
+			<li  hidden class="treeview ">
 				 <a href="/park/demo"><i class="fa fa-fw fa-cab"></i> <span>Demo Page</span> <i class="fa fa-angle-left pull-right"></i></a>
 			</li>
 			
-            <li class="treeview">
+            <li class="treeview active">
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
 				<li><a href="/park/platformShow"><i class="fa fa-area-chart"></i>主界面</a></li>
@@ -144,14 +144,14 @@
               </ul>
             </li>
             
-			  <li class="treeview">
+			  <li class="treeview active">
                 <a href="#"><i class="fa fa-cog"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li>
               </ul>
             </li>
 			
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-users"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li>
@@ -160,7 +160,7 @@
               </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-steam"></i> <span>流量管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin) hidden#end><a href="/park/dataUsage"><i class="fa fa-cc-diners-club"></i>流量卡管理</a></li>
@@ -169,7 +169,7 @@
               </ul>
             </li>
 			
-			 <li class="treeview">
+			 <li class="treeview ">
                 <a href="#"><i class="fa fa-file-text"></i> <span>报表管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 				  <li  ><a href="/park/finance"><i class="fa fa-area-chart"></i>财务概况</a></li>
@@ -180,7 +180,7 @@
             </li>
 			
             
-			 <li class="treeview">
+			 <li class="treeview active">
                 <a href="#"><i class="fa fa-bar-chart"></i> <span>停车位利用率</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>停车位利用率</a></li>
