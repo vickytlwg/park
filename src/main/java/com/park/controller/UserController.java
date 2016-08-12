@@ -113,9 +113,11 @@ public class UserController {
 
 	@RequestMapping(value = "/insert/user", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String insertUser(@RequestBody User user) {
+	public String insertUser(@RequestBody User user,HttpServletResponse response) {
 		logger.info("userName: " + user.getUserName() + " number: "
 				+ user.getNumber());
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "POST");
 		return userService.insertUser(user);
 	}
 
