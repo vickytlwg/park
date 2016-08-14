@@ -23,9 +23,10 @@ chargeApp.controller("feeDetailCtrl", ['$scope', '$http',  'textModal', '$modal'
 				$scope.detail.page.hidden = false;
 				$scope.detail.page.allCounts = response.body;
 				var maxIndex = Math.ceil($scope.detail.page.allCounts / $scope.detail.page.size);
-				$scope.detail.page.indexRange = [];
-				for(var i = 1; i <= maxIndex; i++)
+				$scope.detail.page.indexRange = [1];
+				for(var i = 2; i <= maxIndex; i++)
 					$scope.detail.page.indexRange.push(i);
+					
 				
 			}
 			else
