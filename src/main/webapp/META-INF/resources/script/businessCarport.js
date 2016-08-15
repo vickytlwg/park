@@ -58,9 +58,9 @@
 	    });
 	};
 	var readCookieSetSelect=function(){
-		if($.cookie('selectValue')){
-			var aa=$.cookie('selectValue');
-			$('select#searchPark').val($.cookie('selectValue'));
+		if($.cookie('carportParkSelectValue')){
+			var aa=$.cookie('carportParkSelectValue');
+			$('select#searchPark').val($.cookie('carportParkSelectValue'));
 			if($('select#searchPark').find("option:selected").text().length<3){
 				$('select#searchPark option:last').attr('selected','selected');
 			}
@@ -83,7 +83,7 @@
 		$('select#searchPark').on('change', $(this), function(){
 			
 			if($(this).val()!=-1){
-				$.cookie('selectValue',$(this).val(),{path:'/',expires:10});
+				$.cookie('carportParkSelectValue',$(this).val(),{path:'/',expires:10});
 			}
 			renderBusinessCarport(0, $.fn.page.pageSize);
 		});
@@ -367,8 +367,8 @@
 		$("#businessCarportBody").html('<tr><td colspan="' + cols + '"></td></tr>');
 		$.fn.loader.appendLoader($('#businessCarportBody').find('td'));
 		var parkId=-1;
-		if($.cookie('selectValue')){
-			parkId = $.cookie('selectValue');
+		if($.cookie('carportParkSelectValue')){
+			parkId = $.cookie('carportParkSelectValue');
 		};
 		$.ajax({
 			url:$.fn.config.webroot + "/getBusinessCarportDetail?low=" + low + "&count=" + count +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime(),

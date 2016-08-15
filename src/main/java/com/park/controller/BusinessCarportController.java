@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -208,8 +209,10 @@ public class BusinessCarportController {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String accessIndex(@RequestParam("low") int low, @RequestParam("count") int count,
-			@RequestParam(value = "parkId", required = false) Integer parkId) {
-
+			@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "GET");
+		response.setHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
 				parkId);
