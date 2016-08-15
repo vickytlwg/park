@@ -34,7 +34,7 @@ public class FeeCriterionController {
 	private AuthorityService authService;
 	
 	@RequestMapping(value = "/index", produces = {"application/json;charset=UTF-8"})
-	public String apiUserIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+	public String feeCriterionIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
@@ -47,12 +47,15 @@ public class FeeCriterionController {
 		return "feeCriterion";		
 	}
 	
+
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String get(){
 		
 		List<FeeCriterion> criterions = criterionService.get();
 		return Utility.createJsonMsg(1001, "success", criterions);
 	}
+
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String insert(@RequestBody FeeCriterion criterion){

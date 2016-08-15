@@ -4,16 +4,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
+import com.park.model.FeeCriterion;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
+import com.park.service.AuthorityService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
@@ -26,7 +34,40 @@ public class PosChargeDataController {
 	ParkService parkService;
 	
 	@Autowired
+	private AuthorityService authService;
+	
+	@Autowired
 	PosChargeDataService chargeSerivce;
+	
+	@RequestMapping(value = "/detail", produces = {"application/json;charset=UTF-8"})
+	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+		return "feeDetail";		
+	}
+	
+	
+	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String count(){
+		
+		int count = chargeSerivce.count();
+		return Utility.createJsonMsg(1001, "success", count);
+	}
+	
+	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String page(@RequestBody Map<String, Object> args){
+		int low = (int) args.get("low");
+		int count = (int) args.get("count");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
+	}
+	
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String get(){
