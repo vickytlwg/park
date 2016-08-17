@@ -169,7 +169,7 @@ public class ParkServiceImpl implements ParkService{
 		return new Gson().toJson(map);
 		
 	}
-	
+	@Override
 	public String updatePark(Park park){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(park.getFeeCriterionId() == -1)

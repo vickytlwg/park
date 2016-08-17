@@ -63,7 +63,20 @@ public class BusinessCarportController {
 
 		return "businessCarport";
 	}
+	@RequestMapping(value = "/businessCarportAngular", produces = { "application/json;charset=UTF-8" })
+	public String getbusinessCarportAngular(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
 
+		return "businessCarportAngular";
+	} 
 	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -212,7 +225,7 @@ public class BusinessCarportController {
 			@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		response.setHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+		response.setHeader("Access-Control-Allow-Headers","token,content-type");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
 				parkId);
