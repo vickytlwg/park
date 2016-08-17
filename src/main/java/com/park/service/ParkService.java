@@ -46,4 +46,5 @@ public interface ParkService {
 	public int insertParkNews(ParkNews parkNews);
 	
 	public Park getLastPark();
+	
 }

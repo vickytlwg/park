@@ -7,36 +7,38 @@ import com.park.model.Access;
 import com.park.model.AccessDetail;
 
 public interface AccessService {
-	
-	
-	public String insertAccess(Access item);
-	
-	public int getAccessCount(Integer parkId);
-	
-	
-	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
-	
-	public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date);
-	
-	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date);
-	
-	
-	//public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId, String date);
-	
-	//public Map<String, Map<Integer, Integer>> getMonthCountByChannel(int parkId, int year);
-	
-	public Map<Integer, Integer> getChannelHourCount(String mac,int macId, String date);
-	
-	//public Map<Integer, Integer> getChannelMonthCount(int macId, int year);
-	
-	public int getParkIdByChanelId(int channelId);
-	
-	public String insertAccessList(List<Access> accesses);
-	public int getAllAccessCount(int xmo,int ymonth);
-	//public String updateAccess(Access access);
-	public int getAccessCountByDate(int xmo,int ymonth,String accessDate);
-	//public String deleteAccess(int Id);
-	
-	public List<AccessDetail> getAccessDetail(int low, int count,Integer parkId);
 
+	public String insertAccess(Access item);
+
+	public int getAccessCount(Integer parkId);
+
+	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
+
+	public Map<String, Map<Integer, Integer>> getHourCountByChannel(int parkId, String date);
+
+	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date);
+
+	// public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId,
+	// String date);
+
+	// public Map<String, Map<Integer, Integer>> getMonthCountByChannel(int
+	// parkId, int year);
+
+	public Map<Integer, Integer> getChannelHourCount(String mac, int macId, String date);
+
+	// public Map<Integer, Integer> getChannelMonthCount(int macId, int year);
+
+	public int getParkIdByChanelId(int channelId);
+
+	public String insertAccessList(List<Access> accesses);
+
+	public int getAllAccessCount(int xmo, int ymonth);
+
+	// public String updateAccess(Access access);
+	public int getAccessCountByDate(int xmo, int ymonth, String accessDate);
+	// public String deleteAccess(int Id);
+
+	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId);
+
+	public List<AccessDetail> getAccessForExcel(int parkId, int monthNum);
 }

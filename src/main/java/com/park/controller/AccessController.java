@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +32,7 @@ import com.park.model.AuthUserRole;
 import com.park.service.AccessService;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
+import com.park.service.ExcelExportService;
 import com.park.service.HardwareService;
 import com.park.service.ParkService;
 import com.park.service.Utility;
@@ -47,6 +54,9 @@ public class AccessController {
 
 	@Autowired
 	private ChannelService channelService;
+	
+	@Autowired
+	private ExcelExportService excelService;
 	// private static Log logger = LogFactory.getLog(UserController.class);
 
 	@RequestMapping(value = "/access", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
@@ -168,7 +178,24 @@ public class AccessController {
 	 * 
 	 * }
 	 */
-
+	@RequestMapping(value="/exportExcel/{parkId}/{monthNum}",method=RequestMethod.GET)
+	@ResponseBody
+	public void exportExcel(@PathVariable("parkId")int parkId,@PathVariable("monthNum")int monthNum,HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+		List<AccessDetail> accessData=accessService.getAccessForExcel(parkId, monthNum);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"id","停车场名","通道号","日期"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xls");
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		excelService.produceExceldataAccessDetail("数据表",headers, accessData, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xls", response);
+	}
+	
 	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody

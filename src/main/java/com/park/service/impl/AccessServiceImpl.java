@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +60,7 @@ public class AccessServiceImpl implements AccessService{
 		String table =  "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
 		return table;
 	}
-	
+
 	private String findAccessTable(int parkId, String date){
 		
 		int parkIdHash = parkId % Constants.ACCESSTABLESCOUNT;
@@ -75,7 +76,11 @@ public class AccessServiceImpl implements AccessService{
 		
 	}
 	
-	
+	private String findTableWithMonth(int parkId,int month){
+		int parkIdHash = parkId % Constants.ACCESSTABLESCOUNT;
+		String table =  "access_"+String.format("%04d", parkIdHash)+"_"+String.format("%02d",month);
+		return table;
+	}
 	@Override
 	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId) {
 		if(parkId == null || parkId.intValue() < 0)
@@ -301,6 +306,22 @@ public class AccessServiceImpl implements AccessService{
 	public int getAccessCountByDate(int xmo, int ymonth, String accessDate) {
 		// TODO Auto-generated method stub
 		return accessDAO.getAccessCountByDate(xmo, ymonth, accessDate);
+	}
+
+	@Override
+	public List<AccessDetail> getAccessForExcel(int parkId, int monthNum) {
+		// TODO Auto-generated method stub
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int month=calendar.get(Calendar.MONTH);
+		List<AccessDetail> accessDetails=accessDAO.getParkAccessDetail(0, 900000, parkId,findTableWithMonth(parkId, month));
+		for(int i=1;i<monthNum;i++){
+			int monthTmp=month-i;		
+			if (monthTmp>=1) {
+				accessDetails.addAll(accessDAO.getParkAccessDetail(0, 900000, parkId,findTableWithMonth(parkId, monthTmp)));
+			}
+		}
+		return accessDetails;
 	}
 
 

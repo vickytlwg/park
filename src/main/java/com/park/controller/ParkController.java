@@ -370,6 +370,7 @@ public class ParkController {
 		ret.put("park", park);
 		return Utility.gson.toJson(ret);
 	}
+
 	@RequestMapping(value = "/search/parking", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getSearchParks(@RequestBody Map<String, Object> args){
