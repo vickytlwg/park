@@ -21,8 +21,9 @@
 								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
 		                	</div>
 	                	<div class="pull-right">
-	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
-	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange(selectValue)">
+	                		 <option value=-1>所有停车场</option>
+						
 	                	</select>
 	                	</div>
 	                	

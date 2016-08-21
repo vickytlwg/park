@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -185,15 +186,16 @@ public class AccessController {
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 		String[] headers={"id","停车场名","通道号","日期"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xls");
-		HSSFWorkbook workbook = new HSSFWorkbook();
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		 
 		excelService.produceExceldataAccessDetail("数据表",headers, accessData, workbook);
 		try {
 			workbook.write(out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xls", response);
+		Utility.download(docsPath + FILE_SEPARATOR+ "accessdata"+parkId+".xlsx", response);
 	}
 	
 	@RequestMapping(value = "/getChannelHourCount", method = RequestMethod.POST, produces = {

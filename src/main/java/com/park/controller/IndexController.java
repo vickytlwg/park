@@ -51,9 +51,10 @@ public class IndexController {
 		return "login";
 	}
 	@RequestMapping(value = "authority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public String authority(ModelMap modelMap, @RequestParam("username") String username,@RequestParam("password") String password,HttpSession session){
+	public String authority(ModelMap modelMap, @RequestParam("username") String username,@RequestParam("password") String password,HttpSession session,HttpServletRequest request){
 		if(authService.checkUserAccess(username, password)){
 			session.setAttribute("username", username);
+			//String url=request.getServletPath();
 			AuthUser user = authService.getUserByUsername(username);
 			if(user != null){
 				modelMap.addAttribute("user", user);

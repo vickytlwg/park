@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.park.dao.MonthuserDAO" >
+  <resultMap id="BaseResultMap" type="com.park.model.Monthuser" >
+     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="parkId" jdbcType="INTEGER" property="parkid" />
+    <result column="cardNumber" jdbcType="VARCHAR" property="cardnumber" />
+    <result column="owner" jdbcType="VARCHAR" property="owner" />
+    <result column="plateNumber" jdbcType="VARCHAR" property="platenumber" />
+    <result column="plateColor" jdbcType="VARCHAR" property="platecolor" />
+    <result column="certificateType" jdbcType="VARCHAR" property="certificatetype" />
+    <result column="certificateNumber" jdbcType="VARCHAR" property="certificatenumber" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="payment" jdbcType="REAL" property="payment" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, parkId, cardNumber, owner, plateNumber, plateColor, certificateType, certificateNumber, 
+    startTime, endTime, payment, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from monthUser
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from monthUser
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+ <insert id="insert" parameterType="com.park.model.Monthuser">
+    insert into monthUser (id, type, parkId, 
+      cardNumber, owner, plateNumber, 
+      plateColor, certificateType, certificateNumber, 
+      startTime, endTime, payment, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, 
+      #{cardnumber,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, #{platenumber,jdbcType=VARCHAR}, 
+      #{platecolor,jdbcType=VARCHAR}, #{certificatetype,jdbcType=VARCHAR}, #{certificatenumber,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{payment,jdbcType=REAL}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+   <insert id="insertSelective" parameterType="com.park.model.Monthuser">
+    insert into monthUser
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="parkid != null">
+        parkId,
+      </if>
+      <if test="cardnumber != null">
+        cardNumber,
+      </if>
+      <if test="owner != null">
+        owner,
+      </if>
+      <if test="platenumber != null">
+        plateNumber,
+      </if>
+      <if test="platecolor != null">
+        plateColor,
+      </if>
+      <if test="certificatetype != null">
+        certificateType,
+      </if>
+      <if test="certificatenumber != null">
+        certificateNumber,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="endtime != null">
+        endTime,
+      </if>
+      <if test="payment != null">
+        payment,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="parkid != null">
+        #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="cardnumber != null">
+        #{cardnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null">
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="platenumber != null">
+        #{platenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="platecolor != null">
+        #{platecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatetype != null">
+        #{certificatetype,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatenumber != null">
+        #{certificatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payment != null">
+        #{payment,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Monthuser" >
+    update monthUser
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="parkid != null" >
+        parkId = #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="cardnumber != null" >
+        cardNumber = #{cardnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="platenumber != null" >
+        plateNumber = #{platenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="platecolor != null" >
+        plateColor = #{platecolor,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatetype != null" >
+        certificateType = #{certificatetype,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatenumber != null" >
+        certificateNumber = #{certificatenumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.park.model.Monthuser" >
+    update monthUser
+    set type = #{type,jdbcType=INTEGER},
+      parkId = #{parkid,jdbcType=INTEGER},
+      cardNumber = #{cardnumber,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=VARCHAR},
+      plateNumber = #{platenumber,jdbcType=VARCHAR},
+      plateColor = #{platecolor,jdbcType=VARCHAR},
+      certificateType = #{certificatetype,jdbcType=VARCHAR},
+      certificateNumber = #{certificatenumber,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      payment = #{payment,jdbcType=REAL},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getCount" resultType="int">
+  	select count(*) from monthUser
+  </select>
+  <select id="getByStartAndCount" resultType="com.park.model.Monthuser">
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
+  	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
+  	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
+  	from monthUser left join park on park.id=monthUser.parkid limit #{start},#{count}
+  </select>
+</mapper>

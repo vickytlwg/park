@@ -3,16 +3,27 @@ businessCarportApp.controller('businessCarportCtrl', ['$scope', '$http', '$timeo
 function($scope, $http, $timeout) {
     $scope.carportDetails = [];
     $scope.selectedIndex = -1;
+    $scope.selectValue=-1;
     $scope.parks=[];
+    $scope.parks.push({name:"所有停车场",id:"-1"});
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
             method:'get'
         }).success(function(response){
             if(response.status=1001){
-               $scope.parks=response.body;
+                var body=response.body;
+                for(var i=0;i<body.length;i++){
+                    if(body[i].type==3){
+                        $scope.parks.push(body[i]);
+                    }
+                }
+                $scope.selectValue=$scope.parks[0];
             }
         });
+    };
+    $scope.selectChange=function(value){
+        alert(value.name);
     };
     $scope.refreshData = function() {     
         $http.get('getBusinessCarportDetail?low=0&count=50&parkId=109').success(function(response) {
@@ -22,8 +33,9 @@ function($scope, $http, $timeout) {
         });
         
     };
+     $scope.getParks();
     $scope.refreshData();
-    
+   
     $scope.checked = function(index){
         $scope.selectedIndex = index;
     };

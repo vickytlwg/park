@@ -48,7 +48,7 @@ public class loginInterceptor implements HandlerInterceptor{
 		if(token != null && tokenService.validToken(token)){
 			if(!url.contains("access"))
 				tokenUsageService.insertRecord(token, url);
-			return true;
+			return true; 
 		}
 		HttpSession session  = request.getSession();
 		Object username = session.getAttribute("username");
