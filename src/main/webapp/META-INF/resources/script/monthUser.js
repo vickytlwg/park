@@ -119,8 +119,10 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
             data:$scope.tempUser,
         }).success(function(response){
             if(response.status==1001){
+                $scope.close();
                textModal.open($scope, "成功","操作成功");
                 $scope.$parent.refreshUser();
+                
             }
             else
             {

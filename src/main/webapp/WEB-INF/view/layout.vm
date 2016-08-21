@@ -157,6 +157,7 @@
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li>
                   <li #if(!$isAdmin) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>网站用户管理</a></li>
+					 <li #if(!$isAdmin) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
                   <li #if(!$isAdmin) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>用户token管理</a></li>
               </ul>
             </li>
