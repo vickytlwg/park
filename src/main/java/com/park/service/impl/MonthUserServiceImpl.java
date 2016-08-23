@@ -55,4 +55,10 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getByStartAndCount(start, count);
 	}
 
+	@Override
+	public int updateByPrimaryKeySelective(Monthuser record) {
+		// TODO Auto-generated method stub
+		return monthUserDao.updateByPrimaryKeySelective(record);
+	}
+
 }

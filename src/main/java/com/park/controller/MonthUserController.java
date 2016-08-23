@@ -87,7 +87,7 @@ public String delete(@PathVariable("id")int id){
 @ResponseBody
 public String update(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
-	int num=monthUserService.updateByPrimaryKey(monthUser);
+	int num=monthUserService.updateByPrimaryKeySelective(monthUser);
 	if (num==1) {
 		result.put("status", 1001);
 	}

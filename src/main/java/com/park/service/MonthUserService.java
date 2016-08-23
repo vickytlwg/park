@@ -16,6 +16,8 @@ public interface  MonthUserService {
 	    
 	    int updateByPrimaryKey(Monthuser record);
 	    
+	    int updateByPrimaryKeySelective(Monthuser record);
+	    
 	    int getCount();
 	    
 	    List<Monthuser> getByStartAndCount(int start,int count);

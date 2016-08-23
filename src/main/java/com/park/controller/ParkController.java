@@ -78,6 +78,22 @@ public class ParkController {
 		return "park";
 	}
 	
+	@RequestMapping(value = "/outsideParks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	public String outsideParks(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+		}
+			
+		return "outsidePark";
+	}
+	
 	@RequestMapping(value = "/getPark/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkById(@PathVariable int id, ModelMap modelMap, HttpServletRequest request){
@@ -252,6 +268,20 @@ public class ParkController {
 		return Utility.gson.toJson(ret);					
 	}
 	
+	@RequestMapping(value = "/getOutsideParkCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getOutsideParkCount(){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> body = new HashMap<String, Object>();
+		int count = parkService.getOutsideParkCount();
+		body.put("count", count);
+	
+		ret.put("status", "1001");
+		ret.put("message", "get park detail success");
+		ret.put("body", Utility.gson.toJson(body));
+		
+		return Utility.gson.toJson(ret);					
+	}
 
 	@RequestMapping(value = "/getParkDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
@@ -280,6 +310,35 @@ public class ParkController {
 		return Utility.gson.toJson(ret);
 		
 	}
+	
+	@RequestMapping(value = "/getOutsideParkDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public  String  getOutsideParkDetail( @RequestBody Map<String, Object> args,HttpSession session){
+		int low = (int)args.get("low");
+		int count = (int)args.get("count");
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<ParkDetail> parkDetail = parkService.getOutsideParkDetail(low, count);
+		String username = (String) session.getAttribute("username");
+		
+		if(username != null){
+			
+			AuthUser user = authService.getUserByUsername(username);
+			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
+			{
+				parkDetail = parkService.filterParkDetail(parkDetail, username);
+				//parkDetail = parkService.getPark();
+				//parkDetail = parkService.filterPark(parkDetail, username);
+			}
+		}			
+
+		ret.put("status", "1001");
+		ret.put("message", "get park detail success");
+		ret.put("body", parkDetail);
+
+		return Utility.gson.toJson(ret);
+		
+	}
+	
 	@RequestMapping(value = "/search/parkBykeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkByLocationkeywords(@RequestBody Map<String, Object> args){

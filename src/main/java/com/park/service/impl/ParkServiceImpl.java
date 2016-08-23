@@ -255,6 +255,20 @@ public class ParkServiceImpl implements ParkService{
 	}
 
 
+	@Override
+	public List<ParkDetail> getOutsideParkDetail(int low, int count) {
+		// TODO Auto-generated method stub
+		return parkDAO.getOutsideParkDetail(low, count);
+	}
+
+
+	@Override
+	public int getOutsideParkCount() {
+		// TODO Auto-generated method stub
+		return parkDAO.getOutsideParkCount();
+	}
+
+
 
 	
 

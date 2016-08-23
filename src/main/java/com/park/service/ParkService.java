@@ -27,9 +27,13 @@ public interface ParkService {
 	
 	public List<ParkDetail> getParkDetail(int low, int count);
 	
+	public List<ParkDetail> getOutsideParkDetail(int low, int count);
+	
 	public List<Park> getParkDetailByKeywords(String keywords);
 	
 	public int getParkCount();
+	
+	public int getOutsideParkCount();
 	
 	public String insertPark(Park park);
 	
