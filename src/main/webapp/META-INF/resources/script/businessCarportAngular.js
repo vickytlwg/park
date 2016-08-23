@@ -1,6 +1,6 @@
 var businessCarportApp = angular.module('businessCarportApp', []);
-businessCarportApp.controller('businessCarportCtrl', ['$scope', '$http', '$timeout',
-function($scope, $http, $timeout) {
+businessCarportApp.controller('businessCarportCtrl', ['$scope', '$http', '$timeout','$interval',
+function($scope, $http, $timeout,$interval) {
     $scope.carportDetails = [];
     $scope.selectedIndex = -1;
     $scope.selectValue=-1;
@@ -34,7 +34,10 @@ function($scope, $http, $timeout) {
         
     };
      $scope.getParks();
-    $scope.refreshData();
+      $interval(function(){
+          $scope.refreshData();
+      },3000);
+    
    
     $scope.checked = function(index){
         $scope.selectedIndex = index;

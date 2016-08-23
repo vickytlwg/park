@@ -57,7 +57,7 @@
 							  <td ng-bind="user.certificatenumber"></td>
 							  <td ng-bind="user.starttime"></td>
 							  <td ng-bind="user.endtime"></td>
-							  <td ng-bind="user.payment"></td>
+							  <td ng-bind="user.payment | currency"></td>
 							  <td ng-bind="user.status"></td>
 							  </tr>
 					          </table>

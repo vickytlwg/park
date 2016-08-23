@@ -124,6 +124,7 @@
               <ul class="treeview-menu">
 				<li><a href="/park/platformShow"><i class="fa fa-area-chart"></i>主界面</a></li>
                 <li><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
+				<li><a href="/park/outsideParks"><i class="fa fa-car"></i>路边停车场管理</a></li>
 				<li><a href="/park/parkmap"><i class="fa fa-map-marker"></i>停车场分布</a></li>
                 <li><a href="/park/channel"><i class="fa fa-exchange"></i>出入口管理</a></li>
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
@@ -207,6 +208,8 @@
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; 2016 <a href="#">Nine Bits</a>.</strong> All rights reserved.
+		<strong><a href="http://www.miitbeian.gov.cn/">苏ICP备15036890号
+        </a></strong> 
       </footer>
       
 

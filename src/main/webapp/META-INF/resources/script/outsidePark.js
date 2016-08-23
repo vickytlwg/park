@@ -456,7 +456,7 @@
 		var data = {'low': low, 'count': count, 'T': new Date().getTime()};
 		$.ajax({
 			//url:$.fn.config.webroot + "/getParkDetail?low=" + low + "&count=" + count + "&_t=" + new Date().getTime(),
-			url: $.fn.config.webroot + "/getParkDetail" ,
+			url: $.fn.config.webroot + "/getOutsideParkDetail" ,
 			type: 'post',
 			contentType: 'application/json;charset=utf-8',			
 			datatype: 'json',
@@ -552,7 +552,7 @@
 	var renderPagination = function(){
 
 		$.ajax({
-			url:$.fn.config.webroot + "/getParkCount",
+			url:$.fn.config.webroot + "/getOutsideParkCount",
 			type: 'get',
 			success: function(data){
 				data = $.parseJSON(data["body"]);

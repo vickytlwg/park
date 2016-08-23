@@ -80,12 +80,24 @@
 		order by id  limit #{low}, #{count}
 	</select>
 	
+	<select id="getOutsideParkDetail" resultMap="ParkDetailMapper">
+		select park.id, park.name, park.portCount, park.channelCount, portLeftCount, feeCriterion.name as feeCriterionName, 
+		feeCriterion.id as feeCriterionId, park.status, park.isFree, park.floor, park.type,
+		 park.longitude, park.latitude, park.alias, park.mapAddr, park.position, park.date,
+		  park.contact, park.number, park.pictureUri, park.description 
+		  from park left join feeCriterion on park.feeCriterionId = feeCriterion.id	where park.type=3
+		order by id  limit #{low}, #{count}
+	</select>
+	
 	
 	<select id="getParkDetailByKeywords" parameterType="String" resultMap="ParkMapper" statementType="STATEMENT">
 		  select * from park where park.position like '%${param1}%'
 	</select>
 	<select id="getParkCount"  resultType="int">
 		select count(*) from park
+	</select>
+	<select id="getOutsideParkCount"  resultType="int">
+		select count(*) from park where type=3
 	</select>
 	<select id="getLastPark" resultMap="ParkMapper">
 		select * from park order by id desc limit 1;

@@ -22,11 +22,15 @@ public interface ParkDAO {
 	
 	public List<ParkDetail> getParkDetail(@Param("low")int low, @Param("count")int count);
 	
+	public List<ParkDetail> getOutsideParkDetail(@Param("low")int low, @Param("count")int count);
+	
 	public List<Park> getParkDetailByKeywords(@Param("param1")String keywords);
 	
 	public Park getLastPark();
 	
 	public int getParkCount();
+	
+	public int getOutsideParkCount();
 	
 	public int insertPark(Park park);
 	
