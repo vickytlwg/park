@@ -89,6 +89,11 @@ public class ParkController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 			
 		return "outsidePark";
