@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,10 +30,12 @@ import com.park.model.AuthUserRole;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
 import com.park.model.CarportStatusDetail;
+import com.park.model.Page;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
 import com.park.service.BusinessCarportService;
 import com.park.service.HardwareService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -41,6 +44,9 @@ public class BusinessCarportController {
 	@Autowired
 	private BusinessCarportService businessCarportService;
 
+	@Autowired
+	private UserPagePermissionService pageService;
+	
 	@Autowired
 	private AuthorityService authService;
 
@@ -59,6 +65,10 @@ public class BusinessCarportController {
 			if (user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 
 		return "businessCarport";

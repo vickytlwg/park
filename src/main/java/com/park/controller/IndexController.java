@@ -1,6 +1,8 @@
 package com.park.controller;
 
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,13 +15,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Page;
 import com.park.service.AuthorityService;
+import com.park.service.UserPagePermissionService;
 
 @Controller
 public class IndexController {
 
 	@Autowired
 	private AuthorityService authService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String accessIndex1(ModelMap modelMap,HttpSession session){
@@ -35,6 +42,11 @@ public class IndexController {
 				if(user.getRole() == AuthUserRole.ADMIN.getValue())
 					isAdmin=true;
 				modelMap.addAttribute("isAdmin", isAdmin);
+				
+				Set<Page> pages = pageService.getUserPage(user.getId()); 
+				for(Page page : pages){
+					modelMap.addAttribute(page.getPageKey(), true);
+				}
 			}
 			return "redirect:platformShow";
 		}
@@ -53,15 +65,21 @@ public class IndexController {
 	@RequestMapping(value = "authority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public String authority(ModelMap modelMap, @RequestParam("username") String username,@RequestParam("password") String password,HttpSession session,HttpServletRequest request){
 		if(authService.checkUserAccess(username, password)){
-			session.setAttribute("username", username);
+			session.setAttribute("username", username);			
 			//String url=request.getServletPath();
-			AuthUser user = authService.getUserByUsername(username);
+			AuthUser user = authService.getUserByUsername(username);			
 			if(user != null){
+				session.setAttribute("userId", user.getId());
 				modelMap.addAttribute("user", user);
 				boolean isAdmin = false;
 				if(user.getRole() == AuthUserRole.ADMIN.getValue())
 					isAdmin=true;
 				modelMap.addAttribute("isAdmin", isAdmin);
+				
+				Set<Page> pages = pageService.getUserPage(user.getId()); 
+				for(Page page : pages){
+					modelMap.addAttribute(page.getPageKey(), true);
+				}
 			}
 			return "redirect:platformShow";
 		}else{
@@ -85,6 +103,11 @@ public class IndexController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "demo";
 	}
@@ -104,6 +127,11 @@ public class IndexController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "finance";
 	}
@@ -117,6 +145,11 @@ public class IndexController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "operation";
 	}
@@ -130,6 +163,11 @@ public class IndexController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "data";
 	}
@@ -155,6 +193,11 @@ public class IndexController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "platformShow";
 	}

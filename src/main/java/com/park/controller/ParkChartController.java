@@ -2,6 +2,7 @@ package com.park.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Page;
 import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
+import com.park.service.UserPagePermissionService;
 
 
 @Controller
@@ -27,6 +30,9 @@ public class ParkChartController {
 	
 	@Autowired
 	private AuthorityService authService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	@RequestMapping(value = "/chart", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String parkChart(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
@@ -49,6 +55,11 @@ public class ParkChartController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		
 		
@@ -69,6 +80,11 @@ public class ParkChartController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		
 		return "flow";

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,12 +31,14 @@ import com.park.model.Access;
 import com.park.model.AccessDetail;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Page;
 import com.park.service.AccessService;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.ExcelExportService;
 import com.park.service.HardwareService;
 import com.park.service.ParkService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -57,6 +60,9 @@ public class AccessController {
 	private ChannelService channelService;
 	
 	@Autowired
+	private UserPagePermissionService pageService;
+	
+	@Autowired
 	private ExcelExportService excelService;
 	// private static Log logger = LogFactory.getLog(UserController.class);
 
@@ -70,6 +76,10 @@ public class AccessController {
 			if (user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "access";
 	}

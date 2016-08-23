@@ -4,6 +4,7 @@ package com.park.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.ApiUser;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Page;
 import com.park.service.ApiUserService;
 import com.park.service.AuthorityService;
 import com.park.service.TokenService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -32,6 +35,8 @@ public class ApiUserController {
 	@Autowired
 	private ApiUserService apiUserService;
 
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	@Autowired
 	private AuthorityService authService;
@@ -46,6 +51,10 @@ public class ApiUserController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "apiUser";		
 	}

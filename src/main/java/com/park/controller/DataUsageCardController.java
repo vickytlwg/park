@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,11 +30,13 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.DataUsageCard;
 import com.park.model.DataUsageCardDetail;
+import com.park.model.Page;
 import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.DataUsageCardService;
 import com.park.service.ExcelExportService;
 import com.park.service.ParkService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.park.service.impl.ExcelServiceImpl;
 
@@ -43,10 +46,17 @@ public class DataUsageCardController {
 
 	@Autowired
 	private DataUsageCardService cardService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
+	
+	
 	@Autowired
 	private ParkService parkService;
+	
 	@Autowired
 	private AuthorityService authService;
+	
 	@RequestMapping(value = "", produces = {"application/json;charset=UTF-8"})
 	public String getCardPage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -60,6 +70,11 @@ public class DataUsageCardController {
 			modelMap.addAttribute("user", user);
 			isAdmin = user.getRole() == AuthUserRole.ADMIN.getValue() ? true : false;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		if(isAdmin)
 			return "dataUsageCard";

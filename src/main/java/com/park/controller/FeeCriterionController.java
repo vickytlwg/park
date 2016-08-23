@@ -3,6 +3,7 @@ package com.park.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.FeeCriterion;
+import com.park.model.Page;
 import com.park.service.AuthorityService;
 import com.park.service.FeeCriterionService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -33,6 +36,9 @@ public class FeeCriterionController {
 	@Autowired
 	private AuthorityService authService;
 	
+	@Autowired
+	private UserPagePermissionService pageService;
+	
 	@RequestMapping(value = "/index", produces = {"application/json;charset=UTF-8"})
 	public String feeCriterionIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -43,6 +49,11 @@ public class FeeCriterionController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "feeCriterion";		
 	}

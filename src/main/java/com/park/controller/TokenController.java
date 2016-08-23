@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.service.TokenService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -18,6 +19,9 @@ public class TokenController {
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	@RequestMapping(value = "/{tokenId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

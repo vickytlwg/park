@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +29,12 @@ import com.park.model.AuthUserRole;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 import com.park.model.Hardware;
+import com.park.model.Page;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.HardwareService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -39,11 +42,15 @@ public class ChannelController {
 	
 	@Autowired
 	private ChannelService channelService;
+	
 	@Autowired
 	private HardwareService hardwareService;
 
 	@Autowired
 	private AuthorityService authService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	
 	@RequestMapping(value = "/channel", produces = {"application/json;charset=UTF-8"})
@@ -56,6 +63,11 @@ public class ChannelController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}		
 		return "channel";
 	}

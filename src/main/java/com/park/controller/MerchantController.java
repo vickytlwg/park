@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Merchant;
 import com.park.service.MerchantService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -22,6 +23,9 @@ public class MerchantController {
 	
 	@Autowired
 	private MerchantService merchantService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
