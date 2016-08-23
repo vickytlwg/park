@@ -123,7 +123,8 @@
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
 				<li #if(!$isAdmin && !$park_platformShow) hidden#end ><a href="/park/platformShow"><i class="fa fa-area-chart"></i>主界面</a></li>
-                <li #if(!$isAdmin && $park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
+                <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
+				<li #if(!$isAdmin && !$park_outsideParks) hidden#end><a href="/park/outsideParks"><i class="fa fa-car"></i>路边停车场管理</a></li>
 				<li #if(!$isAdmin && !$park_parkmap) hidden#end><a href="/park/parkmap"><i class="fa fa-map-marker"></i>停车场分布</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/channel"><i class="fa fa-exchange"></i>出入口管理</a></li>
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
