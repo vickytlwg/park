@@ -1,30 +1,30 @@
-var monthUserApp=angular.module("monthUserApp",['ui.bootstrap']);
-monthUserApp.controller("monthUserCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
+var streetApp=angular.module("streetApp",['ui.bootstrap']);
+streetApp.controller("streetCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
-    $scope.users=[];
+    $scope.streets=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
     $scope.count=50;
-    $scope.refreshUser=function(){
+    $scope.refreshStreet=function(){
         $http({
-            url:'/park/monthUser/getByStartAndCount',
+            url:'/park/street/getByStartAndCount',
             method:'post',
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
             if(response.status==1001){
-                $scope.users=response.body;
+                $scope.streets=response.body;
             }
             else{
                textModal.open($scope,"错误","数据请求失败");
             }
         }).error(function(){
-            textModal.open($scope,"错误","数据请求失败");
+               textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.insertUser=function(){
+    $scope.insertStreet=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
-            controller: 'monthUserModify',
+            templateUrl: '/park/views/template/ucNewStreet.html',
+            controller: 'streetModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -33,14 +33,14 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.updateUser=function(){
+    $scope.updateStreet=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
-            controller: 'monthUserModify',
+            templateUrl: '/park/views/template/ucNewStreet.html',
+            controller: 'streetModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -49,20 +49,20 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.deleteUser=function(){
+    $scope.deleteStreet=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
-        var id=$scope.users[$scope.checkedIndex].id;
+        var id=$scope.streets[$scope.checkedIndex].id;
         $http({
-            url:'/park/monthUser/delete/'+id,
+            url:'/park/street/delete/'+id,
             method:'get'
         }).success(function(response){
             if(response.status==1001)
             {
                 textModal.open($scope, "成功","操作成功");
-                $scope.refreshUser();
+                $scope.refreshStreet();
             }
             else{
                 textModal.open($scope, "失败","操作失败");
@@ -72,12 +72,12 @@ function($scope,$http,$uibModal,textModal,$timeout){
         });
     };
         $scope.selectChange=function(index){
-        if($scope.users[index].checked){
+        if($scope.streets[index].checked){
             $scope.checkedIndex = index;
             return;
         }
-        for(var i = 0; i < $scope.users.length; i++){
-            var item = $scope.users[i];
+        for(var i = 0; i < $scope.streets.length; i++){
+            var item = $scope.streets[i];
             if(item.checked != undefined && item.checked == true){
                 $scope.checkedIndex = i;
                 return;
@@ -85,53 +85,59 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }
         $scope.checkedIndex = -1;
     };
-    $scope.refreshUser();
+    $scope.refreshStreet();
 }]);
 
-monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
-    var url = '/park/monthUser/insert';
+streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+    var url = '/park/street/insert';
+  // $scope.tempStreet={};
     if(index != undefined){
-        $scope.tempUser = $scope.$parent.users[index];
-        url = '/park/monthUser/update';
+        $scope.tempStreet = $scope.$parent.streets[index];
+        url = '/park/street/update';
     }
-    $scope.parks=[];
-    $scope.getParks=function(){
+    $scope.areas=[];
+      $scope.refreshArea=function(){
         $http({
-            url:'getParks?_t=' + (new Date()).getTime(),
-            method:'get'
+            url:'/park/area/getByStartAndCount',
+            method:'post',
+            params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
-            if(response.status=1001){
-                var body=response.body;
-                for(var i=0;i<body.length;i++){
-                    if(body[i].type==3){
-                        $scope.parks.push(body[i]);
-                    }
-                }
-                $scope.selectValue=$scope.parks[0];
+            if(response.status==1001){
+                $scope.areas=response.body;
             }
+            else{
+               textModal.open($scope,"错误","数据请求失败");
+            }
+        }).error(function(){
+               textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.getParks();
-    $scope.showResult=false;
-    $scope.showLoader=false;
-    $scope.result='';
+    $scope.refreshArea();
+    $scope.streetTypes=[{id:0,name:"自营路段"},{id:1,name:'其它路段'}];
+    $scope.loading = false;
+    $scope.submitted = false;
+    $scope.result="";
     $scope.submit = function(){
-        $scope.showLoader=true;
+        $scope.loading = true;
+        $scope.submitted = false;
+        delete $scope.tempStreet['checked'];
         $http({
             url:url,
             method:'post',
-            data:$scope.tempUser,
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.result="成功";
-                $scope.showResult=true;
-                $scope.showLoader=false;
-                $timeout(function(){
-                      $scope.close('ok');
-                },2500);
+            data:$scope.tempStreet,
+        }).success(function(response){          
+            if(response.status==1001){ 
+               $scope.loading =false;
+               $scope.submitted = true;
+               $scope.result="成功";             
+               $timeout(function(){                                
+                   $scope.result="";
+                    
+                    $modalInstance.close('ok');
+               },2000);
+                                        
+               $scope.$parent.refreshStreet();
               
-                $scope.$parent.refreshUser();
-                
             }
             else
             {
@@ -147,8 +153,8 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
 
 });
 
-var monthUserService=angular.module("monthUserApp");
-monthUserService.service('textModal',  ['$uibModal', function($uibModal){
+var streetService=angular.module("streetApp");
+streetService.service('textModal',  ['$uibModal', function($uibModal){
     
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
@@ -169,7 +175,7 @@ monthUserService.service('textModal',  ['$uibModal', function($uibModal){
 }]);
 
 
-  monthUserService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
+  streetService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   
     $scope.close = function(){
         $uibModalInstance.close('cancel');

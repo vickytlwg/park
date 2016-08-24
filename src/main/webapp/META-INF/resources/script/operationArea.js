@@ -1,30 +1,30 @@
-var monthUserApp=angular.module("monthUserApp",['ui.bootstrap']);
-monthUserApp.controller("monthUserCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
+var areaApp=angular.module("areaApp",['ui.bootstrap']);
+areaApp.controller("areaCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
-    $scope.users=[];
+    $scope.areas=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
     $scope.count=50;
-    $scope.refreshUser=function(){
+    $scope.refreshArea=function(){
         $http({
-            url:'/park/monthUser/getByStartAndCount',
+            url:'/park/area/getByStartAndCount',
             method:'post',
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
             if(response.status==1001){
-                $scope.users=response.body;
+                $scope.areas=response.body;
             }
             else{
                textModal.open($scope,"错误","数据请求失败");
             }
         }).error(function(){
-            textModal.open($scope,"错误","数据请求失败");
+               textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.insertUser=function(){
+    $scope.insertArea=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
-            controller: 'monthUserModify',
+            templateUrl: '/park/views/template/ucNewArea.html',
+            controller: 'areaModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -33,14 +33,14 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.updateUser=function(){
+    $scope.updateArea=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
-            controller: 'monthUserModify',
+            templateUrl: '/park/views/template/ucNewArea.html',
+            controller: 'areaModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -49,20 +49,20 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.deleteUser=function(){
+    $scope.deleteArea=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
-        var id=$scope.users[$scope.checkedIndex].id;
+        var id=$scope.areas[$scope.checkedIndex].id;
         $http({
-            url:'/park/monthUser/delete/'+id,
+            url:'/park/area/delete/'+id,
             method:'get'
         }).success(function(response){
             if(response.status==1001)
             {
                 textModal.open($scope, "成功","操作成功");
-                $scope.refreshUser();
+                $scope.refreshArea();
             }
             else{
                 textModal.open($scope, "失败","操作失败");
@@ -72,12 +72,12 @@ function($scope,$http,$uibModal,textModal,$timeout){
         });
     };
         $scope.selectChange=function(index){
-        if($scope.users[index].checked){
+        if($scope.areas[index].checked){
             $scope.checkedIndex = index;
             return;
         }
-        for(var i = 0; i < $scope.users.length; i++){
-            var item = $scope.users[i];
+        for(var i = 0; i < $scope.areas.length; i++){
+            var item = $scope.areas[i];
             if(item.checked != undefined && item.checked == true){
                 $scope.checkedIndex = i;
                 return;
@@ -85,53 +85,42 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }
         $scope.checkedIndex = -1;
     };
-    $scope.refreshUser();
+    $scope.refreshArea();
 }]);
 
-monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
-    var url = '/park/monthUser/insert';
+areaApp.controller("areaModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+    var url = '/park/area/insert';
     if(index != undefined){
-        $scope.tempUser = $scope.$parent.users[index];
-        url = '/park/monthUser/update';
+        $scope.tempArea = $scope.$parent.areas[index];
+        url = '/park/area/update';
     }
-    $scope.parks=[];
-    $scope.getParks=function(){
-        $http({
-            url:'getParks?_t=' + (new Date()).getTime(),
-            method:'get'
-        }).success(function(response){
-            if(response.status=1001){
-                var body=response.body;
-                for(var i=0;i<body.length;i++){
-                    if(body[i].type==3){
-                        $scope.parks.push(body[i]);
-                    }
-                }
-                $scope.selectValue=$scope.parks[0];
-            }
-        });
-    };
-    $scope.getParks();
-    $scope.showResult=false;
-    $scope.showLoader=false;
-    $scope.result='';
+    else{
+   
+    }
+    $scope.loading = false;
+    $scope.submitted = false;
+    $scope.result="请求中";
     $scope.submit = function(){
-        $scope.showLoader=true;
+        $scope.loading = true;
+        $scope.submitted = false;
+        delete $scope.tempArea['checked'];
         $http({
             url:url,
             method:'post',
-            data:$scope.tempUser,
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.result="成功";
-                $scope.showResult=true;
-                $scope.showLoader=false;
-                $timeout(function(){
-                      $scope.close('ok');
-                },2500);
+            data:$scope.tempArea,
+        }).success(function(response){          
+            if(response.status==1001){ 
+               $scope.loading =false;
+               $scope.submitted = true;
+               $scope.result="成功";             
+               $timeout(function(){                                
+                   $scope.result="";
+                    
+                    $modalInstance.close('ok');
+               },2000);
+                                        
+               $scope.$parent.refreshArea();
               
-                $scope.$parent.refreshUser();
-                
             }
             else
             {
@@ -147,8 +136,8 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
 
 });
 
-var monthUserService=angular.module("monthUserApp");
-monthUserService.service('textModal',  ['$uibModal', function($uibModal){
+var areaService=angular.module("areaApp");
+areaService.service('textModal',  ['$uibModal', function($uibModal){
     
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
@@ -169,7 +158,7 @@ monthUserService.service('textModal',  ['$uibModal', function($uibModal){
 }]);
 
 
-  monthUserService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
+  areaService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   
     $scope.close = function(){
         $uibModalInstance.close('cancel');
