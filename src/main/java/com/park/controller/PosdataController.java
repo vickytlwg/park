@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.DataUsageCardDetail;
+import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.Posdata;
 import com.park.model.posdataReceive;
@@ -42,6 +44,7 @@ import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.ParkService;
 import com.park.service.PosdataService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.park.service.impl.ExcelServiceImpl;
 
@@ -55,6 +58,9 @@ private PosdataService posdataService;
 private ParkService parkService;
 @Autowired
 private AuthorityService authService;
+
+@Autowired
+private UserPagePermissionService pageService;
 
 @Autowired
 private ExcelExportService excelService;
@@ -149,6 +155,11 @@ public String chargeDetail(ModelMap modelMap, HttpServletRequest request, HttpSe
 		if(user.getRole() == AuthUserRole.ADMIN.getValue())
 			isAdmin=true;
 		modelMap.addAttribute("isAdmin", isAdmin);
+		
+		Set<Page> pages = pageService.getUserPage(user.getId()); 
+		for(Page page : pages){
+			modelMap.addAttribute(page.getPageKey(), true);
+		}
 	}
 	return "posChargeDetail";
 }
@@ -174,6 +185,11 @@ public String carportUsage(ModelMap modelMap, HttpServletRequest request, HttpSe
 		if(user.getRole() == AuthUserRole.ADMIN.getValue())
 			isAdmin=true;
 		modelMap.addAttribute("isAdmin", isAdmin);
+		
+		Set<Page> pages = pageService.getUserPage(user.getId()); 
+		for(Page page : pages){
+			modelMap.addAttribute(page.getPageKey(), true);
+		}
 	}
 	
 	return "carportUsage";

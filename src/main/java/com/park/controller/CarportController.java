@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,10 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.AuthUser;
+import com.park.model.AuthUserRole;
 import com.park.model.Carport;
 import com.park.model.CarportStatusDetail;
+import com.park.model.Page;
 import com.park.model.ParkNews;
+import com.park.service.AuthorityService;
 import com.park.service.CarportService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -30,6 +37,12 @@ public class CarportController {
 
 	@Autowired
 	private CarportService carportService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
+	
+	@Autowired
+	private AuthorityService authService;
 	
 	private static Log logger = LogFactory.getLog(UserController.class);
 	
@@ -100,7 +113,21 @@ public class CarportController {
 		return "carportStatusShow";
 	}
 	@RequestMapping(value="/qhq_carportstatus")
-	public String qhq_carportstatus(){
+	public String qhq_carportstatus(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		
 		return "qhq_carport";
 	}
 	

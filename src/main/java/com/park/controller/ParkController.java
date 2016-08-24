@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,11 +34,13 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Constants;
+import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
+import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
 @Controller
@@ -48,6 +51,9 @@ public class ParkController {
 	
 	@Autowired
 	private AuthorityService authService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	private static Log logger = LogFactory.getLog(ParkController.class);
 	
@@ -62,6 +68,11 @@ public class ParkController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 			
 		return "park";
@@ -78,6 +89,11 @@ public class ParkController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 			
 		return "outsidePark";
@@ -117,6 +133,11 @@ public class ParkController {
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
 		}
 		return "parkmap";
 	}

@@ -24,7 +24,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
           <typeAlias alias="Posdata" type="com.park.model.Posdata"/> 
           <typeAlias alias="CarportExpense" type="com.park.model.CarportExpense"/> 
           <typeAlias alias="FeeCriterion" type="com.park.model.FeeCriterion"/> 
-          <typeAlias alias="PosChargeData" type="com.park.model.PosChargeData"/> 
+          <typeAlias alias="PosChargeData" type="com.park.model.PosChargeData"/>
+          <typeAlias alias="Page" type="com.park.model.Page"/>  
     </typeAliases>
  
     <!-- 映射map -->

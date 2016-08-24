@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.service.ChargeService;
+import com.park.service.UserPagePermissionService;
 import com.pingplusplus.model.Charge;
 
 @Controller
@@ -22,6 +23,9 @@ public class ChargeController {
 	
 	@Autowired
 	private ChargeService chargeService;
+	
+	@Autowired
+	private UserPagePermissionService pageService;
 	
 	private static Log logger = LogFactory.getLog(ChargeController.class);
 	
