@@ -149,9 +149,8 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
                $scope.submitted = true;
                $scope.result="成功";             
                $timeout(function(){                                
-                   $scope.result="";
-                    
-                    $modalInstance.close('ok');
+                   $scope.result="";                   
+                   $modalInstance.close('ok');
                },2000);
                                         
                $scope.$parent.refreshPos();

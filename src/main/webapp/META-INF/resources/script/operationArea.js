@@ -90,12 +90,13 @@ function($scope,$http,$uibModal,textModal,$timeout){
 
 areaApp.controller("areaModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
     var url = '/park/area/insert';
+    $scope.tempArea={};
     if(index != undefined){
         $scope.tempArea = $scope.$parent.areas[index];
         url = '/park/area/update';
     }
     else{
-   
+   $scope.tempArea.number='A-'+(new Date()).format('yyyyMMddhhmmssS');
     }
     $scope.loading = false;
     $scope.submitted = false;

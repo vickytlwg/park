@@ -43,8 +43,8 @@
 					            </tr>
 					          
 					          <tbody id="parkBody"></tbody>
-							  <tr ng-repeat="street in streets">
-							  <td ><input type="checkbox" ng-model="street.checked" ng-click="selectChange($index)"/></td>
+							  <tr ng-repeat="street in streets" ng-click="selectChange($index)">
+							  <td ><input type="checkbox" ng-model="street.checked" /></td>
 							  <td ng-bind="street.id"></td>
 							  <td ng-bind="street.number"></td>
 							  <td ng-bind="street.name"></td>

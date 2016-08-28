@@ -90,13 +90,16 @@ function($scope,$http,$uibModal,textModal,$timeout){
 
 streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
     var url = '/park/street/insert';
-  // $scope.tempStreet={};
+    $scope.tempStreet={};
     if(index != undefined){
         $scope.tempStreet = $scope.$parent.streets[index];
         url = '/park/street/update';
     }
+    else{
+        $scope.tempStreet.number='S-'+(new Date()).format('yyyyMMddhhmmssS');
+    }
     $scope.areas=[];
-      $scope.refreshArea=function(){
+    $scope.refreshArea=function(){
         $http({
             url:'/park/area/getByStartAndCount',
             method:'post',
