@@ -124,6 +124,8 @@
               <ul class="treeview-menu">
 
 				<li #if(!$isAdmin && !$park_platformShow) hidden#end ><a href="/park/platformShow"><i class="fa fa-area-chart"></i>主界面</a></li>
+				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/area"><i class="fa fa-car"></i>经营区域管理</a></li>
+				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/street"><i class="fa fa-car"></i>街道路段管理</a></li>
                 <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
 				<li #if(!$isAdmin && !$park_outsideParks) hidden#end><a href="/park/outsideParks"><i class="fa fa-car"></i>路边停车场管理</a></li>
 				<li #if(!$isAdmin && !$park_parkmap) hidden#end><a href="/park/parkmap"><i class="fa fa-map-marker"></i>停车场分布</a></li>
@@ -135,7 +137,7 @@
 				<li #if(!$isAdmin && !$park_carportstatus) hidden#end><a href="/park/carportstatus"><i class="fa fa-area-chart"></i>车位状态查看</a></li>
 				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>
                 <li #if(!$isAdmin && !$park_hardware) hidden#end><a href="/park/hardware"><i class="fa fa-gear"></i>硬件设备管理</a></li>
-				
+				<li #if(!$isAdmin && !$park_hardware) hidden#end><a href="/park/pos"><i class="fa fa-gear"></i>手持终端管理</a></li>
               </ul>
             </li>
 			

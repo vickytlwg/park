@@ -1,15 +1,124 @@
-var streetApp=angular.module("streetApp",['ui.bootstrap']);
-streetApp.controller("streetCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
+var posApp=angular.module("posApp",['ui.bootstrap']);
+posApp.controller("posCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
-    $scope.streets=[];
+    $scope.poses=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
     $scope.count=50;
-    $scope.refreshStreet=function(){
+    $scope.refreshPos=function(){
+        $http({
+            url:'/park/pos/getByStartAndCount',
+            method:'post',
+            params:{start:$scope.start,count:$scope.count}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.poses=response.body;
+            }
+            else{
+               textModal.open($scope,"错误","数据请求失败");
+            }
+        }).error(function(){
+               textModal.open($scope,"错误","数据请求失败");
+        });
+    };
+    $scope.insertPos=function(){
+        $uibModal.open({
+            templateUrl: '/park/views/template/ucNewPos.html',
+            controller: 'posModify',
+            scope:$scope,
+            resolve: {
+                index: function(){
+                        return undefined;
+                }
+            }
+        });
+    };
+    $scope.updatePos=function(){
+        if($scope.checkedIndex==-1){
+            alert("请选择");
+            return;
+        }
+        $uibModal.open({
+            templateUrl: '/park/views/template/ucNewPos.html',
+            controller: 'posModify',
+            scope:$scope,
+            resolve: {
+                index: function(){
+                        return $scope.checkedIndex;
+                }
+            }
+        });
+    };
+    $scope.deletePos=function(){
+        if($scope.checkedIndex==-1){
+            alert("请选择");
+            return;
+        }
+        var id=$scope.poses[$scope.checkedIndex].id;
+        $http({
+            url:'/park/pos/delete/'+id,
+            method:'get'
+        }).success(function(response){
+            if(response.status==1001)
+            {
+                textModal.open($scope, "成功","操作成功");
+                $scope.refreshPos();
+            }
+            else{
+                textModal.open($scope, "失败","操作失败");
+            }
+        }).error(function(){
+             textModal.open($scope, "失败","操作失败");
+        });
+    };
+        $scope.selectChange=function(index){
+        if($scope.poses[index].checked){
+            $scope.checkedIndex = index;
+            return;
+        }
+        for(var i = 0; i < $scope.poses.length; i++){
+            var item = $scope.poses[i];
+            if(item.checked != undefined && item.checked == true){
+                $scope.checkedIndex = i;
+                return;
+            }
+        }
+        $scope.checkedIndex = -1;
+    };
+    $scope.refreshPos();
+}]);
+
+posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+    var url = '/park/pos/insert';
+  // $scope.tempPos={};
+    if(index != undefined){
+        $scope.tempPos = $scope.$parent.poses[index];
+        url = '/park/pos/update';
+    }
+    $scope.parks=[];
+    $scope.getParks=function(){
+        $http({
+            url:'getParks?_t=' + (new Date()).getTime(),
+            method:'get'
+        }).success(function(response){
+            if(response.status=1001){
+                var body=response.body;
+                for(var i=0;i<body.length;i++){
+                    if(body[i].type==3){
+                        $scope.parks.push(body[i]);
+                   }
+                }
+               $scope.selectValue=$scope.parks[0];
+            }
+        });
+    };
+    $scope.getParks();
+     $scope.streets=[];
+      $scope.getStreets=function(){
         $http({
             url:'/park/street/getByStartAndCount',
             method:'post',
-            params:{start:$scope.start,count:$scope.count}
+            params:{start:0,count:50}
         }).success(function(response){
             if(response.status==1001){
                 $scope.streets=response.body;
@@ -21,110 +130,19 @@ function($scope,$http,$uibModal,textModal,$timeout){
                textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.insertStreet=function(){
-        $uibModal.open({
-            templateUrl: '/park/views/template/ucNewStreet.html',
-            controller: 'streetModify',
-            scope:$scope,
-            resolve: {
-                index: function(){
-                        return undefined;
-                }
-            }
-        });
-    };
-    $scope.updateStreet=function(){
-        if($scope.checkedIndex==-1){
-            alert("请选择");
-            return;
-        }
-        $uibModal.open({
-            templateUrl: '/park/views/template/ucNewStreet.html',
-            controller: 'streetModify',
-            scope:$scope,
-            resolve: {
-                index: function(){
-                        return $scope.checkedIndex;
-                }
-            }
-        });
-    };
-    $scope.deleteStreet=function(){
-        if($scope.checkedIndex==-1){
-            alert("请选择");
-            return;
-        }
-        var id=$scope.streets[$scope.checkedIndex].id;
-        $http({
-            url:'/park/street/delete/'+id,
-            method:'get'
-        }).success(function(response){
-            if(response.status==1001)
-            {
-                textModal.open($scope, "成功","操作成功");
-                $scope.refreshStreet();
-            }
-            else{
-                textModal.open($scope, "失败","操作失败");
-            }
-        }).error(function(){
-             textModal.open($scope, "失败","操作失败");
-        });
-    };
-        $scope.selectChange=function(index){
-        if($scope.streets[index].checked){
-            $scope.checkedIndex = index;
-            return;
-        }
-        for(var i = 0; i < $scope.streets.length; i++){
-            var item = $scope.streets[i];
-            if(item.checked != undefined && item.checked == true){
-                $scope.checkedIndex = i;
-                return;
-            }
-        }
-        $scope.checkedIndex = -1;
-    };
-    $scope.refreshStreet();
-}]);
-
-streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
-    var url = '/park/street/insert';
-  // $scope.tempStreet={};
-    if(index != undefined){
-        $scope.tempStreet = $scope.$parent.streets[index];
-        url = '/park/street/update';
-    }
-    $scope.areas=[];
-      $scope.refreshArea=function(){
-        $http({
-            url:'/park/area/getByStartAndCount',
-            method:'post',
-            params:{start:$scope.start,count:$scope.count}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.areas=response.body;
-            }
-            else{
-               textModal.open($scope,"错误","数据请求失败");
-            }
-        }).error(function(){
-               textModal.open($scope,"错误","数据请求失败");
-        });
-    };
-    $scope.refreshArea();
-    $scope.streetTypes=[{"id":0,"name":"自营路段"},{"id":1,"name":"其它路段"}];
+    $scope.getStreets();
+    
     $scope.loading = false;
     $scope.submitted = false;
     $scope.result="";
     $scope.submit = function(){
         $scope.loading = true;
         $scope.submitted = false;
-        delete $scope.tempStreet['checked'];
+        delete $scope.tempPos['checked'];
         $http({
             url:url,
             method:'post',
-            data:$scope.tempStreet,
+            data:$scope.tempPos,
         }).success(function(response){          
             if(response.status==1001){ 
                $scope.loading =false;
@@ -136,7 +154,7 @@ streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $
                     $modalInstance.close('ok');
                },2000);
                                         
-               $scope.$parent.refreshStreet();
+               $scope.$parent.refreshPos();
               
             }
             else
@@ -153,8 +171,8 @@ streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $
 
 });
 
-var streetService=angular.module("streetApp");
-streetService.service('textModal',  ['$uibModal', function($uibModal){
+var posService=angular.module("posApp");
+posService.service('textModal',  ['$uibModal', function($uibModal){
     
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
@@ -175,7 +193,7 @@ streetService.service('textModal',  ['$uibModal', function($uibModal){
 }]);
 
 
-  streetService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
+  posService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   
     $scope.close = function(){
         $uibModalInstance.close('cancel');
