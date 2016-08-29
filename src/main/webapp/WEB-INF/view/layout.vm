@@ -162,7 +162,8 @@
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_users) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li>
                   <li #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>网站用户管理</a></li>
-					 <li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
+					<li #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/feeOperator"><i class="fa fa-user-plus"></i>收费用户管理</a></li>
+				  <li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
                   <li #if(!$isAdmin && !$park_api_user_index) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>用户token管理</a></li>
               </ul>
             </li>

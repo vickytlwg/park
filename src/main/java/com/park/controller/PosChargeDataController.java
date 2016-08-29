@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
@@ -80,10 +81,21 @@ public class PosChargeDataController {
 	}
 	
 	
-	@RequestMapping(value = "/get", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String get(){
+	@RequestMapping(value = "/get", method = {RequestMethod.GET,RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String get(@RequestParam(value="cardNumber",required=false)String cardNumber){
+		List<PosChargeData> charges =null;
+		if (cardNumber!=null) {
+			try {
+				charges=chargeSerivce.getDebt(cardNumber);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
+			}
+		}
+		else{
+			 charges = chargeSerivce.getUnCompleted();
+		}
 		
-		List<PosChargeData> charges = chargeSerivce.get();
 		return Utility.createJsonMsg(1001, "success", charges);
 	}
 	
