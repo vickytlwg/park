@@ -1,5 +1,7 @@
 package com.park.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PosChargeData {
@@ -31,6 +33,8 @@ public class PosChargeData {
 	int isOneTimeExpense;
 	
 	boolean paidCompleted;
+	
+	boolean isLargeCar;
 	
 	Date entranceDate;
 	
@@ -139,10 +143,10 @@ public class PosChargeData {
 		return entranceDate;
 	}
 
-	public void setEntranceDate(Date entranceDate) {
-		this.entranceDate = entranceDate;
+	public void setEntranceDate(String entranceDate) throws ParseException {
+		this.entranceDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(entranceDate);
 	}
-
+	
 	public Date getExitDate() {
 		return exitDate;
 	}
@@ -166,6 +170,14 @@ public class PosChargeData {
 
 	public void setPaidCompleted(boolean paidCompleted) {
 		this.paidCompleted = paidCompleted;
+	}
+
+	public boolean getIsLargeCar() {
+		return isLargeCar;
+	}
+
+	public void setIsLargeCar(boolean isLargeCar) {
+		this.isLargeCar = isLargeCar;
 	}
 	
 	

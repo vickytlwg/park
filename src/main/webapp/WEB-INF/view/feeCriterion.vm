@@ -35,9 +35,13 @@
 									<th><span >Id</div></th>		
 									<th><span>名称</div></th>
 									<th><span >免费时段/分</div></th>
-									<th><span >起步价</div></th>
-									<th><span >超时加收/元</div></th>
-									<th><span >时间间隔/分</div></th>
+									<th><span >阶段1范围/分</div></th>
+									<th><span >阶段2范围/分</div></th>
+									<th><span >计费单位 /分</div></th>
+									<th><span >阶段1小车计费标准 /元</div></th>
+									<th><span >阶段2小车计费标准/元</div></th>
+									<th><span >阶段1大车计费标准/元</div></th>
+									<th><span >阶段2大车计费标准/元</div></th>
 									<th><span>最高收费/元</div></th>
 									<th><span>夜间时段</div></th>
 									<th><span>是否按次收费</div></th>
@@ -48,17 +52,21 @@
 				          		<td ><input type="checkbox" ng-model="item.checked" ng-click="criterion.checked($index)"/></td>
 				          		<td ng-bind="item.id"></td>
 				          		<td ng-bind="item.name"></td>
-				          		<td ng-bind="item.freeMins"></td>
-				          		<td ng-bind="item.startExpense"></td>
-				          		<td ng-bind="item.timeoutPrice"></td>
-				          		<td ng-bind="item.timeoutPriceInterval"></td>
-				          		<td ng-bind="item.maxExpense"></td>
-				          		<td ng-bind="item.nightStartTime + '--' + item.nightEndTime"></td>
+				          		<td ng-bind="item.freemins"></td>
+				          		<td ng-bind="item.step1capacity"></td>
+				          		<td ng-bind="item.step2capacity"></td>
+								<td ng-bind="item.timeoutpriceinterval"></td>
+				          		<td ng-bind="item.step1price"></td>
+								<td ng-bind="item.step2price"></td>
+				          		<td ng-bind="item.step1pricelarge"></td>
+				          		<td ng-bind="item.step2pricelarge"></td>
+				          		<td ng-bind="item.maxexpense"></td>
+				          		<td ng-bind="item.nightstarttime + '--' + item.nightendtime"></td>
 				          		<td>
-				          			<span ng-if="item.isOneTimeExpense == 0">否</span>
-				          			<span ng-if="item.isOneTimeExpense == 1">是</span>
+				          			<span ng-if="item.isonetimeexpense == 0">否</span>
+				          			<span ng-if="item.isonetimeexpense == 1">是</span>
 				          		</td>
-				          		<td ng-bind="item.oneTimeExpense"></td>
+				          		<td ng-bind="item.onetimeexpense"></td>
 				          </table>
     					</div>
     				</div>

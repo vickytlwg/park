@@ -18,22 +18,22 @@ import com.park.service.PosChargeDataService;
 
 @Transactional
 @Service
-public class PosChargeDataServiceImpl implements PosChargeDataService{
+public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	PosChargeDataDAO chargeDao;
-	
+
 	@Autowired
 	ParkService parkService;
-	
+
 	@Autowired
 	FeeCriterionService criterionService;
-	
+
 	@Override
-	public PosChargeData getById(int id){
+	public PosChargeData getById(int id) {
 		return chargeDao.getById(id);
 	}
-	
+
 	@Override
 	public List<PosChargeData> get() {
 		return chargeDao.get();
@@ -43,7 +43,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService{
 	public List<PosChargeData> getUnCompleted() {
 		return chargeDao.getUnCompleted();
 	}
-	
+
 	@Override
 	public List<PosChargeData> getPage(int low, int count) {
 		return chargeDao.getPage(low, count);
@@ -66,93 +66,183 @@ public class PosChargeDataServiceImpl implements PosChargeDataService{
 
 	@Override
 	public List<PosChargeData> getDebt(String cardNumber) throws Exception {
-		List<PosChargeData> charges =  chargeDao.getDebt(cardNumber);
-		for(PosChargeData charge : charges){
-			if(charge.getExitDate() == null){
+		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
 				this.calExpense(charge, new Date());
-			}		
+			}
 		}
 		return charges;
 	}
 
 	@Override
 	public List<PosChargeData> pay(String cardNumber, double money) throws Exception {
-		
+
 		List<PosChargeData> charges = this.getDebt(cardNumber);
-		for(PosChargeData charge : charges){
-			if(money > charge.getUnPaidMoney()){
+		for (PosChargeData charge : charges) {
+			if (money > charge.getUnPaidMoney()) {
 				money -= charge.getUnPaidMoney();
 				charge.setPaidCompleted(true);
 				this.update(charge);
 			}
 		}
-		if(money > 0){
+		if (money > 0) {
 			int count = charges.size();
-			PosChargeData lastCharge = charges.get(count -1);
+			PosChargeData lastCharge = charges.get(count - 1);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
 			this.update(lastCharge);
 		}
 		return charges;
-				
+
 	}
-	
+
 	@Override
-	public void calExpense(PosChargeData charge, Date exitDate) throws Exception{
-		if(charge.getExitDate() != null)
+	public void calExpense(PosChargeData charge, Date exitDate) throws Exception {
+		if (charge.getIsLargeCar() == false) {
+			this.calExpenseSmallCar(charge, exitDate);
+		} else {
+			this.calExpenseLargeCar(charge, exitDate);
+		}
+
+	}
+
+	@Override
+	public List<PosChargeData> getDebt(String cardNumber, Date exitDate) throws Exception {
+		// TODO Auto-generated method stub
+		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				this.calExpense(charge, exitDate);
+			}
+		}
+		return charges;
+	}
+
+	@Override
+	public void calExpenseLargeCar(PosChargeData charge, Date exitDate) throws Exception {
+		// TODO Auto-generated method stub
+		if (charge.getExitDate() != null)
 			return;
 		Park park = parkService.getParkById(charge.getParkId());
-		
+
 		Integer criterionId = park.getFeeCriterionId();
-		
-		if(criterionId == null)
+
+		if (criterionId == null)
 			throw new Exception("no fee criterion");
-		
 		FeeCriterion criterion = criterionService.getById(criterionId);
-		
 		Date enterDate = charge.getEntranceDate();
-		Date now = new Date();
-		if(enterDate.getDay() < now.getDay()){
-			int nightHour = Integer.parseInt(criterion.getNightStartTime().split(":")[0]);
+		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
+			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
 			Calendar cld = Calendar.getInstance();
 			cld.setTime(enterDate);
 			cld.set(Calendar.HOUR_OF_DAY, nightHour);
 			charge.setExitDate(cld.getTime());
-		}else{
-			charge.setExitDate(new Date());
+		} else {
+			charge.setExitDate(exitDate);
 		}
-			
-		
-		
+
 		double expense = 0;
-		if(charge.getIsOneTimeExpense() == 1){
-			expense = criterion.getOneTimeExpense() - charge.getPaidMoney();
-			
-		}else{
-			long diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime())/(1000 * 60);
-			long intervals = 0;
-			if(diffMin > criterion.getFreeMins())
-				intervals= (diffMin - criterion.getFreeMins()) / criterion.getTimeoutPriceInterval();
-			expense = intervals * criterion.getTimeoutPriceInterval() + criterion.getStartExpense();			
+		if (charge.getIsOneTimeExpense() == 1) {
+			expense = criterion.getOnetimeexpense() - charge.getPaidMoney();
+
+		} else {
+			float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+			float firstHour = criterion.getStep1capacity();
+			if (diffMin > criterion.getFreemins()) {
+				if (diffMin <= firstHour) {
+					double intervals = Math
+							.ceil((diffMin - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals * criterion.getStep1pricelarge();
+				} else {
+					double intervals1 = Math
+							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals1 * criterion.getStep1pricelarge();
+					double intervals2 = Math.ceil((diffMin - firstHour) / criterion.getTimeoutpriceinterval());
+					expense += intervals2 * criterion.getStep2pricelarge();
+				}
+			}
 		}
-		
-		charge.setChangeMoney(expense);
-		
-		if(expense > criterion.getMaxExpense())
-			expense = criterion.getMaxExpense();
-		
+
+		if (expense > criterion.getMaxexpense())
+			expense = criterion.getMaxexpense();
+
+		charge.setChargeMoney(expense);
+		if (expense == 0) {
+			charge.setPaidCompleted(true);
+		}
 		expense -= charge.getPaidMoney();
-		if(expense > 0.01){
-			charge.setUnPaidMoney(expense);				
+		if (expense > 0.01) {
+			charge.setUnPaidMoney(expense);
 		}
-		if(expense < -0.01){
+		if (expense < -0.01) {
 			charge.setUnPaidMoney(0);
 			charge.setChangeMoney(-1 * expense);
 		}
-		
+
 		this.update(charge);
-		
 	}
 
+	@Override
+	public void calExpenseSmallCar(PosChargeData charge, Date exitDate) throws Exception {
 
+		if (charge.getExitDate() != null)
+			return;
+		Park park = parkService.getParkById(charge.getParkId());
+
+		Integer criterionId = park.getFeeCriterionId();
+
+		if (criterionId == null)
+			throw new Exception("no fee criterion");
+
+		FeeCriterion criterion = criterionService.getById(criterionId);
+
+		Date enterDate = charge.getEntranceDate();
+
+		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
+			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
+			Calendar cld = Calendar.getInstance();
+			cld.setTime(enterDate);
+			cld.set(Calendar.HOUR_OF_DAY, nightHour);
+			charge.setExitDate(cld.getTime());
+		} else {
+			charge.setExitDate(exitDate);
+		}
+		double expense = 0;
+		if (charge.getIsOneTimeExpense() == 1) {
+			expense = criterion.getOnetimeexpense() - charge.getPaidMoney();
+		} else {
+			float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+			float firstHour = criterion.getStep1capacity();
+
+			if (diffMin > criterion.getFreemins()) {
+				if (diffMin <= firstHour) {
+					double intervals = Math
+							.ceil((diffMin - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals * criterion.getStep1price();
+				} else {
+					double intervals1 = Math
+							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals1 * criterion.getStep1price();
+					double intervals2 = Math.ceil((diffMin - firstHour) / criterion.getTimeoutpriceinterval());
+					expense += intervals2 * criterion.getStep2price();
+				}
+			}
+		}
+		if (expense > criterion.getMaxexpense())
+			expense = criterion.getMaxexpense();
+		charge.setChargeMoney(expense);
+		if (expense == 0) {
+			charge.setPaidCompleted(true);
+		}
+		expense -= charge.getPaidMoney();
+		if (expense > 0.01) {
+			charge.setUnPaidMoney(expense);
+		}
+		if (expense < -0.01) {
+			charge.setUnPaidMoney(0);
+			charge.setChangeMoney(-1 * expense);
+		}
+		this.update(charge);
+	}
 
 }
