@@ -61,4 +61,10 @@ public class StreetServiceImpl implements StreetService {
 		return streetDao.getByStartAndCount(start, count);
 	}
 
+	@Override
+	public List<Street> getByArea(int areaId) {
+		// TODO Auto-generated method stub
+		return streetDao.getByArea(areaId);
+	}
+
 }

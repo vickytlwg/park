@@ -6,8 +6,8 @@
     <meta name="viewport"
     content="width=device-width, initial-scale=1">
     <title> 登录 </title>
-    <link rel="stylesheet" href="css/amazeui.min.css">
-    <link rel="stylesheet" href="css/loginmain.css">
+    <link rel="stylesheet" href="/park/css/amazeui.min.css">
+    <link rel="stylesheet" href="/park/css/loginmain.css">
 </head>
 <body id="singIn">
 <div class="my-container float-fix">

@@ -23,4 +23,7 @@ public interface StreetDAO {
     int getCount();
     
     List<Street> getByStartAndCount(@Param("start")int start,@Param("count")int count);
+    
+    List<Street> getByArea(@Param("areaId")int areaId);
+    
 }

@@ -20,4 +20,6 @@ public interface AreaService {
 	    int getCount();
 	    
 	    List<Area> getByStartAndCount(int start,int count);
+	    
+	    List<Area> getByZoneCenterId(int zoneid);
 }

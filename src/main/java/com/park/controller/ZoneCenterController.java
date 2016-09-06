@@ -18,21 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.park.model.Area;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
-import com.park.service.AreaService;
+import com.park.model.Zonecenter;
 import com.park.service.AuthorityService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
-
+import com.park.service.ZoneCenterService;
 
 @Controller
-@RequestMapping("area")
-public class AreaController {
+@RequestMapping("zoneCenter")
+public class ZoneCenterController {
 	@Autowired
-	private AreaService areaService;
+	private ZoneCenterService zoneCenterService;
 	@Autowired
 	private AuthorityService authService;
 	@Autowired
@@ -53,14 +52,14 @@ public class AreaController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "area";
+		return "zoneCenter";
 	}
 	
 	@RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String insert(@RequestBody Area area){
+	public String insert(@RequestBody Zonecenter zoneCenter){
 		Map<String, Object> result=new HashMap<>();
-		int num=areaService.insert(area);
+		int num=zoneCenterService.insert(zoneCenter);
 		if (num==1) {
 			result.put("status", 1001);
 		}
@@ -73,7 +72,7 @@ public class AreaController {
 	@ResponseBody
 	public String delete(@PathVariable("id")int id){
 		Map<String, Object> result=new HashMap<>();
-		int num=areaService.deleteByPrimaryKey(id);
+		int num=zoneCenterService.deleteByPrimaryKey(id);
 		if (num==1) {
 			result.put("status", 1001);
 		}
@@ -84,9 +83,9 @@ public class AreaController {
 	}
 	@RequestMapping(value="update",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String update(@RequestBody Area area){
+	public String update(@RequestBody Zonecenter zoneCenter){
 		Map<String, Object> result=new HashMap<>();
-		int num=areaService.updateByPrimaryKeySelective(area);
+		int num=zoneCenterService.updateByPrimaryKeySelective(zoneCenter);
 		if (num==1) {
 			result.put("status", 1001);
 		}
@@ -99,10 +98,10 @@ public class AreaController {
 	@ResponseBody
 	public String selectByPrimaryKey(@PathVariable("id")int id){
 		Map<String, Object> result=new HashMap<>();
-		Area area=areaService.selectByPrimaryKey(id);
-		if (area!=null) {
+		Zonecenter zoneCenter=zoneCenterService.selectByPrimaryKey(id);
+		if (zoneCenter!=null) {
 			result.put("status", 1001);
-			result.put("body", area);
+			result.put("body", zoneCenter);
 		}
 		else{
 			result.put("status", 1002);
@@ -113,32 +112,18 @@ public class AreaController {
 	@ResponseBody
 	public String getCount(){
 		Map<String, Object> result=new HashMap<>();
-		int count=areaService.getCount();
+		int count=zoneCenterService.getCount();
 		result.put("count", count);
-		return Utility.gson.toJson(result);
-	}
-	@RequestMapping(value="getByZoneCenterId/{zoneid}",produces={"application/json;charset=utf-8"})
-	@ResponseBody
-	public String getByZoneCenterId(@PathVariable("zoneid")int zoneid){
-		Map<String, Object> result=new HashMap<>();
-		List<Area> areas=areaService.getByZoneCenterId(zoneid);
-		if (areas!=null) {
-			result.put("status", 1001);
-			result.put("body", areas);
-		}
-		else {
-			result.put("status", 1002);
-		}
 		return Utility.gson.toJson(result);
 	}
 	@RequestMapping(value="/getByStartAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count){
 		Map<String, Object> result=new HashMap<>();
-		List<Area> areas=areaService.getByStartAndCount(start, count);
-		if (areas!=null) {
+		List<Zonecenter> zoneCenters=zoneCenterService.getByStartAndCount(start, count);
+		if (zoneCenters!=null) {
 			result.put("status", 1001);
-			result.put("body", areas);
+			result.put("body", zoneCenters);
 		}
 		else {
 			result.put("status", 1002);

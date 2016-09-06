@@ -1,6 +1,6 @@
 (function($){
 	
-	$.fn.park = {}
+	$.fn.park = {};
 	
 	$.fn.park.initial = function(){
 		bindTrClick();
@@ -128,39 +128,8 @@
 		    type:'get',
 		    datatype: 'json',
 		    success:function(data){
-		  data=data['park'];
-		  var position=data['position'];
-	    var pos_selects = ['select#seachprov', 'select#seachcity', 'select#seachdistrict'];
-  
-        $('#positionlast').val("");
-        
-        var positions = position.split(" ");
-        if(positions.length == 2){
-            $('#positionlast').val(positions[1]);
-        }
-        var areas = positions[0].split("-");
-        if(areas.length >= 1 ){  
-            for(var i = 0; i < areas.length; i++){
-                var select = $(pos_selects[i]);
-                var options = select.find('option');
-                var tmpdata=[];
-                if (options==null||options==undefined||options.length<1) {
-                    break;
-                }
-                for(var j = 0; j < options.length; j++){
-                    tmpdata.push($(options[j]).text());
-                    if($(options[j]).text() == areas[i]){   
-        //              alert($(options[j]).val());
-                       // select.find("option:selected").removeAttr('selected');                
-                        //$(options[j]).attr('selected', true);
-                        select.val($(options[j]).val());
-                        select.change();
-                        setTimeout(function(){},1000);
-                    }
-                }
-            }               
-            
-        }
+		    data=data['park'];
+      
 		    },
 		});
 		$('#addParkModal').modal('show');
@@ -229,7 +198,7 @@
 					$('select#feeCriterion').append('<option value=-1>未绑定</option>');
 					for(var i = 0; i < criterions.length; i++)
 					{
-						$('select#feeCriterion').append('<option value=' + criterions[i].id+ '>' + criterions[i].name + '</option>')
+						$('select#feeCriterion').append('<option value=' + criterions[i].id+ '>' + criterions[i].name + '</option>');
 					}
 					if(selectedId != undefined)
 						$('select#feeCriterion').val(selectedId);
@@ -252,7 +221,7 @@
 		$('input#leftPortCount').val($(tds[5]).text());
 		
 		if($('select#feeCriterion option').length == 0)
-			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'))
+			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'));
 		else
 			$('select#feeCriterion').val($(checkedTr).attr('feeCriterionId'));
 		
@@ -261,46 +230,11 @@
 		$('input#isFree')[0].checked = parseInt($(tds[8]).attr('data')) == 1 ? true : false;
 		$('input#floorCount').val($(tds[9]).text());
 		$('select#parkType').val($(tds[10]).attr('data'));
-		var positionInput = $('input#position');
-		positionInput.val($(tds[12]).text());
+//		var positionInput = $('input#position');
+//		positionInput.val($(tds[12]).text());
 		$('input#longitude').val($(tds[12]).attr('longitude'));
 		$('input#latitude').val($(tds[12]).attr('latitude'));
-		$('input#mapAddr').val(checkedTr.attr('mapAddr'));
-		
-		var position = checkedTr.attr('position');
-		
-		var pos_selects = ['select#seachprov', 'select#seachcity', 'select#seachdistrict'];
-		for(var i = 0; i < 1; i++)
-			$(pos_selects[i]).val(32);
-		$('#positionlast').val("");
-		
-		var positions = position.split(" ");
-		if(positions.length == 2){
-			$('#positionlast').val(positions[1]);
-		}
-		var areas = positions[0].split("-");
-		if(areas.length > 1 ){	
-			for(var i = 0; i < areas.length; i++){
-				var select = $(pos_selects[i]);
-				var options = select.find('option');
-				var tmpdata=[];
-				if (options==null||options==undefined||options.length<1) {
-					break;
-				}
-				for(var j = 0; j < options.length; j++){
-					tmpdata.push($(options[j]).text());
-					if($(options[j]).text() == areas[i]){	
-		//			    alert($(options[j]).val());
-					   // select.find("option:selected").removeAttr('selected');				
-						//$(options[j]).attr('selected', true);
-						select.val($(options[j]).val());
-						select.change();
-						setTimeout(function(){},1000);
-					}
-				}
-			}				
-			
-		}
+		$('input#mapAddr').val(checkedTr.attr('mapAddr'));			
 		
 		$('input#number').val(checkedTr.attr('number'));
 		$('input#contact').val(checkedTr.attr('contact'));
@@ -370,7 +304,7 @@
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
 		parkFields['type'] = parseInt($('select#parkType').val());
-		parkFields['position'] = getAreaNamebyID(getAreaID())+' '+$('input#positionlast').val();
+		parkFields['position'] = $('#zoneCenter').text()+'-'+$("#area").text()+'-'+$("#street").text();
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['mapAddr'] = $('input#mapAddr').val();
@@ -476,7 +410,6 @@
 	var fillParkTbody = function(data){
 		var parkBody = $("#parkBody");
 		parkBody.html('');
-		//data = $.parseJSON(data["body"]);
 		data = data["body"];
 		for(var i = 0; i < data.length; i++){
 			var tr = $('<tr></tr>');

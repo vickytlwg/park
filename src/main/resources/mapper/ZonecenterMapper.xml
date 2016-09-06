@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.park.dao.AreaDAO" >
-  <resultMap id="BaseResultMap" type="com.park.model.Area" >
+<mapper namespace="com.park.dao.ZonecenterDAO" >
+  <resultMap id="BaseResultMap" type="com.park.model.Zonecenter" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="number" property="number" jdbcType="VARCHAR" />
-    <result column="zoneId" property="zoneid" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="contact" property="contact" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
@@ -12,37 +11,34 @@
     <result column="other" property="other" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, number, zoneId, name, contact, phone, date, other
+    id, num, name, contact, phone, date, other
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from area
+    from zoneCenter
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from area
+    delete from zoneCenter
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.park.model.Area" >
-    insert into area (id, number, zoneId, 
-      name, contact, phone, 
-      date, other)
-    values (#{id,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, #{zoneid,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{date,jdbcType=TIMESTAMP}, #{other,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.park.model.Zonecenter" >
+    insert into zoneCenter (id, num, name, 
+      contact, phone, date, 
+      other)
+    values (#{id,jdbcType=INTEGER}, #{num,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{contact,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{date,jdbcType=TIMESTAMP}, 
+      #{other,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.park.model.Area" >
-    insert into area
+  <insert id="insertSelective" parameterType="com.park.model.Zonecenter" >
+    insert into zoneCenter
     <trim prefix="(" suffix=")" suffixOverrides="," >
-       <if test="id != null" >
+      <if test="id != null" >
         id,
       </if>
-      <if test="number != null" >
-        number,
-      </if>
-      <if test="zoneid != null" >
-        zoneId,
+      <if test="num != null" >
+        num,
       </if>
       <if test="name != null" >
         name,
@@ -64,11 +60,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="number != null" >
-        #{number,jdbcType=VARCHAR},
-      </if>
-      <if test="zoneid != null" >
-        #{zoneid,jdbcType=INTEGER},
+      <if test="num != null" >
+        #{num,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -87,14 +80,11 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Area" >
-     update area
+  <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Zonecenter" >
+    update zoneCenter
     <set >
-      <if test="number != null" >
-        number = #{number,jdbcType=VARCHAR},
-      </if>
-      <if test="zoneid != null" >
-        zoneId = #{zoneid,jdbcType=INTEGER},
+      <if test="num != null" >
+        num = #{num,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -114,10 +104,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.park.model.Area" >
-     update area
-    set number = #{number,jdbcType=VARCHAR},
-      zoneId = #{zoneid,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.park.model.Zonecenter" >
+    update zoneCenter
+    set num = #{num,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       contact = #{contact,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
@@ -126,14 +115,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getCount">
-  	select count(*) from area 
+  	select count(*) from zoneCenter 
   </select>
-  <select id="getByStartAndCount" resultType="com.park.model.Area">
-  	select a.id,a.number,a.name,a.zoneid,z.name as zoneCenterName,a.contact,a.phone,a.date,
-  	a.other from area as a left join zoneCenter as z on z.id=a.zoneid
-  	 limit #{start},#{count}
+  <select id="getByStartAndCount" resultType="com.park.model.Zonecenter">
+  	select * from zoneCenter limit #{start},#{count}
   </select>
-  <select id="getByZoneCenterId" resultType="com.park.model.Area">
-  	select * from area where zoneid=#{zoneid}
-  </select>
+  
 </mapper>

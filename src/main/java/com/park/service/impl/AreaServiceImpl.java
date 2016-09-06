@@ -61,4 +61,10 @@ public class AreaServiceImpl implements AreaService {
 		return areaDao.getByStartAndCount(start, count);
 	}
 
+	@Override
+	public List<Area> getByZoneCenterId(int zoneid) {
+		// TODO Auto-generated method stub
+		return areaDao.getByZoneCenterId(zoneid);
+	}
+
 }

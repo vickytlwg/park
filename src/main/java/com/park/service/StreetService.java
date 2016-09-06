@@ -20,4 +20,6 @@ public interface StreetService {
 	    int getCount();
 	    
 	    List<Street> getByStartAndCount(int start,int count);
+	    
+	    List<Street> getByArea(int areaId);
 }

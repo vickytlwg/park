@@ -69,7 +69,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				this.calExpense(charge, new Date());
+				this.calExpense(charge, new Date(),false);
 			}
 		}
 		return charges;
@@ -97,11 +97,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public void calExpense(PosChargeData charge, Date exitDate) throws Exception {
+	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 		if (charge.getIsLargeCar() == false) {
-			this.calExpenseSmallCar(charge, exitDate);
+			this.calExpenseSmallCar(charge, exitDate,isQuery);
 		} else {
-			this.calExpenseLargeCar(charge, exitDate);
+			this.calExpenseLargeCar(charge, exitDate,isQuery);
 		}
 
 	}
@@ -112,14 +112,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				this.calExpense(charge, exitDate);
+				this.calExpense(charge, exitDate,false);
 			}
 		}
 		return charges;
 	}
 
 	@Override
-	public void calExpenseLargeCar(PosChargeData charge, Date exitDate) throws Exception {
+	public void calExpenseLargeCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 		// TODO Auto-generated method stub
 		if (charge.getExitDate() != null)
 			return;
@@ -179,11 +179,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			charge.setChangeMoney(-1 * expense);
 		}
 
-		this.update(charge);
+		if (!isQuery) {
+			this.update(charge);
+		}
 	}
 
 	@Override
-	public void calExpenseSmallCar(PosChargeData charge, Date exitDate) throws Exception {
+	public void calExpenseSmallCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 
 		if (charge.getExitDate() != null)
 			return;
@@ -242,7 +244,22 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			charge.setUnPaidMoney(0);
 			charge.setChangeMoney(-1 * expense);
 		}
-		this.update(charge);
+		if (!isQuery) {
+			this.update(charge);
+		}
+		
+	}
+
+	@Override
+	public List<PosChargeData> queryDebt(String cardNumber, Date exitDate) throws Exception {
+		// TODO Auto-generated method stub
+		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				this.calExpense(charge, exitDate,true);
+			}
+		}
+		return charges;
 	}
 
 }

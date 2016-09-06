@@ -33,6 +33,7 @@
 										<th ><span style="padding-left:15%">Id</div></th>								
 										<th><span style="padding-left:15%">区域编号</div></th>
 										<th><span style="padding-left:15%">区域名称</div></th>
+										<th><span style="padding-left:15%">所属区中心</div></th>
 										<th><span style="padding-left:15%">联系人</div></th>
 										<th><span style="padding-left:15%">联系电话</div></th>
 										<th><span style="padding-left:15%">添加时间</div></th>
@@ -46,6 +47,7 @@
 							  <td ng-bind="area.id"></td>
 							  <td ng-bind="area.number"></td>
 							  <td ng-bind="area.name"></td>
+							  <td ng-bind="area.zoneCenterName"></td>
 							  <td ng-bind="area.contact"></td>
 							  <td ng-bind="area.phone"></td>
 							  <td ng-bind="area.date"></td>

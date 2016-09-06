@@ -20,4 +20,5 @@ public interface PosService {
     int getCount();
     
     List<Pos> getByStartAndCount(int start,int count);
+    
 }

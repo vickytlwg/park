@@ -49,7 +49,12 @@
 							  <td ng-bind="street.number"></td>
 							  <td ng-bind="street.name"></td>
 							  <td ng-bind="street.areaName"></td>
-							  <td ng-bind="street.type"></td>
+							  <td >
+							  <span ng-if="street.type==0">自营路段
+                              </span>
+							  <span ng-if="street.type!=0">其它路段
+                              </span>
+							  </td>
 							  <td ng-bind="street.contact"></td>
 							  <td ng-bind="street.phone"></td>
 							  <td ng-bind="street.date"></td>

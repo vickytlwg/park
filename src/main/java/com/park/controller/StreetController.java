@@ -55,6 +55,20 @@ public class StreetController {
 		}
 		return "street";
 	}
+	@RequestMapping(value="getByAreaid/{areaId}",produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByAreaId(@PathVariable("areaId")int areaId){
+		Map<String, Object> result=new HashMap<>();
+		List<Street> streets=streetService.getByArea(areaId);
+		if (streets!=null) {
+			result.put("status", 1001);
+			result.put("body", streets);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
 	@RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String insert(@RequestBody Street street){
@@ -98,10 +112,10 @@ public class StreetController {
 	@ResponseBody
 	public String selectByPrimaryKey(@PathVariable("id")int id){
 		Map<String, Object> result=new HashMap<>();
-		Street monthUser=streetService.selectByPrimaryKey(id);
-		if (monthUser!=null) {
+		Street street=streetService.selectByPrimaryKey(id);
+		if (street!=null) {
 			result.put("status", 1001);
-			result.put("body", monthUser);
+			result.put("body", street);
 		}
 		else{
 			result.put("status", 1002);

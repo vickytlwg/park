@@ -7,7 +7,7 @@
 <div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
 	<section class="content-header">
           <h1>
-            收费标准管理
+            计费详情
             <small></small>
           </h1>     
     </section>

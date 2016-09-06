@@ -41,7 +41,7 @@ public class CalPosChargeTask {
 			if(nightStartHour <= now.getHours()){
 				now.setHours(nightStartHour);
 				try {
-					chargeService.calExpense(charge, now);
+					chargeService.calExpense(charge, now,false);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

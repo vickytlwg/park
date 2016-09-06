@@ -146,4 +146,7 @@
   	s.contact,s.phone,s.date,s.other from street as s left join area on
   	area.id=s.areaid limit #{start},#{count}
   </select>
+  <select id="getByArea" resultType="com.park.model.Street">
+  	select * from street where areaId=#{areaId}
+  </select>
 </mapper>

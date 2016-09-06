@@ -1,20 +1,14 @@
 package com.park.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Area {
+public class Zonecenter {
     private Integer id;
 
-    private String number;
+    private String num;
 
     private String name;
 
-    private Integer zoneid;
-    
-    private String zoneCenterName;
-    
     private String contact;
 
     private String phone;
@@ -31,30 +25,14 @@ public class Area {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getNum() {
+        return num;
     }
 
-    public void setNumber(String number) {
-        this.number = number == null ? null : number.trim();
+    public void setNum(String num) {
+        this.num = num == null ? null : num.trim();
     }
 
-    public Integer getZoneid() {
-        return zoneid;
-    }
-
-    public void setZoneid(Integer zoneid) {
-        this.zoneid = zoneid;
-    }
-    
-    public String getZoneCenterName() {
-        return zoneCenterName;
-    }
-
-    public void setZoneCenterName(String zoneCenterName) {
-        this.zoneCenterName = zoneCenterName == null ? null : zoneCenterName.trim();
-    }
-    
     public String getName() {
         return name;
     }
@@ -83,8 +61,8 @@ public class Area {
         return date;
     }
 
-    public void setDate(String date) throws ParseException {
-        this.date = new SimpleDateFormat(Constants.DATEFORMAT).parse(date);
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getOther() {

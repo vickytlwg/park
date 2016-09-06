@@ -22,4 +22,6 @@ public interface AreaDAO {
     int getCount();
     
     List<Area> getByStartAndCount(@Param("start")int start,@Param("count")int count);
+    
+    List<Area> getByZoneCenterId(@Param("zoneid")int zoneid);
 }

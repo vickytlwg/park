@@ -37,7 +37,7 @@
 	</select>
 	
 	<select id="getPage" resultMap="PosChargeDataMapper">
-		select * from posChargeData limit #{param1}, #{param2}
+		select * from posChargeData order by id desc limit #{param1}, #{param2}
 	</select>
 	
 	<select id="count" resultType="int">

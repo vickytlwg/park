@@ -64,4 +64,6 @@ public class PosServiceImpl implements PosService {
 		return posDao.getByStartAndCount(start, count);
 	}
 
+	
+
 }

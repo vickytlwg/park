@@ -1,18 +1,18 @@
-var areaApp=angular.module("areaApp",['ui.bootstrap']);
-areaApp.controller("areaCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
+var zoneCenterApp=angular.module("zoneCenterApp",['ui.bootstrap']);
+zoneCenterApp.controller("zoneCenterCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
-    $scope.areas=[];
+    $scope.zoneCenters=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
     $scope.count=50;
-    $scope.refreshArea=function(){
+    $scope.refreshZoneCenter=function(){
         $http({
-            url:'/park/area/getByStartAndCount',
+            url:'/park/zoneCenter/getByStartAndCount',
             method:'post',
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
             if(response.status==1001){
-                $scope.areas=response.body;
+                $scope.zoneCenters=response.body;
             }
             else{
                textModal.open($scope,"错误","数据请求失败");
@@ -21,10 +21,10 @@ function($scope,$http,$uibModal,textModal,$timeout){
                textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.insertArea=function(){
+    $scope.insertZoneCenter=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewArea.html',
-            controller: 'areaModify',
+            templateUrl: '/park/views/template/ucNewZoneCenter.html',
+            controller: 'zoneCenterModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -33,14 +33,14 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.updateArea=function(){
+    $scope.updateZoneCenter=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewArea.html',
-            controller: 'areaModify',
+            templateUrl: '/park/views/template/ucNewZoneCenter.html',
+            controller: 'zoneCenterModify',
             scope:$scope,
             resolve: {
                 index: function(){
@@ -49,20 +49,20 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
-    $scope.deleteArea=function(){
+    $scope.deleteZoneCenter=function(){
         if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
-        var id=$scope.areas[$scope.checkedIndex].id;
+        var id=$scope.zoneCenters[$scope.checkedIndex].id;
         $http({
-            url:'/park/area/delete/'+id,
+            url:'/park/zoneCenter/delete/'+id,
             method:'get'
         }).success(function(response){
             if(response.status==1001)
             {
                 textModal.open($scope, "成功","操作成功");
-                $scope.refreshArea();
+                $scope.refreshZoneCenter();
             }
             else{
                 textModal.open($scope, "失败","操作失败");
@@ -72,12 +72,12 @@ function($scope,$http,$uibModal,textModal,$timeout){
         });
     };
         $scope.selectChange=function(index){
-        if($scope.areas[index].checked){
+        if($scope.zoneCenters[index].checked){
             $scope.checkedIndex = index;
             return;
         }
-        for(var i = 0; i < $scope.areas.length; i++){
-            var item = $scope.areas[i];
+        for(var i = 0; i < $scope.zoneCenters.length; i++){
+            var item = $scope.zoneCenters[i];
             if(item.checked != undefined && item.checked == true){
                 $scope.checkedIndex = i;
                 return;
@@ -85,44 +85,30 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }
         $scope.checkedIndex = -1;
     };
-    $scope.refreshArea();
+    $scope.refreshZoneCenter();
 }]);
 
-areaApp.controller("areaModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
-    var url = '/park/area/insert';
-    $scope.tempArea={};
-    $scope.getZoneCenter=function(){
-        $http({
-            url:"/park/zoneCenter/getByStartAndCount",
-            method:'post',
-            params:{start:0,count:100}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.zoneCenters=response.body;
-            }
-        });
-    };
-     $scope.getZoneCenter();
+zoneCenterApp.controller("zoneCenterModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+    var url = '/park/zoneCenter/insert';
+    $scope.tempZoneCenter={};
     if(index != undefined){
-        $scope.tempArea = $scope.$parent.areas[index];
-       
-        url = '/park/area/update';
+        $scope.tempZoneCenter = $scope.$parent.zoneCenters[index];
+        url = '/park/zoneCenter/update';
     }
     else{
-   $scope.tempArea.number='Z-'+(new Date()).format('yyyyMMddhhmmssS');
-    } 
-    
+   $scope.tempZoneCenter.num='A-'+(new Date()).format('yyyyMMddhhmmssS');
+    }
     $scope.loading = false;
     $scope.submitted = false;
     $scope.result="请求中";
     $scope.submit = function(){
         $scope.loading = true;
         $scope.submitted = false;
-        delete $scope.tempArea['checked'];
+        delete $scope.tempZoneCenter['checked'];
         $http({
             url:url,
             method:'post',
-            data:$scope.tempArea,
+            data:$scope.tempZoneCenter,
         }).success(function(response){          
             if(response.status==1001){ 
                $scope.loading =false;
@@ -134,7 +120,7 @@ areaApp.controller("areaModify",function($scope, textModal,$modalInstance, $http
                     $modalInstance.close('ok');
                },2000);
                                         
-               $scope.$parent.refreshArea();
+               $scope.$parent.refreshZoneCenter();
               
             }
             else
@@ -151,8 +137,8 @@ areaApp.controller("areaModify",function($scope, textModal,$modalInstance, $http
 
 });
 
-var areaService=angular.module("areaApp");
-areaService.service('textModal',  ['$uibModal', function($uibModal){
+var zoneCenterService=angular.module("zoneCenterApp");
+zoneCenterService.service('textModal',  ['$uibModal', function($uibModal){
     
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
@@ -173,7 +159,7 @@ areaService.service('textModal',  ['$uibModal', function($uibModal){
 }]);
 
 
-  areaService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
+  zoneCenterService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   
     $scope.close = function(){
         $uibModalInstance.close('cancel');

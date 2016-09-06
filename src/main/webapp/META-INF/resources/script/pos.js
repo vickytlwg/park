@@ -90,12 +90,60 @@ function($scope,$http,$uibModal,textModal,$timeout){
 
 posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
     var url = '/park/pos/insert';
+    $scope.parks=[];
+   
   // $scope.tempPos={};
+  $scope.getZoneCenter=function(){
+        $http({
+            url:"/park/zoneCenter/getByStartAndCount",
+            method:'post',
+            params:{start:0,count:100}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.zoneCenters=response.body;
+            }
+        });
+    };
+   $scope.getArea=function(){
+        $http({
+            url:'/park/area/getByStartAndCount',
+            method:'post',
+            params:{start:0,count:80}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.areas=response.body;
+                $scope.getStreets();
+            }
+            else{
+               textModal.open($scope,"错误","数据请求失败");
+            }
+        }).error(function(){
+               textModal.open($scope,"错误","数据请求失败");
+        });
+    };
+  
+   $scope.getStreetById=function(){
+       if ($scope.tempPos.streetid==undefined||$scope.tempPos.streetid==null) {
+           return;
+       };
+        $http({
+            url:"/park/street/selectByPrimaryKey/"+$scope.tempPos.streetid,
+            method:'get'
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.areaId=response.body.areaid;
+                $scope.getStreets();
+            }
+        });
+    };
+  
     if(index != undefined){
         $scope.tempPos = $scope.$parent.poses[index];
         url = '/park/pos/update';
+        $scope.getArea();
+        $scope.getStreetById();
     }
-    $scope.parks=[];
+  
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
@@ -113,12 +161,18 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
         });
     };
     $scope.getParks();
-     $scope.streets=[];
-      $scope.getStreets=function(){
+    
+   
+    $scope.getArea();
+  
+    $scope.streets=[];
+    $scope.getStreets=function(){ 
+        if ($scope.areaId==undefined) {      
+            return;
+        };     
         $http({
-            url:'/park/street/getByStartAndCount',
-            method:'post',
-            params:{start:0,count:50}
+            url:'/park/street/getByAreaid/'+$scope.areaId,
+            method:'get',
         }).success(function(response){
             if(response.status==1001){
                 $scope.streets=response.body;
@@ -130,7 +184,7 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
                textModal.open($scope,"错误","数据请求失败");
         });
     };
-    $scope.getStreets();
+
     
     $scope.loading = false;
     $scope.submitted = false;
