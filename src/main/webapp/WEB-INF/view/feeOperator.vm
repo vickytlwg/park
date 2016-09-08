@@ -50,7 +50,8 @@
 							  <td ng-bind="feeOperator.account"></td>
 							  <td ng-bind="feeOperator.name"></td>
 							  <td ng-bind="feeOperator.phone"></td>
-							  <td ng-bind="feeOperator.signstatus"></td>
+							  <td ng-if="feeOperator.signstatus==false">未签到</td>
+							  <td ng-if="feeOperator.signstatus==true">已签到</td>
 							  <td ng-bind="feeOperator.lastsigndate"></td>
 							  <td ng-bind="feeOperator.number"></td>
 							  <td ng-bind="feeOperator.streetname"></td>

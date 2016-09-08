@@ -80,13 +80,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		List<PosChargeData> charges = this.getDebt(cardNumber);
 		for (PosChargeData charge : charges) {
-			if (money > charge.getUnPaidMoney()) {
+			if (money >= charge.getUnPaidMoney()) {
 				money -= charge.getUnPaidMoney();
 				charge.setPaidCompleted(true);
 				this.update(charge);
 			}
 		}
-		if (money > 0) {
+		if (money >= 0) {
 			int count = charges.size();
 			PosChargeData lastCharge = charges.get(count - 1);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
@@ -176,6 +176,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		if (expense < -0.01) {
 			charge.setUnPaidMoney(0);
+			charge.setPaidCompleted(true);
 			charge.setChangeMoney(-1 * expense);
 		}
 
@@ -237,11 +238,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			charge.setPaidCompleted(true);
 		}
 		expense -= charge.getPaidMoney();
-		if (expense > 0.01) {
+		if (expense > 0) {
 			charge.setUnPaidMoney(expense);
 		}
-		if (expense < -0.01) {
+		else {
 			charge.setUnPaidMoney(0);
+			charge.setPaidCompleted(true);
 			charge.setChangeMoney(-1 * expense);
 		}
 		if (!isQuery) {

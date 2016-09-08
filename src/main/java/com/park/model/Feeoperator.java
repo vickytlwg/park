@@ -8,6 +8,8 @@ public class Feeoperator {
     private Integer id;
 
     private String account;
+    
+    private String passwd;
 
     private String name;
 
@@ -45,6 +47,14 @@ public class Feeoperator {
         this.account = account == null ? null : account.trim();
     }
 
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd == null ? null : passwd.trim();
+    }
+    
     public String getName() {
         return name;
     }

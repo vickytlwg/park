@@ -11,9 +11,7 @@ outsideParkApp.controller("outsideParkCtrl",function($scope, $http,$timeout,$q,g
 	};
 	$scope.getStreets=function(){
 		getPositionData.getStreetById($scope.areaId).then(function(result){
-		    var data=[];
-		    data.push(result);
-		    $scope.streets=data;
+		    $scope.streets=result;
 		});
 	};
 	 
@@ -48,11 +46,11 @@ outsideParkApp.factory("getPositionData",function($http,$q){
 	        });
 	        return promise;
 	    };
-	    var getStreetById=function(streetid){
+	    var getStreetById=function(areaid){
 	       var deferred=$q.defer();
            var promise=deferred.promise;	       
 	         $http({
-	             url:"/park/street/selectByPrimaryKey/"+streetid,
+	             url:"/park/street/getByAreaid/"+areaid,
 	             method:'get'
 	         }).success(function(response){
 	             if(response.status==1001){

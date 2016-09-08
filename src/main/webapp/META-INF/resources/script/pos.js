@@ -88,7 +88,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.refreshPos();
 }]);
 
-posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, $timeout,getPositionData,index){
     var url = '/park/pos/insert';
     $scope.parks=[];
    
@@ -104,22 +104,21 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
             }
         });
     };
+   $scope.getZoneCenter();
    $scope.getArea=function(){
-        $http({
-            url:'/park/area/getByStartAndCount',
-            method:'post',
-            params:{start:0,count:80}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.areas=response.body;
-                $scope.getStreets();
-            }
-            else{
-               textModal.open($scope,"错误","数据请求失败");
-            }
-        }).error(function(){
-               textModal.open($scope,"错误","数据请求失败");
-        });
+       getPositionData.getArea($scope.zoneCenterId).then(
+           function(result){
+               $scope.areas=result;               
+           }
+       );
+    };
+  
+   $scope.getStreets=function(){     
+      getPositionData.getStreetByAreaId($scope.areaId).then(
+         function(result){
+             $scope.streets=result;
+         } 
+      );
     };
   
    $scope.getStreetById=function(){
@@ -131,19 +130,19 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
             method:'get'
         }).success(function(response){
             if(response.status==1001){
-                $scope.areaId=response.body.areaid;
                 $scope.getStreets();
+                $scope.areaId=response.body.areaid;
+            
             }
         });
-    };
-  
+  };
     if(index != undefined){
         $scope.tempPos = $scope.$parent.poses[index];
         url = '/park/pos/update';
-        $scope.getArea();
-        $scope.getStreetById();
-    }
-  
+        $scope.getStreetById();    
+    
+     
+    } 
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
@@ -160,32 +159,7 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
             }
         });
     };
-    $scope.getParks();
-    
-   
-    $scope.getArea();
-  
-    $scope.streets=[];
-    $scope.getStreets=function(){ 
-        if ($scope.areaId==undefined) {      
-            return;
-        };     
-        $http({
-            url:'/park/street/getByAreaid/'+$scope.areaId,
-            method:'get',
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.streets=response.body;
-            }
-            else{
-               textModal.open($scope,"错误","数据请求失败");
-            }
-        }).error(function(){
-               textModal.open($scope,"错误","数据请求失败");
-        });
-    };
-
-    
+    $scope.getParks();      
     $scope.loading = false;
     $scope.submitted = false;
     $scope.result="";
@@ -224,8 +198,7 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
 
 });
 
-var posService=angular.module("posApp");
-posService.service('textModal',  ['$uibModal', function($uibModal){
+posApp.service('textModal',  ['$uibModal', function($uibModal){
     
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
@@ -244,9 +217,58 @@ posService.service('textModal',  ['$uibModal', function($uibModal){
   
     
 }]);
+posApp.factory("getPositionData",function($http,$q){
 
+      var getZoneCenter=function(){
+            var deferred=$q.defer();
+            var promise=deferred.promise;
+            $http({
+                url:"/park/zoneCenter/getByStartAndCount",
+                method:'post',
+                params:{start:0,count:100}
+            }).success(function(response){   
+                    deferred.resolve(response.body);           
+            });
+            return promise;
+        };
+       var getArea=function(zoneid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;
+           if (!zoneid) {
+            return;
+        }
+            $http({
+                url:'/park/area/getByZoneCenterId/'+zoneid,
+                method:'get',
+            }).success(function(response){
+                if(response.status==1001){
+                     deferred.resolve(response.body);  
+                }
+            });
+            return promise;
+        };
+        var getStreetById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;           
+             $http({
+                 url:"/park/street/getByAreaid/"+areaid,
+                 method:'get'
+             }).success(function(response){
+                 if(response.status==1001){
+                    deferred.resolve(response.body); 
+                 }
+             });
+             return promise;
+         }; 
+         return {
+             getZoneCenter:getZoneCenter,
+             getArea:getArea,            
+             getStreetByAreaId:getStreetById
+         };
+          
+});
 
-  posService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
+  posApp.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   
     $scope.close = function(){
         $uibModalInstance.close('cancel');

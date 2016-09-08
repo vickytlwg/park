@@ -148,4 +148,7 @@
   	left join street on street.id=p.streetId 
   	limit #{start},#{count} 
   </select>
+  <select id="getByNum" resultType="com.park.model.Pos">
+  	select * from pos where num=#{num}
+  </select>
 </mapper>

@@ -1,5 +1,8 @@
 package com.park.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +23,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Constants;
 import com.park.model.Feeoperator;
 import com.park.model.Page;
+import com.park.model.Park;
+import com.park.model.Pos;
 import com.park.service.AuthorityService;
 import com.park.service.FeeOperatorService;
+import com.park.service.ParkService;
+import com.park.service.PosService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
@@ -37,6 +45,10 @@ public class FeeOperatorController {
 	private FeeOperatorService feeOperatorService;
 	@Autowired
 	private UserPagePermissionService pageService;
+	@Autowired
+	private PosService posService;
+	@Autowired
+	private ParkService parkService;
 	@RequestMapping(value="")
 	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -53,6 +65,37 @@ public class FeeOperatorController {
 			}
 		}
 		return "feeOperator";
+	}
+	@RequestMapping(value="validation",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String Validation(@RequestBody Map<String, String> args) throws ParseException{
+		Map<String, Object> result=new HashMap<>();
+		String account=args.get("account");
+		String passwd=args.get("passwd");
+		String posNum=args.get("posNum");
+		List<Feeoperator> feeoperators=feeOperatorService.operatorValidation(account, passwd);
+		if (feeoperators.isEmpty()) {
+			result.put("status", 1002);
+			result.put("message", "错误的用户名或密码");			
+		}
+		else {		
+			List<Pos> pos=posService.getByNum(posNum);
+			if (pos.isEmpty()) {
+				result.put("status", 1002);
+				result.put("message", "无pos机");
+			}
+			else{
+				result.put("status", 1001);
+				Feeoperator operator=feeoperators.get(0);
+				operator.setLastsigndate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+				Pos tmpPos=pos.get(0);				
+				Park park=parkService.getParkById(tmpPos.getParkid());
+				operator.setLastposnum(tmpPos.getNum());
+				feeOperatorService.updateByPrimaryKeySelective(operator);
+				result.put("parkName", park.getName());
+			}
+		}
+		return Utility.gson.toJson(result);
 	}
 	@RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody

@@ -20,4 +20,6 @@ public interface FeeOperatorService {
     int getCount();
     
     List<Feeoperator> getByStartAndCount(int start,int count);
+    
+    List<Feeoperator> operatorValidation(String account,String passwd);
 }

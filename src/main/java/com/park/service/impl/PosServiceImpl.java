@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.park.dao.PosDAO;
 import com.park.model.Pos;
+import com.park.model.posdataReceive;
 import com.park.service.PosService;
 
 @Service
@@ -62,6 +63,12 @@ public class PosServiceImpl implements PosService {
 	public List<Pos> getByStartAndCount(int start, int count) {
 		// TODO Auto-generated method stub
 		return posDao.getByStartAndCount(start, count);
+	}
+
+	@Override
+	public List<Pos> getByNum(String num) {
+		// TODO Auto-generated method stub
+		return posDao.getByNum(num);
 	}
 
 	

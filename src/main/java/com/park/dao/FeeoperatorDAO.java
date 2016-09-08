@@ -22,4 +22,6 @@ public interface FeeoperatorDAO {
     int getCount();
     
     List<Feeoperator> getByStartAndCount(@Param("start")int start,@Param("count")int count);
-}
+    
+    List<Feeoperator> operatorValidation(@Param("account")String account,@Param("passwd")String passwd);
+    }

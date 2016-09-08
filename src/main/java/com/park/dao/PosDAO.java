@@ -22,4 +22,6 @@ public interface PosDAO {
     int getCount();
     
     List<Pos> getByStartAndCount(@Param("start")int start,@Param("count")int count);
+    
+    List<Pos> getByNum(@Param("num")String num);
 }

@@ -34,10 +34,10 @@
 										<th><span>停车场名</span></th>
 										<th><span>车位号</span></th>
 										<th><span>操作员id</span></th>
-										<th><span>已收费</span></th>	
+										<th><span>收费状态</span></th>	
 										<th><span>押金</span></th>
-										<th><span>补交</span></th>
-										<th><span>返还</span></th>	
+										<th><span>应收费</span></th>
+										<th><span>找零</span></th>	
 										<th><span>进场时间</span></th>	
 										<th><span>离场时间</span></th>
 				            </tr>
@@ -49,7 +49,8 @@
 				          		<td ng-bind="item.parkDesc"></td>
 				          		<td ng-bind="item.portNumber"></td>
 				          		<td ng-bind="item.operatorId"></td>
-				          		<td ng-bind="item.paidCompleted"></td>
+				          		<td ng-if="item.paidCompleted==true" class="success">已收费</td>
+								<td ng-if="item.paidCompleted==false" class="warning">未收费</td>
 				          		<td ng-bind="item.paidMoney"></td>
 				          		<td ng-bind="item.chargeMoney"></td>
 				          		<td ng-bind="item.changeMoney"></td>

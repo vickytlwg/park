@@ -61,7 +61,7 @@ chargeApp.controller("feeDetailCtrl", ['$scope', '$http',  'textModal', '$modal'
 			return;
 		$scope.detail.page.index++;
 		$scope.detail.getPage();
-	}
+	};
 	
 	//last page
 	$scope.detail.lastPage = function(){
@@ -69,7 +69,7 @@ chargeApp.controller("feeDetailCtrl", ['$scope', '$http',  'textModal', '$modal'
 			return;
 		$scope.detail.page.index = $scope.detail.page.indexRange.length;
 		$scope.detail.getPage();
-	}
+	};
 	
 	//get one page detail
 	$scope.detail.getPage = function(){		
@@ -106,7 +106,7 @@ chargeApp.controller("feeDetailCtrl", ['$scope', '$http',  'textModal', '$modal'
 			textModal.open($scope, "错误", "获取计费信息错误: " + + response.status);
 			
 		});
-	}
+	};
 
 	
 	//init page

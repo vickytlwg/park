@@ -46,15 +46,20 @@
         </div>
         <div class="form-group">
              <label class="col-sm-2 control-label" >所属区中心</label>
-             <select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId"></select>
+             <div class="col-sm-8">
+             <select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getArea()"></select>
+        </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label" >所属区域</label>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <select class="form-control" ng-options="area.id as area.name for area in areas"  ng-change="getStreets()" ng-model="areaId"></select>               
             </div>
+            
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label" >所属路段</label>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <select class="form-control" ng-options="street.id as street.name for street in streets" ng-model="tempPos.streetid"></select>               
             </div>
         </div>

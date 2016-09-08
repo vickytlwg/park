@@ -61,4 +61,10 @@ public class FeeOperatroServiceImpl implements FeeOperatorService {
 		return feeoperatroDao.getByStartAndCount(start, count);
 	}
 
+	@Override
+	public List<Feeoperator> operatorValidation(String account, String passwd) {
+		// TODO Auto-generated method stub
+		return feeoperatroDao.operatorValidation(account, passwd);
+	}
+
 }
