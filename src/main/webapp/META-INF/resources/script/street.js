@@ -95,34 +95,41 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.refreshStreet();
 }]);
 
-streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
+streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, positionService,$timeout, index){
     var url = '/park/street/insert';
     $scope.tempStreet={};
-    if(index != undefined){
+      
+     $scope.getZoneCenter=function(){
+      positionService.getZoneCenter().then(function(result){
+      $scope.zoneCenters=result;
+  });
+  };
+   $scope.getZoneCenter();
+   $scope.areas=[];  
+   $scope.getArea=function(){
+       positionService.getArea($scope.zoneCenterId).then(
+           function(result){
+               $scope.areas=result;            
+           }
+       );
+    };    
+   var getAreaById=function(areaid){
+      positionService.getAreaById(areaid).then(
+          function(result){
+              selectedArea=result;
+              $scope.zoneCenterId=selectedArea.zoneid;
+              $scope.getArea();
+          }
+      );
+  };
+     if(index != undefined){
         $scope.tempStreet = $scope.$parent.streets[index];
         url = '/park/street/update';
+        getAreaById($scope.tempStreet.areaid);
     }
-    else{
+     else{
         $scope.tempStreet.number='S-'+(new Date()).format('yyyyMMddhhmmssS');
     }
-    $scope.areas=[];
-    $scope.refreshArea=function(){
-        $http({
-            url:'/park/area/getByStartAndCount',
-            method:'post',
-            params:{start:$scope.start,count:$scope.count}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.areas=response.body;
-            }
-            else{
-               textModal.open($scope,"错误","数据请求失败");
-            }
-        }).error(function(){
-               textModal.open($scope,"错误","数据请求失败");
-        });
-    };
-    $scope.refreshArea();
     $scope.streetTypes=[{"id":0,"name":"自营路段"},{"id":1,"name":"其它路段"}];
     $scope.loading = false;
     $scope.submitted = false;
@@ -164,8 +171,7 @@ streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $
 });
 
 var streetService=angular.module("streetApp");
-streetService.service('textModal',  ['$uibModal', function($uibModal){
-    
+streetService.service('textModal',  ['$uibModal', function($uibModal){   
     this.open = function($scope, header, body){
         $scope.textShowModal = $uibModal.open({
             templateUrl: '/park/views/template/text-modal.html',
@@ -176,14 +182,76 @@ streetService.service('textModal',  ['$uibModal', function($uibModal){
             }
         });
     };
-    
     this.close = function($scope, header, body){
         $scope.textShowModal.close('cancel');
     };
-  
-    
 }]);
 
+streetService.service("positionService",function($http,$q){
+     var getZoneCenter=function(){
+            var deferred=$q.defer();
+            var promise=deferred.promise;
+            $http({
+                url:"/park/zoneCenter/getByStartAndCount",
+                method:'post',
+                params:{start:0,count:100}
+            }).success(function(response){   
+                    deferred.resolve(response.body);           
+            });
+            return promise;
+        };
+       var getAreaById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;
+           if (!areaid) {
+            return;
+            }
+            $http({
+                url:'/park/area/selectByPrimaryKey/'+areaid,
+                method:'get'
+            }).success(function(response){
+                if(response.status==1001){
+                    deferred.resolve(response.body); 
+                }
+            });
+            return promise;
+       };
+       var getArea=function(zoneid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;
+           if (!zoneid) {
+            return;
+        }
+            $http({
+                url:'/park/area/getByZoneCenterId/'+zoneid,
+                method:'get',
+            }).success(function(response){
+                if(response.status==1001){
+                     deferred.resolve(response.body);  
+                }
+            });
+            return promise;
+        };
+        var getStreetById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;           
+             $http({
+                 url:"/park/street/getByAreaid/"+areaid,
+                 method:'get'
+             }).success(function(response){
+                 if(response.status==1001){
+                    deferred.resolve(response.body); 
+                 }
+             });
+             return promise;
+         }; 
+         return {
+             getZoneCenter:getZoneCenter,
+             getArea:getArea,            
+             getStreetByAreaId:getStreetById,
+             getAreaById:getAreaById
+         };
+});
 
   streetService.controller('textCtrl',  function($scope, $uibModalInstance, $http, msg){
     $scope.text = msg;   

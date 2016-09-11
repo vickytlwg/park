@@ -20,6 +20,12 @@
                 <input type="text" class="form-control" placeholder="路段名称" ng-model="tempStreet.name">
             </div>
         </div>
+         <div class="form-group">
+             <label class="col-sm-2 control-label" >所属区中心</label>
+             <div class="col-sm-8">
+             <select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getArea()"></select>
+        </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-2 control-label" >所在区域</label>
             <div class="col-sm-8">

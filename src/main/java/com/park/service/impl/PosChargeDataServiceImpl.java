@@ -77,7 +77,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public List<PosChargeData> pay(String cardNumber, double money) throws Exception {
-
+		double theMoney=money;
 		List<PosChargeData> charges = this.getDebt(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (money >= charge.getUnPaidMoney()) {
@@ -90,6 +90,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			int count = charges.size();
 			PosChargeData lastCharge = charges.get(count - 1);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
+			lastCharge.setGivenMoney(theMoney);
 			this.update(lastCharge);
 		}
 		return charges;

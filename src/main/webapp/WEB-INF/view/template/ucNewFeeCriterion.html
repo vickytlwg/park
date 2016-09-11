@@ -100,7 +100,13 @@
 				<input type="text" class="form-control" placeholder="" ng-model="tempCriterion.onetimeexpense">
 			</div>
 		</div>
-		
+		<div class="form-group">
+            <label class="col-sm-3 control-label" >收费说明</label>
+            <div class="col-sm-8">
+                <textarea rows=5  class="form-control"  ng-model="tempCriterion.explaination"></textarea>
+            </div>
+        </div>
+        
 			
 		<div class="alert alert-info" ng-show="loading || submitted">
 			<span  ng-show='loading' > <i class="fa fa-spinner"></i></span>

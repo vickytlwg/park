@@ -31,8 +31,11 @@ public class FeeCriterion {
     private Integer isonetimeexpense;
 
     private Float onetimeexpense;
+    
+    private String explaination;
 
-    public Integer getId() {
+
+	public Integer getId() {
         return id;
     }
 
@@ -153,7 +156,13 @@ public class FeeCriterion {
     }
 	
 
-	
+    public String getExplaination() {
+		return explaination;
+	}
+
+	public void setExplaination(String explain) {
+		this.explaination = explain;
+	}
 	
 	
 

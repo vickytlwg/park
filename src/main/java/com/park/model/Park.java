@@ -9,6 +9,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class Park {
 	private int id;
 	private String name;
+	private int streetId=1;
 	private int portCount;
 	private int channelCount;
 	private int portLeftCount;
@@ -39,6 +40,13 @@ public class Park {
 	}
 	public String getName() {
 		return name;
+	}	
+	
+	public int getStreetId() {
+		return streetId;
+	}
+	public void setStreetId(int streetId) {
+		this.streetId = streetId;
 	}
 	public int getPortCount() {
 		return portCount;

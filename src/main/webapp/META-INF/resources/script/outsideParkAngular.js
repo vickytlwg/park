@@ -14,6 +14,11 @@ outsideParkApp.controller("outsideParkCtrl",function($scope, $http,$timeout,$q,g
 		    $scope.streets=result;
 		});
 	};
+	$scope.clearPosition=function(){
+	     $scope.areas=[];
+	     $scope.streets=[];
+	     $scope.zoneCenterId=-1;
+	};
 	 
 });
 outsideParkApp.factory("getPositionData",function($http,$q){

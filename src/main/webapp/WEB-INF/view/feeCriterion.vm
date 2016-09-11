@@ -46,6 +46,7 @@
 									<th><span>夜间时段</div></th>
 									<th><span>是否按次收费</div></th>
 									<th><span>价格/次</div></th>
+									<th><span>收费说明</div></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
 				          	<tr  ng-repeat = "item in criterion.items">
@@ -67,6 +68,7 @@
 				          			<span ng-if="item.isonetimeexpense == 1">是</span>
 				          		</td>
 				          		<td ng-bind="item.onetimeexpense"></td>
+								<td ng-bind="item.explaination"></td>
 				          </table>
     					</div>
     				</div>

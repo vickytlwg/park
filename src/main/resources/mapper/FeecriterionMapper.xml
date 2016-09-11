@@ -17,11 +17,12 @@
     <result column="nightEndTime" property="nightendtime" jdbcType="CHAR" />
     <result column="isOneTimeExpense" property="isonetimeexpense" jdbcType="INTEGER" />
     <result column="oneTimeExpense" property="onetimeexpense" jdbcType="REAL" />
+    <result column="explaination" property="explaination" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, freeMins, step1Price, step2Price, step1PriceLarge, step2PriceLarge, step1Capacity, 
     step2Capacity, timeoutPriceInterval, maxExpense, nightStartTime, nightEndTime, isOneTimeExpense, 
-    oneTimeExpense
+    oneTimeExpense, explaination
   </sql>
   <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -43,14 +44,14 @@
       step1Price, step2Price, step1PriceLarge, 
       step2PriceLarge, step1Capacity, step2Capacity, 
       timeoutPriceInterval, maxExpense, nightStartTime, 
-      nightEndTime, isOneTimeExpense, oneTimeExpense
-      )
+      nightEndTime, isOneTimeExpense, oneTimeExpense, 
+      explaination)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=CHAR}, #{freemins,jdbcType=INTEGER}, 
       #{step1price,jdbcType=REAL}, #{step2price,jdbcType=REAL}, #{step1pricelarge,jdbcType=REAL}, 
       #{step2pricelarge,jdbcType=REAL}, #{step1capacity,jdbcType=INTEGER}, #{step2capacity,jdbcType=INTEGER}, 
       #{timeoutpriceinterval,jdbcType=INTEGER}, #{maxexpense,jdbcType=REAL}, #{nightstarttime,jdbcType=CHAR}, 
-      #{nightendtime,jdbcType=CHAR}, #{isonetimeexpense,jdbcType=INTEGER}, #{onetimeexpense,jdbcType=REAL}
-      )
+      #{nightendtime,jdbcType=CHAR}, #{isonetimeexpense,jdbcType=INTEGER}, #{onetimeexpense,jdbcType=REAL}, 
+      #{explaination,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.FeeCriterion" >
     insert into feeCriterion
@@ -100,6 +101,9 @@
       <if test="onetimeexpense != null" >
         oneTimeExpense,
       </if>
+      <if test="explaination != null" >
+        explaination,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -146,6 +150,9 @@
       </if>
       <if test="onetimeexpense != null" >
         #{onetimeexpense,jdbcType=REAL},
+      </if>
+      <if test="explaination != null" >
+        #{explaination,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -194,11 +201,14 @@
       <if test="onetimeexpense != null" >
         oneTimeExpense = #{onetimeexpense,jdbcType=REAL},
       </if>
+      <if test="explaination != null" >
+        explaination = #{explaination,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.park.model.FeeCriterion" >
-    update feeCriterion
+      update feeCriterion
     set name = #{name,jdbcType=CHAR},
       freeMins = #{freemins,jdbcType=INTEGER},
       step1Price = #{step1price,jdbcType=REAL},
@@ -212,7 +222,8 @@
       nightStartTime = #{nightstarttime,jdbcType=CHAR},
       nightEndTime = #{nightendtime,jdbcType=CHAR},
       isOneTimeExpense = #{isonetimeexpense,jdbcType=INTEGER},
-      oneTimeExpense = #{onetimeexpense,jdbcType=REAL}
+      oneTimeExpense = #{onetimeexpense,jdbcType=REAL},
+      explaination = #{explaination,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

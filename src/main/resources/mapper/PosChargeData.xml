@@ -16,6 +16,7 @@
 		<result property="chargeMoney" column="chargeMoney"/>
 		<result property="paidMoney" column="paidMoney"/>
 		<result property="unPaidMoney" column="unPaidMoney"/>
+		<result property="givenMoney" column="givenMoney"/>
 		<result property="changeMoney" column="changeMoney"/>
 		<result property="isOneTimeExpense" column="isOneTimeExpense"/>
 		<result property="paidCompleted" column="paidCompleted"/>
@@ -51,15 +52,15 @@
  		
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
-		paidMoney, unPaidMoney, changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate)
+		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
-		 #{paidMoney}, #{unPaidMoney},#{changeMoney}, #{isOneTimeExpense},0,#{isLargeCar},#{entranceDate}, #{exitDate})
+		 #{paidMoney}, #{unPaidMoney},#{givenMoney},#{changeMoney}, #{isOneTimeExpense},0,#{isLargeCar},#{entranceDate}, #{exitDate})
 	</insert>
 	
 	<update id="update" parameterType="PosChargeData">
 		update posChargeData set cardNumber=#{cardNumber}, parkId=#{parkId}, parkDesc=#{parkDesc}, portNumber = #{portNumber},isEntrance=#{isEntrance}, 
 		operatorId=#{operatorId},posId=#{posId},chargeMoney=#{chargeMoney},
-		paidMoney=#{paidMoney}, unPaidMoney=#{unPaidMoney}, changeMoney=#{changeMoney}, isOneTimeExpense=#{isOneTimeExpense},
+		paidMoney=#{paidMoney}, unPaidMoney=#{unPaidMoney},givenMoney=#{givenMoney} ,changeMoney=#{changeMoney}, isOneTimeExpense=#{isOneTimeExpense},
 		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate}
 		where id=#{id}
 	</update>

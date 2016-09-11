@@ -94,21 +94,16 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
    
   // $scope.tempPos={};
   $scope.getZoneCenter=function(){
-        $http({
-            url:"/park/zoneCenter/getByStartAndCount",
-            method:'post',
-            params:{start:0,count:100}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.zoneCenters=response.body;
-            }
-        });
-    };
+      getPositionData.getZoneCenter().then(function(result){
+      $scope.zoneCenters=result;
+  });
+  };
    $scope.getZoneCenter();
    $scope.getArea=function(){
        getPositionData.getArea($scope.zoneCenterId).then(
            function(result){
-               $scope.areas=result;               
+               $scope.areas=result;
+            //   $scope.zoneCenterId=$scope.areas.zoneid;               
            }
        );
     };
@@ -120,7 +115,16 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
          } 
       );
     };
-  
+  var selectedArea;
+  var getAreaById=function(areaid){
+      getPositionData.getAreaById(areaid).then(
+          function(result){
+              selectedArea=result;
+              $scope.zoneCenterId=selectedArea.zoneid;
+              $scope.getArea();
+          }
+      );
+  };
    $scope.getStreetById=function(){
        if ($scope.tempPos.streetid==undefined||$scope.tempPos.streetid==null) {
            return;
@@ -129,19 +133,17 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
             url:"/park/street/selectByPrimaryKey/"+$scope.tempPos.streetid,
             method:'get'
         }).success(function(response){
-            if(response.status==1001){
-                $scope.getStreets();
+            if(response.status==1001){               
                 $scope.areaId=response.body.areaid;
-            
+                getAreaById($scope.areaId);               
+                $scope.getStreets();           
             }
         });
   };
     if(index != undefined){
         $scope.tempPos = $scope.$parent.poses[index];
         url = '/park/pos/update';
-        $scope.getStreetById();    
-    
-     
+        $scope.getStreetById();        
     } 
     $scope.getParks=function(){
         $http({
@@ -231,6 +233,22 @@ posApp.factory("getPositionData",function($http,$q){
             });
             return promise;
         };
+       var getAreaById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;
+           if (!areaid) {
+            return;
+            }
+            $http({
+                url:'/park/area/selectByPrimaryKey/'+areaid,
+                method:'get'
+            }).success(function(response){
+                if(response.status==1001){
+                    deferred.resolve(response.body); 
+                }
+            });
+            return promise;
+       };
        var getArea=function(zoneid){
            var deferred=$q.defer();
            var promise=deferred.promise;
@@ -263,7 +281,8 @@ posApp.factory("getPositionData",function($http,$q){
          return {
              getZoneCenter:getZoneCenter,
              getArea:getArea,            
-             getStreetByAreaId:getStreetById
+             getStreetByAreaId:getStreetById,
+             getAreaById:getAreaById
          };
           
 });

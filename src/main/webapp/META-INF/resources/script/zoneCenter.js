@@ -96,7 +96,7 @@ zoneCenterApp.controller("zoneCenterModify",function($scope, textModal,$modalIns
         url = '/park/zoneCenter/update';
     }
     else{
-   $scope.tempZoneCenter.num='A-'+(new Date()).format('yyyyMMddhhmmssS');
+   $scope.tempZoneCenter.num='Z-'+(new Date()).format('yyyyMMddhhmmssS');
     }
     $scope.loading = false;
     $scope.submitted = false;

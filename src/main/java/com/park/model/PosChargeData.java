@@ -28,6 +28,8 @@ public class PosChargeData {
 	
 	double unPaidMoney;
 	
+	double givenMoney;
+
 	double changeMoney;
 	
 	int isOneTimeExpense;
@@ -131,6 +133,15 @@ public class PosChargeData {
 		this.unPaidMoney = unPaidMoney;
 	}
 
+	
+	public double getGivenMoney() {
+		return givenMoney;
+	}
+
+	public void setGivenMoney(double givenMoney) {
+		this.givenMoney = givenMoney;
+	}
+	
 	public double getChangeMoney() {
 		return changeMoney;
 	}
