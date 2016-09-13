@@ -70,10 +70,10 @@
 	
 	<select id="getParkById" resultMap="ParkMapper">
 		select * from park where id = #{id}
+	</select>		
+	<select id="getOutsideParkByStreetId" resultMap="ParkMapper">
+		select * from park where type=3 and streetId=#{streetId}
 	</select>
-	
-	
-	
 	<select id="getParkDetail" resultMap="ParkDetailMapper">
 		select park.id, park.name, park.portCount, park.channelCount, portLeftCount, feeCriterion.name as feeCriterionName, 
 		feeCriterion.id as feeCriterionId, park.status, park.isFree, park.floor, park.type,

@@ -2,13 +2,22 @@
 	$.fn.park = {};	
 	parkId=-1;
 	$.fn.park.initial = function(){
-		renderPark(-1,0, $.fn.page.pageSize);
+		
 		renderPagination();
 		intervalRenderPagination();
 		rendnumcard();
+		initialData();
 		bindParkChange();
+		
 	};	
-	
+	var initialData=function(){
+	     //$('#parkNamesearch').options[0].selected=true;
+	     var parkId=$('#parkNamesearch').val();
+	     if(parkId){
+	        renderPark(parkId,0, $.fn.page.pageSize); 
+	     }
+	    
+	};
 	var rendnumcard=function(){
 		$.ajax({
 			url:$.fn.config.webroot + "/pos/getCountsByCard" ,

@@ -15,10 +15,11 @@
               	<div class="box">	               
 	             <div class="box-body"> 
 					<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end id="refresh" ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+								<button #if(!$isAdmin) disabled#end  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
 		                	</div>	
 				<div class="pull-right">		
 							                	
@@ -26,7 +27,7 @@
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">
+							  <table class="table table-bordered table-hover table-condensed" style="font-size:12px">
 					          
 					            <tr>					            
 					             <th><span style=""><input type="checkbox" /></div></th>

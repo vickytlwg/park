@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Monthuser;
+import com.park.model.Monthuserpark;
 import com.park.model.Page;
 import com.park.service.AuthorityService;
+import com.park.service.MonthUserParkService;
 import com.park.service.MonthUserService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
@@ -33,6 +35,8 @@ import com.park.service.Utility;
 public class MonthUserController {
 @Autowired
 private MonthUserService monthUserService;
+@Autowired
+private MonthUserParkService monthUserParkService;
 @Autowired
 private AuthorityService authService;
 
@@ -56,6 +60,67 @@ public String index(ModelMap modelMap, HttpServletRequest request, HttpSession s
 		}
 	}
 	return "monthUser";
+}
+
+@RequestMapping(value="getParkNamesByUserId/{userId}",produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getParkNamesByUserId(@PathVariable("userId")int userId){
+	Map<String, Object> result=new HashMap<>();
+	List<Map<String, Object>> parkNames=monthUserParkService.getOwnParkName(userId);
+	result.put("status", 1001);
+	result.put("body", parkNames);
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="getUsersByParkId/{parkId}",produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getUsersByParkId(@PathVariable("parkId")int parkId){
+	Map<String, Object> result=new HashMap<>();
+	List<Map<String, Object>> users=monthUserParkService.getUsersByParkId(parkId);
+	result.put("status", 1001);
+	result.put("body", users);
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="deletePark/{id}",produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String deletePark(@PathVariable("id")int id){
+	Map<String, Object> result=new HashMap<>();
+	int num=monthUserParkService.deleteByPrimaryKey(id);
+	if (num==1) {
+		result.put("status", 1001);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="insertPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String insertPark(@RequestBody Monthuserpark monthUserPark){
+	Map<String, Object> result=new HashMap<>();
+	int num= monthUserParkService.insert(monthUserPark);
+	if (num==1) {
+		result.put("status", 1001);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="deletePark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String deletePark(@RequestBody Monthuserpark monthUserPark){
+	Map<String, Object> result=new HashMap<>();
+	int num= monthUserParkService.deleteByUserIdAndParkId(monthUserPark);
+	if (num==1) {
+		result.put("status", 1001);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
 }
 @RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody

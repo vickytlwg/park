@@ -14,12 +14,7 @@
                 <input type="text" class="form-control" placeholder="设备终端号" ng-model="tempPos.num">
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label" >所属停车场</label>
-            <div class="col-sm-8">
-                <select class="form-control" ng-options="park.id as park.name for park in parks" ng-model="tempPos.parkid"></select>
-            </div>
-        </div>
+        
         <div class="form-group">
             <label class="col-sm-2 control-label" >设备类型</label>
             <div class="col-sm-8">
@@ -60,7 +55,13 @@
         <div class="form-group">
             <label class="col-sm-2 control-label" >所属路段</label>
             <div class="col-sm-8">
-                <select class="form-control" ng-options="street.id as street.name for street in streets" ng-model="tempPos.streetid"></select>               
+                <select class="form-control" ng-options="street.id as street.name for street in streets" ng-model="tempPos.streetid" ng-change="getParks(tempPos.streetid)"></select>               
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" >所属停车场</label>
+            <div class="col-sm-8">
+                <select class="form-control" ng-options="park.id as park.name for park in parks" ng-model="tempPos.parkid"></select>
             </div>
         </div>
         <div class="form-group">

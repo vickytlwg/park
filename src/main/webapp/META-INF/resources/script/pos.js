@@ -88,7 +88,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.refreshPos();
 }]);
 
-posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, $timeout,getPositionData,index){
+posApp.controller("posModify",function($scope, textModal,$modalInstance, $http,$timeout,getPositionData,index){
     var url = '/park/pos/insert';
     $scope.parks=[];
    
@@ -145,23 +145,11 @@ posApp.controller("posModify",function($scope, textModal,$modalInstance, $http, 
         url = '/park/pos/update';
         $scope.getStreetById();        
     } 
-    $scope.getParks=function(){
-        $http({
-            url:'getParks?_t=' + (new Date()).getTime(),
-            method:'get'
-        }).success(function(response){
-            if(response.status=1001){
-                var body=response.body;
-                for(var i=0;i<body.length;i++){
-                    if(body[i].type==3){
-                        $scope.parks.push(body[i]);
-                   }
-                }
-               $scope.selectValue=$scope.parks[0];
-            }
+    $scope.getParks=function(streetId){
+       getPositionData.getOutsideParkByStreetId(streetId).then(function(result){
+            $scope.parks=result;
         });
-    };
-    $scope.getParks();      
+    };    
     $scope.loading = false;
     $scope.submitted = false;
     $scope.result="";
@@ -220,7 +208,6 @@ posApp.service('textModal',  ['$uibModal', function($uibModal){
     
 }]);
 posApp.factory("getPositionData",function($http,$q){
-
       var getZoneCenter=function(){
             var deferred=$q.defer();
             var promise=deferred.promise;
@@ -278,11 +265,25 @@ posApp.factory("getPositionData",function($http,$q){
              });
              return promise;
          }; 
+         var getOutsideParkByStreetId=function(streetId){
+           var deferred=$q.defer();
+           var promise=deferred.promise;           
+             $http({
+                 url:"/park/getOutsideParkByStreetId/"+streetId,
+                 method:'get'
+             }).success(function(response){
+                 if(response.status==1001){
+                    deferred.resolve(response.body); 
+                 }
+             });
+             return promise;
+         };
          return {
              getZoneCenter:getZoneCenter,
              getArea:getArea,            
              getStreetByAreaId:getStreetById,
-             getAreaById:getAreaById
+             getAreaById:getAreaById,
+             getOutsideParkByStreetId:getOutsideParkByStreetId
          };
           
 });

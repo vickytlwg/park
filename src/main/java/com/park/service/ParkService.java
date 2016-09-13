@@ -31,6 +31,8 @@ public interface ParkService {
 	
 	public List<Park> getParkDetailByKeywords(String keywords);
 	
+	public List<Park> getOutsideParkByStreetId(int streetId);
+	
 	public int getParkCount();
 	
 	public int getOutsideParkCount();
