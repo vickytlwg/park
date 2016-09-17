@@ -108,6 +108,15 @@ public class ParkUserController {
 		
 	}
 	
+	@RequestMapping(value = "/getParkUser", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkUser(){	
+		List<AuthUser> userList = authService.getUsers();
+		
+		return Utility.createJsonMsg("1001", "get user detail success", userList);
+		
+	}
+	
 	@RequestMapping(value = "/insert/parkUser", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertUser(@RequestBody Map<String, Object> argMap){

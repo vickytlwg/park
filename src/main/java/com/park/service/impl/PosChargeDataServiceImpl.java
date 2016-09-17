@@ -125,7 +125,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService{
 		
 		double expense = 0;
 		if(charge.getIsOneTimeExpense() == 1){
-			expense = criterion.getOneTimeExpense() - charge.getPaidMoney();
+			//expense = criterion.getOneTimeExpense() - charge.getPaidMoney();
+			expense = criterion.getOneTimeExpense();
 			
 		}else{
 			long diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime())/(1000 * 60);
@@ -135,7 +136,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService{
 			expense = intervals * criterion.getTimeoutPriceInterval() + criterion.getStartExpense();			
 		}
 		
-		charge.setChangeMoney(expense);
+		charge.setChargeMoney(expense);
 		
 		if(expense > criterion.getMaxExpense())
 			expense = criterion.getMaxExpense();

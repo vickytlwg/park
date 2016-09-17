@@ -7,6 +7,7 @@ public class PagePermission {
 	private int roleId;
 	
 	private int pageId;
+	
 
 	public int getId() {
 		return id;

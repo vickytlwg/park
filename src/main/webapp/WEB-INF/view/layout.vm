@@ -139,7 +139,7 @@
               </ul>
             </li>
 			
-			<li class="treeview">
+			<li class="treeview active">
                 <a href="#"><i class="fa fa-dollar"></i> <span>计费管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_pos_chargeDetail) hidden#end ><a href="/park/pos/chargeDetail"><i class="fa fa-credit-card"></i>费用明细</a></li>
@@ -160,8 +160,11 @@
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_users) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li>
                   <li #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>网站用户管理</a></li>
-					 <li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
+				  <li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
                   <li #if(!$isAdmin && !$park_api_user_index) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>用户token管理</a></li>
+                  <li #if(!$isAdmin && !$park_permission_roles) hidden#end><a href="/park/page/permission/roles"><i class="fa fa-user-secret"></i>角色管理</a></li>
+                   <li #if(!$isAdmin && !$park_permission_role_allocate) hidden#end><a href="/park/page/permission/role/allocate"><i class="fa fa-user-secret"></i>角色分配管理</a></li>
+                  <li #if(!$isAdmin && !$park_permission_pages) hidden#end><a href="/park/page/permission/pages"><i class="fa fa-user-secret"></i>页面管理</a></li>
               </ul>
             </li>
 
