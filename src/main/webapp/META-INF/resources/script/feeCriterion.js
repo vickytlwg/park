@@ -90,15 +90,15 @@ chargeApp.controller("feeCriterionCtrl", ['$scope', '$http',  'textModal', '$mod
 chargeApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $timeout, index){
 	
 	var url = 'insert';
+	$scope.tempCriterion={};
 	if(index != undefined){
 		$scope.tempCriterion = $scope.$parent.criterion.items[index];
 		url = 'modify';
 	}
 	else{
-		/**
-		 * 		
-		 */
-
+		$scope.tempCriterion.maxexpense=9999;
+		$scope.tempCriterion.nightstarttime='20:00';
+		$scope.tempCriterion.nightendtime='08:00';
 	}
 	
 	

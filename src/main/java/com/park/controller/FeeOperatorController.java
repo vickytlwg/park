@@ -106,6 +106,7 @@ public class FeeOperatorController {
 				operator.setSignstatus(true);
 				feeOperatorService.updateByPrimaryKeySelective(operator);
 				result.put("parkName", park.getName());
+				result.put("parkId", park.getId());
 				result.put("carportsCount", park.getPortCount());
 				result.put("message", "success");	
 			}

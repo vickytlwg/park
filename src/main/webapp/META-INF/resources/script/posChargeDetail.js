@@ -11,7 +11,6 @@
 		
 	};	
 	var initialData=function(){
-	     //$('#parkNamesearch').options[0].selected=true;
 	     var parkId=$('#parkNamesearch').val();
 	     if(parkId){
 	        renderPark(parkId,0, $.fn.page.pageSize); 

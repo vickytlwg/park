@@ -1,87 +1,99 @@
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <link href="/park/css/xx_list.css" rel="stylesheet"/>
+<link href="/park/css/xx_pname.css" rel="stylesheet"/>
 <script src="/park/script/utility.js"></script>
-<script src="/park/script/jquery.shCircleLoader-min.js"></script>
-<script src="/park/script/jquery.json-2.4.min.js"></script>
 <script src="/park/script/datepicker.js"></script>
-<script src="/park/script/highcharts.js"></script>
-<script src="/park/script/exporting.js"></script>
-<script src="/park/script/HighchartTheme.js"></script>
-<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
-<div class="content-wrapper">
+<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+<script src="/park/script/outsideParkStatus.js"></script>
+
+<div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 	<section class="content-header">
           <h1>
-			停车位利用率示意图
+			停车场停车状况示意图
             <small></small>
           </h1>        
     </section>
-
-	<div class="xx-list">
+<section class="content">
+	  <div class="row xx-park-info" >                          
+        <div class="col-xs-3 float-fix">
+            <div class="xx-park-ch">
+                <label for="park-select" class="control-label xx-park-head">选择停车场</label>
+                <div class="xx-park-name">
+                    <ul>
+                        <li ng-class="{true:'xx-park-firstli'}[park.selected]" ng-repeat="park in selectParks" ng-click="parkSelected(park)">
+                            <p>{{park.name}}</p>
+                        </li>                     
+                    </ul>
+                </div>
+            </div>
+        </div>
+	<div class="col-xs-9 float-fix">
+			<div class="xx-list">
 		<ul class="float-fix">
-			<li id="list00">
+			<li>
 				<p>停车场名：</p>
-				<span></span>
+				<span>{{selectedParkName|limitTo:7}}{{selectedParkName.length>7?'...':''}}</span>
 			</li>
-			<li id="list01">
+			<li>
 				<p>停车场编号：</p>
-				<span></span>
+				<span ng-bind="selectedParkNum"></span>
 			</li>
-			<li id="list03">
+			<li>
 				<p>负责人姓名：</p>
-				<span></span>
+				<span ng-bind="principalName"></span>
 			</li>
-			<li id="list04">
+			<li>
 				<p>联系电话：</p>
-				<span></span>
+				<span ng-bind="contactNumber"></span>
 			</li>
 		</ul> 
 		<ul class="float-fix">
-			<li id="list10">
+			<li>
 				<p>在线泊位数（个）：</p>
-				<span></span>
+				<span ng-bind="carportsCount"></span>
 			</li>
-			<li id="list11">
+			<li >
 				<p>在停车辆数（个）：</p>
-				<span></span>
+				<span ng-bind="carportUsedCount"></span>
 			</li>
-			<li id="list12">
+			<li >
 				<p>空余泊位数（个）：</p>
-				<span></span>
+				<span ng-bind="carportUnusedCount"></span>
 			</li>
-			<li id="list13">
+			<li >
 				<p>今日停车次数: </p>
-				<span></span>
+				<span ng-bind="dayCarsCount"></span>
 			</li>
 		</ul> 
 		<ul class="float-fix">
-			<li id="list20">
+			<li >
 				<p>进场车辆数（个）：</p>
-				<span></span>
+				<span ng-bind="carsInCount"></span>
 			</li>
-			<li id="list21">
+			<li >
 				<p>离场车辆数（个）：</p>
-				<span></span>
+				<span ng-bind="carsOutCount"></span>
 			</li>
-			<li id="list22">
+			<li >
 				<p>泊位饱和度（%）：</p>
-				<span></span>
+				<span ></span>
 			</li>
-			<li id="list23">
-				<p>泊位平均周转率（次/泊位/天）：</p>
-				<span></span>
+			<li >
+				<p>泊位周转率：</p>
+				<span ng-bind="dayCarsCount/carportsCount|number:2"></span>
 			</li>
 		</ul> 
 		<ul class="float-fix">
 			<li id="list30">
 				<p>应收金额（元）：</p>
-				<span></span>
+				<span ng-bind="dayChargeTotal"></span>
 			</li>
 			<li id="list31">
 				<p>实收金额：</p>
-				<span></span>
+				<span ng-bind="dayRealReceiveMoney"></span>
 			</li>
 			<li id="list32">
-				<p>欠费/签收金额（元）：</p>
+				<p>欠费/签收金额：</p>
 				<span></span>
 			</li>
 			<li id="list33">
@@ -99,7 +111,7 @@
 				<span></span>
 			</li>
 			<li id="list42">
-				<p>停车专卡刷卡金额（元）：</p>
+				<p>专卡刷卡金额：</p>
 				<span></span>
 			</li>
 			<li id="list43">
@@ -108,8 +120,11 @@
 			</li>
 		</ul> 
 	</div>
+        </div>
+	</div>	
 	
-    <section class="content">
+	
+   
        <div class="row">
             <div class="col-xs-12">
               	<div class="box">
@@ -119,10 +134,9 @@
 	                <div class="box-body">  
 						<div id="chart-header">
 							<div class="row" >							
-								<div class="col-md-3">
+								<div class="col-md-3"  style="display:none">
 									<div class="form-group">
-										<label for="park-select" class="control-label">停车场</label>
-										<select id="park-select" class="form-control" style="font-weight:bold">
+										<select id="park-select" ng-model="parkid" ng-change="selectPosdataByParkAndRange()" class="form-control" style="font-weight:bold">
 											#foreach( $park in $parks)
 												<option value=$park.id>$park.name</option>
 											#end
@@ -132,7 +146,7 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="date" class="control-label">日期</label>
-										<input type="text" id="date"  class="form-control date">									
+										<input type="text" id='date' ng-model="date" ng-change="selectPosdataByParkAndRange()" class="form-control date">									
 									</div>
 								</div>								
 							</div>							
@@ -144,7 +158,7 @@
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3 id="totalMoney">0</h3>
+                  <h3 ng-bind="dayRealReceiveMoney"></h3>
                  
                 </div>
                 <div class="icon">
@@ -157,7 +171,7 @@
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3 id="totalparkTimes">0</h3>
+                  <h3 ng-bind="dayCarsCount">0</h3>
                  
                 </div>
                 <div class="icon">
@@ -170,7 +184,7 @@
               <!-- small box -->
               <div class="small-box bg-yellow">
                 <div class="inner">
-                  <h3 id="carportCount">0</h3>
+                  <h3 ng-bind="carportsCount">0</h3>
                  
                 </div>
                 <div class="icon">
@@ -183,7 +197,7 @@
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3 id="zhouzhuanlv">0</h3>
+                  <h3 ng-bind="dayCarsCount/carportsCount|number:2">0</h3>
 
                 </div>
                 <div class="icon">
@@ -194,71 +208,19 @@
             </div><!-- ./col -->
           </div>
 		  
-             	<div class="row" style="padding-top:25px">
-							<div id="chart-content-park-charge" class="col-md-6">							
-							</div>
-							<div id="chart-content-park" class="col-md-6">							
-							</div>
-                        </div>						
-                <div class="row" style="padding-top:25px">                       
+		   <div class="row" style="padding-top:25px">                       
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="parkMonth" class="control-label">选择月份</label>
-									<input type="text" id="parkMonth" class="form-control">									
+									<input type="text" ng-model="monthDate" ng-change="getParkChargeByRange()" id="parkMonth" class="form-control">									
 								</div>
 							</div>		
                         </div>
-                <div class="row">
-                        	<div id = "chart-park-period-charge">
+                <div class="row" >
+                      <div style="height:400px;width:95%;padding-left:10px" id = "chart_park_period_charge">
                 </div>
-                        </div>
-                        <div class="row" style="padding-top:25px">
-							 <div class="col-md-3">
-								<div class="form-group">
-										<label for="carport-select" class="control-label">停车位</label>
-										<select id="carport-select" class="form-control">
-                                        </select>
-                                   </div>
-                               </div>
-						</div>
-						<div class="row" >
-							<div id="chart-content-carport-charge" class="col-md-6">							
-							</div>
-							<div id="chart-content-carport" class="col-md-6">							
-							</div>
-                        </div>
-                        <div class="row" style="padding-top:25px">                        		
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="carportMonth" class="control-label">选择月份</label>
-									<input type="text" id="carportMonth"  class="form-control date">									
-								</div>
-							</div>		
-                        </div>
-                        <div class="row" >
-                        	<div id = "carportUsageChart">
-                        	</div>
-                        </div>
-						<div class="row" >
-                        	<div id = "carportChargeChart">
-                        	</div>
-                        </div>
-    				<div class="box-footer clearfix">   					
-      				</div>
-	            </div>
-            </div>
-        </div>
-    </section>
-						
+          </div>
+	</div>
+	 </section>
+	
 </div>
-
-
-
-
-<script src="/park/script/carportUsage.js"></script>
-
-<script>
-$(document).ready(function(){
-	$.fn.carportUsage.initial();
-	});
-</script>

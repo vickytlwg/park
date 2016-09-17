@@ -3,6 +3,7 @@ package com.park.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +69,37 @@ public class PosChargeDataController {
 		return "feeDetail";		
 	}
 	
-	
+	@RequestMapping(value="/getByParkAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByParkAndRange(@RequestBody Map<String,Object> args){
+		int parkId=Integer.parseInt((String)args.get("parkId"));
+		String startDay=(String)args.get("startDay");
+		String endDay=(String)args.get("endDay");
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<PosChargeData> posChargeDatas=chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		if (posChargeDatas.isEmpty()) {
+			retMap.put("status", 1002);
+		}
+		else {
+			retMap.put("status", 1001);
+			retMap.put("message", "success");
+			retMap.put("body", posChargeDatas);
+		}		
+		return Utility.gson.toJson(retMap);
+	}
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String count(){
 		

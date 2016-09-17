@@ -228,7 +228,7 @@
 			 <li class="treeview active">
                 <a href="#"><i class="fa fa-bar-chart"></i> <span>停车位利用率</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                  
+                 <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>收费站点状态</a></li>
              
               </ul>
             </li>

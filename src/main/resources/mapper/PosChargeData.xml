@@ -65,7 +65,11 @@
 		where id=#{id}
 	</update>
 
-
+ <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
+  <![CDATA[
+  select * from posChargeData where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id
+  ]]>
+  </select>
 	<delete id="delete">
 		delete from PosChargeData
 		where id=#{param1}
