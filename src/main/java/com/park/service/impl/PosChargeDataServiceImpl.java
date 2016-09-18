@@ -175,7 +175,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (expense == 0) {
 			charge.setPaidCompleted(true);
 		}
->>>>>>> origin/master
+
 		expense -= charge.getPaidMoney();
 		if (expense > 0.01) {
 			charge.setUnPaidMoney(expense);
