@@ -1,4 +1,5 @@
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
+<link href="/park/css/xx_list.css" rel="stylesheet"/>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/jquery.shCircleLoader-min.js"></script>
 <script src="/park/script/jquery.json-2.4.min.js"></script>
@@ -15,6 +16,99 @@
           </h1>        
     </section>
 
+	<div class="xx-list">
+		<ul class="float-fix">
+			<li id="list00">
+				<p>停车场名：</p>
+				<span></span>
+			</li>
+			<li id="list01">
+				<p>停车场编号：</p>
+				<span></span>
+			</li>
+			<li id="list03">
+				<p>负责人姓名：</p>
+				<span></span>
+			</li>
+			<li id="list04">
+				<p>联系电话：</p>
+				<span></span>
+			</li>
+		</ul> 
+		<ul class="float-fix">
+			<li id="list10">
+				<p>在线泊位数（个）：</p>
+				<span></span>
+			</li>
+			<li id="list11">
+				<p>在停车辆数（个）：</p>
+				<span></span>
+			</li>
+			<li id="list12">
+				<p>空余泊位数（个）：</p>
+				<span></span>
+			</li>
+			<li id="list13">
+				<p>今日停车次数: </p>
+				<span></span>
+			</li>
+		</ul> 
+		<ul class="float-fix">
+			<li id="list20">
+				<p>进场车辆数（个）：</p>
+				<span></span>
+			</li>
+			<li id="list21">
+				<p>离场车辆数（个）：</p>
+				<span></span>
+			</li>
+			<li id="list22">
+				<p>泊位饱和度（%）：</p>
+				<span></span>
+			</li>
+			<li id="list23">
+				<p>泊位平均周转率（次/泊位/天）：</p>
+				<span></span>
+			</li>
+		</ul> 
+		<ul class="float-fix">
+			<li id="list30">
+				<p>应收金额（元）：</p>
+				<span></span>
+			</li>
+			<li id="list31">
+				<p>实收金额：</p>
+				<span></span>
+			</li>
+			<li id="list32">
+				<p>欠费/签收金额（元）：</p>
+				<span></span>
+			</li>
+			<li id="list33">
+				<p>实收比例（%）：</p>
+				<span></span>
+			</li>
+		</ul> 
+		<ul class="float-fix">
+			<li id="list40">
+				<p>现金支付（元）：</p>
+				<span></span>
+			</li>
+			<li id="list41">
+				<p>刷卡金额：</p>
+				<span></span>
+			</li>
+			<li id="list42">
+				<p>停车专卡刷卡金额（元）：</p>
+				<span></span>
+			</li>
+			<li id="list43">
+				<p></p>
+				<span></span>
+			</li>
+		</ul> 
+	</div>
+	
     <section class="content">
        <div class="row">
             <div class="col-xs-12">
@@ -34,9 +128,7 @@
 											#end
 										</select>
 									</div>
-								</div>
-				
-							
+								</div>							
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="date" class="control-label">日期</label>
@@ -103,26 +195,22 @@
           </div>
 		  
              	<div class="row" style="padding-top:25px">
-							<div id="chart-content-park-charge" class="col-md-6">
-							
+							<div id="chart-content-park-charge" class="col-md-6">							
 							</div>
-							<div id="chart-content-park" class="col-md-6">
-							
+							<div id="chart-content-park" class="col-md-6">							
 							</div>
-                        </div>
-						
-                        <div class="row" style="padding-top:25px">
-                       
+                        </div>						
+                <div class="row" style="padding-top:25px">                       
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="parkMonth" class="control-label">选择月份</label>
-									<input type="text" id="parkMonth"  class="form-control date">									
+									<input type="text" id="parkMonth" class="form-control">									
 								</div>
 							</div>		
                         </div>
-                        <div class="row">
+                <div class="row">
                         	<div id = "chart-park-period-charge">
-                        	</div>
+                </div>
                         </div>
                         <div class="row" style="padding-top:25px">
 							 <div class="col-md-3">
@@ -134,16 +222,12 @@
                                </div>
 						</div>
 						<div class="row" >
-							<div id="chart-content-carport-charge" class="col-md-6">
-							
+							<div id="chart-content-carport-charge" class="col-md-6">							
 							</div>
-							<div id="chart-content-carport" class="col-md-6">
-							
+							<div id="chart-content-carport" class="col-md-6">							
 							</div>
                         </div>
-                        
-                        <div class="row" style="padding-top:25px">
-                        		
+                        <div class="row" style="padding-top:25px">                        		
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="carportMonth" class="control-label">选择月份</label>
@@ -159,13 +243,11 @@
                         	<div id = "carportChargeChart">
                         	</div>
                         </div>
-    				<div class="box-footer clearfix">
-      					
+    				<div class="box-footer clearfix">   					
       				</div>
 	            </div>
             </div>
         </div>
-
     </section>
 						
 </div>

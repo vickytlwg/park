@@ -110,7 +110,13 @@ public class ParkController {
 		ret.put("message", "get park success");
 		return Utility.gson.toJson(ret);
 	}
-	
+
+	@RequestMapping(value = "/getOutsideParkByStreetId/{streetId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getOutsideParkByStreetId(@PathVariable("streetId")int streetId){		
+		List<Park> parks=parkService.getOutsideParkByStreetId(streetId);
+		return Utility.createJsonMsg(1001, "get parks successfully", parks);
+	}
 	@RequestMapping(value = "/getParkByIds", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getParkByIds(@RequestBody Map<String, Object> args, ModelMap modelMap, HttpServletRequest request){

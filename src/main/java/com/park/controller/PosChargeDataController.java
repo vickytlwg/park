@@ -1,6 +1,9 @@
 package com.park.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Page;
 import com.park.model.Park;
@@ -64,7 +69,37 @@ public class PosChargeDataController {
 		return "feeDetail";		
 	}
 	
-	
+	@RequestMapping(value="/getByParkAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByParkAndRange(@RequestBody Map<String,Object> args){
+		int parkId=Integer.parseInt((String)args.get("parkId"));
+		String startDay=(String)args.get("startDay");
+		String endDay=(String)args.get("endDay");
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<PosChargeData> posChargeDatas=chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		if (posChargeDatas.isEmpty()) {
+			retMap.put("status", 1002);
+		}
+		else {
+			retMap.put("status", 1001);
+			retMap.put("message", "success");
+			retMap.put("body", posChargeDatas);
+		}		
+		return Utility.gson.toJson(retMap);
+	}
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String count(){
 		
@@ -80,15 +115,26 @@ public class PosChargeDataController {
 	}
 	
 	
-	@RequestMapping(value = "/get", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String get(){
+	@RequestMapping(value = "/get", method = {RequestMethod.GET,RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String get(@RequestParam(value="cardNumber",required=false)String cardNumber){
+		List<PosChargeData> charges =null;
+		if (cardNumber!=null) {
+			try {
+				charges=chargeSerivce.getDebt(cardNumber);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
+			}
+		}
+		else{
+			 charges = chargeSerivce.getUnCompleted();
+		}
 		
-		List<PosChargeData> charges = chargeSerivce.get();
 		return Utility.createJsonMsg(1001, "success", charges);
 	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String insert(@RequestBody PosChargeData charge){
+	public @ResponseBody String insert(@RequestBody PosChargeData charge) throws ParseException{
 		
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
@@ -96,8 +142,9 @@ public class PosChargeDataController {
 		if(park == null || park.getFeeCriterionId() == null){
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
-		
-		charge.setEntranceDate(new Date());
+		if (charge.getEntranceDate()==null) {
+			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		}		
 		int ret = chargeSerivce.insert(charge);
 		if(ret == 1)
 			return Utility.createJsonMsg(1001, "success");
@@ -115,17 +162,53 @@ public class PosChargeDataController {
 			return Utility.createJsonMsg(1002, "failed");
 	
 	}
-	
+	@RequestMapping(value = "/query", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String query(@RequestBody Map<String, Object> args) throws ParseException{
+		String cardNumber = (String) args.get("cardNumber");
+		String exitDate = (String) args.get("exitDate");
+		List<PosChargeData> queryCharges = null;
+		if (exitDate!=null) {
+			Date eDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			try {
+				queryCharges = chargeSerivce.queryDebt(cardNumber,eDate);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+			}
+		}
+		else {
+			try {
+				queryCharges = chargeSerivce.queryDebt(cardNumber,new Date());
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+			}
+		}			
+		return Utility.createJsonMsg(1001, "success", queryCharges);
+	}
 	
 	@RequestMapping(value = "/unpaid", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String getDebt(@RequestBody Map<String, Object> args){
+	public @ResponseBody String getDebt(@RequestBody Map<String, Object> args) throws ParseException{
 		String cardNumber = (String) args.get("cardNumber");
+		String exitDate = (String) args.get("exitDate");
+		
 		List<PosChargeData> unpaidCharges = null;
-		try {
-			unpaidCharges = chargeSerivce.getDebt(cardNumber);
-		} catch (Exception e) {
-			return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+		if (exitDate!=null) {
+			Date eDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			try {
+				unpaidCharges = chargeSerivce.getDebt(cardNumber,eDate);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+			}
 		}
+		else {
+			try {
+				unpaidCharges = chargeSerivce.getDebt(cardNumber);
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+			}
+		}
+	
 		
 		return Utility.createJsonMsg(1001, "success", unpaidCharges);
 	}
@@ -139,7 +222,7 @@ public class PosChargeDataController {
 		try {
 			payRet = chargeSerivce.pay(cardNumber, money);
 		} catch (Exception e) {
-			return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准" );
 		}
 		
 		return Utility.createJsonMsg(1001, "success", payRet);

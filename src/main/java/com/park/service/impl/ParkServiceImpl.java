@@ -269,6 +269,13 @@ public class ParkServiceImpl implements ParkService{
 	}
 
 
+	@Override
+	public List<Park> getOutsideParkByStreetId(int streetId) {
+		// TODO Auto-generated method stub
+		return parkDAO.getOutsideParkByStreetId(streetId);
+	}
+
+
 
 	
 

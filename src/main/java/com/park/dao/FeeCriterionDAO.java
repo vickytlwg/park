@@ -17,6 +17,6 @@ public interface FeeCriterionDAO {
 
 	public int delete(int id);
 
-	public FeeCriterion getById(Integer criterionId);
+	public FeeCriterion getById(Integer id);
 
 }

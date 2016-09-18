@@ -21,4 +21,5 @@ public interface  MonthUserService {
 	    int getCount();
 	    
 	    List<Monthuser> getByStartAndCount(int start,int count);
+	    	    
 }

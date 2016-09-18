@@ -26,6 +26,8 @@ public interface ParkDAO {
 	
 	public List<Park> getParkDetailByKeywords(@Param("param1")String keywords);
 	
+	public List<Park> getOutsideParkByStreetId(@Param("streetId")int streetId);
+	
 	public Park getLastPark();
 	
 	public int getParkCount();

@@ -90,27 +90,15 @@ chargeApp.controller("feeCriterionCtrl", ['$scope', '$http',  'textModal', '$mod
 chargeApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $timeout, index){
 	
 	var url = 'insert';
+	$scope.tempCriterion={};
 	if(index != undefined){
 		$scope.tempCriterion = $scope.$parent.criterion.items[index];
 		url = 'modify';
 	}
 	else{
-		/**
-		 * 		
-		 */
-		$scope.tempCriterion = {	
-				id:0,
-				name:"",
-				freeMins:0,
-				startExpense:0.00,
-				timeoutPrice:5.00,
-				timeoutPriceInterval:15,
-				maxExpense:100.00,
-				nightStartTime:"20:00",
-				nightEndTime: "08:00",
-				isOneTimeExpense:false,
-				oneTimeExpense: 5.00
-		};
+		$scope.tempCriterion.maxexpense=9999;
+		$scope.tempCriterion.nightstarttime='20:00';
+		$scope.tempCriterion.nightendtime='08:00';
 	}
 	
 	
@@ -120,21 +108,9 @@ chargeApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $tim
 	
 	
 	$scope.submit = function(){
-		$scope.loading = true;
-		var args = {
-				id:parseInt($scope.tempCriterion.id),
-				name:$scope.tempCriterion.name,
-				freeMins:parseInt($scope.tempCriterion.freeMins),
-				startExpense:parseFloat($scope.tempCriterion.startExpense),
-				timeoutPrice:parseFloat($scope.tempCriterion.timeoutPrice),
-				timeoutPriceInterval:parseInt($scope.tempCriterion.timeoutPriceInterval),
-				maxExpense:parseFloat($scope.tempCriterion.maxExpense),
-				nightStartTime:$scope.tempCriterion.nightStartTime,
-				nightEndTime: $scope.tempCriterion.nightEndTime,
-				isOneTimeExpense:$scope.tempCriterion.isOneTimeExpense == true ? 1 : 0,
-				oneTimeExpense: parseFloat($scope.tempCriterion.oneTimeExpense)
-		};
-		$http.post(url, args)
+		$scope.loading = true;	
+		delete $scope.tempCriterion['checked'];
+		$http.post(url, $scope.tempCriterion)
 		.success(function(response){	
 			$scope.loading = false;
 			$scope.submitted = true;

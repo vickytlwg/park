@@ -16,9 +16,11 @@
 		<result property="chargeMoney" column="chargeMoney"/>
 		<result property="paidMoney" column="paidMoney"/>
 		<result property="unPaidMoney" column="unPaidMoney"/>
+		<result property="givenMoney" column="givenMoney"/>
 		<result property="changeMoney" column="changeMoney"/>
 		<result property="isOneTimeExpense" column="isOneTimeExpense"/>
 		<result property="paidCompleted" column="paidCompleted"/>
+		<result property="isLargeCar" column="isLargeCar"/>
 		<result property="entranceDate" column="entranceDate"/>
 		<result property="exitDate" column="exitDate"/>
 	</resultMap> 
@@ -36,7 +38,7 @@
 	</select>
 	
 	<select id="getPage" resultMap="PosChargeDataMapper">
-		select * from posChargeData limit #{param1}, #{param2}
+		select * from posChargeData order by id desc limit #{param1}, #{param2}
 	</select>
 	
 	<select id="count" resultType="int">
@@ -50,20 +52,24 @@
  		
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
-		paidMoney, unPaidMoney, changeMoney, isOneTimeExpense, paidCompleted, entranceDate, exitDate)
+		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
-		 #{paidMoney}, #{unPaidMoney},#{changeMoney}, #{isOneTimeExpense},0,#{entranceDate}, #{exitDate})
+		 #{paidMoney}, #{unPaidMoney},#{givenMoney},#{changeMoney}, #{isOneTimeExpense},0,#{isLargeCar},#{entranceDate}, #{exitDate})
 	</insert>
 	
 	<update id="update" parameterType="PosChargeData">
 		update posChargeData set cardNumber=#{cardNumber}, parkId=#{parkId}, parkDesc=#{parkDesc}, portNumber = #{portNumber},isEntrance=#{isEntrance}, 
 		operatorId=#{operatorId},posId=#{posId},chargeMoney=#{chargeMoney},
-		paidMoney=#{paidMoney}, unPaidMoney=#{unPaidMoney}, changeMoney=#{changeMoney}, isOneTimeExpense=#{isOneTimeExpense},
-		paidCompleted=#{paidCompleted}, entranceDate=#{entranceDate}, exitDate=#{exitDate}
+		paidMoney=#{paidMoney}, unPaidMoney=#{unPaidMoney},givenMoney=#{givenMoney} ,changeMoney=#{changeMoney}, isOneTimeExpense=#{isOneTimeExpense},
+		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate}
 		where id=#{id}
 	</update>
 
-
+ <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
+  <![CDATA[
+  select * from posChargeData where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id
+  ]]>
+  </select>
 	<delete id="delete">
 		delete from PosChargeData
 		where id=#{param1}

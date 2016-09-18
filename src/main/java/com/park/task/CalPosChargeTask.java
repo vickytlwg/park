@@ -37,11 +37,11 @@ public class CalPosChargeTask {
 				criterion = criterionService.getById(criterionId);
 			if(criterion == null)
 				continue;
-			int nightStartHour = Integer.parseInt(criterion.getNightStartTime().split(":")[0]);
+			int nightStartHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
 			if(nightStartHour <= now.getHours()){
 				now.setHours(nightStartHour);
 				try {
-					chargeService.calExpense(charge, now);
+					chargeService.calExpense(charge, now,false);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

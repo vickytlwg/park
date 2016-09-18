@@ -340,9 +340,14 @@ public String selectPosdataByParkAndRange(@RequestBody Map<String,Object> args){
 		e.printStackTrace();
 	}	
 	List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(parkName, parsedStartDay, parsedEndDay);
-	retMap.put("status", 1001);
-	retMap.put("message", "success");
-	retMap.put("body", posdatas);
+	if (posdatas.isEmpty()) {
+		retMap.put("status", 1002);
+	}
+	else {
+		retMap.put("status", 1001);
+		retMap.put("message", "success");
+		retMap.put("body", posdatas);
+	}	
 	return Utility.gson.toJson(retMap);
 }
 @RequestMapping(value="/selectPosdataByParkAndCarportId",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
@@ -380,11 +385,11 @@ public String selectPosdataByParkAndCarportId(@RequestBody Map<String,Object> ar
 @ResponseBody
 public String getParkChargeByRange(@RequestBody Map<String, Object> args){
 	int parkId=Integer.parseInt((String)args.get("parkId"));
-	Park park = parkService.getParkById(parkId);
-	String parkName=park.getName();
+//	Park park = parkService.getParkById(parkId);
+//	String parkName=park.getName();
 	String startDay=(String)args.get("startDay");
 	String endDay=(String)args.get("endDay");
-	Map<String, Object> retMap = new HashMap<>();
+//	Map<String, Object> retMap = new HashMap<>();
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	Date parsedStartDay = null;
 	try {
@@ -410,16 +415,11 @@ public String getParkChargeByRange(@RequestBody Map<String, Object> args){
 	Map<Long, Object> comparemap=new TreeMap<>();
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     while (time <= endTime) {  
-        Date d = new Date(time);  
-          
+        Date d = new Date(time);            
         Map<String,Object> tmpmap=posdataService.getParkChargeByDay(parkId, df.format(d));
         comparemap.put(d.getTime(), tmpmap);
-    //    retMap.put(df.format(d), tmpmap);
         time += oneDay;  
-    }  
-    
-	//List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(parkName, parsedStartDay, parsedEndDay);
-	
+    }     	
 	return Utility.gson.toJson(comparemap);
 }
 @RequestMapping(value="/getCountsByCard",produces={"application/json;charset=utf-8"})

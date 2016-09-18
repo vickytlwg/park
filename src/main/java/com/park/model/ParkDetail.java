@@ -7,6 +7,8 @@ public class ParkDetail {
 	private String name;
 	private int portCount;
 	private int channelCount;
+	private int streetId=1;
+	private String streetName;	
 	private int portLeftCount;
 	private String feeCriterionName;
 	private Integer feeCriterionId;
@@ -41,7 +43,18 @@ public class ParkDetail {
 	public int getPortLeftCount() {
 		return portLeftCount;
 	}
-
+	public int getStreetId() {
+		return streetId;
+	}
+	public void setStreetId(int streetId) {
+		this.streetId = streetId;
+	}
+	public String getStreetName() {
+		return streetName;
+	}
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
 
 	public Integer getFeeCriterionId() {
 		return feeCriterionId;

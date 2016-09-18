@@ -14,6 +14,7 @@ import com.park.dao.PosdataDAO;
 import com.park.model.Park;
 import com.park.model.Posdata;
 import com.park.service.ParkService;
+import com.park.service.PosChargeDataService;
 import com.park.service.PosdataService;
 @Service
 public class PosdataServiceImpl implements PosdataService {
@@ -21,6 +22,7 @@ public class PosdataServiceImpl implements PosdataService {
 	private PosdataDAO posdataDAO;
 	@Autowired
 	private ParkService parkService;
+	@Autowired PosChargeDataService posChargeService;
 	@Override
 	public int insert(Posdata record) {
 		// TODO Auto-generated method stub
@@ -59,7 +61,7 @@ public class PosdataServiceImpl implements PosdataService {
 	
 	@Override
 	public Map<String, Object> getParkCharge(int parkId, Date startDay, Date endDay) {
-		List<Posdata> parkData = getParkData(parkId, startDay, endDay);
+	//	List<Posdata> parkData = getParkData(parkId, startDay, endDay);
 		return null;
 	}
 	@Override
@@ -86,6 +88,9 @@ public class PosdataServiceImpl implements PosdataService {
 		Park park = parkService.getParkById(parkId);
 		String parkName=park.getName();
 		List<Posdata> posdata=selectPosdataByParkAndRange(parkName,parsedStartDay,parsedEndDay);
+		if (posdata.isEmpty()) {
+			return posChargeService.getParkChargeByDay(parkId, day);
+		}
 		Map<String, Object> retmap=new HashMap<>();
 		float chargeTotal=0;
 		float realReceiveMoney=0;
@@ -125,6 +130,7 @@ public class PosdataServiceImpl implements PosdataService {
 		Park park = parkService.getParkById(parkId);
 		String parkName=park.getName();
 		List<Posdata> posdata=getPosdataByCarportAndRange(parkName,carportId,parsedStartDay,parsedEndDay);
+		
 		Map<String, Object> retmap=new HashMap<>();
 		float chargeTotal=0;
 		float realReceiveMoney=0;

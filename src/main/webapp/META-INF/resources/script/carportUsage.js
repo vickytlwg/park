@@ -3,27 +3,18 @@
 	$.fn.carportUsage.initial=function(){
 		dateInitialparkcharge();
 		dateInitial();
-		dateInitialparkcharge();
-		
+		dateInitialparkcharge();		
 		chartPark();		
-		//chartParkPeriodCharge();
 		getParkChargeData();
-//		chartCarportCharge();
-//		chartCarportUsage();	
-	//	chartCarportPeriodCharge();
 		getTotalCharge();
 		getcarportCount();
 		getCarport();
 		
 		getCarportChargeData();
-		
-	//	dateInitialparkcharge();
 		$('#date').on('change', $(this), function(){
 			getTotalCharge();
 			getCarportCharge();
 			chartPark();
-		//	calZhouzhuanlv();
-		//	getcarportCount();
 		});
 		$('#park-select').on('change', $(this), function(){
 			getTotalCharge(); 
@@ -32,7 +23,6 @@
 			getParkChargeData();
 			getCarportCharge();
 			chartPark();
-			//calZhouzhuanlv();
 		});
 		$('#parkMonth').on('change', $(this), function(){
 			getParkChargeData();
@@ -85,10 +75,13 @@
 		
 		});
 	};
+	//
 	var chartCarport=function(){
 		var title="停车位使用率";
 		var dateselect=$('#parkMonth').val();
         var parkid=$('#park-select').val();
+        $("#list00 span").text($('#park-select').find("option:selected").text());
+        $("#list01 span").text(parkid);
         var carportId= $('#carport-select').find("option:selected").attr("id");
         var dateStart=new Date(dateselect.substring(0,7)+'-01');
         var dateEnd=dateStart;
@@ -190,6 +183,7 @@
 				$.fn.carportUsage.realReceiveMoney=realReceiveMoney;
 				$('#totalMoney').text(realReceiveMoney);
 				$('#totalparkTimes').text(parkTimes);
+				$('#list13 span').text(parkTimes);
 				calZhouzhuanlv();
 			}
 		})
@@ -205,6 +199,7 @@
 			success: function(data){
 				data=data['body'];			
 				$('#carportCount').text(data['count']);
+				$('#list10 span').text(data['count']);
 				calZhouzhuanlv();
 			}
 		})
@@ -215,6 +210,7 @@
 		var totalparkTime=parseFloat($('#totalparkTimes').text());
 		var tmpresult=totalparkTime/corportCount;
 		$('#zhouzhuanlv').text(tmpresult.toFixed(2));
+		$('#list23 span').text(tmpresult.toFixed(2));
 		chartParkCharge();
 	}
 	var chartPark=function(){
@@ -286,6 +282,9 @@
             data: [{color:"#DDDF00",y:$.fn.carportUsage.chargeTotal},{color:"#3D11EE",y:$.fn.carportUsage.realReceiveMoney}]
         }]
 		var chartposition=$('#chart-content-park-charge');
+		
+		 $('#list30 span').text($.fn.carportUsage.chargeTotal);
+         $('#list31 span').text($.fn.carportUsage.realReceiveMoney);
 		renderchartcolumn(title,chartposition,data);
 	}	
 	//获取停车场的收费信息
@@ -356,6 +355,7 @@
                 })
                 var chartposition = $('#carportChargeChart');
                 var title="停车位费用";
+               
                 chartParkPeriodCharge(chartposition,catagory,totalMoney,realMoney,title);
             }
         });
@@ -531,7 +531,7 @@ var chartCarportCharge=function(){
 		        },
 		        series: data,
 		    });
-	}
+	};
 	var renderchartcolumn=function(title,chartposition,data){
 		chartposition.highcharts({
 	        chart: {
