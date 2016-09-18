@@ -22,6 +22,8 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> queryDebt (String cardNumber,Date exitDate) throws Exception;
 	
+	public List<PosChargeData> queryCurrentDebt (String cardNumber,Date exitDate) throws Exception;
+	
 	public int count();
 	
 	public int insert(PosChargeData item);

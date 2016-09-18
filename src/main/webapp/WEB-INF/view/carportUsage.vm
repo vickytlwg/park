@@ -1,5 +1,5 @@
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<link href="/park/css/xx_list.css" rel="stylesheet"/>
+<link href="/park/css/xx_list_admin.css" rel="stylesheet"/>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/jquery.shCircleLoader-min.js"></script>
 <script src="/park/script/jquery.json-2.4.min.js"></script>
@@ -15,7 +15,7 @@
             <small></small>
           </h1>        
     </section>
-
+<section class="content">
 	<div class="xx-list">
 		<ul class="float-fix">
 			<li id="list00">
@@ -109,7 +109,7 @@
 		</ul> 
 	</div>
 	
-    <section class="content">
+
        <div class="row">
             <div class="col-xs-12">
               	<div class="box">

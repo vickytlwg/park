@@ -2,6 +2,7 @@ package com.park.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -302,6 +303,21 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		retmap.put("totalMoney", chargeTotal);
 		retmap.put("realMoney", realReceiveMoney);
 		return retmap;
+	}
+
+	@Override
+	public List<PosChargeData> queryCurrentDebt(String cardNumber, Date exitDate) throws Exception {
+		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				tmPosChargeDatas.add(charge);				
+			}
+		}
+		for (PosChargeData tmpcharge:tmPosChargeDatas){
+			this.calExpense(tmpcharge, exitDate,true);
+		}
+		return tmPosChargeDatas;
 	}
 
 }

@@ -71,7 +71,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
              textModal.open($scope, "失败","操作失败");
         });
     };
-        $scope.selectChange=function(index){
+     $scope.selectChange=function(index){
         if($scope.poses[index].checked){
             $scope.checkedIndex = index;
             return;
@@ -236,12 +236,12 @@ posApp.factory("getPositionData",function($http,$q){
             });
             return promise;
        };
-       var getArea=function(zoneid){
-           var deferred=$q.defer();
-           var promise=deferred.promise;
+       var getArea=function(zoneid){          
            if (!zoneid) {
             return;
         }
+         var deferred=$q.defer();
+         var promise=deferred.promise;
             $http({
                 url:'/park/area/getByZoneCenterId/'+zoneid,
                 method:'get',

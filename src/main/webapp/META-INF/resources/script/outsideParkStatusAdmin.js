@@ -1,5 +1,5 @@
 angular.module("outsideParkStatusApp",['ui.bootstrap'])
-.controller("outsideParkStatusCtrl",function($scope,$http,getDataService){
+.controller("outsideParkStatusCtrl",function($scope,$http,$q,getDataService,getPositionData){
     var dateInitial=function(){
         $('.date').val(new Date().format('yyyy-MM-dd'));
         $('.date').datepicker({
@@ -14,11 +14,17 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
             viewStart: 0,
             weekStart: 1,
             yearSuffix: "年",
-            isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}
-        
+            isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}       
         });   
         $scope.date=$('#date').val();  
         };
+        
+    $scope.getZoneCenter=function(){
+      getPositionData.getZoneCenter().then(function(result){
+      $scope.zoneCenters=result;
+    });
+    };
+   $scope.getZoneCenter();
     $scope.selectParks=[];
     var getSelectData=function(){
         var options=$('#park-select').get(0).options;
@@ -26,8 +32,58 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
           var item={value:$(options[i]).val(),name:$(options[i]).text()};
           $scope.selectParks.push(item);
         };
+        $scope.parks=$scope.selectParks;
     };
-    getSelectData();
+  getSelectData();
+  $scope.getArea=function(){
+       getPositionData.getArea($scope.zoneCenterId).then(
+           function(result){
+               $scope.areas=result;
+            //   $scope.zoneCenterId=$scope.areas.zoneid;               
+           }
+       );
+    };
+  var getpark=function(parkid){
+      var deferred=$q.defer();
+      $http({
+          url:'/park/getPark/'+parkid
+      }).success(function(result){
+          deferred.resolve(result.body);
+      });
+      return deferred.promise;
+  };  
+   $scope.getStreets=function(){     
+      getPositionData.getStreetByAreaId($scope.areaId).then(
+         function(result){
+             $scope.streets=result;
+         } 
+      );
+    };
+  var getAreaById=function(areaid){
+      getPositionData.getAreaById(areaid).then(
+          function(result){
+              var selectedArea=result;
+              $scope.zoneCenterId=selectedArea.zoneid;
+              $scope.getArea();
+          }
+      );
+  };
+  var parkToZoneCenter=function(){
+     $scope.parkid=$scope.selectParks[0].value;
+     if($scope.parkid==undefined){
+         return;
+     }
+     getpark($scope.parkid).then(function(result){
+         getPositionData.getStreetById(result.streetid).then(
+             function(result){
+                  $scope.areaId=result.areaid;
+                  getAreaById($scope.areaId);
+                  $scope.getStreets(); 
+             }
+         );
+     });
+  };
+   parkToZoneCenter();    
     var dateInitialparkcharge=function(){
         $('#parkMonth').val(new Date().format('yyyy-MM'));
         $('#parkMonth').datepicker({
@@ -46,6 +102,12 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
    dateInitialparkcharge();
    $scope.parkid=$('#park-select').val();
    dateInitial(); 
+   
+   $scope.getParks=function(streetId){
+       getPositionData.getOutsideParkByStreetId(streetId).then(function(result){
+            $scope.parks=result;
+        });
+    };  
    
    //作图
    var renderChart=function(category,seriesData){
@@ -88,6 +150,14 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
        };
        myChart.setOption(option);
    }; 
+   $scope.parkSelected=function(park){
+       angular.forEach($scope.selectParks,function(park){
+           park.selected=false;
+       });
+       $scope.parkid=park.value;   
+       $scope.selectPosdataByParkAndRange();       
+       park.selected=true;
+   };
    var chartData=function(){
        var series1={
             name:'应收费用',
@@ -108,10 +178,10 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
         var dateEnd=dateStart;
             dateEnd.setMonth(dateStart.getMonth()+2);
        
-       $scope.catagory=[];
-       $scope.totalMoney=[];
-       $scope.realMoney=[];
-       getDataService.getParkChargeByRange($scope.parkid,dateselect.substring(0,7)+'-01',dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01').then(function(result){
+        $scope.catagory=[];
+        $scope.totalMoney=[];
+        $scope.realMoney=[];
+        getDataService.getParkChargeByRange($scope.parkid,dateselect.substring(0,7)+'-01',dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01').then(function(result){
            $.each(result,function(name,value){
                     var date=new Date(parseInt(name));
                     var month=date.getMonth()+1;
@@ -121,10 +191,9 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
                     $scope.realMoney.push(value['realMoney']);
                 });
               chartData();    
-       }); 
-           
-   }; 
-    
+       });           
+   };    
+   
    //获取posdata 并处理
    $scope.selectPosdataByParkAndRange=function(){
        $scope.getParkById();
@@ -250,4 +319,96 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
         getParkById:getParkById,
         getPosChargeDataByParkAndRange:getPosChargeDataByParkAndRange
     };
+})
+.factory("getPositionData",function($http,$q){
+      var getZoneCenter=function(){
+            var deferred=$q.defer();
+            var promise=deferred.promise;
+            $http({
+                url:"/park/zoneCenter/getByStartAndCount",
+                method:'post',
+                params:{start:0,count:100}
+            }).success(function(response){   
+                    deferred.resolve(response.body);           
+            });
+            return promise;
+        };
+       var getAreaById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;
+           if (!areaid) {
+            return;
+            }
+            $http({
+                url:'/park/area/selectByPrimaryKey/'+areaid,
+                method:'get'
+            }).success(function(response){
+                if(response.status==1001){
+                    deferred.resolve(response.body); 
+                }
+            });
+            return promise;
+       };
+       var getArea=function(zoneid){          
+           if (!zoneid) {
+            return;
+        }
+         var deferred=$q.defer();
+         var promise=deferred.promise;
+            $http({
+                url:'/park/area/getByZoneCenterId/'+zoneid,
+                method:'get',
+            }).success(function(response){
+                if(response.status==1001){
+                     deferred.resolve(response.body);  
+                }
+            });
+            return promise;
+        };
+        var getStreetById=function(areaid){
+           var deferred=$q.defer();
+           var promise=deferred.promise;           
+             $http({
+                 url:"/park/street/getByAreaid/"+areaid,
+                 method:'get'
+             }).success(function(response){
+                 if(response.status==1001){
+                    deferred.resolve(response.body); 
+                 }
+             });
+             return promise;
+         }; 
+         var getOutsideParkByStreetId=function(streetId){
+           var deferred=$q.defer();
+           var promise=deferred.promise;           
+             $http({
+                 url:"/park/getOutsideParkByStreetId/"+streetId,
+                 method:'get'
+             }).success(function(response){
+                 if(response.status==1001){
+                    deferred.resolve(response.body); 
+                 }
+             });
+             return promise;
+         };
+         var getStreetById=function(streetId){
+           var deferred=$q.defer();
+           var promise=deferred.promise; 
+            $http({
+            url:"/park/street/selectByPrimaryKey/"+streetId,
+            method:'get'
+            }).success(function(response){
+                promise.resolve(response.body);
+            });
+            return promise;
+         };
+         return {
+             getZoneCenter:getZoneCenter,
+             getArea:getArea,            
+             getStreetByAreaId:getStreetById,
+             getAreaById:getAreaById,
+             getOutsideParkByStreetId:getOutsideParkByStreetId,
+             getStreetById:getStreetById
+         };
+          
 });

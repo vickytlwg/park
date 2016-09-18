@@ -1,38 +1,41 @@
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<link href="/park/css/xx_list.css" rel="stylesheet"/>
-<link href="/park/css/xx_pname.css" rel="stylesheet"/>
+<link href="/park/css/xx_list_admin.css" rel="stylesheet"/>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/datepicker.js"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script src="/park/script/outsideParkStatus.js"></script>
-
+<script src="/park/script/outsideParkStatusAdmin.js"></script>
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>
-			停车场停车状况示意图
+			停车位利用率示意图
             <small></small>
           </h1>        
     </section>
+	
 <section class="content">
-	  <div class="row xx-park-info" >                          
-        <div class="col-xs-3 float-fix">
-            <div class="xx-park-ch">
-                <label for="park-select" class="control-label xx-park-head">选择停车场</label>
-                <div class="xx-park-name">
-                    <ul>
-                        <li ng-class="{true:'xx-park-firstli'}[park.selected]" ng-repeat="park in selectParks" ng-click="parkSelected(park)">
-                            <p>{{park.name}}</p>
-                        </li>                     
-                    </ul>
-                </div>
-            </div>
-        </div>
-	<div class="col-xs-9 float-fix">
-			<div class="xx-list">
+	<div class="row">
+	<div class="col-md-3">
+	<label class="control-label" >所属区中心</label>
+	<select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getArea()"></select>
+	</div>
+	<div class="col-md-3">
+	<label class="control-label" >所属区域</label>
+	<select class="form-control" ng-options="area.id as area.name for area in areas" ng-change="getStreets()" ng-model="areaId"></select>  
+	</div>
+	<div class="col-md-3">
+	<label class="control-label" >所属路段</label>
+	<select class="form-control" ng-options="street.id as street.name for street in streets" ng-model="streetid" ng-change="getParks(streetid)"></select>
+	</div>
+	<div class="col-md-3">
+	<label class="control-label" >所属停车场</label>
+	<select class="form-control" ng-options="park.id as park.name for park in parks" ng-model="parkid"></select>
+	</div>
+	</div>
+	<div class="xx-list">
 		<ul class="float-fix">
-			<li>
+				<li>
 				<p>停车场名：</p>
-				<span>{{selectedParkName|limitTo:7}}{{selectedParkName.length>7?'...':''}}</span>
+				<span>{{selectedParkName|limitTo:9}}{{selectedParkName.length>9?'...':''}}</span>
 			</li>
 			<li>
 				<p>停车场编号：</p>
@@ -48,7 +51,7 @@
 			</li>
 		</ul> 
 		<ul class="float-fix">
-			<li>
+		<li>
 				<p>在线泊位数（个）：</p>
 				<span ng-bind="carportsCount"></span>
 			</li>
@@ -84,7 +87,7 @@
 			</li>
 		</ul> 
 		<ul class="float-fix">
-			<li id="list30">
+				<li id="list30">
 				<p>应收金额（元）：</p>
 				<span ng-bind="dayChargeTotal"></span>
 			</li>
@@ -111,7 +114,7 @@
 				<span></span>
 			</li>
 			<li id="list42">
-				<p>专卡刷卡金额：</p>
+				<p>停车专卡刷卡金额（元）：</p>
 				<span></span>
 			</li>
 			<li id="list43">
@@ -120,11 +123,8 @@
 			</li>
 		</ul> 
 	</div>
-        </div>
-	</div>	
 	
 	
-   
        <div class="row">
             <div class="col-xs-12">
               	<div class="box">
