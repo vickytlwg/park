@@ -6,10 +6,8 @@
           <h1>
            路边停车场管理
             <small></small>
-          </h1>
-       
+          </h1>       
     </section>
-
     <section class="content">
        <div class="row">
             <div class="col-xs-12">
@@ -22,12 +20,9 @@
 	                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
 	                		<button #if(!$isAdmin) disabled#end id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
 	                		<button #if(!$isAdmin) disabled#end id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-	                		<button #if(!$isAdmin) disabled#end id='deletePark' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
-	                		<button #if(!$isAdmin) disabled#end id='uploadPic' type="button" class="btn  btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>  	                		           			                		                	
-	                	 
+	                		<button #if(!$isAdmin) disabled#end id='deletePark' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+	                		<button #if(!$isAdmin) disabled#end id='uploadPic' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>  	                		           			                		                		                	 
 						</div>
-						
-	                	
 						<div class="pull-right" style="width:300px">
 	                	<div class="input-group">	
 						<div class="row">
@@ -52,8 +47,7 @@
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">
-					          
+							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">                            
 					            <tr>					            
 					             <th><span style=""><input type="checkbox" /></div></th>
 										<th ><span style="padding-left:15%">Id</div></th>		
@@ -205,12 +199,31 @@
 							</select>
 						</div>
 					</div>
+					<div class='form-group'>
+						<div class='col-sm-offset-2 col-sm-8'>
+					    <label >
+						<input type="checkbox" id="isPositionChange" ng-model="isPositionChange"/> 更改隶属位置信息
+						</label>
+                    </div>
+					</div>
 					<div class='form-group' >
-						<label class='col-sm-2 control-label'>隶属</label>
-						<div class='col-sm-8' >
-							<select id="zoneCenter" class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getAreas()" ></select>&nbsp;
-							<select id="area" class="form-control" ng-options="area.id as area.name for area in areas" ng-model="areaId" ng-change="getStreets()"></select>&nbsp;
-							<select id="street" class="form-control" ng-options="street.id as street.name for street in streets" ng-model="streetid" "></select>&nbsp;
+						<label class='col-sm-2 control-label'>区中心</label>
+						<div class='col-sm-8' >					
+							<select id="zoneCenterId" class="form-control" ng-disabled="!isPositionChange" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getAreas()" ></select>						
+						</div>
+					</div>
+					<div class='form-group' >
+						<label class='col-sm-2 control-label'>经营区域</label>
+						<div class='col-sm-8' >												
+							<select id="areaId" class="form-control" ng-disabled="!isPositionChange" ng-options="area.id as area.name for area in areas" ng-model="areaId" ng-change="getStreets()"></select>							
+						</div>
+					</div>
+					<span style="display:none" id="tmpStreetId">
+                    </span>
+					<div class='form-group' >
+						<label class='col-sm-2 control-label'>所属街道</label>
+						<div class='col-sm-8' >												
+							<select id="streetid" class="form-control" ng-disabled="!isPositionChange" ng-options="street.id as street.name for street in streets" ng-model="streetid" ng-change="streetIdChange()"></select>
 						</div>
 					</div>
 					<div class='form-group'>

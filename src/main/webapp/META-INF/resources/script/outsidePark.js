@@ -1,7 +1,5 @@
-(function($){
-	
-	$.fn.park = {};
-	
+(function($){	
+	$.fn.park = {};	
 	$.fn.park.initial = function(){
 		bindTrClick();
 		bindRefreshClick();
@@ -17,9 +15,7 @@
 		bindUploadPicBtn();
 		bindSubmitPicBtn();
 		bindSearchPark();
-		initFeeCriterionSelect();
-		
-		
+		initFeeCriterionSelect();				
 	};
 	
 	var bindSearchPark = function(){
@@ -77,7 +73,6 @@
 			var tds = checkedTr.find('td');
 			var parkId = parseInt($(tds[1]).text());
 			$("#parkId").val(parkId);
-			//form.attr("action", form.attr("action") + parkId);
 			form[0].submit();
 		});		
 		
@@ -115,9 +110,7 @@
 	var addBtnClickHandle = function(){
 		$('#addParkForm')[0].reset();
 		$('input#parkName').removeAttr('parkId');
-		$('#addParkResult').html('');
-		
-		
+		$('#addParkResult').html('');		
 		initFeeCriterionSelect();
 		
 		$.ajax({
@@ -133,8 +126,7 @@
 	};
 	
 	
-	var bindSearchBtnClick=function(){
-			
+	var bindSearchBtnClick=function(){			
 		$('#searchParkl').on('click', $(this), function(){
 			$('#searchParkByLocation').modal('show');
 		});
@@ -148,7 +140,6 @@
 	};
 	
 	var searchParkByLocation=function(){
-	//	alert('searchParkByLocation');	
 		$('#submitSearchParkBtn').on('click', $(this), function(){
 			var locationKey={'keywords': $('input#locationKeyWords').val()};
 			var url= $.fn.config.webroot + '/search/parkBykeywords';
@@ -181,8 +172,7 @@
 	
 	
 	var initFeeCriterionSelect = function(selectedId){
-		url = $.fn.config.webroot + '/fee/criterion/get';
-	
+		url = $.fn.config.webroot + '/fee/criterion/get';	
 		$.ajax({
 			url:url,
 			type: 'get',
@@ -208,21 +198,18 @@
 	};
 	
 	
-	var assignAddParkForm = function(checkedTr){
-		
+	var assignAddParkForm = function(checkedTr){		
 		var tds = checkedTr.find('td');
 		$('input#parkName').attr('parkId', parseInt($(tds[1]).text()));
 		$('input#parkName').val($(tds[2]).text());	
 		$('input#street').val($(tds[3]).text());	
 		$('input#channelCount').val($(tds[4]).text());
 		$('input#portCount').val($(tds[5]).text());
-		$('input#leftPortCount').val($(tds[6]).text());
-		
+		$('input#leftPortCount').val($(tds[6]).text());		
 		if($('select#feeCriterion option').length == 0)
 			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'));
 		else
-			$('select#feeCriterion').val($(checkedTr).attr('feeCriterionId'));
-		
+		$('select#feeCriterion').val($(checkedTr).attr('feeCriterionId'));		
 		//$('input#chargeNight').val($(tds[7]).text());	
 		$('select#parkStatus').val($(tds[8]).attr('data'));
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
@@ -232,12 +219,14 @@
 //		positionInput.val($(tds[12]).text());
 		$('input#longitude').val($(tds[13]).attr('longitude'));
 		$('input#latitude').val($(tds[13]).attr('latitude'));
-		$('input#mapAddr').val(checkedTr.attr('mapAddr'));			
-		
+		$('input#mapAddr').val(checkedTr.attr('mapAddr'));		
+		$('#tmpStreetId').text($(tds[15]).text());
+//		$('select#streetid').val('number:'+$(tds[15]).text());
 		$('input#number').val(checkedTr.attr('number'));
 		$('input#contact').val(checkedTr.attr('contact'));
 	};
 	
+
 	/**bind submit button of adding and updating park */
 	var bindSubmitParkBtnClick = function(){
 		
@@ -286,8 +275,12 @@
 		}
 			
 		parkFields['name'] = $('input#parkName').val();
-	    if($('select#street').val()){
-	        parkFields['streetId'] = $('select#street').val().split(':')[1];
+		console.log($('select#streetid').val());
+	    if($('select#streetid').val()){
+	        parkFields['streetId'] = $('select#streetid').val().split(':')[1];
+	    }
+	    else{
+	        parkFields['streetId']=$("#tmpStreetId").text();
 	    }
 		
 		parkFields['channelCount'] = parseInt($('input#channelCount').val());
@@ -296,17 +289,17 @@
 		
 		var feeCriterionId = parseInt($('select#feeCriterion').val());
 		if(feeCriterionId >= 0 )
-			parkFields['feeCriterionId'] = feeCriterionId;
-
-		parkFields['feeCriterionId'] = $('select#feeCriterion').val();
-		
+		parkFields['feeCriterionId'] = feeCriterionId;
+		parkFields['feeCriterionId'] = $('select#feeCriterion').val();		
 		parkFields['contact'] = $('input#contact').val();
 		parkFields['number'] = $('input#number').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
 		parkFields['type'] = parseInt($('select#parkType').val());
-		parkFields['position'] = $('#zoneCenter').find("option:selected").text()+'-'+$("#area").find("option:selected").text()+'-'+$("#street").find("option:selected").text();
+		if($('#isPositionChange').get(0).checked){
+		    parkFields['position'] = $('#zoneCenterId').find("option:selected").text()+'-'+$("#areaId").find("option:selected").text()+'-'+$("#streetid").find("option:selected").text();
+		}		
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['mapAddr'] = $('input#mapAddr').val();
@@ -444,7 +437,7 @@
 				tr.append('<td><a href="#" ref="' + picUri + '"> 显示图片</a></td>');
 			else
 				tr.append('<td>暂无图片</td>');
-			
+			tr.append("<td style='display:none'>"+data[i]['streetId']+"</td>");
 			tr.find('a').on('click', $(this), function(){
 				var modal = new $.Modal('showPic', "停车场图片", '<center><img width=300 height=300 src="' + $(this).attr("ref") + '"></img></center>');
 				$('#showPicture').html(modal.get());

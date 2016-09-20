@@ -68,22 +68,34 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public int update(PosChargeData item) {
 		return chargeDao.update(item);
 	}
-
+	public List<PosChargeData> getCharges(String cardNumber) throws Exception {
+		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		
+		for (PosChargeData tmpcharge:charges){
+			if (tmpcharge.getExitDate() == null) {
+			this.calExpense(tmpcharge, new Date(),false);}
+		}
+		return charges;
+	}
 	@Override
 	public List<PosChargeData> getDebt(String cardNumber) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				this.calExpense(charge, new Date(),false);
+				tmPosChargeDatas.add(charge);				
 			}
 		}
-		return charges;
+		for (PosChargeData tmpcharge:tmPosChargeDatas){
+			this.calExpense(tmpcharge, new Date(),false);
+		}
+		return tmPosChargeDatas;
 	}
 
 	@Override
 	public List<PosChargeData> pay(String cardNumber, double money) throws Exception {
 		double theMoney=money;
-		List<PosChargeData> charges = this.getDebt(cardNumber);
+		List<PosChargeData> charges = this.getCharges(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (money >= charge.getUnPaidMoney()) {
 				money -= charge.getUnPaidMoney();
@@ -116,12 +128,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getDebt(String cardNumber, Date exitDate) throws Exception {
 		// TODO Auto-generated method stub
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				this.calExpense(charge, exitDate,false);
+				tmPosChargeDatas.add(charge);				
 			}
 		}
-		return charges;
+		for (PosChargeData tmpcharge:tmPosChargeDatas){
+			this.calExpense(tmpcharge, exitDate,false);
+		}
+		return tmPosChargeDatas;
 	}
 
 	@Override

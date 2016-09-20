@@ -48,9 +48,11 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
     var filtPark=function(orignParks){
         var parks=[];
         for (var i=0; i < orignParks.length; i++) {
-          if($.inArray(orignParks[i],selectParks)>-1){
-              parks.push(orignParks[i]);
-          }
+         for (var j=0; j < selectParks.length; j++) {
+           if(selectParks[j].value==orignParks[i].id){
+              parks.push(selectParks[j]); 
+           }          
+         };
         };
         return parks;
     };
@@ -65,6 +67,9 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         return deferred.promise;
     };
     $scope.getStreets = function() {
+         if($scope.areaId==undefined||$scope.areaId==null){
+            return;
+        }
         getPositionData.getStreetByAreaId($scope.areaId).then(function(result) {
             $scope.streets = result;
         });
@@ -112,6 +117,9 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
     dateInitial();
 
     $scope.getParks = function(streetId) {
+        if (streetId==undefined||streetId==null) {
+            return;
+        };
         getPositionData.getOutsideParkByStreetId(streetId).then(function(result) {
             $scope.parks = filtPark(result);
         });
@@ -381,6 +389,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         return promise;
     };
     var getStreetByAreaId = function(areaid) {
+       
         var deferred = $q.defer();
         var promise = deferred.promise;
         $http({

@@ -1,5 +1,7 @@
 package com.park.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Zonecenter {
@@ -61,8 +63,8 @@ public class Zonecenter {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(String date) throws ParseException {
+        this.date = new SimpleDateFormat(Constants.DATEFORMAT).parse(date);
     }
 
     public String getOther() {

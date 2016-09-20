@@ -25,6 +25,7 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
         for (var i=0; i < options.length; i++) {
           var item={value:$(options[i]).val(),name:$(options[i]).text()};
           $scope.selectParks.push(item);
+          $scope.selectParks[0].selected=true;
         };
     };
     getSelectData();
@@ -88,6 +89,14 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
        };
        myChart.setOption(option);
    }; 
+   $scope.parkSelected=function(park){
+      angular.forEach($scope.selectParks,function(park){
+           park.selected=false;
+       });
+       $scope.parkid=park.value;   
+       $scope.selectPosdataByParkAndRange();       
+       park.selected=true;
+  };
    var chartData=function(){
        var series1={
             name:'应收费用',
@@ -193,8 +202,7 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
    
    
 })
-.service("getDataService",function($http,$q){
-    
+.service("getDataService",function($http,$q){    
     var getParkChargeByRange=function(parkId,startDay,endDay){
         var deferred=$q.defer();
         var promise=deferred.promise;
@@ -206,8 +214,7 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
             deferred.resolve(response);
         });
         return promise;
-    };
-    
+    };    
     var selectPosdataByParkAndRange=function(parkId,startDay,endDay){
         var deferred=$q.defer();
         var promise=deferred.promise;
