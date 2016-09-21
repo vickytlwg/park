@@ -21,8 +21,7 @@
 	                <div class="box-body">  
 		                	<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end ng-click="detail.refresh()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>		                		
-		                	</div>
-                	
+		                	</div>              	
 	                	<br/>   
 	                    <br/> 
 						<div>

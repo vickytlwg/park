@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.park.model.AccessDetail;
 import com.park.model.DataUsageCardDetail;
+import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 @Service
 public class ExcelExportService {
@@ -233,12 +234,111 @@ public class ExcelExportService {
 			String date="";
 			if (posdata.getEndtime()!=null) {	
 				date=sdf.format(posdata.getEndtime());
-			}
-			
+			}	
 			cell13.setCellValue(date);
 
 		}
 	}
+	public void produceExceldataPosChargeData(String title, String[] headers, List<PosChargeData> dataset,
+			HSSFWorkbook workbook) {
+		// 生成一个表格
+				HSSFSheet sheet = workbook.createSheet(title);
+				// 设置表格默认列宽度为25个字节
+				sheet.setDefaultColumnWidth(25);
+				// 生成一个样式
+				HSSFCellStyle style = workbook.createCellStyle();
+				// 设置这些样式
+				style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				// 生成一个字体
+				HSSFFont font = workbook.createFont();
+				font.setColor(HSSFColor.VIOLET.index);
+				font.setFontHeightInPoints((short) 12);
+				font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				// 把字体应用到当前的样式
+				style.setFont(font);
+
+				HSSFCellStyle style2 = workbook.createCellStyle();
+				style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+				style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+				// 生成另一个字体
+				HSSFFont font2 = workbook.createFont();
+				font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+				// 把字体应用到当前的样式
+				style2.setFont(font2);
+				
+				// 产生表格标题行
+				HSSFRow row = sheet.createRow(0);
+				for (int i = 0; i < headers.length; i++) {
+					HSSFCell cell = row.createCell(i);
+					cell.setCellStyle(style);
+					HSSFRichTextString text = new HSSFRichTextString(headers[i]);
+					cell.setCellValue(text);
+				}
+				for(int j=0;j<dataset.size();j++){
+					HSSFRow row1 = sheet.createRow(j+1);
+					PosChargeData posdata=dataset.get(j);
+					
+					HSSFCell cell1 = row1.createCell(0);				
+					cell1.setCellStyle(style2);
+					cell1.setCellValue(posdata.getCardNumber());
+					
+					HSSFCell cell2 = row1.createCell(1);				
+					cell2.setCellStyle(style2);
+					cell2.setCellValue(posdata.getParkDesc());
+				
+					HSSFCell cell3 = row1.createCell(2);				
+					cell3.setCellStyle(style2);
+					cell3.setCellValue(posdata.getPortNumber());
+					
+					HSSFCell cell4 = row1.createCell(3);				
+					cell4.setCellStyle(style2);
+					cell4.setCellValue(posdata.getOperatorId());
+				
+					HSSFCell cell5 = row1.createCell(4);				
+					cell5.setCellStyle(style2);
+					cell5.setCellValue(posdata.isPaidCompleted()==false?"未收费":"已收费");
+					
+					HSSFCell cell6 = row1.createCell(5);				
+					cell6.setCellStyle(style2);
+					cell6.setCellValue(posdata.getPaidMoney());
+				
+					HSSFCell cell7 = row1.createCell(6);				
+					cell7.setCellStyle(style2);
+					cell7.setCellValue(posdata.getChargeMoney());
+					
+					HSSFCell cell8 = row1.createCell(7);				
+					cell8.setCellStyle(style2);
+					cell8.setCellValue(posdata.getGivenMoney());
+				
+					HSSFCell cell9 = row1.createCell(8);				
+					cell9.setCellStyle(style2);
+					cell9.setCellValue(posdata.getChangeMoney());
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					HSSFCell cell10 = row1.createCell(9);				
+					cell10.setCellStyle(style2);
+					cell10.setCellValue(sdf.format(posdata.getEntranceDate()));
+				
+					HSSFCell cell11 = row1.createCell(10);				
+					cell11.setCellStyle(style2);
+					cell11.setCellValue(sdf.format(posdata.getEntranceDate()));
+					
+				}
+				
+	}
+	
 	public void produceExceldataAccessDetail(String title, String[] headers, List<AccessDetail> dataset,
 			XSSFWorkbook workbook) {
 		// 生成一个表格

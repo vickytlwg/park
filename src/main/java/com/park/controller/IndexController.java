@@ -4,6 +4,7 @@ package com.park.controller;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,20 +49,10 @@ public class IndexController {
 					modelMap.addAttribute(page.getPageKey(), true);
 				}
 			}
-			return "redirect:platformShow";
+			return "platformShow";
 		}
 	}
 	
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String accessIndex2(){
-		
-		return "login";
-	}
-	@RequestMapping(value = ".", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String accessIndex3(){
-		
-		return "login";
-	}
 	@RequestMapping(value = "authority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public String authority(ModelMap modelMap, @RequestParam("username") String username,@RequestParam("password") String password,HttpSession session,HttpServletRequest request){
 		if(authService.checkUserAccess(username, password)){
@@ -70,26 +61,29 @@ public class IndexController {
 			AuthUser user = authService.getUserByUsername(username);			
 			if(user != null){
 				session.setAttribute("userId", user.getId());
-				modelMap.addAttribute("user", user);
+	//			modelMap.addAttribute("user", user);
 				boolean isAdmin = false;
 				if(user.getRole() == AuthUserRole.ADMIN.getValue())
 					isAdmin=true;
-				modelMap.addAttribute("isAdmin", isAdmin);
+	//			modelMap.addAttribute("isAdmin", isAdmin);
 				
 				Set<Page> pages = pageService.getUserPage(user.getId()); 
 				for(Page page : pages){
-					modelMap.addAttribute(page.getPageKey(), true);
+	//				modelMap.addAttribute(page.getPageKey(), true);
 				}
+			}
+			String redirectUrl=(String) session.getAttribute("redirectUrl");
+			if (!redirectUrl.contains("login")&&redirectUrl.length()>3) {
+				redirectUrl=redirectUrl.substring(5);
+				return "redirect:"+redirectUrl;
 			}
 			return "redirect:platformShow";
 		}else{
 			return "redirect:login";
-		}
-		
+		}	
 	}
 	@RequestMapping(value = "login")
-	public String login(){
-		
+	public String login(HttpServletRequest request, HttpServletResponse response){
 		return "login";
 	}
 	
@@ -192,8 +186,7 @@ public class IndexController {
 			boolean isAdmin = false;
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
-			modelMap.addAttribute("isAdmin", isAdmin);
-			
+			modelMap.addAttribute("isAdmin", isAdmin);			
 			Set<Page> pages = pageService.getUserPage(user.getId()); 
 			for(Page page : pages){
 				modelMap.addAttribute(page.getPageKey(), true);
@@ -201,8 +194,5 @@ public class IndexController {
 		}
 		return "platformShow";
 	}
-	@RequestMapping("/maptest")
-	public String maptest(){
-		return "maptest";
-	}
+	
 }

@@ -218,14 +218,13 @@ public String getPosdataCountByPark(@PathVariable("parkId")Integer parkId){
 @RequestMapping("/getExcel")
 @ResponseBody
 public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
-	List<Posdata> posdatas=posdataService.selectPosdataByPage(0,500);
+	List<Posdata> posdatas=posdataService.selectPosdataByPage(0,2000);
 	String docsPath = request.getSession().getServletContext().getRealPath("/");
 	final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 	String[] headers={"车牌","停车场名","车位号","出入场","操作员id","终端机号","应收费","押金","补交","返还","进场时间","离场时间"};
 	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xls");
 	HSSFWorkbook workbook = new HSSFWorkbook();
 	excelService.produceExceldataPosData("收费明细", headers, posdatas, workbook);
-	
 	try {
 		workbook.write(out);
 	} catch (IOException e) {

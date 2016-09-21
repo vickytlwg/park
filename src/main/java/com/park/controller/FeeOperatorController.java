@@ -136,8 +136,9 @@ public class FeeOperatorController {
 				Feeoperator operator=feeoperators.get(0);				
 				Pos tmpPos=pos.get(0);				
 				Park park=parkService.getParkById(tmpPos.getParkid());
-				Integer streetId=park.getStreetId();
-				operator.setLaststreetid(streetId);				
+				Integer streetId=park.getStreetId();				
+				operator.setLaststreetid(streetId);	
+				operator.setLastparkid(tmpPos.getParkid());
 				operator.setSignstatus(false);
 				operator.setLastposnum(tmpPos.getNum());
 				feeOperatorService.updateByPrimaryKeySelective(operator);		

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,8 +55,11 @@ public class loginInterceptor implements HandlerInterceptor{
 		Object username = session.getAttribute("username");
 		if(username != null)
 			return true;
-		else			
-			request.getRequestDispatcher("/login").forward(request, response);		
+		else{
+			session.setAttribute("redirectUrl", url);
+			request.getRequestDispatcher("/login").forward(request, response);
+		}			
+					
 		return false;
 		
 	//	return true;

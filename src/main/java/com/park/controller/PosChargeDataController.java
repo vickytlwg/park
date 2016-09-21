@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,8 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,7 +34,9 @@ import com.park.model.FeeCriterion;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
+import com.park.model.Posdata;
 import com.park.service.AuthorityService;
+import com.park.service.ExcelExportService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.UserPagePermissionService;
@@ -39,8 +47,7 @@ import com.park.service.Utility;
 public class PosChargeDataController {
 	
 	@Autowired
-	ParkService parkService;
-	
+	ParkService parkService;	
 	@Autowired
 	private AuthorityService authService;
 	
@@ -49,6 +56,9 @@ public class PosChargeDataController {
 	
 	@Autowired
 	private UserPagePermissionService pageService;
+	
+	@Autowired
+	private ExcelExportService excelService;
 	
 	@RequestMapping(value = "/detail", produces = {"application/json;charset=UTF-8"})
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
@@ -251,6 +261,22 @@ public class PosChargeDataController {
 		
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
-	
+	@RequestMapping("/getExcel")
+	@ResponseBody
+	public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+		List<PosChargeData> posdatas=chargeSerivce.getPage(0, 2000);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xls");
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xls", response);
+	}
 
 }

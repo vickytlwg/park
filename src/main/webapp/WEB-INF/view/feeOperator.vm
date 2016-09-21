@@ -36,8 +36,7 @@
 										<th><span style="padding-left:15%">联系电话</span></th>
 										<th><span style="padding-left:15%">签到状态</span></th>
 										<th><span style="padding-left:15%">上次签到时间</span></th>
-										<th><span style="padding-left:15%">最后执勤路段编号</span></th>
-										<th><span style="padding-left:15%">最后执勤路段名称</span></th>
+										<th><span style="padding-left:15%">最后执勤收费点</span></th>
 										<th><span style="padding-left:15%">最后执勤终端</span></th>
 										<th><span style="padding-left:15%">注册时间</span></th>
 															
@@ -52,9 +51,8 @@
 							  <td ng-bind="feeOperator.phone"></td>
 							  <td ng-if="feeOperator.signstatus==false">未签到</td>
 							  <td ng-if="feeOperator.signstatus==true">已签到</td>
-							  <td ng-bind="feeOperator.lastsigndate"></td>
-							  <td ng-bind="feeOperator.number"></td>
-							  <td ng-bind="feeOperator.streetname"></td>
+							  <td ng-bind="feeOperator.lastsigndate"></td>						 
+							  <td ng-bind="feeOperator.parkname"></td>
 							  <td ng-bind="feeOperator.lastposnum"></td>
 							  <td ng-bind="feeOperator.registerdate"></td>	
 							  </tr>
