@@ -16,11 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -264,19 +263,19 @@ public class PosChargeDataController {
 	@RequestMapping("/getExcel")
 	@ResponseBody
 	public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
-		List<PosChargeData> posdatas=chargeSerivce.getPage(0, 2000);
+		List<PosChargeData> posdatas=chargeSerivce.getPage(0, 100000);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xls");
-		HSSFWorkbook workbook = new HSSFWorkbook();
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
 			workbook.write(out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xls", response);
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
 	}
 
 }

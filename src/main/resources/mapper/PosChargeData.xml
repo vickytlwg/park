@@ -23,6 +23,7 @@
 		<result property="isLargeCar" column="isLargeCar"/>
 		<result property="entranceDate" column="entranceDate"/>
 		<result property="exitDate" column="exitDate"/>
+		<result property="url" column="url"/>
 	</resultMap> 
 	
 	<select id="get" resultMap="PosChargeDataMapper">
@@ -52,16 +53,16 @@
  		
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
-		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate)
+		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate,url)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
-		 #{paidMoney}, #{unPaidMoney},#{givenMoney},#{changeMoney}, #{isOneTimeExpense},0,#{isLargeCar},#{entranceDate}, #{exitDate})
+		 #{paidMoney}, #{unPaidMoney},#{givenMoney},#{changeMoney}, #{isOneTimeExpense},#{paidCompleted},#{isLargeCar},#{entranceDate}, #{exitDate},#{url})
 	</insert>
 	
 	<update id="update" parameterType="PosChargeData">
 		update posChargeData set cardNumber=#{cardNumber}, parkId=#{parkId}, parkDesc=#{parkDesc}, portNumber = #{portNumber},isEntrance=#{isEntrance}, 
 		operatorId=#{operatorId},posId=#{posId},chargeMoney=#{chargeMoney},
 		paidMoney=#{paidMoney}, unPaidMoney=#{unPaidMoney},givenMoney=#{givenMoney} ,changeMoney=#{changeMoney}, isOneTimeExpense=#{isOneTimeExpense},
-		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate}
+		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate},url=#{url}
 		where id=#{id}
 	</update>
 

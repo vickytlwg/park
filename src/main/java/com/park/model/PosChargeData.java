@@ -34,15 +34,15 @@ public class PosChargeData {
 	
 	int isOneTimeExpense;
 	
-	boolean paidCompleted;
+	boolean paidCompleted=false;
 	
 	boolean isLargeCar;
 	
 	Date entranceDate;
 	
 	Date exitDate;
-	
-	
+
+	String url="";
 	
 
 	public int getId() {
@@ -189,8 +189,15 @@ public class PosChargeData {
 
 	public void setIsLargeCar(boolean isLargeCar) {
 		this.isLargeCar = isLargeCar;
+	}	
+	
+    public String getUrl() {
+		return url;
 	}
-	
-	
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	
 }

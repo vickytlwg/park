@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,10 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.joda.time.LocalDateTime;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +32,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
-import com.park.model.DataUsageCardDetail;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.Posdata;
@@ -46,7 +42,7 @@ import com.park.service.ParkService;
 import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
-import com.park.service.impl.ExcelServiceImpl;
+
 
 @Controller
 @RequestMapping("/pos")
@@ -218,19 +214,19 @@ public String getPosdataCountByPark(@PathVariable("parkId")Integer parkId){
 @RequestMapping("/getExcel")
 @ResponseBody
 public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
-	List<Posdata> posdatas=posdataService.selectPosdataByPage(0,2000);
+	List<Posdata> posdatas=posdataService.selectPosdataByPage(0,100000);
 	String docsPath = request.getSession().getServletContext().getRealPath("/");
 	final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 	String[] headers={"车牌","停车场名","车位号","出入场","操作员id","终端机号","应收费","押金","补交","返还","进场时间","离场时间"};
-	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xls");
-	HSSFWorkbook workbook = new HSSFWorkbook();
+	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xlsx");
+	XSSFWorkbook workbook = new XSSFWorkbook();
 	excelService.produceExceldataPosData("收费明细", headers, posdatas, workbook);
 	try {
 		workbook.write(out);
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
-	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xls", response);
+	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xlsx", response);
 }
 
 @RequestMapping(value="/getParkCharge",method=RequestMethod.GET)

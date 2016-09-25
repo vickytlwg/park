@@ -1,0 +1,198 @@
+#set($layout = "loginlayout.vm")
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>系统管理界面</title>
+    <link rel="stylesheet" href="css/rest.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <!--<link rel="stylesheet" href="css/bootstrap.css">-->
+    <script src="/park/script/outsideParkStatus1.js"></script>
+</head>
+<body>
+<div class="content" ng-app="outsideParkStatus1App" ng-controller="outsideParkStatus1Ctrl">
+
+    <!--top start-->
+    <div class="xt-top">
+        <div class="xt-crumbs">
+            <i class="xt-location"></i>
+            <span>基础信息 ＞ 泊位概况</span>
+        </div>
+        <div class="xt-search">
+            <div><span>分中心：</span><span class="xt-all">全选 <b></b></span></div>
+            <div><span>街道：</span><span class="xt-street">东城某某街道 <b></b></span></div>
+            <div><span>快速定位站点：</span><span class="xt-input"><input type="text" value="请输入站点名称"><b></b></span></div>
+            <div>
+                <button class="xt-btn"><a href="#">快速搜索</a></button>
+            </div>
+        </div>
+    </div>
+    <!--top end-->
+
+    <!--管理中心概况 start-->
+    <div class="xt-content_1">
+        <div class="xt-survey">
+            <p><i></i>管理中心概况</p>
+        </div>
+        <a href="#" class="xt-refresh"></a>
+        <div class="xt-surveytable">
+            <div class="xt-surveytable_1">
+                <table border="1">
+                    <tbody>
+                    <tr>
+                        <td>中心名称</td>
+                        <td>某某中心</td>
+                        <td>设施管理中心</td>
+                        <td>某某管理中心</td>
+                        <td>负责人</td>
+                        <td>林先生</td>
+                        <td>联系电话</td>
+                        <td>15312478450</td>
+                    </tr>
+                    <tr>
+                        <td>规划中心总数<span>（个）</span></td>
+                        <td>59</td>
+                        <td>规划街道总数<span>（个）</span></td>
+                        <td>63</td>
+                        <td>规划站点数<span>（个）</span></td>
+                        <td>1483</td>
+                        <td>规划泊位总数<span>（个）</span></td>
+                        <td>119076</td>
+                    </tr>
+                    <tr>
+                        <td>在线站点数<span>（个）</span></td>
+                        <td>838</td>
+                        <td>在线泊位总数<span>（个）</span></td>
+                        <td>59124</td>
+                        <td>在停车辆总数<span>（个）</span></td>
+                        <td>4985</td>
+                        <td colspan="2" class="xt-td"></td>
+                    </tr>
+                    <tr>
+                        <td>站点在线率<span>（%）</span></td>
+                        <td>56.51</td>
+                        <td>泊位在线率<span>（%）</span></td>
+                        <td>49.65</td>
+                        <td>泊位饱和度<span>（%）</span></td>
+                        <td>8.43</td>
+                        <td colspan="2" class="xt-td"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--管理中心概况 end-->
+
+    <!--概况详细信息 start-->
+    <div class="xt-surveytable_2" ng-show="isShow==1">
+        <table border="1">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>区中心编号</td>
+                <td>区中心名称</td>
+                <td>经营中心<span>（个）</span></td>
+                <td>街道数<span>（条）</span></td>
+                <td>在线站点数<span>（个）</span></td>               
+                <td>总泊位数<span>（个）</span></td>
+                <td>剩余泊位数<span>（个）</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="zoneCenter in zoneCenters">
+                <td>{{zoneCenter.id}}</td>
+                <td>{{zoneCenter.zonenum}}</td>
+                <td ng-click="getAreaInfo(zoneCenter.id)"><a href='#'>{{zoneCenter.zonename}}</a></td>
+                <td>{{zoneCenter.areacount}}</td>
+                <td>{{zoneCenter.streetcount}}</td>
+                <td>{{zoneCenter.parkcount}}</td>
+                <td>{{zoneCenter.carportcount}}</td>
+                <td>{{zoneCenter.carportleftcount}}</td>               
+            </tr>                  
+            </tbody>
+        </table>
+    </div>
+	
+	<div class="xt-surveytable_2" ng-show="isShow==2">
+        <table border="1">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>经营区域编号</td>
+                <td>经营区域名称</td>
+                <td>街道数<span>（条）</span></td>
+                <td>在线站点数<span>（个）</span></td>               
+                <td>总泊位数<span>（个）</span></td>
+                <td>剩余泊位数<span>（个）</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="area in areas">
+                <td>{{area.id}}</td>
+                <td>{{area.areanum}}</td>
+                <td ng-click="getStreetInfo(area.id)"><a href="#">{{area.areaname}}</a></td>
+                <td>{{area.streetcount}}</td>
+                <td>{{area.parkcount}}</td>
+                <td>{{area.carportcount}}</td>
+                <td>{{area.carportleftcount}}</td>               
+            </tr>                  
+            </tbody>
+        </table>
+    </div>
+
+	
+		<div class="xt-surveytable_2" ng-show="isShow==3">
+        <table border="1">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>街道编号</td>
+                <td>街道名称</td>
+                <td>在线站点数<span>（个）</span></td>               
+                <td>总泊位数<span>（个）</span></td>
+                <td>剩余泊位数<span>（个）</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="street in streets">
+                <td>{{street.id}}</td>
+                <td>{{street.streetnum}}</td>
+                <td ng-click="getParkInfo(street.id)"><a href="#">{{street.streetname}}</a></td>
+                <td>{{street.parkcount}}</td>
+                <td>{{street.carportcount}}</td>
+                <td>{{street.carportleftcount}}</td>               
+            </tr>                  
+            </tbody>
+        </table>
+    </div>
+	
+	<div class="xt-surveytable_2" ng-show="isShow==4">
+        <table border="1">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>站点编号</td>
+                <td>站点名称</td>       
+                <td>总泊位数<span>（个）</span></td>
+                <td>剩余泊位数<span>（个）</span></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="park in parks">
+                <td>{{park.id}}</td>
+                <td>{{park.parknum}}</td>
+                <td>{{park.parkname}}</td>
+                <td>{{park.carportcount}}</td>
+                <td>{{park.carportleftcount}}</td>               
+            </tr>                  
+            </tbody>
+        </table>
+    </div>
+    <!--概况详细信息 end-->
+    <!--footer start-->
+
+    <!--footer end-->
+</div>
+</body>
+</html>

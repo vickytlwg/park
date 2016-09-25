@@ -337,8 +337,6 @@ public class ParkController {
 			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
 			{
 				parkDetail = parkService.filterParkDetail(parkDetail, username);
-				//parkDetail = parkService.getPark();
-				//parkDetail = parkService.filterPark(parkDetail, username);
 			}
 		}			
 

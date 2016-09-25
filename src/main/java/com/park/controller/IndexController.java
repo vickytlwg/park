@@ -73,7 +73,7 @@ public class IndexController {
 				}
 			}
 			String redirectUrl=(String) session.getAttribute("redirectUrl");
-			if (!redirectUrl.contains("login")&&redirectUrl.length()>3) {
+			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
 				redirectUrl=redirectUrl.substring(5);
 				return "redirect:"+redirectUrl;
 			}
@@ -173,9 +173,27 @@ public class IndexController {
 	public String operation2(){
 		return "operation2";
 	}
-	@RequestMapping("/data2")
-	public String data2(){
-		return "data2";
+	@RequestMapping("/maptest")
+	public String data2(ModelMap modelMap,HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "maptest";
+	}
+	@RequestMapping("/outsideParkStatus1")
+	public String outsideParkStatus1(){
+		return "outsideParkStatus1";
 	}
 	@RequestMapping("/platformShow")
 	public String platformShow(ModelMap modelMap, HttpServletRequest request, HttpSession session){

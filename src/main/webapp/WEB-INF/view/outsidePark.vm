@@ -17,11 +17,11 @@
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 	                	<div class="btn-group" >
-	                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-	                		<button #if(!$isAdmin) disabled#end id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-	                		<button #if(!$isAdmin) disabled#end id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-	                		<button #if(!$isAdmin) disabled#end id='deletePark' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
-	                		<button #if(!$isAdmin) disabled#end id='uploadPic' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>  	                		           			                		                		                	 
+	                		<button id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+	                		<button id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+	                		<button id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+	                		<button id='deletePark' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+	                		<button id='uploadPic' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>  	                		           			                		                		                	 
 						</div>
 						<div class="pull-right" style="width:300px">
 	                	<div class="input-group">	
