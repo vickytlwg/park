@@ -8,16 +8,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Area;
+import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
 import com.park.model.Street;
 import com.park.model.Zonecenter;
 import com.park.service.AreaService;
+import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.StreetService;
 import com.park.service.Utility;
@@ -34,6 +37,8 @@ public class OutsideParkInfoController {
 	private StreetService streetService;
 	@Autowired
 	private ParkService parkService;
+	@Autowired 
+	private OutsideParkInfoService outsideParkInfoService;
 	@RequestMapping(value="zoneCenterInfo",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String zoneCenterInfo(@RequestParam("start")int start,@RequestParam("count")int count){
@@ -154,6 +159,33 @@ public class OutsideParkInfoController {
 		}
 		result.put("status", 1001);
 		result.put("body", info);
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="/update",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String update(@RequestBody Outsideparkinfo info){
+		Map<String, Object> result=new HashMap<>();
+		int num=outsideParkInfoService.updateByPrimaryKeySelective(info);
+		if (num==1) {
+			result.put("status", 1001);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="/getInfoByParkId/{parkId}",produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getInfoByParkId(@PathVariable("parkId")int parkId){
+		Map<String, Object> result=new HashMap<>();
+		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+		if (outsideparkinfo!=null) {
+			result.put("status", 1001);
+			result.put("body", outsideparkinfo);
+		}
+		else {
+			result.put("status", 1002);
+		}
 		return Utility.gson.toJson(result);
 	}
 }

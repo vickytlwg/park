@@ -329,10 +329,8 @@ public class ParkController {
 		int count = (int)args.get("count");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<ParkDetail> parkDetail = parkService.getOutsideParkDetail(low, count);
-		String username = (String) session.getAttribute("username");
-		
-		if(username != null){
-			
+		String username = (String) session.getAttribute("username");		
+		if(username != null){			
 			AuthUser user = authService.getUserByUsername(username);
 			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
 			{

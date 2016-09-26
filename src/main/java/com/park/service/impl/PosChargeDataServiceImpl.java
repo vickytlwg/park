@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosChargeDataDAO;
 import com.park.model.FeeCriterion;
+import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
+import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 
@@ -33,7 +35,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	FeeCriterionService criterionService;
-
+	
+	@Autowired
+	private OutsideParkInfoService outsideParkInfoService;
 	@Override
 	public PosChargeData getById(int id) {
 		return chargeDao.getById(id);
@@ -108,6 +112,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			PosChargeData lastCharge = charges.get(count - 1);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
 			lastCharge.setGivenMoney(theMoney);
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			outsideparkinfo.setPossigndate(new Date());
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(lastCharge);
 		}
 		return charges;
@@ -204,6 +212,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 
 		if (!isQuery) {
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
+			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
+	//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+			outsideparkinfo.setPossigndate(new Date());
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(charge);
 		}
 	}
@@ -270,6 +285,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			charge.setChangeMoney(-1 * expense);
 		}
 		if (!isQuery) {
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
+			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
+//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+			outsideparkinfo.setPossigndate(new Date());
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(charge);
 		}
 		

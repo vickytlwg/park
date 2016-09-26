@@ -8,8 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.park.model.FeeCriterion;
+import com.park.model.Outsideparkinfo;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
+import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 
@@ -24,10 +26,10 @@ public class CalPosChargeTask {
 	
 	@Autowired
 	FeeCriterionService criterionService;
-	
+	@Autowired
+	private OutsideParkInfoService outsideParkInfoService;
 	@Scheduled(cron="0 0 18/1  * * ? ")
-	public void cal(){
-			
+	public void cal(){			
 		List<PosChargeData> charges = chargeService.getUnCompleted();
 		for(PosChargeData charge : charges){
 			Date now = new Date();	
@@ -47,8 +49,11 @@ public class CalPosChargeTask {
 					e.printStackTrace();
 				}
 			}
-		}
+		}	
+	}
+	@Scheduled(cron="0 30 0  * * ? ")
+	public void dayInfo(){
+		outsideParkInfoService.insertDayParkInfo();
 		
 	}
-
 }

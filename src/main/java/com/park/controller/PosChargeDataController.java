@@ -30,12 +30,14 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
+import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
+import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.UserPagePermissionService;
@@ -58,6 +60,9 @@ public class PosChargeDataController {
 	
 	@Autowired
 	private ExcelExportService excelService;
+	
+	@Autowired
+	private OutsideParkInfoService outsideParkInfoService;
 	
 	@RequestMapping(value = "/detail", produces = {"application/json;charset=UTF-8"})
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
@@ -147,10 +152,29 @@ public class PosChargeDataController {
 		
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
+		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
 		
 		if(park == null || park.getFeeCriterionId() == null){
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
+		if (outsideparkinfo!=null) {
+			if (charge.isPaidCompleted()==false) {
+				int Unusedcarportcount=outsideparkinfo.getUnusedcarportcount();
+				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount-1);
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setPossigndate(new Date());
+				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+			}
+			else {
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
+				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+				outsideparkinfo.setPossigndate(new Date());
+				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+			}
+		}
+		
 		if (charge.getEntranceDate()==null) {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		}		

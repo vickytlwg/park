@@ -32,8 +32,7 @@ public class Park {
 	private String number;
 	private String pictureUri;
 	private String description;
-	
-	
+
 	
 	public int getId() {
 		return id;
