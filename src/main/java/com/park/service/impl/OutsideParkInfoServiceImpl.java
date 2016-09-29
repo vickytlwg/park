@@ -89,7 +89,7 @@ public class OutsideParkInfoServiceImpl implements OutsideParkInfoService {
 		for (ParkDetail parkDetail : parkDetails) {
 			Outsideparkinfo record=new Outsideparkinfo();
 			record.setParkid(parkDetail.getId());
-			record.setDate(date);
+			record.setDate(date);			
 			record.setCarportcount(parkDetail.getPortCount());
 			record.setUnusedcarportcount(parkDetail.getPortCount());
 			outsideParkInfoDAO.insertSelective(record);

@@ -219,7 +219,7 @@ a.xt-refresh {
 .xt-surveytable_1 table tr td {
     text-align: center;
     width: 198px;
-    line-height: 44px;
+    line-height: 25px;
 }
 
 .xt-surveytable_1 table tr td:nth-child(odd) {
@@ -246,7 +246,7 @@ a.xt-refresh {
 
 .xt-surveytable_2 table tr td {
     text-align: center;
-    line-height: 44px;
+    line-height: 25px;
 }
 
 .xt-surveytable_2 table tr td:first-child {

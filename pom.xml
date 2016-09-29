@@ -211,7 +211,12 @@
 			<version>4.4</version>
 		</dependency>
 
-
+		<!-- 七牛 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.0.0, 7.0.99]</version>
+		</dependency>
 		<!-- 日志文件管理包 -->
 		<!-- log start -->
 		<dependency>

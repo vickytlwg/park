@@ -11,6 +11,11 @@ angular.module("outsideParkStatus1App",['ui.bootstrap'])
             $scope.areas=result;
         });
     };
+    $scope.showBack=function(){
+        if($scope.isShow>1){
+            $scope.isShow-=1;
+        }
+    };
     $scope.getStreetInfo=function(areaid){
         $scope.isShow=3;
         getDataService.getStreetInfo(areaid).then(function(result){

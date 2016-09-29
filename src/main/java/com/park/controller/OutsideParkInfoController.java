@@ -1,6 +1,7 @@
 package com.park.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,10 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
+			int amountMoney=0;
+			int realMoney=0;
+			int entranceCount=0;
+			int outCount=0;
 			for (Area area : areas) {
 				List<Street> streets=streetService.getByArea(area.getId());
 				streetCount+=streets.size();
@@ -63,8 +68,13 @@ public class OutsideParkInfoController {
 					List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 					parkCount+=parks.size();
 					for (Park park : parks) {
-						carportCount+=park.getPortCount();
-						carportLeftCount+=park.getPortLeftCount();
+						Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+						carportCount+=parkInfo.getCarportcount();
+						carportLeftCount+=parkInfo.getUnusedcarportcount();
+						amountMoney+=parkInfo.getAmountmoney();
+						realMoney+=parkInfo.getRealmoney();
+						entranceCount+=parkInfo.getEntrancecount();
+						outCount+=parkInfo.getOutcount();
 					}
 				}
 			}
@@ -72,6 +82,10 @@ public class OutsideParkInfoController {
 			tmpdata.put("parkcount", parkCount);
 			tmpdata.put("carportcount", carportCount);
 			tmpdata.put("carportleftcount", carportLeftCount);
+			tmpdata.put("amountmoney", amountMoney);
+			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("entrancecount", entranceCount);
+			tmpdata.put("outcount", outCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -93,20 +107,33 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
+			int amountMoney=0;
+			int realMoney=0;
+			int entranceCount=0;
+			int outCount=0;
 			List<Street> streets=streetService.getByArea(area.getId());
 			streetCount+=streets.size();
 			for (Street street : streets) {
 				List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 				parkCount+=parks.size();
 				for (Park park : parks) {
-					carportCount+=park.getPortCount();
-					carportLeftCount+=park.getPortLeftCount();
+					Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+					carportCount+=parkInfo.getCarportcount();
+					carportLeftCount+=parkInfo.getUnusedcarportcount();
+					amountMoney+=parkInfo.getAmountmoney();
+					realMoney+=parkInfo.getRealmoney();
+					entranceCount+=parkInfo.getEntrancecount();
+					outCount+=parkInfo.getOutcount();
 				}
 			}
 			tmpdata.put("streetcount", streetCount);
 			tmpdata.put("parkcount", parkCount);
 			tmpdata.put("carportcount", carportCount);
 			tmpdata.put("carportleftcount", carportLeftCount);
+			tmpdata.put("amountmoney", amountMoney);
+			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("entrancecount", entranceCount);
+			tmpdata.put("outcount", outCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -127,15 +154,28 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
+			int amountMoney=0;
+			int realMoney=0;
+			int entranceCount=0;
+			int outCount=0;
 			List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 			parkCount+=parks.size();
 			for (Park park : parks) {
-				carportCount+=park.getPortCount();
-				carportLeftCount+=park.getPortLeftCount();
+				Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+				carportCount+=parkInfo.getCarportcount();
+				carportLeftCount+=parkInfo.getUnusedcarportcount();
+				amountMoney+=parkInfo.getAmountmoney();
+				realMoney+=parkInfo.getRealmoney();
+				entranceCount+=parkInfo.getEntrancecount();
+				outCount+=parkInfo.getOutcount();
 			}
 			tmpdata.put("parkcount", parkCount);
 			tmpdata.put("carportcount", carportCount);
 			tmpdata.put("carportleftcount", carportLeftCount);
+			tmpdata.put("amountmoney", amountMoney);
+			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("entrancecount", entranceCount);
+			tmpdata.put("outcount", outCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -149,12 +189,18 @@ public class OutsideParkInfoController {
 		List<Park> parks=parkService.getOutsideParkByStreetId(streetid);
 		List<Map<String, Object>> info=new ArrayList<>();
 		for (Park park : parks) {
+			Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
 			Map<String, Object> tmpdata=new HashMap<>();
 			tmpdata.put("id",park.getId());
-			tmpdata.put("parknum", park.getNumber());
+			tmpdata.put("contactnum", park.getNumber());
+			tmpdata.put("contactname", park.getContact());
 			tmpdata.put("parkname", park.getName());
-			tmpdata.put("carportcount", park.getPortCount());
-			tmpdata.put("carportleftcount", park.getPortLeftCount());		
+			tmpdata.put("carportcount", parkInfo.getCarportcount());
+			tmpdata.put("carportleftcount", parkInfo.getUnusedcarportcount());	
+			tmpdata.put("amountmoney", parkInfo.getAmountmoney());
+			tmpdata.put("realmoney", parkInfo.getRealmoney());
+			tmpdata.put("entrancecount", parkInfo.getEntrancecount());
+			tmpdata.put("outcount", parkInfo.getOutcount());
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -182,6 +228,22 @@ public class OutsideParkInfoController {
 		if (outsideparkinfo!=null) {
 			result.put("status", 1001);
 			result.put("body", outsideparkinfo);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	
+	@RequestMapping(value="/posHeartBeat/{parkId}",produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String posHeartBeat(@PathVariable("parkId")int parkId){
+		Map<String, Object> result=new HashMap<>();
+		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+		outsideparkinfo.setPossigndate(new Date());
+		int num=outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		if (num==1) {
+			result.put("status", 1001);
 		}
 		else {
 			result.put("status", 1002);

@@ -14,9 +14,10 @@
 <script >
 function changeFrameHeight(){
     var ifm= document.getElementById("mainFrame"); 
-    ifm.height=document.documentElement.clientHeight;
-	if(ifm.height<900){
-	ifm.height=900
+    ifm.height=ifm.contentWindow.document.body.scrollHeight;
+	
+	if(ifm.height<800){
+	ifm.height=800
 	}
 }
 window.onresize=function(){  
