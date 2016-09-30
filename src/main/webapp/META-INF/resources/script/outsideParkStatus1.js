@@ -1,32 +1,65 @@
 angular.module("outsideParkStatus1App",['ui.bootstrap'])
 .controller('outsideParkStatus1Ctrl',['$scope','getDataService',function($scope,getDataService){
   $scope.isShow=1;
+  $scope.zoneCenters=[];
   getDataService.getZoneCenterInfo().then(function(result){
       $scope.zoneCenters=result;
   });
   $scope.areas=[];
-    $scope.getAreaInfo=function(zoneid){
+    $scope.getAreaInfo=function(zoneCenter){
         $scope.isShow=2;
-        getDataService.getAreaInfo(zoneid).then(function(result){
+        getDataService.getAreaInfo(zoneCenter.id).then(function(result){
             $scope.areas=result;
         });
+        $scope.show2data=zoneCenter;
     };
     $scope.showBack=function(){
         if($scope.isShow>1){
             $scope.isShow-=1;
         }
     };
-    $scope.getStreetInfo=function(areaid){
+    var getShow1Info=function(){
+        if($scope.zoneCenters==undefined){
+            return;
+        }
+        $scope.show1AreaCount=0;
+        $scope.show1StreetCount=0;
+        $scope.show1ParkCount=0;
+        $scope.show1AmountMoney=0;
+        $scope.show1RealMoney=0;
+        $scope.show1EntranceCount=0;
+        $scope.show1OutCount=0;
+        $scope.show1CarportCount=0;
+        $scope.show1CarportLeftCount=0;
+        angular.forEach($scope.zoneCenters,function(value,num){
+            $scope.show1AreaCount+=value.areacount;
+            $scope.show1StreetCount+=value.streetcount;
+            $scope.show1ParkCount+=value.parkcount;
+            $scope.show1AmountMoney+=value.amountmoney;
+            $scope.show1RealMoney+=value.realmoney;
+            $scope.show1EntranceCount+=value.entrancecount;
+            $scope.show1OutCount+=value.outcount;
+            $scope.show1CarportCount+=value.carportcount;
+            $scope.show1CarportLeftCount+=value.carportleftcount;            
+        });        
+    };
+    $scope.$watch('zoneCenters',function(oldvalue,newvalue){
+        getShow1Info();
+    });
+    
+    $scope.getStreetInfo=function(area){
         $scope.isShow=3;
-        getDataService.getStreetInfo(areaid).then(function(result){
+        getDataService.getStreetInfo(area.id).then(function(result){
             $scope.streets=result;
         });
+        $scope.show3data=area;
     };
-    $scope.getParkInfo=function(streetid){
+    $scope.getParkInfo=function(street){
         $scope.isShow=4;
-        getDataService.getParkInfo(streetid).then(function(result){
+        getDataService.getParkInfo(street.id).then(function(result){
             $scope.parks=result;
         });
+        $scope.show4data=street;
     };
 }])
 .service('getDataService',['$http','$q',function($http,$q){

@@ -1,0 +1,1076 @@
+#set($layout = "loginlayout.vm")
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title></title>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+        <link href="Style/white/layout.css" rel="stylesheet" />
+        <link href="Style/Pagination.css" rel="stylesheet" />
+        <link href="Style/jbox.css" rel="stylesheet" />
+        <link href="Style/loadingbar.css" rel="stylesheet" />
+        <link href="Style/index.css" rel="stylesheet" />
+
+        <script src="Scripts/jquery-1.8.2.min.js"></script>
+        <script src="Scripts/Common.js"></script>
+        <script src="Scripts/jquery.pagination.js"></script>
+        <script src="Scripts/jquery.jBox.src.js"></script>
+        <script src="Scripts/modernizr-2.6.2.js"></script>
+
+    </head>
+    <body>
+        <div class="top-container-wrapper">
+
+            <div id='loadingbar'></div>
+        </div>
+
+        <div class="mian-container">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- Right -->
+
+                    <link href="Style/Pagination.css" rel="stylesheet" />
+                    <link href="Style/index.css" rel="stylesheet" />
+                    <link href="Style/jbox.css" rel="stylesheet" />
+                    <link href="Style/jquery-ui.css" rel="stylesheet" />
+                    <style type="text/css">
+                        #reportInfo {
+                            z-index: 999;
+                            width: 92%;
+                            height: 165%;
+                            background-color: #FFF;
+                            box-shadow: 0px 0px 10px #666;
+                            left: 4%;
+                            position: absolute;
+                            display: none;
+                            margin-bottom: 10px;
+                        }
+                        #reportBody {
+                            border: 0px none;
+                            width: 100%;
+                            height: 98%;
+                            margin-bottom: 40px;
+                        }
+                        .bg {
+                            position: fixed;
+                            width: 100%;
+                            height: 100%;
+                            background-color: black;
+                            z-index: 2;
+                            top: 0px;
+                            left: 0px;
+                            opacity: 0.4;
+                            display: none;
+                        }
+                        .side {
+                            position: fixed;
+                            width: 54px;
+                            height: 275px;
+                            right: 0;
+                            top: 214px;
+                            z-index: 100;
+                        }
+                        .side ul li {
+                            width: 54px;
+                            height: 54px;
+                            float: left;
+                            position: relative;
+                            margin-top: 1px;
+                        }
+                        .side ul li .sidebox {
+                            position: absolute;
+                            width: 54px;
+                            height: 54px;
+                            top: 0;
+                            right: 0;
+                            transition: all 0.3s;
+                            background: #4BA9E9;
+                            opacity: 0.8;
+                            filter: Alpha(opacity=80);
+                            color: #fff;
+                            font: 14px/54px "微软雅黑";
+                            overflow: hidden;
+                        }
+                        .side ul li .sidetop {
+                            width: 54px;
+                            height: 54px;
+                            line-height: 54px;
+                            display: inline-block;
+                            background: #4BA9E9;
+                            opacity: 0.8;
+                            filter: Alpha(opacity=80);
+                            transition: all 0.3s;
+                        }
+                        .side ul li .sidetop:hover {
+                            background: #FFB400;
+                            opacity: 1;
+                            filter: Alpha(opacity=100);
+                        }
+                        .side ul li img {
+                            float: left;
+                        }
+                        div.Area_title {
+                            background: #4BA9E9;
+                            border-bottom: 1px solid #ddd;
+                            padding: 10px;
+                            position: relative;
+                        }
+                        a.close {
+                            float: right;
+                            color: #fff;
+                            padding: 5px;
+                            margin: -2px -5px -5px;
+                            font: bold 14px/14px simsun;
+                            text-shadow: 0 1px 0 #ddd;
+                        }
+                        h3#AreaSelect_title {
+                            color: #fff;
+                            font-size: 16px;
+                            line-height: 16px;
+                            font-family: Microsoft YaHei;
+                        }
+
+                    </style>
+                    <!-- 首页效果 begin -->
+                    <div style="width: 100%;">
+                        <h1 class="dataH1" style="display:inline;">今日数据发布（截至 - <label id="time"></label>）</h1>
+                    </div>
+
+                    <div class="bg" id="reportBackground"></div>
+                    <div id="reportInfo">
+                        <div class="Area_title">
+                            <a href="javascript:;" title="关闭" class="close" onclick="MoveBox()"><img src="Images/jBox/jbox-close.png" style="height: 15px;"/></a>
+                            <h3 id="AreaSelect_title">运行报告</h3>
+                        </div>
+
+                        <iframe  id="reportBody" name="reportBody"></iframe>
+                    </div>
+                    <div class="data_wrapper">
+                        <table cellpadding="0" cellspacing="0" style="width: 100%;" class="flipTable">
+                            <tr>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block1" class="dataActive block1">
+                                        <div class="panel-top hidddiv">
+                                            今日消费金额
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer"  data-to="134674.00" data-speed="1500" data-decimals="2">4,674.00</span>&nbsp;元
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            <p>
+                                                消费总金额&nbsp;<b>2112,981.00</b>&nbsp;元
+                                            </p>
+                                        </div>
+                                        <div class="dataHover block1">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">手机APP：</td><td  style="text-align:left;">1,924.00 元</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信公众号：</td><td  style="text-align:left;">550.00 元</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block2" class="dataActive block2">
+                                        <div class="panel-top hidddiv">
+                                            今日交易次数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer"  data-to=" 1100.00" data-speed="1500"> 1,100</span>&nbsp;笔
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            合计交易总数&nbsp;<b>45,589</b>&nbsp;笔
+                                        </div>
+                                        <div class="dataHover block2">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right">手机APP：</td><td style="text-align:left">3550 笔</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right">微信公众号：</td><td style="text-align:left">2275 笔</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block3" class="dataActive block3">
+                                        <div class="panel-top  hidddiv">
+                                            今日充值金额
+                                        </div>
+                                        <div class="panel-split  hidddiv"></div>
+                                        <div class="panel-middle  hidddiv">
+                                            <span class="panel-value timer" data-to="8700.00" data-speed="1500"  data-decimals="2">8,700.00</span>&nbsp;元
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            充值总金额&nbsp;<b>744,050.02</b>&nbsp;元
+                                        </div>
+                                        <div class="dataHover block3">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">支付宝WAP：</td><td  style="text-align:left;">0.00 元</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">财付通WAP：</td><td  style="text-align:left;">1,100.00 元</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信支付：</td><td  style="text-align:left;">3,750.00 元</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信公众号：</td><td  style="text-align:left;">0.00 元</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block4" class="dataActive block4">
+                                        <div class="panel-top hidddiv">
+                                            今日充值次数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="386.00" data-speed="1500">386</span>&nbsp;笔
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            充值总次数&nbsp;<b>1,128</b>&nbsp;笔
+                                        </div>
+                                        <div class="dataHover block4">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">支付宝WAP：</td><td  style="text-align:left;">0 笔</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">财付通WAP：</td><td  style="text-align:left;">55 笔</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信支付：</td><td  style="text-align:left;">166 笔</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信公众号：</td><td  style="text-align:left;">0 笔</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block5" class="dataActive block5">
+                                        <div class="panel-top hidddiv">
+                                            今日新增用户
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="496.00" data-speed="1500">496</span>&nbsp;人
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            合计总用户数&nbsp;<b>1,229</b>&nbsp;人
+                                        </div>
+                                        <div class="dataHover block5">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">手机APP：</td><td style="text-align:left;">56 人</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">微信公众号：</td><td style="text-align:left;">55 人</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block6" class="dataActive block6">
+                                        <div class="panel-top hidddiv">
+                                            今日运营泊位数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="751.00" data-speed="1500">9751</span>&nbsp;个
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            合计总泊位数&nbsp;<b>18753</b>&nbsp;个
+                                        </div>
+                                        <div class="dataHover block6">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">2154 个</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">1250 个</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">4101 个</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">1105 个</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">3211 个</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">1530 个</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block7" class="dataActive block7">
+                                        <div class="panel-top hidddiv">
+                                            用户投诉数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="0" data-speed="1500">12</span>&nbsp;单
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            总计用户投诉数&nbsp;<b>54</b>&nbsp;单
+                                        </div>
+                                        <div class="dataHover block7">
+                                            <table></table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block8" class="dataActive block8">
+                                        <div class="panel-top hidddiv">
+                                            今日违章次数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="385.00" data-speed="1500"> 1385</span>&nbsp;次
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            违章总次数&nbsp;<b>426</b>&nbsp;次
+                                        </div>
+                                        <div class="dataHover block8">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">12 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">3 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">110 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">11 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">3 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">8 次</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block9" class="dataActive block9">
+                                        <div class="panel-top hidddiv">
+                                            今日补缴欠费次数
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="1.00" data-speed="1500">211</span>&nbsp;次
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            补缴欠费总次数&nbsp;<b>12,582</b>&nbsp;次
+                                        </div>
+                                        <div class="dataHover block9">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">江宁区：</td><td  style="text-align:left;">21 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">玄武区：</td><td  style="text-align:left;">13 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">雨花台区：</td><td  style="text-align:left;">21 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">秦淮区：</td><td  style="text-align:left;">25 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">浦口区：</td><td  style="text-align:left;">12 次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">徐州：</td><td  style="text-align:left;">21 次</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                                <td>
+                                <div class="filpCard_wrapper">
+                                    <div id="block10" class="dataActive block10">
+                                        <div class="panel-top hidddiv">
+                                            今日签到
+                                        </div>
+                                        <div class="panel-split hidddiv"></div>
+                                        <div class="panel-middle hidddiv">
+                                            <span class="panel-value timer" data-to="330.00" data-speed="1500">330</span>&nbsp;人次
+                                        </div>
+                                        <div class="panel-bottom hidddiv">
+                                            合计签到&nbsp;<b>342</b>&nbsp;人次
+                                        </div>
+                                        <div class="dataHover block10">
+                                            <table>
+                                                <tr>
+                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">0 人次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">0 人次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">110 人次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">0 人次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">0 人次</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">0 人次</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <h1 class="dataH1" style="padding: 20px 0 0px 20px;">各区收费分析</h1>
+                    <div class="data_wrapper">
+                        <table cellpadding="0" cellspacing="0" style="width: 100%;">
+                            <tr>
+                                <td style="width:820px;">
+                                <table id="tbReport" class="indexData">
+                                    <tr>
+                                        <th></th>
+                                        <th>消费金额（元）</th>
+                                        <th>交易次数（笔）</th>
+                                        <th style="width: 110px;">违章次数（次）</th>
+                                        <th>补缴欠费次数（次）</th>
+                                        <th>签到次数（人次）</th>
+                                        <th style="width: 110px;">运营中泊位数（个）</th>
+                                    </tr>
+                                    <tr>
+                                        <td>江宁区</td>
+                                        <td>21922</td>
+                                        <td>2118</td>
+                                        <td>121</td>
+                                        <td>54</td>
+                                        <td>2531</td>
+                                        <td>8534</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>玄武区</td>
+                                        <td>14322</td>
+                                        <td>1294</td>
+                                        <td>112</td>
+                                        <td>29</td>
+                                        <td>1121</td>
+                                        <td>4654</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>雨花台区</td>
+                                        <td>13211</td>
+                                        <td>1023</td>
+                                        <td>211</td>
+                                        <td>87</td>
+                                        <td>931</td>
+                                        <td>6543</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>秦淮区</td>
+                                        <td>32839</td>
+                                        <td>3211</td>
+                                        <td>212</td>
+                                        <td>254</td>
+                                        <td>1532</td>
+                                        <td>105</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>浦口区</td>
+                                        <td>2,530</td>
+                                        <td>337</td>
+                                        <td>211</td>
+                                        <td>245</td>
+                                        <td>211</td>
+                                        <td>2111</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>徐州</td>
+                                        <td>14,282</td>
+                                        <td>4,103</td>
+                                        <td>296</td>
+                                        <td>2,318</td>
+                                        <td>2121</td>
+                                        <td>2130</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>合计</td>
+
+                                        <td>128,581</td>
+                                        <td>9,889</td>
+                                        <td>1341</td>
+                                        <td>8,582</td>
+                                        <td>9821</td>
+                                        <td>10232</td>
+                                    </tr>
+                                </table></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <h1 class="dataH1">主要指标趋势分析（最近一个月）</h1>
+                    <div class="data_wrapper" style="height: 400px;position:relative;">
+                        <div id="divLastHalfMonthReport" style="min-width:1024px;height:100%;"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- js 控制左边菜单栏-->
+        <script type="text/javascript">
+            $(".sidebar-toggler").click(function() {
+                if ($(".leftNav").width() == "216") {
+                    $(".leftNav").css("width", "40");
+                    $(".page-content").css("margin-left", "40px");
+                    $(".sidebar-toggler").addClass("sidebar-toggler-closed");
+                    $(".leftNav-menu  span").css("display", "none");
+                    $(".sub-menu").css("display", "none");
+                    $(".arrow").css("display", "none");
+                    $(".sublock").css("padding", "10px");
+                    $(".sub-menu a").css("width", "85px");
+                    $(".sublock").css("width", "20px");
+                } else {
+                    $(".leftNav").css("width", "216px");
+                    $(".page-content").css("margin-left", "216px");
+                    $(".sidebar-toggler").removeClass("sidebar-toggler-closed");
+                    $(".leftNav-menu span").css("display", "inline-block");
+                    $(".arrow").css("display", "inline-block");
+                    $(".sub-menu a").css("width", "130px");
+                    $(".sub-menu a").css("padding", "10px 20px 10px 65px");
+                    $(".sublock").css("width", "195px");
+                }
+            });
+
+            //加载线完成
+            $("#loadingbar").css("display", "block")
+            $("#loadingbar").width("100.4%").delay(1000);
+
+            //2秒后隐藏loginbar函数
+            setTimeout('UnShowLoginBar()', 1000);
+            //隐藏loginbar函数
+            function UnShowLoginBar() {
+                $("#loadingbar").css("display", "none");
+            }
+
+
+            $(document).ready(function(e) {
+                //收缩列表
+                if ($(".leftNav").width() == "40") {
+                    $(".leftNav-menu  li").hover(function() {
+                        $(this).css("width", "200px");
+                    })
+                }
+                $(".sub-menu").hide();
+                var nowF = "";
+                var nowM = "";
+
+                //加载一级菜单选中样式
+                if (nowF != "")
+                    $(".main_menu #" + nowF).addClass("pitch_on");
+                else
+                    $(".main_menu li:eq(0) a").addClass("pitch_on");
+
+                //点击列表效果
+                var sub_menu = $(".sub-menu");
+                var all_sublock = $(".sublock")
+                var li_arrow = $(".leftNav-menu li .arrow");
+                $(".leftNav-menu li a[class='sublock'] ").click(function() {
+                    sub_menu.slideUp(200);
+                    li_arrow.removeClass("arrow_down");
+                    if ($(this).attr("data-select") == "0") {
+                        all_sublock.attr("data-select", "0");
+                        $(this).attr("data-select", "1").next().stop(true, true).slideToggle(200);
+                        $(this).find("i:eq(1)").toggleClass("arrow_down");
+                    } else if ($(this).attr("data-select") == "1") {
+                        $(this).attr("data-select", "0");
+                    }
+                    return false;
+                });
+                //加载二、三级菜单选中样式
+                if (nowM != "") {
+                    $(".sub-menu a[id=" + nowM + "]").addClass("sub-men-toggler");
+                    var sub = $(".sub-menu a[id=" + nowM + "]").parent().parent().parent().find("a[class='sublock']");
+                } else {
+                    $(".sub-menu a:eq(0)").addClass("sub-men-toggler");
+                    var sub = $(".sub-menu a:eq(0)").parent().parent().parent().find("a[class='sublock']");
+                }
+                $(sub).attr("data-select", "1").next().stop(true, true).show();
+                $(sub).find("i:eq(1)").toggleClass("arrow_down");
+                $(".leftNav-menuLi").hover(function(e) {
+                    if ($(".leftNav").width() == "40") {
+                        $(this).addClass("opened");
+                        $(this).find("ul").css("display", "block");
+                        $(this).find("ul").addClass("openedUl");
+                        $(this).find("a").addClass("openedA");
+                        $(this).find(".sublock  span").css("display", "inline-block");
+                        $(this).find(".sublock  span").addClass("hoverSpan");
+                        $(this).find(".sublock").css("width", "180px");
+                        $(this).find(".sublock").css("border", "0");
+                        $(this).find(".sub-menu a").css("padding", "10px 30px 10px 55px");
+                    }
+                }, function() {
+                    if ($(".leftNav").width() == "40") {
+                        $(this).removeClass("opened");
+                        $(this).find("ul").css("display", "none");
+                        $(this).find("ul").removeClass("openedUl");
+                        $(this).find("a").removeClass("openedA");
+                        $(this).find(".sublock span").css("display", "none");
+                        $(this).find(".sublock span").removeClass("hoverSpan");
+                        $(this).find(".sublock").css("width", "20px");
+                        $(this).find(".sublock").css({
+                            "border-top" : "1px solid #e9e9e9"
+                        });
+                    }
+                })
+            });
+
+            $(function() {
+
+                var alarmUpdateTime = $("#hiddAlarmTime").val() * 1000;
+
+                //setInterval(NoticeRead, 1800000);
+            });
+
+        </script>
+
+        <!-- 首页效果 end -->
+
+        <script src="Scripts/sHover.min.js"></script>
+        <script src="Scripts/jquery.numbermodel.js"></script>
+        <script src="Scripts/jquery.jBox.src.js"></script>
+        <script type="text/javascript">
+            function GetLastWeekPayPrice() {
+                var myChart = echarts.init(document.getElementById("divTotalReport"));
+                myChart.setTheme(macarons());
+                myChart.showLoading({
+                    text : '正在查询数据...',
+                    effect : 'whirling'
+                });
+                myChart.hideLoading();
+                var msg = "[&quot;7月3日&quot;,&quot;7月4日&quot;,&quot;7月5日&quot;,&quot;7月6日&quot;,&quot;7月7日&quot;,&quot;7月8日&quot;,&quot;7月9日&quot;]|[0,0,0,0,0,0,0]".replace(new RegExp('&quot;', 'gm'), '"');
+                var option = {
+                    title : {
+                        text : '停车收费情况（过去一周）',
+                        textStyle : {
+                            fontSize : 12,
+                            color : '#1F2B38'
+                        },
+                        x : 'center',
+                        y : '10',
+                        padding : 0,
+                        itemGap : 0
+                    },
+                    tooltip : {
+                        trigger : 'axis',
+                        formatter : '{b} : {c}元',
+                        axisPointer : {
+                            type : 'none'
+                        }
+                    },
+                    xAxis : [{
+                        type : 'category',
+                        data : eval(msg.split('|')[0]),
+                        axisLine : {
+                            lineStyle : {
+                                color : '#e2e2e2',
+                                width : 1,
+                                type : 'solid'
+                            }
+                        },
+                        axisLabel : {
+                            interval : '0'
+                        }
+                    }],
+                    yAxis : [{
+                        type : 'value'
+                    }],
+                    grid : {
+                        x : 50,
+                        y : 30,
+                        x2 : 0,
+                        y2 : 30
+                    },
+                    series : [{
+                        name : '消费金额',
+                        type : 'bar',
+                        data : eval(msg.split('|')[1])
+                    }]
+                };
+                myChart.setOption(option);
+                GetCantonPrice(5);
+                GetChannelPrice(5);
+                myChart.on('click', function(param) {
+                    GetCantonPrice(param.dataIndex - 1);
+                    GetChannelPrice(param.dataIndex - 1);
+                });
+            }
+        </script>
+        <script type="text/javascript">
+            function GetCantonPrice(di) {
+                var myChart = echarts.init(document.getElementById("divCantonReport"));
+                myChart.setTheme(macarons());
+                myChart.setTheme('infographic');
+                myChart.showLoading({
+                    text : '正在查询数据...',
+                    effect : 'whirling'
+                });
+                $.ajax({
+                    type : "POST",
+                    url : "/Home/GetDatePayPriceOnLastWeekByCanton",
+                    data : {
+                        dindex : di
+                    },
+                    dataType : "text",
+                    success : function(msg) {
+                        myChart.hideLoading();
+                        if (msg.split('|')[1] != "") {
+                            var option1 = {
+                                title : {
+                                    text : msg.split('|')[0] + '消费区域分布',
+                                    textStyle : {
+                                        fontSize : 12,
+                                        color : '#444'
+                                    },
+                                    x : 'center',
+                                    y : '10',
+                                    padding : 0,
+                                    itemGap : 0
+                                },
+                                tooltip : {
+                                    trigger : 'item',
+                                    formatter : '{b} : <br/>{c}元 ({d}%)',
+                                    position : function(x, y) {
+                                        return [x - 100, y - 30];
+                                    }
+                                },
+                                series : [{
+                                    name : '消费金额',
+                                    type : 'pie',
+                                    radius : '70%',
+                                    itemStyle : {
+                                        normal : {
+                                            labelLine : {
+                                                length : 10,
+                                                show : false
+                                            },
+                                            label : {
+                                                textStyle : {
+                                                    fontSize : 12,
+                                                    align : "center"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    selectedMode : 'multiple',
+                                    data : eval(msg.split('|')[1])
+                                }]
+                            };
+                            myChart.setOption(option1);
+                        } else {
+                            myChart.clear();
+                            $("#divCantonReport").html("<br><br><br>暂无" + msg.split('|')[0] + "数据");
+                        }
+                    }
+                });
+            }
+        </script>
+        <script type="text/javascript">
+            function GetChannelPrice(di) {
+                var myChart = echarts.init(document.getElementById("divChannelReport"));
+                myChart.setTheme('macarons');
+                myChart.showLoading({
+                    text : '正在查询数据...',
+                    effect : 'whirling'
+                });
+                $.ajax({
+                    type : "POST",
+                    url : "/Home/GetDatePayPriceOnLastWeekByChannel",
+                    data : {
+                        dindex : di
+                    },
+                    dataType : "text",
+                    success : function(msg) {
+                        myChart.hideLoading();
+                        if (msg.split('|')[1] != "") {
+                            var option2 = {
+                                title : {
+                                    text : msg.split('|')[0] + '消费渠道分布',
+                                    textStyle : {
+                                        fontSize : 12,
+                                        color : '#444'
+                                    },
+                                    x : 'center',
+                                    y : '10',
+                                    padding : 0,
+                                    itemGap : 0
+                                },
+                                tooltip : {
+                                    trigger : 'item',
+                                    formatter : '{b} : <br/>{c}元 ({d}%)',
+                                    position : function(x, y) {
+                                        return [x - 100, y - 30];
+                                    }
+                                },
+                                series : [{
+                                    name : '消费金额',
+                                    type : 'pie',
+                                    radius : '70%',
+                                    itemStyle : {
+                                        normal : {
+                                            labelLine : {
+                                                length : 10,
+                                                show : false
+                                            },
+                                            label : {
+                                                textStyle : {
+                                                    fontSize : 12,
+                                                    align : "center"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    selectedMode : 'multiple',
+                                    data : eval(msg.split('|')[1])
+                                }]
+                            };
+                            myChart.setOption(option2);
+                        } else {
+                            myChart.clear();
+                            $("#divChannelReport").html("<br><br><br>暂无" + msg.split('|')[0] + "数据");
+                        }
+                    }
+                });
+            }
+        </script>
+        <!-- 停车支付方式总次数趋势图 -->
+        <script type="text/javascript">
+            function GetLastHalfMonthReport() {
+                var myChart = echarts.init(document.getElementById("divLastHalfMonthReport"));
+                myChart.setTheme(macarons());
+                myChart.showLoading({
+                    text : '正在查询数据...',
+                    effect : 'whirling'
+                });
+                var msg = "{&quot;MainIndex&quot;:[{&quot;Time&quot;:&quot;6月9日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月10日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月11日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月12日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月13日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月14日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月15日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月16日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月17日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月18日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月19日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月20日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月21日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月22日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月23日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月24日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月25日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月26日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月27日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月28日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月29日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月30日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月1日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月2日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月3日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月4日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月5日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月6日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月7日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月8日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月9日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;}]}".replace(new RegExp('&quot;', 'gm'), '"');
+                myChart.hideLoading();
+                if (msg != "") {
+                    //alert(msg);
+                    var MainIndex = $.parseJSON(msg).MainIndex;
+                    var dd = [];
+                    //日期
+                    var rp = [];
+                    //充值金额
+                    var pp = [];
+                    //交易次数
+                    var uc = [];
+                    //注册用户
+                    for (var i = 0; i < MainIndex.length; i++) {
+                        dd.push(MainIndex[i].Time);
+                        rp.push(MainIndex[i].RechargePrice);
+                        pp.push(MainIndex[i].PayCount);
+                        uc.push(MainIndex[i].UserCount);
+                    }
+                    var option = {
+                        tooltip : {
+                            trigger : 'axis',
+                            formatter : '{b}<br>{a}：{c}元<br>{a1}：{c1}笔<br>{a2}：{c2}人',
+                            textStyle : {
+                                align : 'left'
+                            }
+                        },
+                        legend : {
+                            data : ['充值金额', '新增用户', '交易次数'],
+                            x : 'right',
+                            selectedMode : false
+                        },
+                        xAxis : [{
+                            type : 'category',
+                            data : eval(dd)
+                        }],
+                        yAxis : [{
+                            type : 'value',
+                            name : '金额',
+                            axisLabel : {
+                                formatter : '{value} 元'
+                            }
+                        }, {
+                            type : 'value'
+                        }],
+                        series : [{
+                            name : '充值金额',
+                            type : 'bar',
+                            data : eval(rp)
+                        }, {
+                            name : '交易次数',
+                            type : 'line',
+                            yAxisIndex : 1,
+                            data : eval(pp)
+                        }, {
+                            name : '新增用户',
+                            type : 'line',
+                            yAxisIndex : 1,
+                            data : eval(uc)
+                        }]
+                    };
+                    myChart.setOption(option);
+                }
+            }
+        </script>
+        <script src="Scripts/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="Scripts/ECharts/echarts-plain.js"></script>
+        <script type="text/javascript" src="Scripts/ECharts/macarons.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+
+                $(".dataActive").mouseover(function() {
+                    var objId = this.id;
+                    $("#" + objId).find(".hidddiv").css("display", "none");
+                }).mouseleave(function() {
+                    var objId = this.id;
+                    $("#" + objId + " div").css("display", "");
+                });
+
+                var hoverObj = new sHover("dataActive", "dataHover");
+                hoverObj.set({
+                    speed : 7,
+                    opacity : 80,
+                    opacityChange : true
+                });
+
+                GetLastWeekPayPrice();
+                GetLastHalfMonthReport();
+                $(".side ul li").hover(function() {
+                    $(this).find(".sidebox").stop().animate({
+                        "width" : "124px"
+                    }, 200).css({
+                        "opacity" : "1",
+                        "filter" : "Alpha(opacity=100)",
+                        "background" : "#FFB400"
+                    });
+                }, function() {
+                    $(this).find(".sidebox").stop().animate({
+                        "width" : "54px"
+                    }, 200).css({
+                        "opacity" : "0.8",
+                        "filter" : "Alpha(opacity=80)",
+                        "background" : "#4BA9E9"
+                    });
+                });
+
+                //document.getElementById('reportBody').src = '/Home/SectionReportInfo'
+
+                setTimeout('$("#butReport").click()', 1000);
+                setTimeout('getReporPage()', 1000);
+            });
+
+            //回到顶部
+            function goTop() {
+                $('html,body').animate({
+                    'scrollTop' : 0
+                }, 600);
+            }
+
+            function getReporPage() {
+                document.getElementById('reportBody').src = '/Home/SectionReportInfo'
+            }
+
+            function MoveBox() {
+                var divTop = $("#reportInfo").offset().top;
+                var divLeft = $("#reportInfo").offset().left;
+                $("#reportBackground").css("display", "none");
+                $("#reportInfo").css({
+                    "position" : "absolute",
+                    "z-index" : "500",
+                    "left" : divLeft + "px",
+                    "top" : divTop + "px"
+                });
+                $("#reportInfo").animate({
+                    "left" : ($("#butReport").offset().left - $("#butReport").width()) + "px",
+                    "top" : ($(document).scrollTop() + 30) + "px",
+                    "width" : "80px",
+                    "height" : "30px"
+                }, 500, function() {
+                    $("#reportInfo").animate({
+                        "left" : $("#butReport").offset().left + "px",
+                        "top" : $("#butReport").offset().top - 50 + "px",
+                        "width" : "50px",
+                        "height" : "25px"
+                    }, 500).fadeTo(0, 0.1).hide(0);
+                });
+            }
+
+
+            $("#butReport").click(function() {
+                //$("#reportBackground").css("display", "block");
+                $("#reportBackground").fadeTo(1000, 0.5);
+                showReport();
+            });
+            function showReport() {
+                $("#reportInfo").animate({
+                    "top" : "40px",
+                    "left" : "4%",
+                    "width" : "92%",
+                    "height" : "165%",
+                    "margin-bottom" : "10px"
+                }, 100).fadeTo(1000, 1);
+            }
+
+        </script>
+
+    </body>
+</html>

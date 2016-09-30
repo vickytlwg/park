@@ -32,12 +32,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.Posdata;
 import com.park.model.posdataReceive;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
+import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
@@ -57,7 +59,8 @@ private AuthorityService authService;
 
 @Autowired
 private UserPagePermissionService pageService;
-
+@Autowired
+private OutsideParkInfoService outsideParkInfoService;
 @Autowired
 private ExcelExportService excelService;
 @RequestMapping(value = "/insertChargeDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
@@ -98,6 +101,24 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 		}
 		posdata.setEndtime(parseEndtime);
 		num+=posdataService.insert(posdata);
+		List<Park> parks=parkService.getParkByName(posdata.getSitename());
+		if (parks.size()==1) {
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
+			if (posdata.getMode()==1) {
+				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
+				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+				outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-
+						posdata.getReturnmoney().floatValue());
+				outsideparkinfo.setPossigndate(new Date());
+			}
+			else {
+				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setPossigndate(new Date());
+			}
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		}
 	}
 	
 	Map<String, Object> retMap = new HashMap<String, Object>();

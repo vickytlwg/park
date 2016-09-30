@@ -173,7 +173,7 @@
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
 
-				<li #if(!$isAdmin && !$park_platformShow) hidden#end ><a href="/park/platformShow"><i class="fa fa-area-chart"></i>主界面</a></li>
+				<li #if(!$isAdmin && !$park_platformShow) hidden#end ><a href="/park/platformShowbk"><i class="fa fa-area-chart"></i>主界面</a></li>
 				
                 <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
 				

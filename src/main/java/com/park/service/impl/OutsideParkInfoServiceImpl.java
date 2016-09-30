@@ -86,6 +86,9 @@ public class OutsideParkInfoServiceImpl implements OutsideParkInfoService {
 		// TODO Auto-generated method stub
 		List<ParkDetail> parkDetails=parkService.getOutsideParkDetail(0, 9999);
 		Date date=new Date();
+		if (getByParkidAndDate(parkDetails.get(0).getId())!=null) {
+			return;
+		}
 		for (ParkDetail parkDetail : parkDetails) {
 			Outsideparkinfo record=new Outsideparkinfo();
 			record.setParkid(parkDetail.getId());
