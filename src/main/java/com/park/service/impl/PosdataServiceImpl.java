@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosdataDAO;
 import com.park.model.Park;
@@ -16,6 +17,7 @@ import com.park.model.Posdata;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.PosdataService;
+@Transactional
 @Service
 public class PosdataServiceImpl implements PosdataService {
 	@Autowired

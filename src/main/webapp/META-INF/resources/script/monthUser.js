@@ -1,5 +1,5 @@
 var monthUserApp=angular.module("monthUserApp",['ui.bootstrap']);
-monthUserApp.controller("monthUserCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
+monthUserApp.controller("monthUserCtrl",['$scope', '$http','$uibModal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
     $scope.users=[];
     $scope.checkedIndex=-1;
@@ -23,7 +23,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     };
     $scope.insertUser=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
+            templateUrl: 'modifyUser',
             controller: 'monthUserModify',
             scope:$scope,
             resolve: {
@@ -55,7 +55,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewMonthUser.html',
+            templateUrl: 'modifyUser',
             controller: 'monthUserModify',
             scope:$scope,
             resolve: {
@@ -110,6 +110,7 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
         $scope.tempUser = $scope.$parent.users[index];
         url = '/park/monthUser/update';
     }
+    $scope.statuses=[{value:0,text:'未支付'},{value:1,text:'已支付'}];
     $scope.parks=[];
     $scope.getParks=function(){
         $http({
@@ -144,7 +145,7 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
                 $scope.showLoader=false;
                 $timeout(function(){
                       $scope.close('ok');
-                },2500);
+                },2000);
               
                 $scope.$parent.refreshUser();
                 

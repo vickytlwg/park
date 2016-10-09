@@ -113,7 +113,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 				outsideparkinfo.setPossigndate(new Date());
 			}
 			else {
-				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
 				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
 				outsideparkinfo.setPossigndate(new Date());
 			}

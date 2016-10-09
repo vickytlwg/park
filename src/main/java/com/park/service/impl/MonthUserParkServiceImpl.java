@@ -1,14 +1,17 @@
 package com.park.service.impl;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.MonthuserparkDAO;
 import com.park.model.Monthuserpark;
 import com.park.service.MonthUserParkService;
+@Transactional
 @Service
 public class MonthUserParkServiceImpl implements MonthUserParkService {
 @Autowired

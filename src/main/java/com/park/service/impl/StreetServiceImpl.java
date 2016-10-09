@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.StreetDAO;
 import com.park.model.Street;
 import com.park.service.StreetService;
+@Transactional
 @Service
 public class StreetServiceImpl implements StreetService {
 

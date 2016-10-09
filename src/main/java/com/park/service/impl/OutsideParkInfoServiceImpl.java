@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.OutsideparkinfoDAO;
 import com.park.model.Outsideparkinfo;
@@ -15,6 +16,7 @@ import com.park.model.Park;
 import com.park.model.ParkDetail;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
+@Transactional
 @Service
 public class OutsideParkInfoServiceImpl implements OutsideParkInfoService {
 	@Autowired

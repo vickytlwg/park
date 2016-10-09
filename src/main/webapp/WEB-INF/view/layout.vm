@@ -115,8 +115,11 @@
             <li class="header">功能区</li>
             <!-- Optionally, you can add icons to the links -->
             
-			<li hidden class="treeview ">
-				 <a href="/park/demo"><i class="fa fa-fw fa-cab"></i> <span>Demo Page</span> <i class="fa fa-angle-left pull-right"></i></a>
+			<li class="treeview active">
+				 <a href="/park/demo"><i class="fa fa-fw fa-cab"></i> <span>首页面</span> <i class="fa fa-angle-left pull-right"></i></a>
+				  <ul class="treeview-menu">
+					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/platformShow"><i class="fa fa-user-plus"></i>数据发布</a></li>
+				</ul>
 			</li>
 			
 			<li class="treeview active">

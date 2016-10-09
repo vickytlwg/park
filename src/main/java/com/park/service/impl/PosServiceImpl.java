@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosDAO;
 import com.park.model.Pos;
 import com.park.model.posdataReceive;
 import com.park.service.PosService;
-
+@Transactional
 @Service
 public class PosServiceImpl implements PosService {
 	

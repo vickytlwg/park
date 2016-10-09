@@ -475,16 +475,16 @@
                     <div class="data_wrapper">
                         <table cellpadding="0" cellspacing="0" style="width: 100%;">
                             <tr>
-                                <td style="width:820px;">
+                                <td style="width:1024px;">
                                 <table id="tbReport" class="indexData">
                                     <tr>
                                         <th></th>
                                         <th>消费金额（元）</th>
                                         <th>交易次数（笔）</th>
-                                        <th style="width: 110px;">违章次数（次）</th>
-                                        <th>补缴欠费次数（次）</th>
-                                        <th>签到次数（人次）</th>
-                                        <th style="width: 110px;">运营中泊位数（个）</th>
+                                        <th>违章次数（次）</th>
+                                        <th>补缴欠费次数</th>
+                                        <th>签到次数</th>
+                                        <th >运营中泊位数</th>
                                     </tr>
                                     <tr>
                                         <td>江宁区</td>
@@ -570,332 +570,16 @@
             </div>
         </div>
 
-        <!-- js 控制左边菜单栏-->
-        <script type="text/javascript">
-            $(".sidebar-toggler").click(function() {
-                if ($(".leftNav").width() == "216") {
-                    $(".leftNav").css("width", "40");
-                    $(".page-content").css("margin-left", "40px");
-                    $(".sidebar-toggler").addClass("sidebar-toggler-closed");
-                    $(".leftNav-menu  span").css("display", "none");
-                    $(".sub-menu").css("display", "none");
-                    $(".arrow").css("display", "none");
-                    $(".sublock").css("padding", "10px");
-                    $(".sub-menu a").css("width", "85px");
-                    $(".sublock").css("width", "20px");
-                } else {
-                    $(".leftNav").css("width", "216px");
-                    $(".page-content").css("margin-left", "216px");
-                    $(".sidebar-toggler").removeClass("sidebar-toggler-closed");
-                    $(".leftNav-menu span").css("display", "inline-block");
-                    $(".arrow").css("display", "inline-block");
-                    $(".sub-menu a").css("width", "130px");
-                    $(".sub-menu a").css("padding", "10px 20px 10px 65px");
-                    $(".sublock").css("width", "195px");
-                }
-            });
-
-            //加载线完成
-            $("#loadingbar").css("display", "block")
-            $("#loadingbar").width("100.4%").delay(1000);
-
-            //2秒后隐藏loginbar函数
-            setTimeout('UnShowLoginBar()', 1000);
-            //隐藏loginbar函数
-            function UnShowLoginBar() {
-                $("#loadingbar").css("display", "none");
-            }
-
-
-            $(document).ready(function(e) {
-                //收缩列表
-                if ($(".leftNav").width() == "40") {
-                    $(".leftNav-menu  li").hover(function() {
-                        $(this).css("width", "200px");
-                    })
-                }
-                $(".sub-menu").hide();
-                var nowF = "";
-                var nowM = "";
-
-                //加载一级菜单选中样式
-                if (nowF != "")
-                    $(".main_menu #" + nowF).addClass("pitch_on");
-                else
-                    $(".main_menu li:eq(0) a").addClass("pitch_on");
-
-                //点击列表效果
-                var sub_menu = $(".sub-menu");
-                var all_sublock = $(".sublock")
-                var li_arrow = $(".leftNav-menu li .arrow");
-                $(".leftNav-menu li a[class='sublock'] ").click(function() {
-                    sub_menu.slideUp(200);
-                    li_arrow.removeClass("arrow_down");
-                    if ($(this).attr("data-select") == "0") {
-                        all_sublock.attr("data-select", "0");
-                        $(this).attr("data-select", "1").next().stop(true, true).slideToggle(200);
-                        $(this).find("i:eq(1)").toggleClass("arrow_down");
-                    } else if ($(this).attr("data-select") == "1") {
-                        $(this).attr("data-select", "0");
-                    }
-                    return false;
-                });
-                //加载二、三级菜单选中样式
-                if (nowM != "") {
-                    $(".sub-menu a[id=" + nowM + "]").addClass("sub-men-toggler");
-                    var sub = $(".sub-menu a[id=" + nowM + "]").parent().parent().parent().find("a[class='sublock']");
-                } else {
-                    $(".sub-menu a:eq(0)").addClass("sub-men-toggler");
-                    var sub = $(".sub-menu a:eq(0)").parent().parent().parent().find("a[class='sublock']");
-                }
-                $(sub).attr("data-select", "1").next().stop(true, true).show();
-                $(sub).find("i:eq(1)").toggleClass("arrow_down");
-                $(".leftNav-menuLi").hover(function(e) {
-                    if ($(".leftNav").width() == "40") {
-                        $(this).addClass("opened");
-                        $(this).find("ul").css("display", "block");
-                        $(this).find("ul").addClass("openedUl");
-                        $(this).find("a").addClass("openedA");
-                        $(this).find(".sublock  span").css("display", "inline-block");
-                        $(this).find(".sublock  span").addClass("hoverSpan");
-                        $(this).find(".sublock").css("width", "180px");
-                        $(this).find(".sublock").css("border", "0");
-                        $(this).find(".sub-menu a").css("padding", "10px 30px 10px 55px");
-                    }
-                }, function() {
-                    if ($(".leftNav").width() == "40") {
-                        $(this).removeClass("opened");
-                        $(this).find("ul").css("display", "none");
-                        $(this).find("ul").removeClass("openedUl");
-                        $(this).find("a").removeClass("openedA");
-                        $(this).find(".sublock span").css("display", "none");
-                        $(this).find(".sublock span").removeClass("hoverSpan");
-                        $(this).find(".sublock").css("width", "20px");
-                        $(this).find(".sublock").css({
-                            "border-top" : "1px solid #e9e9e9"
-                        });
-                    }
-                })
-            });
-
-            $(function() {
-
-                var alarmUpdateTime = $("#hiddAlarmTime").val() * 1000;
-
-                //setInterval(NoticeRead, 1800000);
-            });
-
-        </script>
+     
 
         <!-- 首页效果 end -->
 
         <script src="Scripts/sHover.min.js"></script>
         <script src="Scripts/jquery.numbermodel.js"></script>
         <script src="Scripts/jquery.jBox.src.js"></script>
-        <script type="text/javascript">
-            function GetLastWeekPayPrice() {
-                var myChart = echarts.init(document.getElementById("divTotalReport"));
-                myChart.setTheme(macarons());
-                myChart.showLoading({
-                    text : '正在查询数据...',
-                    effect : 'whirling'
-                });
-                myChart.hideLoading();
-                var msg = "[&quot;7月3日&quot;,&quot;7月4日&quot;,&quot;7月5日&quot;,&quot;7月6日&quot;,&quot;7月7日&quot;,&quot;7月8日&quot;,&quot;7月9日&quot;]|[0,0,0,0,0,0,0]".replace(new RegExp('&quot;', 'gm'), '"');
-                var option = {
-                    title : {
-                        text : '停车收费情况（过去一周）',
-                        textStyle : {
-                            fontSize : 12,
-                            color : '#1F2B38'
-                        },
-                        x : 'center',
-                        y : '10',
-                        padding : 0,
-                        itemGap : 0
-                    },
-                    tooltip : {
-                        trigger : 'axis',
-                        formatter : '{b} : {c}元',
-                        axisPointer : {
-                            type : 'none'
-                        }
-                    },
-                    xAxis : [{
-                        type : 'category',
-                        data : eval(msg.split('|')[0]),
-                        axisLine : {
-                            lineStyle : {
-                                color : '#e2e2e2',
-                                width : 1,
-                                type : 'solid'
-                            }
-                        },
-                        axisLabel : {
-                            interval : '0'
-                        }
-                    }],
-                    yAxis : [{
-                        type : 'value'
-                    }],
-                    grid : {
-                        x : 50,
-                        y : 30,
-                        x2 : 0,
-                        y2 : 30
-                    },
-                    series : [{
-                        name : '消费金额',
-                        type : 'bar',
-                        data : eval(msg.split('|')[1])
-                    }]
-                };
-                myChart.setOption(option);
-                GetCantonPrice(5);
-                GetChannelPrice(5);
-                myChart.on('click', function(param) {
-                    GetCantonPrice(param.dataIndex - 1);
-                    GetChannelPrice(param.dataIndex - 1);
-                });
-            }
-        </script>
-        <script type="text/javascript">
-            function GetCantonPrice(di) {
-                var myChart = echarts.init(document.getElementById("divCantonReport"));
-                myChart.setTheme(macarons());
-                myChart.setTheme('infographic');
-                myChart.showLoading({
-                    text : '正在查询数据...',
-                    effect : 'whirling'
-                });
-                $.ajax({
-                    type : "POST",
-                    url : "/Home/GetDatePayPriceOnLastWeekByCanton",
-                    data : {
-                        dindex : di
-                    },
-                    dataType : "text",
-                    success : function(msg) {
-                        myChart.hideLoading();
-                        if (msg.split('|')[1] != "") {
-                            var option1 = {
-                                title : {
-                                    text : msg.split('|')[0] + '消费区域分布',
-                                    textStyle : {
-                                        fontSize : 12,
-                                        color : '#444'
-                                    },
-                                    x : 'center',
-                                    y : '10',
-                                    padding : 0,
-                                    itemGap : 0
-                                },
-                                tooltip : {
-                                    trigger : 'item',
-                                    formatter : '{b} : <br/>{c}元 ({d}%)',
-                                    position : function(x, y) {
-                                        return [x - 100, y - 30];
-                                    }
-                                },
-                                series : [{
-                                    name : '消费金额',
-                                    type : 'pie',
-                                    radius : '70%',
-                                    itemStyle : {
-                                        normal : {
-                                            labelLine : {
-                                                length : 10,
-                                                show : false
-                                            },
-                                            label : {
-                                                textStyle : {
-                                                    fontSize : 12,
-                                                    align : "center"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    selectedMode : 'multiple',
-                                    data : eval(msg.split('|')[1])
-                                }]
-                            };
-                            myChart.setOption(option1);
-                        } else {
-                            myChart.clear();
-                            $("#divCantonReport").html("<br><br><br>暂无" + msg.split('|')[0] + "数据");
-                        }
-                    }
-                });
-            }
-        </script>
-        <script type="text/javascript">
-            function GetChannelPrice(di) {
-                var myChart = echarts.init(document.getElementById("divChannelReport"));
-                myChart.setTheme('macarons');
-                myChart.showLoading({
-                    text : '正在查询数据...',
-                    effect : 'whirling'
-                });
-                $.ajax({
-                    type : "POST",
-                    url : "/Home/GetDatePayPriceOnLastWeekByChannel",
-                    data : {
-                        dindex : di
-                    },
-                    dataType : "text",
-                    success : function(msg) {
-                        myChart.hideLoading();
-                        if (msg.split('|')[1] != "") {
-                            var option2 = {
-                                title : {
-                                    text : msg.split('|')[0] + '消费渠道分布',
-                                    textStyle : {
-                                        fontSize : 12,
-                                        color : '#444'
-                                    },
-                                    x : 'center',
-                                    y : '10',
-                                    padding : 0,
-                                    itemGap : 0
-                                },
-                                tooltip : {
-                                    trigger : 'item',
-                                    formatter : '{b} : <br/>{c}元 ({d}%)',
-                                    position : function(x, y) {
-                                        return [x - 100, y - 30];
-                                    }
-                                },
-                                series : [{
-                                    name : '消费金额',
-                                    type : 'pie',
-                                    radius : '70%',
-                                    itemStyle : {
-                                        normal : {
-                                            labelLine : {
-                                                length : 10,
-                                                show : false
-                                            },
-                                            label : {
-                                                textStyle : {
-                                                    fontSize : 12,
-                                                    align : "center"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    selectedMode : 'multiple',
-                                    data : eval(msg.split('|')[1])
-                                }]
-                            };
-                            myChart.setOption(option2);
-                        } else {
-                            myChart.clear();
-                            $("#divChannelReport").html("<br><br><br>暂无" + msg.split('|')[0] + "数据");
-                        }
-                    }
-                });
-            }
-        </script>
+       <script src="Scripts/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="Scripts/ECharts/echarts-plain.js"></script>
+        <script type="text/javascript" src="Scripts/ECharts/macarons.js"></script>
         <!-- 停车支付方式总次数趋势图 -->
         <script type="text/javascript">
             function GetLastHalfMonthReport() {
@@ -907,6 +591,12 @@
                 });
                 var msg = "{&quot;MainIndex&quot;:[{&quot;Time&quot;:&quot;6月9日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月10日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月11日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月12日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月13日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月14日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月15日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月16日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月17日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月18日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月19日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月20日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月21日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月22日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月23日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月24日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月25日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月26日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月27日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月28日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月29日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;6月30日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月1日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月2日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月3日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月4日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月5日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月6日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月7日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月8日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;},{&quot;Time&quot;:&quot;7月9日&quot;,&quot;RechargePrice&quot;:&quot;0&quot;,&quot;PayCount&quot;:&quot;0&quot;,&quot;UserCount&quot;:&quot;0&quot;}]}".replace(new RegExp('&quot;', 'gm'), '"');
                 myChart.hideLoading();
+				function GetRandomNum(Min,Max)
+				{   
+					var Range = Max - Min;   
+					var Rand = Math.random();   
+					return(Min + Math.round(Rand * Range));   
+				}   
                 if (msg != "") {
                     //alert(msg);
                     var MainIndex = $.parseJSON(msg).MainIndex;
@@ -919,10 +609,10 @@
                     var uc = [];
                     //注册用户
                     for (var i = 0; i < MainIndex.length; i++) {
-                        dd.push(MainIndex[i].Time);
-                        rp.push(MainIndex[i].RechargePrice);
-                        pp.push(MainIndex[i].PayCount);
-                        uc.push(MainIndex[i].UserCount);
+                        dd.push('9月'+(i+1)+'日');
+                        rp.push(9000+GetRandomNum(1,5000));
+                        pp.push(300+GetRandomNum(1,500));
+                        uc.push(1500+GetRandomNum(1,2000));
                     }
                     var option = {
                         tooltip : {
@@ -969,108 +659,11 @@
                     myChart.setOption(option);
                 }
             }
+			GetLastHalfMonthReport();
         </script>
-        <script src="Scripts/jquery-1.8.2.min.js"></script>
-        <script type="text/javascript" src="Scripts/ECharts/echarts-plain.js"></script>
-        <script type="text/javascript" src="Scripts/ECharts/macarons.js"></script>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-                $(".dataActive").mouseover(function() {
-                    var objId = this.id;
-                    $("#" + objId).find(".hidddiv").css("display", "none");
-                }).mouseleave(function() {
-                    var objId = this.id;
-                    $("#" + objId + " div").css("display", "");
-                });
-
-                var hoverObj = new sHover("dataActive", "dataHover");
-                hoverObj.set({
-                    speed : 7,
-                    opacity : 80,
-                    opacityChange : true
-                });
-
-                GetLastWeekPayPrice();
-                GetLastHalfMonthReport();
-                $(".side ul li").hover(function() {
-                    $(this).find(".sidebox").stop().animate({
-                        "width" : "124px"
-                    }, 200).css({
-                        "opacity" : "1",
-                        "filter" : "Alpha(opacity=100)",
-                        "background" : "#FFB400"
-                    });
-                }, function() {
-                    $(this).find(".sidebox").stop().animate({
-                        "width" : "54px"
-                    }, 200).css({
-                        "opacity" : "0.8",
-                        "filter" : "Alpha(opacity=80)",
-                        "background" : "#4BA9E9"
-                    });
-                });
-
-                //document.getElementById('reportBody').src = '/Home/SectionReportInfo'
-
-                setTimeout('$("#butReport").click()', 1000);
-                setTimeout('getReporPage()', 1000);
-            });
-
-            //回到顶部
-            function goTop() {
-                $('html,body').animate({
-                    'scrollTop' : 0
-                }, 600);
-            }
-
-            function getReporPage() {
-                document.getElementById('reportBody').src = '/Home/SectionReportInfo'
-            }
-
-            function MoveBox() {
-                var divTop = $("#reportInfo").offset().top;
-                var divLeft = $("#reportInfo").offset().left;
-                $("#reportBackground").css("display", "none");
-                $("#reportInfo").css({
-                    "position" : "absolute",
-                    "z-index" : "500",
-                    "left" : divLeft + "px",
-                    "top" : divTop + "px"
-                });
-                $("#reportInfo").animate({
-                    "left" : ($("#butReport").offset().left - $("#butReport").width()) + "px",
-                    "top" : ($(document).scrollTop() + 30) + "px",
-                    "width" : "80px",
-                    "height" : "30px"
-                }, 500, function() {
-                    $("#reportInfo").animate({
-                        "left" : $("#butReport").offset().left + "px",
-                        "top" : $("#butReport").offset().top - 50 + "px",
-                        "width" : "50px",
-                        "height" : "25px"
-                    }, 500).fadeTo(0, 0.1).hide(0);
-                });
-            }
+        
 
 
-            $("#butReport").click(function() {
-                //$("#reportBackground").css("display", "block");
-                $("#reportBackground").fadeTo(1000, 0.5);
-                showReport();
-            });
-            function showReport() {
-                $("#reportInfo").animate({
-                    "top" : "40px",
-                    "left" : "4%",
-                    "width" : "92%",
-                    "height" : "165%",
-                    "margin-bottom" : "10px"
-                }, 100).fadeTo(1000, 1);
-            }
-
-        </script>
 
     </body>
 </html>

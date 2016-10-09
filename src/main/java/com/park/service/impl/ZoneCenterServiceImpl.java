@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.ZonecenterDAO;
 import com.park.model.Zonecenter;
 import com.park.service.ZoneCenterService;
+@Transactional
 @Service
 public class ZoneCenterServiceImpl implements ZoneCenterService {
 

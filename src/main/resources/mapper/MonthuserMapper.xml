@@ -148,11 +148,23 @@
       <if test="platecolor != null" >
         plateColor = #{platecolor,jdbcType=VARCHAR},
       </if>
+      <if test="starttime != null">
+        startTime=#{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        endTime=#{endtime,jdbcType=TIMESTAMP},
+      </if>
       <if test="certificatetype != null" >
         certificateType = #{certificatetype,jdbcType=VARCHAR},
       </if>
       <if test="certificatenumber != null" >
         certificateNumber = #{certificatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="payment != null">
+        payment=#{payment,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        status=#{status,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
