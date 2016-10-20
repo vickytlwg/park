@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class ParkUserController {
 		if(isAdmin)
 			return "parkUser";
 		else
-			return "/login";
+			return "redirect:platformShow";
 	}
 	
 	

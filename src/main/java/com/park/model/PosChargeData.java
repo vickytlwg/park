@@ -162,10 +162,12 @@ public class PosChargeData {
 		return exitDate;
 	}
 
-	public void setExitDate(Date exitDate) {
-		this.exitDate = exitDate;
+	public void setExitDate(String exitDate) throws ParseException {
+		this.exitDate =new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 	}
-
+	public void setExitDate1(Date exitDate){
+		this.exitDate =exitDate;
+	}
 
 	public int getIsOneTimeExpense() {
 		return isOneTimeExpense;

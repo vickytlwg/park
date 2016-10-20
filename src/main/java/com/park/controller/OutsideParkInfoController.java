@@ -69,12 +69,14 @@ public class OutsideParkInfoController {
 					parkCount+=parks.size();
 					for (Park park : parks) {
 						Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
-						carportCount+=parkInfo.getCarportcount();
-						carportLeftCount+=parkInfo.getUnusedcarportcount();
-						amountMoney+=parkInfo.getAmountmoney();
-						realMoney+=parkInfo.getRealmoney();
-						entranceCount+=parkInfo.getEntrancecount();
-						outCount+=parkInfo.getOutcount();
+						if (parkInfo!=null) {
+							carportCount+=parkInfo.getCarportcount();
+							carportLeftCount+=parkInfo.getUnusedcarportcount();
+							amountMoney+=parkInfo.getAmountmoney();
+							realMoney+=parkInfo.getRealmoney();
+							entranceCount+=parkInfo.getEntrancecount();
+							outCount+=parkInfo.getOutcount();
+						}						
 					}
 				}
 			}

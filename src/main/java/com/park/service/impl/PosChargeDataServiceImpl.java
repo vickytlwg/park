@@ -166,9 +166,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			Calendar cld = Calendar.getInstance();
 			cld.setTime(enterDate);
 			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-			charge.setExitDate(cld.getTime());
+			charge.setExitDate1(cld.getTime());
 		} else {
-			charge.setExitDate(exitDate);
+			charge.setExitDate1(exitDate);
 		}
 
 		double expense = 0;
@@ -244,9 +244,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			Calendar cld = Calendar.getInstance();
 			cld.setTime(enterDate);
 			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-			charge.setExitDate(cld.getTime());
+			charge.setExitDate1(cld.getTime());
 		} else {
-			charge.setExitDate(exitDate);
+			charge.setExitDate1(exitDate);
 		}
 		double expense = 0;
 		if (charge.getIsOneTimeExpense() == 1) {

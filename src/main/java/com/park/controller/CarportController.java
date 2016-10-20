@@ -1,7 +1,6 @@
 package com.park.controller;
 
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +69,7 @@ public class CarportController {
 	
 	@RequestMapping(value = "/insert/carport", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String insertCarport(@RequestBody Carport carport){
-		
-		
+	public String insertCarport(@RequestBody Carport carport){			
 		int ret = carportService.insertCarport(carport);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		
