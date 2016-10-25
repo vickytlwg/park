@@ -77,7 +77,11 @@
 						<div class='col-sm-8'>
 							<select class='form-control' id='faulttype'>
 								<option value=0>有车显示无车</option>
-								<option value=2>其它</option>
+								<option value=1>拒绝付费</option>
+								<option value=2>收费员不在场</option>
+								<option value=3>未停车入位</option>
+								<option value=4>收费员未带工作牌 </option>
+								<option value=9>其它</option>
 							</select>
 						</div>
 					</div>

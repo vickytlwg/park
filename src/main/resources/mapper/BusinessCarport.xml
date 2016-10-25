@@ -43,7 +43,7 @@
 	</select>
 	
 	<select id="getParkLeftPort" resultType="int">
-		select count(*) from businessCarport where status = 1 and parkId = #{param1};
+		select count(*) from businessCarport where status = 0 and parkId = #{param1};
 	</select>
 	
 	<select id="checkMacExist" resultType="int">

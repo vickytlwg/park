@@ -83,6 +83,24 @@ public class PosChargeDataController {
 		return "feeDetail";		
 	}
 	
+	@RequestMapping(value = "/arrearage", produces = {"application/json;charset=UTF-8"})
+	public String arrearage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "arrearage";		
+	}
 	@RequestMapping(value="/getByParkAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String getByParkAndRange(@RequestBody Map<String,Object> args){

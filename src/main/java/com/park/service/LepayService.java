@@ -16,7 +16,7 @@ public Map<String, Object> saomaPay(Long amount,int type){
      String version = "1.0.0";
      String encoding = "UTF-8";
      String signature = "";
-     String reqReserved = "测试请求";
+     String reqReserved = "九比特测试请求";
 
      // String mchId = "23501";
      // String cmpAppId = "34505";
@@ -24,14 +24,14 @@ public Map<String, Object> saomaPay(Long amount,int type){
      String cmpAppId = "38501";
      String payTypeCode = "PT0007_MS";
      if (type==1) {
-    	 payTypeCode="PT0007_MS";
+    	 payTypeCode="PT0009_MS";
 	}
 
      String outTradeNo = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
      String tradeTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
   //   String amount = "1";
-     String summary = "测试";
-     String summaryDetail = "测试";
+     String summary = "九比特停车";
+     String summaryDetail = "九比特停车";
      String deviceId = "L897554536354";
      String deviceIp = "127.0.0.1";
 

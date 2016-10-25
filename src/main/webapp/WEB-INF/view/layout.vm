@@ -138,7 +138,10 @@
 				<li #if(!$isAdmin && !$park_outsideParks) hidden#end><a href="/park/outsideParks"><i class="fa fa-car"></i>收费站点管理</a></li>
 				<li #if(!$isAdmin && !$park_fee_criterion_index) hidden#end ><a href="/park/fee/criterion/index"><i class="fa fa-file-text-o"></i>计费标准管理</a></li>
 				<li #if(!$isAdmin && !$park_hardware) hidden#end><a href="/park/pos"><i class="fa fa-gear"></i>手持终端管理</a></li>	
+				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>包月用户管理</a></li>
 				<li #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/feeOperator"><i class="fa fa-user-plus"></i>收费人员管理</a></li>
+				<li #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/feeOperator/2"><i class="fa fa-user-plus"></i>巡检员管理</a></li>
+
 				</ul>
 			</li>
 			
@@ -157,7 +160,7 @@
 					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>今日停车简版</a></li>
 				    <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车</a></li>
 					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/maptest"><i class="fa fa-pie-chart"></i>今日停车测试</a></li>
-					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="#"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
+					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
 					<li #if(!$isAdmin && !$park_parks) hidden#end><a href="#"><i class="fa fa-pie-chart"></i>终端状态</a></li>
 					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarport" ><i class="fa fa-car"></i>车位管理</a></li>
 				</ul>
@@ -172,6 +175,12 @@
 				  
 				</ul>
 			</li>
+			 <li class="treeview active">
+                <a href="#"><i class="fa fa-cog"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li #if(!$isAdmin && !$park_repair) hidden#end><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li>
+              </ul>
+            </li>
             <li class="treeview active">
               <a href="#"><i class="fa fa-fw fa-cab"></i> <span>停车管理</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
@@ -202,19 +211,14 @@
               </ul>
             </li>
             
-			  <li class="treeview active">
-                <a href="#"><i class="fa fa-cog"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                  <li #if(!$isAdmin && !$park_repair) hidden#end><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li>
-              </ul>
-            </li>
+			 
 			
             <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-users"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_users) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li>
                   <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>网站用户管理</a></li>
-				  <li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>月卡用户管理</a></li>
+				  
                   <li #if(!$isAdmin && !$park_api_user_index) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>用户token管理</a></li>
                   <li #if(!$isAdmin && !$park_permission_roles) hidden#end><a href="/park/page/permission/roles"><i class="fa fa-user-secret"></i>角色管理</a></li>
                    <li #if(!$isAdmin && !$park_permission_role_allocate) hidden#end><a href="/park/page/permission/role/allocate"><i class="fa fa-user-secret"></i>角色分配管理</a></li>
