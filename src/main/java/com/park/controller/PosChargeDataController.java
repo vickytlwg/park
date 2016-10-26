@@ -132,6 +132,13 @@ public class PosChargeDataController {
 		}		
 		return Utility.gson.toJson(retMap);
 	}
+	@RequestMapping(value="getByCardnumber",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getByCardnumber(@RequestBody Map<String, String> args){
+		String cardNumber=args.get("cardNumber");
+		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByCardNumber(cardNumber));
+	}
+	
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String count(){
 		

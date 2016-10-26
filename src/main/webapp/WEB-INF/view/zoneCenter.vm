@@ -26,8 +26,8 @@
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">					          
-					            <tr>					            
+							  <table class="table table-bordered table-hover table-striped table-condensed" id='parkTable' style="font-size:12px">					          
+					            <tr class="success">					            
 					             <th><span style=""><input type="checkbox" /></div></th>
 										<th ><span style="padding-left:15%">Id</div></th>								
 										<th><span style="padding-left:15%">区中心编号</div></th>

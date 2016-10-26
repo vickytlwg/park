@@ -22,9 +22,20 @@
 		                		<button ng-click="detail.refresh()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>		                		
 		                	</div>    					
 							<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end onclick="window.open('getExcel')" id="excelBtn" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 导出excel</button>
-		             
+		                		<button #if(!$isAdmin) disabled#end onclick="window.open('getExcel')" id="excelBtn" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 导出excel</button>		             
 		                	</div>
+							<div class="btn-group">
+								<div class="row" style="padding-left:20px">
+									<div class="col-md-8">
+										<input type="text" ng-model="searchText" class="form-control" style="float:right"/>
+										
+                                    </div>
+									<div class="col-md-4">
+										<button  type="button" class="btn btn-info" ng-click="searchByCardnumber()" style="float:left">查找
+                                        </button>
+                                    </div>
+                                </div>
+							</div>
 	                	<br/>   
 	                    <br/> 
 						<div>
@@ -64,7 +75,7 @@
 				          </table>
     					</div>
     					
-    					                <div class="box-footer clearfix">
+    			<div class="box-footer clearfix">
                   <div ng-hide="detail.loading"><small ng-bind="'获取到' + detail.items.length + '/' + detail.page.allCounts + '条结果！'"> </small></div>
                   <ul ng-hide="detail.page.hidden" class="pagination pagination-sm no-margin pull-right">
                   <li ng-click='detail.firstPage()'>

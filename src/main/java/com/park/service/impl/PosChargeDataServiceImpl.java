@@ -359,4 +359,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return tmPosChargeDatas;
 	}
 
+	@Override
+	public List<PosChargeData> getByCardNumber(String cardNumber) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByCardNumber(cardNumber);
+	}
+
 }

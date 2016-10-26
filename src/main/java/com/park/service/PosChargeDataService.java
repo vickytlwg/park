@@ -41,4 +41,6 @@ public interface PosChargeDataService {
 	public List<PosChargeData> selectPosdataByParkAndRange(Date startDay, Date endDay,int parkId);
 	
 	public Map<String, Object> getParkChargeByDay(int parkId, String day);
+	
+	public List<PosChargeData> getByCardNumber(String cardNumber);
 }

@@ -41,7 +41,21 @@ function($scope, $http, textModal,textModalTest, $uibModal, $timeout) {
         $scope.detail.page.index--;
         $scope.detail.getPage();
     };
-
+    $scope.searchText="";
+    $scope.searchByCardnumber=function(){
+        if($scope.searchText==""||$scope.searchText==undefined){
+            return;
+        }
+        $http({
+            url:'getByCardnumber',
+            method:'post',
+            data:{"cardNumber":$scope.searchText}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.detail.items=response.body;
+            }
+        });
+    };
     //first page
     $scope.detail.firstPage = function() {
         if ($scope.detail.page.index <= 1)

@@ -427,9 +427,9 @@
 			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
-				tr.addClass('success');
+		//		tr.addClass('success');
 			}else{
-				tr.addClass('active');
+		//		tr.addClass('active');
 			}
 		
 			var picUri = data[i]['pictureUri'];

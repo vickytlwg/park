@@ -26,9 +26,9 @@
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">
+							  <table class="table table-striped table-bordered table-hover table-condensed" id='parkTable' style="font-size:12px">
 					          
-					            <tr>					            
+					            <tr class="success">					            
 					             <th><span style=""><input type="checkbox" /></div></th>
 										<th><span style="padding-left:15%">Id</div></th>								
 										<th><span style="padding-left:15%">路段编号</div></th>

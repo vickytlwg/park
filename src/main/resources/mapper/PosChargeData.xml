@@ -49,8 +49,9 @@
 	<select id="getDebt" resultMap="PosChargeDataMapper">
 		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1}
 	</select>
-	
- 		
+	<select id="getByCardNumber" statementType="STATEMENT" resultMap="PosChargeDataMapper">
+		select * from posChargeData where cardNumber like '%${cardNumber}%'
+ 	</select>	
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
 		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate,url)
