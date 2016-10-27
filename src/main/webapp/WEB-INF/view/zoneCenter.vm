@@ -3,7 +3,7 @@
 <div class="content-wrapper" ng-app="zoneCenterApp" ng-controller="zoneCenterCtrl">
 	<section class="content-header">
           <h1>
-       经营区域管理
+       区中心管理
             <small></small>
           </h1>
        
@@ -16,9 +16,9 @@
 	             <div class="box-body"> 
 					<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end id="refresh" ng-click="refreshZoneCenter()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertZoneCenter()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateZoneCenter()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteZoneCenter()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertZoneCenter()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加区中心</button>
+		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateZoneCenter()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新区中心信息</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteZoneCenter()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除区中心</button>
 		                	</div>	
 				<div class="pull-right">		
 							                	

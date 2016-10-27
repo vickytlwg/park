@@ -16,9 +16,9 @@
 	             <div class="box-body"> 
 					<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end id="refresh" ng-click="refreshArea()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertArea()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateArea()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteArea()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertArea()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加经营区域</button>
+		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateArea()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新区域信息</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteArea()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除经营区域</button>
 		                	</div>	
 				<div class="pull-right">		
 							                	

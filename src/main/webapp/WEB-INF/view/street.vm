@@ -16,9 +16,9 @@
 	             <div class="box-body"> 
 					<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshStreet()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="insertStreet()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="updateStreet()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteStreet()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="insertStreet()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加收费路段</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="updateStreet()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新路段信息</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteStreet()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除收费路段</button>
 		                	</div>	
 				<div class="pull-right">		
 							                	

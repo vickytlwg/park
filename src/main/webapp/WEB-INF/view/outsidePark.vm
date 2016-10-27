@@ -139,10 +139,15 @@ float:right;
 									<input type='text' class='form-control' id='parkName' placeholder='请输入名称'>
 								</div>
 								<div class="col-sm-2 ">
-									<label class='control-label' style="float:right" for='channelCount'>进出口数</label>
+									<label style="display:none" class='control-label' style="float:right" for='channelCount'>进出口数</label>
+									<label class='control-label' style="float:right" for='parkType'>类型</label>
 								</div>
 								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
+									<input style="display:none" type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
+									<select class='form-control' id='parkType'>
+										<option value=3>路边停车场</option>
+										<option value=2>其它</option>
+									</select>
 								</div>
 							</div>
 							
@@ -159,25 +164,7 @@ float:right;
 									<div class='col-sm-4'>
 										<input type='text' class='form-control' id='leftPortCount' placeholder='请输入剩余车位数'>
 									</div>
-							</div>
-							
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' style="float:right" for='floorCount'>楼层数</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='floorCount' placeholder='请输入楼层数'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' style="float:right" for='parkType'>类型</label>
-								</div>
-								<div class='col-sm-4'>
-									<select class='form-control' id='parkType'>
-										<option value=3>路边停车场</option>
-										<option value=2>其它</option>
-									</select>
-								</div>
-							</div>
+							</div>				
 							
 								<div class='form-group'>
 								<div class="col-sm-2 ">

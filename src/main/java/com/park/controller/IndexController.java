@@ -173,7 +173,7 @@ public class IndexController {
 	public String operation2(){
 		return "operation2";
 	}
-	@RequestMapping("/maptest")
+	@RequestMapping("/parkingInfo")
 	public String data2(ModelMap modelMap,HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
@@ -189,7 +189,7 @@ public class IndexController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "maptest";
+		return "parkingInfo";
 	}
 	@RequestMapping("/demoIndex")
 	public String demoIndex(ModelMap modelMap,HttpSession session){

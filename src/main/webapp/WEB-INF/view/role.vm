@@ -43,7 +43,6 @@
 				          		<td ><input type="checkbox" ng-model="item.checked" ng-click="role.checked($index)"/></td>
 				          		<td ng-bind="item.id"></td>
 				          		<td ng-bind="item.name"></td>
-				          		<td ng-bind="item.description"></td>
 				          		<td><button class="btn-sm btn btn-info" ng-click="role.allocatePages($index)">分配页面</button></td>
 								
 				          </table>
