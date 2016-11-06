@@ -56,6 +56,20 @@ function($scope, $http, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
+     $scope.searchByParkName=function(){
+        if($scope.searchParkNameText==""||$scope.searchParkNameText==undefined){
+            return;
+        }
+        $http({
+            url:'getByParkName',
+            method:'post',
+            data:{"parkName":$scope.searchParkNameText}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.detail.items=response.body;
+            }
+        });
+    };
     //first page
     $scope.detail.firstPage = function() {
         if ($scope.detail.page.index <= 1)

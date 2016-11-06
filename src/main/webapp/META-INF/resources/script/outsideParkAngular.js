@@ -57,9 +57,7 @@ outsideParkApp.controller("outsideParkCtrl",function($scope, $http,$timeout,$q,g
                 $scope.getStreets();
             });
     };
-    
- 
-    
+        
    $scope.selectedStreetId=$('#selectedStreetId').text();
    $scope.streetIdChange=function(){
        streetToZoneCenter();

@@ -61,6 +61,8 @@ public class OutsideParkInfoController {
 			int realMoney=0;
 			int entranceCount=0;
 			int outCount=0;
+			int onlineParkCount=0;
+			int onlineCarportCount=0;
 			for (Area area : areas) {
 				List<Street> streets=streetService.getByArea(area.getId());
 				streetCount+=streets.size();
@@ -76,6 +78,15 @@ public class OutsideParkInfoController {
 							realMoney+=parkInfo.getRealmoney();
 							entranceCount+=parkInfo.getEntrancecount();
 							outCount+=parkInfo.getOutcount();
+							if (parkInfo.getPossigndate()==null) {
+								continue;
+							}
+							Long signDate=parkInfo.getPossigndate().getTime();
+							Long diffMin=((new Date()).getTime()-signDate)/(1000*60);
+							if (diffMin<=30) {
+								onlineParkCount+=1;
+								onlineCarportCount+=parkInfo.getCarportcount();
+							}
 						}						
 					}
 				}
@@ -88,6 +99,8 @@ public class OutsideParkInfoController {
 			tmpdata.put("realmoney", realMoney);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
+			tmpdata.put("onlineparkcount", onlineParkCount);
+			tmpdata.put("onlinecarportcount", onlineCarportCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -113,6 +126,8 @@ public class OutsideParkInfoController {
 			int realMoney=0;
 			int entranceCount=0;
 			int outCount=0;
+			int onlineParkCount=0;
+			int onlineCarportCount=0;
 			List<Street> streets=streetService.getByArea(area.getId());
 			streetCount+=streets.size();
 			for (Street street : streets) {
@@ -126,6 +141,15 @@ public class OutsideParkInfoController {
 					realMoney+=parkInfo.getRealmoney();
 					entranceCount+=parkInfo.getEntrancecount();
 					outCount+=parkInfo.getOutcount();
+					if (parkInfo.getPossigndate()==null) {
+						continue;
+					}
+					Long signDate=parkInfo.getPossigndate().getTime();
+					Long diffMin=((new Date()).getTime()-signDate)/(1000*60);
+					if (diffMin<=30) {
+						onlineParkCount+=1;
+						onlineCarportCount+=parkInfo.getCarportcount();
+					}
 				}
 			}
 			tmpdata.put("streetcount", streetCount);
@@ -136,6 +160,8 @@ public class OutsideParkInfoController {
 			tmpdata.put("realmoney", realMoney);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
+			tmpdata.put("onlineparkcount", onlineParkCount);
+			tmpdata.put("onlinecarportcount", onlineCarportCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -160,6 +186,8 @@ public class OutsideParkInfoController {
 			int realMoney=0;
 			int entranceCount=0;
 			int outCount=0;
+			int onlineParkCount=0;
+			int onlineCarportCount=0;
 			List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 			parkCount+=parks.size();
 			for (Park park : parks) {
@@ -170,6 +198,15 @@ public class OutsideParkInfoController {
 				realMoney+=parkInfo.getRealmoney();
 				entranceCount+=parkInfo.getEntrancecount();
 				outCount+=parkInfo.getOutcount();
+				if (parkInfo.getPossigndate()==null) {
+					continue;
+				}
+				Long signDate=parkInfo.getPossigndate().getTime();
+				Long diffMin=((new Date()).getTime()-signDate)/(1000*60);
+				if (diffMin<=30) {
+					onlineParkCount+=1;
+					onlineCarportCount+=parkInfo.getCarportcount();
+				}
 			}
 			tmpdata.put("parkcount", parkCount);
 			tmpdata.put("carportcount", carportCount);
@@ -178,6 +215,8 @@ public class OutsideParkInfoController {
 			tmpdata.put("realmoney", realMoney);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
+			tmpdata.put("onlineparkcount", onlineParkCount);
+			tmpdata.put("onlinecarportcount", onlineCarportCount);
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);
@@ -203,6 +242,17 @@ public class OutsideParkInfoController {
 			tmpdata.put("realmoney", parkInfo.getRealmoney());
 			tmpdata.put("entrancecount", parkInfo.getEntrancecount());
 			tmpdata.put("outcount", parkInfo.getOutcount());
+			if (parkInfo.getPossigndate()==null) {
+				continue;
+			}
+			Long signDate=parkInfo.getPossigndate().getTime();
+			Long diffMin=((new Date()).getTime()-signDate)/(1000*60);
+			if (diffMin>=30) {
+				tmpdata.put("isonline", false);
+			}
+			else {
+				tmpdata.put("isonline", true);
+			}
 			info.add(tmpdata);
 		}
 		result.put("status", 1001);

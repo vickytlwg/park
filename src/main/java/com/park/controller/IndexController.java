@@ -191,8 +191,8 @@ public class IndexController {
 		}
 		return "parkingInfo";
 	}
-	@RequestMapping("/demoIndex")
-	public String demoIndex(ModelMap modelMap,HttpSession session){
+	@RequestMapping("/generalDataView")
+	public String generalDataView(ModelMap modelMap,HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
@@ -207,7 +207,7 @@ public class IndexController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "demoIndex";
+		return "generalDataView";
 	}
 	@RequestMapping("/outsideParkStatus1")
 	public String outsideParkStatus1(){

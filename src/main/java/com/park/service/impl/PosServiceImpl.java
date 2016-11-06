@@ -72,6 +72,12 @@ public class PosServiceImpl implements PosService {
 		return posDao.getByNum(num);
 	}
 
+	@Override
+	public List<Pos> getByParkNameAndNumber(String parkName, String num) {
+		// TODO Auto-generated method stub
+		return posDao.getByParkNameAndNumber(parkName, num);
+	}
+
 	
 
 }

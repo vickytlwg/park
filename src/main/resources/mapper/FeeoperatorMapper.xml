@@ -187,4 +187,10 @@
   <select id="operatorValidation" resultType="com.park.model.Feeoperator">
   	select * from feeOperator where account=#{account} and passwd=#{passwd}
   </select>
+  <select id="getByNameAndPhoneParkName" statementType="STATEMENT" resultType="com.park.model.Feeoperator">
+  	select f.id,f.account,f.name,f.phone,f.signstatus,f.passwd,f.lastsigndate,f.laststreetid,
+  	p.name as parkname,f.lastposnum,f.registerdate from feeOperator as f 
+  	left join park as p on p.id=f.lastparkid 
+  	where f.name like '%${name}%' or f.phone like '%${phone}%' or p.name like '%${parkName}%'
+  </select>
 </mapper>

@@ -129,4 +129,20 @@ public class PosController {
 		}
 		return Utility.gson.toJson(result);
 	}
+	@RequestMapping(value="/getByParkNameAndNumber",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByParkNameAndNumber(@RequestBody Map<String, String> args){
+		Map<String, Object> result=new HashMap<>();
+		String parkName=args.get("parkName");
+		String num=args.get("num");
+		List<Pos> poses=posService.getByParkNameAndNumber(parkName, num);
+		if (poses!=null) {
+			result.put("status", 1001);
+			result.put("body", poses);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
 }

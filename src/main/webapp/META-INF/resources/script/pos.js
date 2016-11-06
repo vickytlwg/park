@@ -21,6 +21,26 @@ function($scope,$http,$uibModal,textModal,$timeout){
                textModal.open($scope,"错误","数据请求失败");
         });
     };
+    $scope.searchByParkNameAndNumber=function(){
+        if ($scope.searchText==""||$scope.searchText==undefined) {
+             textModal.open($scope,"提示","请输入查询关键字");
+             return;
+        };
+         $http({
+            url:'/park/pos/getByParkNameAndNumber',
+            method:'post',
+            data:{parkName:$scope.searchText,num:$scope.searchText}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.poses=response.body;
+            }
+            else{
+               textModal.open($scope,"错误","数据请求失败");
+            }
+        }).error(function(){
+               textModal.open($scope,"错误","数据请求失败");
+        });
+    };
     $scope.insertPos=function(){
         $uibModal.open({
             templateUrl: '/park/views/template/ucNewPos.html',

@@ -24,4 +24,6 @@ public interface PosDAO {
     List<Pos> getByStartAndCount(@Param("start")int start,@Param("count")int count);
     
     List<Pos> getByNum(@Param("num")String num);
+    
+    List<Pos> getByParkNameAndNumber(@Param("parkName")String parkName,@Param("num")String num);
 }

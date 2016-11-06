@@ -71,7 +71,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
              textModal.open($scope, "失败","操作失败");
         });
     };
-        $scope.selectChange=function(index){
+    $scope.selectChange=function(index){
           
            if($scope.streets[index].checked){
                $scope.streets[index].checked=false;
@@ -97,9 +97,8 @@ function($scope,$http,$uibModal,textModal,$timeout){
 
 streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $http, positionService,$timeout, index){
     var url = '/park/street/insert';
-    $scope.tempStreet={};
-      
-     $scope.getZoneCenter=function(){
+    $scope.tempStreet={};      
+    $scope.getZoneCenter=function(){
       positionService.getZoneCenter().then(function(result){
       $scope.zoneCenters=result;
   });

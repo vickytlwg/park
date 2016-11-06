@@ -9,7 +9,16 @@
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
-        <link href="Style/white/layout.css" rel="stylesheet" />
+
+	<script src="/park/plugins/angular/angular.min.js"></script>
+   	<script src="/park/plugins/angular/angular-animate.min.js"></script>
+    <script src="/park/plugins/angular/angular-cookies.min.js"></script>
+     <script src="/park/plugins/angular/angular-ui-router.min.js"></script>
+    <script src="/park/plugins/angular/ocLazyLoad.min.js"></script>  
+    <script src="/park/plugins/angular/ui-bootstrap-tpls.min.js"></script>
+	<script src="/park/script/generalDataView.js"></script>
+	
+	    <link href="Style/white/layout.css" rel="stylesheet" />
         <link href="Style/Pagination.css" rel="stylesheet" />
         <link href="Style/jbox.css" rel="stylesheet" />
         <link href="Style/loadingbar.css" rel="stylesheet" />
@@ -20,7 +29,7 @@
         <script src="Scripts/jquery.pagination.js"></script>
         <script src="Scripts/jquery.jBox.src.js"></script>
         <script src="Scripts/modernizr-2.6.2.js"></script>
-
+		
     </head>
     <body>
         <div class="top-container-wrapper">
@@ -28,7 +37,7 @@
             <div id='loadingbar'></div>
         </div>
 
-        <div class="mian-container">
+        <div class="mian-container" ng-app="generalDataViewApp" ng-controller="generalDataViewCtrl">
             <div class="page-content">
                 <div class="container-fluid">
                     <!-- Right -->
@@ -156,15 +165,15 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block1" class="dataActive block1">
                                         <div class="panel-top hidddiv">
-                                            今日消费金额
+                                            今日应收金额
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer"  data-to="134674.00" data-speed="1500" data-decimals="2">4,674.00</span>&nbsp;元
+                                            <span class="panel-value timer"  data-to="{{dayAmountMoney}}" data-speed="1500" data-decimals="2">4,674.00</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             <p>
-                                                消费总金额&nbsp;<b>2112,981.00</b>&nbsp;元
+                                                应收总金额&nbsp;<b>{{dayAmountMoney}}</b>&nbsp;元
                                             </p>
                                         </div>
                                         <div class="dataHover block1">
@@ -184,14 +193,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block2" class="dataActive block2">
                                         <div class="panel-top hidddiv">
-                                            今日交易次数
+                                        今日实收金额
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer"  data-to=" 1100.00" data-speed="1500"> 1,100</span>&nbsp;笔
+                                            <span class="panel-value timer"  data-to="{{dayRealMoney}}" data-speed="1500"> 1,100</span>&nbsp;笔
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            合计交易总数&nbsp;<b>45,589</b>&nbsp;笔
+                                            实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block2">
                                             <table>
@@ -210,14 +219,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block3" class="dataActive block3">
                                         <div class="panel-top  hidddiv">
-                                            今日充值金额
+                                            今日欠费金额
                                         </div>
                                         <div class="panel-split  hidddiv"></div>
                                         <div class="panel-middle  hidddiv">
-                                            <span class="panel-value timer" data-to="8700.00" data-speed="1500"  data-decimals="2">8,700.00</span>&nbsp;元
+                                            <span class="panel-value timer" data-to={{dayAmountMoney-dayRealMoney}} data-speed="1500"  data-decimals="2">8,700.00</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            充值总金额&nbsp;<b>744,050.02</b>&nbsp;元
+                                            欠费总金额&nbsp;<b>{{dayAmountMoney-dayRealMoney}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block3">
                                             <table>
@@ -242,14 +251,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block4" class="dataActive block4">
                                         <div class="panel-top hidddiv">
-                                            今日充值次数
+                                            今日交易次数
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="386.00" data-speed="1500">386</span>&nbsp;笔
+                                            <span class="panel-value timer" data-to="{{dayOutCount}}" data-speed="1500">386</span>&nbsp;笔
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            充值总次数&nbsp;<b>1,128</b>&nbsp;笔
+                                            交易总次数&nbsp;<b>{{dayOutCount}}</b>&nbsp;笔
                                         </div>
                                         <div class="dataHover block4">
                                             <table>
@@ -274,14 +283,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block5" class="dataActive block5">
                                         <div class="panel-top hidddiv">
-                                            今日新增用户
+                                            今日逃费率
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="496.00" data-speed="1500">496</span>&nbsp;人
+                                            <span class="panel-value timer" data-to="" data-speed="1500">496</span>&nbsp;人
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            合计总用户数&nbsp;<b>1,229</b>&nbsp;人
+                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney}}</b>&nbsp;人
                                         </div>
                                         <div class="dataHover block5">
                                             <table>
@@ -302,14 +311,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block6" class="dataActive block6">
                                         <div class="panel-top hidddiv">
-                                            今日运营泊位数
+                                            今日运营站点数
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
                                             <span class="panel-value timer" data-to="751.00" data-speed="1500">9751</span>&nbsp;个
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            合计总泊位数&nbsp;<b>18753</b>&nbsp;个
+                                            合计运营站点数&nbsp;<b>{{dayParkCount}}</b>&nbsp;个
                                         </div>
                                         <div class="dataHover block6">
                                             <table>
@@ -339,14 +348,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block7" class="dataActive block7">
                                         <div class="panel-top hidddiv">
-                                            用户投诉数
+                                            今日运营泊位数
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
                                             <span class="panel-value timer" data-to="0" data-speed="1500">12</span>&nbsp;单
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总计用户投诉数&nbsp;<b>54</b>&nbsp;单
+                                            总泊位数&nbsp;<b>{{dayCarportCount}}</b>&nbsp;个
                                         </div>
                                         <div class="dataHover block7">
                                             <table></table>
@@ -358,14 +367,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block8" class="dataActive block8">
                                         <div class="panel-top hidddiv">
-                                            今日违章次数
+                                            今日泊位在线率
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
                                             <span class="panel-value timer" data-to="385.00" data-speed="1500"> 1385</span>&nbsp;次
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            违章总次数&nbsp;<b>426</b>&nbsp;次
+                                            总泊位在线率&nbsp;<b>{{dayOnlineCarportCount/dayCarportCount}}</b>&nbsp;次
                                         </div>
                                         <div class="dataHover block8">
                                             <table>
@@ -396,14 +405,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block9" class="dataActive block9">
                                         <div class="panel-top hidddiv">
-                                            今日补缴欠费次数
+                                            今日泊位饱和度
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
                                             <span class="panel-value timer" data-to="1.00" data-speed="1500">211</span>&nbsp;次
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            补缴欠费总次数&nbsp;<b>12,582</b>&nbsp;次
+                                            总泊位饱和度&nbsp;<b>{{1-(dayCarportLeftCount/dayCarportCount)}}</b>&nbsp;次
                                         </div>
                                         <div class="dataHover block9">
                                             <table>
@@ -434,14 +443,14 @@
                                 <div class="filpCard_wrapper">
                                     <div id="block10" class="dataActive block10">
                                         <div class="panel-top hidddiv">
-                                            今日签到
+                                            今日泊位周转率
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
                                             <span class="panel-value timer" data-to="330.00" data-speed="1500">330</span>&nbsp;人次
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            合计签到&nbsp;<b>342</b>&nbsp;人次
+                                          总泊位周转率&nbsp;<b>{{dayOutCount/dayOnlineCarportCount}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block10">
                                             <table>

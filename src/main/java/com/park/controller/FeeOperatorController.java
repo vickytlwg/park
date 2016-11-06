@@ -241,4 +241,21 @@ public class FeeOperatorController {
 		}
 		return Utility.gson.toJson(result);
 	}
+	@RequestMapping(value="/getByNameAndPhoneParkName",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByNameAndPhoneParkName(@RequestBody Map<String, String> args){
+		Map<String, Object> result=new HashMap<>();
+		String name=args.get("name");
+		String phone=args.get("phone");
+		String parkName=args.get("parkName");
+		List<Feeoperator> feeOperatores=feeOperatorService.getByNameAndPhoneParkName(name, phone, parkName);
+		if (feeOperatores!=null) {
+			result.put("status", 1001);
+			result.put("body", feeOperatores);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
 }

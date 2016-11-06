@@ -365,4 +365,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return chargeDao.getByCardNumber(cardNumber);
 	}
 
+	@Override
+	public List<PosChargeData> getByParkName(String parkName) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByParkName(parkName);
+	}
+
 }

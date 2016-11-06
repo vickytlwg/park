@@ -22,4 +22,6 @@ public interface FeeOperatorService {
     List<Feeoperator> getByStartAndCount(int start,int count);
     
     List<Feeoperator> operatorValidation(String account,String passwd);
+    
+    List<Feeoperator> getByNameAndPhoneParkName(String name,String phone,String parkName);
 }

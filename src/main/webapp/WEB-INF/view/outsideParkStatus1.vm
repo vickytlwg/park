@@ -252,8 +252,10 @@
                 <td>出场数</td>
                 <td>经营中心</td>
                 <td>街道数</td>
-                <td>在线站点</td>               
+                <td>站点总数</td>
+				<td>在线站点</td> 
                 <td>总泊位</td>
+				<td>在线泊位</td>
                 <td>剩余泊位</td>
             </tr>
             </thead>
@@ -269,7 +271,9 @@
 				<td>{{zoneCenter.areacount}}</td>
                 <td>{{zoneCenter.streetcount}}</td>
                 <td>{{zoneCenter.parkcount}}</td>
+				<td>{{zoneCenter.onlineparkcount}}</td>
                 <td>{{zoneCenter.carportcount}}</td>
+				<td>{{zoneCenter.onlinecarportcount}}</td>
                 <td>{{zoneCenter.carportleftcount}}</td>               
             </tr>                  
             </tbody>
@@ -288,8 +292,10 @@
 				<td>入场数</td>
                 <td>出场数</td>
                 <td>街道数</td>
-                <td>在线站点</td>               
+                <td>站点总数</td>
+				<td>在线站点</td> 
                 <td>总泊位</td>
+				<td>在线泊位</td>
                 <td>剩余泊位</td>
             </tr>
             </thead>
@@ -304,7 +310,9 @@
                 <td>{{area.outcount}}</td>
 				<td>{{area.streetcount}}</td>
                 <td>{{area.parkcount}}</td>
+				<td>{{area.onlineparkcount}}</td>
                 <td>{{area.carportcount}}</td>
+				<td>{{area.onlinecarportcount}}</td>
                 <td>{{area.carportleftcount}}</td>               
             </tr>                  
             </tbody>
@@ -323,8 +331,10 @@
 				<td>欠费</td>
 				<td>入场数</td>
                 <td>出场数</td>
-                <td>在线站点</td>               
+                <td>站点总数</td>
+				<td>在线站点</td> 
                 <td>总泊位</td>
+				<td>在线泊位</td>
                 <td>剩余泊位</td>
             </tr>
             </thead>
@@ -338,7 +348,9 @@
 				<td>{{street.entrancecount}}</td>
                 <td>{{street.outcount}}</td>
 				<td>{{street.parkcount}}</td>
+				<td>{{street.onlineparkcount}}</td>
                 <td>{{street.carportcount}}</td>
+				<td>{{street.onlinecarportcount}}</td>
                 <td>{{street.carportleftcount}}</td>               
             </tr>                  
             </tbody>
@@ -356,8 +368,9 @@
 				<td>应收额</td>
                 <td>实收额</td>
 				<td>欠费</td>
-				<td>入场数</td>
+				<td>入场数</td>				
                 <td>出场数</td>
+				<td>是否在线</td>
                 <td>总泊位</td>
                 <td>剩余泊位</td>
             </tr>
@@ -373,6 +386,8 @@
 				<td>{{park.amountmoney-park.realmoney}}</td>
 				<td>{{park.entrancecount}}</td>
                 <td>{{park.outcount}}</td>
+				<td ng-if="park.isonline==true">是</td>
+				<td ng-if="park.isonline==false">否</td>
                 <td>{{park.carportcount}}</td>
                 <td>{{park.carportleftcount}}</td>               
             </tr>                  

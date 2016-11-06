@@ -22,4 +22,6 @@ public interface PosService {
     List<Pos> getByStartAndCount(int start,int count);
     
     List<Pos> getByNum(String num);
+    
+    List<Pos> getByParkNameAndNumber(String parkName,String num);
 }

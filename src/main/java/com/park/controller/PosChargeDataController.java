@@ -145,6 +145,13 @@ public class PosChargeDataController {
 		int count = chargeSerivce.count();
 		return Utility.createJsonMsg(1001, "success", count);
 	}
+	@RequestMapping(value="getByParkName",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getByParkName(@RequestBody Map<String, String> args){
+		String parkName=args.get("parkName");
+		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByParkName(parkName));
+	}
+	
 	
 	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String page(@RequestBody Map<String, Object> args){

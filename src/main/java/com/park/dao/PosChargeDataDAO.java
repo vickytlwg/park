@@ -30,4 +30,6 @@ public interface PosChargeDataDAO {
 	public List<PosChargeData> selectPosdataByParkAndRange(@Param("startDay") Date startDay, @Param("endDay") Date endDay,@Param("parkId")int parkId);
 	
 	public List<PosChargeData> getByCardNumber(@Param("cardNumber")String cardNumber);
+	
+	public List<PosChargeData> getByParkName(@Param("parkName")String parkName);
 }

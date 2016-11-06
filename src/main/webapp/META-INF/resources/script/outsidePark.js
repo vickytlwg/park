@@ -234,7 +234,7 @@
 			var url = '';
 			var parkFields = getAddParkFormValue();
 			if(parkFields['id'] != undefined && parkFields['id'] != null ){
-				url = $.fn.config.webroot + '/update/park';
+				url = $.fn.config.webroot + '/update/parkFields';
 			}else{
 				url = $.fn.config.webroot + '/insert/park';
 			}

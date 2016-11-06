@@ -21,6 +21,26 @@ function($scope,$http,$uibModal,textModal,$timeout){
                textModal.open($scope,"错误","数据请求失败");
         });
     };
+    $scope.searchByNameAndPhoneParkName=function(){
+        if ($scope.searchText==""||$scope.searchText==undefined) {
+             textModal.open($scope,"提示","请输入查询关键字");
+             return;
+        };
+        $http({
+            url:'/park/feeOperator/getByNameAndPhoneParkName',
+            method:'post',
+            data:{name:$scope.searchText,phone:$scope.searchText,parkName:$scope.searchText}
+        }).success(function(response){
+            if(response.status==1001){
+                $scope.feeOperatores=response.body;
+            }
+            else{
+               textModal.open($scope,"错误","数据请求失败");
+            }
+        }).error(function(){
+               textModal.open($scope,"错误","数据请求失败");
+        });
+    };
     $scope.insertFeeOperator=function(){
         $uibModal.open({
             templateUrl: '/park/views/template/ucNewFeeOperator.html',

@@ -67,4 +67,10 @@ public class FeeOperatroServiceImpl implements FeeOperatorService {
 		return feeoperatroDao.operatorValidation(account, passwd);
 	}
 
+	@Override
+	public List<Feeoperator> getByNameAndPhoneParkName(String name, String phone, String parkName) {
+		// TODO Auto-generated method stub
+		return feeoperatroDao.getByNameAndPhoneParkName(name, phone, parkName);
+	}
+
 }

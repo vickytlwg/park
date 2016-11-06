@@ -87,7 +87,9 @@
 		<mvc:exclude-mapping path="/views/**"/>	
 		<mvc:exclude-mapping path="/bootstrap/**"/>	
 		<mvc:exclude-mapping path="/dist/**"/>	
-		<mvc:exclude-mapping path="/plugins/**"/>					
+		<mvc:exclude-mapping path="/plugins/**"/>	
+		<mvc:exclude-mapping path="/fee/alipaydata/insert"/>	
+		<mvc:exclude-mapping path="/fee/wechartdata/insert"/>			
 		<bean class="com.park.interceptor.loginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
