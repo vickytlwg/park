@@ -8,17 +8,15 @@
 
 <section class="content">
 <iframe id="mainFrame" name="mainFrame" scrolling="no" onload="changeFrameHeight()"  src="/park/generalDataView"
-            frameborder="0" style="padding: 0px; width: 100%;min-height=900px"></iframe>	
+            frameborder="0" style="padding: 0px; width: 100%;min-height=1200px"></iframe>	
 </section>	
 </div>
 <script >
 function changeFrameHeight(){
     var ifm= document.getElementById("mainFrame"); 
-    ifm.height=ifm.contentWindow.document.body.scrollHeight;
+    ifm.height=ifm.contentWindow.document.body.scrollHeight+400;
+	console.log(ifm.height);
 	
-	if(ifm.height<800){
-	ifm.height=800
-	}
 }
 window.onresize=function(){  
      changeFrameHeight();  

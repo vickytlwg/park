@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,20 +98,24 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public List<PosChargeData> pay(String cardNumber, double money) throws Exception {
+	public PosChargeData pay(String cardNumber, double money) throws Exception {
 		double theMoney=money;
 		List<PosChargeData> charges = this.getCharges(cardNumber);
-		for (PosChargeData charge : charges) {
-			if (money >= charge.getUnPaidMoney()) {
-				money -= charge.getUnPaidMoney();
-				charge.setPaidCompleted(true);
-				this.update(charge);
-			}
-		}
-		if (money >= 0) {
-			int count = charges.size();
-			PosChargeData lastCharge = charges.get(count - 1);
-			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
+//		for (PosChargeData charge : charges) {
+//			if (money >= charge.getUnPaidMoney()) {
+//				money -= charge.getUnPaidMoney();
+//				charge.setPaidCompleted(true);
+//				this.update(charge);
+//			}
+//		}
+		int count = charges.size();
+		PosChargeData lastCharge = charges.get(count - 1);
+		money -= lastCharge.getUnPaidMoney();
+		lastCharge.setPaidCompleted(true);
+		this.update(lastCharge);
+		if (money >= 0) {					
+			 DecimalFormat df = new DecimalFormat("#.00");  
+			lastCharge.setChangeMoney(Double.parseDouble(df.format(lastCharge.getChangeMoney() + money)));
 			lastCharge.setGivenMoney(theMoney);
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
@@ -118,8 +123,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(lastCharge);
 		}
-		return charges;
-
+		return lastCharge;
 	}
 
 	@Override
@@ -369,6 +373,32 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getByParkName(String parkName) {
 		// TODO Auto-generated method stub
 		return chargeDao.getByParkName(parkName);
+	}
+
+	@Override
+	public List<PosChargeData> repay(String cardNumber, double money) throws Exception {
+		double theMoney=money;
+		List<PosChargeData> charges = this.getCharges(cardNumber);
+		for (PosChargeData charge : charges) {
+			if (money >= charge.getUnPaidMoney()) {
+				money -= charge.getUnPaidMoney();
+				charge.setPaidCompleted(true);
+				this.update(charge);
+			}
+		}
+
+		if (money >= 0) {
+			int count = charges.size();
+			PosChargeData lastCharge = charges.get(count - 1);
+			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
+			lastCharge.setGivenMoney(theMoney);
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			outsideparkinfo.setPossigndate(new Date());
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+			this.update(lastCharge);
+		}
+		return charges;
 	}
 
 }

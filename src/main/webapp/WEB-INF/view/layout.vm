@@ -170,10 +170,11 @@
 			<li class="treeview active">
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>今日概况</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
-					<li #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>收费站点状态</a></li>
-					<li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>今日停车简版</a></li>
-				    <li #if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车</a></li>
-					<li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日停车测试</a></li>
+					
+					<li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
+					<li #if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车分析</a></li>
+					<li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>今日停车简版</a></li>		
+					<li #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
 					<li #if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
 					<li #if(!$isAdmin && !$park_posStatus) hidden#end><a href="/park/posStatus"><i class="fa fa-pie-chart"></i>终端状态</a></li>
 					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarport" ><i class="fa fa-car"></i>车位管理</a></li>

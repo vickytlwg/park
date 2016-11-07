@@ -29,7 +29,7 @@
         <script src="Scripts/jquery.pagination.js"></script>
         <script src="Scripts/jquery.jBox.src.js"></script>
         <script src="Scripts/modernizr-2.6.2.js"></script>
-		
+		<script src="Scripts/jquery.numbermodel.js"></script>
     </head>
     <body>
         <div class="top-container-wrapper">
@@ -146,7 +146,7 @@
                     </style>
                     <!-- 首页效果 begin -->
                     <div style="width: 100%;">
-                        <h1 class="dataH1" style="display:inline;">今日数据发布（截至 - <label id="time"></label>）</h1>
+                        <h1 class="dataH1" style="display:inline;">今日数据发布 <label id="time"></label>）</h1>
                     </div>
 
                     <div class="bg" id="reportBackground"></div>
@@ -169,7 +169,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer"  data-to="{{dayAmountMoney}}" data-speed="1500" data-decimals="2">4,674.00</span>&nbsp;元
+                                            <span class="panel-value " >{{dayAmountMoney}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             <p>
@@ -197,7 +197,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer"  data-to="{{dayRealMoney}}" data-speed="1500"> 1,100</span>&nbsp;笔
+                                            <span class="panel-value "  data-to="{{dayRealMoney}}" data-speed="1500">{{dayRealMoney}}</span>&nbsp;笔
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;
@@ -223,7 +223,7 @@
                                         </div>
                                         <div class="panel-split  hidddiv"></div>
                                         <div class="panel-middle  hidddiv">
-                                            <span class="panel-value timer" data-to={{dayAmountMoney-dayRealMoney}} data-speed="1500"  data-decimals="2">8,700.00</span>&nbsp;元
+                                            <span class="panel-value" data-to="{{dayAmountMoney-dayRealMoney}}" data-speed="1500"  data-decimals="2">{{dayAmountMoney-dayRealMoney}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             欠费总金额&nbsp;<b>{{dayAmountMoney-dayRealMoney}}</b>&nbsp;
@@ -255,7 +255,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="{{dayOutCount}}" data-speed="1500">386</span>&nbsp;笔
+                                            <span class="panel-value" data-to="{{dayOutCount}}" data-speed="1500">{{dayOutCount}}</span>&nbsp;笔
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             交易总次数&nbsp;<b>{{dayOutCount}}</b>&nbsp;笔
@@ -287,10 +287,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="" data-speed="1500">496</span>&nbsp;人
+                                            <span class="panel-value" data-to="" data-speed="1500">{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney}}</b>&nbsp;人
+                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3}}</b>&nbsp;人
                                         </div>
                                         <div class="dataHover block5">
                                             <table>
@@ -315,7 +315,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="751.00" data-speed="1500">9751</span>&nbsp;个
+                                            <span class="panel-value" data-to="751.00" data-speed="1500">{{dayParkCount}}</span>&nbsp;个
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             合计运营站点数&nbsp;<b>{{dayParkCount}}</b>&nbsp;个
@@ -352,7 +352,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="0" data-speed="1500">12</span>&nbsp;单
+                                            <span class="panel-value" data-to="0" data-speed="1500">{{dayCarportCount}}</span>&nbsp;单
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             总泊位数&nbsp;<b>{{dayCarportCount}}</b>&nbsp;个
@@ -371,10 +371,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="385.00" data-speed="1500"> 1385</span>&nbsp;次
+                                            <span class="panel-value" data-to="385.00" data-speed="1500"> {{dayOnlineCarportCount/dayCarportCount|number:3}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总泊位在线率&nbsp;<b>{{dayOnlineCarportCount/dayCarportCount}}</b>&nbsp;次
+                                            总泊位在线率&nbsp;<b>{{dayOnlineCarportCount/dayCarportCount|number:4}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block8">
                                             <table>
@@ -409,10 +409,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="1.00" data-speed="1500">211</span>&nbsp;次
+                                            <span class="panel-value" data-to="1.00" data-speed="1500">{{(1-(dayCarportLeftCount/dayCarportCount))|number:3}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总泊位饱和度&nbsp;<b>{{1-(dayCarportLeftCount/dayCarportCount)}}</b>&nbsp;次
+                                            总泊位饱和度&nbsp;<b>{{1-(dayCarportLeftCount/dayCarportCount)|number:4}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block9">
                                             <table>
@@ -447,10 +447,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value timer" data-to="330.00" data-speed="1500">330</span>&nbsp;人次
+                                            <span class="panel-value" data-to="330.00" data-speed="1500">{{dayOutCount/dayOnlineCarportCount|number:3}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                          总泊位周转率&nbsp;<b>{{dayOutCount/dayOnlineCarportCount}}</b>&nbsp;
+                                          总泊位周转率&nbsp;<b>{{dayOutCount/dayOnlineCarportCount|number:4}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block10">
                                             <table>
@@ -481,99 +481,51 @@
                         </table>
                     </div>
                     <h1 class="dataH1" style="padding: 20px 0 0px 20px;">各区收费分析</h1>
-                    <div class="data_wrapper">
-                        <table cellpadding="0" cellspacing="0" style="width: 100%;">
-                            <tr>
-                                <td style="width:1024px;">
-                                <table id="tbReport" class="indexData">
+                    <div class="data_wrapper" style="padding-top:20px">
+                   
+                               
+                                <table id="tbReport" class="indexData" style="width:100%" ng-click="toParkInfo()">
                                     <tr>
-                                        <th></th>
-                                        <th>消费金额（元）</th>
-                                        <th>交易次数（笔）</th>
-                                        <th>违章次数（次）</th>
-                                        <th>补缴欠费次数</th>
-                                        <th>签到次数</th>
-                                        <th >运营中泊位数</th>
+                                                 
+									   <td>区中心</td>
+									   <td>应收额</td>
+									   <td>实收额</td>
+									   <td>欠费</td>
+									   <td>入场数</td>
+									   <td>出场数</td>
+									   <td>经营中心</td>
+									   <td>街道数</td>
+									   <td>站点总数</td>
+									   <td>在线站点</td> 
+									   <td>总泊位</td>
+									   <td>在线泊位</td>
+									   <td>剩余泊位</td>
                                     </tr>
-                                    <tr>
-                                        <td>江宁区</td>
-                                        <td>21922</td>
-                                        <td>2118</td>
-                                        <td>121</td>
-                                        <td>54</td>
-                                        <td>2531</td>
-                                        <td>8534</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>玄武区</td>
-                                        <td>14322</td>
-                                        <td>1294</td>
-                                        <td>112</td>
-                                        <td>29</td>
-                                        <td>1121</td>
-                                        <td>4654</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>雨花台区</td>
-                                        <td>13211</td>
-                                        <td>1023</td>
-                                        <td>211</td>
-                                        <td>87</td>
-                                        <td>931</td>
-                                        <td>6543</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>秦淮区</td>
-                                        <td>32839</td>
-                                        <td>3211</td>
-                                        <td>212</td>
-                                        <td>254</td>
-                                        <td>1532</td>
-                                        <td>105</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>浦口区</td>
-                                        <td>2,530</td>
-                                        <td>337</td>
-                                        <td>211</td>
-                                        <td>245</td>
-                                        <td>211</td>
-                                        <td>2111</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>徐州</td>
-                                        <td>14,282</td>
-                                        <td>4,103</td>
-                                        <td>296</td>
-                                        <td>2,318</td>
-                                        <td>2121</td>
-                                        <td>2130</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>合计</td>
-
-                                        <td>128,581</td>
-                                        <td>9,889</td>
-                                        <td>1341</td>
-                                        <td>8,582</td>
-                                        <td>9821</td>
-                                        <td>10232</td>
-                                    </tr>
-                                </table></td>
+                                      <tr ng-repeat="zoneCenter in zoneCenters">
+										          
+										<td ><a href='#'>{{zoneCenter.zonename|limitTo:5}}</a></td>
+										<td>{{zoneCenter.amountmoney}}</td>
+										<td>{{zoneCenter.realmoney}}</td>
+										<td>{{zoneCenter.amountmoney-zoneCenter.realmoney}}</td>
+										<td>{{zoneCenter.entrancecount}}</td>
+										<td>{{zoneCenter.outcount}}</td>
+										<td>{{zoneCenter.areacount}}</td>
+										<td>{{zoneCenter.streetcount}}</td>
+										<td>{{zoneCenter.parkcount}}</td>
+										<td>{{zoneCenter.onlineparkcount}}</td>
+										<td>{{zoneCenter.carportcount}}</td>
+										<td>{{zoneCenter.onlinecarportcount}}</td>
+										<td>{{zoneCenter.carportleftcount}}</td>               
+									  </tr> 
+                                  
+                                  
+                                   
+                                </table>
+								
                                 <td></td>
-                            </tr>
-                        </table>
+                         
                     </div>
-                    <h1 class="dataH1">主要指标趋势分析（最近一个月）</h1>
-                    <div class="data_wrapper" style="height: 400px;position:relative;">
-                        <div id="divLastHalfMonthReport" style="min-width:1024px;height:100%;"></div>
-                    </div>
+                   
 
                 </div>
             </div>

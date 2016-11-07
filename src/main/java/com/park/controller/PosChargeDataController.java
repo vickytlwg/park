@@ -307,9 +307,23 @@ public class PosChargeDataController {
 		String cardNumber = (String) args.get("cardNumber");
 		double money = (double) args.get("money");
 		
-		List<PosChargeData> payRet =  null;
+		PosChargeData payRet =  null;
 		try {
 			payRet = chargeSerivce.pay(cardNumber, money);
+		} catch (Exception e) {
+			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准" );
+		}
+		
+		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	@RequestMapping(value = "/repay", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String repay(@RequestBody Map<String, Object> args){
+		String cardNumber = (String) args.get("cardNumber");
+		double money = (double) args.get("money");
+		
+		List<PosChargeData> payRet =  null;
+		try {
+			payRet = chargeSerivce.repay(cardNumber, money);
 		} catch (Exception e) {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准" );
 		}

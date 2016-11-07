@@ -20,6 +20,9 @@ controller("generalDataViewCtrl",['$scope','getDataService',function($scope,getD
           $scope.dayOutCount+=value.outcount;
       });
   };
+  $scope.toParkInfo=function(){
+     parent.location.href="/park/parkingInfo/";
+  };
      getDataService.getZoneCenterInfo().then(function(result){
       $scope.zoneCenters=result;
       $scope.processData(result);

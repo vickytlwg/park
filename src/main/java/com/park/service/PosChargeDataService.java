@@ -30,7 +30,9 @@ public interface PosChargeDataService {
 	
 	public int update(PosChargeData item);
 		
-	public List<PosChargeData> pay(String cardNumber, double money) throws Exception;
+	public PosChargeData pay(String cardNumber, double money) throws Exception;
+	
+	public List<PosChargeData> repay(String cardNumber, double money) throws Exception;
 	
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
 	
@@ -45,4 +47,6 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getByCardNumber(String cardNumber);
 	
 	public List<PosChargeData> getByParkName(String parkName);
+	
+	
 }
