@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosChargeDataDAO;
+import com.park.dao.PosdataDAO;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
@@ -114,8 +115,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		lastCharge.setPaidCompleted(true);
 		this.update(lastCharge);
 		if (money >= 0) {					
-			 DecimalFormat df = new DecimalFormat("#.00");  
-			lastCharge.setChangeMoney(Double.parseDouble(df.format(lastCharge.getChangeMoney() + money)));
+			DecimalFormat df = new DecimalFormat("0.00"); 
+			String data=df.format(lastCharge.getChangeMoney() + money);
+			lastCharge.setChangeMoney(Double.parseDouble(data));
 			lastCharge.setGivenMoney(theMoney);
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
@@ -399,6 +401,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			this.update(lastCharge);
 		}
 		return charges;
+	}
+
+	@Override
+	public List<Map<String, Object>> getFeeOperatorChargeData(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getFeeOperatorChargeData(startDate, endDate);
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.park.model.PosChargeData;
 
 public interface PosChargeDataService {
@@ -48,5 +50,5 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getByParkName(String parkName);
 	
-	
+	public List<Map<String, Object>> getFeeOperatorChargeData(Date startDate,Date endDate);
 }

@@ -82,7 +82,24 @@ public class PosChargeDataController {
 		}
 		return "feeDetail";		
 	}
-	
+	@RequestMapping(value = "/feeoperatorCharge", produces = {"application/json;charset=UTF-8"})
+	public String feeoperatorCharge(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "feeOperatorChargeData";		
+	}
 	@RequestMapping(value = "/arrearage", produces = {"application/json;charset=UTF-8"})
 	public String arrearage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -315,6 +332,28 @@ public class PosChargeDataController {
 		}
 		
 		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	
+	@RequestMapping(value="/getFeeOperatorChargeData",method=RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getFeeOperatorChargeData(@RequestBody Map<String, String> args) throws ParseException{
+		String startDay=(String)args.get("startDay");
+		String endDay=(String)args.get("endDay");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 23:59:59");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<Map<String, Object>> results=chargeSerivce.getFeeOperatorChargeData(parsedStartDay,parsedEndDay);
+		return Utility.createJsonMsg(1001, "success", results);
 	}
 	@RequestMapping(value = "/repay", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String repay(@RequestBody Map<String, Object> args){

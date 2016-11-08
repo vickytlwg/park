@@ -187,7 +187,7 @@
 				  <li #if(!$isAdmin && !$park_operation) hidden#end><a href="/park/operation"><i class="fa fa-bar-chart"></i>财务运营分析</a></li>
 				  <li #if(!$isAdmin && !$park_data) hidden#end><a href="/park/data"><i class="fa fa-line-chart"></i>停车数据分析</a></li>
 				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/detail"><i class="fa fa-file-text-o"></i>计费详情</a></li>
-				  
+				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
 				</ul>
 			</li>
 			 <li class="treeview active">

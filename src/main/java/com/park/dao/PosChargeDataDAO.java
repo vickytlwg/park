@@ -2,6 +2,7 @@ package com.park.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,6 @@ public interface PosChargeDataDAO {
 	public List<PosChargeData> getByCardNumber(@Param("cardNumber")String cardNumber);
 	
 	public List<PosChargeData> getByParkName(@Param("parkName")String parkName);
+	
+	public List<Map<String, Object>> getFeeOperatorChargeData(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

@@ -79,5 +79,11 @@
 		delete from PosChargeData
 		where id=#{param1}
 	</delete>
-	
+<select id="getFeeOperatorChargeData" resultType="java.util.HashMap">
+	SELECT SUM(posChargeData.chargeMoney) AS chargeMoney,count(*) AS count,SUM(posChargeData.paidMoney) AS paidMoney,SUM(posChargeData.unPaidMoney) AS unPaidMoney, 
+	SUM(posChargeData.givenMoney) AS givenMoney,SUM(posChargeData.changeMoney) AS changeMoney,posChargeData.operatorId ,feeOperator.name AS feeOperator
+	FROM feeOperator LEFT JOIN posChargeData ON posChargeData.operatorId=feeOperator.account  where entranceDate between 
+	#{startDate} and #{endDate} 
+	GROUP BY feeOperator.account
+ </select>	
 </mapper>
