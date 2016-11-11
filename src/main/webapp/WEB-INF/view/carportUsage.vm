@@ -132,7 +132,7 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="date" class="control-label">日期</label>
-										<input type="text" id="date"  class="form-control date">									
+										<input type="text" id="date" class="form-control date">									
 									</div>
 								</div>								
 							</div>							

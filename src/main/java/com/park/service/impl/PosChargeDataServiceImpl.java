@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosChargeDataDAO;
 import com.park.dao.PosdataDAO;
+import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
@@ -409,4 +410,44 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return chargeDao.getFeeOperatorChargeData(startDate, endDate);
 	}
 
+	@Override
+	public List<PosChargeData> getByRange(int parkId, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByRange(parkId, startDate, endDate);
+	}
+
+	@Override
+	public List<PosChargeData> getByParkAndDay(int parkId, String date) throws ParseException  {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
+		Date startDate=sFormat.parse(date+" 00:00:00");
+		Date endDate=sFormat.parse(date+" 23:59:59");
+		return chargeDao.getByRange(parkId, startDate, endDate);
+	}
+
+	@Override
+	public List<PosChargeData> getAllByDay(String date) throws ParseException {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
+		Date startDate=sFormat.parse(date+" 00:00:00");
+		Date endDate=sFormat.parse(date+" 23:59:59");
+		return chargeDao.getAllByDay(startDate,endDate);
+	}
+	@Override
+	public List<PosChargeData> getByParkAndDayRange(int parkId, String startDate,String endDate) throws ParseException  {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
+		Date dstartDate=sFormat.parse(startDate+" 00:00:00");
+		Date dendDate=sFormat.parse(endDate+" 23:59:59");
+		return chargeDao.getByRange(parkId, dstartDate, dendDate);
+	}
+
+	@Override
+	public List<PosChargeData> getAllByDayRange(String startDate,String endDate) throws ParseException {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
+		Date dstartDate=sFormat.parse(startDate+" 00:00:00");
+		Date dendDate=sFormat.parse(endDate+" 23:59:59");
+		return chargeDao.getAllByDay(dstartDate,dendDate);
+	}
 }

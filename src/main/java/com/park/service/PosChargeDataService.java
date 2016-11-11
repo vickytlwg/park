@@ -1,5 +1,6 @@
 package com.park.service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,12 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getUnCompleted();
 	
 	public List<PosChargeData> getPage(int low, int count);
+	
+	public List<PosChargeData> getByRange(int parkId,Date startDate,Date endDate);
+	
+	public List<PosChargeData> getAllByDay(String date) throws ParseException;
+	
+	public List<PosChargeData> getByParkAndDay(int parkId,String date) throws ParseException;
 	
 	public List<PosChargeData> getDebt (String cardNumber) throws Exception;
 	
@@ -51,4 +58,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getByParkName(String parkName);
 	
 	public List<Map<String, Object>> getFeeOperatorChargeData(Date startDate,Date endDate);
+
+	List<PosChargeData> getByParkAndDayRange(int parkId, String startDate,String endDate) throws ParseException;
+
+	List<PosChargeData> getAllByDayRange(String startDate, String endDate) throws ParseException;
 }

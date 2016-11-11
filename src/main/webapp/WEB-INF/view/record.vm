@@ -1,12 +1,12 @@
 <script src="/park/script/service/textModalService.js"></script>
-
+<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <script src="/park/script/feeDetail.js"></script>
 <script src="/park/script/datepicker.js"></script>
 
 <div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
 	<section class="content-header">
           <h1>
-            今日欠费
+            停车记录查询
             <small></small>
           </h1>     
     </section>
@@ -17,14 +17,36 @@
 	                <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
-	                <div class="box-body">  
-		                	<div class="btn-group">
-		                		<button ng-click="detail.refresh()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>		                		
-		                	</div>    					
-							<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end onclick="window.open('getExcel')" id="excelBtn" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 导出excel</button>
-		             
+	               <div class="box-body">  
+					<div class="panel panel-default">
+						<div class="panel-body">
+		                	<div class="row" style="padding-top:15px">
+								
+								<div class="col-md-1">
+                                        <label class="label-control" style="float:right;padding-top:10px">车牌号:</label>
+								</div>
+								<div class="col-md-2">
+										<input type="text" ng-model="searchText" class="form-control" style="float:right"/>										
+                                    </div>
+								<div class="col-md-1">
+										<button  type="button" class="btn btn-info" ng-click="searchByCardnumber()" style="float:left">查找
+                                        </button>
+                                   </div>	
+								<div class="col-md-2">
+                                        <label class="label-control" style="float:right;padding-top:10px">输入停车场:</label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" ng-model="searchParkNameText" class="form-control" style="float:right"/>										
+                                    </div>
+									<div class="col-md-1">
+										<button  type="button" class="btn btn-info" ng-click="searchByParkName()" style="float:left">查找
+                                        </button>
+                                    </div>
 		                	</div>
+
+							
+						  </div>
+						</div>	
 	                	<br/>   
 	                    <br/> 
 						<div>
@@ -43,6 +65,7 @@
 										<th><span>找零</span></th>	
 										<th><span>进场时间</span></th>	
 										<th><span>离场时间</span></th>
+										<th><span>查看图片</span></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
 				          	<tr  ng-repeat = "item in detail.items">
@@ -60,11 +83,13 @@
 				          		<td ng-bind="item.changeMoney"></td>
 				          		<td ng-bind="item.entranceDate"></td>
 				          		<td ng-bind="item.exitDate"></td>
-				          		
+				          		<td ng-if="item.url!=''"><a href={{item.url}} target="_blank">查看
+                                </a></td>
+								<td ng-if="item.url==''">暂无</td>
 				          </table>
     					</div>
     					
-    					                <div class="box-footer clearfix">
+    			<div class="box-footer clearfix">
                   <div ng-hide="detail.loading"><small ng-bind="'获取到' + detail.items.length + '/' + detail.page.allCounts + '条结果！'"> </small></div>
                   <ul ng-hide="detail.page.hidden" class="pagination pagination-sm no-margin pull-right">
                   <li ng-click='detail.firstPage()'>

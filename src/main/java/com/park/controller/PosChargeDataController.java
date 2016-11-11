@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
+import com.squareup.okhttp.Request;
 
 @Controller
 @RequestMapping("/pos/charge")
@@ -68,6 +70,16 @@ public class PosChargeDataController {
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> outsideparks=new ArrayList<>();
+		for(Park park :parkList){
+			if (park.getType()==3) {
+				outsideparks.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", outsideparks);
 		if(user != null){
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
@@ -82,6 +94,94 @@ public class PosChargeDataController {
 		}
 		return "feeDetail";		
 	}
+	
+	@RequestMapping(value = "/record", produces = {"application/json;charset=UTF-8"})
+	public String record(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> outsideparks=new ArrayList<>();
+		for(Park park :parkList){
+			if (park.getType()==3) {
+				outsideparks.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", outsideparks);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "record";		
+	}
+	
+	@RequestMapping(value = "/flowbill", produces = {"application/json;charset=UTF-8"})
+	public String flowbill(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> outsideparks=new ArrayList<>();
+		for(Park park :parkList){
+			if (park.getType()==3) {
+				outsideparks.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", outsideparks);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "flowbill";		
+	}
+	
+	@RequestMapping(value = "/reconciliation", produces = {"application/json;charset=UTF-8"})
+	public String reconciliation(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> outsideparks=new ArrayList<>();
+		for(Park park :parkList){
+			if (park.getType()==3) {
+				outsideparks.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", outsideparks);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "reconciliation";		
+	}
+	
 	@RequestMapping(value = "/feeoperatorCharge", produces = {"application/json;charset=UTF-8"})
 	public String feeoperatorCharge(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -154,11 +254,9 @@ public class PosChargeDataController {
 	public String getByCardnumber(@RequestBody Map<String, String> args){
 		String cardNumber=args.get("cardNumber");
 		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByCardNumber(cardNumber));
-	}
-	
+	}	
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String count(){
-		
+	public @ResponseBody String count(){	
 		int count = chargeSerivce.count();
 		return Utility.createJsonMsg(1001, "success", count);
 	}
@@ -167,17 +265,13 @@ public class PosChargeDataController {
 	public String getByParkName(@RequestBody Map<String, String> args){
 		String parkName=args.get("parkName");
 		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByParkName(parkName));
-	}
-	
-	
+	}		
 	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String page(@RequestBody Map<String, Object> args){
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
-	}
-	
-	
+	}		
 	@RequestMapping(value = "/get", method = {RequestMethod.GET,RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String get(@RequestParam(value="cardNumber",required=false)String cardNumber){
 		List<PosChargeData> charges =null;
@@ -386,5 +480,82 @@ public class PosChargeDataController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
 	}
-
+	@RequestMapping(value="/getExcelByParkAndDay")
+	@ResponseBody
+	public void getExcelByParkAndDay(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
+		String date=request.getParameter("date");
+		String parkId=request.getParameter("parkId");
+		
+		List<PosChargeData> posdatas=chargeSerivce.getByParkAndDay(Integer.parseInt(parkId), date);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+	}
+	@RequestMapping(value="/getExcelByDay")
+	@ResponseBody
+	public void getExcelByDay(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
+		String date=request.getParameter("date");
+		List<PosChargeData> posdatas=chargeSerivce.getAllByDay(date);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+	}
+	@RequestMapping(value="/getExcelByParkAndDayRange")
+	@ResponseBody
+	public void getExcelByParkAndDayRange(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
+		String startDate=request.getParameter("startDate");
+		String endDate=request.getParameter("endDate");
+		String parkId=request.getParameter("parkId");
+		
+		List<PosChargeData> posdatas=chargeSerivce.getByParkAndDayRange(Integer.parseInt(parkId), startDate, endDate);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+	}
+	@RequestMapping(value="/getExcelByDayRange")
+	@ResponseBody
+	public void getExcelByDayRange(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
+		String startDate=request.getParameter("startDate");
+		String endDate=request.getParameter("endDate");
+		List<PosChargeData> posdatas=chargeSerivce.getAllByDayRange(startDate, endDate);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+	}
 }

@@ -15,15 +15,15 @@
 		<slf4j.version>1.6.6</slf4j.version>
 		<log4j.version>1.2.12</log4j.version>
 	</properties>
-	
-<repositories>
-        <repository>
-            <id>nexus</id>
-             <name>Team Nexus Repository</name>
-            <url>http://120.25.159.154:8081/nexus/content/groups/public/</url>
-          </repository>
-  </repositories>
-  
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<name>Team Nexus Repository</name>
+			<url>http://120.25.159.154:8081/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+
 
 	<dependencies>
 
@@ -179,7 +179,7 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -245,7 +245,39 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- log end -->
-
+		<!-- lepay start -->
+		<dependency>
+			<groupId>cn.ninebit</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.45</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.ninebit</groupId>
+			<artifactId>channel.lepay.client</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.ninebit</groupId>
+			<artifactId>channel.lepay.sdk</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.ninebit</groupId>
+			<artifactId>channel.lepay.security</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.ninebit</groupId>
+			<artifactId>channel.lepay.share</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<classifier>jdk15</classifier><!--指定jdk版本 -->
+			<version>2.4</version>
+		</dependency>
+		<!-- lepay end -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -261,7 +293,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-				
+
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>

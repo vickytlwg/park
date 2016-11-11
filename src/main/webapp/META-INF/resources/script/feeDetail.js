@@ -1,7 +1,7 @@
 var chargeApp = angular.module("feeDetailApp", ['ui.bootstrap']);
 
-chargeApp.controller("feeDetailCtrl", ['$scope', '$http', 'textModal', 'textModalTest','$modal', '$timeout',
-function($scope, $http, textModal,textModalTest, $uibModal, $timeout) {
+chargeApp.controller("feeDetailCtrl", ['$scope', '$http', '$window','textModal', 'textModalTest','$modal', '$timeout',
+function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
     //define table content
     $scope.detail = {
@@ -15,6 +15,26 @@ function($scope, $http, textModal,textModalTest, $uibModal, $timeout) {
             index : 1
         }
     };
+ $scope.searchDate=new Date().format('yyyy-MM-dd');
+ $scope.startDate=new Date().format('yyyy-MM-dd');
+ $scope.endDate=new Date().format('yyyy-MM-dd');
+      var dateInitial=function(){
+        $('.date').datepicker({
+            autoClose: true,
+            dateFormat: "yyyy-mm-dd",
+            days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+            daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+            daysMin: ["日", "一", "二", "三", "四", "五", "六"],
+            months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+            showMonthAfterYear: true,
+            viewStart: 0,
+            weekStart: 1,
+            yearSuffix: "年",
+            isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}        
+        });
+    };  
+   dateInitial();
 
     $scope.detail.getCount = function() {
         $http.get('count').success(function(response) {
@@ -56,6 +76,19 @@ function($scope, $http, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
+    $scope.getExcelByDay=function(){  
+         $window.location.href="getExcelByDay?date="+$scope.searchDate;
+        };
+    $scope.getExcelByDayRange=function(){  
+         $window.location.href="getExcelByDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate;
+        };
+    $scope.getExcelByParkAndDay=function(){
+         $window.location.href="getExcelByParkAndDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
+     };
+     $scope.getExcelByParkAndDayRange=function(){
+         $window.location.href="getExcelByParkAndDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate
+         +"&parkId="+$('#park-select2').val();
+     };
      $scope.searchByParkName=function(){
         if($scope.searchParkNameText==""||$scope.searchParkNameText==undefined){
             return;

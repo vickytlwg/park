@@ -41,7 +41,12 @@
 	<select id="getPage" resultMap="PosChargeDataMapper">
 		select * from posChargeData order by id desc limit #{param1}, #{param2}
 	</select>
-	
+	<select id= "getByRange" resultMap="PosChargeDataMapper">
+		select * from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}
+	</select>
+	<select id= "getAllByDay" resultMap="PosChargeDataMapper">
+		select * from posChargeData where entranceDate between #{startDate} and #{endDate}
+	</select>
 	<select id="count" resultType="int">
 		select count(*) from posChargeData
 	</select>
