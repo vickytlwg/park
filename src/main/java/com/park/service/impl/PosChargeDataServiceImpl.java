@@ -450,4 +450,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		Date dendDate=sFormat.parse(endDate+" 23:59:59");
 		return chargeDao.getAllByDay(dstartDate,dendDate);
 	}
+
+	@Override
+	public List<PosChargeData> getPageArrearage(int low, int count) {
+		// TODO Auto-generated method stub
+		return chargeDao.getPageArrearage(low, count);
+	}
 }

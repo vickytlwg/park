@@ -18,6 +18,8 @@ public interface PosChargeDataDAO {
 	
 	public List<PosChargeData> getPage(int low, int count);
 	
+	public List<PosChargeData> getPageArrearage(int low, int count);
+	
 	public List<PosChargeData> getByRange(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
 	
 	public List<PosChargeData> getAllByDay(@Param("startDate")Date startDate,@Param("endDate")Date endDate);

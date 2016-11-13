@@ -41,6 +41,9 @@
 	<select id="getPage" resultMap="PosChargeDataMapper">
 		select * from posChargeData order by id desc limit #{param1}, #{param2}
 	</select>
+	<select id="getPageArrearage" resultMap="PosChargeDataMapper">
+		select * from posChargeData where paidCompleted=false order by id desc limit #{param1}, #{param2}
+	</select>
 	<select id= "getByRange" resultMap="PosChargeDataMapper">
 		select * from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}
 	</select>

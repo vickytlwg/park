@@ -1,13 +1,48 @@
 angular.module("feeOperatorChargeDataApp",['ui.bootstrap']).
 controller("feeOperatorChargeDataCtrl",["$scope",'getData',function($scope,getData){
+               
+                $scope.refresh=function(){
                 var curDate = new Date();
                 var nextDate = new Date();
-                nextDate.setDate(nextDate.getDate() - 10);
+                nextDate.setDate(nextDate.getDate() );
                 var data={startDay:nextDate.format('yyyy-MM-dd'),endDay:curDate.format('yyyy-MM-dd')};
-                getData.getFeeOperatorDataByDateRange(data).then(function(result){
+                     getData.getFeeOperatorDataByDateRange(data).then(function(result){
                     $scope.items=result;
                 });
+                };
+                $scope.refresh();
                 $scope.refresh=function(){
+                var curDate = new Date();
+                var nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() );
+                var data={startDay:nextDate.format('yyyy-MM-dd'),endDay:curDate.format('yyyy-MM-dd')};
+                     getData.getFeeOperatorDataByDateRange(data).then(function(result){
+                    $scope.items=result;
+                });
+                };
+                $scope.weekData=function(){
+                var curDate = new Date();
+                var nextDate = new Date();
+                nextDate.setDate(nextDate.getDate()-7 );
+                var data={startDay:nextDate.format('yyyy-MM-dd'),endDay:curDate.format('yyyy-MM-dd')};
+                     getData.getFeeOperatorDataByDateRange(data).then(function(result){
+                    $scope.items=result;
+                });
+                };
+                $scope.monthData=function(){
+                var curDate = new Date();
+                var nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() -30);
+                var data={startDay:nextDate.format('yyyy-MM-dd'),endDay:curDate.format('yyyy-MM-dd')};
+                     getData.getFeeOperatorDataByDateRange(data).then(function(result){
+                    $scope.items=result;
+                });
+                };
+                $scope.yearData=function(){
+                var curDate = new Date();
+                var nextDate = new Date();
+                nextDate.setDate(nextDate.getDate()-365 );
+                var data={startDay:nextDate.format('yyyy-MM-dd'),endDay:curDate.format('yyyy-MM-dd')};
                      getData.getFeeOperatorDataByDateRange(data).then(function(result){
                     $scope.items=result;
                 });

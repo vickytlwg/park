@@ -19,6 +19,8 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getPage(int low, int count);
 	
+	public List<PosChargeData> getPageArrearage(int low, int count);
+	
 	public List<PosChargeData> getByRange(int parkId,Date startDate,Date endDate);
 	
 	public List<PosChargeData> getAllByDay(String date) throws ParseException;

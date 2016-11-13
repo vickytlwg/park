@@ -1,6 +1,6 @@
 <script src="/park/script/service/textModalService.js"></script>
 
-<script src="/park/script/feeDetail.js"></script>
+<script src="/park/script/arrearage.js"></script>
 <script src="/park/script/datepicker.js"></script>
 
 <div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
@@ -64,7 +64,7 @@
 				          </table>
     					</div>
     					
-    					                <div class="box-footer clearfix">
+    				<div class="box-footer clearfix">
                   <div ng-hide="detail.loading"><small ng-bind="'获取到' + detail.items.length + '/' + detail.page.allCounts + '条结果！'"> </small></div>
                   <ul ng-hide="detail.page.hidden" class="pagination pagination-sm no-margin pull-right">
                   <li ng-click='detail.firstPage()'>

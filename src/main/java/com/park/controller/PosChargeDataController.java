@@ -272,6 +272,12 @@ public class PosChargeDataController {
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
 	}		
+	@RequestMapping(value = "/pageArrearage", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String pageArrearage(@RequestBody Map<String, Object> args){
+		int low = (int) args.get("low");
+		int count = (int) args.get("count");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearage(low, count));
+	}
 	@RequestMapping(value = "/get", method = {RequestMethod.GET,RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String get(@RequestParam(value="cardNumber",required=false)String cardNumber){
 		List<PosChargeData> charges =null;
