@@ -19,7 +19,7 @@
 	</select> 
 	
 	<select id="getByCarportId" resultMap="CarportStatusDetailMapper">
-		select * from carportStatusDetail where carportId = #{param1}
+		select * from carportStatusDetail where carportId = #{param1} order by startTime desc
 	</select>
 	
 	<select id="getDayCarportStatusDetail" resultMap="CarportStatusDetailMapper">
