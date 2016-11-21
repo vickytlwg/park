@@ -5,7 +5,7 @@
 <script src="/park/script/highcharts.js"></script>
 <!--<script src="/park/script/exporting.js"></script>-->
 <script src="/park/script/HighchartTheme.js"></script>
-<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts-more.js"></script>
+<script type="text/javascript" src="/park/script/highcharts-more.js"></script>
 
 
 
