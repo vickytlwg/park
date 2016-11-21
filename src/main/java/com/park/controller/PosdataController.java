@@ -35,12 +35,14 @@ import com.park.model.AuthUserRole;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
+import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.model.posdataReceive;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
+import com.park.service.PosChargeDataService;
 import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
@@ -56,7 +58,8 @@ private PosdataService posdataService;
 private ParkService parkService;
 @Autowired
 private AuthorityService authService;
-
+@Autowired
+PosChargeDataService chargeSerivce;
 @Autowired
 private UserPagePermissionService pageService;
 @Autowired

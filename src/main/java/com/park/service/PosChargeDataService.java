@@ -19,7 +19,11 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getPage(int low, int count);
 	
+	public List<PosChargeData> getPageByParkId(int parkId,int start,int count);
+	
 	public List<PosChargeData> getPageArrearage(int low, int count);
+	
+	public List<PosChargeData> getPageArrearageByParkId(int parkId,int start,int count);
 	
 	public List<PosChargeData> getByRange(int parkId,Date startDate,Date endDate);
 	

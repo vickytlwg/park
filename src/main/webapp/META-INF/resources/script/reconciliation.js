@@ -53,6 +53,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
         });
     };
+
     $scope.selectedPark={};
     $scope.selectParks = [];
     var getSelectData = function() {
@@ -68,7 +69,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
     };
     getSelectData();
     
-    $scope.$watch("selectedPark",function(){
+     $scope.$watch("selectedPark",function(){
         $scope.detail.getPage();
     },true);
     //previous page
@@ -146,9 +147,6 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
     //get one page detail
     $scope.detail.getPage = function() {
-        if($scope.selectedPark==null||$scope.selectedPark==undefined){
-            return;
-        }
         if ($scope.detail.page.index > $scope.detail.page.indexRange.length) {
             textModal.open($scope, "错误", "当前页不存在!");
             return;
@@ -166,7 +164,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         };
 
-        $http.post('pageArrearageByParkId', {
+          $http.post('pageByParkId', {
             start : ($scope.detail.page.index - 1) * $scope.detail.page.size,
             count : $scope.detail.page.size,
             parkId: parseInt($scope.selectedPark.value)

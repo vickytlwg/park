@@ -48,435 +48,474 @@ import com.squareup.okhttp.Request;
 @Controller
 @RequestMapping("/pos/charge")
 public class PosChargeDataController {
-	
+
 	@Autowired
-	ParkService parkService;	
+	ParkService parkService;
 	@Autowired
 	private AuthorityService authService;
-	
+
 	@Autowired
 	PosChargeDataService chargeSerivce;
-	
+
 	@Autowired
 	private UserPagePermissionService pageService;
-	
+
 	@Autowired
 	private ExcelExportService excelService;
-	
+
 	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
-	
-	@RequestMapping(value = "/detail", produces = {"application/json;charset=UTF-8"})
-	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
+	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		List<Park> parkList = parkService.getParks();
-		if(username != null)
+		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
-		List<Park> outsideparks=new ArrayList<>();
-		for(Park park :parkList){
-			if (park.getType()==3) {
+		List<Park> outsideparks = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType() == 3) {
 				outsideparks.add(park);
 			}
 		}
 		modelMap.addAttribute("parks", outsideparks);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "feeDetail";		
+		return "feeDetail";
 	}
-	
-	@RequestMapping(value = "/record", produces = {"application/json;charset=UTF-8"})
-	public String record(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/record", produces = { "application/json;charset=UTF-8" })
+	public String record(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		List<Park> parkList = parkService.getParks();
-		if(username != null)
+		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
-		List<Park> outsideparks=new ArrayList<>();
-		for(Park park :parkList){
-			if (park.getType()==3) {
+		List<Park> outsideparks = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType() == 3) {
 				outsideparks.add(park);
 			}
 		}
 		modelMap.addAttribute("parks", outsideparks);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "record";		
+		return "record";
 	}
-	
-	@RequestMapping(value = "/flowbill", produces = {"application/json;charset=UTF-8"})
-	public String flowbill(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/flowbill", produces = { "application/json;charset=UTF-8" })
+	public String flowbill(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		List<Park> parkList = parkService.getParks();
-		if(username != null)
+		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
-		List<Park> outsideparks=new ArrayList<>();
-		for(Park park :parkList){
-			if (park.getType()==3) {
+		List<Park> outsideparks = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType() == 3) {
 				outsideparks.add(park);
 			}
 		}
 		modelMap.addAttribute("parks", outsideparks);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "flowbill";		
+		return "flowbill";
 	}
-	
-	@RequestMapping(value = "/reconciliation", produces = {"application/json;charset=UTF-8"})
-	public String reconciliation(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/reconciliation", produces = { "application/json;charset=UTF-8" })
+	public String reconciliation(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		List<Park> parkList = parkService.getParks();
-		if(username != null)
+		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
-		List<Park> outsideparks=new ArrayList<>();
-		for(Park park :parkList){
-			if (park.getType()==3) {
+		List<Park> outsideparks = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType() == 3) {
 				outsideparks.add(park);
 			}
 		}
 		modelMap.addAttribute("parks", outsideparks);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "reconciliation";		
+		return "reconciliation";
 	}
-	
-	@RequestMapping(value = "/feeoperatorCharge", produces = {"application/json;charset=UTF-8"})
-	public String feeoperatorCharge(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/feeoperatorCharge", produces = { "application/json;charset=UTF-8" })
+	public String feeoperatorCharge(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
-		if(user != null){
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "feeOperatorChargeData";		
+		return "feeOperatorChargeData";
 	}
-	@RequestMapping(value = "/arrearage", produces = {"application/json;charset=UTF-8"})
-	public String arrearage(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/arrearage", produces = { "application/json;charset=UTF-8" })
+	public String arrearage(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
-		if(user != null){
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> outsideparks = new ArrayList<>();
+		for (Park park : parkList) {
+			if (park.getType() == 3) {
+				outsideparks.add(park);
+			}
+		}
+		modelMap.addAttribute("parks", outsideparks);
+		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
-			if(user.getRole() == AuthUserRole.ADMIN.getValue())
-				isAdmin=true;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "arrearage";		
+		return "arrearage";
 	}
-	@RequestMapping(value="/getByParkAndRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+
+	@RequestMapping(value = "/getByParkAndRange", method = RequestMethod.POST, produces = {
+			"application/json;charset=utf-8" })
 	@ResponseBody
-	public String getByParkAndRange(@RequestBody Map<String,Object> args){
-		int parkId=Integer.parseInt((String)args.get("parkId"));
-		String startDay=(String)args.get("startDay");
-		String endDay=(String)args.get("endDay");
+	public String getByParkAndRange(@RequestBody Map<String, Object> args) {
+		int parkId = Integer.parseInt((String) args.get("parkId"));
+		String startDay = (String) args.get("startDay");
+		String endDay = (String) args.get("endDay");
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<PosChargeData> posChargeDatas=chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		List<PosChargeData> posChargeDatas = chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay,
+				parkId);
 		if (posChargeDatas.isEmpty()) {
 			retMap.put("status", 1002);
-		}
-		else {
+		} else {
 			retMap.put("status", 1001);
 			retMap.put("message", "success");
 			retMap.put("body", posChargeDatas);
-		}		
+		}
 		return Utility.gson.toJson(retMap);
 	}
-	@RequestMapping(value="getByCardnumber",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "getByCardnumber", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getByCardnumber(@RequestBody Map<String, String> args){
-		String cardNumber=args.get("cardNumber");
-		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByCardNumber(cardNumber));
-	}	
-	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String count(){	
+	public String getByCardnumber(@RequestBody Map<String, String> args) {
+		String cardNumber = args.get("cardNumber");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
+	}
+
+	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String count() {
 		int count = chargeSerivce.count();
 		return Utility.createJsonMsg(1001, "success", count);
 	}
-	@RequestMapping(value="getByParkName",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "getByParkName", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getByParkName(@RequestBody Map<String, String> args){
-		String parkName=args.get("parkName");
-		return Utility.createJsonMsg(1001, "success",chargeSerivce.getByParkName(parkName));
-	}		
-	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String page(@RequestBody Map<String, Object> args){
+	public String getByParkName(@RequestBody Map<String, String> args) {
+		String parkName = args.get("parkName");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkName(parkName));
+	}
+
+	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String page(@RequestBody Map<String, Object> args) {
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
-	}		
-	@RequestMapping(value = "/pageArrearage", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String pageArrearage(@RequestBody Map<String, Object> args){
+	}
+	
+	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args) {
+		int parkId=(int) args.get("parkId");
+		int start = (int) args.get("start");
+		int count = (int) args.get("count");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageByParkId(parkId, start, count));
+	}
+
+	@RequestMapping(value = "/pageArrearage", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String pageArrearage(@RequestBody Map<String, Object> args) {
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearage(low, count));
 	}
-	@RequestMapping(value = "/get", method = {RequestMethod.GET,RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String get(@RequestParam(value="cardNumber",required=false)String cardNumber){
-		List<PosChargeData> charges =null;
-		if (cardNumber!=null) {
+
+	@RequestMapping(value = "/pageArrearageByParkId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String pageArrearageByParkId(@RequestBody Map<String, Object> args){
+		int parkId =(int) args.get("parkId");
+		int start = (int) args.get("start");
+		int count = (int) args.get("count");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearageByParkId(parkId, start, count));
+	}
+
+	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST }, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String get(@RequestParam(value = "cardNumber", required = false) String cardNumber) {
+		List<PosChargeData> charges = null;
+		if (cardNumber != null) {
 			try {
-				charges=chargeSerivce.getDebt(cardNumber);
+				charges = chargeSerivce.getDebt(cardNumber);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 			}
+		} else {
+			charges = chargeSerivce.getUnCompleted();
 		}
-		else{
-			 charges = chargeSerivce.getUnCompleted();
-		}
-		
+
 		return Utility.createJsonMsg(1001, "success", charges);
 	}
-	
-	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String insert(@RequestBody PosChargeData charge) throws ParseException{
-		
+
+	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String insert(@RequestBody PosChargeData charge) throws ParseException {
+
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
-		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
-		
-		if(park == null || park.getFeeCriterionId() == null){
+		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId);
+
+		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
-		if (outsideparkinfo!=null) {
-			if (charge.isPaidCompleted()==false) {
-				int Unusedcarportcount=outsideparkinfo.getUnusedcarportcount();
-				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount-1);
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+		if (outsideparkinfo != null) {
+			if (charge.isPaidCompleted() == false) {
+				int Unusedcarportcount = outsideparkinfo.getUnusedcarportcount();
+				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount - 1);
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
 				outsideparkinfo.setPossigndate(new Date());
 				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			}
-			else {
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
-				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+			} else {
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
+				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount() + 1);
+				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney() + charge.getChargeMoney()));
+				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + charge.getPaidMoney()
+						+ charge.getGivenMoney() - charge.getChangeMoney()));
 				outsideparkinfo.setPossigndate(new Date());
 				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			}
 		}
-		
-		if (charge.getEntranceDate()==null) {
+
+		if (charge.getEntranceDate() == null) {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		}		
+		}
 		int ret = chargeSerivce.insert(charge);
-		if(ret == 1)
+		if (ret == 1)
 			return Utility.createJsonMsg(1001, "success");
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
-	
-	@RequestMapping(value = "/update",method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String modify(@RequestBody PosChargeData charge){
-		
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String modify(@RequestBody PosChargeData charge) {
+
 		int ret = chargeSerivce.update(charge);
-		if(ret == 1)
+		if (ret == 1)
 			return Utility.createJsonMsg(1001, "success");
 		else
 			return Utility.createJsonMsg(1002, "failed");
-	
+
 	}
-	@RequestMapping(value = "/query", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String query(@RequestBody Map<String, Object> args) throws ParseException{
+
+	@RequestMapping(value = "/query", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String query(@RequestBody Map<String, Object> args) throws ParseException {
 		String cardNumber = (String) args.get("cardNumber");
 		String exitDate = (String) args.get("exitDate");
 		List<PosChargeData> queryCharges = null;
-		if (exitDate!=null) {
-			Date eDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 			try {
-				queryCharges = chargeSerivce.queryDebt(cardNumber,eDate);
+				queryCharges = chargeSerivce.queryDebt(cardNumber, eDate);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		} else {
+			try {
+				queryCharges = chargeSerivce.queryDebt(cardNumber, new Date());
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 			}
 		}
-		else {
-			try {
-				queryCharges = chargeSerivce.queryDebt(cardNumber,new Date());
-			} catch (Exception e) {
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
-			}
-		}			
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
-	
-	@RequestMapping(value = "/queryCurrent", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String queryCurrent(@RequestBody Map<String, Object> args) throws ParseException{
+
+	@RequestMapping(value = "/queryCurrent", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String queryCurrent(@RequestBody Map<String, Object> args) throws ParseException {
 		String cardNumber = (String) args.get("cardNumber");
 		String exitDate = (String) args.get("exitDate");
 		List<PosChargeData> queryCharges = null;
-		if (exitDate!=null) {
-			Date eDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 			try {
-				queryCharges = chargeSerivce.queryCurrentDebt(cardNumber,eDate);
+				queryCharges = chargeSerivce.queryCurrentDebt(cardNumber, eDate);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		} else {
+			try {
+				queryCharges = chargeSerivce.queryCurrentDebt(cardNumber, new Date());
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 			}
 		}
-		else {
-			try {
-				queryCharges = chargeSerivce.queryCurrentDebt(cardNumber,new Date());
-			} catch (Exception e) {
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
-			}
-		}			
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
-	
-	@RequestMapping(value = "/unpaid", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String getDebt(@RequestBody Map<String, Object> args) throws ParseException{
+
+	@RequestMapping(value = "/unpaid", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String getDebt(@RequestBody Map<String, Object> args) throws ParseException {
 		String cardNumber = (String) args.get("cardNumber");
 		String exitDate = (String) args.get("exitDate");
-		
+
 		List<PosChargeData> unpaidCharges = null;
-		if (exitDate!=null) {
-			Date eDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 			try {
-				unpaidCharges = chargeSerivce.getDebt(cardNumber,eDate);
+				unpaidCharges = chargeSerivce.getDebt(cardNumber, eDate);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 			}
-		}
-		else {
+		} else {
 			try {
 				unpaidCharges = chargeSerivce.getDebt(cardNumber);
 			} catch (Exception e) {
-				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准" );
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 			}
 		}
-	
-		
+
 		return Utility.createJsonMsg(1001, "success", unpaidCharges);
 	}
-	
-	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String pay(@RequestBody Map<String, Object> args){
+
+	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String pay(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
 		double money = (double) args.get("money");
-		
-		PosChargeData payRet =  null;
+
+		PosChargeData payRet = null;
 		try {
 			payRet = chargeSerivce.pay(cardNumber, money);
 		} catch (Exception e) {
-			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准" );
+			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
-		
+
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
-	
-	@RequestMapping(value="/getFeeOperatorChargeData",method=RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+
+	@RequestMapping(value = "/getFeeOperatorChargeData", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getFeeOperatorChargeData(@RequestBody Map<String, String> args) throws ParseException{
-		String startDay=(String)args.get("startDay");
-		String endDay=(String)args.get("endDay");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	public String getFeeOperatorChargeData(@RequestBody Map<String, String> args) throws ParseException {
+		String startDay = (String) args.get("startDay");
+		String endDay = (String) args.get("endDay");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 23:59:59");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<Map<String, Object>> results=chargeSerivce.getFeeOperatorChargeData(parsedStartDay,parsedEndDay);
+		List<Map<String, Object>> results = chargeSerivce.getFeeOperatorChargeData(parsedStartDay, parsedEndDay);
 		return Utility.createJsonMsg(1001, "success", results);
 	}
-	@RequestMapping(value = "/repay", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String repay(@RequestBody Map<String, Object> args){
+
+	@RequestMapping(value = "/repay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String repay(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
 		double money = (double) args.get("money");
-		
-		List<PosChargeData> payRet =  null;
+
+		List<PosChargeData> payRet = null;
 		try {
 			payRet = chargeSerivce.repay(cardNumber, money);
 		} catch (Exception e) {
-			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准" );
+			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
-		
+
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
+
 	@RequestMapping("/getExcel")
 	@ResponseBody
-	public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
-		List<PosChargeData> posdatas=chargeSerivce.getPage(0, 100000);
+	public void getExcel(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		List<PosChargeData> posdatas = chargeSerivce.getPage(0, 100000);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
@@ -484,19 +523,21 @@ public class PosChargeDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-	@RequestMapping(value="/getExcelByParkAndDay")
+
+	@RequestMapping(value = "/getExcelByParkAndDay")
 	@ResponseBody
-	public void getExcelByParkAndDay(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
-		String date=request.getParameter("date");
-		String parkId=request.getParameter("parkId");
-		
-		List<PosChargeData> posdatas=chargeSerivce.getByParkAndDay(Integer.parseInt(parkId), date);
+	public void getExcelByParkAndDay(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		String date = request.getParameter("date");
+		String parkId = request.getParameter("parkId");
+
+		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDay(Integer.parseInt(parkId), date);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
@@ -504,17 +545,19 @@ public class PosChargeDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-	@RequestMapping(value="/getExcelByDay")
+
+	@RequestMapping(value = "/getExcelByDay")
 	@ResponseBody
-	public void getExcelByDay(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
-		String date=request.getParameter("date");
-		List<PosChargeData> posdatas=chargeSerivce.getAllByDay(date);
+	public void getExcelByDay(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		String date = request.getParameter("date");
+		List<PosChargeData> posdatas = chargeSerivce.getAllByDay(date);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
@@ -522,20 +565,22 @@ public class PosChargeDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-	@RequestMapping(value="/getExcelByParkAndDayRange")
+
+	@RequestMapping(value = "/getExcelByParkAndDayRange")
 	@ResponseBody
-	public void getExcelByParkAndDayRange(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
-		String startDate=request.getParameter("startDate");
-		String endDate=request.getParameter("endDate");
-		String parkId=request.getParameter("parkId");
-		
-		List<PosChargeData> posdatas=chargeSerivce.getByParkAndDayRange(Integer.parseInt(parkId), startDate, endDate);
+	public void getExcelByParkAndDayRange(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String parkId = request.getParameter("parkId");
+
+		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDayRange(Integer.parseInt(parkId), startDate, endDate);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
@@ -543,18 +588,20 @@ public class PosChargeDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-	@RequestMapping(value="/getExcelByDayRange")
+
+	@RequestMapping(value = "/getExcelByDayRange")
 	@ResponseBody
-	public void getExcelByDayRange(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, NumberFormatException, ParseException{
-		String startDate=request.getParameter("startDate");
-		String endDate=request.getParameter("endDate");
-		List<PosChargeData> posdatas=chargeSerivce.getAllByDayRange(startDate, endDate);
+	public void getExcelByDayRange(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		List<PosChargeData> posdatas = chargeSerivce.getAllByDayRange(startDate, endDate);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers={"车牌","停车场名","车位号","操作员id","收费状态","押金","应收费","补交","返还","进场时间","离场时间"};
-		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx");
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
 		try {
@@ -562,6 +609,6 @@ public class PosChargeDataController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Utility.download(docsPath + FILE_SEPARATOR+ "poschargedata.xlsx", response);
+		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
 }

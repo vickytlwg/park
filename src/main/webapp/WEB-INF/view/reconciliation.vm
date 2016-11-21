@@ -1,6 +1,6 @@
 <script src="/park/script/service/textModalService.js"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<script src="/park/script/feeDetail.js"></script>
+<script src="/park/script/reconciliation.js"></script>
 <script src="/park/script/datepicker.js"></script>
 
 <div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
@@ -101,6 +101,18 @@
 							
 						  </div>
 						</div>	
+						
+						<div class="pull-right">
+						 <select style="display:none" id="get_Park" class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
+	                		          		#foreach( $park in $parks)
+												<option value=$park.id>$park.name</option>
+											#end
+	                	</select>
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park1.name for park1 in selectParks" ng-model="selectedPark">
+	                		#if($isAdmin) <option value=-1>所有停车场</option>#end  
+	                	</select>
+	                	</div>
+						
 	                	<br/>   
 	                    <br/> 
 						<div>

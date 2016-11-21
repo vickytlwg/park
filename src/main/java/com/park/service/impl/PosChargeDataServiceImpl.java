@@ -456,4 +456,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.getPageArrearage(low, count);
 	}
+
+	@Override
+	public List<PosChargeData> getPageArrearageByParkId(int parkId, int start, int count) {
+		// TODO Auto-generated method stub
+		return chargeDao.getPageArrearageByParkId(parkId, start, count);
+	}
+
+	@Override
+	public List<PosChargeData> getPageByParkId(int parkId, int start, int count) {
+		// TODO Auto-generated method stub
+		return chargeDao.getPageByParkId(parkId, start, count);
+	}
 }

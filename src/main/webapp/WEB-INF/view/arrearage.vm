@@ -25,6 +25,16 @@
 		                		<button #if(!$isAdmin) disabled#end onclick="window.open('getExcel')" id="excelBtn" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 导出excel</button>
 		             
 		                	</div>
+						<div class="pull-right">
+						 <select style="display:none" id="get_Park" class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
+	                		          		#foreach( $park in $parks)
+												<option value=$park.id>$park.name</option>
+											#end
+	                	</select>
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park1.name for park1 in selectParks" ng-model="selectedPark">
+	                		#if($isAdmin) <option value=-1>所有停车场</option>#end  
+	                	</select>
+	                	</div>
 	                	<br/>   
 	                    <br/> 
 						<div>

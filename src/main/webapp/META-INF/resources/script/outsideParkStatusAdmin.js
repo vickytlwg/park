@@ -190,7 +190,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         $scope.catagory = [];
         $scope.totalMoney = [];
         $scope.realMoney = [];
-        getDataService.getParkChargeByRange($scope.parkid, dateselect.substring(0, 7) + '-01', dateEnd.getFullYear() + '-' + dateEnd.getMonth() + '-01').then(function(result) {
+        getDataService.getParkChargeByRange($scope.parkid, dateselect.substring(0, 7) + '-01', dateEnd.getFullYear() + '-' + (dateEnd.getMonth()+1) + '-01').then(function(result) {
             $.each(result, function(name, value) {
                 var date = new Date(parseInt(name));
                 var month = date.getMonth() + 1;
@@ -221,7 +221,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
             $scope.carsInCount = 0;
             $scope.carsOutCount = 0;
             if (data.status == 1002) {
-                getPosChargeDataByParkAndRange($scope.parkid, date, dateEnd);
+                getPosChargeDataByParkAndRange($scope.parkid, date, dateEnd);                               
                 return;
             }
             data = data['body'];
@@ -256,6 +256,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
                 $scope.carsInCount++;
                 if (data[i]['exitDate'] != null) {
                     $scope.carsOutCount++;
+                    $scope.dayCarsCount++;
                 }
             }
         });

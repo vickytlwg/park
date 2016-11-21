@@ -135,6 +135,9 @@ public class OutsideParkInfoController {
 				parkCount+=parks.size();
 				for (Park park : parks) {
 					Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+					if (parkInfo==null) {
+						continue;
+					}
 					carportCount+=parkInfo.getCarportcount();
 					carportLeftCount+=parkInfo.getUnusedcarportcount();
 					amountMoney+=parkInfo.getAmountmoney();
