@@ -235,14 +235,22 @@
 						</div>
 					</div>
 					<div class="tab-pane fade" id="usageTable">
+						<div class="form-group">
+							<label for="carportStartDateForTable" class="control-label">开始日期</label>
+							<input type="text" id="carportStartDateForTable"  class="form-control date">									
+						</div>
+						<div class="form-group">
+							<label for="carportEndDateForTable" class="control-label">结束日期</label>
+							<input type="text" id="carportEndDateForTable"  class="form-control date">									
+						</div>
 						<table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
 							<thead>
 							<tr>
 								<th>ID</th>
 								<th>开始时间</th>
 								<th>结束时间</th>
-								<th>应付</th>
-								<th>实付</th>
+								<!--<th>应付</th>
+								<th>实付</th>-->
 							</tr>
 							</thead>
 							<tbody id="carportUsageTbody">
