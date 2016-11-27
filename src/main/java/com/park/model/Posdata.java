@@ -38,6 +38,8 @@ public class Posdata {
 
     private String memo;
 
+    private Boolean isarrearage=false;
+
     public Long getId() {
         return id;
     }
@@ -172,5 +174,13 @@ public class Posdata {
 
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
+    }
+
+    public Boolean getIsarrearage() {
+        return isarrearage;
+    }
+
+    public void setIsarrearage(Boolean isarrearage) {
+        this.isarrearage = isarrearage;
     }
 }

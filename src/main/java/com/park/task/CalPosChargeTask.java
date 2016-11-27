@@ -51,7 +51,7 @@ public class CalPosChargeTask {
 			}
 		}	
 	}
-	@Scheduled(cron="0 30 0  * * ? ")
+	@Scheduled(cron="0 30 0 * * ? ")
 	public void dayInfo(){
 		outsideParkInfoService.insertDayParkInfo();
 		

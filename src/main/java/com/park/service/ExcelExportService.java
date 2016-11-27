@@ -78,11 +78,7 @@ public class ExcelExportService {
 		for(int j=0;j<dataset.size();j++){
 			HSSFRow row1 = sheet.createRow(j+1);
 			DataUsageCardDetail dataUsageCardDetail=dataset.get(j);
-		
-//				HSSFCell cell0 = row1.createCell(0);				
-//				cell0.setCellStyle(style2);
-//				cell0.setCellValue(dataUsageCardDetail.getId());
-			
+					
 				HSSFCell cell1 = row1.createCell(0);				
 				cell1.setCellStyle(style2);
 				cell1.setCellValue(dataUsageCardDetail.getParkName());
@@ -209,19 +205,19 @@ public class ExcelExportService {
 			
 			XSSFCell cell8 = row1.createCell(6);				
 			cell8.setCellStyle(style2);
-			cell8.setCellValue(posdata.getMoney().toString());
+			cell8.setCellValue(Float.parseFloat(posdata.getMoney().toString()));
 		
 			XSSFCell cell9 = row1.createCell(7);				
 			cell9.setCellStyle(style2);
-			cell9.setCellValue(posdata.getGiving().toString());
+			cell9.setCellValue(Float.parseFloat(posdata.getGiving().toString()));
 			
 			XSSFCell cell10 = row1.createCell(8);				
 			cell10.setCellStyle(style2);
-			cell10.setCellValue(posdata.getRealmoney().toString());
+			cell10.setCellValue(Float.parseFloat(posdata.getRealmoney().toString()));
 			
 			XSSFCell cell11 = row1.createCell(9);				
 			cell11.setCellStyle(style2);
-			cell11.setCellValue(posdata.getReturnmoney().toString());
+			cell11.setCellValue(Float.parseFloat(posdata.getReturnmoney().toString()));
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			

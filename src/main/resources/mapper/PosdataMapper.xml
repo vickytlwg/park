@@ -19,6 +19,7 @@
     <result column="EndTime" property="endtime" jdbcType="TIMESTAMP" />
     <result column="SysID" property="sysid" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="isArrearage" property="isarrearage" jdbcType="BIT" />
   </resultMap>
 
 
@@ -28,13 +29,13 @@
       Mode, UserID, PosSnr, 
       Money, Giving, RealMoney, 
       ReturnMoney, StartTime, EndTime, 
-      SysID, memo)
+      SysID, memo,isArrearage)
     values (#{id,jdbcType=BIGINT}, #{credencesnr,jdbcType=VARCHAR}, #{cardsnr,jdbcType=VARCHAR}, 
       #{cardtype,jdbcType=VARCHAR}, #{sitename,jdbcType=VARCHAR}, #{backbyte,jdbcType=VARCHAR}, 
       #{mode,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{possnr,jdbcType=VARCHAR}, 
       #{money,jdbcType=DECIMAL}, #{giving,jdbcType=DECIMAL}, #{realmoney,jdbcType=DECIMAL}, 
       #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
-      #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
+      #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},#{isarrearage,jdbcType=BIT)
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap">

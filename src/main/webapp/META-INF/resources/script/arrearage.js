@@ -1,7 +1,7 @@
 var chargeApp = angular.module("feeDetailApp", ['ui.bootstrap']);
 
-chargeApp.controller("feeDetailCtrl", ['$scope', '$http', '$window','textModal', 'textModalTest','$modal', '$timeout',
-function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
+chargeApp.controller("feeDetailCtrl", ['$scope', '$http', '$window', 'textModal', 'textModalTest', '$modal', '$timeout',
+function($scope, $http, $window, textModal, textModalTest, $uibModal, $timeout) {
 
     //define table content
     $scope.detail = {
@@ -15,26 +15,28 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             index : 1
         }
     };
- $scope.searchDate=new Date().format('yyyy-MM-dd');
- $scope.startDate=new Date().format('yyyy-MM-dd');
- $scope.endDate=new Date().format('yyyy-MM-dd');
-      var dateInitial=function(){
+    $scope.searchDate = new Date().format('yyyy-MM-dd');
+    $scope.startDate = new Date().format('yyyy-MM-dd');
+    $scope.endDate = new Date().format('yyyy-MM-dd');
+    var dateInitial = function() {
         $('.date').datepicker({
-            autoClose: true,
-            dateFormat: "yyyy-mm-dd",
-            days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-            daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-            daysMin: ["日", "一", "二", "三", "四", "五", "六"],
-            months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-            monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-            showMonthAfterYear: true,
-            viewStart: 0,
-            weekStart: 1,
-            yearSuffix: "年",
-            isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}        
+            autoClose : true,
+            dateFormat : "yyyy-mm-dd",
+            days : ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+            daysShort : ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+            daysMin : ["日", "一", "二", "三", "四", "五", "六"],
+            months : ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            monthsShort : ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+            showMonthAfterYear : true,
+            viewStart : 0,
+            weekStart : 1,
+            yearSuffix : "年",
+            isDisabled : function(date) {
+                return date.valueOf() > Date.now() ? true : false;
+            }
         });
-    };  
-   dateInitial();
+    };
+    dateInitial();
 
     $scope.detail.getCount = function() {
         $http.get('count').success(function(response) {
@@ -53,7 +55,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
         });
     };
-    $scope.selectedPark={};
+    $scope.selectedPark = {};
     $scope.selectParks = [];
     var getSelectData = function() {
         var options = $('#get_Park').get(0).options;
@@ -62,15 +64,15 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
                 value : $(options[i]).val(),
                 name : $(options[i]).text()
             };
-             $scope.selectParks.push(item);
+            $scope.selectParks.push(item);
         };
-        $scope.selectedPark=$scope.selectParks[0];
+        $scope.selectedPark = $scope.selectParks[0];
     };
     getSelectData();
-    
-    $scope.$watch("selectedPark",function(){
+
+    $scope.$watch("selectedPark", function() {
         $scope.detail.getPage();
-    },true);
+    }, true);
     //previous page
     $scope.detail.previousPage = function() {
         if ($scope.detail.page.index <= 1)
@@ -78,45 +80,48 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         $scope.detail.page.index--;
         $scope.detail.getPage();
     };
-    $scope.searchText="";
-    $scope.searchByCardnumber=function(){
-        if($scope.searchText==""||$scope.searchText==undefined){
+    $scope.searchText = "";
+    $scope.searchByCardnumber = function() {
+        if ($scope.searchText == "" || $scope.searchText == undefined) {
             return;
         }
         $http({
-            url:'getByCardnumber',
-            method:'post',
-            data:{"cardNumber":$scope.searchText}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.detail.items=response.body;
+            url : 'getByCardnumber',
+            method : 'post',
+            data : {
+                "cardNumber" : $scope.searchText
+            }
+        }).success(function(response) {
+            if (response.status == 1001) {
+                $scope.detail.items = response.body;
             }
         });
     };
-    $scope.getExcelByDay=function(){  
-         $window.location.href="getExcelByDay?date="+$scope.searchDate;
-        };
-    $scope.getExcelByDayRange=function(){  
-         $window.location.href="getExcelByDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate;
-        };
-    $scope.getExcelByParkAndDay=function(){
-         $window.location.href="getExcelByParkAndDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
-     };
-     $scope.getExcelByParkAndDayRange=function(){
-         $window.location.href="getExcelByParkAndDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate
-         +"&parkId="+$('#park-select2').val();
-     };
-     $scope.searchByParkName=function(){
-        if($scope.searchParkNameText==""||$scope.searchParkNameText==undefined){
+    $scope.getExcelByDay = function() {
+        $window.location.href = "getExcelByDay?date=" + $scope.searchDate;
+    };
+    $scope.getExcelByDayRange = function() {
+        $window.location.href = "getExcelByDayRange?startDate=" + $scope.startDate + "&endDate=" + $scope.endDate;
+    };
+    $scope.getExcelByParkAndDay = function() {
+        $window.location.href = "getExcelByParkAndDay?date=" + $scope.searchDate + "&parkId=" + $('#park-select').val();
+    };
+    $scope.getExcelByParkAndDayRange = function() {
+        $window.location.href = "getExcelByParkAndDayRange?startDate=" + $scope.startDate + "&endDate=" + $scope.endDate + "&parkId=" + $('#park-select2').val();
+    };
+    $scope.searchByParkName = function() {
+        if ($scope.searchParkNameText == "" || $scope.searchParkNameText == undefined) {
             return;
         }
         $http({
-            url:'getByParkName',
-            method:'post',
-            data:{"parkName":$scope.searchParkNameText}
-        }).success(function(response){
-            if(response.status==1001){
-                $scope.detail.items=response.body;
+            url : 'getByParkName',
+            method : 'post',
+            data : {
+                "parkName" : $scope.searchParkNameText
+            }
+        }).success(function(response) {
+            if (response.status == 1001) {
+                $scope.detail.items = response.body;
             }
         });
     };
@@ -146,7 +151,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
     //get one page detail
     $scope.detail.getPage = function() {
-        if($scope.selectedPark==null||$scope.selectedPark==undefined){
+        if ($scope.selectedPark == null || $scope.selectedPark == undefined) {
             return;
         }
         if ($scope.detail.page.index > $scope.detail.page.indexRange.length) {
@@ -169,7 +174,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         $http.post('pageArrearageByParkId', {
             start : ($scope.detail.page.index - 1) * $scope.detail.page.size,
             count : $scope.detail.page.size,
-            parkId: parseInt($scope.selectedPark.value)
+            parkId : parseInt($scope.selectedPark.value)
         }).success(function(response) {
             $scope.detail.loading = false;
 
@@ -221,29 +226,28 @@ function($uibModal) {
 }]);
 feeDetail.service('textModalTest', function($uibModal) {
     var modalInstance;
-    var open=function($scope){
-    modalInstance = $uibModal.open({
-        templateUrl:'myModalTest',
-        scope : $scope,
-  //      controller:'feeDetailCtrl',
-        backdrop:'static'
-    });
-    modalInstance.opened.then(function(        
-    ){
-       console.log('modalInstance is opened'); 
-    });
-    modalInstance.result.then(function(result){
-        console.log(result);
-    });
-};
-    
-    var close=function(result){
+    var open = function($scope) {
+        modalInstance = $uibModal.open({
+            templateUrl : 'myModalTest',
+            scope : $scope,
+            //      controller:'feeDetailCtrl',
+            backdrop : 'static'
+        });
+        modalInstance.opened.then(function() {
+            console.log('modalInstance is opened');
+        });
+        modalInstance.result.then(function(result) {
+            console.log(result);
+        });
+    };
+
+    var close = function(result) {
         modalInstance.close(result);
         return '能得到消息吗';
     };
-    return{
-        open:open,
-        close:close
+    return {
+        open : open,
+        close : close
     };
 });
 //show message dilog controller

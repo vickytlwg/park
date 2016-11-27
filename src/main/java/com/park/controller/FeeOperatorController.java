@@ -117,7 +117,9 @@ public class FeeOperatorController {
 				result.put("status", 1001);
 				Feeoperator operator=feeoperators.get(0);
 				operator.setLastsigndate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-				Pos tmpPos=pos.get(0);				
+				Pos tmpPos=pos.get(0);		
+				tmpPos.setLasttime(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+				posService.updateByPrimaryKeySelective(tmpPos);
 				Park park=parkService.getParkById(tmpPos.getParkid());
 				FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
 				result.put("feeCriterion", feeCriterion);

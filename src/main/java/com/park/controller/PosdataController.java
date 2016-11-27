@@ -137,6 +137,78 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 	}
 	return Utility.gson.toJson(retMap);
 }
+@RequestMapping(value = "/insertChargeDetailArrearage", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+@ResponseBody
+public String insertChargeDetailArrearage(@RequestBody List<posdataReceive> posdatarecv ){
+	int listnum=posdatarecv.size();
+	int num=0;
+	for(int i=0;i<listnum;i++)
+	{
+		Posdata posdata=new Posdata();
+		posdata.setBackbyte(posdatarecv.get(i).getBackbyte());
+		posdata.setCardsnr(posdatarecv.get(i).getCardsnr());
+		posdata.setCardtype(posdatarecv.get(i).getCardtype());
+		posdata.setCredencesnr(posdatarecv.get(i).getCredencesnr());
+		posdata.setGiving(posdatarecv.get(i).getGiving());
+		posdata.setMemo(posdatarecv.get(i).getMemo());
+		posdata.setMode(posdatarecv.get(i).getMode());
+		posdata.setMoney(posdatarecv.get(i).getMoney());
+		posdata.setPossnr(posdatarecv.get(i).getPossnr());
+		posdata.setRealmoney(posdatarecv.get(i).getRealmoney());
+		posdata.setReturnmoney(posdatarecv.get(i).getReturnmoney());
+		posdata.setSitename(posdatarecv.get(i).getSitename());
+		posdata.setSysid(posdatarecv.get(i).getSysid());
+		posdata.setUserid(posdatarecv.get(i).getUserid());
+		posdata.setIsarrearage(true);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStarttime = null;
+		try {
+			parsedStarttime = sdf.parse(posdatarecv.get(i).getStarttime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		posdata.setStarttime(parsedStarttime);
+		Date parseEndtime=null;
+		try {
+			parseEndtime=sdf.parse(posdatarecv.get(i).getEndtime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		posdata.setEndtime(parseEndtime);
+		num+=posdataService.insert(posdata);
+		List<Park> parks=parkService.getParkByName(posdata.getSitename());
+		if (parks.size()==1) {
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
+			if (posdata.getMode()==1) {
+				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
+				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+				outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-
+						posdata.getReturnmoney().floatValue());
+				outsideparkinfo.setPossigndate(new Date());
+			}
+			else {
+				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setPossigndate(new Date());
+			}
+			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		}
+	}
+	
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	if(num==listnum)
+	{
+		retMap.put("status", 1001);
+		retMap.put("message", "success");
+	}
+	else
+	{
+		retMap.put("status", 1002);
+		retMap.put("message", "failure");
+	}
+	return Utility.gson.toJson(retMap);
+}
 @RequestMapping(value="/getChargeDetail", produces = {"application/json;charset=UTF-8"})
 @ResponseBody
 public String getChargeDetail(){
@@ -252,7 +324,41 @@ public void getExcel(HttpServletRequest request, HttpServletResponse response) t
 	}
 	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xlsx", response);
 }
-
+@RequestMapping("/getExcelByDayAndPark")
+@ResponseBody
+public void getExcelByDayAndParkid(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+	int parkId=Integer.parseInt(request.getParameter("parkId"));
+	Park park = parkService.getParkById(parkId);
+	String parkName=park.getName();
+	String startDay=request.getParameter("startday");
+	String endDay=request.getParameter("endday");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(endDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(parkName, parsedStartDay, parsedEndDay);
+	String docsPath = request.getSession().getServletContext().getRealPath("/");
+	final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+	String[] headers={"车牌","停车场名","车位号","出入场","操作员id","终端机号","应收费","押金","补交","返还","进场时间","离场时间"};
+	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xlsx");
+	XSSFWorkbook workbook = new XSSFWorkbook();
+	excelService.produceExceldataPosData("收费明细", headers, posdatas, workbook);
+	try {
+		workbook.write(out);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xlsx", response);
+}
 @RequestMapping(value="/getParkCharge",method=RequestMethod.GET)
 @ResponseBody
 public String getParkCharge(@RequestParam("parkId") int parkId, @RequestParam("startDay")String startDay, @RequestParam("endDay")String endDay ){

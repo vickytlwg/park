@@ -195,6 +195,9 @@ public class OutsideParkInfoController {
 			parkCount+=parks.size();
 			for (Park park : parks) {
 				Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+				if (parkInfo==null) {
+					continue;
+				}
 				carportCount+=parkInfo.getCarportcount();
 				carportLeftCount+=parkInfo.getUnusedcarportcount();
 				amountMoney+=parkInfo.getAmountmoney();
@@ -234,6 +237,9 @@ public class OutsideParkInfoController {
 		List<Map<String, Object>> info=new ArrayList<>();
 		for (Park park : parks) {
 			Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+			if (parkInfo==null) {
+				continue;
+			}
 			Map<String, Object> tmpdata=new HashMap<>();
 			tmpdata.put("id",park.getId());
 			tmpdata.put("contactnum", park.getNumber());

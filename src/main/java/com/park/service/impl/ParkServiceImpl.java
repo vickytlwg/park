@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
@@ -24,7 +25,7 @@ import com.park.service.ParkService;
 import com.park.service.UserParkService;
 import com.park.service.Utility;
 
-@Transactional
+@Transactional(propagation=Propagation.SUPPORTS)
 @Service
 public class ParkServiceImpl implements ParkService{
 	

@@ -197,7 +197,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value "  data-to="{{dayRealMoney}}" data-speed="1500">{{dayRealMoney}}</span>&nbsp;笔
+                                            <span class="panel-value "  data-to="{{dayRealMoney}}" data-speed="1500">{{dayRealMoney}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;
@@ -290,7 +290,7 @@
                                             <span class="panel-value" data-to="" data-speed="1500">{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3}}</b>&nbsp;人
+                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block5">
                                             <table>
@@ -352,7 +352,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="0" data-speed="1500">{{dayCarportCount}}</span>&nbsp;单
+                                            <span class="panel-value" data-to="0" data-speed="1500">{{dayCarportCount}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             总泊位数&nbsp;<b>{{dayCarportCount}}</b>&nbsp;个

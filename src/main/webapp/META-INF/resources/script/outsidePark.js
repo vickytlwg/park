@@ -234,7 +234,7 @@
 			var url = '';
 			var parkFields = getAddParkFormValue();
 			if(parkFields['id'] != undefined && parkFields['id'] != null ){
-				url = $.fn.config.webroot + '/update/parkFields';
+				url = $.fn.config.webroot + '/update/park';
 			}else{
 				url = $.fn.config.webroot + '/insert/park';
 			}
@@ -290,7 +290,7 @@
 		var feeCriterionId = parseInt($('select#feeCriterion').val());
 		if(feeCriterionId >= 0 )
 		parkFields['feeCriterionId'] = feeCriterionId;
-		parkFields['feeCriterionId'] = $('select#feeCriterion').val();		
+		parkFields['feeCriterionId'] = parseInt($('select#feeCriterion').val());		
 		parkFields['contact'] = $('input#contact').val();
 		parkFields['number'] = $('input#number').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());

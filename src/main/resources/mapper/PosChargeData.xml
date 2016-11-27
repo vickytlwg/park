@@ -64,10 +64,10 @@
 		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1}
 	</select>
 	<select id="getByCardNumber" statementType="STATEMENT" resultMap="PosChargeDataMapper">
-		select * from posChargeData where cardNumber like '%${cardNumber}%'
+		select * from posChargeData where cardNumber like '%${cardNumber}%' order by id desc
  	</select>
  	<select id="getByParkName" statementType="STATEMENT" resultMap="PosChargeDataMapper">
-		select * from posChargeData where parkDesc like '%${parkName}%'
+		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc
  	</select>		
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
