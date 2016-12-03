@@ -185,7 +185,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         var dateselect = $('#parkMonth').val();
         var dateStart = new Date(dateselect.substring(0, 7) + '-01');
         var dateEnd = dateStart;
-        dateEnd.setMonth(dateStart.getMonth() + 2);
+        dateEnd.setMonth(dateStart.getMonth() + 1);
 
         $scope.catagory = [];
         $scope.totalMoney = [];

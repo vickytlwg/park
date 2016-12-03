@@ -252,6 +252,8 @@ public class OutsideParkInfoController {
 			tmpdata.put("entrancecount", parkInfo.getEntrancecount());
 			tmpdata.put("outcount", parkInfo.getOutcount());
 			if (parkInfo.getPossigndate()==null) {
+				tmpdata.put("isonline", false);
+				info.add(tmpdata);
 				continue;
 			}
 			Long signDate=parkInfo.getPossigndate().getTime();

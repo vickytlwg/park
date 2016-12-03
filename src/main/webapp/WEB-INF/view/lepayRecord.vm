@@ -37,7 +37,7 @@
 				            </tr>
 				          	<tr  ng-repeat = "item in items">
 				          		<td ng-bind="item.id"></td>
-				          		<td ng-bind="item.amount"></td>
+				          		<td ng-bind="item.amount/100|currency:'¥'"></td>
 				          		<td ng-if="item.paytype==0">支付宝</td>
 								<td ng-if="item.paytype==1">微信</td>
 				          		<td ng-bind="item.outtradeno"></td>

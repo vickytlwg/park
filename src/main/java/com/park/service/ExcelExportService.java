@@ -329,7 +329,12 @@ public class ExcelExportService {
 				
 					XSSFCell cell11 = row1.createCell(10);				
 					cell11.setCellStyle(style2);
-					cell11.setCellValue(sdf.format(posdata.getEntranceDate()));
+					if (posdata.getExitDate()!=null) {
+						cell11.setCellValue(sdf.format(posdata.getExitDate()));
+					}
+					else {
+						cell11.setCellValue("");
+					}
 					
 				}
 				

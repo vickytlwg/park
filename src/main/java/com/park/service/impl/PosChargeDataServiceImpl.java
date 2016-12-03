@@ -344,7 +344,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		float realReceiveMoney=0;
 		for(PosChargeData posData:posChargeDatas){
 			chargeTotal+=posData.getChargeMoney();
-			realReceiveMoney+=posData.getGivenMoney()+posData.getGivenMoney()-posData.getChangeMoney();
+			realReceiveMoney+=posData.getGivenMoney()+posData.getPaidMoney()-posData.getChangeMoney();
 		}
 		retmap.put("totalMoney", chargeTotal);
 		retmap.put("realMoney", realReceiveMoney);

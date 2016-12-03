@@ -203,7 +203,7 @@
                     </tr>
                     <tr>
                         <td>在线站点数<span>（个）</span></td>
-                        <td>{{show4data.parkcount}}</td>
+                        <td>{{show4data.onlineparkcount}}</td>
                         <td>在线泊位总数<span>（个）</span></td>
                         <td>{{show4data.carportcount}}</td>
                         <td>在停车辆总数<span>（个）</span></td>

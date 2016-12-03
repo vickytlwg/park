@@ -35,7 +35,7 @@
       #{mode,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{possnr,jdbcType=VARCHAR}, 
       #{money,jdbcType=DECIMAL}, #{giving,jdbcType=DECIMAL}, #{realmoney,jdbcType=DECIMAL}, 
       #{returnmoney,jdbcType=DECIMAL}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
-      #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},#{isarrearage,jdbcType=BIT)
+      #{sysid,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},#{isarrearage,jdbcType=BIT})
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap">

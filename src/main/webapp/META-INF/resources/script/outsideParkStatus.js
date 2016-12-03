@@ -184,6 +184,7 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
                         $scope.carsInCount++;                                         
                     if (data[i]['exitDate']!=null) {                     
                         $scope.carsOutCount++;
+                        $scope.dayCarsCount++;
                     }
                 }
        });

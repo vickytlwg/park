@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +31,14 @@ public String alipaydataInsert(HttpServletRequest request){
 
 	Lepayrecord lepayrecord=new Lepayrecord();
 	lepayrecord.setPaytype((short) 0);//支付宝为0
-	String signature=request.getParameter("signature");
+//	String signature=request.getParameter("signature");
 	String amount=request.getParameter("amount");
-	lepayrecord.setAmount(Integer.parseInt(amount));;
+	lepayrecord.setAmount((int) Float.parseFloat(amount));;
 	String mchId=request.getParameter("mchId");
 	lepayrecord.setMchid(mchId);
 	String outTradeNo=request.getParameter("outTradeNo");
 	lepayrecord.setOuttradeno(outTradeNo);
-	String payTypeTradeNo=(String) request.getParameter("payTypeTradeNo");
+	String payTypeTradeNo=request.getParameter("payTypeOrderNo");
 	lepayrecord.setPaytypetradeno(payTypeTradeNo);
 	String orderNo=request.getParameter("orderNo");
 	lepayrecord.setOrderno(orderNo);
@@ -49,18 +50,31 @@ public String alipaydataInsert(HttpServletRequest request){
 public String wechartdataInsert(HttpServletRequest request){
 	Map<String, Object> result=new HashMap<>();
 	Lepayrecord lepayrecord=new Lepayrecord();
+	logger.error("微信支付");
+	Enumeration enu=request.getParameterNames();  
+	while(enu.hasMoreElements()){  
+	String paraName=(String)enu.nextElement();  
+	logger.error(paraName+": "+request.getParameter(paraName));  
+	}  
 	lepayrecord.setPaytype((short) 1);//微信为1
-	String signature=request.getParameter("signature");
+//	String signature=request.getParameter("signature");
+	
 	String amount=request.getParameter("amount");
-	lepayrecord.setAmount(Integer.parseInt(amount));;
+	logger.error("amount:"+amount);
+	lepayrecord.setAmount((int) Float.parseFloat(amount));;
 	String mchId=request.getParameter("mchId");
 	lepayrecord.setMchid(mchId);
+	logger.error("mchId:"+mchId);
 	String outTradeNo=request.getParameter("outTradeNo");
 	lepayrecord.setOuttradeno(outTradeNo);
-	String payTypeTradeNo=(String) request.getParameter("payTypeTradeNo");
+	logger.error("outTradeNo:"+outTradeNo);
+	String payTypeTradeNo=request.getParameter("payTypeOrderNo");
 	lepayrecord.setPaytypetradeno(payTypeTradeNo);
+	logger.error("payTypeTradeNo:"+payTypeTradeNo);
 	String orderNo=request.getParameter("orderNo");
+	logger.error("orderNo:"+orderNo);
 	lepayrecord.setOrderno(orderNo);
+	lepayRecord.insertSelective(lepayrecord);
 	result.put("status", "success");
 	return Utility.gson.toJson(result);
 }

@@ -137,6 +137,9 @@
 			tr.append('<td>' + data[i]['sitename']+ '</td>');			
 			tr.append('<td>' + data[i]['backbyte']+ '</td>');
 			var mode=parseInt(data[i]['mode'])==0?"进场":"出场";
+			if(data[i]['isarrearage']==true){
+			    mode="补交";
+			}
 			tr.append('<td>' + mode + '</td>');
 			tr.append('<td>' + data[i]['userid']+ '</td>');
 			tr.append('<td>' + data[i]['possnr']+ '</td>');
@@ -151,8 +154,7 @@
 			};
 			tr.append('<td>' + endtime+ '</td>');
 	//		tr.append('<td>' + data[i]['sysid']+ '</td>');
-	//		tr.append('<td>' + data[i]['memo']+ '</td>');			
-		
+	        
 			if( i % 2 == 0){
 				tr.addClass('success');
 			}else{

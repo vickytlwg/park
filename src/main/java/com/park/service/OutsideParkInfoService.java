@@ -1,5 +1,6 @@
 package com.park.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public interface OutsideParkInfoService {
 	Outsideparkinfo selectByPrimaryKey(Integer id);
 	
 	Outsideparkinfo getByParkidAndDate(int parkId);
+	
+	Outsideparkinfo getByParkidAndDate(int parkId,Date date);
 
 	int updateByPrimaryKeySelective(Outsideparkinfo record);
 

@@ -228,7 +228,7 @@ public class ParkController {
 	@ResponseBody
 	public String getParkWithName(@PathVariable String name){
 		
-		logger.info("get park with name: " + name);
+	//	logger.info("get park with name: " + name);
 		List<Park> parks = parkService.getParkByName(name);
 	
 		if(parks != null){
@@ -248,7 +248,7 @@ public class ParkController {
 	@ResponseBody
 	public String getParkByName(@RequestBody Map<String, Object> args){
 		String name = (String)args.get("name");
-		logger.info("get park with name: " + name);
+//		logger.info("get park with name: " + name);
 		List<Park> parks = parkService.getParkByName(name);
 	
 		if(parks != null){

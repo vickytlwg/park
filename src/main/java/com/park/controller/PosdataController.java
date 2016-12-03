@@ -178,7 +178,7 @@ public String insertChargeDetailArrearage(@RequestBody List<posdataReceive> posd
 		num+=posdataService.insert(posdata);
 		List<Park> parks=parkService.getParkByName(posdata.getSitename());
 		if (parks.size()==1) {
-			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
+			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId(),posdata.getStarttime());
 			if (posdata.getMode()==1) {
 				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());

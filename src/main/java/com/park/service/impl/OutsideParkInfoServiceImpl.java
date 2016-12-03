@@ -109,4 +109,11 @@ public class OutsideParkInfoServiceImpl implements OutsideParkInfoService {
 		return outsideParkInfoDAO.getByParkidAndDate(parkId, date);
 	}
 
+	@Override
+	public Outsideparkinfo getByParkidAndDate(int parkId, Date date) {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
+		return outsideParkInfoDAO.getByParkidAndDate(parkId, sf.format(date));
+	}
+
 }

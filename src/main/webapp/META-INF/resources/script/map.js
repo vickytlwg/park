@@ -3,7 +3,7 @@
     $.fn.map.initial=function(){
         mapInitial();
         $.fn.map.getData();
-        setInterval("$.fn.map.getData()",4000); 
+        setInterval("$.fn.map.getData()",8000); 
     };
     var map;
     var point;
@@ -22,6 +22,12 @@
         map.setMaxZoom(14);     
         map.enableScrollWheelZoom();                    
         mapClusterer = new BMapLib.MarkerClusterer(map,{maxZoom:11,isAverangeCenter:true});
+        
+        var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_TOP_LEFT});   //设置版权控件位置
+        map.addControl(cr); //添加版权控件
+        var bs = map.getBounds();   //返回地图可视区域
+        var content= "<p><span style='color:#006600;'><strong>蓝色</strong></span><strong>表示车位充足</strong></p><p style='margin-top:10px;margin-bottom:10px'><span style='color:#FFE500;'><strong>黄色</strong></span><strong>表示车位紧张</strong></p><p><span style='color:#E53333;'><strong>红色</strong></span><strong>表示无车位</strong></p>";
+cr.addCopyright({id: 1, content: content, bounds: bs}); 
     };
     var data_info;
     var opts = {
@@ -32,12 +38,10 @@
                };
     function addClickHandler(content,marker){
         marker.addEventListener("click",function(e){
-    //      openInfo(content,e)
             var infoWindow = new BMapLib.SearchInfoWindow(map,content,
                     {
-                //    title: title, //标题
-                        width: 90, //宽度
-                        height: 100, //高度
+                        width: 390, //宽度
+                        height: 420, //高度
                         panel : "panel", //检索结果面板
                         enableAutoPan : true, //自动平移
                         enableSendToPhone: true, //是否显示发送到手机按钮
@@ -103,6 +107,7 @@
                     tmparray[1]=parkdata[i].latitude;
                       var v_html = '<div id="tipsjt"></div>';
                         v_html += '    <h4 class="font14 green relative">' + parkdata[i].name + '<i class="i pointer" onclick="closeTip()"></i></h4>';
+                        v_html += "<img style='float:right;margin:4px;margin-top:10px' id='imgDemo' src='http://7xkb3v.com1.z0.glb.clouddn.com/%E6%97%A0%E6%A0%87%E9%A2%98.png'  height='304' title='停车场'/>";
                         v_html += '<p class="font14">空余车位：<b class="red">' + parkdata[i].portLeftCount + '</b> 个' + (parkdata[i].portLeftCount > 0 ? '<a href="#" class="but_b back_orange font18 radius_3 absolute reservation" style="right:10px;" pid="' + i+ '"><i class="i"></i>预定</a>' : '') + '</p>';
                         v_html += '<p class="green font14">收费标准：</p> ';
                         v_html += '  <div class="color_9">';
