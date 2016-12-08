@@ -39,7 +39,7 @@
 								<div class="col-md-2">
 										<input type="text"  id="startDate" class="form-control date">									
                                     </div>						
-								<div class="col-md-2">                                    
+								<div class="col-md-2" hidden>                                    
                                         <input type="text"  id="endDate" class="form-control date">
 								</div>
 								<div class="col-md-3">

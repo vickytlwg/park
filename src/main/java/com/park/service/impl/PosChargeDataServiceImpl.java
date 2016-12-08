@@ -468,4 +468,18 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.getPageByParkId(parkId, start, count);
 	}
+
+	@Override
+	public List<PosChargeData> getByParkIdAndCardNumber(Integer parkId, String cardNumber) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByParkIdAndCardNumber(parkId, cardNumber);
+	}
+
+	@Override
+	public List<PosChargeData> getParkCarportStatusToday(int parkId) {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String day=sdf.format(new Date())+" 00:00:00";
+		return chargeDao.getParkCarportStatusToday(parkId, day);
+	}
 }

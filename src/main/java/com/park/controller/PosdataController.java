@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,6 +68,7 @@ private UserPagePermissionService pageService;
 private OutsideParkInfoService outsideParkInfoService;
 @Autowired
 private ExcelExportService excelService;
+private static Log logger = LogFactory.getLog(PosdataController.class);
 @RequestMapping(value = "/insertChargeDetail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 @ResponseBody
 public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
@@ -108,6 +111,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 		if (parks.size()==1) {
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
 			if (posdata.getMode()==1) {
+				logger.error("outsideparkOutcount "+posdata.getSitename()+" count:"+outsideparkinfo.getOutcount()+new Date().toString());
 				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
 				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
@@ -116,6 +120,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 				outsideparkinfo.setPossigndate(new Date());
 			}
 			else {
+				logger.error("outsideparkEntrancecount "+posdata.getSitename()+" count:"+outsideparkinfo.getEntrancecount()+new Date().toString());
 				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
 				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
 				outsideparkinfo.setPossigndate(new Date());
@@ -179,19 +184,15 @@ public String insertChargeDetailArrearage(@RequestBody List<posdataReceive> posd
 		List<Park> parks=parkService.getParkByName(posdata.getSitename());
 		if (parks.size()==1) {
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId(),posdata.getStarttime());
-			if (posdata.getMode()==1) {
-				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+			logger.error("outsideparkOutcountBujiao "+posdata.getSitename()+" count:"+outsideparkinfo.getOutcount()+new Date().toString());
+			//	outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
-				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+			//	outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
 				outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-
 						posdata.getReturnmoney().floatValue());
-				outsideparkinfo.setPossigndate(new Date());
-			}
-			else {
-				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
-				outsideparkinfo.setPossigndate(new Date());
-			}
+			//	outsideparkinfo.setPossigndate(new Date());
+			
+			
 			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		}
 	}
@@ -324,9 +325,9 @@ public void getExcel(HttpServletRequest request, HttpServletResponse response) t
 	}
 	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xlsx", response);
 }
-@RequestMapping("/getExcelByDayAndPark")
+@RequestMapping("/getExcelByDayRangeAndPark")
 @ResponseBody
-public void getExcelByDayAndParkid(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+public void getExcelByDayRangeAndPark(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
 	int parkId=Integer.parseInt(request.getParameter("parkId"));
 	Park park = parkService.getParkById(parkId);
 	String parkName=park.getName();
@@ -342,6 +343,41 @@ public void getExcelByDayAndParkid(HttpServletRequest request, HttpServletRespon
 	Date parsedEndDay  = null;
 	try {
 		parsedEndDay = sdf.parse(endDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(parkName, parsedStartDay, parsedEndDay);
+	String docsPath = request.getSession().getServletContext().getRealPath("/");
+	final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+	String[] headers={"车牌","停车场名","车位号","出入场","操作员id","终端机号","应收费","押金","补交","返还","进场时间","离场时间"};
+	OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR+ "posdata.xlsx");
+	XSSFWorkbook workbook = new XSSFWorkbook();
+	excelService.produceExceldataPosData("收费明细", headers, posdatas, workbook);
+	try {
+		workbook.write(out);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	Utility.download(docsPath + FILE_SEPARATOR+ "posdata.xlsx", response);
+}
+@RequestMapping("/getExcelByDayAndPark")
+@ResponseBody
+public void getExcelByDayAndParkid(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+	int parkId=Integer.parseInt(request.getParameter("parkId"));
+	Park park = parkService.getParkById(parkId);
+	String parkName=park.getName();
+	String startDay=request.getParameter("startday");
+//	String endDay=request.getParameter("endday");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	Date parsedStartDay = null;
+	try {
+		parsedStartDay = sdf.parse(startDay + " 00:00:00");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}	
+	Date parsedEndDay  = null;
+	try {
+		parsedEndDay = sdf.parse(startDay + " 23:59:59");
 	} catch (ParseException e) {
 		e.printStackTrace();
 	}	

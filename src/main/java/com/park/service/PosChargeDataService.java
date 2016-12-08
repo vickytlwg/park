@@ -19,6 +19,8 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getPage(int low, int count);
 	
+	public List<PosChargeData> getByParkIdAndCardNumber(Integer parkId,String cardNumber);
+	
 	public List<PosChargeData> getPageByParkId(int parkId,int start,int count);
 	
 	public List<PosChargeData> getPageArrearage(int low, int count);
@@ -38,6 +40,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> queryDebt (String cardNumber,Date exitDate) throws Exception;
 	
 	public List<PosChargeData> queryCurrentDebt (String cardNumber,Date exitDate) throws Exception;
+	
+	public List<PosChargeData> getParkCarportStatusToday(int parkId);
 	
 	public int count();
 	

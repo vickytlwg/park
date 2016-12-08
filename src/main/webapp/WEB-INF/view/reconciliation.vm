@@ -62,7 +62,7 @@
 							</div>			
 							
 							
-							<div class="row" style="padding-top:45px">
+							<div class="row" style="padding-top:45px" hidden>
 								
 								<div class="col-md-1">
                                         <label class="label-control" style="float:right;padding-top:10px"> 时间段:</label>
@@ -80,7 +80,7 @@
                                 </div>
 								</div>
 								
-								<div class="row" style="padding-top:25px">
+								<div class="row" style="padding-top:25px" hidden>
 								<div class="col-md-1">
 										<label class="control-label" style="float:right;padding-top:10px">停车场:</label>								
 								</div>								

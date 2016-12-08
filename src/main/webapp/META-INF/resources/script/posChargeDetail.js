@@ -16,9 +16,9 @@
 	        renderPark(parkId,0, $.fn.page.pageSize); 
 	     }
 	     $("#startDate").val(new Date().format("yyyy-MM-dd"));
-	     $("#endDate").val(new Date().format("yyyy-MM-dd"));
+	//     $("#endDate").val(new Date().format("yyyy-MM-dd"));
 	    $('#getExcelByDayRange').on('click',function(){
-	        window.location.href="/park/pos/getExcelByDayAndPark?parkId="+$('#parkSelected').val()+"&startday="+$("#startDate").val()+"&endday="+$("#endDate").val();
+	        window.location.href="/park/pos/getExcelByDayAndPark?parkId="+$('#parkSelected').val()+"&startday="+$("#startDate").val();
 	    });
 	    var dateInitial=function(){
         $('.date').datepicker({

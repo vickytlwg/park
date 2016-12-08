@@ -192,8 +192,13 @@ public class ExcelExportService {
 	
 			
 			XSSFCell cell5 = row1.createCell(3);				
-			cell5.setCellStyle(style2);
-			cell5.setCellValue(posdata.getMode()==0?"进场":"出场");
+			cell5.setCellStyle(style2);			
+			if (posdata.getIsarrearage()==false) {
+				cell5.setCellValue(posdata.getMode()==0?"进场":"出场");				
+			}
+			else {
+				cell5.setCellValue("补交");				
+			}
 		
 			XSSFCell cell6 = row1.createCell(4);				
 			cell6.setCellStyle(style2);

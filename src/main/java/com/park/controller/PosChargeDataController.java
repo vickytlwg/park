@@ -123,7 +123,7 @@ public class PosChargeDataController {
 		}
 		return "record";
 	}
-	
+
 	@RequestMapping(value = "/taopaiche", produces = { "application/json;charset=UTF-8" })
 	public String taopaiche(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -320,10 +320,11 @@ public class PosChargeDataController {
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
 	}
-	
-	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args) {
-		int parkId=(int) args.get("parkId");
+		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageByParkId(parkId, start, count));
@@ -337,9 +338,17 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearage(low, count));
 	}
 
-	@RequestMapping(value = "/pageArrearageByParkId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String pageArrearageByParkId(@RequestBody Map<String, Object> args){
-		int parkId =(int) args.get("parkId");
+	@RequestMapping(value = "/getParkCarportStatusToday", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String getParkCarportStatusToday(@RequestBody Map<String, Object> args) {
+		int parkId = (int) args.get("parkId");	
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getParkCarportStatusToday(parkId));
+	}
+
+	@RequestMapping(value = "/pageArrearageByParkId", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String pageArrearageByParkId(@RequestBody Map<String, Object> args) {
+		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearageByParkId(parkId, start, count));
@@ -368,7 +377,7 @@ public class PosChargeDataController {
 
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
-		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId);
+		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId, charge.getEntranceDate());
 
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
@@ -409,7 +418,27 @@ public class PosChargeDataController {
 			return Utility.createJsonMsg(1001, "success");
 		else
 			return Utility.createJsonMsg(1002, "failed");
+	}
 
+	@RequestMapping(value = "/updateYj", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String updateYj(@RequestBody Map<String, String> args) {
+		int parkId = Integer.parseInt(args.get("parkId"));
+		String cardNumber = (String) args.get("cardNumber");
+		Double yajin = Double.parseDouble(args.get("yajin"));
+		List<PosChargeData> posChargeDatas = chargeSerivce.getByParkIdAndCardNumber(parkId, cardNumber);
+		if (posChargeDatas.isEmpty()) {
+			return Utility.createJsonMsg(1002, "no record");
+		}
+		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId,
+				posChargeDatas.get(0).getEntranceDate());
+		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + yajin));
+		posChargeDatas.get(0).setPaidMoney(yajin);
+		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		int ret = chargeSerivce.update(posChargeDatas.get(0));
+		if (ret == 1)
+			return Utility.createJsonMsg(1001, "success");
+		else
+			return Utility.createJsonMsg(1002, "failed");
 	}
 
 	@RequestMapping(value = "/query", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
