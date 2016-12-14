@@ -5,17 +5,17 @@ import java.util.Date;
 public class Outsideparkinfo {
     private Integer id;
 
-    private Float amountmoney;
+    private Float amountmoney=0f;
 
-    private Float realmoney;
+    private Float realmoney=0f;
 
-    private Integer entrancecount;
+    private Integer entrancecount=0;
 
-    private Integer outcount;
+    private Integer outcount=0;
 
     private Integer carportcount;
 
-    private Integer unusedcarportcount;
+    private Integer unusedcarportcount=0;
 
     private Integer parkid;
 

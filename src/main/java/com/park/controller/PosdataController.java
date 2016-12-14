@@ -502,7 +502,13 @@ public String selectPosdataByParkAndRange(@RequestBody Map<String,Object> args){
 	}	
 	List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(parkName, parsedStartDay, parsedEndDay);
 	if (posdatas.isEmpty()) {
-		retMap.put("status", 1002);
+	//	List<PosChargeData> posChargeDatas = chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+	//	if (posChargeDatas.isEmpty()) {
+			retMap.put("status", 1002);
+	//	}
+	//	retMap.put("status", 1001);
+	//	retMap.put("message", "success");
+	//	retMap.put("body", posChargeDatas);
 	}
 	else {
 		retMap.put("status", 1001);

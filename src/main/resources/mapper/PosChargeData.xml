@@ -65,11 +65,14 @@
 	</select>
 	
 	<select id="getDebt" resultMap="PosChargeDataMapper">
-		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1}
+		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1} order by id desc
+	</select>
+	<select id="getArrearageByCardNumber" resultMap="PosChargeDataMapper">
+		select * from posChargeData where paidCompleted = 0 and cardNumber=#{param1} and exitDate is not null order by id desc
 	</select>
 	<select id="getParkCarportStatusToday" resultMap="PosChargeDataMapper">
 	<![CDATA[
-  	select * from posChargeData where parkId=#{parkId} and entranceDate > #{day} and exitDate is null
+  	select * from posChargeData where parkId=#{parkId} and entranceDate > #{day} and paidCompleted = 0 order by id desc
   	]]>
 	</select>
 	
@@ -96,7 +99,7 @@
 
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
   <![CDATA[
-  select * from posChargeData where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id
+  select * from posChargeData where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id desc
   ]]>
   </select>
 	<delete id="delete">

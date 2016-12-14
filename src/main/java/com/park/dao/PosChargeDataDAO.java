@@ -39,6 +39,8 @@ public interface PosChargeDataDAO {
 	public int update(PosChargeData item);
 	
 	public List<PosChargeData> getDebt(String cardNumber);
+	
+	public List<PosChargeData> getArrearageByCardNumber(String cardNumber);
 
 	public List<PosChargeData> getUnCompleted();
 	

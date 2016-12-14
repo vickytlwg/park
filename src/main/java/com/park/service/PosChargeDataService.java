@@ -7,11 +7,12 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.park.model.Outsideparkinfo;
 import com.park.model.PosChargeData;
 
 public interface PosChargeDataService {
 	
-	public PosChargeData getById(int id);
+	public PosChargeData getById(int id);		
 	
 	public List<PosChargeData> get();
 	
@@ -36,6 +37,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getDebt (String cardNumber) throws Exception;
 	
 	public List<PosChargeData> getDebt (String cardNumber,Date exitDate) throws Exception;
+	
+	public List<PosChargeData> getArrearageByCardNumber(String cardNumber);
 	
 	public List<PosChargeData> queryDebt (String cardNumber,Date exitDate) throws Exception;
 	
@@ -72,4 +75,6 @@ public interface PosChargeDataService {
 	List<PosChargeData> getByParkAndDayRange(int parkId, String startDate,String endDate) throws ParseException;
 
 	List<PosChargeData> getAllByDayRange(String startDate, String endDate) throws ParseException;
+	
+	public Outsideparkinfo getOutsideparkinfoByOrigin(int parkId,String day);
 }

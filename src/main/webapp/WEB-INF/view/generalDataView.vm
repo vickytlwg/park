@@ -146,7 +146,7 @@
                     </style>
                     <!-- 首页效果 begin -->
                     <div style="width: 100%;">
-                        <h1 class="dataH1" style="display:inline;">今日数据发布 <label id="time"></label>）</h1>
+                        <h1 class="dataH1" style="display:inline;">今日数据发布 <label id="time"></label></h1>
                     </div>
 
                     <div class="bg" id="reportBackground"></div>
@@ -223,10 +223,10 @@
                                         </div>
                                         <div class="panel-split  hidddiv"></div>
                                         <div class="panel-middle  hidddiv">
-                                            <span class="panel-value" data-to="{{dayAmountMoney-dayRealMoney}}" data-speed="1500"  data-decimals="2">{{dayAmountMoney-dayRealMoney}}</span>&nbsp;元
+                                            <span class="panel-value" data-to="{{(dayAmountMoney-dayRealMoney)}}" data-speed="1500"  data-decimals="2">{{(dayAmountMoney-dayRealMoney)>0?(dayAmountMoney-dayRealMoney):0}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            欠费总金额&nbsp;<b>{{dayAmountMoney-dayRealMoney}}</b>&nbsp;
+                                            欠费总金额&nbsp;<b>{{(dayAmountMoney-dayRealMoney)>0?(dayAmountMoney-dayRealMoney):0}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block3">
                                             <table>
@@ -287,10 +287,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="" data-speed="1500">{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2}}</span>&nbsp;
+                                            <span class="panel-value" data-to="" data-speed="1500">{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2)>0?((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2):0}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总逃费率&nbsp;<b>{{(dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3}}</b>&nbsp;
+                                            总逃费率&nbsp;<b>{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3)>0?((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3):0}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block5">
                                             <table>

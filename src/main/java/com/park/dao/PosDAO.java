@@ -3,9 +3,10 @@ package com.park.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.park.model.Pos;
-
+@Repository
 public interface PosDAO {
     int deleteByPrimaryKey(Integer id);
 

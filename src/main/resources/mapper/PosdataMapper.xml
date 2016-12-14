@@ -61,7 +61,7 @@
   <select id="getPosdataByCarportAndRange" resultMap="BaseResultMap">
   <![CDATA[
   select * from posdata where StartTime <= #{endDay} and StartTime >= #{startDay} and Sitename=#{parkName} 
-  and BackByte=#{carportid}
+  and BackByte=#{carportid} order by id desc
   ]]>
   </select>
    <select id="getCountByCard" resultType="java.util.Map">

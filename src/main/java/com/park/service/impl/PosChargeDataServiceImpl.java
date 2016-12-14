@@ -21,10 +21,12 @@ import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
+import com.park.model.Posdata;
 import com.park.service.FeeCriterionService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
+import com.park.service.PosdataService;
 
 @Transactional
 @Service
@@ -34,8 +36,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	PosChargeDataDAO chargeDao;
 
 	@Autowired
-	ParkService parkService;
-
+	ParkService parkService;	
+	
+	@Autowired
+	private PosdataService chargeSerivce;
+		
 	@Autowired
 	FeeCriterionService criterionService;
 	
@@ -111,21 +116,27 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 //			}
 //		}
 		int count = charges.size();
-		PosChargeData lastCharge = charges.get(count - 1);
+		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
-		lastCharge.setPaidCompleted(true);
-		this.update(lastCharge);
-		if (money >= 0) {					
+		lastCharge.setGivenMoney(theMoney);
+		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+		if (money >= 0) {
+			lastCharge.setPaidCompleted(true);
 			DecimalFormat df = new DecimalFormat("0.00"); 
 			String data=df.format(lastCharge.getChangeMoney() + money);
-			lastCharge.setChangeMoney(Double.parseDouble(data));
-			lastCharge.setGivenMoney(theMoney);
-			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			lastCharge.setChangeMoney(Double.parseDouble(data));				
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
 			outsideparkinfo.setPossigndate(new Date());
-			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			this.update(lastCharge);
+						
 		}
+		else {
+			lastCharge.setPaidMoney(lastCharge.getPaidMoney()+theMoney);
+			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney()-theMoney);
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+theMoney));
+			outsideparkinfo.setPossigndate(new Date());
+		}
+		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		this.update(lastCharge);
 		return lastCharge;
 	}
 
@@ -223,7 +234,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
 			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-	//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
 			outsideparkinfo.setPossigndate(new Date());
 			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(charge);
@@ -296,7 +307,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
 			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()+charge.getGivenMoney()-charge.getChangeMoney()));
+			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
 			outsideparkinfo.setPossigndate(new Date());
 			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(charge);
@@ -481,5 +492,70 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String day=sdf.format(new Date())+" 00:00:00";
 		return chargeDao.getParkCarportStatusToday(parkId, day);
+	}
+
+	@Override
+	public Outsideparkinfo getOutsideparkinfoByOrigin(int parkId, String day) {
+		// TODO Auto-generated method stub
+		Park park = parkService.getParkById(parkId);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(day + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Date parsedEndDay = null;
+		try {
+			parsedEndDay = sdf.parse(day + " 23:59:59");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Outsideparkinfo outsideparkinfo=new Outsideparkinfo();
+		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		outsideparkinfo.setParkid(parkId);
+		outsideparkinfo.setCarportcount(park.getPortCount());
+		outsideparkinfo.setUnusedcarportcount(park.getPortCount());
+		if (!posChargeDatas.isEmpty()) {			
+			outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+			for(PosChargeData posChargeData : posChargeDatas){
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+posChargeData.getChargeMoney()));
+				if (posChargeData.getExitDate()==null) {
+					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
+				}
+				else {				
+					outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+				}
+				if (posChargeData.isPaidCompleted()) {
+					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));
+				}
+			}	
+		}
+		else {
+			outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+			/*List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(park.getName(), parsedStartDay, parsedEndDay);
+			outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
+			for(Posdata posdata :posdatas){
+				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
+				if (posdata.getEndtime()==null) {
+					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
+				}
+				else{
+					outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+				}
+				if (posdata.get) {
+					
+				}
+			}*/
+		}
+		return outsideparkinfo;
+	}
+
+	@Override
+	public List<PosChargeData> getArrearageByCardNumber(String cardNumber) {
+		// TODO Auto-generated method stub
+		return chargeDao.getArrearageByCardNumber(cardNumber);
 	}
 }

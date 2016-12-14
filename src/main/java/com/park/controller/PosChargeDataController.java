@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -259,8 +260,7 @@ public class PosChargeDataController {
 		return "arrearage";
 	}
 
-	@RequestMapping(value = "/getByParkAndRange", method = RequestMethod.POST, produces = {
-			"application/json;charset=utf-8" })
+	@RequestMapping(value = "/getByParkAndRange", method = RequestMethod.POST, produces = {"application/json;charset=utf-8" })
 	@ResponseBody
 	public String getByParkAndRange(@RequestBody Map<String, Object> args) {
 		int parkId = Integer.parseInt((String) args.get("parkId"));
@@ -280,8 +280,7 @@ public class PosChargeDataController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<PosChargeData> posChargeDatas = chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay,
-				parkId);
+		List<PosChargeData> posChargeDatas = chargeSerivce.selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
 		if (posChargeDatas.isEmpty()) {
 			retMap.put("status", 1002);
 		} else {
@@ -290,7 +289,7 @@ public class PosChargeDataController {
 			retMap.put("body", posChargeDatas);
 		}
 		return Utility.gson.toJson(retMap);
-	}
+	}	
 
 	@RequestMapping(value = "getByCardnumber", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
@@ -463,6 +462,14 @@ public class PosChargeDataController {
 		}
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
+	
+	@RequestMapping(value = "/getArrearageByCardNumber", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getArrearageByCardNumber(@RequestBody Map<String, Object> args){
+		String cardNumber = (String) args.get("cardNumber");
+		List<PosChargeData> queryCharges = chargeSerivce.getArrearageByCardNumber(cardNumber);
+		return Utility.createJsonMsg(1001, "success", queryCharges);
+	}
 
 	@RequestMapping(value = "/queryCurrent", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
@@ -523,6 +530,35 @@ public class PosChargeDataController {
 			payRet = chargeSerivce.pay(cardNumber, money);
 		} catch (Exception e) {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
+		}
+
+		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	
+	@RequestMapping(value = "/payById", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String payById(@RequestBody Map<String, Object> args) {
+		String cardNumber = (String) args.get("cardNumber");
+		double money = (double) args.get("money");
+		Integer chargeId=(Integer) args.get("id");
+		PosChargeData payRet = chargeSerivce.getById(chargeId);
+		if (payRet!=null&&payRet.getCardNumber().equals(cardNumber)) {
+			if (payRet.getUnPaidMoney()<=money) {
+				payRet.setGivenMoney(money);
+				money-=payRet.getUnPaidMoney();
+				payRet.setPaidCompleted(true);
+				String data=new DecimalFormat("0.00").format(money);
+				payRet.setChangeMoney(Double.parseDouble(data));
+				chargeSerivce.update(payRet);
+			}
+			else {
+				payRet.setGivenMoney(money);
+				payRet.setPaidMoney(payRet.getPaidMoney()+money);
+				payRet.setUnPaidMoney(payRet.getUnPaidMoney()-money);
+				chargeSerivce.update(payRet);
+			}
+		}
+		else {
+			return Utility.createJsonMsg(1002, "付费失败");
 		}
 
 		return Utility.createJsonMsg(1001, "success", payRet);

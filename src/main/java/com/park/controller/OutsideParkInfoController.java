@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import com.park.model.Zonecenter;
 import com.park.service.AreaService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
+import com.park.service.PosChargeDataService;
 import com.park.service.StreetService;
 import com.park.service.Utility;
 import com.park.service.ZoneCenterService;
@@ -38,6 +40,8 @@ public class OutsideParkInfoController {
 	private StreetService streetService;
 	@Autowired
 	private ParkService parkService;
+	@Autowired
+	private PosChargeDataService posChargeDataService;
 	@Autowired 
 	private OutsideParkInfoService outsideParkInfoService;
 	@RequestMapping(value="zoneCenterInfo",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
@@ -45,6 +49,7 @@ public class OutsideParkInfoController {
 	public String zoneCenterInfo(@RequestParam("start")int start,@RequestParam("count")int count){
 		Map<String, Object> result=new HashMap<>();
 		List<Map<String, Object>> info=new ArrayList<>();
+		String day=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		List<Zonecenter> zonecenters=zoneCenterService.getByStartAndCount(0,100);
 		for (Zonecenter zonecenter : zonecenters) {
 			Map<String, Object> tmpdata=new HashMap<>();
@@ -70,7 +75,7 @@ public class OutsideParkInfoController {
 					List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 					parkCount+=parks.size();
 					for (Park park : parks) {
-						Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+						Outsideparkinfo parkInfo=posChargeDataService.getOutsideparkinfoByOrigin(park.getId(), day);
 						if (parkInfo!=null) {
 							carportCount+=parkInfo.getCarportcount();
 							carportLeftCount+=parkInfo.getUnusedcarportcount();
@@ -111,6 +116,7 @@ public class OutsideParkInfoController {
 	@ResponseBody
 	public String areaInfo(@PathVariable("zoneid")int zoneid){
 		Map<String, Object> result=new HashMap<>();
+		String day=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		List<Area> areas=areaService.getByZoneCenterId(zoneid);
 		List<Map<String, Object>> info=new ArrayList<>();
 		for (Area area : areas) {
@@ -134,7 +140,7 @@ public class OutsideParkInfoController {
 				List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 				parkCount+=parks.size();
 				for (Park park : parks) {
-					Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+					Outsideparkinfo parkInfo=posChargeDataService.getOutsideparkinfoByOrigin(park.getId(), day);
 					if (parkInfo==null) {
 						continue;
 					}
@@ -175,6 +181,7 @@ public class OutsideParkInfoController {
 	@ResponseBody
 	public String streetInfo(@PathVariable("areaid")int areaid){
 		Map<String, Object> result=new HashMap<>();
+		String day=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		List<Street> streets=streetService.getByArea(areaid);
 		List<Map<String, Object>> info=new ArrayList<>();
 		for (Street street : streets) {
@@ -194,7 +201,7 @@ public class OutsideParkInfoController {
 			List<Park> parks=parkService.getOutsideParkByStreetId(street.getId());
 			parkCount+=parks.size();
 			for (Park park : parks) {
-				Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+				Outsideparkinfo parkInfo=posChargeDataService.getOutsideparkinfoByOrigin(park.getId(), day);
 				if (parkInfo==null) {
 					continue;
 				}
@@ -233,10 +240,11 @@ public class OutsideParkInfoController {
 	@ResponseBody
 	public String parkinfo(@PathVariable("streetid")int streetid){
 		Map<String, Object> result=new HashMap<>();
+		String day=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		List<Park> parks=parkService.getOutsideParkByStreetId(streetid);
 		List<Map<String, Object>> info=new ArrayList<>();
 		for (Park park : parks) {
-			Outsideparkinfo parkInfo=outsideParkInfoService.getByParkidAndDate(park.getId());
+			Outsideparkinfo parkInfo=posChargeDataService.getOutsideparkinfoByOrigin(park.getId(), day);
 			if (parkInfo==null) {
 				continue;
 			}

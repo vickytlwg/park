@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.park.model.Posdata;
-
+@Repository
 public interface PosdataDAO {
 	int insert(Posdata record);
 

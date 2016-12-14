@@ -45,7 +45,7 @@
                         <td>实收金额</td>
                         <td>{{show1RealMoney}}</td>
                         <td>欠费金额</td>
-                        <td>{{show1AmountMoney-show1RealMoney}}</td>
+                        <td>{{(show1AmountMoney-show1RealMoney)>0?(show1AmountMoney-show1RealMoney):0}}</td>
                     </tr>
                     <tr>
                         <td>规划中心总数<span>（个）</span></td>
@@ -63,7 +63,8 @@
                         <td>在线泊位总数<span>（个）</span></td>
                         <td>{{show1CarportCount}}</td>
                         <td>在停车辆总数<span>（个）</span></td>
-                        <td>{{show1EntranceCount-show1OutCount}}</td>
+                        <td>{{(show1EntranceCount-show1OutCount)>0?(show1EntranceCount-show1OutCount):0}}</td>
+						
 						<td>入场车辆总数<span>（个）</span></td>
 						<td>{{show1EntranceCount}}</td>
                     </tr>
@@ -93,7 +94,7 @@
                         <td>实收金额</td>
                         <td>{{show2data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{show2data.amountmoney-show2data.realmoney}}</td>
+                        <td>{{(show2data.amountmoney-show2data.realmoney)>0?(show2data.amountmoney-show2data.realmoney):0}}</td>
                     </tr>
                     <tr>
 						<td>经营区域数量</td>
@@ -111,7 +112,7 @@
                         <td>在线泊位总数<span>（个）</span></td>
                         <td>{{show2data.carportcount}}</td>
                         <td>在停车辆总数</td>
-                        <td>{{show2data.entrancecount-show2data.outcount}}</td>
+                        <td>{{(show2data.entrancecount-show2data.outcount)>0?(show2data.entrancecount-show2data.outcount):0}}</td>
                         <td>入场车辆数</td>
                         <td>{{show2data.entrancecount}}</td>
                     </tr>
@@ -141,7 +142,7 @@
                         <td>实收金额</td>
                         <td>{{show3data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{show3data.amountmoney-show3data.realmoney}}</td>
+                        <td>{{(show3data.amountmoney-show3data.realmoney)>0?(show3data.amountmoney-show3data.realmoney):0}}</td>
                     </tr>
                     <tr>						
                         <td>规划街道总数<span>（个）</span></td>
@@ -158,7 +159,7 @@
                         <td>在线泊位总数<span>（个）</span></td>
                         <td>{{show3data.carportcount}}</td>
                         <td>在停车辆总数<span>（个）</span></td>
-                        <td>{{show3data.entrancecount-show3data.outcount}}</td>
+                        <td>{{(show3data.entrancecount-show3data.outcount)>0?(show3data.entrancecount-show3data.outcount):0}}</td>
                         <td>入场车辆数</td>
                         <td>{{show3data.entrancecount}}</td>
                     </tr>
@@ -188,7 +189,7 @@
                         <td>实收金额</td>
                         <td>{{show4data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{show4data.amountmoney-show4data.realmoney}}</td>
+                        <td>{{(show4data.amountmoney-show4data.realmoney)>0?(show4data.amountmoney-show4data.realmoney):0}}</td>
                     </tr>
                     <tr>						
                         <td>联系人</td>
@@ -207,7 +208,7 @@
                         <td>在线泊位总数<span>（个）</span></td>
                         <td>{{show4data.carportcount}}</td>
                         <td>在停车辆总数<span>（个）</span></td>
-                        <td>{{show4data.entrancecount-show4data.outcount}}</td>
+                        <td>{{(show4data.entrancecount-show4data.outcount)>0?(show4data.entrancecount-show4data.outcount):0}}</td>
                         <td>入场车辆数</td>
                         <td>{{show4data.entrancecount}}</td>
                     </tr>
@@ -265,7 +266,7 @@
                 <td ng-click="getAreaInfo(zoneCenter)"><a href='#'>{{zoneCenter.zonename}}</a></td>
                 <td>{{zoneCenter.amountmoney}}</td>
                 <td>{{zoneCenter.realmoney}}</td>
-				<td>{{zoneCenter.amountmoney-zoneCenter.realmoney}}</td>
+				<td>{{(zoneCenter.amountmoney-zoneCenter.realmoney)>0?(zoneCenter.amountmoney-zoneCenter.realmoney):0}}</td>
 				<td>{{zoneCenter.entrancecount}}</td>
                 <td>{{zoneCenter.outcount}}</td>
 				<td>{{zoneCenter.areacount}}</td>
@@ -274,7 +275,7 @@
 				<td>{{zoneCenter.onlineparkcount}}</td>
                 <td>{{zoneCenter.carportcount}}</td>
 				<td>{{zoneCenter.onlinecarportcount}}</td>
-                <td>{{zoneCenter.carportleftcount}}</td>               
+                <td>{{zoneCenter.carportleftcount>0?zoneCenter.carportleftcount:0}}</td>               
             </tr>                  
             </tbody>
         </table>
@@ -305,7 +306,7 @@
                 <td ng-click="getStreetInfo(area)"><a href="#">{{area.areaname}}</a></td>
                 <td>{{area.amountmoney}}</td>
                 <td>{{area.realmoney}}</td>
-				<td>{{area.amountmoney-area.realmoney}}</td>
+				<td>{{(area.amountmoney-area.realmoney)>0?(area.amountmoney-area.realmoney):0}}</td>
 				<td>{{area.entrancecount}}</td>
                 <td>{{area.outcount}}</td>
 				<td>{{area.streetcount}}</td>
@@ -313,7 +314,7 @@
 				<td>{{area.onlineparkcount}}</td>
                 <td>{{area.carportcount}}</td>
 				<td>{{area.onlinecarportcount}}</td>
-                <td>{{area.carportleftcount}}</td>               
+                <td>{{area.carportleftcount>0?area.carportleftcount:0}}</td>               
             </tr>                  
             </tbody>
         </table>
@@ -344,14 +345,14 @@
                 <td ng-click="getParkInfo(street)"><a href="#">{{street.streetname}}</a></td>
                 <td>{{street.amountmoney}}</td>
                 <td>{{street.realmoney}}</td>
-				<td>{{street.amountmoney-street.realmoney}}</td>
+				<td>{{(street.amountmoney-street.realmoney)>0?(street.amountmoney-street.realmoney):0}}</td>
 				<td>{{street.entrancecount}}</td>
                 <td>{{street.outcount}}</td>
 				<td>{{street.parkcount}}</td>
 				<td>{{street.onlineparkcount}}</td>
                 <td>{{street.carportcount}}</td>
 				<td>{{street.onlinecarportcount}}</td>
-                <td>{{street.carportleftcount}}</td>               
+                <td>{{street.carportleftcount>0?street.carportleftcount:0}}</td>               
             </tr>                  
             </tbody>
         </table>
@@ -383,13 +384,13 @@
                 <td>{{park.parkname}}</td>
 				<td>{{park.amountmoney}}</td>
                 <td>{{park.realmoney}}</td>
-				<td>{{park.amountmoney-park.realmoney}}</td>
+				<td>{{(park.amountmoney-park.realmoney)>0?(park.amountmoney-park.realmoney):0}}</td>
 				<td>{{park.entrancecount}}</td>
                 <td>{{park.outcount}}</td>
 				<td ng-if="park.isonline==true">是</td>
 				<td ng-if="park.isonline==false">否</td>
                 <td>{{park.carportcount}}</td>
-                <td>{{park.carportleftcount}}</td>               
+                <td>{{park.carportleftcount>0?park.carportleftcount:0}}</td>               
             </tr>                  
             </tbody>
         </table>
