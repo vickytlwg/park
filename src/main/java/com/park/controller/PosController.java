@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.Mobilelog;
 import com.park.model.Page;
 import com.park.model.Pos;
 import com.park.service.AuthorityService;
+import com.park.service.MobileLogService;
 import com.park.service.PosService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
@@ -37,6 +39,8 @@ public class PosController {
 	private PosService posService;
 	@Autowired
 	private UserPagePermissionService pageService;
+	@Autowired 
+	MobileLogService mobileLogService;
 	@RequestMapping(value="")
 	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -59,6 +63,19 @@ public class PosController {
 	public String insert(@RequestBody Pos pos){
 		Map<String, Object> result=new HashMap<>();
 		int num=posService.insertSelective(pos);
+		if (num==1) {
+			result.put("status", 1001);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="logInsert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String logInsert(@RequestBody Mobilelog record){
+		Map<String, Object> result=new HashMap<>();
+		int num=mobileLogService.insertSelective(record);
 		if (num==1) {
 			result.put("status", 1001);
 		}

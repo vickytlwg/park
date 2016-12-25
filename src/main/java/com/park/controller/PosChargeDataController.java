@@ -543,7 +543,7 @@ public class PosChargeDataController {
 		PosChargeData payRet = chargeSerivce.getById(chargeId);
 		if (payRet!=null&&payRet.getCardNumber().equals(cardNumber)) {
 			if (payRet.getUnPaidMoney()<=money) {
-				payRet.setGivenMoney(money);
+				payRet.setGivenMoney(money+payRet.getGivenMoney());
 				money-=payRet.getUnPaidMoney();
 				payRet.setPaidCompleted(true);
 				String data=new DecimalFormat("0.00").format(money);
@@ -551,8 +551,8 @@ public class PosChargeDataController {
 				chargeSerivce.update(payRet);
 			}
 			else {
-				payRet.setGivenMoney(money);
-				payRet.setPaidMoney(payRet.getPaidMoney()+money);
+				payRet.setGivenMoney(money+payRet.getGivenMoney());
+		//		payRet.setPaidMoney(payRet.getPaidMoney()+money);
 				payRet.setUnPaidMoney(payRet.getUnPaidMoney()-money);
 				chargeSerivce.update(payRet);
 			}
@@ -598,7 +598,6 @@ public class PosChargeDataController {
 		} catch (Exception e) {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
-
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
 

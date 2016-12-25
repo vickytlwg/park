@@ -7,7 +7,7 @@
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>
-			停车位利用率示意图
+			今日停车分析
             <small></small>
           </h1>        
     </section>

@@ -36,7 +36,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	PosChargeDataDAO chargeDao;
 
 	@Autowired
-	ParkService parkService;	
+	ParkService parkService;
+	
+	@Autowired
+	FormatTime formatTime;
 	
 	@Autowired
 	private PosdataService chargeSerivce;
@@ -118,9 +121,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		int count = charges.size();
 		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
-		lastCharge.setGivenMoney(theMoney);
+		
 		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 		if (money >= 0) {
+			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
 			lastCharge.setPaidCompleted(true);
 			DecimalFormat df = new DecimalFormat("0.00"); 
 			String data=df.format(lastCharge.getChangeMoney() + money);
@@ -130,7 +134,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 						
 		}
 		else {
-			lastCharge.setPaidMoney(lastCharge.getPaidMoney()+theMoney);
+			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
 			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney()-theMoney);
 			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+theMoney));
 			outsideparkinfo.setPossigndate(new Date());
@@ -142,12 +146,40 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
+		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
+		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		if (charge.getIsLargeCar() == false) {
-			this.calExpenseSmallCar(charge, exitDate,isQuery);
+			
+			Map<String,String> dates=formatTime.format(startTime, endTime, "20", "7");
+			for(String name:dates.keySet()){
+				charge.setEntranceDate(name);
+		//		charge.setExitDate(dates.get(name));
+			  if (name.substring(11).equals("20:00:00")) {
+				charge.setIsOneTimeExpense(1);
+				this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			  else {
+				  charge.setIsOneTimeExpense(0);
+				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			
+			if (charge.getPaidMoney()>=charge.getChargeMoney() ) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney()-charge.getChargeMoney());
+			}
+			else {
+				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
+			}
+			this.update(charge);
+			
 		} else {
 			this.calExpenseLargeCar(charge, exitDate,isQuery);
 		}
-
+		
 	}
 
 	@Override
@@ -244,8 +276,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public void calExpenseSmallCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 
-		if (charge.getExitDate() != null)
-			return;
+	//	if (charge.getExitDate() != null)
+	//		return;
 		Park park = parkService.getParkById(charge.getParkId());
 
 		Integer criterionId = park.getFeeCriterionId();
@@ -257,18 +289,19 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		Date enterDate = charge.getEntranceDate();
 
-		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
-			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
-			Calendar cld = Calendar.getInstance();
-			cld.setTime(enterDate);
-			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-			charge.setExitDate1(cld.getTime());
-		} else {
-			charge.setExitDate1(exitDate);
-		}
+//		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
+//			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
+//			Calendar cld = Calendar.getInstance();
+//			cld.setTime(enterDate);
+//			cld.set(Calendar.HOUR_OF_DAY, nightHour);
+//			charge.setExitDate1(cld.getTime());
+//		} else {
+//			charge.setExitDate1(exitDate);
+//		}
+		charge.setExitDate1(exitDate);
 		double expense = 0;
 		if (charge.getIsOneTimeExpense() == 1) {
-			expense = criterion.getOnetimeexpense() - charge.getPaidMoney();
+			expense = criterion.getOnetimeexpense();
 		} else {
 			float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
 			float firstHour = criterion.getStep1capacity();
@@ -287,30 +320,33 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		if (expense > criterion.getMaxexpense())
-			expense = criterion.getMaxexpense();
-		charge.setChargeMoney(expense);
-		if (expense == 0) {
-			charge.setPaidCompleted(true);
+	//	if (expense > criterion.getMaxexpense())
+	//		expense = criterion.getMaxexpense();
+		charge.setChargeMoney(expense+charge.getChargeMoney());
+		if (charge.getChargeMoney()>criterion.getMaxexpense()) {
+			charge.setChargeMoney(criterion.getMaxexpense());
 		}
-		expense -= charge.getPaidMoney();
-		if (expense > 0) {
-			charge.setUnPaidMoney(expense);
-		}
-		else {
-			charge.setUnPaidMoney(0);
-			charge.setPaidCompleted(true);
-			charge.setChangeMoney(-1 * expense);
-		}
+//		if (charge.getChargeMoney() == 0) {
+//			charge.setPaidCompleted(true);
+//		}
+//		expense -= charge.getPaidMoney();
+//		if (expense > 0) {
+//			charge.setUnPaidMoney(expense);
+//		}
+//		else {
+//			charge.setUnPaidMoney(0);
+//			charge.setPaidCompleted(true);
+//			charge.setChangeMoney(-1 * expense);
+//		}
 		if (!isQuery) {
-			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
-			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
-			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
-			outsideparkinfo.setPossigndate(new Date());
-			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			this.update(charge);
+//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
+//			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+//			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+//			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
+//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
+//			outsideparkinfo.setPossigndate(new Date());
+//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+	//		this.update(charge);
 		}
 		
 	}
@@ -403,9 +439,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		if (money >= 0) {
 			int count = charges.size();
-			PosChargeData lastCharge = charges.get(count - 1);
+			PosChargeData lastCharge = charges.get(0);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
-			lastCharge.setGivenMoney(theMoney);
+			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
 			outsideparkinfo.setPossigndate(new Date());
@@ -490,7 +526,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getParkCarportStatusToday(int parkId) {
 		// TODO Auto-generated method stub
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String day=sdf.format(new Date())+" 00:00:00";
+		Date tmpdate=new Date(new Date().getTime()-1000*60*60*24*5);
+		
+		String day=sdf.format(tmpdate)+" 00:00:00";
 		return chargeDao.getParkCarportStatusToday(parkId, day);
 	}
 

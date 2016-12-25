@@ -45,7 +45,7 @@ public class CalPosChargeTask {
 			if(nightStartHour <= now.getHours()){
 				now.setHours(nightStartHour);
 				try {
-					chargeService.calExpense(charge, now, false);
+//					chargeService.calExpense(charge, now, false);
 //					charge.setChangeMoney(0);
 //					charge.setChargeMoney(0);
 //					charge.setPaidMoney(0);
