@@ -44,7 +44,7 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> queryCurrentDebt (String cardNumber,Date exitDate) throws Exception;
 	
-	public List<PosChargeData> getParkCarportStatusToday(int parkId);
+	public List<PosChargeData> getParkCarportStatusToday(int parkId,Date tmpdate);
 	
 	public int count();
 	

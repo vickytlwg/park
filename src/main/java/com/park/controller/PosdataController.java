@@ -111,7 +111,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 		if (parks.size()==1) {
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
 			if (posdata.getMode()==1) {
-				logger.error("outsideparkOutcount "+posdata.getSitename()+" count:"+outsideparkinfo.getOutcount()+new Date().toString());
+	//			logger.error("outsideparkOutcount "+posdata.getSitename()+" count:"+outsideparkinfo.getOutcount()+new Date().toString());
 				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
 				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
 				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
@@ -120,7 +120,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 				outsideparkinfo.setPossigndate(new Date());
 			}
 			else {
-				logger.error("outsideparkEntrancecount "+posdata.getSitename()+" count:"+outsideparkinfo.getEntrancecount()+new Date().toString());
+//				logger.error("outsideparkEntrancecount "+posdata.getSitename()+" count:"+outsideparkinfo.getEntrancecount()+new Date().toString());
 				outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
 				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
 				outsideparkinfo.setPossigndate(new Date());

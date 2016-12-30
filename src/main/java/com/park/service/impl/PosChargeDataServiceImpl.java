@@ -48,6 +48,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	FeeCriterionService criterionService;
 	
 	@Autowired
+	PosdataService posdataService;
+	
+	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
 	@Override
 	public PosChargeData getById(int id) {
@@ -523,10 +526,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public List<PosChargeData> getParkCarportStatusToday(int parkId) {
+	public List<PosChargeData> getParkCarportStatusToday(int parkId,Date tmpdate) {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date tmpdate=new Date(new Date().getTime()-1000*60*60*24*5);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
 		
 		String day=sdf.format(tmpdate)+" 00:00:00";
 		return chargeDao.getParkCarportStatusToday(parkId, day);
@@ -571,7 +573,33 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}	
 		}
 		else {
-			outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+			List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(park.getName(), parsedStartDay, parsedEndDay);			
+			//outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+			//从数据表中获取数据
+			if (posdatas.isEmpty()) {
+				return outsideparkinfo;
+			}
+			outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
+			for(Posdata posdata:posdatas){
+				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
+				
+				if (posdata.getIsarrearage()==false) {
+					if (posdata.getMode()==0) {	
+					outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);															
+					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);																				
+				}
+					else {
+						outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+						outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+						outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
+					}
+				}
+				
+				else {
+					outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
+				}
+				
+			}
 			/*List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(park.getName(), parsedStartDay, parsedEndDay);
 			outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
 			for(Posdata posdata :posdatas){

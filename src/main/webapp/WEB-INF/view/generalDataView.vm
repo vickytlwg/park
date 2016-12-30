@@ -412,7 +412,7 @@
                                             <span class="panel-value" data-to="1.00" data-speed="1500">{{(1-(dayCarportLeftCount/dayCarportCount))|number:3}}</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总泊位饱和度&nbsp;<b>{{1-(dayCarportLeftCount/dayCarportCount)|number:4}}</b>&nbsp;
+                                            总泊位饱和度&nbsp;<b>{{(1-(dayCarportLeftCount/dayCarportCount))|number:4}}</b>&nbsp;
                                         </div>
                                         <div class="dataHover block9">
                                             <table>
@@ -506,7 +506,7 @@
 										<td ><a href='#'>{{zoneCenter.zonename|limitTo:5}}</a></td>
 										<td>{{zoneCenter.amountmoney}}</td>
 										<td>{{zoneCenter.realmoney}}</td>
-										<td>{{zoneCenter.amountmoney-zoneCenter.realmoney}}</td>
+										<td>{{(zoneCenter.amountmoney-zoneCenter.realmoney)>0?(zoneCenter.amountmoney-zoneCenter.realmoney):0}}</td>
 										<td>{{zoneCenter.entrancecount}}</td>
 										<td>{{zoneCenter.outcount}}</td>
 										<td>{{zoneCenter.areacount}}</td>

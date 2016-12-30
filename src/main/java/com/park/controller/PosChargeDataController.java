@@ -36,6 +36,7 @@ import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
+import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
@@ -341,7 +342,42 @@ public class PosChargeDataController {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String getParkCarportStatusToday(@RequestBody Map<String, Object> args) {
 		int parkId = (int) args.get("parkId");	
-		return Utility.createJsonMsg(1001, "success", chargeSerivce.getParkCarportStatusToday(parkId));
+		List<PosChargeData> resultData=new ArrayList<>();
+		Date tmpdate=new Date(new Date().getTime()-1000*60*60*24*5);
+		List<PosChargeData> posChargeDatas= chargeSerivce.getParkCarportStatusToday(parkId,tmpdate);
+		for(PosChargeData posChargeData:posChargeDatas){
+			if (posChargeData.getExitDate()==null) {
+				resultData.add(posChargeData);
+			}
+		}
+		return Utility.createJsonMsg(1001, "success", resultData);
+	}
+	
+
+	@RequestMapping(value = "/getParkCarportStatusTodaySimple", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	public @ResponseBody String getParkCarportStatusTodaySimple(@RequestBody Map<String, Object> args) {
+		int parkId = (int) args.get("parkId");	
+		Date tmpdate=new Date(new Date().getTime()-1000*60*60*24*365);
+		List<PosChargeData> posChargeDatas= chargeSerivce.getParkCarportStatusToday(parkId,tmpdate);
+		List<PosChargeDataSimple> posChargeDataSimples=new ArrayList<>();
+		int num=1;
+		for(PosChargeData posChargeData:posChargeDatas){			
+			if (num>10) {
+				break;
+			}
+			if (posChargeData.isPaidCompleted()==false) {
+				num++;
+				PosChargeDataSimple posChargeDataSimple=new PosChargeDataSimple();
+				posChargeDataSimple.setId(posChargeData.getId());
+				posChargeDataSimple.setCardNumber(posChargeData.getCardNumber());
+				posChargeDataSimple.setUnPaidMoney(posChargeData.getUnPaidMoney());
+				posChargeDataSimple.setExitDate(posChargeData.getExitDate());
+				posChargeDataSimples.add(posChargeDataSimple);
+			}
+			
+		}
+		return Utility.createJsonMsg(1001, "success", posChargeDataSimples);
 	}
 
 	@RequestMapping(value = "/pageArrearageByParkId", method = RequestMethod.POST, produces = {
@@ -468,9 +504,26 @@ public class PosChargeDataController {
 	public String getArrearageByCardNumber(@RequestBody Map<String, Object> args){
 		String cardNumber = (String) args.get("cardNumber");
 		List<PosChargeData> queryCharges = chargeSerivce.getArrearageByCardNumber(cardNumber);
+		
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
-
+	@RequestMapping(value = "/getArrearageByCardNumberSimple", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getArrearageByCardNumberSimple(@RequestBody Map<String, Object> args){
+		String cardNumber = (String) args.get("cardNumber");
+		List<PosChargeData> queryCharges = chargeSerivce.getArrearageByCardNumber(cardNumber);
+		List<PosChargeDataSimple> posChargeDataSimples=new ArrayList<>();
+		for(PosChargeData posChargeData:queryCharges){
+			PosChargeDataSimple posChargeDataSimple=new PosChargeDataSimple();
+			posChargeDataSimple.setId(posChargeData.getId());
+			posChargeDataSimple.setCardNumber(posChargeData.getCardNumber());
+			posChargeDataSimple.setUnPaidMoney(posChargeData.getUnPaidMoney());
+			posChargeDataSimple.setExitDate(posChargeData.getExitDate());
+			posChargeDataSimples.add(posChargeDataSimple);
+		}
+		return Utility.createJsonMsg(1001, "success", posChargeDataSimples);
+	}	
+	
 	@RequestMapping(value = "/queryCurrent", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String queryCurrent(@RequestBody Map<String, Object> args) throws ParseException {

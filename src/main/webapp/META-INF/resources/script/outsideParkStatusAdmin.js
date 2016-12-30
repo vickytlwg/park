@@ -42,6 +42,10 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
     $scope.getArea = function() {
         getPositionData.getArea($scope.zoneCenterId).then(function(result) {
             $scope.areas = result;
+            if($scope.areas!=null&&$scope.areas.length==1){
+                $scope.areaId=$scope.areas[0].id;
+                $scope.getStreets();
+            }
         });
     };
     
@@ -72,6 +76,10 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         }
         getPositionData.getStreetByAreaId($scope.areaId).then(function(result) {
             $scope.streets = result;
+            if ($scope.streets!=null&&$scope.streets.length==1) {
+                $scope.streetid=$scope.streets[0].id;
+                $scope.getParks($scope.streetid);
+            };
         });
     };
     var getAreaById = function(areaid) {
@@ -122,6 +130,9 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         };
         getPositionData.getOutsideParkByStreetId(streetId).then(function(result) {
             $scope.parks = filtPark(result);
+            if($scope.parks!=undefined&&$scope.parks.length==1){
+                $scope.parkid=$scope.parks[0].id;
+            }
         });
     };
 

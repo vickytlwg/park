@@ -72,11 +72,11 @@
 						<td>出场车辆总数<span>（个）</span></td>
 						<td>{{show1OutCount}}</td>
                         <td>站点在线率<span>（%）</span></td>
-                        <td>56.51</td>
+                        <td></td>
                         <td>泊位在线率<span>（%）</span></td>
-                        <td>49.65</td>
+                        <td></td>
                         <td>泊位饱和度<span>（%）</span></td>
-                        <td>8.43</td>
+                        <td></td>
                        
                     </tr>
                     </tbody>
