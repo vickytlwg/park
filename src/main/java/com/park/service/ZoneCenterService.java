@@ -20,4 +20,6 @@ public interface ZoneCenterService {
     int getCount();
     
     List<Zonecenter> getByStartAndCount(int start,int count);
+    
+    List<Zonecenter> getByUserName(String username);
 }

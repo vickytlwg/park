@@ -34,7 +34,7 @@
 					<div class="row" style="padding-top:5px">
 								
 								<div class="col-md-1">
-                                        <label class="label-control" style="float:right;padding-top:10px"> 按天导出 :</label>
+                                        <label class="label-control" style="float:right;padding-top:10px"> 按天导出 </label>
 								</div>
 								<div class="col-md-2">
 										<input type="text"  id="startDate" class="form-control date">									
@@ -57,7 +57,7 @@
 					  		<div class="row" style="padding-top:15px">
 								
 								<div class="col-md-1">
-                                        <label class="label-control" style="float:right;padding-top:10px"> 按时间段 :</label>
+                                        <label class="label-control" style="float:right;padding-top:10px"> 按时间段 </label>
 								</div>
 								<div class="col-md-2">
 										<input type="text"  id="startDay" class="form-control date">									

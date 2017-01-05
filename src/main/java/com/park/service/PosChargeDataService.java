@@ -24,6 +24,8 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getPageByParkId(int parkId,int start,int count);
 	
+	public List<PosChargeData> getByParkAuthority(String userName);
+	
 	public List<PosChargeData> getPageArrearage(int low, int count);
 	
 	public List<PosChargeData> getPageArrearageByParkId(int parkId,int start,int count);

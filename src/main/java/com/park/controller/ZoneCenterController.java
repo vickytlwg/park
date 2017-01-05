@@ -118,9 +118,10 @@ public class ZoneCenterController {
 	}
 	@RequestMapping(value="/getByStartAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count){
+	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){
+		String username=(String) session.getAttribute("username");
 		Map<String, Object> result=new HashMap<>();
-		List<Zonecenter> zoneCenters=zoneCenterService.getByStartAndCount(start, count);
+		List<Zonecenter> zoneCenters=zoneCenterService.getByUserName(username);
 		if (zoneCenters!=null) {
 			result.put("status", 1001);
 			result.put("body", zoneCenters);

@@ -31,6 +31,8 @@ import com.park.service.PosdataService;
 @Transactional
 @Service
 public class PosChargeDataServiceImpl implements PosChargeDataService {
+	
+	
 
 	@Autowired
 	PosChargeDataDAO chargeDao;
@@ -623,5 +625,20 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getArrearageByCardNumber(String cardNumber) {
 		// TODO Auto-generated method stub
 		return chargeDao.getArrearageByCardNumber(cardNumber);
+	}
+
+	@Override
+	public List<PosChargeData> getByParkAuthority(String userName) {
+		// TODO Auto-generated method stub
+		List<Park> parkList = parkService.getParks();
+		if (userName != null)
+			parkList = parkService.filterPark(parkList, userName);
+		int num=120/parkList.size();
+		List<PosChargeData> posChargeDatas=new ArrayList<PosChargeData>();
+		for(Park park:parkList){
+			List<PosChargeData> tmPosChargeDatas=getPageByParkId(park.getId(), 0, num);
+			posChargeDatas.addAll(tmPosChargeDatas);
+		}
+		return posChargeDatas;
 	}
 }

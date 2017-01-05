@@ -192,7 +192,7 @@
 		});
 	}
 	var intervalRenderPagination=function(){
-		setInterval(renderPagination,5000);
+		setInterval(renderPagination,60000);
 	};
 	var pageClickFunc = function(index){
 		renderPark(parkId,$.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);

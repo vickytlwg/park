@@ -1,4 +1,4 @@
-package com.park.controller;
+ package com.park.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -305,7 +305,13 @@ public class PosChargeDataController {
 		int count = chargeSerivce.count();
 		return Utility.createJsonMsg(1001, "success", count);
 	}
-
+	@RequestMapping(value = "/getById", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getById(@RequestBody Map<String, Integer> args){
+		Integer id=args.get("id");
+		PosChargeData posChargeDatas=chargeSerivce.getById(id);
+		return Utility.createJsonMsg(1001, "success", posChargeDatas);
+	}
 	@RequestMapping(value = "getByParkName", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -315,15 +321,17 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	public @ResponseBody String page(@RequestBody Map<String, Object> args) {
+	public @ResponseBody String page(@RequestBody Map<String, Object> args,HttpSession session) {
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
-		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPage(low, count));
+		String userName=(String) session.getAttribute("username");
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkAuthority(userName));
 	}
 
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
-	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args) {
+	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args,HttpSession session) {
+		String username = (String) session.getAttribute("username");
 		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
 		int count = (int) args.get("count");
@@ -346,9 +354,9 @@ public class PosChargeDataController {
 		Date tmpdate=new Date(new Date().getTime()-1000*60*60*24*5);
 		List<PosChargeData> posChargeDatas= chargeSerivce.getParkCarportStatusToday(parkId,tmpdate);
 		for(PosChargeData posChargeData:posChargeDatas){
-			if (posChargeData.getExitDate()==null) {
+		//	if (posChargeData.getExitDate()==null) {
 				resultData.add(posChargeData);
-			}
+		//	}
 		}
 		return Utility.createJsonMsg(1001, "success", resultData);
 	}
@@ -366,7 +374,7 @@ public class PosChargeDataController {
 			if (num>10) {
 				break;
 			}
-			if (posChargeData.isPaidCompleted()==false) {
+			if (posChargeData.isPaidCompleted()==false&&posChargeData.getExitDate()!=null) {
 				num++;
 				PosChargeDataSimple posChargeDataSimple=new PosChargeDataSimple();
 				posChargeDataSimple.setId(posChargeData.getId());
