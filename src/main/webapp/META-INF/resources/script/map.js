@@ -8,11 +8,11 @@
     var map;
     var point;
     var mapClusterer;
-	var myIconred = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/red.png", new BMap.Size(23, 25),{
+	var myIconred = new BMap.Icon("http://www.iotclouddashboard.com/park/Images/red.png", new BMap.Size(23, 25),{
     });
-	var myIcongreen = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/green.png", new BMap.Size(23, 25),{
+	var myIcongreen = new BMap.Icon("http://www.iotclouddashboard.com/park/Images/green.png", new BMap.Size(23, 25),{
     });
-	var myIconyellow = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/yellow.png", new BMap.Size(23, 25),{
+	var myIconyellow = new BMap.Icon("http://www.iotclouddashboard.com/park/Images/yellow.png", new BMap.Size(23, 25),{
     });   
     var mapInitial=function(){
         map = new BMap.Map("parkmap");

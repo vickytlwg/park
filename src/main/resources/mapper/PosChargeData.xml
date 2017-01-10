@@ -112,5 +112,13 @@
 	FROM feeOperator LEFT JOIN posChargeData ON posChargeData.operatorId=feeOperator.account  where entranceDate between 
 	#{startDate} and #{endDate} 
 	GROUP BY feeOperator.account
- </select>	
+ </select>
+<delete id="deleteByParkIdAndDate">
+	 <![CDATA[
+	delete from posChargeData where parkId=#{parkId} and entranceDate>=#{startDay} and entranceDate<=#{endDay}
+	 ]]>
+</delete>
+<delete id="deleteById">
+	delete from posChargeData where id = #{id}
+</delete>
 </mapper>

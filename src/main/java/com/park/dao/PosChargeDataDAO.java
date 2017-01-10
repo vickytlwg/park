@@ -34,6 +34,8 @@ public interface PosChargeDataDAO {
 	
 	public int count();
 	
+	public int deleteById(@Param("id")int id);
+	
 	public int insert(PosChargeData item);
 	
 	public int update(PosChargeData item);
@@ -45,6 +47,8 @@ public interface PosChargeDataDAO {
 	public List<PosChargeData> getUnCompleted();
 	
 	public List<PosChargeData> selectPosdataByParkAndRange(@Param("startDay") Date startDay, @Param("endDay") Date endDay,@Param("parkId")int parkId);
+	
+	public int deleteByParkIdAndDate(@Param("startDay") String startDay, @Param("endDay") String endDay,@Param("parkId")int parkId);
 	
 	public List<PosChargeData> getByCardNumber(@Param("cardNumber")String cardNumber);
 	

@@ -79,8 +79,7 @@
  </select>
  <select id="getUsersByParkId" resultType="HashMap">
 		select mu.id,mu.cardNumber,mu.owner,mu.plateNumber,mu.plateColor,mu.certificateType,
-		mu.certificateNumber,mu.startTime,mu.endTime,mu.payment,mu.status from monthUserPark
-		left join monthUser as mu on mu.id=monthUserPark.monthUserId where 
-		monthUserPark.parkId=#{parkId}
+		mu.certificateNumber,mu.startTime,mu.endTime,mu.payment,mu.status from monthUser
+		as mu where mu.parkId=#{parkId}
  </select>
 </mapper>

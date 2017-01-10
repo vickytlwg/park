@@ -22,6 +22,8 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getByParkIdAndCardNumber(Integer parkId,String cardNumber);
 	
+	public Integer deleteByParkIdAndDate(int parkId, String startDate,String endDate);
+	
 	public List<PosChargeData> getPageByParkId(int parkId,int start,int count);
 	
 	public List<PosChargeData> getByParkAuthority(String userName);
@@ -49,6 +51,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getParkCarportStatusToday(int parkId,Date tmpdate);
 	
 	public int count();
+	
+	public int deleteById(int id);
 	
 	public int insert(PosChargeData item);
 	

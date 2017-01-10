@@ -28,11 +28,8 @@
 									</h3>
 								</div>
 								<div class="panel-body">
- 
-
 							
-		                	<div class="row">
-								
+		                	<div class="row">								
                                 <div class="col-md-1">
 										<label for="date" class="control-label" style="float:right;padding-top:10px">单日:</label>								
 								</div>		
@@ -40,29 +37,25 @@
 								<div class="col-md-3">
 										<input type="text" id="date" ng-model="searchDate" class="form-control date">
 								</div>
-								<div class="col-md-2">								
-		                		<button ng-click="getExcelByDay()" type="button" class="btn bg-purple">所有停车场</button>		                		                               
-								</div>		
-								</div>
-								
-								<div class="row" style="padding-top:25px">	
-								<div class="col-md-1">
-										<label class="control-label" style="float:right;padding-top:10px">停车场:</label>								
-								</div>								
-								<div class="col-md-3">
+								<div class="col-md-4">
 									<select id="park-select" class="form-control" style="font-weight:bold">
 											#foreach( $park in $parks)
 												<option value=$park.id>$park.name</option>
 											#end
 									 </select>
-								</div>								
-								<div class="col-md-1">
-		                		<button id="excelBtn" ng-click="getExcelByParkAndDay()" type="button" class="btn bg-purple"> 单停车场</button>	
 								</div>
-							</div>			
+								<div class="col-md-2">
+		                		<button id="excelBtn" ng-click="getExcelByParkAndDay()" type="button" class="btn bg-purple"> 导出</button>	
+								</div>
+								<div class="col-md-1" hidden>								
+		                		<button ng-click="getExcelByDay()" type="button" class="btn bg-purple">所有停车场</button>		                		                               
+								</div>									
+								</div>
+								
+									
 							
 							
-							<div class="row" style="padding-top:45px" >
+							<div class="row" style="padding-top:25px" >
 								
 								<div class="col-md-1">
                                         <label class="label-control" style="float:right;padding-top:10px"> 时间段:</label>
@@ -74,27 +67,24 @@
 								<div class="col-md-2">                                    
                                         <input type="text" id="date" ng-model="endDate" class="form-control date">
 								</div>
-								<div class="col-md-1">
-										<button  type="button" class="btn btn-info" ng-click="getExcelByDayRange()" style="float:left">所有停车场
-                                        </button>
-                                </div>
-								</div>
-								
-								<div class="row" style="padding-top:25px" >
-								<div class="col-md-1">
-										<label class="control-label" style="float:right;padding-top:10px">停车场:</label>								
-								</div>								
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<select id="park-select2" class="form-control" style="font-weight:bold">
 											#foreach( $park in $parks)
 												<option value=$park.id>$park.name</option>
 											#end
 									 </select>
-								</div>								
-								<div class="col-md-1">
-		                		<button id="excelBtn" ng-click="getExcelByParkAndDayRange()" type="button" class="btn btn-info"> 单停车场</button>	
+								</div>	
+								<div class="col-md-2">
+		                		<button id="excelBtn" ng-click="getExcelByParkAndDayRange()" type="button" class="btn btn-info"> 导出</button>	
 								</div>
-		                	</div>
+								<div class="col-md-1" hidden>
+										<button  type="button" class="btn btn-info" ng-click="getExcelByDayRange()" style="float:left">所有停车场
+                                        </button>
+                                </div>
+								
+								</div>
+								
+						
 						
 						</div>
 					</div>

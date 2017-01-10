@@ -634,11 +634,26 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (userName != null)
 			parkList = parkService.filterPark(parkList, userName);
 		int num=120/parkList.size();
+		if (num<1) {
+			num=2;
+		}
 		List<PosChargeData> posChargeDatas=new ArrayList<PosChargeData>();
 		for(Park park:parkList){
 			List<PosChargeData> tmPosChargeDatas=getPageByParkId(park.getId(), 0, num);
 			posChargeDatas.addAll(tmPosChargeDatas);
 		}
 		return posChargeDatas;
+	}
+
+	@Override
+	public Integer deleteByParkIdAndDate(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.deleteByParkIdAndDate(startDate, endDate, parkId);
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return chargeDao.deleteById(id);
 	}
 }
