@@ -279,6 +279,7 @@ float:right;
 								</div>
 								<div class="col-sm-2 ">
 									<label class='control-label'>路段</label>
+                                    <input id="tmpStreetId" type='text' hidden></input>
 								</div>
 								<div class='col-sm-4'>
 									<select id="streetid" class="form-control" ng-disabled="!isPositionChange" ng-options="street.id as street.name for street in streets" ng-model="streetid" ng-change="streetIdChange()"></select>						

@@ -121,6 +121,21 @@ public class ZoneCenterController {
 	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){
 		String username=(String) session.getAttribute("username");
 		Map<String, Object> result=new HashMap<>();
+		List<Zonecenter> zoneCenters=zoneCenterService.getByStartAndCount(start, count);
+		if (zoneCenters!=null) {
+			result.put("status", 1001);
+			result.put("body", zoneCenters);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="/getByUserName",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByUserName(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){
+		String username=(String) session.getAttribute("username");
+		Map<String, Object> result=new HashMap<>();
 		List<Zonecenter> zoneCenters=zoneCenterService.getByUserName(username);
 		if (zoneCenters!=null) {
 			result.put("status", 1001);
