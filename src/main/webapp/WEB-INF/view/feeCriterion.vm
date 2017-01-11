@@ -68,7 +68,7 @@
 				          			<span ng-if="item.isonetimeexpense == 1">是</span>
 				          		</td>
 				          		<td ng-bind="item.onetimeexpense"></td>
-								<td ng-bind="item.explaination"></td>
+								<td ng-bind="item.explaination|limitTo:27"></td>
 				          </table>
     					</div>
     				</div>
