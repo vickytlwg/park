@@ -182,7 +182,7 @@
 					$('select#feeCriterion').html('');
 					var criterions = data.body;
 					
-					$('select#feeCriterion').append('<option value=-1>未绑定</option>');
+					$('select#feeCriterion').append('<option value=20>未绑定</option>');
 					for(var i = 0; i < criterions.length; i++)
 					{
 						$('select#feeCriterion').append('<option value=' + criterions[i].id+ '>' + criterions[i].name + '</option>');
@@ -395,7 +395,7 @@
 			var feeCriterionId = data[i]['feeCriterionId'];
 			var feeCriterionName = data[i]['feeCriterionName'];
 			if(feeCriterionId == undefined || feeCriterionId < 0){
-				feeCriterionId = -1;
+				feeCriterionId = 20;
 				feeCriterionName = "未绑定";
 			}
 

@@ -572,6 +572,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				if (posChargeData.isPaidCompleted()) {
 					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));
 				}
+				else {
+					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
+				}
 			}	
 		}
 		else {

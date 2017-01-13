@@ -132,8 +132,8 @@
 			<li class="treeview active">
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>系统设置</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
-				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/zoneCenter"><i class="fa fa-car"></i>区中心管理</a></li>
-				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/area"><i class="fa fa-car"></i>经营区域管理</a></li>
+				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/zoneCenter"><i class="fa fa-car"></i>市管理</a></li>
+				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/area"><i class="fa fa-car"></i>区管理</a></li>
 				<li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/street"><i class="fa fa-car"></i>街道路段管理</a></li>
 				<li #if(!$isAdmin && !$park_outsideParks) hidden#end><a href="/park/outsideParks"><i class="fa fa-car"></i>收费站点管理</a></li>
 				<li #if(!$isAdmin && !$park_fee_criterion_index) hidden#end ><a href="/park/fee/criterion/index"><i class="fa fa-file-text-o"></i>计费标准管理</a></li>

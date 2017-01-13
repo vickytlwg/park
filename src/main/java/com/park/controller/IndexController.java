@@ -49,7 +49,7 @@ public class IndexController {
 					modelMap.addAttribute(page.getPageKey(), true);
 				}
 			}
-			return "outsideParkStatusAdmin";
+			return "platformShow";
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class IndexController {
 				redirectUrl=redirectUrl.substring(5);
 				return "redirect:"+redirectUrl;
 			}
-			return "redirect:outsideParkStatusAdmin";
+			return "redirect:platformShow";
 		}else{
 			return "redirect:login";
 		}	

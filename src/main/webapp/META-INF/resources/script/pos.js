@@ -43,7 +43,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     };
     $scope.insertPos=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewPos.html',
+            templateUrl: '/park/views/template/ucNewPos.html?v=1.0',
             controller: 'posModify',
             scope:$scope,
             resolve: {
@@ -59,7 +59,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewPos.html',
+            templateUrl: '/park/views/template/ucNewPos.html?v=1.0',
             controller: 'posModify',
             scope:$scope,
             resolve: {

@@ -209,7 +209,7 @@
 			<a href="#"><i class="fa fa-fw fa-cab"></i> <span>基础信息</span> <i class="fa fa-angle-left pull-right"></i></a>
 			<ul class="treeview-menu">
 				<li #if(!$isAdmin && !$park_carportstatus) hidden#end><a href="/park/carportstatus"><i class="fa fa-area-chart"></i>泊位概况</a></li>
-				<li #if(!$isAdmin && !$park_feeOperatorInfo) hidden#end><a href="/park/feeOperatorInfo"><i class="fa fa-area-chart"></i>收费员信息</a></li>
+				<li hidden #if(!$isAdmin && !$park_feeOperatorInfo) hidden#end><a href="/park/feeOperatorInfo"><i class="fa fa-area-chart"></i>收费员信息</a></li>
 			</ul>
 			</li>
 			
@@ -219,7 +219,7 @@
 					
 					<li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
 					<li #if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车分析</a></li>
-					<li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>今日停车简版</a></li>		
+					<li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>车位使用分析</a></li>		
 					<li #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
 					<li #if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
 					<li #if(!$isAdmin && !$park_posStatus) hidden#end><a href="/park/posStatus"><i class="fa fa-pie-chart"></i>终端状态</a></li>
@@ -233,11 +233,11 @@
 				  <li hidden #if(!$isAdmin && !$park_operation) hidden#end><a href="/park/operation"><i class="fa fa-bar-chart"></i>财务运营分析</a></li>
 				  <li hidden #if(!$isAdmin && !$park_data) hidden#end><a href="/park/data"><i class="fa fa-line-chart"></i>停车数据分析</a></li>
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li>
-				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
-				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
+				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
+				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
 					 <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
-				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
-				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/lepay/record/"><i class="fa fa-file-text-o"></i>支付数据</a></li>
+				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
+				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/lepay/record/"><i class="fa fa-file-text-o"></i>支付数据</a></li>
 				</ul>
 			</li>
 			 <li class="treeview active">

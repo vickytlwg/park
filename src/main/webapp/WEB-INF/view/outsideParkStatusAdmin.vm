@@ -3,7 +3,7 @@
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/datepicker.js"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script src="/park/script/outsideParkStatusAdmin.js"></script>
+<script src="/park/script/outsideParkStatusAdmin.js?v=1.0"></script>
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>
@@ -15,11 +15,11 @@
 <section class="content">
 	<div class="row">
 	<div class="col-md-3">
-	<label class="control-label" >所属区中心</label>
+	<label class="control-label" >所属市</label>
 	<select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getArea()"></select>
 	</div>
 	<div class="col-md-3">
-	<label class="control-label" >所属区域</label>
+	<label class="control-label" >所属区</label>
 	<select class="form-control" ng-options="area.id as area.name for area in areas" ng-change="getStreets()" ng-model="areaId"></select>  
 	</div>
 	<div class="col-md-3">
@@ -57,11 +57,11 @@
 			</li>
 			<li >
 				<p>在停车辆数（个）：</p>
-				<span ng-bind="carportUsedCount"></span>
+				<span >{{(carsInCount-carsOutCount)<0?0:(carsInCount-carsOutCount)}}</span>
 			</li>
 			<li >
 				<p>空余泊位数（个）：</p>
-				<span ng-bind="carportUnusedCount"></span>
+				<span >{{carportsCount+carsOutCount-carsInCount}}</span>
 			</li>
 			<li >
 				<p>今日停车次数: </p>
@@ -79,7 +79,7 @@
 			</li>
 			<li >
 				<p>泊位饱和度（%）：</p>
-				<span ></span>
+				<span >{{(carsInCount-carsOutCount)/carportsCount|number:2}}</span>
 			</li>
 			<li >
 				<p>泊位周转率：</p>
@@ -101,7 +101,7 @@
 			</li>
 			<li id="list33">
 				<p>实收比例（%）：</p>
-				<span></span>
+				<span>{{dayRealReceiveMoney/dayChargeTotal|number:2}}</span>
 			</li>
 		</ul> 
 		<ul class="float-fix">

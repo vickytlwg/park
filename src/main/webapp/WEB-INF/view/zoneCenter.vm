@@ -3,7 +3,7 @@
 <div class="content-wrapper" ng-app="zoneCenterApp" ng-controller="zoneCenterCtrl">
 	<section class="content-header">
           <h1>
-       区中心管理
+       市管理
             <small></small>
           </h1>
        
@@ -16,9 +16,9 @@
 	             <div class="box-body"> 
 					<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end id="refresh" ng-click="refreshZoneCenter()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertZoneCenter()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加区中心</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateZoneCenter()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新区中心信息</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteZoneCenter()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除区中心</button>
+		                		<button #if(!$isAdmin) disabled#end id='addUser' ng-click="insertZoneCenter()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加市</button>
+		                		<button #if(!$isAdmin) disabled#end id='updateUser' ng-click="updateZoneCenter()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新市信息</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteUser' ng-click="deleteZoneCenter()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除市</button>
 		                	</div>	
 				<div class="pull-right">		
 							                	
@@ -30,8 +30,8 @@
 					            <tr class="success">					            
 					             <th><span style=""><input type="checkbox" /></div></th>
 										<th ><span style="padding-left:15%">Id</div></th>								
-										<th><span style="padding-left:15%">区中心编号</div></th>
-										<th><span style="padding-left:15%">区中心名称</div></th>
+										<th><span style="padding-left:15%">市编号</div></th>
+										<th><span style="padding-left:15%">市名称</div></th>
 										<th><span style="padding-left:15%">联系人</div></th>
 										<th><span style="padding-left:15%">联系电话</div></th>
 										<th><span style="padding-left:15%">添加时间</div></th>
