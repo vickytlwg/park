@@ -53,6 +53,7 @@
 										<button  type="button" class="btn btn-info" id="getExcelByDayRange" style="float:left">导出
                                         </button>
                                 </div>
+
 					  </div>
 					  		<div class="row" style="padding-top:15px">
 								
@@ -78,12 +79,7 @@
                                 </div>
 					  </div>
 				<div class="pull-right">		
-				<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="parkNamesearch">
-						 #if($isAdmin)<option value=-1>所有停车场</option> #end
-	                #foreach( $park in $parks)
-						<option value=$park.id>$park.name</option>
-					#end           		
-	            </select>					                	
+								                	
 	                	</div>
 	                    <br/>   
 	                    <br/>    	
