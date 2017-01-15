@@ -3,7 +3,7 @@
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/datepicker.js"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script src="/park/script/outsideParkStatusAdmin.js?v=1.0"></script>
+<script src="/park/script/outsideParkStatusAdmin.js?v=2.0"></script>
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>
@@ -52,15 +52,15 @@
 		</ul> 
 		<ul class="float-fix">
 		<li>
-				<p>在线泊位数（个）：</p>
+				<p>在线泊位数：</p>
 				<span ng-bind="carportsCount"></span>
 			</li>
 			<li >
-				<p>在停车辆数（个）：</p>
+				<p>在停车辆数：</p>
 				<span >{{(carsInCount-carsOutCount)<0?0:(carsInCount-carsOutCount)}}</span>
 			</li>
 			<li >
-				<p>空余泊位数（个）：</p>
+				<p>空余泊位数：</p>
 				<span >{{carportsCount+carsOutCount-carsInCount}}</span>
 			</li>
 			<li >
@@ -70,16 +70,17 @@
 		</ul> 
 		<ul class="float-fix">
 			<li >
-				<p>进场车辆数（个）：</p>
+				<p>进场车辆数：</p>
 				<span ng-bind="carsInCount"></span>
 			</li>
 			<li >
-				<p>离场车辆数（个）：</p>
+				<p>离场车辆数：</p>
 				<span ng-bind="carsOutCount"></span>
 			</li>
 			<li >
-				<p>泊位饱和度（%）：</p>
-				<span >{{(carsInCount-carsOutCount)/carportsCount|number:2}}</span>
+				<p>泊位饱和度：</p>
+				<span ng-if="carsInCount<=carsOutCount">{{(-carsInCount+carsOutCount)/carportsCount|number:2}}</span>
+				<span ng-if="carsInCount>carsOutCount">{{(carsInCount-carsOutCount)/carportsCount|number:2}}</span>
 			</li>
 			<li >
 				<p>泊位周转率：</p>
@@ -100,8 +101,8 @@
 				<span></span>
 			</li>
 			<li id="list33">
-				<p>实收比例（%）：</p>
-				<span>{{dayRealReceiveMoney/dayChargeTotal|number:2}}</span>
+				<p>实收比例：</p>
+				<span>{{(dayRealReceiveMoney/dayChargeTotal|number:2)}}</span>
 			</li>
 		</ul> 
 		<ul class="float-fix">

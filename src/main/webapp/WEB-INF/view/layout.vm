@@ -182,12 +182,7 @@
 				</ul>
 			</li>
 			
-			<li class="treeview active">
-				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-				 <ul class="treeview-menu">
-				 <li #if(!$isAdmin&& !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>用户管理</a></li>
-				</ul>
-            </li>
+	
 			
 			<li class="treeview active">
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>系统设置</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -205,13 +200,7 @@
 				</ul>
 			</li>
 			
-			<li class="treeview active">
-			<a href="#"><i class="fa fa-fw fa-cab"></i> <span>基础信息</span> <i class="fa fa-angle-left pull-right"></i></a>
-			<ul class="treeview-menu">
-				<li #if(!$isAdmin && !$park_carportstatus) hidden#end><a href="/park/carportstatus"><i class="fa fa-area-chart"></i>泊位概况</a></li>
-				<li hidden #if(!$isAdmin && !$park_feeOperatorInfo) hidden#end><a href="/park/feeOperatorInfo"><i class="fa fa-area-chart"></i>收费员信息</a></li>
-			</ul>
-			</li>
+		
 			
 			<li class="treeview active">
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>今日概况</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -226,6 +215,15 @@
 					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarport" ><i class="fa fa-car"></i>车位管理</a></li>
 				</ul>
 			</li>
+			
+			<li class="treeview active">
+			<a href="#"><i class="fa fa-fw fa-cab"></i> <span>基础信息</span> <i class="fa fa-angle-left pull-right"></i></a>
+			<ul class="treeview-menu">
+				<li #if(!$isAdmin && !$park_carportstatus) hidden#end><a href="/park/carportstatus"><i class="fa fa-area-chart"></i>泊位概况</a></li>
+				<li hidden #if(!$isAdmin && !$park_feeOperatorInfo) hidden#end><a href="/park/feeOperatorInfo"><i class="fa fa-area-chart"></i>收费员信息</a></li>
+			</ul>
+			</li>
+			
 			<li class="treeview active">
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>报表管理</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
@@ -276,7 +274,12 @@
               </ul>
             </li>
             
-			 
+		<li class="treeview active">
+				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+				 <ul class="treeview-menu">
+				 <li #if(!$isAdmin&& !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>用户管理</a></li>
+				</ul>
+            </li>
 			
             <li class="treeview active">
                 <a href="#"><i class="fa fa-fw fa-users"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>

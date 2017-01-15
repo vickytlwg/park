@@ -65,8 +65,9 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
-			int amountMoney=0;
-			int realMoney=0;
+			float amountMoney=0;
+			float realMoney=0;
+			float arrearage=0;
 			int entranceCount=0;
 			int outCount=0;
 			int onlineParkCount=0;
@@ -84,6 +85,7 @@ public class OutsideParkInfoController {
 							carportLeftCount+=parkInfo.getUnusedcarportcount();
 							amountMoney+=parkInfo.getAmountmoney();
 							realMoney+=parkInfo.getRealmoney();
+							arrearage+=parkInfo.getArrearage();
 							entranceCount+=parkInfo.getEntrancecount();
 							outCount+=parkInfo.getOutcount();
 							if (parkInfo.getPossigndate()==null) {
@@ -105,6 +107,7 @@ public class OutsideParkInfoController {
 			tmpdata.put("carportleftcount", carportLeftCount);
 			tmpdata.put("amountmoney", amountMoney);
 			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("arrearage", arrearage);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
 			tmpdata.put("onlineparkcount", onlineParkCount);
@@ -131,8 +134,9 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
-			int amountMoney=0;
-			int realMoney=0;
+			float amountMoney=0;
+			float realMoney=0;
+			float arrearage=0;
 			int entranceCount=0;
 			int outCount=0;
 			int onlineParkCount=0;
@@ -151,6 +155,7 @@ public class OutsideParkInfoController {
 					carportLeftCount+=parkInfo.getUnusedcarportcount();
 					amountMoney+=parkInfo.getAmountmoney();
 					realMoney+=parkInfo.getRealmoney();
+					arrearage+=parkInfo.getArrearage();
 					entranceCount+=parkInfo.getEntrancecount();
 					outCount+=parkInfo.getOutcount();
 					if (parkInfo.getPossigndate()==null) {
@@ -170,6 +175,7 @@ public class OutsideParkInfoController {
 			tmpdata.put("carportleftcount", carportLeftCount);
 			tmpdata.put("amountmoney", amountMoney);
 			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("arrearage", arrearage);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
 			tmpdata.put("onlineparkcount", onlineParkCount);
@@ -195,8 +201,9 @@ public class OutsideParkInfoController {
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
-			int amountMoney=0;
-			int realMoney=0;
+			float amountMoney=0;
+			float realMoney=0;
+			float arrearage=0;
 			int entranceCount=0;
 			int outCount=0;
 			int onlineParkCount=0;
@@ -212,6 +219,7 @@ public class OutsideParkInfoController {
 				carportLeftCount+=parkInfo.getUnusedcarportcount();
 				amountMoney+=parkInfo.getAmountmoney();
 				realMoney+=parkInfo.getRealmoney();
+				arrearage+=parkInfo.getArrearage();
 				entranceCount+=parkInfo.getEntrancecount();
 				outCount+=parkInfo.getOutcount();
 				if (parkInfo.getPossigndate()==null) {
@@ -229,6 +237,7 @@ public class OutsideParkInfoController {
 			tmpdata.put("carportleftcount", carportLeftCount);
 			tmpdata.put("amountmoney", amountMoney);
 			tmpdata.put("realmoney", realMoney);
+			tmpdata.put("arrearage", arrearage);
 			tmpdata.put("entrancecount", entranceCount);
 			tmpdata.put("outcount", outCount);
 			tmpdata.put("onlineparkcount", onlineParkCount);
@@ -260,6 +269,7 @@ public class OutsideParkInfoController {
 			tmpdata.put("carportleftcount", parkInfo.getUnusedcarportcount());	
 			tmpdata.put("amountmoney", parkInfo.getAmountmoney());
 			tmpdata.put("realmoney", parkInfo.getRealmoney());
+			tmpdata.put("arrearage", parkInfo.getArrearage());
 			tmpdata.put("entrancecount", parkInfo.getEntrancecount());
 			tmpdata.put("outcount", parkInfo.getOutcount());
 			if (parkInfo.getPossigndate()==null) {

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/rest.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <!--<link rel="stylesheet" href="css/bootstrap.css">-->
-    <script src="/park/script/outsideParkStatus1.js"></script>
+    <script src="/park/script/outsideParkStatus1.js?v=1.0"></script>
 </head>
 <body>
 <div class="content" ng-app="outsideParkStatus1App" ng-controller="outsideParkStatus1Ctrl">
@@ -45,39 +45,40 @@
                         <td>实收金额</td>
                         <td>{{show1RealMoney}}</td>
                         <td>欠费金额</td>
-                        <td>{{(show1AmountMoney-show1RealMoney)>0?(show1AmountMoney-show1RealMoney):0}}</td>
+                        <td>{{show1Arrearage}}</td>
                     </tr>
                     <tr>
-                        <td>规划中心总数<span>（个）</span></td>
+                        <td>规划中心总数<span></span></td>
                         <td>{{show1AreaCount}}</td>
-                        <td>规划街道总数<span>（个）</span></td>
+                        <td>规划街道总数<span></span></td>
                         <td>{{show1StreetCount}}</td>
-                        <td>规划站点数<span>（个）</span></td>
+                        <td>规划站点数<span></span></td>
                         <td>{{show1ParkCount}}</td>
-                        <td>规划泊位总数<span>（个）</span></td>
+                        <td>规划泊位总数<span></span></td>
                         <td>{{show1CarportCount}}</td>
                     </tr>
                     <tr>
-                        <td>在线站点数<span>（个）</span></td>
-                        <td>{{show1ParkCount}}</td>
-                        <td>在线泊位总数<span>（个）</span></td>
-                        <td>{{show1CarportCount}}</td>
-                        <td>在停车辆总数<span>（个）</span></td>
+                        <td>在线站点数<span></span></td>
+                        <td>{{show1Onlineparkcount}}</td>
+                        <td>在线泊位总数<span></span></td>
+                        <td>{{show1Onlinecarportcount}}</td>
+                        <td>在停车辆总数<span></span></td>
                         <td>{{(show1EntranceCount-show1OutCount)>0?(show1EntranceCount-show1OutCount):0}}</td>
 						
-						<td>入场车辆总数<span>（个）</span></td>
+						<td>入场车辆总数<span></span></td>
 						<td>{{show1EntranceCount}}</td>
                     </tr>
                     <tr>
-						<td>出场车辆总数<span>（个）</span></td>
+						<td>出场车辆总数<span></span></td>
 						<td>{{show1OutCount}}</td>
-                        <td>站点在线率<span>（%）</span></td>
-                        <td></td>
-                        <td>泊位在线率<span>（%）</span></td>
-                        <td></td>
-                        <td>泊位饱和度<span>（%）</span></td>
-                        <td></td>
-                       
+                        <td>站点在线率<span></span></td>
+                        <td>{{show1Onlineparkcount/show1ParkCount|number:2}}</td>
+                        <td>泊位在线率<span></span></td>
+                        <td>{{show1Onlinecarportcount/show1CarportCount|number:2}}</td>
+                        <td>泊位饱和度<span></span></td>
+                        <td ng-if="show1EntranceCount>=show1OutCount">{{(show1EntranceCount-show1OutCount)/show1CarportCount|number:2}}</td>
+                        <td ng-if="show1EntranceCount<show1OutCount">{{(-show1EntranceCount+show1OutCount)/show1CarportCount|number:2}}</td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -94,22 +95,22 @@
                         <td>实收金额</td>
                         <td>{{show2data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{(show2data.amountmoney-show2data.realmoney)>0?(show2data.amountmoney-show2data.realmoney):0}}</td>
+                        <td>{{show2data.arrearage}}</td>
                     </tr>
                     <tr>
 						<td>区数量</td>
                         <td>{{show2data.areacount}}</td>
-                        <td>规划街道总数<span>（个）</span></td>
+                        <td>规划街道总数<span></span></td>
                         <td>{{show2data.streetcount}}</td>
-                        <td>规划站点数<span>（个）</span></td>
+                        <td>规划站点数<span></span></td>
                         <td>{{show2data.parkcount}}</td>
-                        <td>规划泊位总数<span>（个）</span></td>
+                        <td>规划泊位总数<span></span></td>
                         <td>{{show2data.carportcount}}</td>						
                     </tr>
                     <tr>
-                        <td>在线站点数<span>（个）</span></td>
+                        <td>在线站点数<span></span></td>
                         <td>{{show2data.parkcount}}</td>
-                        <td>在线泊位总数<span>（个）</span></td>
+                        <td>在线泊位总数<span></span></td>
                         <td>{{show2data.carportcount}}</td>
                         <td>在停车辆总数</td>
                         <td>{{(show2data.entrancecount-show2data.outcount)>0?(show2data.entrancecount-show2data.outcount):0}}</td>
@@ -119,13 +120,15 @@
                     <tr>
 						<td>出场车辆数</td>
                         <td>{{show2data.outcount}}</td>
-                        <td>站点在线率<span>（%）</span></td>
-                        <td>56.51</td>
-                        <td>泊位在线率<span>（%）</span></td>
-                        <td>49.65</td>
-                        <td>泊位饱和度<span>（%）</span></td>
-                        <td>8.43</td>
-                        <td colspan="2" class="xt-td"></td>
+                        <td>站点在线率<span></span></td>
+                        <td>{{show2data.onlineparkcount/show2data.parkcount|number:2}}</td>
+                        <td>泊位在线率<span></span></td>
+                        <td>{{show2data.onlinecarportcount/show2data.carportcount|number:2}}</td>
+                        <td>泊位饱和度<span></span></td>
+                        <td ng-if="show2data.entrancecount>=show2data.outcount">{{(show2data.entrancecount-show2data.outcount)/show2data.carportcount|number:2}}</td>
+                        <td ng-if="show2data.entrancecount<show2data.outcount">{{(-show2data.entrancecount+show2data.outcount)/show2data.carportcount|number:2}}</td>
+
+						<td colspan="2" class="xt-td"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -142,23 +145,23 @@
                         <td>实收金额</td>
                         <td>{{show3data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{(show3data.amountmoney-show3data.realmoney)>0?(show3data.amountmoney-show3data.realmoney):0}}</td>
+                        <td>{{show3data.arrearage}}</td>
                     </tr>
                     <tr>						
-                        <td>规划街道总数<span>（个）</span></td>
+                        <td>规划街道总数<span></span></td>
                         <td>{{show3data.streetcount}}</td>
-                        <td>规划站点数<span>（个）</span></td>
+                        <td>规划站点数<span></span></td>
                         <td>{{show3data.parkcount}}</td>
-                        <td>规划泊位总数<span>（个）</span></td>
+                        <td>规划泊位总数<span></span></td>
                         <td>{{show3data.carportcount}}</td>
 						<td colspan="2" class="xt-td"></td>
                     </tr>
                     <tr>
-                        <td>在线站点数<span>（个）</span></td>
+                        <td>在线站点数<span></span></td>
                         <td>{{show3data.parkcount}}</td>
-                        <td>在线泊位总数<span>（个）</span></td>
+                        <td>在线泊位总数<span></span></td>
                         <td>{{show3data.carportcount}}</td>
-                        <td>在停车辆总数<span>（个）</span></td>
+                        <td>在停车辆总数<span></span></td>
                         <td>{{(show3data.entrancecount-show3data.outcount)>0?(show3data.entrancecount-show3data.outcount):0}}</td>
                         <td>入场车辆数</td>
                         <td>{{show3data.entrancecount}}</td>
@@ -166,13 +169,15 @@
                     <tr>
 						<td>出场车辆数</td>
                         <td>{{show3data.outcount}}</td>
-                        <td>站点在线率<span>（%）</span></td>
-                        <td>56.51</td>
-                        <td>泊位在线率<span>（%）</span></td>
-                        <td>49.65</td>
-                        <td>泊位饱和度<span>（%）</span></td>
-                        <td>8.43</td>
-                        <td colspan="2" class="xt-td"></td>
+                        <td>站点在线率<span></span></td>
+                        <td>{{show3data.onlineparkcount/show3data.parkcount|number:2}}</td>
+                        <td>泊位在线率<span></span></td>
+                        <td>{{show3data.onlinecarportcount/show3data.carportcount|number:2}}</td>
+                        <td>泊位饱和度<span></span></td>
+                        <td ng-if="show3data.entrancecount>=show3data.outcount">{{(show3data.entrancecount-show3data.outcount)/show3data.carportcount|number:2}}</td>
+                        <td ng-if="show3data.entrancecount<show3data.outcount">{{(-show3data.entrancecount+show3data.outcount)/show3data.carportcount|number:2}}</td>
+
+						<td colspan="2" class="xt-td"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -189,39 +194,41 @@
                         <td>实收金额</td>
                         <td>{{show4data.realmoney}}</td>
 						<td>欠费金额</td>
-                        <td>{{(show4data.amountmoney-show4data.realmoney)>0?(show4data.amountmoney-show4data.realmoney):0}}</td>
+                        <td>{{show4data.arrearage}}</td>
                     </tr>
                     <tr>						
                         <td>联系人</td>
                         <td>王先生</td>
 						<td>联系人电话</td>
                         <td>13668378688</td>
-                        <td>规划站点数<span>（个）</span></td>
+                        <td>规划站点数<span></span></td>
                         <td>{{show4data.parkcount}}</td>
-                        <td>规划泊位总数<span>（个）</span></td>
+                        <td>规划泊位总数<span></span></td>
                         <td>{{show4data.carportcount}}</td>
 						<td colspan="2" class="xt-td"></td>
                     </tr>
                     <tr>
-                        <td>在线站点数<span>（个）</span></td>
+                        <td>在线站点数<span></span></td>
                         <td>{{show4data.onlineparkcount}}</td>
-                        <td>在线泊位总数<span>（个）</span></td>
+                        <td>在线泊位总数<span></span></td>
                         <td>{{show4data.carportcount}}</td>
-                        <td>在停车辆总数<span>（个）</span></td>
+                        <td>在停车辆总数<span></span></td>
                         <td>{{(show4data.entrancecount-show4data.outcount)>0?(show4data.entrancecount-show4data.outcount):0}}</td>
                         <td>入场车辆数</td>
                         <td>{{show4data.entrancecount}}</td>
                     </tr>
                     <tr>
 						<td>出场车辆数</td>
-                        <td>{{show3data.outcount}}</td>
-                        <td>站点在线率<span>（%）</span></td>
-                        <td>56.51</td>
-                        <td>泊位在线率<span>（%）</span></td>
-                        <td>49.65</td>
-                        <td>泊位饱和度<span>（%）</span></td>
-                        <td>8.43</td>
-                        <td colspan="2" class="xt-td"></td>
+                        <td>{{show4data.outcount}}</td>
+                       <td>站点在线率<span></span></td>
+                        <td>{{show4data.onlineparkcount/show4data.parkcount|number:2}}</td>
+                        <td>泊位在线率<span></span></td>
+                        <td>{{show4data.onlinecarportcount/show4data.carportcount|number:2}}</td>
+                        <td>泊位饱和度<span></span></td>
+                        <td ng-if="show4data.entrancecount>=show4data.outcount">{{(show4data.entrancecount-show4data.outcount)/show4data.carportcount|number:2}}</td>
+                        <td ng-if="show4data.entrancecount<show4data.outcount">{{(-show4data.entrancecount+show4data.outcount)/show4data.carportcount|number:2}}</td>
+
+						<td colspan="2" class="xt-td"></td>
                     </tr>
 					<tr>
 						<td>现金支付</td>

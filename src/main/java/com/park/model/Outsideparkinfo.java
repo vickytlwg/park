@@ -8,6 +8,8 @@ public class Outsideparkinfo {
     private Float amountmoney=0f;
 
     private Float realmoney=0f;
+    
+    private Float arrearage=0f;
 
     private Integer entrancecount=0;
 
@@ -49,6 +51,15 @@ public class Outsideparkinfo {
 
     public void setRealmoney(Float realmoney) {
         this.realmoney = realmoney;
+    }
+    
+
+    public Float getArrearage() {
+        return arrearage;
+    }
+
+    public void setArrearage(Float arrearage) {
+        this.arrearage = arrearage;
     }
 
     public Integer getEntrancecount() {

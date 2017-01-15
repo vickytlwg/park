@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="amountMoney" property="amountmoney" jdbcType="REAL" />
     <result column="realMoney" property="realmoney" jdbcType="REAL" />
+    <result column="arrearage" property="arrearage" jdbcType="REAL" />
     <result column="entranceCount" property="entrancecount" jdbcType="INTEGER" />
     <result column="outCount" property="outcount" jdbcType="INTEGER" />
     <result column="carportCount" property="carportcount" jdbcType="INTEGER" />
@@ -16,7 +17,7 @@
     <result column="date" property="date" jdbcType="DATE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, amountMoney, realMoney, entranceCount, outCount, carportCount, unusedCarportCount, 
+    id, amountMoney, realMoney, arrearage, entranceCount, outCount, carportCount, unusedCarportCount, 
     parkId, posSignDate, posLng, posLat, date
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -31,13 +32,15 @@
   </delete>
   <insert id="insert" parameterType="com.park.model.Outsideparkinfo" >
     insert into outsideParkInfo (id, amountMoney, realMoney, 
-      entranceCount, outCount, carportCount, 
-      unusedCarportCount, parkId, posSignDate, 
-      posLng, posLat, date)
+      arrearage, entranceCount, outCount, 
+      carportCount, unusedCarportCount, parkId, 
+      posSignDate, posLng, posLat, 
+      date)
     values (#{id,jdbcType=INTEGER}, #{amountmoney,jdbcType=REAL}, #{realmoney,jdbcType=REAL}, 
-      #{entrancecount,jdbcType=INTEGER}, #{outcount,jdbcType=INTEGER}, #{carportcount,jdbcType=INTEGER}, 
-      #{unusedcarportcount,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, #{possigndate,jdbcType=TIMESTAMP}, 
-      #{poslng,jdbcType=REAL}, #{poslat,jdbcType=REAL}, #{date,jdbcType=DATE})
+      #{arrearage,jdbcType=REAL}, #{entrancecount,jdbcType=INTEGER}, #{outcount,jdbcType=INTEGER}, 
+      #{carportcount,jdbcType=INTEGER}, #{unusedcarportcount,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, 
+      #{possigndate,jdbcType=TIMESTAMP}, #{poslng,jdbcType=REAL}, #{poslat,jdbcType=REAL}, 
+      #{date,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Outsideparkinfo" >
     insert into outsideParkInfo
@@ -50,6 +53,9 @@
       </if>
       <if test="realmoney != null" >
         realMoney,
+      </if>
+      <if test="arrearage != null" >
+        arrearage,
       </if>
       <if test="entrancecount != null" >
         entranceCount,
@@ -89,6 +95,9 @@
       <if test="realmoney != null" >
         #{realmoney,jdbcType=REAL},
       </if>
+      <if test="arrearage != null" >
+        #{arrearage,jdbcType=REAL},
+      </if>
       <if test="entrancecount != null" >
         #{entrancecount,jdbcType=INTEGER},
       </if>
@@ -127,6 +136,9 @@
       <if test="realmoney != null" >
         realMoney = #{realmoney,jdbcType=REAL},
       </if>
+      <if test="arrearage != null" >
+        arrearage = #{arrearage,jdbcType=REAL},
+      </if>
       <if test="entrancecount != null" >
         entranceCount = #{entrancecount,jdbcType=INTEGER},
       </if>
@@ -161,6 +173,7 @@
     update outsideParkInfo
     set amountMoney = #{amountmoney,jdbcType=REAL},
       realMoney = #{realmoney,jdbcType=REAL},
+      arrearage = #{arrearage,jdbcType=REAL},
       entranceCount = #{entrancecount,jdbcType=INTEGER},
       outCount = #{outcount,jdbcType=INTEGER},
       carportCount = #{carportcount,jdbcType=INTEGER},

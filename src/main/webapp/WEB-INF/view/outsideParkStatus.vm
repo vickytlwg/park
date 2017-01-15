@@ -49,16 +49,16 @@
 		</ul> 
 		<ul class="float-fix">
 			<li>
-				<p>在线泊位数（个）：</p>
+				<p>在线泊位数：</p>
 				<span ng-bind="carportsCount"></span>
 			</li>
 			<li >
-				<p>在停车辆数（个）：</p>
-				<span ng-bind="carportUsedCount"></span>
+				<p>在停车辆数：</p>
+				<span >{{(carsInCount-carsOutCount)<0?0:(carsInCount-carsOutCount)}}</span>
 			</li>
 			<li >
-				<p>空余泊位数（个）：</p>
-				<span ng-bind="carportUnusedCount"></span>
+				<p>空余泊位数：</p>
+				<span >{{carportsCount+carsOutCount-carsInCount}}</span>
 			</li>
 			<li >
 				<p>今日停车次数: </p>
@@ -67,16 +67,16 @@
 		</ul> 
 		<ul class="float-fix">
 			<li >
-				<p>进场车辆数（个）：</p>
+				<p>进场车辆数：</p>
 				<span ng-bind="carsInCount"></span>
 			</li>
 			<li >
-				<p>离场车辆数（个）：</p>
+				<p>离场车辆数：</p>
 				<span ng-bind="carsOutCount"></span>
 			</li>
 			<li >
-				<p>泊位饱和度（%）：</p>
-				<span ></span>
+				<p>泊位饱和度：</p>
+				<span >{{(carsInCount-carsOutCount)/carportsCount<0?0:(carsInCount-carsOutCount)/carportsCount}}</span>
 			</li>
 			<li >
 				<p>泊位周转率：</p>
@@ -98,7 +98,7 @@
 			</li>
 			<li id="list33">
 				<p>实收比例（%）：</p>
-				<span></span>
+				<span>{{(dayRealReceiveMoney/dayChargeTotal|number:2)}}</span>
 			</li>
 		</ul> 
 		<ul class="float-fix">

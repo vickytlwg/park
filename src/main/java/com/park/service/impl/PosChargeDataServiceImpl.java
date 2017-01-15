@@ -554,12 +554,24 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			e.printStackTrace();
 		}
 		Outsideparkinfo outsideparkinfo=new Outsideparkinfo();
+		Outsideparkinfo outsideparkinfo2=new Outsideparkinfo();		
+		outsideparkinfo2 = outsideParkInfoService.getByParkidAndDate(parkId,new Date());
+		 
+		if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()!=null) {
+			outsideparkinfo.setPossigndate(outsideparkinfo2.getPossigndate());
+		}
 		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
 		outsideparkinfo.setParkid(parkId);
 		outsideparkinfo.setCarportcount(park.getPortCount());
 		outsideparkinfo.setUnusedcarportcount(park.getPortCount());
 		if (!posChargeDatas.isEmpty()) {			
-			outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+			if (outsideparkinfo2.getPossigndate()==null) {
+				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+			}
+			else if(posChargeDatas.get(0).getEntranceDate().getTime()>outsideparkinfo2.getPossigndate().getTime()){
+				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+			}
+			
 			for(PosChargeData posChargeData : posChargeDatas){
 				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
 				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+posChargeData.getChargeMoney()));
@@ -573,6 +585,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));
 				}
 				else {
+					if (posChargeData.getChargeMoney()>posChargeData.getPaidMoney()) {
+						outsideparkinfo.setArrearage((float) (outsideparkinfo.getArrearage()+posChargeData.getChargeMoney()-posChargeData.getPaidMoney()));
+					}
 					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
 				}
 			}	

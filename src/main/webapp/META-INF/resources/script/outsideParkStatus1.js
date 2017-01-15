@@ -31,6 +31,9 @@ angular.module("outsideParkStatus1App",['ui.bootstrap'])
         $scope.show1OutCount=0;
         $scope.show1CarportCount=0;
         $scope.show1CarportLeftCount=0;
+        $scope.show1Onlinecarportcount=0;
+        $scope.show1Onlineparkcount=0;
+        $scope.show1Arrearage=0;
         angular.forEach($scope.zoneCenters,function(value,num){
             $scope.show1AreaCount+=value.areacount;
             $scope.show1StreetCount+=value.streetcount;
@@ -40,7 +43,10 @@ angular.module("outsideParkStatus1App",['ui.bootstrap'])
             $scope.show1EntranceCount+=value.entrancecount;
             $scope.show1OutCount+=value.outcount;
             $scope.show1CarportCount+=value.carportcount;
-            $scope.show1CarportLeftCount+=value.carportleftcount;            
+            $scope.show1CarportLeftCount+=value.carportleftcount;       
+            $scope.show1Onlinecarportcount+=value.onlinecarportcount; 
+            $scope.show1Onlineparkcount+=value.onlineparkcount; 
+            $scope.show1Arrearage+=value.arrearage;
         });        
     };
     $scope.$watch('zoneCenters',function(oldvalue,newvalue){
