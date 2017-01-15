@@ -3,17 +3,17 @@
     $.fn.map.initial=function(){
         mapInitial();
         $.fn.map.getData();
-        setInterval("$.fn.map.getData()",8000); 
+        setInterval("$.fn.map.getData()",8000000); 
     };
     var map;
     var point;
     var mapClusterer;
-	var myIconred = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/red.png", new BMap.Size(23, 25),{
+	var myIconred = new BMap.Icon("/park/img/red_park4848.png", new BMap.Size(48, 48),{
     });
-	var myIcongreen = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/green.png", new BMap.Size(23, 25),{
+	var myIcongreen = new BMap.Icon("/park/img/green_park4848.png", new BMap.Size(48, 48),{
     });
-	var myIconyellow = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/yellow.png", new BMap.Size(23, 25),{
-    });   
+	//var myIconyellow = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/yellow.png", new BMap.Size(23, 25),{
+   // });   
     var mapInitial=function(){
         map = new BMap.Map("parkmap");
         point = new BMap.Point(118.8, 32.0625);
@@ -26,7 +26,7 @@
         var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_TOP_LEFT});   //设置版权控件位置
         map.addControl(cr); //添加版权控件
         var bs = map.getBounds();   //返回地图可视区域
-        var content= "<p><span style='color:#006600;'><strong>蓝色</strong></span><strong>表示车位充足</strong></p><p style='margin-top:10px;margin-bottom:10px'><span style='color:#FFE500;'><strong>黄色</strong></span><strong>表示车位紧张</strong></p><p><span style='color:#E53333;'><strong>红色</strong></span><strong>表示无车位</strong></p>";
+        var content= "";/*"<p><span style='color:#006600;'><strong>蓝色</strong></span><strong>表示车位充足</strong></p><p style='margin-top:10px;margin-bottom:10px'><span style='color:#FFE500;'><strong>黄色</strong></span><strong>表示车位紧张</strong></p><p><span style='color:#E53333;'><strong>红色</strong></span><strong>表示无车位</strong></p>"*/;
 cr.addCopyright({id: 1, content: content, bounds: bs}); 
     };
     var data_info;
@@ -72,10 +72,10 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
 		    {
 		        marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIconred});  
 		    }
-			 else if(data_info[i][3]<10)
+			/* else if(data_info[i][3]<10)
 			 {
 			     marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIconyellow}); 
-			 }
+			 }*/
 			 else
 			 {
 			     marker= new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon: myIcongreen}); 
@@ -83,10 +83,10 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
             var content = data_info[i][2];
             var opts = {
                       position : point,    // 指定文本标注所在的地理位置
-                 //    offset   : new BMap.Size(30, -30)    //设置文本偏移量
+                      offset   : new BMap.Size(-8, -15)    //设置文本偏移量
                 };
             var label = new BMap.Label(data_info[i][3], opts);
-            label.setStyle({color:"blue", "font-weight":"bold"});
+            label.setStyle({color:"#3c8dbc", "font-weight":"bold", "border":"none","background-color": "rgba(0, 0, 0, 0)"  });
             map.addOverlay(label);               // 将标注添加到地图中
             mapClusterer.addMarker(marker);
             addClickHandler(content,marker);
