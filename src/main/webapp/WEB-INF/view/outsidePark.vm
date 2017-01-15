@@ -1,4 +1,4 @@
-<script src="/park/script/outsidePark.js"></script>
+<script src="/park/script/outsidePark.js?v=1.0"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 
 <div class="content-wrapper" >
@@ -263,7 +263,7 @@ float:right;
 									</div>
 								</div>
 								<div class="col-sm-2 ">
-									<label class='control-label'>区中心</label>
+									<label class='control-label'>市</label>
 								</div>
 								<div class='col-sm-4'>
 									<select id="zoneCenterId" class="form-control" ng-disabled="!isPositionChange" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getAreas()" ></select>						
@@ -272,13 +272,14 @@ float:right;
 
 							<div class='form-group'>
 								<div class="col-sm-2 ">
-									<label class='control-label'>经营区域</label>
+									<label class='control-label'>区</label>
                                 </div>
 								<div class='col-sm-4'>
 									<select id="areaId" class="form-control" ng-disabled="!isPositionChange" ng-options="area.id as area.name for area in areas" ng-model="areaId" ng-change="getStreets()"></select>							
 								</div>
 								<div class="col-sm-2 ">
 									<label class='control-label'>路段</label>
+                                    <input hidden id="tmpStreetId" type='text' ></input>
 								</div>
 								<div class='col-sm-4'>
 									<select id="streetid" class="form-control" ng-disabled="!isPositionChange" ng-options="street.id as street.name for street in streets" ng-model="streetid" ng-change="streetIdChange()"></select>						

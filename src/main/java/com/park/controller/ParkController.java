@@ -372,7 +372,10 @@ public class ParkController {
 	@RequestMapping(value = "/update/park", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updatePark(@RequestBody Park park){
-		
+		if(park.getStreetId()==1){
+			Park tmPark=parkService.getParkById(park.getId());
+			park.setStreetId(tmPark.getStreetId());
+		}
 		return parkService.updatePark(park);
 	}
 	

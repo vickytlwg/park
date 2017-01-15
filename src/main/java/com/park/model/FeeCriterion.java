@@ -143,8 +143,13 @@ public class FeeCriterion {
         return isonetimeexpense;
     }
 
-    public void setIsonetimeexpense(Integer isonetimeexpense) {
-        this.isonetimeexpense = isonetimeexpense;
+    public void setIsonetimeexpense(Boolean isonetimeexpense) {
+    	if (isonetimeexpense==false) {
+    		this.isonetimeexpense = 0;
+		}
+        else {
+			this.isonetimeexpense=1;
+		}
     }
 
     public Float getOnetimeexpense() {

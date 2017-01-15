@@ -9,13 +9,13 @@
 <div class="modal-body">
      <form class="form-horizontal" role="form">     
         <div class="form-group">
-            <label class="col-sm-2 control-label" >所属区中心</label>
+            <label class="col-sm-2 control-label" >所属市</label>
             <div class="col-sm-8">
                 <select class="form-control" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getArea(zoneCenterId)"></select>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label" >所属区域</label>
+            <label class="col-sm-2 control-label" >所属区</label>
             <div class="col-sm-8">
                 <select class="form-control" ng-options="area.id as area.name for area in areas"  ng-change="getStreets(areaId)" ng-model="areaId"></select>
             </div>

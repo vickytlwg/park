@@ -16,10 +16,14 @@
 	        renderPark(parkId,0, $.fn.page.pageSize); 
 	     }
 	     $("#startDate").val(new Date().format("yyyy-MM-dd"));
-	//     $("#endDate").val(new Date().format("yyyy-MM-dd"));
+	     $("#startDay").val(new Date().format("yyyy-MM-dd"));
+         $("#endDay").val(new Date().format("yyyy-MM-dd"));
 	    $('#getExcelByDayRange').on('click',function(){
 	        window.location.href="/park/pos/getExcelByDayAndPark?parkId="+$('#parkSelected').val()+"&startday="+$("#startDate").val();
 	    });
+	     $('#getExcelByRange').on('click',function(){
+            window.location.href="/park/pos/getExcelByDayRangeAndPark?parkId="+$('#parkSelected2').val()+"&startday="+$("#startDay").val()+"&endday="+$("#endDay").val();
+        });
 	    var dateInitial=function(){
         $('.date').datepicker({
             autoClose: true,
@@ -188,7 +192,7 @@
 		});
 	}
 	var intervalRenderPagination=function(){
-		setInterval(renderPagination,5000);
+		setInterval(renderPagination,60000);
 	};
 	var pageClickFunc = function(index){
 		renderPark(parkId,$.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);

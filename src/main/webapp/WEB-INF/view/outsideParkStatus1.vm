@@ -13,12 +13,12 @@
 <div class="content" ng-app="outsideParkStatus1App" ng-controller="outsideParkStatus1Ctrl">
 
     <!--top start-->
-    <div class="xt-top">
-        <div class="xt-crumbs">
+    <div class="xt-top" hidden>
+        <div class="xt-crumbs" hidden>
             <i class="xt-location"></i>
             <span>基础信息 ＞ 泊位概况</span>
         </div>
-        <div class="xt-search">
+        <div class="xt-search" hidden>
             <div><span>分中心：</span><span class="xt-all">全选 <b></b></span></div>
             <div><span>街道：</span><span class="xt-street">东城某某街道 <b></b></span></div>
         
@@ -38,7 +38,7 @@
                 <table border="1">
                     <tbody>
                     <tr>
-                        <td>区中心数</td>
+                        <td>市数</td>
                         <td>{{zoneCenters.length}}</td>
                         <td>应收金额</td>
                         <td>{{show1AmountMoney}}</td>
@@ -72,11 +72,11 @@
 						<td>出场车辆总数<span>（个）</span></td>
 						<td>{{show1OutCount}}</td>
                         <td>站点在线率<span>（%）</span></td>
-                        <td>56.51</td>
+                        <td></td>
                         <td>泊位在线率<span>（%）</span></td>
-                        <td>49.65</td>
+                        <td></td>
                         <td>泊位饱和度<span>（%）</span></td>
-                        <td>8.43</td>
+                        <td></td>
                        
                     </tr>
                     </tbody>
@@ -87,7 +87,7 @@
                 <table border="1">
                     <tbody>
                     <tr>
-                        <td>区中心名称</td>
+                        <td>市名称</td>
                         <td>{{show2data.zonename}}</td>
                         <td>应收金额</td>
                         <td>{{show2data.amountmoney}}</td>
@@ -97,7 +97,7 @@
                         <td>{{(show2data.amountmoney-show2data.realmoney)>0?(show2data.amountmoney-show2data.realmoney):0}}</td>
                     </tr>
                     <tr>
-						<td>经营区域数量</td>
+						<td>区数量</td>
                         <td>{{show2data.areacount}}</td>
                         <td>规划街道总数<span>（个）</span></td>
                         <td>{{show2data.streetcount}}</td>
@@ -135,7 +135,7 @@
                 <table border="1">
                     <tbody>
                     <tr>
-                        <td>经营区域名称</td>
+                        <td>区名称</td>
                         <td>{{show3data.areaname}}</td>                       
                         <td>应收金额</td>
                         <td>{{show3data.amountmoney}}</td>
@@ -245,7 +245,7 @@
             <thead>
             <tr>
                 <td>序号</td>             
-                <td>区中心</td>
+                <td>市</td>
 				<td>应收额</td>
                 <td>实收额</td>
 				<td>欠费</td>
@@ -286,7 +286,7 @@
             <thead>
             <tr>
                 <td>序号</td>               
-                <td>经营区域</td>
+                <td>区</td>
 				<td>应收额</td>
                 <td>实收额</td>
 				<td>欠费</td>

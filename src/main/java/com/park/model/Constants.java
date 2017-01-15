@@ -8,5 +8,5 @@ public class  Constants{
 	public static  int ACCESSTABLESCOUNT = 500;
 	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
 	public static  String UPLOADDIR = "/alidata/server/tomcat7/webapps/parkpictures/";
-
+	public static  String WEBAPIURL="http://www.iotclouddashboard.com/park";
 }

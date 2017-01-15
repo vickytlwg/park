@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,11 +48,12 @@ public class OutsideParkInfoController {
 	private OutsideParkInfoService outsideParkInfoService;
 	@RequestMapping(value="zoneCenterInfo",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String zoneCenterInfo(@RequestParam("start")int start,@RequestParam("count")int count){
+	public String zoneCenterInfo(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){
+		String username=(String) session.getAttribute("username");
 		Map<String, Object> result=new HashMap<>();
 		List<Map<String, Object>> info=new ArrayList<>();
 		String day=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		List<Zonecenter> zonecenters=zoneCenterService.getByStartAndCount(0,100);
+		List<Zonecenter> zonecenters=zoneCenterService.getByUserName(username);
 		for (Zonecenter zonecenter : zonecenters) {
 			Map<String, Object> tmpdata=new HashMap<>();
 			tmpdata.put("id",zonecenter.getId());

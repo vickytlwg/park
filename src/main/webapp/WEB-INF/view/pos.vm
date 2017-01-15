@@ -1,4 +1,4 @@
-<script src="/park/script/pos.js"></script>
+<script src="/park/script/pos.js?v=1.0"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <div class="content-wrapper" ng-app="posApp" ng-controller="posCtrl">
 	<section class="content-header">

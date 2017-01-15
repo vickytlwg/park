@@ -112,11 +112,11 @@
 		</dependency>
 		<!-- springframe end -->
 		<!--excel的处理包 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.14</version>
-		</dependency>
+		</dependency>! -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -293,7 +293,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>

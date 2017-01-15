@@ -91,7 +91,7 @@
 
 
 
-<div class="modal fade" id="searchParkByLocation" tabindex="1" role="dialog" aria-labelledby='searchParkLoction' aria-hidden='true'>
+<div class="modal fade" id="searchParkByLocation" tabindex="-1" role="dialog" aria-labelledby='searchParkLoction' aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
 				<div class='modal-header'>
@@ -119,120 +119,177 @@
 		</div>
 
 <div class="modal fade" id="addParkModal" tabindex="-1" role="dialog" aria-labelledby='addParkLabel' aria-hidden='true'>
-	<div class='modal-dialog'>
+	<div class='modal-dialog'  style="min-width:880px">
 		<div class='modal-content'>
 		
-			<div class='modal-header'>
-				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-				<h4 class='modal-title ' id='addParkLabel'>停车场信息</h4>
-			</div>
-			
-			<div class='modal-body'>
-				<form class='form-horizontal' id='addParkForm' role='form'>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='parkName'>名称</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='parkName' placeholder='请输入名称'>
+		<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true' ng-click="clearPosition()">&times;</button>
+				<h2 class='modal-title' style="padding-left:40%" id='addParkLabel'>收费站点信息</h2>
+			</div>			
+			<div class='modal-body '>
+			<form class='form-horizontal' id='addParkForm' role='form'>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									基本信息
+								 </h3>
 						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='channelCount'>进出口数</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='portCount'>车位数</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='portCount' placeholder='请输入车位数'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='leftPortCount'>剩余车位数</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='leftPortCount' placeholder='请输入剩余车位数'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='contact'>联系人</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='contact' placeholder='联系人'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='number'>联系人电话</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='number' placeholder='联系人电话'>
-						</div>
-					</div>
-									
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='feeCriterion'>计费标准</label>
-						<div class='col-sm-8'>
-							<select  class='form-control' id='feeCriterion'></select>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='status'>状态</label>
-						<div class='col-sm-8'>
-							<select class='form-control' id='parkStatus'>
-								<option value=0>可用</option>
-								<option value=1>不可用</option>
-							</select>
-						</div>
-					</div>
-					<div class='form-group'>
-						<div class='col-sm-offset-2 col-sm-8'>
-							<div class='checkbox'>
-								<label >
-									<input type='checkbox' id='isFree'>免费
-								</label>
+						<div class="panel-body">
+							<div class='form-group '>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right" for='parkName'>名称</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='parkName' placeholder='请输入名称'>
+								</div>
+								<div class="col-sm-2 ">
+									<label style="display:none" class='control-label' style="float:right" for='channelCount'>进出口数</label>
+									<label class='control-label' style="float:right" for='parkType'>类型</label>
+								</div>
+								<div class='col-sm-4'>
+									<input style="display:none" type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
+									<select class='form-control' id='parkType'>
+										<option value=0>室内停车场</option>
+										<option value=1>室外停车场</option>
+										<option value=3>路边停车场</option>
+										<option value=2>其它</option>
+										
+									</select>
+								</div>
+							</div>
+							
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class=' control-label' style="float:right" for='portCount'>车位数</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='portCount' placeholder='请输入车位数'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class=' control-label' style="float:right" for='leftPortCount'>剩余车位数</label>
+								</div>
+									<div class='col-sm-4'>
+										<input type='text' class='form-control' id='leftPortCount' placeholder='请输入剩余车位数'>
+									</div>
+							</div>				
+							
+								<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right" for='longitude'>经度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right" for='latitude'>纬度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='floorCount'>楼层数</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='floorCount' placeholder='请输入楼层数'>
+				</div>
+				
+				<div class="panel panel-success">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									附加信息
+								 </h3>
 						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='parkType'>类型</label>
-						<div class='col-sm-8'>
-							<select class='form-control' id='parkType'>
-								<option value=0>室内停车场</option>
-								<option value=1>室外停车场</option>
-								<option value=3>路边停车场</option>
-								<option value=2>其它</option>
-							</select>
+						<div class="panel-body">
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right"  for='contact'>联系人</label>
+                                </div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='contact' placeholder='联系人'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right"  for='number'>联系人电话</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='number' placeholder='联系人电话'>
+								</div>
+							</div>
+							
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right"  for='feeCriterion'>计费标准</label>
+								</div>
+								<div class='col-sm-4'>
+									<select  class='form-control' id='feeCriterion'></select>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' style="float:right"  for='status'>状态</label>
+								</div>
+								<div class='col-sm-4'>
+									<select class='form-control' id='parkStatus'>
+										<option value=0>可用</option>
+										<option value=1>不可用</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label'  style="float:right" >是否免费</label>
+								</div>
+								<div class='col-sm-4'>
+									<div class='checkbox'>
+										<label style="float:left">
+											<input type='checkbox' id='isFree'>免费
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label'  style="float:right" >图片地址</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='mapAddr' placeholder='请输入停车场地图地址'>
+								</div>
+							</div>
+                        </div>
+                </div>			
+				
+						<div class="panel panel-warning">
+					<div class="panel-heading">
+							<h3 class="panel-title">
+								位置信息
+							</h3>
 						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='position'>位置</label>
-						<div class='col-sm-8'>
-							<select  id="seachprov" name="seachprov" onChange="changeComplexProvince(this.value, sub_array, 'seachcity', 'seachdistrict');"></select>&nbsp;
-<select id="seachcity" name="homecity" onChange="changeCity(this.value,'seachdistrict','seachdistrict');"></select>&nbsp;
-<span id="seachdistrict_div"><select id="seachdistrict" name="seachdistrict"></select></span>&nbsp;<input style="width:80px;" type='text'  id="positionlast">
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='longitude'>经度</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='latitude'>纬度</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
-						</div>
-					</div>
-					<div class='form-group'>
-						<label class='col-sm-2 control-label' for='mapAddr'>地图地址</label>
-						<div class='col-sm-8'>
-							<input type='text' class='form-control' id='mapAddr' placeholder='请输入停车场地图地址'>
-						</div>
-					</div>
+						<div class="panel-body">
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label'  style="float:right"  for='floorCount'>楼层数</label>
+                                </div>
+								<div class='col-sm-4'>
+									
+                                        <input type='text' class='form-control' id='floorCount' placeholder='请输入楼层数'>
+									
+								</div>
+								<div class="col-sm-2 ">
+								
+								</div>
+								<div class='col-sm-4'>
+									
+								</div>
+							</div>
+
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+										<label class='control-label' style="float:right"  for='position'>位置</label>
+                                </div>
+								<div class='col-sm-8'>
+<select  id="seachprov" style="width:120px;height:35px" name="seachprov" onChange="changeComplexProvince(this.value, sub_array, 'seachcity', 'seachdistrict');"></select>&nbsp;
+<select id="seachcity"  style="width:120px;height:35px" name="homecity" onChange="changeCity(this.value,'seachdistrict','seachdistrict');"></select>&nbsp;
+<span id="seachdistrict_div"><select id="seachdistrict"  style="width:120px;height:35px" name="seachdistrict"></select></span>&nbsp;<input style="width:150px;height:35px" type='text'  id="positionlast">
+						</div>							
+							
+							</div>
+                        </div>
+                </div>
+				
+					
 					<div id='addParkResult'>						
 					</div>
 			</div>

@@ -14,6 +14,7 @@
     });
 	//var myIconyellow = new BMap.Icon("http://112.74.109.240/parkYanCheng/images/yellow.png", new BMap.Size(23, 25),{
    // });   
+
     var mapInitial=function(){
         map = new BMap.Map("parkmap");
         point = new BMap.Point(118.8, 32.0625);
