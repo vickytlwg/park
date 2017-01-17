@@ -3,7 +3,7 @@
     $.fn.map.initial=function(){
         mapInitial();
         $.fn.map.getData();
-        setInterval("$.fn.map.getData()",8000000); 
+  //      setInterval("$.fn.map.getData()",8000000); 
     };
     var map;
     var point;

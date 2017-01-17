@@ -580,15 +580,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 				else {				
 					outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-				}
-				if (posChargeData.isPaidCompleted()) {
-					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));
-				}
-				else {
-					if (posChargeData.getChargeMoney()>posChargeData.getPaidMoney()) {
-						outsideparkinfo.setArrearage((float) (outsideparkinfo.getArrearage()+posChargeData.getChargeMoney()-posChargeData.getPaidMoney()));
+				}				
+				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));			
+				if(!posChargeData.isPaidCompleted()) 
+				{
+					if (posChargeData.getChargeMoney()>(posChargeData.getPaidMoney()+posChargeData.getGivenMoney())) {
+						outsideparkinfo.setArrearage((float) (outsideparkinfo.getArrearage()+posChargeData.getChargeMoney()-posChargeData.getPaidMoney()-posChargeData.getGivenMoney()));
 					}
-					outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
+			//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
 				}
 			}	
 		}

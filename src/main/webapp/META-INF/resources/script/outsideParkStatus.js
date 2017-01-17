@@ -117,10 +117,11 @@ angular.module("outsideParkStatusApp",['ui.bootstrap'])
         var dateEnd=dateStart;
             dateEnd.setMonth(dateStart.getMonth()+2);
        
+      
+       getDataService.getParkChargeByRange($scope.parkid,dateselect.substring(0,7)+'-01',dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01').then(function(result){
        $scope.catagory=[];
        $scope.totalMoney=[];
        $scope.realMoney=[];
-       getDataService.getParkChargeByRange($scope.parkid,dateselect.substring(0,7)+'-01',dateEnd.getFullYear()+'-'+dateEnd.getMonth()+'-01').then(function(result){
            $.each(result,function(name,value){
                     var date=new Date(parseInt(name));
                     var month=date.getMonth()+1;
