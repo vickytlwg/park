@@ -134,17 +134,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			DecimalFormat df = new DecimalFormat("0.00"); 
 			String data=df.format(lastCharge.getChangeMoney() + money);
 			lastCharge.setChangeMoney(Double.parseDouble(data));				
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
-			outsideparkinfo.setPossigndate(new Date());
+//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+//			outsideparkinfo.setPossigndate(new Date());
 						
 		}
 		else {
 			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
 			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney()-theMoney);
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+theMoney));
-			outsideparkinfo.setPossigndate(new Date());
+	//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+theMoney));
+	//		outsideparkinfo.setPossigndate(new Date());
 		}
-		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+	// 	outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		this.update(lastCharge);
 		return lastCharge;
 	}
@@ -153,19 +153,51 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
-		if (charge.getIsLargeCar() == false) {
-			
-			Map<String,String> dates=formatTime.format(startTime, endTime, "20", "7");
+		Park park = parkService.getParkById(charge.getParkId());
+		Integer criterionId = park.getFeeCriterionId();
+		FeeCriterion criterion = criterionService.getById(criterionId);
+		String nightStartHour = "20";
+		String nightEndHour = "7";
+		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
+			 nightStartHour = criterion.getNightstarttime().split(":")[0];
+			 nightEndHour = criterion.getNightendtime().split(":")[0].substring(1);
+		}	
+		if (charge.getIsLargeCar() == false) {			
+			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
 			for(String name:dates.keySet()){
 				charge.setEntranceDate(name);
-		//		charge.setExitDate(dates.get(name));
-			  if (name.substring(11).equals("20:00:00")) {
+			  if (name.substring(11,13).equals(nightStartHour)) {
 				charge.setIsOneTimeExpense(1);
 				this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			  else {
 				  charge.setIsOneTimeExpense(0);
 				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);			
+			if (charge.getPaidMoney()>=charge.getChargeMoney() ) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney()-charge.getChargeMoney());
+			}
+			else {
+				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
+			}
+			this.update(charge);
+			
+		} else {
+			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
+			for(String name:dates.keySet()){
+				charge.setEntranceDate(name);
+			  if (name.substring(11,13).equals(nightStartHour)) {
+				charge.setIsOneTimeExpense(1);
+				this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			  else {
+				  charge.setIsOneTimeExpense(0);
+				  this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			}
 			charge.setEntranceDate(startTime);
@@ -180,9 +212,6 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
 			}
 			this.update(charge);
-			
-		} else {
-			this.calExpenseLargeCar(charge, exitDate,isQuery);
 		}
 		
 	}
@@ -206,8 +235,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public void calExpenseLargeCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 		// TODO Auto-generated method stub
-		if (charge.getExitDate() != null)
-			return;
+//		if (charge.getExitDate() != null)
+//			return;
 		Park park = parkService.getParkById(charge.getParkId());
 
 		Integer criterionId = park.getFeeCriterionId();
@@ -215,17 +244,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterionId == null)
 			throw new Exception("no fee criterion");
 		FeeCriterion criterion = criterionService.getById(criterionId);
-		Date enterDate = charge.getEntranceDate();
-		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
-			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
-			Calendar cld = Calendar.getInstance();
-			cld.setTime(enterDate);
-			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-			charge.setExitDate1(cld.getTime());
-		} else {
-			charge.setExitDate1(exitDate);
-		}
-
+	//	Date enterDate = charge.getEntranceDate();
+//		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
+//			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
+//			Calendar cld = Calendar.getInstance();
+//			cld.setTime(enterDate);
+//			cld.set(Calendar.HOUR_OF_DAY, nightHour);
+//			charge.setExitDate1(cld.getTime());
+//		} else {
+//			charge.setExitDate1(exitDate);
+//		}
+		charge.setExitDate1(exitDate);
 		double expense = 0;
 		if (charge.getIsOneTimeExpense() == 1) {
 			expense = criterion.getOnetimeexpense() - charge.getPaidMoney();
@@ -242,39 +271,44 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					double intervals1 = Math
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1pricelarge();
-					double intervals2 = Math.ceil((diffMin - firstHour) / criterion.getTimeoutpriceinterval());
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
 					expense += intervals2 * criterion.getStep2pricelarge();
 				}
 			}
 		}
 
-		if (expense > criterion.getMaxexpense())
-			expense = criterion.getMaxexpense();
+//		if (expense > criterion.getMaxexpense())
+//			expense = criterion.getMaxexpense();
 
-		charge.setChargeMoney(expense);
-		if (expense == 0) {
-			charge.setPaidCompleted(true);
+		charge.setChargeMoney(expense+charge.getChargeMoney());
+		if (charge.getChargeMoney()>(criterion.getMaxexpense()*2)) {
+			charge.setChargeMoney(criterion.getMaxexpense()*2);
 		}
-
-		expense -= charge.getPaidMoney();
-		if (expense > 0.01) {
-			charge.setUnPaidMoney(expense);
-		}
-		if (expense < -0.01) {
-			charge.setUnPaidMoney(0);
-			charge.setPaidCompleted(true);
-			charge.setChangeMoney(-1 * expense);
-		}
+		
+//		charge.setChargeMoney(expense);
+//		if (expense == 0) {
+//			charge.setPaidCompleted(true);
+//		}
+//
+//		expense -= charge.getPaidMoney();
+//		if (expense > 0.01) {
+//			charge.setUnPaidMoney(expense);
+//		}
+//		if (expense < -0.01) {
+//			charge.setUnPaidMoney(0);
+//			charge.setPaidCompleted(true);
+//			charge.setChangeMoney(-1 * expense);
+//		}
 
 		if (!isQuery) {
-			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
-			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
-			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
-			outsideparkinfo.setPossigndate(new Date());
-			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			this.update(charge);
+//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
+//			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+//			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+//			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
+//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
+//			outsideparkinfo.setPossigndate(new Date());
+//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		//	this.update(charge);
 		}
 	}
 
@@ -292,7 +326,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		FeeCriterion criterion = criterionService.getById(criterionId);
 
-		Date enterDate = charge.getEntranceDate();
+//		Date enterDate = charge.getEntranceDate();
 
 //		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
 //			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
@@ -320,7 +354,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					double intervals1 = Math
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1price();
-					double intervals2 = Math.ceil((diffMin - firstHour) / criterion.getTimeoutpriceinterval());
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
 					expense += intervals2 * criterion.getStep2price();
 				}
 			}
@@ -447,10 +481,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			PosChargeData lastCharge = charges.get(0);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
 			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
-			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
-			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
-			outsideparkinfo.setPossigndate(new Date());
-			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+//			outsideparkinfo.setPossigndate(new Date());
+//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(lastCharge);
 		}
 		return charges;
@@ -565,10 +599,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		outsideparkinfo.setCarportcount(park.getPortCount());
 		outsideparkinfo.setUnusedcarportcount(park.getPortCount());
 		if (!posChargeDatas.isEmpty()) {			
-			if (outsideparkinfo2.getPossigndate()==null) {
+			if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()==null) {
 				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
 			}
-			else if(posChargeDatas.get(0).getEntranceDate().getTime()>outsideparkinfo2.getPossigndate().getTime()){
+			else if(outsideparkinfo2!=null&&posChargeDatas.get(0).getEntranceDate().getTime()>outsideparkinfo2.getPossigndate().getTime()){
 				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
 			}
 			

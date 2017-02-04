@@ -1,4 +1,4 @@
-<script src="/park/script/feeOperator.js?v=1.0"></script>
+<script src="/park/script/feeOperator.js?v=1.2"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <div class="content-wrapper" ng-app="feeOperatorApp" ng-controller="feeOperatorCtrl">
 	<section class="content-header">

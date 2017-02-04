@@ -9,7 +9,7 @@
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>
-			停车场停车状况示意图
+			站点收费概况
             <small></small>
           </h1>        
     </section>
@@ -76,7 +76,7 @@
 			</li>
 			<li >
 				<p>泊位饱和度：</p>
-				<span >{{(carsInCount-carsOutCount)/carportsCount<0?0:(carsInCount-carsOutCount)/carportsCount}}</span>
+				<span >{{(carsInCount-carsOutCount)/carportsCount<0?0:(carsInCount-carsOutCount)/carportsCount|number:2}}</span>
 			</li>
 			<li >
 				<p>泊位周转率：</p>
@@ -97,7 +97,7 @@
 				<span></span>
 			</li>
 			<li id="list33">
-				<p>实收比例（%）：</p>
+				<p>实收比例：</p>
 				<span>{{(dayRealReceiveMoney/dayChargeTotal|number:2)}}</span>
 			</li>
 		</ul> 

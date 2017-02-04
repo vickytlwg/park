@@ -73,4 +73,16 @@ public class FeeOperatroServiceImpl implements FeeOperatorService {
 		return feeoperatroDao.getByNameAndPhoneParkName(name, phone, parkName);
 	}
 
+	@Override
+	public void operatorsLogout() {
+		// TODO Auto-generated method stub
+		List<Feeoperator> feeoperators=feeoperatroDao.getByStartAndCount(0, 2000);
+		for (Feeoperator feeoperator : feeoperators) {
+			if (feeoperator.getSignstatus()==true) {
+				feeoperator.setSignstatus(false);
+				updateByPrimaryKey(feeoperator);
+			}
+		}
+	}
+
 }

@@ -198,6 +198,8 @@ public class OutsideParkInfoController {
 			tmpdata.put("id",street.getId());
 			tmpdata.put("streetnum", street.getNumber());
 			tmpdata.put("streetname", street.getName());
+			tmpdata.put("contact", street.getContact());
+			tmpdata.put("phone", street.getPhone());
 			int parkCount=0;
 			int carportCount=0;
 			int carportLeftCount=0;
@@ -332,6 +334,20 @@ public class OutsideParkInfoController {
 		else {
 			result.put("status", 1002);
 		}
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="testDelay",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String testDelay(@RequestBody Map<String, Integer> args){
+		Integer delay=args.get("delay");
+		try {
+			Thread.sleep(1000*delay);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Map<String, Object> result=new HashMap<>();
+		result.put("message", "ok");
 		return Utility.gson.toJson(result);
 	}
 }

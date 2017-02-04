@@ -43,7 +43,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     };
     $scope.insertFeeOperator=function(){
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewFeeOperator.html?v=1.0',
+            templateUrl: '/park/views/template/ucNewFeeOperator.html?v=1.2',
             controller: 'feeOperatorModify',
             scope:$scope,
             resolve: {
@@ -59,7 +59,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             return;
         }
         $uibModal.open({
-            templateUrl: '/park/views/template/ucNewFeeOperator.html?v=1.0',
+            templateUrl: '/park/views/template/ucNewFeeOperator.html?v=1.2',
             controller: 'feeOperatorModify',
             scope:$scope,
             resolve: {

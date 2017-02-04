@@ -13,6 +13,7 @@ import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
+import com.park.service.FeeOperatorService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
@@ -30,6 +31,9 @@ public class CalPosChargeTask {
 	FeeCriterionService criterionService;
 	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
+	@Autowired
+	private FeeOperatorService feeOperatorService;
+	
 	@Scheduled(cron="0 0 18/1  * * ? ")
 	public void cal(){			
 		List<PosChargeData> charges = chargeService.getUnCompleted();
@@ -65,8 +69,9 @@ public class CalPosChargeTask {
 	public void dayInfo(){
 		outsideParkInfoService.insertDayParkInfo();		
 	}
-	@Scheduled(cron="0 0 8 * * ? ")
+	@Scheduled(cron="0 0 23 * * ? ")
 	public void out(){
+		feeOperatorService.operatorsLogout();
 //		List<PosChargeData> charges = chargeService.getUnCompleted();		
 //		for(PosChargeData charge : charges){
 //			Date now = new Date();

@@ -152,6 +152,7 @@
 										<option value=0>室内停车场</option>
 										<option value=1>室外停车场</option>
 										<option value=3>路边停车场</option>
+										<option value=4>充电桩</option>
 										<option value=2>其它</option>
 										
 									</select>

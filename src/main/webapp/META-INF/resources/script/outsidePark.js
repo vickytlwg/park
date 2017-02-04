@@ -421,6 +421,8 @@
 				type='室外';
 			else if(data[i]['type'] == 3)
 				type='路边';
+			else if(data[i]['type'] == 4)
+                type='充电桩';
 			else 
 				type='其它';
 			tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');

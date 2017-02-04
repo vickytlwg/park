@@ -146,6 +146,7 @@ float:right;
 									<input style="display:none" type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
 									<select class='form-control' id='parkType'>
 										<option value=3>路边停车场</option>
+										<option value=4>充电桩</option>
 										<option value=2>其它</option>
 									</select>
 								</div>

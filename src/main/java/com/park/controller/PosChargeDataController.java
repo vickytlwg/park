@@ -65,8 +65,7 @@ public class PosChargeDataController {
 	@Autowired
 	private ExcelExportService excelService;
 
-	@Autowired
-	private OutsideParkInfoService outsideParkInfoService;
+
 
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
@@ -447,28 +446,28 @@ public class PosChargeDataController {
 
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
-		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId, charge.getEntranceDate());
+//		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId, charge.getEntranceDate());
 
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
-		if (outsideparkinfo != null) {
-			if (charge.isPaidCompleted() == false) {
-				int Unusedcarportcount = outsideparkinfo.getUnusedcarportcount();
-				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount - 1);
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
-				outsideparkinfo.setPossigndate(new Date());
-				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			} else {
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
-				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount() + 1);
-				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney() + charge.getChargeMoney()));
-				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + charge.getPaidMoney()
-						+ charge.getGivenMoney() - charge.getChangeMoney()));
-				outsideparkinfo.setPossigndate(new Date());
-				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-			}
-		}
+//		if (outsideparkinfo != null) {
+//			if (charge.isPaidCompleted() == false) {
+//				int Unusedcarportcount = outsideparkinfo.getUnusedcarportcount();
+//				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount - 1);
+//				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
+//				outsideparkinfo.setPossigndate(new Date());
+//				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+//			} else {
+//				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
+//				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount() + 1);
+//				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney() + charge.getChargeMoney()));
+//				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + charge.getPaidMoney()
+//						+ charge.getGivenMoney() - charge.getChangeMoney()));
+//				outsideparkinfo.setPossigndate(new Date());
+//				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+//			}
+//		}
 
 		if (charge.getEntranceDate() == null) {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -499,11 +498,10 @@ public class PosChargeDataController {
 		if (posChargeDatas.isEmpty()) {
 			return Utility.createJsonMsg(1002, "no record");
 		}
-		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId,
-				posChargeDatas.get(0).getEntranceDate());
-		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + yajin));
+//		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId,posChargeDatas.get(0).getEntranceDate());
+//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + yajin));
 		posChargeDatas.get(0).setPaidMoney(yajin);
-		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+//		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		int ret = chargeSerivce.update(posChargeDatas.get(0));
 		if (ret == 1)
 			return Utility.createJsonMsg(1001, "success");

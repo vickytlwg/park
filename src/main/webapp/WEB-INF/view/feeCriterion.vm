@@ -149,7 +149,7 @@
 		</div>
 		
 		<div class="form-group">
-			<label class="col-sm-2 control-label" >是否按此收费</label>
+			<label class="col-sm-2 control-label" >是否按次收费</label>
 			<div class="col-sm-4">
 				<input type="checkbox"  placeholder="" ng-model="tempCriterion.isonetimeexpense">
 			</div>

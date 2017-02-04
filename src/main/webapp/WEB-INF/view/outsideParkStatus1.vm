@@ -41,11 +41,11 @@
                         <td>市数</td>
                         <td>{{zoneCenters.length}}</td>
                         <td>应收金额</td>
-                        <td>{{show1AmountMoney}}</td>
+                        <td>{{show1AmountMoney|number:2}}</td>
                         <td>实收金额</td>
-                        <td>{{show1RealMoney}}</td>
+                        <td>{{show1RealMoney|number:2}}</td>
                         <td>欠费金额</td>
-                        <td>{{show1Arrearage}}</td>
+                        <td>{{show1Arrearage|number:2}}</td>
                     </tr>
                     <tr>
                         <td>规划中心总数<span></span></td>
@@ -91,11 +91,11 @@
                         <td>市名称</td>
                         <td>{{show2data.zonename}}</td>
                         <td>应收金额</td>
-                        <td>{{show2data.amountmoney}}</td>
+                        <td>{{show2data.amountmoney|number:2}}</td>
                         <td>实收金额</td>
-                        <td>{{show2data.realmoney}}</td>
+                        <td>{{show2data.realmoney|number:2}}</td>
 						<td>欠费金额</td>
-                        <td>{{show2data.arrearage}}</td>
+                        <td>{{show2data.arrearage|number:2}}</td>
                     </tr>
                     <tr>
 						<td>区数量</td>
@@ -141,11 +141,11 @@
                         <td>区名称</td>
                         <td>{{show3data.areaname}}</td>                       
                         <td>应收金额</td>
-                        <td>{{show3data.amountmoney}}</td>
+                        <td>{{show3data.amountmoney|number:2}}</td>
                         <td>实收金额</td>
-                        <td>{{show3data.realmoney}}</td>
+                        <td>{{show3data.realmoney|number:2}}</td>
 						<td>欠费金额</td>
-                        <td>{{show3data.arrearage}}</td>
+                        <td>{{show3data.arrearage|number:2}}</td>
                     </tr>
                     <tr>						
                         <td>规划街道总数<span></span></td>
@@ -190,17 +190,17 @@
                         <td>街道名称</td>
                         <td>{{show4data.streetname}}</td>                       
                         <td>应收金额</td>
-                        <td>{{show4data.amountmoney}}</td>
+                        <td>{{show4data.amountmoney|number:2}}</td>
                         <td>实收金额</td>
-                        <td>{{show4data.realmoney}}</td>
+                        <td>{{show4data.realmoney|number:2}}</td>
 						<td>欠费金额</td>
-                        <td>{{show4data.arrearage}}</td>
+                        <td>{{show4data.arrearage|number:2}}</td>
                     </tr>
                     <tr>						
                         <td>联系人</td>
-                        <td>王先生</td>
+                        <td>{{show4data.contact}}</td>
 						<td>联系人电话</td>
-                        <td>13668378688</td>
+                        <td>{{show4data.phone}}</td>
                         <td>规划站点数<span></span></td>
                         <td>{{show4data.parkcount}}</td>
                         <td>规划泊位总数<span></span></td>
@@ -271,9 +271,9 @@
             <tr ng-repeat="zoneCenter in zoneCenters">
                 <td>{{zoneCenter.id}}</td>               
                 <td ng-click="getAreaInfo(zoneCenter)"><a href='#'>{{zoneCenter.zonename}}</a></td>
-                <td>{{zoneCenter.amountmoney}}</td>
-                <td>{{zoneCenter.realmoney}}</td>
-				<td>{{(zoneCenter.amountmoney-zoneCenter.realmoney)>0?(zoneCenter.amountmoney-zoneCenter.realmoney):0}}</td>
+                <td>{{zoneCenter.amountmoney|number:2}}</td>
+                <td>{{zoneCenter.realmoney|number:2}}</td>
+				<td>{{zoneCenter.arrearage}}</td>
 				<td>{{zoneCenter.entrancecount}}</td>
                 <td>{{zoneCenter.outcount}}</td>
 				<td>{{zoneCenter.areacount}}</td>
@@ -311,9 +311,9 @@
             <tr ng-repeat="area in areas">
                 <td>{{area.id}}</td>           
                 <td ng-click="getStreetInfo(area)"><a href="#">{{area.areaname}}</a></td>
-                <td>{{area.amountmoney}}</td>
-                <td>{{area.realmoney}}</td>
-				<td>{{(area.amountmoney-area.realmoney)>0?(area.amountmoney-area.realmoney):0}}</td>
+                <td>{{area.amountmoney|number:2}}</td>
+                <td>{{area.realmoney|number:2}}</td>
+				<td>{{area.arrearage}}</td>
 				<td>{{area.entrancecount}}</td>
                 <td>{{area.outcount}}</td>
 				<td>{{area.streetcount}}</td>
@@ -350,9 +350,9 @@
             <tr ng-repeat="street in streets">
                 <td>{{street.id}}</td>            
                 <td ng-click="getParkInfo(street)"><a href="#">{{street.streetname}}</a></td>
-                <td>{{street.amountmoney}}</td>
-                <td>{{street.realmoney}}</td>
-				<td>{{(street.amountmoney-street.realmoney)>0?(street.amountmoney-street.realmoney):0}}</td>
+                <td>{{street.amountmoney|number:2}}</td>
+                <td>{{street.realmoney|number:2}}</td>
+				<td>{{street.arrearage}}</td>
 				<td>{{street.entrancecount}}</td>
                 <td>{{street.outcount}}</td>
 				<td>{{street.parkcount}}</td>
@@ -389,9 +389,9 @@
 				<td>{{park.contactname}}</td>
                 <td>{{park.contactnum}}</td>
                 <td>{{park.parkname}}</td>
-				<td>{{park.amountmoney}}</td>
-                <td>{{park.realmoney}}</td>
-				<td>{{(park.amountmoney-park.realmoney)>0?(park.amountmoney-park.realmoney):0}}</td>
+				<td>{{park.amountmoney|number:2}}</td>
+                <td>{{park.realmoney|number:2}}</td>
+				<td>{{park.arrearage}}</td>
 				<td>{{park.entrancecount}}</td>
                 <td>{{park.outcount}}</td>
 				<td ng-if="park.isonline==true">是</td>
