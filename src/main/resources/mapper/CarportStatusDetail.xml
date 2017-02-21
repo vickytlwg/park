@@ -24,7 +24,7 @@
 	
 	<select id="getDayCarportStatusDetail" resultMap="CarportStatusDetailMapper">
 		<![CDATA[
-		select * from carportStatusDetail where carportId = #{param1} and startTime < #{param3} and endTime > #{param2}
+		select * from carportStatusDetail where carportId = #{param1} and startTime < #{param3} and startTime > #{param2}
 		]]>
 	</select>
 	

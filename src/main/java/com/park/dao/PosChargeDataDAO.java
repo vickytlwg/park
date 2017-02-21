@@ -46,6 +46,8 @@ public interface PosChargeDataDAO {
 
 	public List<PosChargeData> getUnCompleted();
 	
+	public List<PosChargeData> selectPosdataByParkAndRangeAndCarportNumber(@Param("startDay") Date startDay, @Param("endDay") Date endDay,@Param("parkId")int parkId,@Param("carportNumber")int carportNumber);
+	
 	public List<PosChargeData> selectPosdataByParkAndRange(@Param("startDay") Date startDay, @Param("endDay") Date endDay,@Param("parkId")int parkId);
 	
 	public int deleteByParkIdAndDate(@Param("startDay") String startDay, @Param("endDay") String endDay,@Param("parkId")int parkId);

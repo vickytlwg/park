@@ -5,17 +5,18 @@
 	$.fn.businessCarport.initial = function(){
 		
 		bindTrClick();
-		bindRefreshClick();
+	//	bindRefreshClick();
 		bindAddBtnClick();
 		bindUpdateBtnClick();
 		bindSubmitBusinessCarportBtnClick();
 		bindDeleteBtnClick();
 		bindSeacherBtnClick();
 		//renderBusinessCarport(0, $.fn.page.pageSize);					
-		fillSearchPark();
+	//	fillSearchPark();
 		bindSearchParkChange();
 		bindaddBusinessCarportNum();
 		bindaddCarportSubmit();		
+		setInterval("$.fn.businessCarport.bindStatusbutton()",3000);
 		// setInterval(function(){
 			// renderBusinessCarport($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 // 
@@ -82,10 +83,12 @@
 	var bindSearchParkChange = function(){
 		$('select#searchPark').on('change', $(this), function(){
 			
-			if($(this).val()!=-1){
-				$.cookie('carportParkSelectValue',$(this).val(),{path:'/',expires:10});
-			}
-			renderBusinessCarport(0, $.fn.page.pageSize);
+		//	if($(this).val()!=-1){
+		//		$.cookie('carportParkSelectValue',$(this).val(),{path:'/',expires:10});
+		//	}
+		//	renderBusinessCarport(0, $.fn.page.pageSize);
+		
+		//bindStatusbutton();
 		});
 	};
 	
@@ -238,7 +241,8 @@
 	var updateBtnClickHandle = function(){
 		$('#addBusinessCarportForm')[0].reset();
 		$('#addBusinessCarportResult').html('');
-		var checkedTr = $('#businessCarportBody').find('input[type="checkbox"]:checked').parents('tr');
+	//	var checkedTr = $('#businessCarportBody').find('input[type="checkbox"]:checked').parents('tr');
+	var checkedTr = $('input[type="checkbox"]:checked').parents('tr');
 		if(checkedTr.length == 0){
 			alert('请选择一个列表项');
 			return;
@@ -443,7 +447,31 @@
 			businessCarportBody.append(tr);
 		}
 	};
-	
+	$.fn.businessCarport.bindStatusbutton=function(){
+	       
+            var statusButton = $('td button');
+            $.each(statusButton,function(){
+                $(this).on('click', $(this), function(){
+                var button = $(this);
+                dateInitial();
+                $('#carportUsage').modal('show');
+                $('#carportUsage').attr('carportId', $($(button).parents('tr').find('td')[1]).text());
+                var curDate = new Date();
+                var nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() + 1);
+                $('#carportStartDate').val(curDate.format('yyyy-MM-dd'));
+                $('#carportEndDate').val(nextDate.format('yyyy-MM-dd'));
+                
+                $('#carportStartDateForTable').val(curDate.format('yyyy-MM-dd'));
+                $('#carportEndDateForTable').val(nextDate.format('yyyy-MM-dd'));
+                $('#carportEndDate').on('change', $(this), function(){renderCarportStatusChart();});
+                $('#carportEndDateForTable').on('change', $(this), function(){renderCarportStatusTable();});
+                renderCarportStatusTable();
+                renderCarportStatusChart();
+            });
+            });
+         
+	};
 	var errorHandle = function(data){
 		var modal = new $.Modal('errorHandle', "失败", "操作失败" + data['message']);
 		$('#showErrorMessage').html(modal.get());
@@ -496,11 +524,17 @@
 				for(var i = 0; i < carportUsage.length; i++){
 					var startTime = carportUsage[i]['startTime'];
 					var endTime = carportUsage[i]['endTime'];
-					if(startTime == undefined || endTime == undefined)
+					if(startTime == undefined)
 						continue;
 					var startMilliSec = Date.parse(startTime);
 					startMilliSec = startMilliSec > parsedStartDay ? startMilliSec : parsedStartDay;					
-					var endTimeMillSec = Date.parse(endTime);
+					  var endTimeMillSec;
+                    if(endTime!=undefined){
+                        endTimeMillSec = Date.parse(endTime);
+                    }
+                    else{
+                        endTimeMillSec= new Date().getTime();
+                    }
 					endTimeMillSec = endTimeMillSec < parsedEndDay ? endTimeMillSec : parsedEndDay;
 					chartData.push([startMilliSec,null, null ]);
 					chartData.push([startMilliSec,0, 1]);

@@ -707,4 +707,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.deleteById(id);
 	}
+
+	@Override
+	public List<PosChargeData> selectPosdataByParkAndRangeAndCarportNumber(Date startDay, Date endDay, int parkId,
+			int carportNumber) {
+		// TODO Auto-generated method stub
+		return chargeDao.selectPosdataByParkAndRangeAndCarportNumber(startDay, endDay, parkId, carportNumber);
+	}
 }

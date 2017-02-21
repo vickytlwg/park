@@ -1,5 +1,11 @@
 <script src="/park/script/businessCarportAngular.js"></script>
-
+<script src="/park/script/businessCarport.js?"></script>
+<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
+<script src="/park/script/datepicker.js"></script>
+<script src="/park/script/highcharts.js"></script>
+<!--<script src="/park/script/exporting.js"></script>-->
+<script src="/park/script/HighchartTheme.js"></script>
+<script type="text/javascript" src="/park/script/highcharts-more.js"></script>
 <div class="content-wrapper" ng-app="businessCarportApp" ng-controller="businessCarportCtrl">
 	<section class="content-header">
           <h1>
@@ -15,13 +21,13 @@
 	                <div class="box-body">  
 		                	<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end ng-click='refreshData()' id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click='addData()' id='addBusinessCarport' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button #if(!$isAdmin) disabled#end id='addBusinessCarport' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
 		                		<button #if(!$isAdmin) disabled#end id='updateBusinessCarport' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
 		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
 								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
 		                	</div>
 	                	<div class="pull-right">
-	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange(selectValue)">
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange()">
 	                		 <option value=-1>所有停车场</option>
 						
 	                	</select>
@@ -32,26 +38,27 @@
 						<div >
 							 <table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
 					            <tr>
-					             <th><span style=""><input type="checkbox" /></div></th>
-										<th ><span style="padding-left:15%">Id</div></th>		
-										<th><span style="padding-left:15%">停车场名称</div></th>
-										<th><span style="padding-left:15%">停车位编号</div></th>
-										<th><span style="padding-left:15%">MAC Id</div></th>
-										<th><span style="padding-left:15%">状态</div></th>
-										<th><span style="padding-left:15%">楼层</div></th>
-										<th><span style="padding-left:15%">位置</div></th>
-										<th><span style="padding-left:15%">描述</div></th>
-										<th><span style="padding-left:15%">日期</div></th>	
+					             
+										<th ><span style="padding-left:15%">Id</span></th>		
+										<th><span style="padding-left:15%">停车场名称</span></th>
+										<th><span style="padding-left:15%">停车位编号</span></th>
+										<th><span style="padding-left:15%">MAC Id</span></th>
+										<th><span style="padding-left:15%">状态</span></th>
+										<th><span style="padding-left:15%">楼层</span></th>
+										<th><span style="padding-left:15%">位置</span></th>
+										<th><span style="padding-left:15%">描述</span></th>
+										<th><span style="padding-left:15%">日期</span></th>	
 					            </tr>
 					          <tbody id="businessCarportBody"></tbody>
 							  <tr ng-repeat="item in carportDetails" >
-								<td><input type="checkbox" ng-click="checked($index)"/></td>
+								<td><input type="checkbox" /></td>
 								<td ng-if="$odd" class='success'>{{item.id}}</td>
 								<td ng-if="$even" class='info'>{{item.id}}</td>
 								<td>{{item.parkName}}</td>
 								<td>{{item.carportNumber}}</td>
 								<td>{{item.macId}}</td>
-								<td>{{item.status}}</td>
+								<td ng-if="item.status==1" data=1><button type='button' class='btn btn-danger'>有车</button></td>
+								<td ng-if="item.status==0" data=0><button type='button' class='btn btn-success'>无车</button></td>
 								<td>{{item.floor}}</td>
 								<td>{{item.position}}</td>
 								<td>{{item.description}}</td>
@@ -153,6 +160,8 @@
 <div id='showErrorMessage'>
 </div>
 
+
+
 <div class="modal fade" id="addCarportNum" tabindex="-1" role="dialog"  aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
@@ -235,15 +244,23 @@
 						<div id = "carportUsageChart">
 						</div>
 					</div>
-					<div class="tab-pane fade" id="usageTable">
+				<div class="tab-pane fade in active" id="usageTable">
+						<div class="form-group">
+							<label for="carportStartDateForTable" class="control-label">开始日期</label>
+							<input type="text" id="carportStartDateForTable"  class="form-control date">									
+						</div>
+						<div class="form-group">
+							<label for="carportEndDateForTable" class="control-label">结束日期</label>
+							<input type="text" id="carportEndDateForTable"  class="form-control date">									
+						</div>
 						<table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
 							<thead>
 							<tr>
 								<th>ID</th>
 								<th>开始时间</th>
 								<th>结束时间</th>
-								<th>应付</th>
-								<th>实付</th>
+								<!--<th>应付</th>
+								<th>实付</th>-->
 							</tr>
 							</thead>
 							<tbody id="carportUsageTbody">
@@ -261,6 +278,10 @@
 	</div>
 </div>
 
-
+<script>
+$(document).ready(function(){
+	$.fn.businessCarport.initial();
+});
+</script>
 
 </script>

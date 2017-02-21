@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.park.dao.PosdataDAO;
 import com.park.model.Park;
+import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
@@ -132,17 +133,23 @@ public class PosdataServiceImpl implements PosdataService {
 		Park park = parkService.getParkById(parkId);
 		String parkName=park.getName();
 		List<Posdata> posdata=getPosdataByCarportAndRange(parkName,carportId,parsedStartDay,parsedEndDay);
-		
+		List<PosChargeData> posChargeDatas=posChargeService.selectPosdataByParkAndRangeAndCarportNumber(parsedStartDay, parsedEndDay, parkId, Integer.parseInt(carportId));
 		Map<String, Object> retmap=new HashMap<>();
+//		float chargeTotal=0;
+//		float realReceiveMoney=0;
+//		for (Posdata posdata2 : posdata) {
+//			if (posdata2.getMode()==1) {
+//				chargeTotal+=posdata2.getMoney().floatValue();
+//				realReceiveMoney+=posdata2.getGiving().floatValue()+posdata2.getRealmoney().floatValue()-
+//						posdata2.getReturnmoney().floatValue();
+//			}
+//			
+//		}
 		float chargeTotal=0;
 		float realReceiveMoney=0;
-		for (Posdata posdata2 : posdata) {
-			if (posdata2.getMode()==1) {
-				chargeTotal+=posdata2.getMoney().floatValue();
-				realReceiveMoney+=posdata2.getGiving().floatValue()+posdata2.getRealmoney().floatValue()-
-						posdata2.getReturnmoney().floatValue();
-			}
-			
+		for(PosChargeData posData:posChargeDatas){
+			chargeTotal+=posData.getChargeMoney();
+			realReceiveMoney+=posData.getGivenMoney()+posData.getPaidMoney()-posData.getChangeMoney();
 		}
 		retmap.put("totalMoney", chargeTotal);
 		retmap.put("realMoney", realReceiveMoney);

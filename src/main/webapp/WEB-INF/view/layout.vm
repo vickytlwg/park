@@ -203,7 +203,7 @@
 		
 			
 			<li class="treeview active">
-				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>今日概况</span> <i class="fa fa-angle-left pull-right"></i></a>
+				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>今日信息</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
 					
 					<li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
@@ -212,7 +212,7 @@
 					<li #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
 					<li #if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
 					<li #if(!$isAdmin && !$park_posStatus) hidden#end><a href="/park/posStatus"><i class="fa fa-pie-chart"></i>终端状态</a></li>
-					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarport" ><i class="fa fa-car"></i>车位管理</a></li>
+					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarportAngular" ><i class="fa fa-car"></i>车位管理</a></li>
 				</ul>
 			</li>
 			
@@ -233,7 +233,7 @@
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
-					 <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
+				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/lepay/record/"><i class="fa fa-file-text-o"></i>支付数据</a></li>
 				</ul>

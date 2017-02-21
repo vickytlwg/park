@@ -5,7 +5,7 @@ function($scope, $http, $timeout,$interval) {
     $scope.selectedIndex = -1;
     $scope.selectValue=-1;
     $scope.parks=[];
-    $scope.parks.push({name:"所有停车场",id:"-1"});
+  //  $scope.parks.push({name:"所有停车场",id:"-1"});
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
@@ -19,14 +19,16 @@ function($scope, $http, $timeout,$interval) {
                     }
                 }
                 $scope.selectValue=$scope.parks[0];
+                $scope.refreshData();
             }
         });
     };
-    $scope.selectChange=function(value){
-        alert(value.name);
+    $scope.selectChange=function(){
+        $scope.refreshData();
     };
+    
     $scope.refreshData = function() {     
-        $http.get('getBusinessCarportDetail?low=0&count=50&parkId=109').success(function(response) {
+        $http.get('getBusinessCarportDetail?low=0&count=50&parkId='+$scope.selectValue.id).success(function(response) {
             if (response.status == 1001) {
                 $scope.carportDetails = response.body;
             }
@@ -36,11 +38,16 @@ function($scope, $http, $timeout,$interval) {
      $scope.getParks();
       $interval(function(){
           $scope.refreshData();
-      },3000);
+      },8000);
     
    
     $scope.checked = function(index){
         $scope.selectedIndex = index;
+        if($scope.parks[index].checked==false)
+        $scope.parks[index].checked=true;
+        else{
+            $scope.parks[index].checked=false;
+        }
     };
     $scope.addData = function() {
         console.log($scope.checked);

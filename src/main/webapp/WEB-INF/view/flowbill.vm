@@ -51,7 +51,7 @@
 										<th><span>查看图片</span></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
-				          	<tr  ng-repeat = "item in detail.items">
+				          	<tr  ng-repeat = "item in detail.items |orderBy:'id':true">
 				          		<td ><input type="checkbox" ng-model="item.checked" /></td>
 				          		<td ng-bind="item.id"></td>
 				          		<td ng-bind="item.cardNumber"></td>

@@ -200,7 +200,7 @@
                                             <span class="panel-value "  data-to="{{dayRealMoney}}" data-speed="1500">{{dayRealMoney}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;
+                                            实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;元
                                         </div>
                                         <div class="dataHover block2">
                                             <table>
@@ -226,7 +226,7 @@
                                             <span class="panel-value" data-to="{{(dayAmountMoney-dayRealMoney)}}" data-speed="1500"  data-decimals="2">{{(dayAmountMoney-dayRealMoney)>0?(dayAmountMoney-dayRealMoney):0}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            欠费总金额&nbsp;<b>{{(dayAmountMoney-dayRealMoney)>0?(dayAmountMoney-dayRealMoney):0}}</b>&nbsp;
+                                            欠费总金额&nbsp;<b>{{(dayAmountMoney-dayRealMoney)>0?(dayAmountMoney-dayRealMoney):0}}</b>&nbsp;元
                                         </div>
                                         <div class="dataHover block3">
                                             <table>
@@ -287,10 +287,10 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="" data-speed="1500">{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2)>0?((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:2):0}}</span>&nbsp;
+                                            <span class="panel-value" data-to="" data-speed="1500">{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:1)>0?((dayAmountMoney-dayRealMoney)*100/dayAmountMoney|number:2):0}}%</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总逃费率&nbsp;<b>{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3)>0?((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3):0}}</b>&nbsp;
+                                            总逃费率&nbsp;<b>{{((dayAmountMoney-dayRealMoney)/dayAmountMoney|number:3)>0?((dayAmountMoney-dayRealMoney)*100/dayAmountMoney|number:1):0}}%</b>&nbsp;
                                         </div>
                                         <div class="dataHover block5">
                                             <table>
@@ -321,26 +321,7 @@
                                             合计运营站点数&nbsp;<b>{{dayParkCount}}</b>&nbsp;个
                                         </div>
                                         <div class="dataHover block6">
-                                            <table>
-                                                <tr>
-                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">2154 个</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">1250 个</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">4101 个</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">1105 个</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">3211 个</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">1530 个</td>
-                                                </tr>
-                                            </table>
+                                         
                                         </div>
                                     </div>
                                 </div></td>
@@ -352,7 +333,7 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="0" data-speed="1500">{{dayCarportCount}}</span>&nbsp;
+                                            <span class="panel-value" data-to="0" data-speed="1500">{{dayCarportCount}}</span>&nbsp;个
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             总泊位数&nbsp;<b>{{dayCarportCount}}</b>&nbsp;个
@@ -371,32 +352,13 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="385.00" data-speed="1500"> {{dayOnlineCarportCount/dayCarportCount|number:3}}</span>&nbsp;
+                                            <span class="panel-value" data-to="385.00" data-speed="1500"> {{(dayOnlineCarportCount*100)/dayCarportCount|number:1}}%</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总泊位在线率&nbsp;<b>{{dayOnlineCarportCount/dayCarportCount|number:4}}</b>&nbsp;
+                                            总泊位在线率&nbsp;<b>{{(dayOnlineCarportCount*100)/dayCarportCount|number:1}}%</b>&nbsp;
                                         </div>
                                         <div class="dataHover block8">
-                                            <table>
-                                                <tr>
-                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">12 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">3 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">110 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">11 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">3 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">8 次</td>
-                                                </tr>
-                                            </table>
+                             
                                         </div>
                                     </div>
 
@@ -409,32 +371,13 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="1.00" data-speed="1500">{{(1-(dayCarportLeftCount/dayCarportCount))|number:3}}</span>&nbsp;
+                                            <span class="panel-value" data-to="1.00" data-speed="1500">{{(1-(dayCarportLeftCount/dayCarportCount))*100|number:1}}%</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            总泊位饱和度&nbsp;<b>{{(1-(dayCarportLeftCount/dayCarportCount))|number:4}}</b>&nbsp;
+                                            总泊位饱和度&nbsp;<b>{{(1-(dayCarportLeftCount/dayCarportCount))*100|number:1}}%</b>&nbsp;
                                         </div>
                                         <div class="dataHover block9">
-                                            <table>
-                                                <tr>
-                                                    <td style="text-align:right;">江宁区：</td><td  style="text-align:left;">21 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">玄武区：</td><td  style="text-align:left;">13 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">雨花台区：</td><td  style="text-align:left;">21 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">秦淮区：</td><td  style="text-align:left;">25 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">浦口区：</td><td  style="text-align:left;">12 次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">徐州：</td><td  style="text-align:left;">21 次</td>
-                                                </tr>
-                                            </table>
+                                     
                                         </div>
                                     </div>
 
@@ -447,32 +390,13 @@
                                         </div>
                                         <div class="panel-split hidddiv"></div>
                                         <div class="panel-middle hidddiv">
-                                            <span class="panel-value" data-to="330.00" data-speed="1500">{{dayOutCount/dayOnlineCarportCount|number:3}}</span>&nbsp;
+                                            <span class="panel-value" data-to="330.00" data-speed="1500">{{dayOnlineCarportCount>0?(dayOutCount*100/dayOnlineCarportCount|number:1):0}}%</span>&nbsp;
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                          总泊位周转率&nbsp;<b>{{dayOutCount/dayOnlineCarportCount|number:4}}</b>&nbsp;
+                                          总泊位周转率&nbsp;<b>{{(dayOnlineCarportCount>0?(dayOutCount*100/dayOnlineCarportCount|number:1):0)}}%</b>&nbsp;
                                         </div>
                                         <div class="dataHover block10">
-                                            <table>
-                                                <tr>
-                                                    <td style="text-align:right;">江宁区：</td><td style="text-align:left;">0 人次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">玄武区：</td><td style="text-align:left;">0 人次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">雨花台区：</td><td style="text-align:left;">110 人次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">秦淮区：</td><td style="text-align:left;">0 人次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">浦口区：</td><td style="text-align:left;">0 人次</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align:right;">徐州：</td><td style="text-align:left;">0 人次</td>
-                                                </tr>
-                                            </table>
+                                         
                                         </div>
                                     </div>
 

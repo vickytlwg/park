@@ -131,7 +131,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         getPositionData.getOutsideParkByStreetId(streetId).then(function(result) {
             $scope.parks = filtPark(result);
             if($scope.parks!=undefined&&$scope.parks.length==1){
-                $scope.parkid=$scope.parks[0].id;
+                $scope.parkid=$scope.parks[0].value;
             }
         });
     };

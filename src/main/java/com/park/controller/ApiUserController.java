@@ -1,6 +1,7 @@
 package com.park.controller;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import com.park.service.AuthorityService;
 import com.park.service.TokenService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
+import com.jpush.Jpush;
 
 @Controller
 @RequestMapping("/api/user")
@@ -102,5 +104,12 @@ public class ApiUserController {
 	public String delete(@PathVariable int id){
 		int ret = apiUserService.delete(id);
 		return Utility.createJsonMsg(ret > 0 ? 1001 : 1002, ret > 0 ? "sucessfully" : "failed");
+	}
+	@RequestMapping(value = "/testjpush", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody 
+	public void testjpush(){
+		List<String> audiences=new ArrayList<>();
+		audiences.add("2017");
+		Jpush.SendPushToAudiences(audiences);
 	}
 }
