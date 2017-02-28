@@ -16,6 +16,9 @@ public class PosChargeData {
 	
 	String portNumber;
 	
+	String rejectReason="";
+
+
 	boolean isEntrance;
 	
 	String operatorId;
@@ -53,6 +56,15 @@ public class PosChargeData {
 		this.id = id;
 	}
 
+	
+	public String getRejectReason() {
+		return rejectReason;
+	}
+
+	public void setRejectReason(String rejectReason) {
+		this.rejectReason = rejectReason;
+	}
+	
 	public String getCardNumber() {
 		return cardNumber;
 	}

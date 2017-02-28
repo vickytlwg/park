@@ -35,7 +35,10 @@
 	<select id="getDetailByCarportId" resultMap="CarportStatusDetailMapper">
 		select * from carportStatusDetail where carportId = #{param1} order by startTime desc
 	</select>
-	      	        
+	 <select id="getDetailByParkIdAndDateRange" resultType="java.util.HashMap">
+	 	SELECT c.id,c.carportId,c.startTime,c.endTime,c.charged,c.expense,c.actualExpense,businessCarport.carportNumber FROM carportStatusDetail as c LEFT JOIN businessCarport ON businessCarport.id=c.`carportId` 
+	 	WHERE businessCarport.parkId=#{parkId} AND c.`startTime` BETWEEN #{startDate} AND #{endDate}
+	 </select>   
 	<select id="limitGet" resultMap="CarportStatusDetailMapper">
 		select * from carportStatusDetail limit #{param1}, #{param2}
 	</select>

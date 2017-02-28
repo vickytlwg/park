@@ -66,11 +66,7 @@ public class IndexController {
 				if(user.getRole() == AuthUserRole.ADMIN.getValue())
 					isAdmin=true;
 	//			modelMap.addAttribute("isAdmin", isAdmin);
-				
-				Set<Page> pages = pageService.getUserPage(user.getId()); 
-				for(Page page : pages){
-	//				modelMap.addAttribute(page.getPageKey(), true);
-				}
+
 			}
 			String redirectUrl=(String) session.getAttribute("redirectUrl");
 			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {

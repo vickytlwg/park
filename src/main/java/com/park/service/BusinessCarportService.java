@@ -1,10 +1,12 @@
 package com.park.service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
 
 public interface BusinessCarportService {
@@ -42,5 +44,7 @@ public interface BusinessCarportService {
 	public List<CarportStatusDetail> getDetailByCarportId(int carportId);
 	
 	public CarportStatusDetail getLatestDetailByCarportId(int carportId);
+	
+	public List<BusinessCarportStatus> getBusinessStatusByParkId(int parkId) throws ParseException, Exception;
 	
 }

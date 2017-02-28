@@ -1,5 +1,5 @@
-<script src="/park/script/businessCarportAngular.js"></script>
-<script src="/park/script/businessCarport.js?"></script>
+<script src="/park/script/businessCarportAngular.js?v=1.2"></script>
+<script src="/park/script/businessCarport.js?v=1.2"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <script src="/park/script/datepicker.js"></script>
 <script src="/park/script/highcharts.js"></script>
@@ -38,11 +38,11 @@
 						<div >
 							 <table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
 					            <tr>
-					             
+										<th ></th>
 										<th ><span style="padding-left:15%">Id</span></th>		
 										<th><span style="padding-left:15%">停车场名称</span></th>
 										<th><span style="padding-left:15%">停车位编号</span></th>
-										<th><span style="padding-left:15%">MAC Id</span></th>
+										<th><span style="padding-left:15%">MAC</span></th>
 										<th><span style="padding-left:15%">状态</span></th>
 										<th><span style="padding-left:15%">楼层</span></th>
 										<th><span style="padding-left:15%">位置</span></th>
@@ -56,7 +56,7 @@
 								<td ng-if="$even" class='info'>{{item.id}}</td>
 								<td>{{item.parkName}}</td>
 								<td>{{item.carportNumber}}</td>
-								<td>{{item.macId}}</td>
+								<td>{{item.mac}}</td>
 								<td ng-if="item.status==1" data=1><button type='button' class='btn btn-danger'>有车</button></td>
 								<td ng-if="item.status==0" data=0><button type='button' class='btn btn-success'>无车</button></td>
 								<td>{{item.floor}}</td>

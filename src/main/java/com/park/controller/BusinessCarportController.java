@@ -30,6 +30,7 @@ import com.park.model.AuthUserRole;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
 import com.park.model.BusinessCarportDetailSimple;
+import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
 import com.park.model.Page;
 import com.park.model.Status;
@@ -381,5 +382,32 @@ return Utility.gson.toJson(ret);
 		ret.put("num", insertnum);
 		return Utility.gson.toJson(ret);
 		
+	}
+	@RequestMapping(value="/businessCarportStatus")
+	public String businessCarportStatus(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "businessCarportStatus";
+	}
+	@RequestMapping(value="/getBusinessCarportStatusByParkId/{parkId}",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getBusinessCarportStatusByParkId(@PathVariable("parkId") int parkId) throws ParseException, Exception{
+		Map<String, Object> result=new HashMap<>();
+		List<BusinessCarportStatus> businessCarportStatus=businessCarportService.getBusinessStatusByParkId(parkId);
+		
+		result.put("status", "1001");
+		result.put("body", businessCarportStatus);
+		return Utility.gson.toJson(result);
 	}
 }

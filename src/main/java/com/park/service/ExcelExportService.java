@@ -341,6 +341,10 @@ public class ExcelExportService {
 						cell11.setCellValue("");
 					}
 					
+					XSSFCell cell12= row1.createCell(11);				
+					cell12.setCellStyle(style2);
+					cell12.setCellValue(posdata.getRejectReason());
+					
 				}
 				
 	}

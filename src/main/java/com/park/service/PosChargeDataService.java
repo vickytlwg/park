@@ -60,6 +60,8 @@ public interface PosChargeDataService {
 		
 	public PosChargeData pay(String cardNumber, double money) throws Exception;
 	
+	public PosChargeData updateRejectReason(String cardNumber,String rejectReason) throws Exception;
+	
 	public List<PosChargeData> repay(String cardNumber, double money) throws Exception;
 	
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
@@ -77,6 +79,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getByCardNumber(String cardNumber);
 	
 	public List<PosChargeData> getByParkName(String parkName);
+	
+	public List<PosChargeData> hardwareRecord(Integer parkId,String startDate,String endDate) throws ParseException, Exception;
 	
 	public List<Map<String, Object>> getFeeOperatorChargeData(Date startDate,Date endDate);
 

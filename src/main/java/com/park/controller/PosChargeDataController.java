@@ -29,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.dao.CarportStatusDetailDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
@@ -66,7 +68,9 @@ public class PosChargeDataController {
 	@Autowired
 	private ExcelExportService excelService;
 
-
+	@Autowired 
+	private CarportStatusDetailDAO carportStatusDetailDAO;
+	
 
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
@@ -624,6 +628,18 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
+	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String rejectReason(@RequestBody Map<String, Object> args) {
+		String cardNumber = (String) args.get("cardNumber");
+		String rejectReason = (String) args.get("rejectReason");
+		PosChargeData lastCharge = null;
+		try {
+			lastCharge = chargeSerivce.updateRejectReason(cardNumber, rejectReason);
+		} catch (Exception e) {
+			return Utility.createJsonMsg(1002, "异常");
+		}
+		return Utility.createJsonMsg(1001, "success", lastCharge);
+	}
 
 	@RequestMapping(value = "/payById", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String payById(@RequestBody Map<String, Object> args) {
@@ -687,6 +703,19 @@ public class PosChargeDataController {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
 		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	
+	@RequestMapping(value="/hardwareRecord",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String hardwareRecord(@RequestBody Map<String, Object> args) throws Exception{
+		Integer parkId=(Integer) args.get("parkId");
+		String startDate=(String) args.get("startDate");
+		String endDate=(String) args.get("endDate");
+
+		Map<String, Object> result=new HashMap<>();
+		result.put("status", 1001);
+	
+		return Utility.gson.toJson(result);
 	}
 
 	@RequestMapping("/getExcel")

@@ -65,6 +65,7 @@
 										<th><span>找零</span></th>	
 										<th><span>进场时间</span></th>	
 										<th><span>离场时间</span></th>
+										<th><span>拒缴理由</span></th>
 										<th><span>查看图片</span></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
@@ -83,6 +84,7 @@
 				          		<td ng-bind="item.changeMoney"></td>
 				          		<td ng-bind="item.entranceDate"></td>
 				          		<td ng-bind="item.exitDate"></td>
+								<td ng-bind="item.rejectReason"></td>
 				          		<td ng-if="item.url!=''"><a href={{item.url}} target="_blank">查看
                                 </a></td>
 								<td ng-if="item.url==''">暂无</td>

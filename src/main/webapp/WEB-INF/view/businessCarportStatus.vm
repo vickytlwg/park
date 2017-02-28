@@ -1,0 +1,75 @@
+<script src="/park/script/businessCarportStatus.js?v=1.0"></script>
+
+
+<div class="content-wrapper" ng-app="businessCarportStatusApp" ng-controller="businessCarportStatusCtrl">
+	<section class="content-header">
+          <h1>
+            车位状态        
+          </h1>        
+    </section>
+
+    <section class="content">
+       <div class="row">
+            <div class="col-xs-12">
+              	<div class="box">
+	              
+	                <div class="box-body">  		            
+	                	<div class="pull-right">
+	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange()">
+	                		 <option value=-1>所有停车场</option>
+						
+	                	</select>
+	                	</div>
+	                	
+	                	<br/>   
+	                    <br/> 
+						<div >
+							 <table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
+					            <tr>
+										<th ></th>
+										<th ><span style="padding-left:15%">Id</span></th>		
+										<th><span style="padding-left:15%">停车场</span></th>
+										<th><span style="padding-left:15%">车位编号</span></th>
+										<th><span style="padding-left:15%">MAC</span></th>
+										<th><span style="padding-left:15%">状态</span></th>
+										<th><span style="padding-left:15%">在停车辆</span></th>
+										<th><span style="padding-left:15%">使用率</span></th>
+										<th><span style="padding-left:15%">应收费用</span></th>
+										<th><span style="padding-left:15%">实际收费</span></th>
+										<th><span style="padding-left:15%">地磁计费</span></th>
+										<th><span style="padding-left:15%">位置</span></th>
+										<th><span style="padding-left:15%">描述</span></th>
+										<th><span style="padding-left:15%">日期</span></th>	
+					            </tr>
+					          <tbody id="businessCarportBody"></tbody>
+							  <tr ng-repeat="item in carportStatuses" >
+								<td><input type="checkbox" /></td>
+								<td style=" text-align: center;vertical-align: middle;" ng-if="$odd" class='success'>{{item.id}}</td>
+								<td style=" text-align: center;vertical-align: middle;" ng-if="$even" class='info'>{{item.id}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.parkName}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.carportNumber}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.mac}}</td>
+								<td ng-if="item.status==1" data=1><button type='button' class='btn btn-danger'>有车</button></td>
+								<td ng-if="item.status==0" data=0><button type='button' class='btn btn-success'>无车</button></td>
+								<td ng-if="item.cardNumber!=undefined" style="background:#1A42E6;color:#FFFFFF; text-align: center;vertical-align: middle;"><strong>{{item.cardNumber}}</strong></td>
+								<td ng-if="item.cardNumber==undefined">{{item.cardNumber}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.usage*100|number:2}}%</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.posCharge}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.posRealCharge}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.hardwareCharge}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.position}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.description}}</td>
+								<td style=" text-align: center;vertical-align: middle;">{{item.date}}</td>
+                              </tr>
+					          </table>
+    					</div>
+    				</div>
+    				<div class="box-footer clearfix">
+      					<div id='pagination'></div>
+      				</div>
+	            </div>
+            </div>
+        </div>
+    </section>
+</div>
+    

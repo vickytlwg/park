@@ -6,6 +6,8 @@ public class CarportStatusDetail {
 
 	private int id;
 	private int carportId;
+	private int carportNumber;
+	
 	private Date startTime;
 	private Date endTime;
 	private int charged;
@@ -18,6 +20,14 @@ public class CarportStatusDetail {
 	public int getCarportId() {
 		return carportId;
 	}
+	
+	public int getCarportNumber() {
+		return carportNumber;
+	}
+	public void setCarportNumber(int carportNumber) {
+		this.carportNumber = carportNumber;
+	}
+	
 	public Date getStartTime() {
 		return startTime;
 	}

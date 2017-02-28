@@ -3,7 +3,7 @@
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/datepicker.js"></script>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script src="/park/script/outsideParkStatusAdmin.js?v=2.3"></script>
+<script src="/park/script/outsideParkStatusAdmin.js?v=2.31"></script>
 <div class="content-wrapper" ng-app="outsideParkStatusApp" ng-controller="outsideParkStatusCtrl">
 <section class="content-header">
           <h1>

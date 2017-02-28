@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.park.dao.CarportStatusDetailDAO;
 import com.park.dao.PosChargeDataDAO;
 import com.park.dao.PosdataDAO;
+import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
@@ -43,8 +45,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Autowired
 	FormatTime formatTime;
 	
-	@Autowired
-	private PosdataService chargeSerivce;
+	@Autowired 
+	private CarportStatusDetailDAO carportStatusDetailDAO;
 		
 	@Autowired
 	FeeCriterionService criterionService;
@@ -127,7 +129,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
 		
-		Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+	//	Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 		if (money >= 0) {
 			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
 			lastCharge.setPaidCompleted(true);
@@ -185,7 +187,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			else {
 				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
 			}
-			this.update(charge);
+			if (!isQuery) {
+				this.update(charge);
+			}
+			
 			
 		} else {
 			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
@@ -211,7 +216,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			else {
 				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
 			}
-			this.update(charge);
+			if (!isQuery) {
+				this.update(charge);
+			}
+			
 		}
 		
 	}
@@ -713,5 +721,43 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			int carportNumber) {
 		// TODO Auto-generated method stub
 		return chargeDao.selectPosdataByParkAndRangeAndCarportNumber(startDay, endDay, parkId, carportNumber);
+	}
+
+	@Override
+	public List<PosChargeData> hardwareRecord(Integer parkId, String startDate, String endDate) throws Exception {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> carportStatusDetails=carportStatusDetailDAO.getDetailByParkIdAndDateRange(parkId, startDate, endDate);
+		List<PosChargeData> posChargeDatas=new ArrayList<>();
+		SimpleDateFormat sFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for(Map<String, Object> c:carportStatusDetails){
+			if (c.get("endTime")!=null) {
+				PosChargeData tmPosChargeData=new PosChargeData();
+			//	tmPosChargeData.setCardNumber(Integer.toString(c.getCarportId()));
+				tmPosChargeData.setEntranceDate(sFormat.format(c.get("startTime")));
+				tmPosChargeData.setExitDate(sFormat.format(c.get("endTime")));
+				tmPosChargeData.setParkId(parkId);
+				tmPosChargeData.setPortNumber(String.valueOf(c.get("carportNumber")));
+				tmPosChargeData.setIsLargeCar(false);
+				tmPosChargeData.setIsOneTimeExpense(0);	
+				posChargeDatas.add(tmPosChargeData);
+			}			
+		}
+		for(PosChargeData p:posChargeDatas){
+			this.calExpense(p, p.getExitDate(), true);
+		}
+		return posChargeDatas;
+	}
+
+	@Override
+	public PosChargeData updateRejectReason(String cardNumber, String rejectReason) throws Exception {
+		// TODO Auto-generated method stub
+		List<PosChargeData> charges = this.getCharges(cardNumber);
+		if(charges.isEmpty()){
+			return null;
+		}
+		PosChargeData lastCharge = charges.get(0);
+		lastCharge.setRejectReason(rejectReason);
+		this.update(lastCharge);
+		return lastCharge;
 	}
 }

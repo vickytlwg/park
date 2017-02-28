@@ -213,6 +213,7 @@
 					<li #if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
 					<li #if(!$isAdmin && !$park_posStatus) hidden#end><a href="/park/posStatus"><i class="fa fa-pie-chart"></i>终端状态</a></li>
 					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarportAngular" ><i class="fa fa-car"></i>车位管理</a></li>
+					<li #if(!$isAdmin && !$park_businessCarport) hidden#end><a href="/park/businessCarportStatus" ><i class="fa fa-car"></i>车位状态</a></li>
 				</ul>
 			</li>
 			

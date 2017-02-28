@@ -1,5 +1,8 @@
 package com.park.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,12 +19,15 @@ import com.park.dao.HardwareDAO;
 import com.park.dao.ParkDAO;
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
 import com.park.model.Hardware;
 import com.park.model.HardwareType;
+import com.park.model.PosChargeData;
 import com.park.model.Status;
 import com.park.service.BusinessCarportService;
 import com.park.service.HardwareService;
+import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Transactional
@@ -40,7 +46,14 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	private CarportStatusDetailDAO carportStatusDetailDAO;
 	
 	@Autowired
+	PosChargeDataService chargeSerivce;
+	
+	@Autowired
 	private ParkDAO parkDAO;
+	
+	@Autowired
+	private PosChargeDataService poschargeDataService;
+
 	
 	private static Log logger = LogFactory.getLog(BusinessCarportServiceImpl.class);
 
@@ -248,6 +261,52 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			}
 		}
 		return insertnum;
+	}
+
+	@Override
+	public List<BusinessCarportStatus> getBusinessStatusByParkId(int parkId) throws Exception {
+		// TODO Auto-generated method stub
+		List<BusinessCarportDetail> businessCarportDetails=this.getBusinessCarportDetail(0, 200,parkId);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String nowDate=sdf.format(new Date());
+		List<PosChargeData> posChargeDatas= chargeSerivce.getByParkAndDay(parkId,nowDate);
+		String startDate=nowDate+" 00:00:00";
+		String endDate=nowDate+" 23:59:59";
+		List<PosChargeData> hardwarePosChargeDatas=poschargeDataService.hardwareRecord(parkId,startDate,endDate );
+		
+		List<BusinessCarportStatus> businessCarportStatuses=new ArrayList<>();
+		for(BusinessCarportDetail b:businessCarportDetails){
+			BusinessCarportStatus  businessCarportStatus=new BusinessCarportStatus();
+			businessCarportStatus.setId(b.getId());
+			businessCarportStatus.setCarportNumber(b.getCarportNumber());
+			businessCarportStatus.setDate(b.getDate());
+			businessCarportStatus.setMac(b.getMac());
+			businessCarportStatus.setParkName(b.getParkName());
+			businessCarportStatus.setDescription(b.getDescription());
+			businessCarportStatus.setStatus(b.getStatus());
+			businessCarportStatus.setPosition(b.getPosition());
+			businessCarportStatus.setUsage(this.getCarportUsage(b.getId(), sf.parse(startDate), sf.parse(endDate)));
+			for(PosChargeData p1:posChargeDatas){
+				int a=0;
+				if (Integer.parseInt(p1.getPortNumber())==b.getCarportNumber()) {
+					if (a==0&&p1.getExitDate()==null) {
+						businessCarportStatus.setCardNumber(p1.getCardNumber());
+					}
+					a++;
+					businessCarportStatus.setPosCharge(businessCarportStatus.getPosCharge()+p1.getChargeMoney());
+					businessCarportStatus.setPosRealCharge(businessCarportStatus.getPosRealCharge()+p1.getPaidMoney()+p1.getGivenMoney()-p1.getChangeMoney());
+				}
+			}
+			for(PosChargeData hp:hardwarePosChargeDatas){
+				if (Integer.parseInt(hp.getPortNumber())==b.getCarportNumber()) {
+					businessCarportStatus.setHardwareCharge(businessCarportStatus.getHardwareCharge()+hp.getChargeMoney());
+				}
+				
+			}
+			businessCarportStatuses.add(businessCarportStatus);
+		}
+		return businessCarportStatuses;
 	}
 
 	
