@@ -16,7 +16,7 @@
 		bindSearchParkChange();
 		bindaddBusinessCarportNum();
 		bindaddCarportSubmit();		
-		setInterval("$.fn.businessCarport.bindStatusbutton()",3000);
+		setInterval("$.fn.businessCarport.bindStatusbutton()",1000);
 		// setInterval(function(){
 			// renderBusinessCarport($.fn.page.pageSize * ($.fn.page.currentPage - 1), $.fn.page.pageSize);
 // 
@@ -451,6 +451,7 @@
 	       
             var statusButton = $('td button');
             $.each(statusButton,function(){
+                $(this).unbind();
                 $(this).on('click', $(this), function(){
                 var button = $(this);
                 dateInitial();
@@ -500,7 +501,7 @@
 	//Highcharts.setOptions({ global: { useUTC: false } });   
 	
 	var renderCarportStatusChart = function(){
-		event.stopPropagation();
+	//	event.stopPropagation();
 		var id = $('#carportUsage').attr('carportId');
 		var startDay = $('#carportStartDate').val();
 		var endDay = $('#carportEndDate').val();
@@ -526,6 +527,10 @@
 					var endTime = carportUsage[i]['endTime'];
 					if(startTime == undefined)
 						continue;
+						//只允许最新的数据未出场是空的  担心异常
+					if (endTime==undefined&&i!=(carportUsage.length-1)) {
+                        continue;
+                    };
 					var startMilliSec = Date.parse(startTime);
 					startMilliSec = startMilliSec > parsedStartDay ? startMilliSec : parsedStartDay;					
 					  var endTimeMillSec;
@@ -547,6 +552,7 @@
 				rate = rate.toFixed(2);
 				
 				chartData.push([parsedEndDay, null, null]);
+				$('#carportUsageChart').html("");
 				$('#carportUsageChart').highcharts({
 					 chart: {
 					        type: 'arearange',
@@ -601,7 +607,7 @@
 				tbody.html('');
 				for(var i = 0; i < carportUsage.length; i++){
 					var tr = $('<tr></tr>');
-					tr.append('<td>' + (carportUsage[i]['carportId']) + '</td>');
+					tr.append('<td>' + (carportUsage[i]['id']) + '</td>');
 					tr.append('<td>' + (carportUsage[i]['startTime'] == undefined ? '' : carportUsage[i]['startTime']) + '</td>');
 //					if(carportUsage[i]['startTime']!=undefined&&carportUsage[i]['endTime']!=undefined){
 //						var date1=new Date(carportUsage[i]['startTime']);

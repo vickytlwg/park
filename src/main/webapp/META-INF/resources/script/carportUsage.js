@@ -410,11 +410,13 @@
                     var endTime = carportUsage[i]['endTime'];
                     if(startTime == undefined )
                         continue;
-                   
+                    if (endTime!=undefined&&i!=0) {
+                        continue;
+                    };
                     var startMilliSec = Date.parse(startTime);
                     startMilliSec = startMilliSec > parsedStartDay ? startMilliSec : parsedStartDay;                                        
                     var endTimeMillSec;
-                    if(endTime!=undefined){
+                    if(endTime!=undefined&&i==0){
                         endTimeMillSec = Date.parse(endTime);
                     }
                     else{

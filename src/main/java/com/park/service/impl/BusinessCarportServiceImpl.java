@@ -219,13 +219,20 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		List<CarportStatusDetail> carportUsages = getDayCarportStatusDetail(carportId, startDay, endDay);
 		
 		long usage = 0;
+		int num=1;
 		for (CarportStatusDetail c : carportUsages)
 		{
+			
 			if(c.getStartTime() == null )
 				continue;
-			if(c.getEndTime()==null){
+			if(c.getEndTime()==null&&num==carportUsages.size()){
 				c.setEndTime(new Date());
 			}
+			else if(c.getEndTime()==null&&num!=carportUsages.size()){
+				num++;
+				continue;
+			}
+			num++;
 			Date carportStart = c.getStartTime();
 			Date carportEnd = c.getEndTime();
 			if(carportStart.before(startDay)){

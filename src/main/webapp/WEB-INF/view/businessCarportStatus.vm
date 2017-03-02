@@ -1,6 +1,11 @@
 <script src="/park/script/businessCarportStatus.js?v=1.0"></script>
-
-
+<script src="/park/script/businessCarport.js?v=1.21"></script>
+<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
+<script src="/park/script/datepicker.js"></script>
+<script src="/park/script/highcharts.js"></script>
+<!--<script src="/park/script/exporting.js"></script>-->
+<script src="/park/script/HighchartTheme.js"></script>
+<script type="text/javascript" src="/park/script/highcharts-more.js"></script>
 <div class="content-wrapper" ng-app="businessCarportStatusApp" ng-controller="businessCarportStatusCtrl">
 	<section class="content-header">
           <h1>
@@ -71,5 +76,78 @@
             </div>
         </div>
     </section>
+	<div class="modal fade" id="carportUsage" tabindex="-1" role="dialog" style="min-width:600px" aria-hidden='true'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+		
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+				<h4 class='modal-title' >停车位</h4>
+			</div>
+			
+			<div class='modal-body'>
+				<div>
+					<ul id="myTab" class="nav nav-tabs">  						
+   						<li class="active"><a href="#usageTable" data-toggle="tab">表格</a></li>
+						<li ><a href="#usageChart" data-toggle="tab">图表</a></li>
+   					</ul>
+				</div>
+				<div class="tab-content">
+
+				<div class="tab-pane fade in active" id="usageTable">
+						<div class="form-group">
+							<label for="carportStartDateForTable" class="control-label">开始日期</label>
+							<input type="text" id="carportStartDateForTable"  class="form-control date">									
+						</div>
+						<div class="form-group">
+							<label for="carportEndDateForTable" class="control-label">结束日期</label>
+							<input type="text" id="carportEndDateForTable"  class="form-control date">									
+						</div>
+						<table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
+							<thead>
+							<tr>
+								<th>ID</th>
+								<th>开始时间</th>
+								<th>结束时间</th>
+								<!--<th>应付</th>
+								<th>实付</th>-->
+							</tr>
+							</thead>
+							<tbody id="carportUsageTbody">
+							</tbody>
+						</table>
+					</div>
+					
+						<div class="tab-pane fade " id="usageChart">
+						<div class="form-group">
+							<label for="carportStartDate" class="control-label">开始日期</label>
+							<input type="text" id="carportStartDate"  class="form-control date">									
+						</div>
+						<div class="form-group">
+							<label for="carportEndDate" class="control-label">结束日期</label>
+							<input type="text" id="carportEndDate"  class="form-control date">									
+						</div>					
+						<div class="form-group" style="width:100%">
+						<div id = "carportUsageChart" >
+						</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>				
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$.fn.businessCarport.initial();
+});
+</script>
 </div>
     
