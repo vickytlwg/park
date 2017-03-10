@@ -96,7 +96,7 @@
 	</mvc:interceptors>
 
 	<!-- 对静态资源文件的访问  -->
-	<mvc:resources mapping="/image/**" location="/META-INF/resources/image/"
+	<mvc:resources mapping="/image/**" location="/META-INF/resources/Images/"
     	cache-period="31556926" />
     	<mvc:resources mapping="/img/**" location="/META-INF/resources/img/"
     	cache-period="31556926" />

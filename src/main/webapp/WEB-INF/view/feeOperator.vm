@@ -41,6 +41,7 @@
 										<th><span style="padding-left:15%">Id</span></th>
 										<th><span style="padding-left:15%">操作员帐号</span></th>
 										<th><span style="padding-left:15%">操作员姓名</span></th>
+										<th><span style="padding-left:15%">操作员身份证</span></th>
 										<th><span style="padding-left:15%">联系电话</span></th>
 										<th><span style="padding-left:15%">签到状态</span></th>
 										<th><span style="padding-left:15%">上次签到时间</span></th>
@@ -56,6 +57,7 @@
 							  <td ng-bind="feeOperator.id"></td>
 							  <td ng-bind="feeOperator.account"></td>
 							  <td ng-bind="feeOperator.name"></td>
+							  <td ng-bind="feeOperator.idnumber"></td>
 							  <td ng-bind="feeOperator.phone"></td>
 							  <td ng-if="feeOperator.signstatus==false">未签到</td>
 							  <td ng-if="feeOperator.signstatus==true">已签到</td>

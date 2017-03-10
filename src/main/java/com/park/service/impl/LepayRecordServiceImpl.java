@@ -62,4 +62,10 @@ public class LepayRecordServiceImpl implements LepayRecordService {
 		return lepayrecordMapper.getByCount(start, count);
 	}
 
+	@Override
+	public Lepayrecord getByOutTradeNo(String outTradeNo) {
+		// TODO Auto-generated method stub
+		return lepayrecordMapper.getByOutTradeNo(outTradeNo);
+	}
+
 }

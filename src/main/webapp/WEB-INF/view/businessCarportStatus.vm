@@ -58,7 +58,10 @@
 								<td ng-if="item.status==0" data=0><button type='button' class='btn btn-success'>无车</button></td>
 								<td ng-if="item.cardNumber!=undefined" style="background:#1A42E6;color:#FFFFFF; text-align: center;vertical-align: middle;"><strong>{{item.cardNumber}}</strong></td>
 								<td ng-if="item.cardNumber==undefined">{{item.cardNumber}}</td>
-								<td style=" text-align: center;vertical-align: middle;">{{item.usage*100|number:2}}%</td>
+								<td style=" text-align: center;vertical-align: middle;" ng-if="item.usage<0.6">{{item.usage*100|number:2}}%<div class="progress"><div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style="width:{{item.usage*100}}%">
+                                </div> </div></td>
+								<td style=" text-align: center;vertical-align: middle;" ng-if="item.usage>=0.6">{{item.usage*100|number:2}}%<div class="progress"><div class='progress-bar progress-bar-danger' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style="width:{{item.usage*100}}%">
+                                </div> </div></td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.posCharge}}</td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.posRealCharge}}</td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.hardwareCharge}}</td>

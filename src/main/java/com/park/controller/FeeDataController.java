@@ -1,7 +1,10 @@
 package com.park.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lechinepay.channel.lepay.client.DefaultLePay;
+import com.lechinepay.channel.lepay.client.apppay.AppPay;
+import com.lechinepay.channel.lepay.share.LePayParameters;
 import com.park.model.Lepayrecord;
+import com.park.model.PosChargeData;
 import com.park.service.LepayRecordService;
+import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
@@ -25,57 +33,106 @@ public class FeeDataController {
 private static Log logger = LogFactory.getLog(FeeDataController.class);
 @Autowired
 LepayRecordService lepayRecord;
+@Autowired
+PosChargeDataService poschargedataService;
 @RequestMapping(value="/alipaydata/insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
-public String alipaydataInsert(HttpServletRequest request){
-	Map<String, Object> result=new HashMap<>();
+public void alipaydataInsert(HttpServletRequest request) throws IOException {
+    String encoding = request.getParameter(LePayParameters.ENCODING);
+    if (null == encoding || encoding.trim().isEmpty()) {
+        encoding = DefaultLePay.ENCODING_DEFAULT_VALUE;
+    }
+    request.setCharacterEncoding(encoding);
 
+    Map<String, Object> params = new HashMap<String, Object>();
+    Map requestParams = request.getParameterMap();
+    for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+        String name = (String) iter.next();
+        String[] values = (String[]) requestParams.get(name);
+        String valueStr = "";
+        for (int i = 0; i < values.length; i++) {
+            valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+        }
+        params.put(name, valueStr);
+    }	
 	Lepayrecord lepayrecord=new Lepayrecord();
 	lepayrecord.setPaytype((short) 0);//支付宝为0
-//	String signature=request.getParameter("signature");
-	String amount=request.getParameter("amount");
+	String amount=(String) params.get("amount");
 	lepayrecord.setAmount((int) Float.parseFloat(amount));;
-	String mchId=request.getParameter("mchId");
+	String mchId=(String) params.get("mchId");
 	lepayrecord.setMchid(mchId);
-	String outTradeNo=request.getParameter("outTradeNo");
-	lepayrecord.setOuttradeno(outTradeNo);
-	String payTypeTradeNo=request.getParameter("payTypeOrderNo");
+	String cmpAppId=(String) params.get("cmpAppId");
+	lepayrecord.setCmpappid(cmpAppId);
+	
+	String[] tmpStr=((String)params.get("outTradeNo")).split(";");
+	int poschargeId=Integer.parseInt(tmpStr[1]);
+	lepayrecord.setOuttradeno(tmpStr[1]);
+	String payTypeTradeNo=(String) params.get("payTypeOrderNo");
 	lepayrecord.setPaytypetradeno(payTypeTradeNo);
-	String orderNo=request.getParameter("orderNo");
+	String orderNo=(String) params.get("orderNo");	
 	lepayrecord.setOrderno(orderNo);
-	lepayRecord.insertSelective(lepayrecord);
-	result.put("status", "success");
-	return Utility.gson.toJson(result);
+	 if (AppPay.verify(params)) {// 验证成功
+		 Lepayrecord lepayrecord2=lepayRecord.getByOutTradeNo(tmpStr[1]);
+		 if (lepayrecord2==null) {
+			 lepayRecord.insertSelective(lepayrecord);
+		}
+		 if (!lepayrecord.getOuttradeno().equals("none")) {			
+			PosChargeData posChargeData=poschargedataService.getById(poschargeId);
+			posChargeData.setPayType(0);
+			poschargedataService.update(posChargeData);
+		}
+     } else {// 验证失败
+       
+     }
+	
+	
 }
 @RequestMapping(value="/wechartdata/insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
-public String wechartdataInsert(HttpServletRequest request){
-	Map<String, Object> result=new HashMap<>();
+public void wechartdataInsert(HttpServletRequest request) throws IOException{
+    String encoding = request.getParameter(LePayParameters.ENCODING);
+    if (null == encoding || encoding.trim().isEmpty()) {
+        encoding = DefaultLePay.ENCODING_DEFAULT_VALUE;
+    }
+    request.setCharacterEncoding(encoding);
+    Map<String, Object> params = new HashMap<String, Object>();
+    Map requestParams = request.getParameterMap();
+    for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+        String name = (String) iter.next();
+        String[] values = (String[]) requestParams.get(name);
+        String valueStr = "";
+        for (int i = 0; i < values.length; i++) {
+            valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+        }
+        params.put(name, valueStr);
+    }	
 	Lepayrecord lepayrecord=new Lepayrecord();
-	logger.error("微信支付");
-	Enumeration enu=request.getParameterNames();  
-	while(enu.hasMoreElements()){  
-	String paraName=(String)enu.nextElement();  
-	logger.error(paraName+": "+request.getParameter(paraName));  
-	}  
+
 	lepayrecord.setPaytype((short) 1);//微信为1
-//	String signature=request.getParameter("signature");
-	
-	String amount=request.getParameter("amount");
-	logger.error("amount:"+amount);
+	String amount=(String) params.get("amount");
 	lepayrecord.setAmount((int) Float.parseFloat(amount));;
-	String mchId=request.getParameter("mchId");
+	String mchId=(String) params.get("mchId");
 	lepayrecord.setMchid(mchId);
-	logger.error("mchId:"+mchId);
-	String outTradeNo=request.getParameter("outTradeNo");
-	lepayrecord.setOuttradeno(outTradeNo);
-	logger.error("outTradeNo:"+outTradeNo);
-	String payTypeTradeNo=request.getParameter("payTypeOrderNo");
+	String cmpAppId=(String) params.get("cmpAppId");
+	lepayrecord.setCmpappid(cmpAppId);
+	String[] tmpStr=((String)params.get("outTradeNo")).split(";");
+	int poschargeId=Integer.parseInt(tmpStr[1]);
+	lepayrecord.setOuttradeno(tmpStr[1]);
+	String payTypeTradeNo=(String) params.get("payTypeOrderNo");
 	lepayrecord.setPaytypetradeno(payTypeTradeNo);
-	logger.error("payTypeTradeNo:"+payTypeTradeNo);
-	String orderNo=request.getParameter("orderNo");
-	logger.error("orderNo:"+orderNo);
+	String orderNo=(String) params.get("orderNo");
 	lepayrecord.setOrderno(orderNo);
-	lepayRecord.insertSelective(lepayrecord);
-	result.put("status", "success");
-	return Utility.gson.toJson(result);
+	
+	 if (AppPay.verify(params)) {// 验证成功
+		 Lepayrecord lepayrecord2=lepayRecord.getByOutTradeNo(tmpStr[1]);
+		 if (lepayrecord2==null) {
+			 lepayRecord.insertSelective(lepayrecord);
+		}	
+		 if (!lepayrecord.getOuttradeno().equals("none")) {			   	
+				PosChargeData posChargeData=poschargedataService.getById(poschargeId);
+				posChargeData.setPayType(1);
+				poschargedataService.update(posChargeData);
+			}
+     } else {// 验证失败
+       
+     }
 }
 }

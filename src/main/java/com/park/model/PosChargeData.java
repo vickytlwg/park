@@ -18,7 +18,8 @@ public class PosChargeData {
 	
 	String rejectReason="";
 
-
+    int payType=2;
+	
 	boolean isEntrance;
 	
 	String operatorId;
@@ -56,6 +57,13 @@ public class PosChargeData {
 		this.id = id;
 	}
 
+	public int getPayType() {
+		return payType;
+	}
+
+	public void setPayType(int payType) {
+		this.payType = payType;
+	} 
 	
 	public String getRejectReason() {
 		return rejectReason;

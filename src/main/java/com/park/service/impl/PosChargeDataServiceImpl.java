@@ -90,6 +90,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public int update(PosChargeData item) {
 		return chargeDao.update(item);
 	}
+	@Override
 	public List<PosChargeData> getCharges(String cardNumber) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		

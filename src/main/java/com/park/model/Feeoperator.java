@@ -8,10 +8,10 @@ public class Feeoperator {
     private Integer id;
 
     private String account;
-    
-    private String passwd;
 
     private String name;
+
+    private String passwd;
 
     private String phone;
 
@@ -20,16 +20,18 @@ public class Feeoperator {
     private Date lastsigndate;
 
     private Integer laststreetid;
-    
-    private Integer lastparkid;
 
-	private String lastposnum;
+    private String lastposnum;
+    
+    private String parkname;
+
+	private Integer lastparkid;
 
     private Date registerdate;
 
     private String other;
 
-	private String parkname;
+    private String idnumber;
 
     public Integer getId() {
         return id;
@@ -47,20 +49,20 @@ public class Feeoperator {
         this.account = account == null ? null : account.trim();
     }
 
-    public String getPasswd() {
-        return passwd;
-    }
-
-    public void setPasswd(String passwd) {
-        this.passwd = passwd == null ? null : passwd.trim();
-    }
-    
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd == null ? null : passwd.trim();
     }
 
     public String getPhone() {
@@ -103,6 +105,14 @@ public class Feeoperator {
         this.lastposnum = lastposnum == null ? null : lastposnum.trim();
     }
 
+    public Integer getLastparkid() {
+        return lastparkid;
+    }
+
+    public void setLastparkid(Integer lastparkid) {
+        this.lastparkid = lastparkid;
+    }
+
     public Date getRegisterdate() {
         return registerdate;
     }
@@ -110,7 +120,7 @@ public class Feeoperator {
     public void setRegisterdate(String registerdate) throws ParseException {
         this.registerdate = new SimpleDateFormat(Constants.DATEFORMAT).parse(registerdate);
     }
- 
+
     public String getOther() {
         return other;
     }
@@ -119,14 +129,6 @@ public class Feeoperator {
         this.other = other == null ? null : other.trim();
     }
     
-    public Integer getLastparkid() {
-		return lastparkid;
-	}
-
-	public void setLastparkid(Integer lastparkid) {
-		this.lastparkid = lastparkid;
-	}
-    
     public String getParkname() {
 		return parkname;
 	}
@@ -134,4 +136,13 @@ public class Feeoperator {
 	public void setParkname(String parkname) {
 		this.parkname = parkname;
 	}
+
+
+    public String getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(String idnumber) {
+        this.idnumber = idnumber == null ? null : idnumber.trim();
+    }
 }

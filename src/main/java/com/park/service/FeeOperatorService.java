@@ -25,5 +25,7 @@ public interface FeeOperatorService {
     
     List<Feeoperator> getByNameAndPhoneParkName(String name,String phone,String parkName);
     
+    List<Feeoperator> getOperatorByAccount(String account);
+    
     void operatorsLogout();
 }

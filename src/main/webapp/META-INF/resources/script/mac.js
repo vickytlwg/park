@@ -1,7 +1,7 @@
 (function($){
 	
 	$.fn.mac = {};
-	
+	$.fn.isInsert=false;
 	$.fn.mac.initial = function(){
 		bindTrClick();
 		bindRefreshClick();
@@ -53,6 +53,7 @@
 	/**bind add Mac click**/
 	var bindAddBtnClick = function(){
 		$('#addMac').on('click', $(this), function(){
+		    $.fn.isInsert=true;
 			addBtnClickHandle();
 		});
 	};
@@ -66,6 +67,7 @@
 	/**bind update Mac click **/
 	var bindUpdateBtnClick = function(){
 		$('#updateMac').on('click', $(this), function(){
+		    $.fn.isInsert=false;
 			updateBtnClickHandle();
 		});
 	};
@@ -99,7 +101,7 @@
 		$('#submitMacBtn').on('click', $(this), function(){		
 			var url = '';
 			var MacFields = getAddMacFormValue();
-			if(MacFields['id'] != undefined && MacFields['id'] != null ){
+			if(MacFields['id'] != undefined && MacFields['id'] != null&&!$.fn.isInsert){
 				url = $.fn.config.webroot + '/update/hardware';
 			}else{
 				url = $.fn.config.webroot + '/insert/hardware';

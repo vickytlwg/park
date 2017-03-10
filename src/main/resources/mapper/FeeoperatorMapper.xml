@@ -14,10 +14,11 @@
     <result column="lastParkId" property="lastparkid" jdbcType="INTEGER" />
     <result column="registerDate" property="registerdate" jdbcType="TIMESTAMP" />
     <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="IDNumber" property="idnumber" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, account, name, passwd, phone, signStatus, lastSignDate, lastStreetId, lastPosNum, 
-    lastParkId, registerDate, other
+    lastParkId, registerDate, other, IDNumber
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -33,13 +34,13 @@
     insert into feeOperator (id, account, name, 
       passwd, phone, signStatus, 
       lastSignDate, lastStreetId, lastPosNum, 
-      lastParkId, registerDate, other
-      )
+      lastParkId, registerDate, other, 
+      IDNumber)
     values (#{id,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{passwd,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{signstatus,jdbcType=BIT}, 
       #{lastsigndate,jdbcType=TIMESTAMP}, #{laststreetid,jdbcType=INTEGER}, #{lastposnum,jdbcType=VARCHAR}, 
-      #{lastparkid,jdbcType=INTEGER}, #{registerdate,jdbcType=TIMESTAMP}, #{other,jdbcType=VARCHAR}
-      )
+      #{lastparkid,jdbcType=INTEGER}, #{registerdate,jdbcType=TIMESTAMP}, #{other,jdbcType=VARCHAR}, 
+      #{idnumber,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Feeoperator" >
     insert into feeOperator
@@ -80,6 +81,9 @@
       <if test="other != null" >
         other,
       </if>
+      <if test="idnumber != null" >
+        IDNumber,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -117,6 +121,9 @@
       </if>
       <if test="other != null" >
         #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="idnumber != null" >
+        #{idnumber,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +163,9 @@
       <if test="other != null" >
         other = #{other,jdbcType=VARCHAR},
       </if>
+      <if test="idnumber != null" >
+        IDNumber = #{idnumber,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -171,7 +181,8 @@
       lastPosNum = #{lastposnum,jdbcType=VARCHAR},
       lastParkId = #{lastparkid,jdbcType=INTEGER},
       registerDate = #{registerdate,jdbcType=TIMESTAMP},
-      other = #{other,jdbcType=VARCHAR}
+      other = #{other,jdbcType=VARCHAR},
+      IDNumber = #{idnumber,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -180,16 +191,19 @@
   </select>
   <select id="getByStartAndCount" resultType="com.park.model.Feeoperator">
   	select f.id,f.account,f.name,f.phone,f.signstatus,f.passwd,f.lastsigndate,f.laststreetid,
-  	p.name as parkname,f.lastposnum,f.registerdate from feeOperator as f 
+  	p.name as parkname,f.lastposnum,f.registerdate,f.idnumber from feeOperator as f 
   	left join park as p on p.id=f.lastparkid
   	limit #{start},#{count} 
   </select>
   <select id="operatorValidation" resultType="com.park.model.Feeoperator">
   	select * from feeOperator where account=#{account} and passwd=#{passwd}
   </select>
+   <select id="getOperatorByAccount" resultType="com.park.model.Feeoperator">
+  	select * from feeOperator where account=#{account}
+  </select>
   <select id="getByNameAndPhoneParkName" statementType="STATEMENT" resultType="com.park.model.Feeoperator">
   	select f.id,f.account,f.name,f.phone,f.signstatus,f.passwd,f.lastsigndate,f.laststreetid,
-  	p.name as parkname,f.lastposnum,f.registerdate from feeOperator as f 
+  	p.name as parkname,f.lastposnum,f.registerdate,f.idnumber from feeOperator as f 
   	left join park as p on p.id=f.lastparkid 
   	where f.name like '%${name}%' or f.phone like '%${phone}%' or p.name like '%${parkName}%'
   </select>

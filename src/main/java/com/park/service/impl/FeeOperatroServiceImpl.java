@@ -85,4 +85,10 @@ public class FeeOperatroServiceImpl implements FeeOperatorService {
 		}
 	}
 
+	@Override
+	public List<Feeoperator> getOperatorByAccount(String account) {
+		// TODO Auto-generated method stub
+		return feeoperatroDao.getOperatorByAccount(account);
+	}
+
 }

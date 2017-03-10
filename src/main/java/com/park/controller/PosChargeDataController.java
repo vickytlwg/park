@@ -35,6 +35,7 @@ import com.park.model.AuthUserRole;
 import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
+import com.park.model.Feeoperator;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
@@ -43,6 +44,8 @@ import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
+import com.park.service.FeeCriterionService;
+import com.park.service.FeeOperatorService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
@@ -67,11 +70,13 @@ public class PosChargeDataController {
 
 	@Autowired
 	private ExcelExportService excelService;
-
-	@Autowired 
-	private CarportStatusDetailDAO carportStatusDetailDAO;
 	
-
+	@Autowired
+	private FeeOperatorService feeOperatorService;
+	
+	@Autowired
+	private FeeCriterionService feeCriterionService;
+	
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -359,7 +364,15 @@ public class PosChargeDataController {
 		String userName = (String) session.getAttribute("username");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkAuthority(userName));
 	}
-
+	
+	@RequestMapping(value="/getByCount",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getByCount(@RequestBody Map<String, Object> args){
+		int low = (int) args.get("low");
+		int count = (int) args.get("count");
+		List<PosChargeData> posChargeDatas=chargeSerivce.getPage(low, count);
+		return Utility.createJsonMsg(1001, "success",posChargeDatas);
+	}
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args, HttpSession session) {
@@ -627,6 +640,53 @@ public class PosChargeDataController {
 		}
 
 		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	@RequestMapping(value = "/getInfoByCardNumber", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String getInfoByCardNumber(@RequestBody Map<String, Object> args) throws Exception {
+		String cardNumber = (String) args.get("cardNumber");
+		Map<String, Object> result=new HashMap<>();
+		List<PosChargeData> charges = chargeSerivce.getDebt(cardNumber);
+		if (charges.isEmpty()) {
+			result.put("status", 1002);
+			return Utility.gson.toJson(result);
+		}
+		PosChargeData lastCharge = charges.get(0);
+		double charge=(lastCharge.getChargeMoney()-lastCharge.getPaidMoney())>0?(lastCharge.getChargeMoney()-lastCharge.getPaidMoney()):0;
+		result.put("deposit", lastCharge.getPaidMoney());
+		result.put("charge", charge);
+		result.put("chargeId", lastCharge.getId());
+		Feeoperator feeoperator=feeOperatorService.getOperatorByAccount(lastCharge.getOperatorId()).get(0);
+		if (feeoperator==null) {
+			result.put("status", 1002);
+			return Utility.gson.toJson(result);
+		}
+		result.put("operatorName", feeoperator.getName());
+		result.put("operatorPhone", feeoperator.getPhone());
+		Park park=parkService.getParkById(lastCharge.getParkId());		
+		FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+		if (feeCriterion==null) {
+			result.put("status", 1002);
+			return Utility.gson.toJson(result);
+		}
+		result.put("feeCriterion", feeCriterion.getExplaination());
+		result.put("status", 1001);
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value = "/pushInfoFromWechat", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String pushInfoFromWechat(@RequestBody Map<String, Object> args) throws Exception {
+		Integer chargeId=(Integer) args.get("chargeId");
+		Map<String, Object> result=new HashMap<>();
+		PosChargeData posChargeData=chargeSerivce.getById(chargeId);
+		Double charge=(Double)args.get("charge");
+		posChargeData.setGivenMoney(charge);
+		posChargeData.setPaidCompleted(true);
+		if (chargeSerivce.update(posChargeData)==1) {
+			result.put("status", 1001);
+		}
+		else{
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
 	}
 	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String rejectReason(@RequestBody Map<String, Object> args) {

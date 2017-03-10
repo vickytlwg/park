@@ -51,12 +51,12 @@
 					            </tr>
 					          <tbody id="businessCarportBody"></tbody>
 							  <tr ng-repeat="item in carportDetails" >
-								<td><input type="checkbox" /></td>
+								<td style=" text-align: center;vertical-align: middle;" ><input type="checkbox" /></td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$odd" class='success'>{{item.id}}</td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$even" class='info'>{{item.id}}</td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.parkName}}</td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.carportNumber}}</td>
-								<td style=" text-align: center;vertical-align: middle;">{{item.mac}}</td>
+								<td style=" text-align: center;vertical-align: middle;" data={{item.macId}}>{{item.mac}}</td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="item.status==1" data=1><button type='button' class='btn btn-danger'>有车</button></td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="item.status==0" data=0><button type='button' class='btn btn-success'>无车</button></td>
 								<td style=" text-align: center;vertical-align: middle;">{{item.floor}}</td>

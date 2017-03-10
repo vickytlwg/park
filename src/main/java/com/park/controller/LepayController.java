@@ -41,8 +41,7 @@ public class LepayController {
 		Integer amount=(Integer)args.get("amount");
 		int type=(int) args.get("type");
 		Map<String, Object> result=new HashMap<>();
-		LepayService lepayService=new LepayService();
-		
+		LepayService lepayService=new LepayService();		
 		Map<String, Object> data=lepayService.saomaPay((long)amount, type);
 		if (data!=null) {
 			result.put("status", 1001);
@@ -50,14 +49,29 @@ public class LepayController {
 		}
 		else {
 			result.put("status", 1002);
-		}
-		
+		}		
 		return Utility.gson.toJson(result);
 	}
-	
+	@RequestMapping(value="/payByPosChargeDataId",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String payByPosChargeDataId(@RequestBody Map<String, Object> args){
+		Integer amount=(Integer)args.get("amount");
+		int type=(int) args.get("type");
+		int poschargeId=(int) args.get("poschargedataId");
+		Map<String, Object> result=new HashMap<>();
+		LepayService lepayService=new LepayService();		
+		Map<String, Object> data=lepayService.saomaPayByPosdataId((long)amount, type,poschargeId);
+		if (data!=null) {
+			result.put("status", 1001);
+			result.put("body", data);
+		}
+		else {
+			result.put("status", 1002);
+		}		
+		return Utility.gson.toJson(result);
+	}
 	@RequestMapping(value = "/record", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public String parks(ModelMap modelMap, HttpServletRequest request, HttpSession session){
-		
+	public String parks(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
@@ -82,8 +96,7 @@ public class LepayController {
 	}
 	@RequestMapping(value="/record/getByCount",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String getByCount(@RequestBody Map<String, String> args){
-		
+	public String getByCount(@RequestBody Map<String, String> args){		
 		Integer start=Integer.parseInt(args.get("start"));
 		Integer count=Integer.parseInt(args.get("count"));
 		List<Lepayrecord> lepayrecords=lepayrecordService.getByCount(start, count);

@@ -22,4 +22,6 @@ public interface LepayrecordMapper {
     int getAmount();
     
     List<Lepayrecord> getByCount(@Param("start")Integer start,@Param("count")Integer count);
+    
+    Lepayrecord getByOutTradeNo(@Param("outTradeNo")String outTradeNo);
 }

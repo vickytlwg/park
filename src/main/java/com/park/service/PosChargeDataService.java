@@ -89,4 +89,6 @@ public interface PosChargeDataService {
 	List<PosChargeData> getAllByDayRange(String startDate, String endDate) throws ParseException;
 	
 	public Outsideparkinfo getOutsideparkinfoByOrigin(int parkId,String day);
+
+	List<PosChargeData> getCharges(String cardNumber) throws Exception;
 }

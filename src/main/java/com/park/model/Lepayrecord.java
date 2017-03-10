@@ -21,6 +21,8 @@ public class Lepayrecord {
 
     private Date date;
 
+    private Integer poschargeid;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class Lepayrecord {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Integer getPoschargeid() {
+        return poschargeid;
+    }
+
+    public void setPoschargeid(Integer poschargeid) {
+        this.poschargeid = poschargeid;
     }
 }
