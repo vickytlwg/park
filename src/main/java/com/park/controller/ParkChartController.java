@@ -1,6 +1,8 @@
 package com.park.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
 import com.park.model.Park;
+import com.park.service.AccessService;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
 import com.park.service.UserPagePermissionService;
@@ -34,6 +37,9 @@ public class ParkChartController {
 	@Autowired
 	private UserPagePermissionService pageService;
 	
+	@Autowired
+	private AccessService accessService;
+	
 	@RequestMapping(value = "/chart", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String parkChart(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
 		List<Park> parkList = parkService.getParks();
@@ -41,9 +47,15 @@ public class ParkChartController {
 		if(username != null)
 			parkList = parkService.filterPark(parkList, username);
 		List<Park> parkl = new ArrayList<>();
+		SimpleDateFormat sFormat=new SimpleDateFormat("yyyy-MM-dd");
+		String date=sFormat.format(new Date())+" 00:00:00";
 		for (Park park : parkList) {
 			if (park.getType()!=3) {
-				parkl.add(park);
+				int count=accessService.getAccessCountToday(park.getId(), date);
+				if (count>0) {
+					parkl.add(park);
+				}
+				
 			}
 		}
 		modelMap.addAttribute("parks", parkl);

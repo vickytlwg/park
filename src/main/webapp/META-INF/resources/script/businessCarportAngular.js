@@ -1,11 +1,11 @@
-var businessCarportApp = angular.module('businessCarportApp', []);
-businessCarportApp.controller('businessCarportCtrl', ['$scope', '$http', '$timeout','$interval',
-function($scope, $http, $timeout,$interval) {
+var businessCarportApp = angular.module('businessCarportApp', ['ui.bootstrap']);
+businessCarportApp.controller('businessCarportCtrl', ['$scope', '$http','$uibModal','$timeout','$interval',
+function($scope, $http, $modal,$timeout,$interval) {
     $scope.carportDetails = [];
     $scope.selectedIndex = -1;
     $scope.selectValue=-1;
     $scope.parks=[];
-  //  $scope.parks.push({name:"所有停车场",id:"-1"});
+
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
@@ -40,7 +40,13 @@ function($scope, $http, $timeout,$interval) {
           $scope.refreshData();
       },8000);
     
-   
+   $scope.addMacAndInsertBusinessCarport=function(){
+       $modal.open({
+           templateUrl:"addMacAndBind",
+           controller:"addMacAndInsertBusinessCarportCtrl",
+           scope:$scope
+       });
+   };
     $scope.checked = function(index){
         $scope.selectedIndex = index;
         if($scope.parks[index].checked==false)
@@ -53,12 +59,38 @@ function($scope, $http, $timeout,$interval) {
         console.log($scope.checked);
            var getdata=$http({
             method:'get',
-            url:'http://120.25.159.154/park/getBusinessCarportDetail',
+            url:'/park/getBusinessCarportDetail',
             headers:{"token":"6f13b8f3-cc3f-4e2a-a5b4-01b9cf6b40ca-1458491724564"},
             params:{low:0,count:50,parkId:109}
           }).success(function(data){
             console.log(data);
         });
     };
-}]);
+}])
+.controller("addMacAndInsertBusinessCarportCtrl",["$scope","$http","$uibModalInstance",function($scope,$http,$uibModalInstance){
+    $scope.parks=$scope.$parent.parks;
+    $scope.selectP=$scope.$parent.selectValue;
+    $scope.loading = false;
+    $scope.submitted = false;
+    $scope.close = function(){
+        $uibModalInstance.close();
+    };
+    $scope.submit=function(){        
+        var postdata={"mac":$scope.mac,"macDesc":$scope.macDesc,"parkId":$scope.selectP.id,"carportNumber":parseInt($scope.carportNumber)};
+        $http({
+            url:"/park/addMacAndInsertBusinessCarport",
+            method:"post",
+            data:angular.toJson(postdata)
+        }).success(function(response){
+            $scope.loading =false;
+            $scope.submitted = true;
+            $scope.result=response.message;
+        });
+    };
+}])
+.controller("testctrl",function($uibModalInstance){
+      $scope.close = function(){
+        $uibModalInstance.close();
+    };
+});
 

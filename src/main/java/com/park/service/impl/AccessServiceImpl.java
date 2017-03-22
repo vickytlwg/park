@@ -324,5 +324,11 @@ public class AccessServiceImpl implements AccessService{
 		return accessDetails;
 	}
 
+	@Override
+	public int getAccessCountToday(Integer parkId, String date) {
+		// TODO Auto-generated method stub
+		return accessDAO.getParkAccessCountToday(parkId.intValue(), findAccessTable(parkId),date);
+	}
+
 
 }

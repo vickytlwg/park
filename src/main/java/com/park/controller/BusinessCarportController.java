@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.tools.config.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,6 +33,8 @@ import com.park.model.BusinessCarportDetail;
 import com.park.model.BusinessCarportDetailSimple;
 import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
+import com.park.model.Constants;
+import com.park.model.Hardware;
 import com.park.model.Page;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
@@ -298,7 +301,44 @@ return Utility.gson.toJson(ret);
 		retMap.put("message", "insert businessCarport fail, mac has already been used");
 		return Utility.gson.toJson(retMap);
 	}
-
+	@RequestMapping(value = "/addMacAndInsertBusinessCarport", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String addMacAndInsertBusinessCarport(@RequestBody Map<String, Object> args){
+		Map<String, Object> result=new HashMap<>();
+		String mac =(String) args.get("mac");
+		String macDescription=(String) args.get("macDesc");
+		Hardware hardware=new Hardware();
+		hardware.setMac(mac);
+		hardware.setDescription(macDescription);
+		hardware.setType(0);
+		hardware.setStatus(1);
+		hardware.setDate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+		int ret =  hardwareService.insertHardware(hardware);
+		if (ret!=1) {
+			result.put("status", 1002);
+			result.put("message", "硬件插入失败");
+			return Utility.gson.toJson(result);
+		}
+		int macId=hardware.getId();
+		int parkId=(int) args.get("parkId");
+		int carportNumber=(int) args.get("carportNumber");
+		BusinessCarport businessCarport=new BusinessCarport();
+		businessCarport.setCarportNumber(carportNumber);
+		businessCarport.setDate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+		businessCarport.setMacId(macId);
+		businessCarport.setStatus(0);
+		businessCarport.setParkId(parkId);
+		if (businessCarportService.insertBusinessCarport(businessCarport)==1) {
+			businessCarportService.updateBusinessCarport(businessCarport);
+			result.put("status", 1001);
+			result.put("message", "成功插入硬件并绑定成功");
+			return Utility.gson.toJson(result);
+		}
+		result.put("status", 1002);
+		result.put("message", "绑定失败");
+		return Utility.gson.toJson(result);
+	}
 	@RequestMapping(value = "/update/businessCarport", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody

@@ -1,4 +1,4 @@
-<script src="/park/script/businessCarportAngular.js?v=1.21"></script>
+<script src="/park/script/businessCarportAngular.js?v=1.22"></script>
 <script src="/park/script/businessCarport.js?v=1.21"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <script src="/park/script/datepicker.js"></script>
@@ -25,11 +25,11 @@
 		                		<button #if(!$isAdmin) disabled#end id='updateBusinessCarport' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
 		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
 								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
+								<button #if(!$isAdmin) disabled#end type="button" class="btn bg-navy" ng-click="addMacAndInsertBusinessCarport()"><span class="glyphicon glyphicon-pencil"></span> 添加硬件与绑定</button>
 		                	</div>
 	                	<div class="pull-right">
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange()">
-	                		 <option value=-1>所有停车场</option>
-						
+	                		 <option value=-1>所有停车场</option>						
 	                	</select>
 	                	</div>
 	                	
@@ -74,6 +74,53 @@
             </div>
         </div>
     </section>
+	
+<script  type="text/ng-template" id="addMacAndBind">
+ <ng-form name="formData">
+<div class="modal-header panel panel-success">
+<div class="panel-heading">
+	<button type='button' class='close' ng-click="close()" aria-hidden='true'>&times;</button>				
+	<h4 class="modal-title" >添加硬件并绑定</h4>
+</div>	
+</div>	
+<div class="modal-body">
+	<form class='form-horizontal'  role='form'>
+			<div class='form-group'>
+				<label class='col-sm-2 control-label' for='mac'>MAC</label>
+				<div class='col-sm-8'>
+				<input type='text' class='form-control' ng-model="mac" placeholder='MAC地址'  required>
+				</div>
+			</div>
+			<div class='form-group'>
+					<label class='col-sm-2 control-label' for='macDesc'>描述</label>
+					<div class='col-sm-8'>
+					<input type='text' class='form-control' ng-model="macDesc" required placeholder='请输入描述信息'>
+					</div>
+			</div>
+			<div class='form-group'>
+					<label class='col-sm-2 control-label' for='macDesc'>所在停车场</label>
+					<div class='col-sm-8'>
+					<select class="form-control" ng-options="p.name for p in parks" ng-model="selectP"></select>                
+					</div>
+			</div>
+			<div class='form-group'>
+					<label class='col-sm-2 control-label' for='macDesc'>停车位编号</label>
+					<div class='col-sm-8'>
+					<input type='text' class='form-control' ng-model="carportNumber" placeholder='' required>
+					</div>
+			</div>
+	</form>
+</div>
+<div class="alert alert-info" ng-show="loading || submitted">
+            <span  ng-show='loading' > <i class="fa fa-spinner"></i></span>
+            <span ng-show='submitted'>{{result}}</span>
+        </div>
+<div class="modal-footer">
+	<button ng-click="close()" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	<button ng-click="submit()"  type="button" class="btn btn-primary" ng-disabled="formData.$invalid">提交数据</button>
+</div>
+</ng-form>
+</script>
 </div>
     
 <div class="modal fade" id="addBusinessCarportModal" tabindex="-1" role="dialog" aria-labelledby='addBusinessCarportLabel' aria-hidden='true'>
@@ -212,8 +259,7 @@
          </div>
         </div>
     </div>
-	 </div>
-<div class="modal fade" id="carportUsage" tabindex="-1" role="dialog" style="min-width:600px" aria-hidden='true'>
+	<div class="modal fade" id="carportUsage" tabindex="-1" role="dialog" style="min-width:600px" aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
 		
@@ -280,6 +326,8 @@
 		</div>
 	</div>
 </div>
+
+	 </div>
 
 <script>
 $(document).ready(function(){

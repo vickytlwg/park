@@ -11,6 +11,8 @@ public interface AccessService {
 	public String insertAccess(Access item);
 
 	public int getAccessCount(Integer parkId);
+	
+	public int getAccessCountToday(Integer parkId,String date);
 
 	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
 

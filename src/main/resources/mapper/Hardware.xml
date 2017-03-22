@@ -70,7 +70,7 @@
 	<select id="searchHardwareByKeywords" resultMap="HardwareMapper" statementType="STATEMENT">
 	select * from hardware where mac like '%${mac}%'
 	</select>
-	<insert id="insertHardware" parameterType="com.park.model.Hardware" keyProperty="id">
+	<insert id="insertHardware"  useGeneratedKeys="true" parameterType="com.park.model.Hardware" keyProperty="id">
 		insert into hardware(mac, type, status, description, date) values(#{mac}, #{type}, #{status}, #{description}, #{date})
 	</insert>
 	

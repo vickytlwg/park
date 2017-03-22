@@ -645,7 +645,7 @@ public class PosChargeDataController {
 	public @ResponseBody String getInfoByCardNumber(@RequestBody Map<String, Object> args) throws Exception {
 		String cardNumber = (String) args.get("cardNumber");
 		Map<String, Object> result=new HashMap<>();
-		List<PosChargeData> charges = chargeSerivce.getDebt(cardNumber);
+		List<PosChargeData> charges = chargeSerivce.queryDebt(cardNumber,new Date());
 		if (charges.isEmpty()) {
 			result.put("status", 1002);
 			return Utility.gson.toJson(result);
@@ -679,6 +679,8 @@ public class PosChargeDataController {
 		PosChargeData posChargeData=chargeSerivce.getById(chargeId);
 		Double charge=(Double)args.get("charge");
 		posChargeData.setGivenMoney(charge);
+		posChargeData.setPayType(3);
+		posChargeData.setExitDate1(new Date());
 		posChargeData.setPaidCompleted(true);
 		if (chargeSerivce.update(posChargeData)==1) {
 			result.put("status", 1001);
@@ -768,9 +770,6 @@ public class PosChargeDataController {
 	@RequestMapping(value="/hardwareRecord",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String hardwareRecord(@RequestBody Map<String, Object> args) throws Exception{
-		Integer parkId=(Integer) args.get("parkId");
-		String startDate=(String) args.get("startDate");
-		String endDate=(String) args.get("endDate");
 
 		Map<String, Object> result=new HashMap<>();
 		result.put("status", 1001);

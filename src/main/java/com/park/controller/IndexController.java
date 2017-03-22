@@ -31,7 +31,9 @@ public class IndexController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String accessIndex1(ModelMap modelMap,HttpSession session){
+		
 		String username=(String) session.getAttribute("username");
+		
 		if (username==null) {
 			return "login";
 		}

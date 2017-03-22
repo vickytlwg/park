@@ -80,7 +80,7 @@
 		select count(*) from businessCarport where businessCarport.parkId = #{param1}
 	</select>
 	
-	<insert id="insertBusinessCarport" parameterType="com.park.model.BusinessCarport" keyProperty="id">
+	<insert id="insertBusinessCarport"  useGeneratedKeys="true" parameterType="com.park.model.BusinessCarport" keyProperty="id">
 		insert into businessCarport(parkId, carportNumber, macId, status, floor, position, description, date) 
 		values(#{parkId}, #{carportNumber}, #{macId}, #{status}, #{floor}, #{position}, #{description}, #{date})
 	</insert>

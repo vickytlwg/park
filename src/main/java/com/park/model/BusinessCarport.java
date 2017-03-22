@@ -10,9 +10,9 @@ public class BusinessCarport {
 	private int carportNumber;
 	private Integer macId;
 	private int status;
-	private int floor;
-	private String position;
-	private String description;
+	private int floor=0;
+	private String position="";
+	private String description="";
 	private Date date;
 	
 	

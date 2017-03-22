@@ -165,6 +165,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			 nightStartHour = criterion.getNightstarttime().split(":")[0];
 			 nightEndHour = criterion.getNightendtime().split(":")[0].substring(1);
 		}	
+		int isOneTimeExpense=charge.getIsOneTimeExpense();
 		if (charge.getIsLargeCar() == false) {			
 			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
 			for(String name:dates.keySet()){
@@ -173,9 +174,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				charge.setIsOneTimeExpense(1);
 				this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
-			  else {
+			  else if(isOneTimeExpense==0) {
 				  charge.setIsOneTimeExpense(0);
 				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			  else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			}
 			charge.setEntranceDate(startTime);
@@ -201,14 +206,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				charge.setIsOneTimeExpense(1);
 				this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
-			  else {
+			  else if(isOneTimeExpense==0) {
 				  charge.setIsOneTimeExpense(0);
-				  this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+			}
+			  else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			}
 			charge.setEntranceDate(startTime);
-			charge.setExitDate(endTime);
-			
+			charge.setExitDate(endTime);			
 			if (charge.getPaidMoney()>=charge.getChargeMoney() ) {
 				charge.setUnPaidMoney(0);
 				charge.setPaidCompleted(true);
@@ -243,9 +251,6 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public void calExpenseLargeCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
-		// TODO Auto-generated method stub
-//		if (charge.getExitDate() != null)
-//			return;
 		Park park = parkService.getParkById(charge.getParkId());
 
 		Integer criterionId = park.getFeeCriterionId();
@@ -253,23 +258,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterionId == null)
 			throw new Exception("no fee criterion");
 		FeeCriterion criterion = criterionService.getById(criterionId);
-	//	Date enterDate = charge.getEntranceDate();
-//		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
-//			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
-//			Calendar cld = Calendar.getInstance();
-//			cld.setTime(enterDate);
-//			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-//			charge.setExitDate1(cld.getTime());
-//		} else {
-//			charge.setExitDate1(exitDate);
-//		}
+
 		charge.setExitDate1(exitDate);
 		double expense = 0;
-		if (charge.getIsOneTimeExpense() == 1) {
-			expense = criterion.getOnetimeexpense() - charge.getPaidMoney();
-
-		} else {
-			float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+		float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+		if (charge.getIsOneTimeExpense() == 1&&diffMin > criterion.getFreemins()) {
+			expense = criterion.getOnetimeexpense();
+		} else {	
 			float firstHour = criterion.getStep1capacity();
 			if (diffMin > criterion.getFreemins()) {
 				if (diffMin <= firstHour) {
@@ -280,52 +275,20 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					double intervals1 = Math
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1pricelarge();
-					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
 					expense += intervals2 * criterion.getStep2pricelarge();
 				}
 			}
 		}
-
-//		if (expense > criterion.getMaxexpense())
-//			expense = criterion.getMaxexpense();
-
 		charge.setChargeMoney(expense+charge.getChargeMoney());
 		if (charge.getChargeMoney()>(criterion.getMaxexpense()*2)) {
 			charge.setChargeMoney(criterion.getMaxexpense()*2);
-		}
-		
-//		charge.setChargeMoney(expense);
-//		if (expense == 0) {
-//			charge.setPaidCompleted(true);
-//		}
-//
-//		expense -= charge.getPaidMoney();
-//		if (expense > 0.01) {
-//			charge.setUnPaidMoney(expense);
-//		}
-//		if (expense < -0.01) {
-//			charge.setUnPaidMoney(0);
-//			charge.setPaidCompleted(true);
-//			charge.setChangeMoney(-1 * expense);
-//		}
-
-		if (!isQuery) {
-//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
-//			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
-//			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-//			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
-//			outsideparkinfo.setPossigndate(new Date());
-//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-		//	this.update(charge);
 		}
 	}
 
 	@Override
 	public void calExpenseSmallCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 
-	//	if (charge.getExitDate() != null)
-	//		return;
 		Park park = parkService.getParkById(charge.getParkId());
 
 		Integer criterionId = park.getFeeCriterionId();
@@ -335,23 +298,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		FeeCriterion criterion = criterionService.getById(criterionId);
 
-//		Date enterDate = charge.getEntranceDate();
-
-//		if (enterDate.getDay() < exitDate.getDay() || enterDate.getMonth() != exitDate.getMonth()) {
-//			int nightHour = Integer.parseInt(criterion.getNightstarttime().split(":")[0]);
-//			Calendar cld = Calendar.getInstance();
-//			cld.setTime(enterDate);
-//			cld.set(Calendar.HOUR_OF_DAY, nightHour);
-//			charge.setExitDate1(cld.getTime());
-//		} else {
-//			charge.setExitDate1(exitDate);
-//		}
 		charge.setExitDate1(exitDate);
 		double expense = 0;
-		if (charge.getIsOneTimeExpense() == 1) {
+		float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+		if (charge.getIsOneTimeExpense() == 1&&diffMin > criterion.getFreemins()) {
 			expense = criterion.getOnetimeexpense();
 		} else {
-			float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+			
 			float firstHour = criterion.getStep1capacity();
 
 			if (diffMin > criterion.getFreemins()) {
@@ -363,39 +316,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					double intervals1 = Math
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1price();
-					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
 					expense += intervals2 * criterion.getStep2price();
 				}
 			}
 		}
-	//	if (expense > criterion.getMaxexpense())
-	//		expense = criterion.getMaxexpense();
 		charge.setChargeMoney(expense+charge.getChargeMoney());
 		if (charge.getChargeMoney()>criterion.getMaxexpense()) {
 			charge.setChargeMoney(criterion.getMaxexpense());
 		}
-//		if (charge.getChargeMoney() == 0) {
-//			charge.setPaidCompleted(true);
-//		}
-//		expense -= charge.getPaidMoney();
-//		if (expense > 0) {
-//			charge.setUnPaidMoney(expense);
-//		}
-//		else {
-//			charge.setUnPaidMoney(0);
-//			charge.setPaidCompleted(true);
-//			charge.setChangeMoney(-1 * expense);
-//		}
-		if (!isQuery) {
-//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(charge.getParkId());
-//			outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
-//			outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-//			outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+charge.getChargeMoney()));
-//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+charge.getPaidMoney()));
-//			outsideparkinfo.setPossigndate(new Date());
-//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-	//		this.update(charge);
-		}
+
 		
 	}
 

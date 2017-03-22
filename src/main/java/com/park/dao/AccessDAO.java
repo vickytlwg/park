@@ -40,6 +40,8 @@ public interface AccessDAO {
 	// public int getAccessCount();
 
 	public int getParkAccessCount(@Param("parkId") int parkId, @Param("table") String table);
+	
+	public int getParkAccessCountToday(@Param("parkId") int parkId, @Param("table") String table,@Param("date")String date);
 
 	// public int updateAccess(@Param("access")Access
 	// access,@Param("table")String table);
