@@ -151,6 +151,9 @@
   <select id="getByNum" resultType="com.park.model.Pos">
   	select * from pos where num=#{num}
   </select>
+   <select id="getByParkId" resultType="com.park.model.Pos">
+  	select * from pos where parkId=#{parkId}
+  </select>
   <select id="getByParkNameAndNumber" statementType="STATEMENT" resultType="com.park.model.Pos">
   	SELECT p.id,p.num,p.parkId,park.name AS parkName,street.name AS streetName,p.type,p.model,p.lastTime,p.addTime,p.streetId,p.operator FROM pos AS p
   	LEFT JOIN park ON park.id=p.parkId 

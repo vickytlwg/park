@@ -26,5 +26,7 @@ public interface PosDAO {
     
     List<Pos> getByNum(@Param("num")String num);
     
+    List<Pos> getByParkId(@Param("parkId")Integer parkId);
+    
     List<Pos> getByParkNameAndNumber(@Param("parkName")String parkName,@Param("num")String num);
 }

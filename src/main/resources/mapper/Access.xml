@@ -99,7 +99,13 @@
 		where channel.parkId = ${parkId} and ${table}.dateIndex > '${date}'
 		]]>
 	</select>
-
+	<select id="getAccessInvalidate"  resultMap="AccessDetailMapper" statementType="STATEMENT"> 
+		<![CDATA[		
+		select * from ${table}
+		left join channel on ${table}.channelId = channel.Id
+		where channel.parkId = ${parkId} and ${table}.dateIndex < '${date}' order by id desc limit 1	
+		]]>	
+	</select>
 	<insert id="insertAccess" keyProperty="id" statementType="STATEMENT">
 	    insert into ${table}(channelId,date,isDeleted,dateIndex) values (${item.channelId},NOW(), ${item.isDeleted},DATE_FORMAT(NOW(), '%Y-%m-%d %H'))
 	</insert>

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jpush.Jpush;
 import com.park.dao.CarportStatusDetailDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
@@ -39,6 +40,7 @@ import com.park.model.Feeoperator;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
+import com.park.model.Pos;
 import com.park.model.PosChargeData;
 import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
@@ -49,6 +51,7 @@ import com.park.service.FeeOperatorService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
+import com.park.service.PosService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.squareup.okhttp.Request;
@@ -67,7 +70,10 @@ public class PosChargeDataController {
 
 	@Autowired
 	private UserPagePermissionService pageService;
-
+	
+	@Autowired
+	private PosService posService;
+	
 	@Autowired
 	private ExcelExportService excelService;
 	
@@ -688,6 +694,15 @@ public class PosChargeDataController {
 		else{
 			result.put("status", 1002);
 		}
+		List<Pos> poses=posService.getByParkId(posChargeData.getParkId());
+		List<String> audiences=new ArrayList<>();
+		for (Pos pos : poses) {
+			audiences.add(pos.getNum());			
+		}
+		Map<String, String> extras=new HashMap<>();
+		extras.put("parkId", String.valueOf(posChargeData.getParkId()));
+		extras.put("portNum", String.valueOf(posChargeData.getPortNumber()));
+		Jpush.SendPushToAudiencesWithExtras(audiences, extras, "wechatPaidChanged");
 		return Utility.gson.toJson(result);
 	}
 	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })

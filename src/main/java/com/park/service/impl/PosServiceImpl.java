@@ -78,6 +78,12 @@ public class PosServiceImpl implements PosService {
 		return posDao.getByParkNameAndNumber(parkName, num);
 	}
 
+	@Override
+	public List<Pos> getByParkId(Integer parkId) {
+		// TODO Auto-generated method stub
+		return posDao.getByParkId(parkId);
+	}
+
 	
 
 }

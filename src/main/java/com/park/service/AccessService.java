@@ -13,6 +13,8 @@ public interface AccessService {
 	public int getAccessCount(Integer parkId);
 	
 	public int getAccessCountToday(Integer parkId,String date);
+	
+	public AccessDetail getAccessInvalidate(Integer parkId,String date);
 
 	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
 
@@ -20,15 +22,7 @@ public interface AccessService {
 
 	public Map<String, Map<Integer, Integer>> getDayCountByPark(int parkId, String date);
 
-	// public Map<String, Map<Integer, Integer>> getMonthCountByPark(int parkId,
-	// String date);
-
-	// public Map<String, Map<Integer, Integer>> getMonthCountByChannel(int
-	// parkId, int year);
-
 	public Map<Integer, Integer> getChannelHourCount(String mac, int macId, String date);
-
-	// public Map<Integer, Integer> getChannelMonthCount(int macId, int year);
 
 	public int getParkIdByChanelId(int channelId);
 
@@ -38,7 +32,6 @@ public interface AccessService {
 
 	// public String updateAccess(Access access);
 	public int getAccessCountByDate(int xmo, int ymonth, String accessDate);
-	// public String deleteAccess(int Id);
 
 	public List<AccessDetail> getAccessDetail(int low, int count, Integer parkId);
 

@@ -82,7 +82,7 @@
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>BT</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>九比特停车云</b></span>
+          <span class="logo-lg"><b>停车云</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -297,7 +297,7 @@
               </ul>
             </li>
             
-		<li class="treeview active">
+		<li class="treeview active" hidden>
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
 				 <ul class="treeview-menu">
 				 <li #if(!$isAdmin&& !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>用户管理</a></li>

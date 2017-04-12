@@ -23,5 +23,7 @@ public interface PosService {
     
     List<Pos> getByNum(String num);
     
+    List<Pos> getByParkId(Integer parkId);
+    
     List<Pos> getByParkNameAndNumber(String parkName,String num);
 }

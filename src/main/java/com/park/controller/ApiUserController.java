@@ -110,6 +110,16 @@ public class ApiUserController {
 	public void testjpush(){
 		List<String> audiences=new ArrayList<>();
 		audiences.add("2017");
-		Jpush.SendPushToAudiences(audiences);
+		Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
+	}
+	@RequestMapping(value = "/testjpushextras", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody 
+	public void testjpushWithExtra(){
+		List<String> audiences=new ArrayList<>();
+		audiences.add("2017");
+		Map<String, String> extras=new HashMap<>();
+		extras.put("parkId", "160");
+		extras.put("portNum", "23");
+		Jpush.SendPushToAudiencesWithExtras(audiences,extras,"wechatPaidChanged");
 	}
 }

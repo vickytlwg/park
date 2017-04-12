@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jpush.Jpush;
 import com.park.dao.BusinessCarportDAO;
 import com.park.dao.CarportStatusDetailDAO;
 import com.park.dao.HardwareDAO;
@@ -23,11 +24,13 @@ import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
 import com.park.model.Hardware;
 import com.park.model.HardwareType;
+import com.park.model.Pos;
 import com.park.model.PosChargeData;
 import com.park.model.Status;
 import com.park.service.BusinessCarportService;
 import com.park.service.HardwareService;
 import com.park.service.PosChargeDataService;
+import com.park.service.PosService;
 import com.park.service.Utility;
 
 @Transactional
@@ -41,7 +44,8 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	
 	@Autowired
 	private HardwareService hardwareService;
-	
+	@Autowired
+	private PosService posService;
 	@Autowired
 	private CarportStatusDetailDAO carportStatusDetailDAO;
 	
@@ -140,7 +144,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		int macId = hardwareDAO.macToId(mac);
 		Hardware hardware = hardwareDAO.getHardwareById(macId);
 		if(hardware.getStatus() == Status.UNUSED.getValue()){
-			logger.info("hardware is unused" );
+		//	logger.info("hardware is unused" );
 			return 0;
 		}
 		
@@ -151,6 +155,13 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		
 		BusinessCarport carport = businessCarportDAO.getBusinessCarportByMacId(macId);
 		carport.setStatus(status);
+		//发送jpush请求
+		List<Pos> poses=posService.getByParkId(carport.getParkId());
+		List<String> audiences=new ArrayList<>();
+		for (Pos pos : poses) {
+			audiences.add(pos.getNum());			
+		}
+		Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
 		
 		int ret = businessCarportDAO.updateBusinessCarportStatus(macId, status, new Date());
 		int parkId = carport.getParkId();

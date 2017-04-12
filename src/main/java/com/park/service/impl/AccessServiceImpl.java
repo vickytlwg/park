@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils.Null;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -328,6 +329,12 @@ public class AccessServiceImpl implements AccessService{
 	public int getAccessCountToday(Integer parkId, String date) {
 		// TODO Auto-generated method stub
 		return accessDAO.getParkAccessCountToday(parkId.intValue(), findAccessTable(parkId),date);
+	}
+
+	@Override
+	public AccessDetail getAccessInvalidate(Integer parkId, String date) {
+		// TODO Auto-generated method stub
+		return accessDAO.getAccessInvalidate(parkId, findAccessTable(parkId), date);
 	}
 
 

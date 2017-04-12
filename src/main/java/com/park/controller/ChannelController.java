@@ -1,5 +1,9 @@
 package com.park.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,8 +15,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,6 +39,7 @@ import com.park.model.Page;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
+import com.park.service.ExcelExportService;
 import com.park.service.HardwareService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
@@ -52,6 +59,8 @@ public class ChannelController {
 	@Autowired
 	private UserPagePermissionService pageService;
 	
+	@Autowired
+	private ExcelExportService excelService;
 	
 	@RequestMapping(value = "/channel", produces = {"application/json;charset=UTF-8"})
 	public String getChannels(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
@@ -102,6 +111,23 @@ public class ChannelController {
 			ret.put("message", "get channel detail fail");
 		}
 		return Utility.gson.toJson(ret);		
+	}
+	@RequestMapping(value="excelChannelDetailExport",method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public void excelChannelDetailExport(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException{
+		List<ChannelDetail> channelDetails=channelService.getChannelDetail(0, 1000);
+		String[] headers = {"id","停车场","硬件地址","出入口","描述","日期"};
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "channelDetail.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataChannel("channel数据", headers, channelDetails, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR + "channelDetail.xlsx", response);
 	}
 	@RequestMapping(value = "/getChannelDetailByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

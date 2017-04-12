@@ -27,7 +27,7 @@ public Map<String, Object> saomaPay(Long amount,int type){
     	 payTypeCode="PT0009_MS";
 	}
 
-     String outTradeNo = "none";
+     String outTradeNo = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
      String tradeTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
   //   String amount = "1";
      String summary = "九比特停车";
