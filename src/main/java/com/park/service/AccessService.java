@@ -14,7 +14,7 @@ public interface AccessService {
 	
 	public int getAccessCountToday(Integer parkId,String date);
 	
-	public AccessDetail getAccessInvalidate(Integer parkId,String date);
+	public Access getAccessInvalidate(Integer parkId,String date);
 
 	public Map<String, Map<Integer, Integer>> getHourCountByPark(int parkId, String date);
 

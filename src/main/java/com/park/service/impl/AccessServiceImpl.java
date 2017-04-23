@@ -332,7 +332,7 @@ public class AccessServiceImpl implements AccessService{
 	}
 
 	@Override
-	public AccessDetail getAccessInvalidate(Integer parkId, String date) {
+	public Access getAccessInvalidate(Integer parkId, String date) {
 		// TODO Auto-generated method stub
 		return accessDAO.getAccessInvalidate(parkId, findAccessTable(parkId), date);
 	}

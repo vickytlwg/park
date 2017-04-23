@@ -140,7 +140,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	}
 
 	@Override
-	public int updateBusinessCarportStatus(String mac, int status) {
+	public int updateBusinessCarportStatus(String mac, int status,Boolean isPush) {
 		int macId = hardwareDAO.macToId(mac);
 		Hardware hardware = hardwareDAO.getHardwareById(macId);
 		if(hardware.getStatus() == Status.UNUSED.getValue()){
@@ -156,12 +156,15 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		BusinessCarport carport = businessCarportDAO.getBusinessCarportByMacId(macId);
 		carport.setStatus(status);
 		//发送jpush请求
-		List<Pos> poses=posService.getByParkId(carport.getParkId());
-		List<String> audiences=new ArrayList<>();
-		for (Pos pos : poses) {
-			audiences.add(pos.getNum());			
+		if (isPush) {
+			List<Pos> poses=posService.getByParkId(carport.getParkId());
+			List<String> audiences=new ArrayList<>();
+			for (Pos pos : poses) {
+				audiences.add(pos.getNum());			
+			}
+			Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
 		}
-		Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
+		
 		
 		int ret = businessCarportDAO.updateBusinessCarportStatus(macId, status, new Date());
 		int parkId = carport.getParkId();

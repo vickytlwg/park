@@ -28,7 +28,7 @@ public interface AccessDAO {
 
 	public int getParkIdByChanelId(int channelId);
 	
-	public AccessDetail getAccessInvalidate(@Param("parkId") int parkId, @Param("table") String table,@Param("date") String date);
+	public Access getAccessInvalidate(@Param("parkId") int parkId, @Param("table") String table,@Param("date") String date);
 
 	public int insertAccess(@Param("item") Access item, @Param("table") String table);
 

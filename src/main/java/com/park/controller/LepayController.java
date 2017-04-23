@@ -52,6 +52,24 @@ public class LepayController {
 		}		
 		return Utility.gson.toJson(result);
 	}
+	@RequestMapping(value="/quickPay",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String quickPay(@RequestBody Map<String, Object> args){
+		Integer amount=(Integer)args.get("amount");
+		int type=(int) args.get("type");
+		Map<String, Object> result=new HashMap<>();
+		LepayService lepayService=new LepayService();		
+		Map<String, Object> data=lepayService.quickPay((long)amount);
+		if (data!=null) {
+			result.put("status", 1001);
+			result.put("body", data);
+		}
+		else {
+			result.put("status", 1002);
+		}		
+		return Utility.gson.toJson(result);
+	}
+	
 	@RequestMapping(value="/payByPosChargeDataId",method=RequestMethod.POST,produces={"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String payByPosChargeDataId(@RequestBody Map<String, Object> args){

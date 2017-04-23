@@ -363,7 +363,7 @@ return Utility.gson.toJson(ret);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		String mac = (String) args.get("mac");
 		int status = Integer.parseInt((String) args.get("status"));
-		int ret = businessCarportService.updateBusinessCarportStatus(mac, status);
+		int ret = businessCarportService.updateBusinessCarportStatus(mac, status,true);
 		logger.info("updateBusinessCarportStatus resutl: " + ret);
 		if (ret > 0) {
 			retMap.put("status", "1001");
@@ -382,11 +382,18 @@ return Utility.gson.toJson(ret);
 	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args) {
 		List<String> updatedMac = new ArrayList<String>();
 		List<Object> carportsStatus = (List<Object>) args.get("carportStatus");
+		int i=1;
 		for (Object item : carportsStatus) {
 			Map<String, Object> arg = (Map<String, Object>) item;
 			String mac = (String) arg.get("mac");
 			int status = Integer.parseInt((String) arg.get("status").toString());
-			int ret = businessCarportService.updateBusinessCarportStatus(mac, status);
+			int ret;
+			if (i==1) {
+				ret = businessCarportService.updateBusinessCarportStatus(mac, status,true);
+			}else{
+				ret = businessCarportService.updateBusinessCarportStatus(mac, status,false);
+			}			
+			i++;
 			if (ret > 0)
 				updatedMac.add(mac);
 		}

@@ -1,5 +1,4 @@
 package com.park.service.impl;
-
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -276,6 +275,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1pricelarge();
 					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
+			//		double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+
 					expense += intervals2 * criterion.getStep2pricelarge();
 				}
 			}
@@ -317,6 +318,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1price();
 					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
+					//double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
 					expense += intervals2 * criterion.getStep2price();
 				}
 			}

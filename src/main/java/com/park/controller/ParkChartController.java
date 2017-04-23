@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.Access;
 import com.park.model.AccessDetail;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
@@ -107,7 +108,7 @@ public class ParkChartController {
 		for (Park park : parkList) {
 			if (park.getType()!=3) {
 				Map<String, Object> tmpData=new HashMap<>();
-				AccessDetail accessDetail=accessService.getAccessInvalidate(park.getId(), date);
+				Access accessDetail=accessService.getAccessInvalidate(park.getId(), date);
 				tmpData.put("id", park.getId());
 				tmpData.put("name", park.getName());
 				tmpData.put("date", accessDetail.getDate());

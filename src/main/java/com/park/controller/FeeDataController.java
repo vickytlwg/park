@@ -135,4 +135,55 @@ public void wechartdataInsert(HttpServletRequest request) throws IOException{
        
      }
 }
+
+@RequestMapping(value="/quickpaydata/insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+public void quickpaydataInsert(HttpServletRequest request) throws IOException {
+	 String encoding = request.getParameter(LePayParameters.ENCODING);
+	    if (null == encoding || encoding.trim().isEmpty()) {
+	        encoding = DefaultLePay.ENCODING_DEFAULT_VALUE;
+	    }
+	    request.setCharacterEncoding(encoding);
+
+	    Map<String, Object> params = new HashMap<String, Object>();
+	    Map requestParams = request.getParameterMap();
+	    for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+	        String name = (String) iter.next();
+	        String[] values = (String[]) requestParams.get(name);
+	        String valueStr = "";
+	        for (int i = 0; i < values.length; i++) {
+	            valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+	        }
+	        params.put(name, valueStr);
+	    }	
+		Lepayrecord lepayrecord=new Lepayrecord();
+		lepayrecord.setPaytype((short) 2);//2为快捷支付
+		String amount=(String) params.get("amount");
+		lepayrecord.setAmount((int) Float.parseFloat(amount));;
+		String mchId=(String) params.get("mchId");
+		lepayrecord.setMchid(mchId);
+		String cmpAppId=(String) params.get("cmpAppId");
+		lepayrecord.setCmpappid(cmpAppId);
+		
+		String[] tmpStr=((String)params.get("outTradeNo")).split(";");
+		int poschargeId=Integer.parseInt(tmpStr[1]);
+		lepayrecord.setOuttradeno(tmpStr[1]);
+		String payTypeTradeNo=(String) params.get("payTypeOrderNo");
+		lepayrecord.setPaytypetradeno(payTypeTradeNo);
+		String orderNo=(String) params.get("orderNo");	
+		lepayrecord.setOrderno(orderNo);
+		 if (AppPay.verify(params)) {// 验证成功
+			 Lepayrecord lepayrecord2=lepayRecord.getByOutTradeNo(tmpStr[1]);
+			 if (lepayrecord2==null) {
+				 lepayRecord.insertSelective(lepayrecord);
+			}
+			 if (!lepayrecord.getOuttradeno().equals("none")) {			
+				PosChargeData posChargeData=poschargedataService.getById(poschargeId);
+				posChargeData.setPayType(0);
+				poschargedataService.update(posChargeData);
+			}
+	     } else {// 验证失败
+	       
+	     }
+	
+}
 }

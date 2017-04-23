@@ -259,6 +259,7 @@
          </div>
         </div>
     </div>
+</div>
 	<div class="modal fade" id="carportUsage" tabindex="-1" role="dialog" style="min-width:600px" aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
@@ -327,7 +328,7 @@
 	</div>
 </div>
 
-	 </div>
+	
 
 <script>
 $(document).ready(function(){

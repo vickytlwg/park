@@ -28,8 +28,7 @@ public interface BusinessCarportService {
 	public int insertBusinessCarport(BusinessCarport businessCarport);
 	
 	public int updateBusinessCarport(BusinessCarport businessCarport);
-	
-	public int updateBusinessCarportStatus(String mac, int status);
+		
 	
 	public int deleteBusinessCarport(int id);
 	
@@ -46,5 +45,7 @@ public interface BusinessCarportService {
 	public CarportStatusDetail getLatestDetailByCarportId(int carportId);
 	
 	public List<BusinessCarportStatus> getBusinessStatusByParkId(int parkId) throws ParseException, Exception;
+
+	int updateBusinessCarportStatus(String mac, int status, Boolean isOncePush);
 	
 }

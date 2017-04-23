@@ -99,7 +99,7 @@
 		where channel.parkId = ${parkId} and ${table}.dateIndex > '${date}'
 		]]>
 	</select>
-	<select id="getAccessInvalidate"  resultMap="AccessDetailMapper" statementType="STATEMENT"> 
+	<select id="getAccessInvalidate"  resultMap="AccessMapper" statementType="STATEMENT"> 
 		<![CDATA[		
 		select * from ${table}
 		left join channel on ${table}.channelId = channel.Id
