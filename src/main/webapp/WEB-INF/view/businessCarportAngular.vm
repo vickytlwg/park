@@ -50,7 +50,7 @@
 										<th><span style="padding-left:15%">日期</span></th>	
 					            </tr>
 					          <tbody id="businessCarportBody"></tbody>
-							  <tr ng-repeat="item in carportDetails" >
+							  <tr ng-repeat="item in carportDetails|orderBy:'carportNumber'" >
 								<td style=" text-align: center;vertical-align: middle;" ><input type="checkbox" /></td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$odd" class='success'>{{item.id}}</td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$even" class='info'>{{item.id}}</td>

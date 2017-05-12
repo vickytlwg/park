@@ -359,7 +359,7 @@ return Utility.gson.toJson(ret);
 	@RequestMapping(value = "/update/status/businessCarport", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updateBusinessCarportStatus(@RequestBody Map<String, Object> args) {
+	public String updateBusinessCarportStatus(@RequestBody Map<String, Object> args) throws InterruptedException {
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		String mac = (String) args.get("mac");
 		int status = Integer.parseInt((String) args.get("status"));
@@ -379,7 +379,7 @@ return Utility.gson.toJson(ret);
 	@RequestMapping(value = "/update/status/businessCarports", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args) {
+	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args) throws InterruptedException {
 		List<String> updatedMac = new ArrayList<String>();
 		List<Object> carportsStatus = (List<Object>) args.get("carportStatus");
 		int i=1;

@@ -201,7 +201,9 @@
 				  <ul class="treeview-menu" style="background: #3c8dbc;color:#3c8dbc">
 					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/parkBigData"><i class="fa fa-file-text-o"></i>停车大数据</a></li>
 					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/platformShow"><i class="fa fa-file-text-o"></i>今日数据</a></li>
-				</ul>
+					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/udp/"><i class="fa fa-file-text-o"></i>UDP测试</a></li>
+
+				  </ul>
 			</li>
 			
 	
@@ -279,7 +281,7 @@
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/channel"><i class="fa fa-exchange"></i>出入口管理</a></li>
 
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
-                <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/channel"><i class="fa fa-rub"></i>剩余泊位牌管理</a></li>
+                <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/leftParkingCard"><i class="fa fa-rub"></i>剩余泊位牌管理</a></li>
                 
 				
 				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>

@@ -46,6 +46,6 @@ public interface BusinessCarportService {
 	
 	public List<BusinessCarportStatus> getBusinessStatusByParkId(int parkId) throws ParseException, Exception;
 
-	int updateBusinessCarportStatus(String mac, int status, Boolean isOncePush);
+	int updateBusinessCarportStatus(String mac, int status, Boolean isOncePush) throws InterruptedException;
 	
 }

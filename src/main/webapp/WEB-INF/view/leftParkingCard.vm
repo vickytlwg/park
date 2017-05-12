@@ -1,9 +1,9 @@
-<script src="/park/script/channel.js"></script>
+<script src="/park/script/leftParkingCard.js"></script>
 
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>
-           出入口管理
+           剩余泊位牌管理
             <small></small>
           </h1>
     
@@ -80,7 +80,7 @@
 		
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-				<h4 class='modal-title' id='addChannelLabel'>出入口信息</h4>
+				<h4 class='modal-title' id='addChannelLabel'>剩余泊位牌信息</h4>
 			</div>
 			
 			<div class='modal-body'>

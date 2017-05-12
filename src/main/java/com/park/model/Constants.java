@@ -1,5 +1,11 @@
 package com.park.model;
 
+import java.net.DatagramSocket;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.asm.commons.StaticInitMerger;
+
 public class  Constants{
 	
 	public static  String PINGAPIKEY = "sk_test_nbDy94HOWXT8GmjXnLfX18eD";
@@ -9,4 +15,6 @@ public class  Constants{
 	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
 	public static  String UPLOADDIR = "/alidata/server/tomcat7/webapps/parkpictures/";
 	public static  String WEBAPIURL="http://www.iotclouddashboard.com/park";
+	public static  List<Udpconnectors>  udpconnectors=new ArrayList<>();
+	public static  DatagramSocket socket=null;
 }

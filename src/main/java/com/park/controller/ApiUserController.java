@@ -107,14 +107,14 @@ public class ApiUserController {
 	}
 	@RequestMapping(value = "/testjpush", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody 
-	public void testjpush(){
+	public void testjpush() throws InterruptedException{
 		List<String> audiences=new ArrayList<>();
 		audiences.add("2017");
 		Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
 	}
 	@RequestMapping(value = "/testjpushextras", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody 
-	public void testjpushWithExtra(){
+	public void testjpushWithExtra() throws InterruptedException{
 		List<String> audiences=new ArrayList<>();
 		audiences.add("2017");
 		Map<String, String> extras=new HashMap<>();
