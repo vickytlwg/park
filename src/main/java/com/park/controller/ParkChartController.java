@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -98,6 +99,26 @@ public class ParkChartController {
 			}
 		}
 		return Utility.createJsonMsg(1001, "success", parkl);
+	}
+	@RequestMapping(value="getValidateDataParkByUserName",method = RequestMethod.POST,produces={"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getValidateDataParkByUserName(@RequestBody Map<String, String> args){		
+		String username=args.get("username");
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		List<Park> parkl = new ArrayList<Park>();
+		SimpleDateFormat sFormat=new SimpleDateFormat("yyyy-MM-dd");
+		String date=sFormat.format(new Date())+" 00:00:00";
+		for (Park park : parkList) {
+			if (park.getType()!=3) {
+				int count=accessService.getAccessCountToday(park.getId(), date);
+				if (count>0) {
+					parkl.add(park);
+				}				
+			}
+		}
+		return Utility.createJsonMsg(1001, "success", parkList);
 	}
 	@RequestMapping(value="getAccessInvalidate",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
 	public String getAccessInvalidate(){	

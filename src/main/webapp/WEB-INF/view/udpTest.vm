@@ -3,7 +3,7 @@
 <div class="content-wrapper" ng-app="udpTestApp" ng-controller="udpTestCtrl">
 	<section class="content-header">
           <h1>
-			udp通信
+			NB-IoT智能地锁
             <small></small>
           </h1>  		  
     </section>

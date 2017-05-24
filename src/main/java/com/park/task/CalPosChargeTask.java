@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import com.park.model.Outsideparkinfo;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
+import com.park.service.JavaBeanXml;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
@@ -33,7 +35,8 @@ public class CalPosChargeTask {
 	private OutsideParkInfoService outsideParkInfoService;
 	@Autowired
 	private FeeOperatorService feeOperatorService;
-	
+	@Autowired
+	private JavaBeanXml javaBeanXml;
 	@Scheduled(cron="0 0 18/1  * * ? ")
 	public void cal(){			
 		List<PosChargeData> charges = chargeService.getUnCompleted();
@@ -68,6 +71,11 @@ public class CalPosChargeTask {
 	@Scheduled(cron="0 30 0 * * ? ")
 	public void dayInfo(){
 		outsideParkInfoService.insertDayParkInfo();		
+	}
+	@Scheduled(cron="0 0/1 * * * ? ")
+	public void parkUpdateFromXml() throws DocumentException{
+	//	System.out.println("任务...打印.....");
+		javaBeanXml.updateParkFromXml();
 	}
 	@Scheduled(cron="0 0 23 * * ? ")
 	public void out(){

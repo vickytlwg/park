@@ -35,7 +35,7 @@ public class ServerThreadMuiti  implements Runnable {
 		//响应报文包含服务器的ip地址
 		InetAddress address=packet.getAddress();
 		int port=packet.getPort();
-		byte[] dataToClient="connected!".getBytes();
+//		byte[] dataToClient="connected!".getBytes();
 		Udpconnectors udpconnector=new Udpconnectors();
 		udpconnector.setIp(address.getHostAddress());
 		udpconnector.setPort(String.valueOf(port));
@@ -62,11 +62,6 @@ public class ServerThreadMuiti  implements Runnable {
 			}
 		}
 		
-		DatagramPacket packetToClient=new DatagramPacket(dataToClient, dataToClient.length, address, port);
-		try {
-			socket.send(packetToClient);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	//	DatagramPacket packetToClient=new DatagramPacket(dataToClient, dataToClient.length, address, port);
+	
 }}

@@ -17,4 +17,5 @@ public class  Constants{
 	public static  String WEBAPIURL="http://www.iotclouddashboard.com/park";
 	public static  List<Udpconnectors>  udpconnectors=new ArrayList<>();
 	public static  DatagramSocket socket=null;
+	public static StringBuilder  dataReceived=new StringBuilder();
 }
