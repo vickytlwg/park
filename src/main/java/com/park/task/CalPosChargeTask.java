@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.jpush.Jpush;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
@@ -72,10 +73,11 @@ public class CalPosChargeTask {
 	public void dayInfo(){
 		outsideParkInfoService.insertDayParkInfo();		
 	}
-	@Scheduled(cron="0 0/1 * * * ? ")
+	@Scheduled(cron="0 0/2 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
 	//	System.out.println("任务...打印.....");
 		javaBeanXml.updateParkFromXml();
+		Jpush.SendPushToAllAudiences("heart!");
 	}
 	@Scheduled(cron="0 0 23 * * ? ")
 	public void out(){

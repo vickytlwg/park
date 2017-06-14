@@ -59,10 +59,10 @@ public class JavaBeanXml {
 		parkid.add(ab);
 		Map<Integer, String> ac= new HashMap<>();
 		ac.put(200, "pt31010700079");
-		parkid.add(ac);
+	//	parkid.add(ac);
 		Map<Integer, String> ad= new HashMap<>();
 		ad.put(201, "pt31010700215");
-		parkid.add(ad);
+	//	parkid.add(ad);
 		Map<Integer, String> ae= new HashMap<>();
 		ae.put(203, "pt31010700040");
 		parkid.add(ae);

@@ -1,6 +1,7 @@
 package com.park.controller;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.park.service.ChargeService;
+import com.park.service.PingPPService;
 import com.park.service.UserPagePermissionService;
 import com.pingplusplus.model.Charge;
 
@@ -22,7 +23,7 @@ import com.pingplusplus.model.Charge;
 public class ChargeController {
 	
 	@Autowired
-	private ChargeService chargeService;
+	private PingPPService chargeService;
 	
 	@Autowired
 	private UserPagePermissionService pageService;
@@ -39,8 +40,17 @@ public class ChargeController {
 			client_ip = request.getHeader("x-forwarded-for");
 		}
 			  
-		argMap.put("client_ip", client_ip);
-		return chargeService.getCharge(argMap);
+		argMap.put("client_ip", "127.0.0.1");
+		argMap.put("order_no", "test00020170606001");
+		argMap.put("channel", "alipay_qr");
+		argMap.put("livemode", false);
+		 Map<String, String> app = new HashMap<String, String>();
+	     app.put("id", "app_bX1SKKWbP4K0Ge1i");
+		argMap.put("app",app);
+		argMap.put("amount", 500);
+		 Map<String, Object> extra = new HashMap<String, Object>();
+		 argMap.put("extra", extra);
+		return chargeService.saomaPay(argMap);
 		
 	}
 	

@@ -124,8 +124,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			hardwareService.changeHardwareStatus(oldBusinessCarport.getMacId(), Status.UNUSED.getValue());
 		if(newMacId > 0)
 			hardwareService.changeHardwareStatus(businessCarport.getMacId(), Status.USED.getValue());
-	
-		
+			
 		int ret = businessCarportDAO.updateBusinessCarport(businessCarport);
 			
 		return ret;

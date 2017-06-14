@@ -46,7 +46,7 @@ public class Jpush {
    //     PushPayload pushPayload=buil
         try {
             PushResult result = jpushClient.sendPush(payload);
-    //        Thread.sleep(1000);
+     //       Thread.sleep(50);
     //        jpushClient.close();
    //         LOG.info("Got result - " + result);
             
@@ -63,6 +63,20 @@ public class Jpush {
         }
 	}
 	
+	public static void SendPushToAllAudiences(String message){
+		ClientConfig clientConfig = ClientConfig.getInstance();
+        JPushClient jpushClient = new JPushClient(masterSecret, appKey, null, clientConfig);
+        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, clientConfig);
+        jpushClient.getPushClient().setHttpClient(httpClient);
+        PushPayload payload = buildPushObject_android_and_AllAudience(message);
+        try {
+			PushResult result = jpushClient.sendPush(payload);
+		} catch (APIConnectionException | APIRequestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void SendPushToAudiencesWithExtras(List<String> audiences,Map<String, String> extras,String message) throws InterruptedException {
 		ClientConfig clientConfig = ClientConfig.getInstance();
         JPushClient jpushClient = new JPushClient(masterSecret, appKey, null, clientConfig);   
@@ -71,7 +85,7 @@ public class Jpush {
         PushPayload payload = buildPushObject_android(audiences,extras,message);
         try {
             PushResult result = jpushClient.sendPush(payload);
-    //        Thread.sleep(1000);
+   //         Thread.sleep(50);
    //         jpushClient.close();
           //  LOG.info("Got result - " + result);
             
@@ -106,4 +120,13 @@ public class Jpush {
     					.addExtras(extras)
     					.build()).build();
     };
+    
+    public static PushPayload buildPushObject_android_and_AllAudience(String message) {
+    	return PushPayload.newBuilder()
+    			.setPlatform(Platform.android())
+    			.setAudience(Audience.all())
+    			.setMessage(Message.newBuilder()
+    					.setMsgContent(message)
+    					.build()).build();
+    }
 }

@@ -2,14 +2,16 @@ package com.park.model;
 
 import java.net.DatagramSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.asm.commons.StaticInitMerger;
 
 public class  Constants{
 	
-	public static  String PINGAPIKEY = "sk_test_nbDy94HOWXT8GmjXnLfX18eD";
-	public static  String PINGAPPID = "app_K8aH0444i5G8qvTO";
+	public static  String PINGAPIKEY = "sk_live_Wr104O5Gu5m508arbTmX9aL8";
+	public static  String PINGAPPID = "app_bX1SKKWbP4K0Ge1i";
 	public static  String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static  int ACCESSTABLESCOUNT = 500;
 	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
@@ -18,4 +20,5 @@ public class  Constants{
 	public static  List<Udpconnectors>  udpconnectors=new ArrayList<>();
 	public static  DatagramSocket socket=null;
 	public static StringBuilder  dataReceived=new StringBuilder();
+	public static  Map<String, Object> iotData=new HashMap<>();
 }

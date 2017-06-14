@@ -281,9 +281,39 @@ if (businessCarportDetail != null) {
 	//ret.put("message", "get businessCarport detail fail");
 }
 return Utility.gson.toJson(ret);
-
 }
-
+@RequestMapping(value = "/getBCDSimpleLimitSeconds", method = RequestMethod.GET, produces = {
+"application/json;charset=UTF-8" })
+@ResponseBody
+public String getBCDSimpleLimitSecond(@RequestParam("low") int low, @RequestParam("count") int count,@RequestParam(value ="seconds", required = false) Integer seconds,
+@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
+Map<String, Object> ret = new HashMap<String, Object>();
+List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
+	parkId);
+if (seconds==null) {
+	seconds=10;
+}
+if (businessCarportDetail != null) {
+List<BusinessCarportDetailSimple> businessCarportDetailSimples=new ArrayList<BusinessCarportDetailSimple>();
+for(BusinessCarportDetail tmpbusiness:businessCarportDetail){
+	if (new Date().getTime()-tmpbusiness.getDate().getTime()>1000*seconds) {
+		continue;
+	}
+	BusinessCarportDetailSimple tmpdata=new BusinessCarportDetailSimple();
+	tmpdata.setCarportNumber(tmpbusiness.getCarportNumber());
+	tmpdata.setDate(tmpbusiness.getDate());
+	tmpdata.setStatus(tmpbusiness.getStatus());
+	businessCarportDetailSimples.add(tmpdata);
+}
+ret.put("status", "1001");
+//ret.put("message", "get businessCarport detail success");
+ret.put("body", businessCarportDetailSimples);
+} else {
+ret.put("status", "1002");
+//ret.put("message", "get businessCarport detail fail");
+}
+return Utility.gson.toJson(ret);
+}
 	@RequestMapping(value = "/insert/businessCarport", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -396,6 +426,8 @@ return Utility.gson.toJson(ret);
 			i++;
 			if (ret > 0)
 				updatedMac.add(mac);
+			
+			
 		}
 
 		return Utility.createJsonMsg(1001, "updated mac", updatedMac) + "eof\n";

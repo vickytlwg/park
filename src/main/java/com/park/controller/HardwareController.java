@@ -208,9 +208,10 @@ public class HardwareController {
 	@RequestMapping(value = "/insert/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertHardware1(@RequestBody Hardware hardware){
-		int ret =  hardwareService.insertHardware(hardware);
+		
 		if(hardwareService.checkHardwareExist(hardware.getMac()))
 			return Utility.createJsonMsg("1002", "mac exists");
+		int ret =  hardwareService.insertHardware(hardware);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		if(ret > 0 ){
 			retMap.put("status", "1001");
