@@ -28,7 +28,7 @@ function($scope, $http, $modal,$timeout,$interval) {
     };
     
     $scope.refreshData = function() {     
-        $http.get('getBusinessCarportDetail?low=0&count=50&parkId='+$scope.selectValue.id).success(function(response) {
+        $http.get('getBusinessCarportDetail?low=0&count=350&parkId='+$scope.selectValue.id).success(function(response) {
             if (response.status == 1001) {
                 $scope.carportDetails = response.body;
             }
@@ -61,7 +61,7 @@ function($scope, $http, $modal,$timeout,$interval) {
             method:'get',
             url:'/park/getBusinessCarportDetail',
             headers:{"token":"6f13b8f3-cc3f-4e2a-a5b4-01b9cf6b40ca-1458491724564"},
-            params:{low:0,count:50,parkId:109}
+            params:{low:0,count:350,parkId:109}
           }).success(function(data){
             console.log(data);
         });

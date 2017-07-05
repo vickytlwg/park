@@ -52,6 +52,7 @@ import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.PosService;
+import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.squareup.okhttp.Request;
@@ -73,7 +74,8 @@ public class PosChargeDataController {
 	
 	@Autowired
 	private PosService posService;
-	
+	@Autowired
+	private PosdataService posdataService;
 	@Autowired
 	private ExcelExportService excelService;
 	
@@ -382,11 +384,15 @@ public class PosChargeDataController {
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args, HttpSession session) {
-		String username = (String) session.getAttribute("username");
+//		String username = (String) session.getAttribute("username");
 		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
 		int count = (int) args.get("count");
-		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageByParkId(parkId, start, count));
+		List<PosChargeData> posChargeDatas=chargeSerivce.getPageByParkId(parkId, start, count);
+		if (posChargeDatas.isEmpty()) {
+			return Utility.createJsonMsg(1001, "success",posdataService.selectPosdataByPageAndPark(parkId, start, count));
+		}
+		return Utility.createJsonMsg(1001, "success", posChargeDatas);
 	}
 
 	@RequestMapping(value = "/pageArrearage", method = RequestMethod.POST, produces = {

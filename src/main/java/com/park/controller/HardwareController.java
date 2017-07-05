@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -176,7 +177,8 @@ public class HardwareController {
 	}
 	@RequestMapping(value="/searchHardwareByKeywords",produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String searchHardwareByKeywords(@RequestParam("mac")String mac){
+	public String searchHardwareByKeywords(@RequestParam("mac")String mac) throws UnsupportedEncodingException{
+		mac=new String(mac.getBytes("ISO-8859-1"), "UTF-8");
 		Map<String, Object> ret=new HashMap<>();
 		List<Hardware> hardwares=hardwareService.searchHardwareByKeywords(mac);
 		if(hardwares != null)

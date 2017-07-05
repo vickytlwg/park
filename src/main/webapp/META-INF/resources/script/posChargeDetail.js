@@ -64,8 +64,8 @@
 	};
 	
 	var bindParkChange=function(){
-		$('#parkNamesearch').on('change',function(){
-		 parkId=$('#parkNamesearch').val();
+		$('#parkSelected3').on('change',function(){
+		 parkId=$('#parkSelected3').val();
 		renderPark(parkId,0, $.fn.page.pageSize);
         renderPagination();
 		});

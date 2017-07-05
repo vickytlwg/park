@@ -3,7 +3,7 @@
 <script src="/park/script/Area.js" type="text/javascript"></script>
 <script src="/park/script/utility.js" type="text/javascript"></script>
 <script src="/park/script/AreaData_min.js" type="text/javascript"></script>
-<script src="/park/script/posChargeDetail.js"></script>
+<script src="/park/script/posChargeDetail.js?v=1.2"></script>
 
 <div class="content-wrapper">
 	<section class="content-header">
@@ -78,9 +78,13 @@
                                         </button>
                                 </div>
 					  </div>
-				<div class="pull-right">		
-								                	
-	                	</div>
+				<div class="pull-right">
+						 <select id="parkSelected3" class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">
+	                		          		#foreach( $park in $parks)
+												<option value=$park.id>$park.name</option>
+											#end
+	                	</select>
+						</div>
 	                    <br/>   
 	                    <br/>    	
 						<div>
