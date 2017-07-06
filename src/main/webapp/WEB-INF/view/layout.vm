@@ -93,52 +93,9 @@
             <span class="sr-only">Toggle navigation</span>
           </a>
           
-       	   <div  style="color:rgb(255,255,255)"  class="hidden-xs">
-          		<div class="col-sm-1 col-md-offset-3" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(255,255,255,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-          			<center> <a href="/park/parkingInfo" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-eye-open"></span>
-	          		</div><p>可视化</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-	          		<center>
-	          		<a href="/park/pos/charge/flowbill" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-stats"></span>
-	          		</div><p>报表</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	          		<center><a href="/park/pos/charge/feeoperatorCharge" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-usd">
-	          		</span></div><p>交易</p>
-	          		</a></center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-          		<center>
-          		 	<a href="/park/repair" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-wrench"></span>
-	          		</div><p>运维</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	          		<center>
-	          		<a href="/park/street" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-qrcode"></span>
-	          		</div><p>服务</p>
-	          		</a>
-	          		</center></div>
-            	<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	            	<center>
-	            	<a href="/park/pos" style="color:#ffffff">
-	            	<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-cog"></span>
-	            	</div><p>设置</p>
-	            	</a>
-	            	</center>
-            	</div>
-              	<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
+       	   <div  style="color:rgb(255,255,255);padding-right:20px" >
+          		
+              	<div class="col-sm-1" style="padding-right:10px;background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
 	              	<center>
 	              	<a href="/park/login" style="color:#ffffff">
 	              		<div style="margin-top:5px;font-size:16px">
