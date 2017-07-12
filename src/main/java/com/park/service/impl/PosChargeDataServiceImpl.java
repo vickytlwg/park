@@ -538,7 +538,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
 		outsideparkinfo.setParkid(parkId);
 		outsideparkinfo.setCarportcount(park.getPortCount());
-		outsideparkinfo.setUnusedcarportcount(park.getPortCount());
+		outsideparkinfo.setUnusedcarportcount(park.getPortLeftCount());
 		if (!posChargeDatas.isEmpty()) {			
 			if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()==null) {
 				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());

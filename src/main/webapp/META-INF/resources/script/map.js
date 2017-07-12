@@ -17,7 +17,7 @@
 
     var mapInitial=function(){
         map = new BMap.Map("parkmap");
-        point = new BMap.Point(118.8, 32.0625);
+        point = new BMap.Point(118.283787,33.971518);
         map.centerAndZoom(point, 12);
         map.setMinZoom(11);
         map.setMaxZoom(14);     
