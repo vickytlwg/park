@@ -207,11 +207,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			  else if(isOneTimeExpense==0) {
 				  charge.setIsOneTimeExpense(0);
-				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+				  this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			  else {
 					charge.setIsOneTimeExpense(1);
-					this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
+					this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			}
 			charge.setEntranceDate(startTime);
@@ -538,7 +538,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
 		outsideparkinfo.setParkid(parkId);
 		outsideparkinfo.setCarportcount(park.getPortCount());
-		outsideparkinfo.setUnusedcarportcount(park.getPortCount());
+		outsideparkinfo.setUnusedcarportcount(park.getPortLeftCount());
 		if (!posChargeDatas.isEmpty()) {			
 			if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()==null) {
 				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());

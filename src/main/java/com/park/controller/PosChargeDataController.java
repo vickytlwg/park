@@ -638,7 +638,27 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", unpaidCharges);
 	}
-
+	@RequestMapping(value="/exitAndPay",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" } )
+	@ResponseBody
+	public String exitAndPay(@RequestBody Map<String, Object> args) throws Exception{
+		String cardNumber = (String) args.get("cardNumber");
+		double money = (double) args.get("money");
+		String exitDate = (String) args.get("exitDate");
+		PosChargeData payRet=null;
+		
+		Date eDate=new Date();
+		if (exitDate!=null) {
+			 eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+		}
+		List<PosChargeData> unpaidCharges = chargeSerivce.getDebt(cardNumber, eDate);
+		try {
+		payRet = chargeSerivce.pay(cardNumber, money);
+		} catch (Exception e) {
+			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
+		}
+		return Utility.createJsonMsg(1001, "success", payRet);
+	}
+	
 	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String pay(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");

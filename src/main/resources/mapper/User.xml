@@ -11,6 +11,8 @@
 		<result property="passwd" column="passwd"/>
 		<result property="headerUri" column="headerUri"/>
 		<result property="nickname" column="nickname"/>
+		<result property="balance" column="balance"/>
+		<result property="credit" column="credit"/>
 	</resultMap>   
 	
 	<resultMap id="UserDetailMapper" type="com.park.model.UserDetail">
@@ -19,6 +21,8 @@
 		<result property="number" column="number"/>
 		<result property="headerUri" column="headerUri"/>
 		<result property="nickname" column="nickname"/>
+		<result property="balance" column="number"/>
+		<result property="credit" column="number"/>
 	</resultMap> 
 
 

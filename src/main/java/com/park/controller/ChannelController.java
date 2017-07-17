@@ -80,7 +80,24 @@ public class ChannelController {
 		}		
 		return "channel";
 	}
-	
+	@RequestMapping(value = "barrier", produces = {"application/json;charset=UTF-8"})
+	public String barrier(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}		
+		return "barrier";
+	}
 	@RequestMapping(value = "/getchannelCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getchannelCount(){

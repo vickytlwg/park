@@ -20,27 +20,27 @@ public class PosChargeData {
 
     int payType=2;
 	
-	boolean isEntrance;
+	boolean isEntrance=true;
 	
-	String operatorId;
+	String operatorId ="operotor";
 	
-	String posId;
+	String posId ="posid";
 	
-	double chargeMoney;
+	double chargeMoney=0.0;
 	
-	double paidMoney;
+	double paidMoney=0.0;
 	
-	double unPaidMoney;
+	double unPaidMoney=0.0;
 	
-	double givenMoney;
+	double givenMoney=0.0;
 
-	double changeMoney;
+	double changeMoney=0.0;
 	
-	int isOneTimeExpense;
+	int isOneTimeExpense=0;
 	
 	boolean paidCompleted=false;
 	
-	boolean isLargeCar;
+	boolean isLargeCar=false;
 	
 	Date entranceDate;
 	

@@ -93,10 +93,10 @@
 						<div class='col-sm-8'>
 
 							<select class='form-control' id='macType'>	
-							<option value=1>车流量探测器</option>						
+								<option value=1>车流量探测器</option>						
 								<option value=2>剩余泊位指示牌</option>
 								<option value=0>停车位探测器</option>
-
+								<option value=3>道闸控制器</option>
 							</select>
 						</div>
 					</div>

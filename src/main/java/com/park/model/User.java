@@ -11,7 +11,20 @@ public class User {
 	private String passwd;
 	private String headerUri;
 	private String nickname;
-	
+	private Float balance;
+	private Byte credit;
+	public Float getBalance() {
+		return balance;
+	}
+	public void setBalance(Float balance) {
+		this.balance = balance;
+	}
+	public Byte getCredit() {
+		return credit;
+	}
+	public void setCredit(Byte credit) {
+		this.credit = credit;
+	}
 	public String getUserName() {
 		return userName;
 	}
