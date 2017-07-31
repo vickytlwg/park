@@ -8,6 +8,9 @@ import java.util.Map;
 
 import org.springframework.asm.commons.StaticInitMerger;
 
+import com.park.service.UdpConnectorInfoService;
+import com.park.service.impl.UdpConnectorsInfoServiceImpl;
+
 public class  Constants{
 	
 	public static  String PINGAPIKEY = "sk_live_Wr104O5Gu5m508arbTmX9aL8";
@@ -21,4 +24,6 @@ public class  Constants{
 	public static  DatagramSocket socket=null;
 	public static StringBuilder  dataReceived=new StringBuilder();
 	public static  Map<String, Object> iotData=new HashMap<>();
+	public static UdpConnectorInfoService udpConnectorInfoService=new UdpConnectorsInfoServiceImpl();
+	
 }

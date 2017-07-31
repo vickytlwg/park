@@ -112,13 +112,43 @@ public class ChannelController {
 		
 		return Utility.gson.toJson(ret);					
 	}
-
+	@RequestMapping(value = "/getchannelCountByMacType/{macType}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getchannelCountByChannelFlag(@PathVariable int macType){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> body = new HashMap<String, Object>();
+		int count = channelService.getChannelCountByChannelFlag(macType);
+		body.put("count", count);
+	
+		ret.put("status", "1001");
+		ret.put("message", "get channel detail success");
+		ret.put("body", Utility.gson.toJson(body));
+		
+		return Utility.gson.toJson(ret);					
+	}
+	
 	@RequestMapping(value = "/getchannelDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
-	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
+	public String getchannelDetail(@RequestParam("low")int low, @RequestParam("count")int count){	
 		Map<String, Object> ret = new HashMap<String, Object>();
 		
 		List<ChannelDetail> channelDetail = channelService.getChannelDetail(low, count);
+		if(channelDetail != null){
+			ret.put("status", "1001");
+			ret.put("message", "get channel detail success");
+			ret.put("body", Utility.gson.toJson(channelDetail));
+		}else{
+			ret.put("status", "1002");
+			ret.put("message", "get channel detail fail");
+		}
+		return Utility.gson.toJson(ret);		
+	}
+	@RequestMapping(value = "/getchannelDetailByMacType", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getchannelDetailByChannelFlag(@RequestParam("low")int low, @RequestParam("count")int count,@RequestParam("macType")int macType){	
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		List<ChannelDetail> channelDetail = channelService.getChannelDetailByMacType(low, count, macType);
 		if(channelDetail != null){
 			ret.put("status", "1001");
 			ret.put("message", "get channel detail success");

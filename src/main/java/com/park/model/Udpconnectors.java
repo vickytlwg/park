@@ -6,8 +6,12 @@ public class Udpconnectors {
     private String ip;
 
     private String port;
+    
+    private String mac;
+    
+    private String message;
 
-    private Date lastdate;
+	private Date lastdate;
 
     public String getIp() {
         return ip;
@@ -32,4 +36,20 @@ public class Udpconnectors {
     public void setLastdate(Date lastdate) {
         this.lastdate = lastdate;
     }
+
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
+    
+    public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

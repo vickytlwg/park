@@ -100,6 +100,72 @@ public class BarrierChargeController {
 		}
 		else {
 			return Utility.createJsonMsg(1002, "fail");
+		}	
+}
+	@RequestMapping(value="touched",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String touched(@RequestBody Map<String, String> args) throws ParseException{
+		String mac= args.get("mac");
+		String cardNumber=args.get("cardNumber");
+		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
+		PosChargeData charge=new PosChargeData();
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> info=hardwareService.getInfoByMac(mac);
+		if (info==null) {
+			ret.put("status", 1002);
+			return Utility.gson.toJson(ret);
 		}
-	
-}}
+		int channelFlag=(int) info.get("channelFlag");
+		//入口硬件
+		if (channelFlag==1) {
+			Integer parkId=(Integer) info.get("parkID");
+			String parkName=(String) info.get("Name");
+			if (largeCar==true) {
+				charge.setIsLargeCar(true);
+			}
+			charge.setCardNumber(cardNumber);
+			charge.setParkId(parkId);
+			charge.setParkDesc(parkName);
+			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			int num = chargeSerivce.insert(charge);
+			if (num==1) {
+				ret.put("status", 1001);
+			}
+			else {
+				ret.put("status", 1002);
+			}
+			return Utility.gson.toJson(ret);
+		}
+		else {			
+			List<PosChargeData> queryCharges = null;
+			String exitDate=(String) args.get("exitDate");
+			if (exitDate != null) {
+				Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+				try {
+					queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+				}
+			} else {
+				try {
+					queryCharges = chargeSerivce.getDebt(cardNumber);
+				} catch (Exception e) {
+					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+				}
+			}
+			PosChargeData payRet=queryCharges.get(queryCharges.size()-1);
+			payRet.setPaidCompleted(true);
+			payRet.setPaidMoney(payRet.getChargeMoney());
+			payRet.setUnPaidMoney(0);
+			payRet.setOperatorId("道闸");
+			int num = chargeSerivce.update(payRet);
+			if (num==1) {
+				return Utility.createJsonMsg(1001, "success", payRet);
+			}
+			else {
+				return Utility.createJsonMsg(1002, "fail");
+			}	
+		}
+	}
+}

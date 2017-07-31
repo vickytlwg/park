@@ -13,7 +13,11 @@ public interface ChannelService {
 	
 	public int getchannelCount();
 	
+	public int getChannelCountByChannelFlag(int macType);
+	
 	public List<ChannelDetail> getChannelDetail(int low, int count);
+	
+	public List<ChannelDetail> getChannelDetailByMacType(int low, int count,int macType);
 	
 	public List<ChannelDetail> getChannelDetailByKeywords(String keywords);
 	

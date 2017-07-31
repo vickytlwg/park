@@ -66,6 +66,8 @@ public class UsersController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String update(@RequestBody Users users){
+		int userId=users.getId();
+		Users usersOrigin=usersService.selectByPrimaryKey(userId);
 		int num=usersService.updateByPrimaryKeySelective(users);
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if (num==1) {
@@ -85,6 +87,30 @@ public class UsersController {
 		List<Users> users=usersService.getByUserNameAndPassword(userName, password);
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if (!users.isEmpty()) {
+			ret.put("status", 1001);
+			ret.put("body", users.get(0));
+		}
+		else {
+			ret.put("status", 1002);
+		}
+		return Utility.gson.toJson(ret);
+	}
+	@RequestMapping(value = "/reCharge", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String reCharge(@RequestBody Map<String, Object> args){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		double money=(double) args.get("money");
+		int userId=(int) args.get("userId");
+		Users users=usersService.selectByPrimaryKey(userId);
+		if (users==null) {
+			ret.put("status", 1002);
+			ret.put("message", "no users");
+			return Utility.gson.toJson(ret);
+		}
+		users.setBalance((float) (users.getBalance()+money));
+		int num=usersService.updateByPrimaryKey(users);
+		
+		if (num==1) {
 			ret.put("status", 1001);
 		}
 		else {

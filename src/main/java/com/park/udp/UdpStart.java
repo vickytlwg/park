@@ -32,8 +32,8 @@ public class UdpStart implements ServletContextListener {
 	ServerStart thread=new ServerStart();
 	new Thread(thread).start();
 	
-	ServerStart2 thread2=new ServerStart2();
-	new Thread(thread2).start();
+//	ServerStart2 thread2=new ServerStart2();
+//	new Thread(thread2).start();
 	}
 	
 }

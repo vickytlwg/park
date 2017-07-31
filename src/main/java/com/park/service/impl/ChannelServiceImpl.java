@@ -120,4 +120,18 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDAO.getChannelDetailByKeywords(keywords);
 	}
 
+
+	@Override
+	public int getChannelCountByChannelFlag(int channelFlag) {
+		// TODO Auto-generated method stub
+		return channelDAO.getChannelCountByChannelFlag(channelFlag);
+	}
+
+
+	@Override
+	public List<ChannelDetail> getChannelDetailByMacType(int low, int count, int channelFlag) {
+		// TODO Auto-generated method stub
+		return channelDAO.getChannelDetailByChannelFlag(low, count, channelFlag);
+	}
+
 }

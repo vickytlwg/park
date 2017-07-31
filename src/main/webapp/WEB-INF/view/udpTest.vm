@@ -25,11 +25,13 @@
          <tr>
 			<th><span>IP地址</span></th>										
 			<th><span>端口号</span></th>
+			<th><span>mac</span></th>
 			<th><span>连接时间</span></th>
 		 </tr>
 		 <tr  ng-repeat = "item in items">
 		 <td ng-bind="item.ip"></td>
 		 <td ng-bind="item.port"></td>
+		  <td ng-bind="item.mac"></td>
 		 <td ng-bind="item.lastdate"></td>
 		 </tr>
 		 </table>

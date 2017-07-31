@@ -52,7 +52,7 @@
 	SELECT type FROM hardware WHERE mac = #{mac}
 	</select>
 	<select id="getInfoByMac" resultType="java.util.HashMap">
-	 SELECT channel.parkId AS parkID, park.name AS NAME,hardware.mac AS mac FROM hardware 
+	 SELECT channel.parkId AS parkID,channel.channelFlag as channelFlag, park.name AS NAME,hardware.mac AS mac FROM hardware 
 	 LEFT JOIN channel ON channel.macId=hardware.id 
 	 LEFT JOIN park ON park.id=channel.parkId
 	 WHERE mac=#{mac}

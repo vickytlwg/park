@@ -48,6 +48,19 @@
 		left join hardware on channel.macId = hardware.id
 		limit #{low}, #{count}
 	</select>
+	
+	<select id="getChannelDetailByChannelFlag" resultMap="ChannelDetailMapper">
+		select channel.id as channel_Id, channel.parkId as channel_parkId, park.name as park_name, 
+		channel.macId as channel_macId, hardware.mac as hardware_mac, channel.channelId as channel_channelId, 
+		channel.channelFlag as channel_flag, channel.status as channel_status, 
+		channel.description as channel_description, channel.date as channel_date
+		from channel 
+		left join park on channel.parkId = park.Id
+		left join hardware on channel.macId = hardware.id
+		where hardware.type = #{macType}
+		limit #{low}, #{count}
+	</select>
+	
 	<select id="getChannelDetailByKeywords" resultMap="ChannelDetailMapper" statementType="STATEMENT">
 		select channel.id as channel_Id, channel.parkId as channel_parkId, park.name as park_name, 
 		channel.macId as channel_macId, hardware.mac as hardware_mac, channel.channelId as channel_channelId, 
@@ -81,6 +94,11 @@
 	
 	<select id="getChannelCount"  resultType="int">
 		select count(*) from channel
+	</select>
+	
+	<select id="getChannelCountByChannelFlag"  resultType="int">
+		select count(*) from channel left join hardware on channel.macId = hardware.id
+		where hardware.type = #{macType}
 	</select>
 	
 	<select id="getChannelIdByMacId"  resultType="int">

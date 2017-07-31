@@ -101,7 +101,7 @@
 		var url='';
 		var parkId = $('select#searchPark').val();
 			if (parkId<1) {
-				url=$.fn.config.webroot + "/getchannelDetail?low=" + low + "&count=" + count  +"&_t=" + (new Date()).getTime();
+				url=$.fn.config.webroot + "/getchannelDetailByMacType?low=" + low + "&count=" + count  +"&macType=3&_t=" + (new Date()).getTime();
 			} else {
 				url=$.fn.config.webroot + "/getParkchannelDetail?low=" + low + "&count=" + count +  "&parkId=" + parkId +"&_t=" + (new Date()).getTime();
 			}
@@ -492,7 +492,7 @@
 	var renderPagination = function(){
 
 		$.ajax({
-			url:$.fn.config.webroot + "/getchannelCount",
+			url:$.fn.config.webroot + "/getchannelCountByMacType/3",
 			type: 'get',
 			success: function(data){
 				data = $.parseJSON(data["body"]);

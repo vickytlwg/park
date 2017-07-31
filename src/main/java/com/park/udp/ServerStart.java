@@ -28,8 +28,7 @@ public class ServerStart implements Runnable{
 				//创建接收数据报
 				DatagramPacket packet=new DatagramPacket(data, data.length);
 				Constants.socket.receive(packet);
-		//		count++;
-			//	System.out.println("当前连接数："+count);
+
 				ServerThreadMuiti server=new ServerThreadMuiti(Constants.socket,packet,data);
 				Thread t=new Thread(server);
 				t.start();

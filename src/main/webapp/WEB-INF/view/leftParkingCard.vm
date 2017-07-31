@@ -1,4 +1,4 @@
-<script src="/park/script/leftParkingCard.js"></script>
+<script src="/park/script/leftParkingCard.js?v=1.1"></script>
 
 <div class="content-wrapper">
 	<section class="content-header">

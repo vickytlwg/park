@@ -16,9 +16,13 @@ public interface ChannelDAO {
 	public Channel getChannelById(int id);
 
 	public int getChannelCount();
+	
+	public int getChannelCountByChannelFlag(@Param("macType")int macType);
 
 	public List<ChannelDetail> getChannelDetail(@Param("low") int low, @Param("count") int count);
 
+	public List<ChannelDetail> getChannelDetailByChannelFlag(@Param("low") int low, @Param("count") int count,@Param("macType")int macType);
+	
 	public List<ChannelDetail> getChannelDetailByKeywords(@Param("keywords") String keywords);
 
 	public List<ChannelDetail> getParkChannelDetail(@Param("low") int low, @Param("count") int count,
