@@ -158,10 +158,19 @@ public class AliParkFeeService {
 	//订单更新
 	public AlipayEcoMycarParkingOrderUpdateResponse parkingOrderUpdate(Map<String, String> args) throws AlipayApiException{
 		AlipayEcoMycarParkingOrderUpdateRequest request = new AlipayEcoMycarParkingOrderUpdateRequest();
+		String user_id=args.get("user_id");
+		String order_no=args.get("order_no");
+		String order_status=args.get("order_status");
 		request.setBizContent("{" +
-		"\"user_id\":\"2088006362935583\"," +
-		"\"order_no\":\"PO20160805204323394865\"," +
-		"\"order_status\":\"1\"" +
+		"\"user_id\":\""
+		+ user_id
+		+ "\"," +
+		"\"order_no\":\""
+		+ order_no
+		+ "\"," +
+		"\"order_status\":\""
+		+ order_status
+		+ "\"" +
 		"  }");
 		AlipayEcoMycarParkingOrderUpdateResponse response = alipayClient.execute(request);
 		return response;
@@ -209,8 +218,11 @@ public class AliParkFeeService {
 	//车牌信息查询
 	public AlipayEcoMycarParkingVehicleQueryResponse parkingCardNumberQuery(Map<String, String> args) throws AlipayApiException{
 		AlipayEcoMycarParkingVehicleQueryRequest request = new AlipayEcoMycarParkingVehicleQueryRequest();
+		String car_id=args.get("car_id");
 		request.setBizContent("{" +
-		"\"car_id\":\"201605061278654\"" +
+		"\"car_id\":\""
+		+ car_id
+		+ "\"" +
 		"  }");
 		String accessToken="";
 		AlipayEcoMycarParkingVehicleQueryResponse response = alipayClient.execute(request,accessToken);

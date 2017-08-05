@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alipay.api.AlipayApiException;
 import com.jpush.Jpush;
 import com.park.dao.CarportStatusDetailDAO;
 import com.park.model.AuthUser;
@@ -40,16 +41,19 @@ import com.park.model.Feeoperator;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
+import com.park.model.Parktoalipark;
 import com.park.model.Pos;
 import com.park.model.PosChargeData;
 import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
+import com.park.service.AliParkFeeService;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
+import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.PosService;
 import com.park.service.PosdataService;
@@ -84,6 +88,10 @@ public class PosChargeDataController {
 	
 	@Autowired
 	private FeeCriterionService feeCriterionService;
+	@Autowired
+	AliParkFeeService aliparkFeeService;
+	@Autowired
+	ParkToAliparkService parkToAliparkService;
 	
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
@@ -209,12 +217,8 @@ public class PosChargeDataController {
 		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
 		List<Park> outsideparks = new ArrayList<>();
-		for (Park park : parkList) {
-			if (park.getType() == 3) {
-				outsideparks.add(park);
-			}
-		}
-		modelMap.addAttribute("parks", outsideparks);
+		
+		modelMap.addAttribute("parks", parkList);
 		if (user != null) {
 			modelMap.addAttribute("user", user);
 			boolean isAdmin = false;
@@ -472,7 +476,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	public @ResponseBody String insert(@RequestBody PosChargeData charge) throws ParseException {
+	public @ResponseBody String insert(@RequestBody PosChargeData charge) throws ParseException, AlipayApiException {
 
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
@@ -503,8 +507,19 @@ public class PosChargeDataController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		}
 		int ret = chargeSerivce.insert(charge);
-		if (ret == 1)
+		if (ret == 1){
+			List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(parkId);
+			if (!parktoaliparks.isEmpty()) {
+				Parktoalipark parktoalipark=parktoaliparks.get(0);
+				Map<String, String> argstoali=new HashMap<>();
+				argstoali.put("parking_id", parktoalipark.getAliparkingid());
+				argstoali.put("car_number", charge.getCardNumber());
+				argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				aliparkFeeService.parkingEnterinfoSync(argstoali);
+			}
 			return Utility.createJsonMsg(1001, "success");
+		}
+			
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}

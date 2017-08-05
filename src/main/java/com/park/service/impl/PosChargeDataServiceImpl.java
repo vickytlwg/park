@@ -21,11 +21,14 @@ import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
+import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
+import com.park.service.AliParkFeeService;
 import com.park.service.FeeCriterionService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
+import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.PosdataService;
 
@@ -55,6 +58,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	
 	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
+	
+	@Autowired
+	AliParkFeeService aliparkFeeService;
+	@Autowired
+	ParkToAliparkService parkToAliparkService;
+	
 	@Override
 	public PosChargeData getById(int id) {
 		return chargeDao.getById(id);
@@ -94,6 +103,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		
 		for (PosChargeData tmpcharge:charges){
+		
 			if (tmpcharge.getExitDate() == null) {
 			this.calExpense(tmpcharge, new Date(),false);}
 		}
@@ -105,6 +115,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
+				//信息录入支付宝
+				List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(charge.getParkId());
+				if (!parktoaliparks.isEmpty()) {
+					Parktoalipark parktoalipark=parktoaliparks.get(0);
+					Map<String, String> argstoali=new HashMap<>();
+					argstoali.put("parking_id", parktoalipark.getAliparkingid());
+					argstoali.put("car_number", cardNumber);
+					argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					aliparkFeeService.parkingExitinfoSync(argstoali);
+				}
 				tmPosChargeDatas.add(charge);				
 			}
 		}
@@ -238,7 +258,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
+			//信息录入支付宝
 			if (charge.getExitDate() == null) {
+				List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(charge.getParkId());
+				if (!parktoaliparks.isEmpty()) {
+					Parktoalipark parktoalipark=parktoaliparks.get(0);
+					Map<String, String> argstoali=new HashMap<>();
+					argstoali.put("parking_id", parktoalipark.getAliparkingid());
+					argstoali.put("car_number", cardNumber);
+					argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(exitDate));
+					aliparkFeeService.parkingExitinfoSync(argstoali);
+				}
 				tmPosChargeDatas.add(charge);				
 			}
 		}

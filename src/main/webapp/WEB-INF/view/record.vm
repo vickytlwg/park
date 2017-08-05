@@ -65,7 +65,7 @@
 										<th><span>找零</span></th>	
 										<th><span>进场时间</span></th>	
 										<th><span>离场时间</span></th>
-										<th><span>拒缴理由</span></th>
+										<th><span>未缴理由</span></th>
 										<th><span>查看图片</span></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>

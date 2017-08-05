@@ -78,6 +78,7 @@
 		<mvc:exclude-mapping path="/authority"/>
 		<mvc:exclude-mapping path="/image/**"/>
 		<mvc:exclude-mapping path="/iot/**"/>
+		<mvc:exclude-mapping path="/alipayh5/**"/>
 		<mvc:exclude-mapping path="/excelChannelDetailExport"/>
 		<mvc:exclude-mapping path="/img/**"/>
 		<mvc:exclude-mapping path="/script/**"/>

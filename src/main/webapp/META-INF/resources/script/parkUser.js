@@ -240,6 +240,6 @@
 		$('#adminType').on('change', $(this), bindFunction);
 		$('#normalType').on('change', $(this), bindFunction);
 		
-	}
+	};
 	
 })(jQuery);

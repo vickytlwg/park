@@ -38,8 +38,11 @@ import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
+import com.park.model.Street;
+import com.park.service.AreaService;
 import com.park.service.AuthorityService;
 import com.park.service.ParkService;
+import com.park.service.StreetService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
@@ -51,6 +54,11 @@ public class ParkController {
 	
 	@Autowired
 	private AuthorityService authService;
+	
+	@Autowired
+	private AreaService areaService;
+	@Autowired
+	private StreetService streetService;
 	
 	@Autowired
 	private UserPagePermissionService pageService;
@@ -116,6 +124,17 @@ public class ParkController {
 	public String getOutsideParkByStreetId(@PathVariable("streetId")int streetId){		
 		List<Park> parks=parkService.getOutsideParkByStreetId(streetId);
 		return Utility.createJsonMsg(1001, "get parks successfully", parks);
+	}
+	@RequestMapping(value = "/getOutsideParkByAreaId/{areaId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getOutsideParkByAreaId(@PathVariable("areaId")int areaId){	
+	List<Street> streets=streetService.getByArea(areaId);
+	List<Park> parks=new ArrayList<>();
+	for (Street street : streets) {
+		List<Park> parkstmp=parkService.getOutsideParkByStreetId(street.getId());
+		parks.addAll(parkstmp);
+	}
+	return Utility.createJsonMsg(1001, "get parks successfully", parks);
 	}
 	@RequestMapping(value = "/getParkByIds", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

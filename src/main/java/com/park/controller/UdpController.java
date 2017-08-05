@@ -81,8 +81,7 @@ public class UdpController {
 	@ResponseBody
 	public String send(@RequestBody Map<String, String> args) throws IOException, InterruptedException {
 		String message = args.get("message");
-		byte[] msToSend = message.getBytes();
-		List<Udpconnectors> udpconnectors = Constants.udpconnectors;
+		byte[] msToSend = message.getBytes();		
 		for (Udpconnectors udpconnector : Constants.udpconnectors) {
 			InetAddress address = InetAddress.getByName(udpconnector.getIp());
 			int port = Integer.parseInt(udpconnector.getPort());

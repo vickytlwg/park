@@ -217,8 +217,8 @@
 		$('select#parkType').val($(tds[11]).attr('data'));
 //		var positionInput = $('input#position');
 //		positionInput.val($(tds[12]).text());
-		$('input#longitude').val($(tds[13]).attr('longitude'));
-		$('input#latitude').val($(tds[13]).attr('latitude'));
+		$('input#longitude').val($(tds[12]).attr('longitude'));
+		$('input#latitude').val($(tds[12]).attr('latitude'));
 		$('input#mapAddr').val(checkedTr.attr('mapAddr'));		
 		$('#tmpStreetId').text($(tds[15]).text());
 //		$('select#streetid').val('number:'+$(tds[15]).text());

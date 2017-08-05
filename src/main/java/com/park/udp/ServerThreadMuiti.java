@@ -41,8 +41,7 @@ public class ServerThreadMuiti  implements Runnable {
 		udpconnector.setPort(String.valueOf(port));
 		udpconnector.setMac(info);
 		udpconnector.setLastdate(new Date());
-	synchronized (Constants.udpconnectors) {
-							
+								
 		if (Constants.udpconnectors.isEmpty()) {
 			 Constants.udpconnectors.add(udpconnector);
 		}
@@ -51,6 +50,7 @@ public class ServerThreadMuiti  implements Runnable {
 			for (Udpconnectors u : Constants.udpconnectors) {
 				if (u.getIp().equals(udpconnector.getIp())&&u.getPort().equals(udpconnector.getPort())) {
 					u.setLastdate(new Date());
+					u.setMac(info);
 					isOld=true;
 				}
 				if ((new Date().getTime()-u.getLastdate().getTime())>1000*60*5) {
@@ -61,5 +61,5 @@ public class ServerThreadMuiti  implements Runnable {
 				Constants.udpconnectors.add(udpconnector);
 			}
 		}
-	}
+	
 }}

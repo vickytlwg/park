@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.springframework.asm.commons.StaticInitMerger;
 
@@ -20,7 +21,7 @@ public class  Constants{
 	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
 	public static  String UPLOADDIR = "/alidata/server/tomcat7/webapps/parkpictures/";
 	public static  String WEBAPIURL="http://www.iotclouddashboard.com/park";
-	public static  List<Udpconnectors>  udpconnectors=new ArrayList<>();
+	public static  List<Udpconnectors>  udpconnectors=new Vector<>();
 	public static  DatagramSocket socket=null;
 	public static StringBuilder  dataReceived=new StringBuilder();
 	public static  Map<String, Object> iotData=new HashMap<>();
