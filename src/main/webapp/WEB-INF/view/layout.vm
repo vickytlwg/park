@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>九比特停车云</title>
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -82,7 +83,9 @@
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>BT</span>
           <!-- logo for regular state and mobile devices -->
+
           <span class="logo-lg"><b>停车云</b></span>
+
         </a>
 
         <!-- Header Navbar -->
@@ -92,52 +95,9 @@
             <span class="sr-only">Toggle navigation</span>
           </a>
           
-       	   <div  style="color:rgb(255,255,255)"  class="hidden-xs">
-          		<div class="col-sm-1 col-md-offset-3" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(255,255,255,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-          			<center> <a href="/park/parkingInfo" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-eye-open"></span>
-	          		</div><p>可视化</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-	          		<center>
-	          		<a href="/park/pos/charge/flowbill" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-stats"></span>
-	          		</div><p>报表</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	          		<center><a href="/park/pos/charge/feeoperatorCharge" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-usd">
-	          		</span></div><p>交易</p>
-	          		</a></center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5)">
-          		<center>
-          		 	<a href="/park/repair" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-wrench"></span>
-	          		</div><p>运维</p>
-	          		</a>
-	          		</center>
-          		</div>
-          		<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	          		<center>
-	          		<a href="/park/street" style="color:#ffffff">
-	          		<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-qrcode"></span>
-	          		</div><p>服务</p>
-	          		</a>
-	          		</center></div>
-            	<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
-	            	<center>
-	            	<a href="/park/pos" style="color:#ffffff">
-	            	<div style="margin-top:5px;font-size:16px"><span class="glyphicon glyphicon-cog"></span>
-	            	</div><p>设置</p>
-	            	</a>
-	            	</center>
-            	</div>
-              	<div class="col-sm-1" style="background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
+       	   <div  style="color:rgb(255,255,255);padding-right:20px" >
+          		
+              	<div class="col-sm-1" style="padding-right:10px;background: rgba(103, 171, 210, 0.87);border-left:1px solid rgba(0,0,0,0.5);border-right:1px solid rgba(255,255,255,0.5);">
 	              	<center>
 	              	<a href="/park/login" style="color:#ffffff">
 	              		<div style="margin-top:5px;font-size:16px">
@@ -230,8 +190,9 @@
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>今日信息</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
 					
-					<li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
+					<li #if(!$isAdmin && !$park_parkingInfo) #end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
 					<li #if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车分析</a></li>
+
 					<li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>车位使用分析</a></li>		
 					<li #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
 					<li #if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
@@ -242,6 +203,7 @@
 			</li>
 			
 			<li class="treeview active">
+
 			<a href="#"><i class="fa fa-fw fa-cab"></i> <span>基础信息</span> <i class="fa fa-angle-left pull-right"></i></a>
 			<ul class="treeview-menu">
 				<li #if(!$isAdmin && !$park_carportstatus) hidden#end><a href="/park/carportstatus"><i class="fa fa-area-chart"></i>泊位概况</a></li>
@@ -258,12 +220,14 @@
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
+
 				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/lepay/record/"><i class="fa fa-file-text-o"></i>支付数据</a></li>
 				</ul>
 			</li>
 			 <li class="treeview active">
+
                 <a href="#"><i class="fa fa-cog"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_repair) hidden#end><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li>
@@ -283,6 +247,7 @@
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/leftParkingCard"><i class="fa fa-rub"></i>剩余泊位牌管理</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
+
 
 				
 				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>
@@ -316,6 +281,7 @@
                   <li #if(!$isAdmin && !$park_permission_roles) hidden#end><a href="/park/page/permission/roles"><i class="fa fa-user-secret"></i>角色管理</a></li>
                   <li #if(!$isAdmin && !$park_permission_role_allocate) hidden#end><a href="/park/page/permission/role/allocate"><i class="fa fa-user-secret"></i>角色分配管理</a></li>
                   <li #if(!$isAdmin && !$park_permission_pages) hidden#end><a href="/park/page/permission/pages"><i class="fa fa-user-secret"></i>页面管理</a></li>
+
               </ul>
             </li>
 
@@ -350,7 +316,7 @@
          
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2016 <a href="#">Nine Bits</a>.</strong> All rights reserved.
+        <strong>Copyright©2017 <a href="#"></a>.</strong> All rights reserved.
 		<strong><a href="http://www.miitbeian.gov.cn/">苏ICP备15036890号
         </a></strong> 
       </footer>
