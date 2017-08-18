@@ -17,6 +17,10 @@ public class Alipayrecord {
 
     private Date date;
 
+    private String userid;
+
+    private String parkingid;
+
     public Integer getId() {
         return id;
     }
@@ -71,5 +75,21 @@ public class Alipayrecord {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid == null ? null : userid.trim();
+    }
+
+    public String getParkingid() {
+        return parkingid;
+    }
+
+    public void setParkingid(String parkingid) {
+        this.parkingid = parkingid == null ? null : parkingid.trim();
     }
 }

@@ -61,6 +61,8 @@ import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.squareup.okhttp.Request;
 
+import io.netty.util.internal.chmv8.ConcurrentHashMapV8.DoubleByDoubleToDouble;
+
 @Controller
 @RequestMapping("/pos/charge")
 public class PosChargeDataController {
@@ -75,24 +77,24 @@ public class PosChargeDataController {
 
 	@Autowired
 	private UserPagePermissionService pageService;
-	
+
 	@Autowired
 	private PosService posService;
 	@Autowired
 	private PosdataService posdataService;
 	@Autowired
 	private ExcelExportService excelService;
-	
+
 	@Autowired
 	private FeeOperatorService feeOperatorService;
-	
+
 	@Autowired
 	private FeeCriterionService feeCriterionService;
 	@Autowired
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
-	
+
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -216,8 +218,8 @@ public class PosChargeDataController {
 		List<Park> parkList = parkService.getParks();
 		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
-		List<Park> outsideparks = new ArrayList<>();
-		
+		// List<Park> outsideparks = new ArrayList<>();
+
 		modelMap.addAttribute("parks", parkList);
 		if (user != null) {
 			modelMap.addAttribute("user", user);
@@ -323,6 +325,15 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
 	}
 
+	@RequestMapping(value = "getByCardnumberAndPort", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getByCardnumberAndPort(@RequestBody Map<String, Object> args) {
+		String cardNumber = (String) args.get("cardNumber");
+		Integer portNumber = (Integer) args.get("portNumber");		
+		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumberAndPort(cardNumber, portNumber).get(0));
+	}
+
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String count() {
 		int count = chargeSerivce.count();
@@ -358,8 +369,7 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", result);
 	}
 
-	@RequestMapping(value = "deleleById", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	@RequestMapping(value = "deleleById", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String deleleById(@RequestBody Map<String, String> args) {
 		int id = Integer.parseInt(args.get("id"));
@@ -376,25 +386,27 @@ public class PosChargeDataController {
 		String userName = (String) session.getAttribute("username");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkAuthority(userName));
 	}
-	
-	@RequestMapping(value="/getByCount",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/getByCount", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getByCount(@RequestBody Map<String, Object> args){
+	public String getByCount(@RequestBody Map<String, Object> args) {
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
-		List<PosChargeData> posChargeDatas=chargeSerivce.getPage(low, count);
-		return Utility.createJsonMsg(1001, "success",posChargeDatas);
+		List<PosChargeData> posChargeDatas = chargeSerivce.getPage(low, count);
+		return Utility.createJsonMsg(1001, "success", posChargeDatas);
 	}
+
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args, HttpSession session) {
-//		String username = (String) session.getAttribute("username");
+		// String username = (String) session.getAttribute("username");
 		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
 		int count = (int) args.get("count");
-		List<PosChargeData> posChargeDatas=chargeSerivce.getPageByParkId(parkId, start, count);
+		List<PosChargeData> posChargeDatas = chargeSerivce.getPageByParkId(parkId, start, count);
 		if (posChargeDatas.isEmpty()) {
-			return Utility.createJsonMsg(1001, "success",posdataService.selectPosdataByPageAndPark(parkId, start, count));
+			return Utility.createJsonMsg(1001, "success",
+					posdataService.selectPosdataByPageAndPark(parkId, start, count));
 		}
 		return Utility.createJsonMsg(1001, "success", posChargeDatas);
 	}
@@ -434,12 +446,13 @@ public class PosChargeDataController {
 			if (num > 10) {
 				break;
 			}
+			DecimalFormat    df   = new DecimalFormat("######0.00");   
 			if (posChargeData.isPaidCompleted() == false && posChargeData.getExitDate() != null) {
 				num++;
 				PosChargeDataSimple posChargeDataSimple = new PosChargeDataSimple();
 				posChargeDataSimple.setId(posChargeData.getId());
 				posChargeDataSimple.setCardNumber(posChargeData.getCardNumber());
-				posChargeDataSimple.setUnPaidMoney(posChargeData.getUnPaidMoney());
+				posChargeDataSimple.setUnPaidMoney(Double.parseDouble(df.format(posChargeData.getUnPaidMoney())));
 				posChargeDataSimple.setExitDate(posChargeData.getExitDate());
 				posChargeDataSimples.add(posChargeDataSimple);
 			}
@@ -480,38 +493,44 @@ public class PosChargeDataController {
 
 		int parkId = charge.getParkId();
 		Park park = parkService.getParkById(parkId);
-//		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId, charge.getEntranceDate());
+		// Outsideparkinfo outsideparkinfo =
+		// outsideParkInfoService.getByParkidAndDate(parkId,
+		// charge.getEntranceDate());
 
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
-//		if (outsideparkinfo != null) {
-//			if (charge.isPaidCompleted() == false) {
-//				int Unusedcarportcount = outsideparkinfo.getUnusedcarportcount();
-//				outsideparkinfo.setUnusedcarportcount(Unusedcarportcount - 1);
-//				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
-//				outsideparkinfo.setPossigndate(new Date());
-//				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-//			} else {
-//				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() + 1);
-//				outsideparkinfo.setOutcount(outsideparkinfo.getOutcount() + 1);
-//				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney() + charge.getChargeMoney()));
-//				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + charge.getPaidMoney()
-//						+ charge.getGivenMoney() - charge.getChangeMoney()));
-//				outsideparkinfo.setPossigndate(new Date());
-//				outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
-//			}
-//		}
+		// if (outsideparkinfo != null) {
+		// if (charge.isPaidCompleted() == false) {
+		// int Unusedcarportcount = outsideparkinfo.getUnusedcarportcount();
+		// outsideparkinfo.setUnusedcarportcount(Unusedcarportcount - 1);
+		// outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() +
+		// 1);
+		// outsideparkinfo.setPossigndate(new Date());
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		// } else {
+		// outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount() +
+		// 1);
+		// outsideparkinfo.setOutcount(outsideparkinfo.getOutcount() + 1);
+		// outsideparkinfo.setAmountmoney((float)
+		// (outsideparkinfo.getAmountmoney() + charge.getChargeMoney()));
+		// outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()
+		// + charge.getPaidMoney()
+		// + charge.getGivenMoney() - charge.getChangeMoney()));
+		// outsideparkinfo.setPossigndate(new Date());
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		// }
+		// }
 
 		if (charge.getEntranceDate() == null) {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		}
 		int ret = chargeSerivce.insert(charge);
-		if (ret == 1){
-			List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(parkId);
+		if (ret == 1) {
+			List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
 			if (!parktoaliparks.isEmpty()) {
-				Parktoalipark parktoalipark=parktoaliparks.get(0);
-				Map<String, String> argstoali=new HashMap<>();
+				Parktoalipark parktoalipark = parktoaliparks.get(0);
+				Map<String, String> argstoali = new HashMap<>();
 				argstoali.put("parking_id", parktoalipark.getAliparkingid());
 				argstoali.put("car_number", charge.getCardNumber());
 				argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -519,7 +538,7 @@ public class PosChargeDataController {
 			}
 			return Utility.createJsonMsg(1001, "success");
 		}
-			
+
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
@@ -543,10 +562,12 @@ public class PosChargeDataController {
 		if (posChargeDatas.isEmpty()) {
 			return Utility.createJsonMsg(1002, "no record");
 		}
-//		Outsideparkinfo outsideparkinfo = outsideParkInfoService.getByParkidAndDate(parkId,posChargeDatas.get(0).getEntranceDate());
-//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney() + yajin));
+		// Outsideparkinfo outsideparkinfo =
+		// outsideParkInfoService.getByParkidAndDate(parkId,posChargeDatas.get(0).getEntranceDate());
+		// outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()
+		// + yajin));
 		posChargeDatas.get(0).setPaidMoney(yajin);
-//		outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		int ret = chargeSerivce.update(posChargeDatas.get(0));
 		if (ret == 1)
 			return Utility.createJsonMsg(1001, "success");
@@ -653,27 +674,28 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", unpaidCharges);
 	}
-	@RequestMapping(value="/exitAndPay",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" } )
+
+	@RequestMapping(value = "/exitAndPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String exitAndPay(@RequestBody Map<String, Object> args) throws Exception{
+	public String exitAndPay(@RequestBody Map<String, Object> args) throws Exception {
 		String cardNumber = (String) args.get("cardNumber");
 		double money = (double) args.get("money");
 		String exitDate = (String) args.get("exitDate");
-		PosChargeData payRet=null;
-		
-		Date eDate=new Date();
-		if (exitDate!=null) {
-			 eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+		PosChargeData payRet = null;
+
+		Date eDate = new Date();
+		if (exitDate != null) {
+			eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 		}
 		List<PosChargeData> unpaidCharges = chargeSerivce.getDebt(cardNumber, eDate);
 		try {
-		payRet = chargeSerivce.pay(cardNumber, money);
+			payRet = chargeSerivce.pay(cardNumber, money);
 		} catch (Exception e) {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
-	
+
 	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String pay(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
@@ -688,30 +710,33 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
-	@RequestMapping(value = "/getInfoByCardNumber", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/getInfoByCardNumber", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String getInfoByCardNumber(@RequestBody Map<String, Object> args) throws Exception {
 		String cardNumber = (String) args.get("cardNumber");
-		Map<String, Object> result=new HashMap<>();
-		List<PosChargeData> charges = chargeSerivce.queryDebt(cardNumber,new Date());
+		Map<String, Object> result = new HashMap<>();
+		List<PosChargeData> charges = chargeSerivce.queryDebt(cardNumber, new Date());
 		if (charges.isEmpty()) {
 			result.put("status", 1002);
 			return Utility.gson.toJson(result);
 		}
 		PosChargeData lastCharge = charges.get(0);
-		double charge=(lastCharge.getChargeMoney()-lastCharge.getPaidMoney())>0?(lastCharge.getChargeMoney()-lastCharge.getPaidMoney()):0;
+		double charge = (lastCharge.getChargeMoney() - lastCharge.getPaidMoney()) > 0
+				? (lastCharge.getChargeMoney() - lastCharge.getPaidMoney()) : 0;
 		result.put("deposit", lastCharge.getPaidMoney());
 		result.put("charge", charge);
 		result.put("chargeId", lastCharge.getId());
-		Feeoperator feeoperator=feeOperatorService.getOperatorByAccount(lastCharge.getOperatorId()).get(0);
-		if (feeoperator==null) {
+		Feeoperator feeoperator = feeOperatorService.getOperatorByAccount(lastCharge.getOperatorId()).get(0);
+		if (feeoperator == null) {
 			result.put("status", 1002);
 			return Utility.gson.toJson(result);
 		}
 		result.put("operatorName", feeoperator.getName());
 		result.put("operatorPhone", feeoperator.getPhone());
-		Park park=parkService.getParkById(lastCharge.getParkId());		
-		FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
-		if (feeCriterion==null) {
+		Park park = parkService.getParkById(lastCharge.getParkId());
+		FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
+		if (feeCriterion == null) {
 			result.put("status", 1002);
 			return Utility.gson.toJson(result);
 		}
@@ -719,34 +744,37 @@ public class PosChargeDataController {
 		result.put("status", 1001);
 		return Utility.gson.toJson(result);
 	}
-	@RequestMapping(value = "/pushInfoFromWechat", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/pushInfoFromWechat", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String pushInfoFromWechat(@RequestBody Map<String, Object> args) throws Exception {
-		Integer chargeId=(Integer) args.get("chargeId");
-		Map<String, Object> result=new HashMap<>();
-		PosChargeData posChargeData=chargeSerivce.getById(chargeId);
-		Double charge=(Double)args.get("charge");
+		Integer chargeId = (Integer) args.get("chargeId");
+		Map<String, Object> result = new HashMap<>();
+		PosChargeData posChargeData = chargeSerivce.getById(chargeId);
+		Double charge = (Double) args.get("charge");
 		posChargeData.setGivenMoney(charge);
 		posChargeData.setPayType(3);
 		posChargeData.setExitDate1(new Date());
 		posChargeData.setPaidCompleted(true);
-		if (chargeSerivce.update(posChargeData)==1) {
+		if (chargeSerivce.update(posChargeData) == 1) {
 			result.put("status", 1001);
-		}
-		else{
+		} else {
 			result.put("status", 1002);
 		}
-		List<Pos> poses=posService.getByParkId(posChargeData.getParkId());
-		List<String> audiences=new ArrayList<>();
+		List<Pos> poses = posService.getByParkId(posChargeData.getParkId());
+		List<String> audiences = new ArrayList<>();
 		for (Pos pos : poses) {
-			audiences.add(pos.getNum());			
+			audiences.add(pos.getNum());
 		}
-		Map<String, String> extras=new HashMap<>();
+		Map<String, String> extras = new HashMap<>();
 		extras.put("parkId", String.valueOf(posChargeData.getParkId()));
 		extras.put("portNum", String.valueOf(posChargeData.getPortNumber()));
 		Jpush.SendPushToAudiencesWithExtras(audiences, extras, "wechatPaidChanged");
 		return Utility.gson.toJson(result);
 	}
-	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String rejectReason(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
 		String rejectReason = (String) args.get("rejectReason");
@@ -822,14 +850,15 @@ public class PosChargeDataController {
 		}
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
-	
-	@RequestMapping(value="/hardwareRecord",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	@ResponseBody
-	public String hardwareRecord(@RequestBody Map<String, Object> args) throws Exception{
 
-		Map<String, Object> result=new HashMap<>();
+	@RequestMapping(value = "/hardwareRecord", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String hardwareRecord(@RequestBody Map<String, Object> args) throws Exception {
+
+		Map<String, Object> result = new HashMap<>();
 		result.put("status", 1001);
-	
+
 		return Utility.gson.toJson(result);
 	}
 
@@ -862,8 +891,8 @@ public class PosChargeDataController {
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
 		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
-		SimpleDateFormat sFormat=new SimpleDateFormat("yyyyMMdd");
-		String filename=sFormat.format(new Date())+"poschargedata.xlsx";
+		SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
+		String filename = sFormat.format(new Date()) + "poschargedata.xlsx";
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);

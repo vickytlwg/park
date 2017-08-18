@@ -91,4 +91,7 @@ public interface PosChargeDataService {
 	public Outsideparkinfo getOutsideparkinfoByOrigin(int parkId,String day);
 
 	List<PosChargeData> getCharges(String cardNumber) throws Exception;
+	
+	public List<PosChargeData> getByCardNumberAndPort(String cardNumber,Integer portNumber);
+
 }

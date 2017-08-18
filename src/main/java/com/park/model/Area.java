@@ -94,4 +94,15 @@ public class Area {
     public void setOther(String other) {
         this.other = other == null ? null : other.trim();
     }
+    
+    @Override
+    public boolean equals(Object obj){
+    	Area area=(Area)obj;
+    	return id==area.getId();
+    }
+    @Override  
+    public int hashCode() {  
+    String in = id + name;  
+    return in.hashCode();  
+    }  
 }

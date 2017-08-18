@@ -95,6 +95,11 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} and
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,rejectReason,portNumber,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
 FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber like '%${cardNumber}%' order by id desc
  	</select>
+ 	<select id="getByCardNumberAndPort"  resultMap="PosChargeDataMapper">
+		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,rejectReason,portNumber,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardNumber} and portNumber=#{portNumber} order by id desc
+ 	</select>
+ 	
  	<select id="getByParkName" statementType="STATEMENT" resultMap="PosChargeDataMapper">
 		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc
  	</select>		

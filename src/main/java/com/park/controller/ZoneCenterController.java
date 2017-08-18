@@ -1,6 +1,8 @@
 package com.park.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,11 +20,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.park.model.Area;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
+import com.park.model.Park;
+import com.park.model.Street;
 import com.park.model.Zonecenter;
+import com.park.service.AreaService;
 import com.park.service.AuthorityService;
+import com.park.service.ParkService;
+import com.park.service.StreetService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.park.service.ZoneCenterService;
@@ -36,6 +44,12 @@ public class ZoneCenterController {
 	private AuthorityService authService;
 	@Autowired
 	private UserPagePermissionService pageService;
+	@Autowired
+	private ParkService parkService;
+	@Autowired
+	private StreetService streetService;
+	@Autowired
+	private AreaService areaService;
 	@RequestMapping(value="")
 	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -122,9 +136,39 @@ public class ZoneCenterController {
 		String username=(String) session.getAttribute("username");
 		Map<String, Object> result=new HashMap<>();
 		List<Zonecenter> zoneCenters=zoneCenterService.getByStartAndCount(start, count);
-		if (zoneCenters!=null) {
+		
+		//String username = (String) session.getAttribute("username");
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		Set<Street> streetsResult=new HashSet<>();
+		for (Park parktmp : parkList) {
+			if (parktmp.getType()!=3) {
+				continue;
+			}
+			Street street=streetService.selectByPrimaryKey(parktmp.getStreetId());
+			if (!streetsResult.contains(street)) {
+				streetsResult.add(street);
+			}
+		}
+		Set<Area> areasResult=new HashSet<>();
+		for (Street streettmp : streetsResult) {
+			Area area=areaService.selectByPrimaryKey(streettmp.getAreaid());
+			if (!areasResult.contains(area)) {
+				areasResult.add(area);
+			}
+		}
+		Set<Zonecenter> zonecentersResult=new HashSet<>();
+		for (Area areaTmp : areasResult) {
+			Zonecenter zonecenter=zoneCenterService.selectByPrimaryKey(areaTmp.getZoneid());
+			if (!zonecentersResult.contains(zonecenter)) {
+				zonecentersResult.add(zonecenter);
+			}
+		}
+		
+		if (zonecentersResult!=null) {
 			result.put("status", 1001);
-			result.put("body", zoneCenters);
+			result.put("body", zonecentersResult);
 		}
 		else {
 			result.put("status", 1002);

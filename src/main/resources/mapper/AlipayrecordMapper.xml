@@ -9,9 +9,11 @@
     <result column="money" property="money" jdbcType="DOUBLE" />
     <result column="aliTradeNo" property="alitradeno" jdbcType="VARCHAR" />
     <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+    <result column="parkingId" property="parkingid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, out_trade_no, poschargeId, status, money, aliTradeNo, date
+    id, out_trade_no, poschargeId, status, money, aliTradeNo, date, userId, parkingId
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -26,10 +28,12 @@
   <insert id="insert" parameterType="com.park.model.Alipayrecord" >
     insert into alipayRecord (id, out_trade_no, poschargeId, 
       status, money, aliTradeNo, 
-      date)
+      date, userId, parkingId
+      )
     values (#{id,jdbcType=INTEGER}, #{outTradeNo,jdbcType=VARCHAR}, #{poschargeid,jdbcType=INTEGER}, 
       #{status,jdbcType=CHAR}, #{money,jdbcType=DOUBLE}, #{alitradeno,jdbcType=VARCHAR}, 
-      #{date,jdbcType=TIMESTAMP})
+      #{date,jdbcType=TIMESTAMP}, #{userid,jdbcType=VARCHAR}, #{parkingid,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Alipayrecord" >
     insert into alipayRecord
@@ -55,6 +59,12 @@
       <if test="date != null" >
         date,
       </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="parkingid != null" >
+        parkingId,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -77,6 +87,12 @@
       </if>
       <if test="date != null" >
         #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingid != null" >
+        #{parkingid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -101,6 +117,12 @@
       <if test="date != null" >
         date = #{date,jdbcType=TIMESTAMP},
       </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingid != null" >
+        parkingId = #{parkingid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -111,7 +133,9 @@
       status = #{status,jdbcType=CHAR},
       money = #{money,jdbcType=DOUBLE},
       aliTradeNo = #{alitradeno,jdbcType=VARCHAR},
-      date = #{date,jdbcType=TIMESTAMP}
+      date = #{date,jdbcType=TIMESTAMP},
+      userId = #{userid,jdbcType=VARCHAR},
+      parkingId = #{parkingid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getByOutTradeNO" resultType="com.park.model.Alipayrecord">

@@ -74,4 +74,15 @@ public class Zonecenter {
     public void setOther(String other) {
         this.other = other == null ? null : other.trim();
     }
+    
+    @Override
+    public boolean equals(Object obj){
+    	Zonecenter zonecenter=(Zonecenter) obj;
+    	return id==zonecenter.id;
+    }
+    @Override  
+    public int hashCode() {  
+    String in = id + name;  
+    return in.hashCode();  
+    }  
 }

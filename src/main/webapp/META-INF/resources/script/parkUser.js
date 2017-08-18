@@ -5,7 +5,7 @@
 		bindTrClick();
 		bindRefreshClick();
 		renderuser(0, $.fn.page.pageSize);
-		fillParkSelect();
+	//	fillParkSelect();
 		renderPagination();
 		bindAddButton();
 		bindDeleteButton();

@@ -1,6 +1,8 @@
 package com.park.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
+import com.park.model.Park;
 import com.park.model.Street;
 import com.park.service.AuthorityService;
+import com.park.service.ParkService;
 import com.park.service.StreetService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
@@ -37,6 +41,8 @@ public class StreetController {
 	private StreetService streetService;
 	@Autowired
 	private UserPagePermissionService pageService;
+	@Autowired
+	private ParkService parkService;
 	@RequestMapping(value="")
 	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -132,12 +138,27 @@ public class StreetController {
 	}
 	@RequestMapping(value="/getByStartAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count){
+	public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count, HttpSession session){
 		Map<String, Object> result=new HashMap<>();
-		List<Street> streets=streetService.getByStartAndCount(start, count);
-		if (streets!=null) {
+	//	List<Street> streets=streetService.getByStartAndCount(start, count);
+		String username = (String) session.getAttribute("username");
+		List<Park> parkList = parkService.getParks();
+		if(username != null)
+			parkList = parkService.filterPark(parkList, username);
+		Set<Street> streetsResult=new HashSet<>();
+		for (Park parktmp : parkList) {
+			if (parktmp.getType()!=3) {
+				continue;
+			}
+			Street street=streetService.selectByPrimaryKey(parktmp.getStreetId());
+			if (!streetsResult.contains(street)) {
+				streetsResult.add(street);
+			}
+		}
+		
+		if (streetsResult!=null) {
 			result.put("status", 1001);
-			result.put("body", streets);
+			result.put("body", streetsResult);
 		}
 		else {
 			result.put("status", 1002);

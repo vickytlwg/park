@@ -1,5 +1,5 @@
-<script src="/park/script/parkUser.js"></script>
-<script src="/park/script/parkUserAngular.js"></script>
+<script src="/park/script/parkUser.js?v=1.2"></script>
+<script src="/park/script/parkUserAngular.js?v=1.2"></script>
 <div class="content-wrapper">
 	<section class="content-header">
           <h1>

@@ -1,3 +1,4 @@
+#set($layout = "nullLayout.vm")
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>支付成功页面</title>
-  <link rel="stylesheet" href="dist/css/main.css">
+  <link rel="stylesheet" href="http://www.iotclouddashboard.com/park/alipayh5/css/main.css">
 </head>
 <body id="body">
   <div class="container container-success">
@@ -19,10 +20,10 @@
         <p>支付成功</p>
       </div>
       <div class="park-fee">
-        <p>5.00</p>
+        <p>$chargeMoney</p>
       </div>
       <div class="notice">
-        <p>请于15分钟内离场，超时将加收停车费</p>
+        <p></p>
       </div>
     </div>
   </div>

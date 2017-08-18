@@ -103,4 +103,15 @@ public class Street {
     public void setOther(String other) {
         this.other = other == null ? null : other.trim();
     }
+    
+    @Override
+    public boolean equals(Object obj){
+    	Street street=(Street)obj;
+    	return id==street.getId();
+    }
+    @Override  
+    public int hashCode() {  
+    String in = id + name;  
+    return in.hashCode();  
+    }  
 }

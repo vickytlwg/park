@@ -723,4 +723,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		this.update(lastCharge);
 		return lastCharge;
 	}
+
+	@Override
+	public List<PosChargeData> getByCardNumberAndPort(String cardNumber, Integer portNumber) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByCardNumberAndPort(cardNumber, portNumber);
+	}
 }

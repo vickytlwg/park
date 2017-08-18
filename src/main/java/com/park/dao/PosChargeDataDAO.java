@@ -54,6 +54,8 @@ public interface PosChargeDataDAO {
 	
 	public List<PosChargeData> getByCardNumber(@Param("cardNumber")String cardNumber);
 	
+	public List<PosChargeData> getByCardNumberAndPort(@Param("cardNumber")String cardNumber,@Param("portNumber")Integer portNumber);
+	
 	public List<PosChargeData> getByParkName(@Param("parkName")String parkName);
 	
 	public List<Map<String, Object>> getFeeOperatorChargeData(@Param("startDate") Date startDate, @Param("endDate") Date endDate);

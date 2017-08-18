@@ -185,18 +185,20 @@
       <p>实付金额<span>$charge</span></p>
       <p>优惠金额<span>0</span></p>
     </div>
+	#set($hours=$parkingDuration/60)
+	#set($minutes=$parkingDuration%60)
     <div class="park-info">
       <p>车牌号<span>$carNumber</span></p>
 	  <p>停车卡号<span></span></p>
       <p>入场时间<span>$enterDate</span></p>
-      <p>出场时间<span>$exitDate</span></p>
+      <p>停车时长<span>$hours时$minutes分</span></p>
     </div>
   </div>
   <div class="footer-info">
     <div class="state">
       <p><span>!</span>付款后请15分钟内离场，超时将加收停车费</p>
     </div>
-    <button ><a href="http://www.iotclouddashboard.com/park/alipay/quickPayWeb/$chargeId/">立即付款</a></button>
+    <button ><a href="http://www.iotclouddashboard.com/park/alipay/quickPayWeb/$chargeId/$userId/$parkingId/">立即付款</a></button>
     <div class="contact-info">
       <p>本服务由九比特提供</p>
       <p>客服电话 <span>4000-0000-165</span></p>

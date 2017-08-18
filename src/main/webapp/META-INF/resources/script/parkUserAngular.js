@@ -1,16 +1,28 @@
 angular.module("parkUserApp", ['ui.bootstrap'])
-.controller("parkUserCtrl", function($scope, $http, $q,  getPositionData) {   
+.controller("parkUserCtrl", function($scope, $http, $q,  getPositionData) {  
+    $scope.parks=[]; 
       $scope.getArea = function() {
         getPositionData.getArea($scope.zoneCenterId).then(function(result) {
-            $scope.areas = result;        
+            $scope.areas = result;  
+             $scope.parks=[];
+            angular.forEach(result,function(area){
+            getPositionData.getOutsideParkByAreaId(area.id).then(function(result) {
+                 angular.forEach(result,function(result){
+                     $scope.parks.push(result);
+                 });
+            
+         
         });
+            });      
+        });
+        
     };
      $scope.getZoneCenter = function() {
         getPositionData.getZoneCenter().then(function(result) {
             $scope.zoneCenters = result;
         });
     };
-    $scope.parks;
+    
     $scope.getZoneCenter();
      $scope.getStreets = function() {
          if($scope.areaId==undefined||$scope.areaId==null){
@@ -19,6 +31,9 @@ angular.module("parkUserApp", ['ui.bootstrap'])
         getPositionData.getStreetByAreaId($scope.areaId).then(function(result) {
             $scope.streets = result;
            
+        });
+        getPositionData.getOutsideParkByAreaId($scope.areaId).then(function(result){
+            $scope.parks=result;
         });
     };   
       var getAreaById = function(areaid) {
@@ -32,10 +47,10 @@ angular.module("parkUserApp", ['ui.bootstrap'])
         if (streetId==undefined||streetId==null) {
             return;
         };
-        $("#parkSelect option[index>'0']").remove();
+      
         getPositionData.getOutsideParkByStreetId(streetId).then(function(result) {
             $scope.parks = result;   
-            });    
+            });           
     };
 })
 .factory("getPositionData", function($http, $q) {

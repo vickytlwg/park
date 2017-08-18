@@ -64,8 +64,7 @@ public class ParkChartController {
 				}				
 			}
 		}
-		modelMap.addAttribute("parks", parkl);
-		
+		modelMap.addAttribute("parks", parkl);		
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
 			modelMap.addAttribute("user", user);

@@ -47,8 +47,9 @@ public class loginInterceptor implements HandlerInterceptor{
 		String url = request.getRequestURI();		
 		String token = request.getHeader("token");
 		if(token != null && tokenService.validToken(token)){
-			if(!url.contains("access"))
-				tokenUsageService.insertRecord(token, url);
+			if(!url.contains("access")){
+			//	tokenUsageService.insertRecord(token, url);
+			}
 			return true; 
 		}
 		HttpSession session  = request.getSession();
