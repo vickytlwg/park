@@ -63,4 +63,10 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.updateByPrimaryKeySelective(record);
 	}
 
+	@Override
+	public List<Monthuser> getByCardNumber(String cardNumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByCardNumber(cardNumber);
+	}
+
 }

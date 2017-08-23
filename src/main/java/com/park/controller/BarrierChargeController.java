@@ -24,12 +24,15 @@ import com.park.dao.PosChargeDataDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Constants;
+import com.park.model.Monthuser;
 import com.park.model.Page;
 import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 import com.park.service.AliParkFeeService;
 import com.park.service.AuthorityService;
 import com.park.service.HardwareService;
+import com.park.service.MonthUserParkService;
+import com.park.service.MonthUserService;
 import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.UserPagePermissionService;
@@ -48,6 +51,8 @@ public class BarrierChargeController {
 	ParkToAliparkService parkToAliparkService;
 	@Autowired
 	AliParkFeeService aliparkFeeService;
+	@Autowired
+	MonthUserService monthUserService;
 	
 	@RequestMapping(value="insert",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
@@ -130,7 +135,26 @@ public class BarrierChargeController {
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> info=hardwareService.getInfoByMac(mac);
-		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
+		if (monthusers.isEmpty()) {
+			dataMap.put("userType", "0");			
+		}
+		else{
+			Monthuser monthuser=monthusers.get(0);
+			dataMap.put("userType", "1");
+		//	dataMap.put("monthUserStartDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getStarttime()));
+			dataMap.put("endDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getEndtime()));
+			Long diff=(monthuser.getEndtime().getTime()-(new Date()).getTime());
+			if (diff>0) {
+				int leftDays=(int) (diff/(1000*60*60*24));
+				dataMap.put("leftDays", String.valueOf(leftDays));
+			}
+			else {
+				dataMap.put("leftDays","-1");
+			}
+			
+		}
 		if (info==null) {
 			ret.put("status", 1002);
 			return Utility.gson.toJson(ret);
@@ -144,6 +168,7 @@ public class BarrierChargeController {
 			if (largeCar==true) {
 				charge.setIsLargeCar(true);
 			}
+			dataMap.put("channelType", "in");	
 			charge.setCardNumber(cardNumber);
 			charge.setParkId(parkId);
 			charge.setParkDesc(parkName);
@@ -163,9 +188,10 @@ public class BarrierChargeController {
 			else {
 				ret.put("status", 1002);
 			}
-			return Utility.gson.toJson(ret);
+			return Utility.createJsonMsg(1001, "success", dataMap);
 		}
-		else {			
+		else {		
+			dataMap.put("channelType", "out");	
 			List<PosChargeData> queryCharges = null;
 			String exitDate=(String) args.get("exitDate");
 			
@@ -209,8 +235,10 @@ public class BarrierChargeController {
 			payRet.setUnPaidMoney(0);
 			payRet.setOperatorId("道闸");
 			int num = chargeSerivce.update(payRet);
+			dataMap.put("enterDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+			dataMap.put("chargeMoney", String.valueOf(payRet.getChangeMoney()));
 			if (num==1) {
-				return Utility.createJsonMsg(1001, "success", payRet);
+				return Utility.createJsonMsg(1001, "success", dataMap);
 			}
 			else {
 				return Utility.createJsonMsg(1002, "fail");

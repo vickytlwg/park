@@ -24,4 +24,6 @@ public interface MonthuserDAO {
     int getCount();
     
     List<Monthuser> getByStartAndCount(@Param("start")int start,@Param("count")int count);
+    
+    List<Monthuser> getByCardNumber(@Param("cardNumber")String cardNumber);
 }

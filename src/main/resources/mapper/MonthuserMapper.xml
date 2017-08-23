@@ -188,6 +188,9 @@
   <select id="getCount" resultType="int">
   	select count(*) from monthUser
   </select>
+  <select id="getByCardNumber" resultType="com.park.model.Monthuser">
+  	select * from monthUser where plateNumber = #{cardNumber}
+  </select>
   <select id="getByStartAndCount" resultType="com.park.model.Monthuser">
   	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
