@@ -124,6 +124,11 @@ public class AlipayController {
 		}
 		modelMap.addAttribute("carNumber",carNumber);
 		List<PosChargeData> charges=poschargedataService.queryDebt(carNumber,new Date());
+		
+		if (charges.isEmpty()) {
+			return "alipayh5/noRecord";
+		}
+		
 		PosChargeData lastCharge = charges.get(0);
 		
 		modelMap.addAttribute("charge",lastCharge.getChargeMoney());

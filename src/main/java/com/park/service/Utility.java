@@ -50,6 +50,13 @@ public class Utility {
 		return gson.toJson(ret);
 	}
 	
+	public static String createJsonMsgWithoutMsg(Object status,  Object body){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", status);
+		ret.put("body", body);
+		return gson.toJson(ret);
+	}
+	
 	private static double EARTH_RADIUS = 6378.137;//地球半径
 	private static double rad(double d)
 	{

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -135,23 +136,26 @@ public class BarrierChargeController {
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
 		Map<String, Object> info=hardwareService.getInfoByMac(mac);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		if (info==null) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
 		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
 		if (monthusers.isEmpty()) {
-			dataMap.put("userType", "0");			
+			dataMap.put("uT", "0");			
 		}
 		else{
 			Monthuser monthuser=monthusers.get(0);
-			dataMap.put("userType", "1");
+			dataMap.put("uT", "1");
 		//	dataMap.put("monthUserStartDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getStarttime()));
-			dataMap.put("endDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getEndtime()));
+			dataMap.put("eD", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getEndtime()));
 			Long diff=(monthuser.getEndtime().getTime()-(new Date()).getTime());
 			if (diff>0) {
 				int leftDays=(int) (diff/(1000*60*60*24));
-				dataMap.put("leftDays", String.valueOf(leftDays));
+				dataMap.put("ds", String.valueOf(leftDays));
 			}
 			else {
-				dataMap.put("leftDays","-1");
+				dataMap.put("ds","-1");
 			}
 			
 		}
@@ -168,7 +172,7 @@ public class BarrierChargeController {
 			if (largeCar==true) {
 				charge.setIsLargeCar(true);
 			}
-			dataMap.put("channelType", "in");	
+			dataMap.put("cT", "in");	
 			charge.setCardNumber(cardNumber);
 			charge.setParkId(parkId);
 			charge.setParkDesc(parkName);
@@ -188,10 +192,10 @@ public class BarrierChargeController {
 			else {
 				ret.put("status", 1002);
 			}
-			return Utility.createJsonMsg(1001, "success", dataMap);
+			return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 		}
 		else {		
-			dataMap.put("channelType", "out");	
+			dataMap.put("cT", "out");	
 			List<PosChargeData> queryCharges = null;
 			String exitDate=(String) args.get("exitDate");
 			
@@ -214,11 +218,11 @@ public class BarrierChargeController {
 				if (largeCar==true) {
 					charge.setIsLargeCar(true);
 				}
-				charge.setCardNumber(cardNumber);
-				charge.setParkId(parkId);
-				charge.setParkDesc(parkName);
-				charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				chargeSerivce.insert(charge);
+//				charge.setCardNumber(cardNumber);
+//				charge.setParkId(parkId);
+//				charge.setParkDesc(parkName);
+//				charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//				chargeSerivce.insert(charge);
 				if (!parktoaliparks.isEmpty()) {
 					Parktoalipark parktoalipark=parktoaliparks.get(0);
 					Map<String, String> argstoali=new HashMap<>();
@@ -227,22 +231,45 @@ public class BarrierChargeController {
 					argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					aliparkFeeService.parkingExitinfoSync(argstoali);
 				}
-				return Utility.createJsonMsg(1003, "没有入场信息", charge);
+				return Utility.createJsonMsgWithoutMsg(1003, dataMap);
 			}
-			PosChargeData payRet=queryCharges.get(queryCharges.size()-1);
+			//PosChargeData payRet=queryCharges.get(queryCharges.size()-1);
+			PosChargeData payRet=queryCharges.get(0);
 			payRet.setPaidCompleted(true);
 			payRet.setPaidMoney(payRet.getChargeMoney());
 			payRet.setUnPaidMoney(0);
 			payRet.setOperatorId("道闸");
 			int num = chargeSerivce.update(payRet);
-			dataMap.put("enterDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
-			dataMap.put("chargeMoney", String.valueOf(payRet.getChangeMoney()));
+			dataMap.put("eD", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+				if (monthusers.isEmpty()) {
+					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
+				}						
+			
 			if (num==1) {
-				return Utility.createJsonMsg(1001, "success", dataMap);
+				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			}
 			else {
 				return Utility.createJsonMsg(1002, "fail");
 			}	
 		}
+	}
+	
+	@RequestMapping(value="getTypeByMac",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getTypeByMac(@RequestBody Map<String, String> args) {
+		String mac= args.get("mac");
+		Map<String, Object> info=hardwareService.getInfoByMac(mac);
+		if (info==null) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		int channelFlag=(int) info.get("channelFlag");
+		if (channelFlag==1) {	
+			dataMap.put("channelType", "in");
+		}
+		else {
+			dataMap.put("channelType", "out");
+		}
+		return Utility.createJsonMsg(1001, "success", dataMap);
 	}
 }

@@ -106,11 +106,16 @@ function($scope,$http,$uibModal,textModal,$timeout){
 
 monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
     var url = '/park/monthUser/insert';
+    $scope.tempUser={};
     if(index != undefined){
         $scope.tempUser = $scope.$parent.users[index];
         url = '/park/monthUser/update';
-    }
+    }else{
+    $scope.tempUser.starttime=new Date().format("yyyy-MM-dd hh:mm:ss");
+    $scope.tempUser.endtime=new Date().format("yyyy-MM-dd hh:mm:ss");
+    }   
     $scope.statuses=[{value:0,text:'未支付'},{value:1,text:'已支付'}];
+  
     $scope.parks=[];
     $scope.getParks=function(){
         $http({

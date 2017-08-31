@@ -151,7 +151,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label" >是否按次收费</label>
 			<div class="col-sm-4">
-				<input type="checkbox"  placeholder="" ng-model="tempCriterion.isonetimeexpense">
+				<input type="checkbox"  ng-true-value="1" ng-false-value="0" ng-model="tempCriterion.isonetimeexpense">
 			</div>
 			<label class="col-sm-2 control-label" >价格(元)/每次</label>
 			<div class="col-sm-4">

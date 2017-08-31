@@ -250,8 +250,8 @@ public class HardwareController {
 	@ResponseBody
 	public String updateHardware(@RequestBody Hardware hardware){
 		int ret = hardwareService.updateHardware(hardware);
-		if(hardwareService.checkHardwareExist(hardware.getMac()))
-			return Utility.createJsonMsg("1002", "mac exists");
+//		if(hardwareService.checkHardwareExist(hardware.getMac()))
+//			return Utility.createJsonMsg("1002", "mac exists");
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		if(ret > 0 ){
 			retMap.put("status", "1001");

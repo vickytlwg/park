@@ -91,8 +91,12 @@ chargeApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $tim
 	
 	var url = 'insert';
 	$scope.tempCriterion={};
+	 $scope.onetimeExpense=false;
 	if(index != undefined){
 		$scope.tempCriterion = $scope.$parent.criterion.items[index];
+		if($scope.tempCriterion.isonetimeexpense==1){
+		    $scope.onetimeExpense=true;
+		}
 		url = 'modify';
 	}
 	else{
@@ -109,7 +113,13 @@ chargeApp.controller('modifyCrtl',  function($scope, $modalInstance, $http, $tim
 	
 	$scope.submit = function(){
 		$scope.loading = true;	
-		delete $scope.tempCriterion['checked'];
+		
+	// if($scope.tempCriterion['checked']){
+	    // $scope.tempCriterion.isonetimeexpense=true;
+	// }else{
+	    // $scope.tempCriterion.isonetimeexpense=false;
+	// }
+	delete $scope.tempCriterion['checked'];
 		$http.post(url, $scope.tempCriterion)
 		.success(function(response){	
 			$scope.loading = false;
