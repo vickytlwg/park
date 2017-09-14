@@ -35,7 +35,7 @@ public class NjparkController {
 	@ResponseBody
 	public String carArrive(@RequestBody Map<String, Object> args) throws ParseException{
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
-		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("transDate")));
+		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
 		njcarfeerecord.setCartype((String) args.get("carType"));
 		njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
@@ -59,7 +59,7 @@ public class NjparkController {
 	@ResponseBody
 	public String carLeave(@RequestBody Map<String, Object> args) throws ParseException{
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
-		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("transDate")));
+		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
 		njcarfeerecord.setCartype((String) args.get("carType"));
 		njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
@@ -74,12 +74,13 @@ public class NjparkController {
 			return Utility.createJsonMsg(1002, "无入场信息");
 		}
 		njcarfeerecord=njcarfeeSelecteds.get(0);
-		njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("leaveTime")));
-		njcarfeerecord.setShouldcharge((Integer) args.get("shouldCharge"));
-		njcarfeerecord.setArrearspay((Integer) args.get("arrearsPay"));
-		njcarfeerecord.setDiscount((Integer) args.get("discount"));
-		njcarfeerecord.setOtherpay((Integer) args.get("otherPay"));
-		njcarfeerecord.setRealpay((Integer) args.get("realPay"));
+		njcarfeerecord.setLeavetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("leaveTime")));
+		njcarfeerecord.setShouldcharge((int) args.get("shouldCharge"));
+		njcarfeerecord.setArrearspay((int) args.get("arrearsPay"));
+		njcarfeerecord.setDiscount((int) args.get("discount"));
+		njcarfeerecord.setOtherpay((int) args.get("otherPay"));
+		njcarfeerecord.setRealpay((int) args.get("realPay"));
+		njcarfeerecord.setInvoiceurl((String) args.get("invoiceUrl"));
 		int num=njcarFeeRecordService.updateByPrimaryKeySelective(njcarfeerecord);
 		if (num==1) {
 			return Utility.createJsonMsg(1001, "success");
@@ -93,9 +94,13 @@ public class NjparkController {
 	public String monthUserInsert(@RequestBody Map<String, Object> args) throws ParseException{
 		Njmonthuser njmonthuser=new Njmonthuser();
 		njmonthuser.setCardnumber((String) args.get("cardNumber"));
+		njmonthuser.setCarnumber((String) args.get("carNumber"));
+		njmonthuser.setMembername((String) args.get("memberName"));
 		njmonthuser.setMonthid((String) args.get("monthId"));
+		njmonthuser.setCartype((String) args.get("carType"));
 		njmonthuser.setMonthtype((String) args.get("monthType"));
 		njmonthuser.setTradenumber((String) args.get("tradeNumber"));
+		njmonthuser.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("tradeDate")));
 		njmonthuser.setEffectivetimes((String) args.get("effectiveTimes"));
 		njmonthuser.setMonthfee((int) args.get("monthFee"));
 		njmonthuser.setMonthstart(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("monthStart")));
@@ -105,6 +110,8 @@ public class NjparkController {
 		njmonthuser.setRechargemoney((int) args.get("rechargeMoney"));
 		njmonthuser.setRealpay((int) args.get("realPay"));
 		njmonthuser.setShouldcharge((int) args.get("shouldCharge"));
+		njmonthuser.setDiscount((int) args.get("discount"));
+		njmonthuser.setStandardfees((int) args.get("standardFees"));
 		njmonthuser.setPreferential((int)args.get("preferential"));
 		njmonthuser.setPicturepath((String) args.get("picturePath"));
 		njmonthuser.setDescription((String) args.get("description"));

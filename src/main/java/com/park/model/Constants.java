@@ -27,6 +27,7 @@ public class  Constants{
 	public static  DatagramSocket socket=null;
 	public static StringBuilder  dataReceived=new StringBuilder();
 	public static  Map<String, Object> iotData=new HashMap<>();
+	public static Map<String, Object> tcpReceiveDatas=new HashMap<>();
 	public static UdpConnectorInfoService udpConnectorInfoService=new UdpConnectorsInfoServiceImpl();
 	
 }

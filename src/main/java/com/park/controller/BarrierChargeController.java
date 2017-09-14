@@ -140,11 +140,22 @@ public class BarrierChargeController {
 			return Utility.createJsonMsg(1002, "fail");
 		}
 		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		int channelFlag=(int) info.get("channelFlag");
+		Integer parkId=(Integer) info.get("parkID");
+		String parkName=(String) info.get("Name");
 		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
-		if (monthusers.isEmpty()) {
-			dataMap.put("uT", "0");			
+		boolean isMonthUser=false;
+		for (Monthuser monthuser : monthusers) {
+			if (monthuser.getParkid()==parkId) {
+				isMonthUser=true;
+				break;
+			}
 		}
+		if (!isMonthUser) {
+			dataMap.put("uT", "0");			
+		}		
 		else{
+		
 			Monthuser monthuser=monthusers.get(0);
 			dataMap.put("uT", "1");
 		//	dataMap.put("monthUserStartDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getStarttime()));
@@ -159,13 +170,8 @@ public class BarrierChargeController {
 			}
 			
 		}
-		if (info==null) {
-			ret.put("status", 1002);
-			return Utility.gson.toJson(ret);
-		}
-		int channelFlag=(int) info.get("channelFlag");
-		Integer parkId=(Integer) info.get("parkID");
-		String parkName=(String) info.get("Name");
+
+		
 		List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(parkId);
 		//入口硬件
 		if (channelFlag==1) {			

@@ -287,7 +287,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterionId == null)
 			throw new Exception("no fee criterion");
 		FeeCriterion criterion = criterionService.getById(criterionId);
-		if (criterion.getIsonetimeexpense().intValue()==1) {
+		if (criterion.getIsonetimeexpense()!=null&&criterion.getIsonetimeexpense().intValue()==1) {
 			charge.setIsOneTimeExpense(1); 
 		}
 		charge.setExitDate1(exitDate);
@@ -333,7 +333,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		charge.setExitDate1(exitDate);
 		double expense = 0;
-		if (criterion.getIsonetimeexpense().intValue()==1) {
+		if (criterion.getIsonetimeexpense()!=null&&criterion.getIsonetimeexpense().intValue()==1) {
 			charge.setIsOneTimeExpense(1); 
 		}
 		float diffMin = (float) Math.ceil((charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f));

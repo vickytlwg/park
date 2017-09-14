@@ -174,7 +174,7 @@
         <p>没有您的停车记录</p>
       </div>
       <div class="park-fee">
-        <p>$charge</p>
+        <p>0</p>
       </div>
       <div class="fee-type">
         <p>无需交费</p>
@@ -183,8 +183,7 @@
     <div class="money-info">
 
     </div>
-	#set($hours=$parkingDuration/60)
-	#set($minutes=$parkingDuration%60)
+	
     <div class="park-info">
      
     </div>
