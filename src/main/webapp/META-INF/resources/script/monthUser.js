@@ -125,9 +125,9 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
             if(response.status=1001){
                 var body=response.body;
                 for(var i=0;i<body.length;i++){
-                    if(body[i].type==3){
+                    
                         $scope.parks.push(body[i]);
-                    }
+                    
                 }
                 $scope.selectValue=$scope.parks[0];
             }

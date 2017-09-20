@@ -247,7 +247,7 @@ public class BarrierChargeController {
 			payRet.setOperatorId("道闸");
 			int num = chargeSerivce.update(payRet);
 			dataMap.put("eD", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
-				if (monthusers.isEmpty()) {
+				if (!isMonthUser) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 				}						
 			

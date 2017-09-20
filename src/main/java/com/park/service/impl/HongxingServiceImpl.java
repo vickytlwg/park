@@ -20,11 +20,15 @@ public class HongxingServiceImpl implements HongxingService {
 	@Override
 	public Map<String, Object> getFeeByCarNumber(String carNumber) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map=HttpUtil.get("http://www.168parking.com//ApiPlatform/GetCarPrice?SecretKey=xx&carNo="+carNumber);
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/GetCarPrice?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&carNo="+carNumber);
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
          }.getType() );		
+		 String code=(String) mapdata.get("Code");
+		 if (!code.equals("200")) {
+			return null;
+		}
 		 Map<String, Object> resultData=(Map<String, Object>) mapdata.get("Data");
 			Hongxingrecord hongxingrecord = new Hongxingrecord();
 			hongxingrecord.setCarlock((String) resultData.get("carLock"));
@@ -40,12 +44,44 @@ public class HongxingServiceImpl implements HongxingService {
 			hongxingrecord.setOrderno((String) resultData.get("orderNo"));
 			hongxingrecord.setParkkey((String) resultData.get("parkKey"));
 			hongxingrecord.setTotalamount((float) (double) resultData.get("totalAmount"));
-			hongxingrecord.setCouponamount((float) (double) resultData.get("couponAmount"));
+			hongxingrecord.setCouponamount((float) (double) resultData.get("payAmount"));
 			int num=hongxingRecordService.insert(hongxingrecord);
 			if (num==1) {
 				resultData.put("recordId", hongxingrecord.getId());
 			}
 		return resultData;
+	}
+
+	@Override
+	public String creatPayOrder(String orderNo) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/GetCarPrice?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&orderNo="+orderNo);
+		Object data=map.get("body");
+		 Gson gson = new Gson();
+		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
+        }.getType() );		
+		 Boolean status=(Boolean) mapdata.get("Success");
+		 if (status!=true) {
+			return null;
+		}
+		 String returnOrderNo=(String) mapdata.get("Code");
+		return returnOrderNo;
+	}
+
+	@Override
+	public Boolean payOrderNotify(String paidMoney, String OrderNo, String Order) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/CarOrderPay?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&payOrder="
+				+ Order+"&payedSN="+OrderNo+"&payedMoney="+paidMoney);
+		Object data=map.get("body");
+		 Gson gson = new Gson();
+		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
+       }.getType() );		
+		 Boolean status=(Boolean) mapdata.get("Success");
+		 if (status!=true) {
+			return false;
+		}
+		return true;
 	}
 
 }
