@@ -13,7 +13,7 @@ public class FormatTime
 { 
     //startTime and endTime should be in format like: yyyy-MM-dd HH:mm:ss
 	//start and end should be in format arrange from 0 to 23
-	Map<String,String> format(String startTime,String endTime,String start, String end)
+	public Map<String,String> format(String startTime,String endTime,String start, String end)
 	{
 	    Map<String, String> ret_map = new HashMap<String, String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

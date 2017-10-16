@@ -25,5 +25,7 @@ public interface UsersMapper {
     
     List<Users> getByCount(@Param("start")Integer start,@Param("count")Integer count);
     
+    List<Users> getByUserName(@Param("userName")String userName);
+    
     List<Users> getByUserNameAndPassword(@Param("userName")String userName,@Param("password")String password);
 }

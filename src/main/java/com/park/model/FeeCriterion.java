@@ -6,29 +6,29 @@ public class FeeCriterion {
 
     private String name;
 
-    private Integer freemins;
+    private Integer freemins=0;
 
-    private Float step1price;
+    private Float step1price=(float) 1;
 
-    private Float step2price;
+    private Float step2price=(float) 2;
 
-    private Float step1pricelarge;
+    private Float step1pricelarge=(float) 2;
 
-    private Float step2pricelarge;
+    private Float step2pricelarge=(float) 4;
 
-    private Integer step1capacity;
+    private Integer step1capacity=60;
 
-    private Integer step2capacity;
+    private Integer step2capacity=480;
 
-    private Integer timeoutpriceinterval;
+    private Integer timeoutpriceinterval=15;
 
-    private Float maxexpense;
+    private Float maxexpense=(float) 9999;
 
     private String nightstarttime;
 
     private String nightendtime;
 
-    private Integer isonetimeexpense;
+    private Integer isonetimeexpense=0;
 
     private Float onetimeexpense;
     

@@ -61,6 +61,14 @@ function($scope,$http,$uibModal,textModal,$timeout){
             textModal.open($scope,"错误","数据请求失败");
         });
     };
+    var user1={id:"张明",parkname:"苏AXX0012",cardnumber:"黑名单",owner:"润和软件园北门",platenumber:"逃费",platecolor:"2017-09-20 00:00:00",certificatetype:"2017-10-20 00:00:00",
+    certificatenumber:"收费员",starttime:"2017-09-17 11:26:17",endtime:"逃费逃逸",starttime1:"生效中"};
+    var user2={id:"李强",parkname:"苏A13GU3",cardnumber:"黑名单",owner:"润和软件园北门",platenumber:"拒缴",platecolor:"2017-09-20 00:00:00",certificatetype:"2017-10-20 00:00:00",
+    certificatenumber:"收费员",starttime:"2017-09-21 16:56:32",endtime:"拒绝缴费",starttime1:"生效中"};
+   
+    $scope.users.push(user1);
+    $scope.users.push(user2);
+    
     $scope.insertUser=function(){
         $uibModal.open({
             templateUrl: 'modifyUser',
@@ -141,7 +149,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }
         $scope.checkedIndex = -1;
     };
-    $scope.refreshUser();
+//    $scope.refreshUser();
 }]);
 
 monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){

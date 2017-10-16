@@ -69,4 +69,34 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getByCardNumber(cardNumber);
 	}
 
+	@Override
+	public int getCountByParkId(int parkId) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getCountByParkId(parkId);
+	}
+
+	@Override
+	public List<Monthuser> getByParkIdAndCount(int parkId, int start, int count) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByParkIdAndCount(parkId, start, count);
+	}
+
+	@Override
+	public List<Monthuser> getByStartAndCountOrder(int start, int count, int type) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByStartAndCountAndOrder(start, count, type);
+	}
+
+	@Override
+	public List<Monthuser> getByParkIdAndCountOrder(int parkId, int start, int count, int type) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByParkIdAndCountOrder(parkId, start, count, type);
+	}
+
+	@Override
+	public List<Monthuser> getByUsernameAndPark(String username, int parkId) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByUsernameAndPark(username, parkId);
+	}
+
 }

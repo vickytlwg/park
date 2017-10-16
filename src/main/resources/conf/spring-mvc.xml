@@ -81,6 +81,7 @@
 		<mvc:exclude-mapping path="/alipayh5/**"/>
 		<mvc:exclude-mapping path="/excelChannelDetailExport"/>
 		<mvc:exclude-mapping path="/img/**"/>
+		<mvc:exclude-mapping path="/njpark/**"/>
 		<mvc:exclude-mapping path="/script/**"/>
 		<mvc:exclude-mapping path="/css/**"/>
 		<mvc:exclude-mapping path="/cssmb/**"/>

@@ -69,4 +69,10 @@ public class UsersServiceImpl implements UsersService{
 		return userMapper.getByUserNameAndPassword(userName, password);
 	}
 
+	@Override
+	public List<Users> getByUserName(String userName) {
+		// TODO Auto-generated method stub
+		return userMapper.getByUserName(userName);
+	}
+
 }

@@ -1,10 +1,14 @@
 package com.park.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alipay.api.AlipayApiException;
 import com.park.model.Constants;
 import com.park.model.Monthuser;
 import com.park.model.Njcarfeerecord;
 import com.park.model.Njmonthuser;
+import com.park.service.AliParkFeeService;
 import com.park.service.NjCarFeeRecordService;
 import com.park.service.NjMonthUserService;
 import com.park.service.Utility;
@@ -30,6 +36,8 @@ public class NjparkController {
 	NjMonthUserService njMonthUserService;
 	@Autowired
 	NjCarFeeRecordService njcarFeeRecordService;
+	@Autowired
+	AliParkFeeService parkFeeService;
 	
 	@RequestMapping(value="carArrive",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
@@ -122,5 +130,68 @@ public class NjparkController {
 		else {
 			return Utility.createJsonMsg(1002, "failed");
 		}	
+	}
+	///此为美凯龙的调用接口
+	@RequestMapping(value="enterCar",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String carArrivehx(HttpServletRequest request) throws ParseException, UnsupportedEncodingException, AlipayApiException{
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String carNo=new String((request.getParameter("carNo")).getBytes("iso-8859-1"),"utf-8");
+		String orderNo=new String((request.getParameter("orderNo")).getBytes("iso-8859-1"),"utf-8");
+		String enterTime=new String((request.getParameter("enterTime")).getBytes("iso-8859-1"),"utf-8");
+		String carType=new String((request.getParameter("carType")).getBytes("iso-8859-1"),"utf-8");
+		String gateName=new String((request.getParameter("gateName")).getBytes("iso-8859-1"),"utf-8");
+		String operatorName=new String((request.getParameter("operatorName")).getBytes("iso-8859-1"),"utf-8");
+
+		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
+		njcarfeerecord.setArrivetime(new Date());
+		njcarfeerecord.setCarnumber(carNo);
+		njcarfeerecord.setCartype(carType);
+		njcarfeerecord.setParkname(gateName);
+		njcarfeerecord.setStoptype("入场");
+		
+		Map<String, String> args=new HashMap<>();
+		args.put("parking_id", "PI1501317472942184881");
+		args.put("car_number", carNo);
+		args.put("in_time", enterTime);
+		parkFeeService.parkingEnterinfoSync(args);
+		
+		njcarfeerecord.setInvoiceurl(enterTime);
+		njcarFeeRecordService.insertSelective(njcarfeerecord);
+		return Utility.createJsonMsg(1001, "ok");
+	}
+	///此为美凯龙的调用接口
+	@RequestMapping(value="outCar",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String outcar(HttpServletRequest request) throws ParseException{
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String carNo=request.getParameter("carNo");
+		String orderNo=request.getParameter("orderNo");
+		String carType=request.getParameter("carType");
+		String outTime=request.getParameter("outTime");
+		String gateName=request.getParameter("gateName");
+		String operatorName=request.getParameter("operatorName");
+
+		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
+		njcarfeerecord.setArrivetime(new Date());
+		njcarfeerecord.setCarnumber(carNo);
+		njcarfeerecord.setInvoiceurl(orderNo);
+		njcarfeerecord.setCartype(carType);
+		njcarfeerecord.setParkname(gateName);
+		njcarfeerecord.setStoptype("出场");
+	
+		njcarfeerecord.setInvoiceurl(outTime);
+		njcarFeeRecordService.insertSelective(njcarfeerecord);
+		return Utility.createJsonMsg(1001, "ok");
 	}
 }

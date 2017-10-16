@@ -61,6 +61,15 @@ function($scope,$http,$uibModal,textModal,$timeout){
             textModal.open($scope,"错误","数据请求失败");
         });
     };
+    var user1={id:"红星美凯龙",parkname:"商城地下停车场",cardnumber:"半价优惠",owner:"最高15元",platenumber:"2017-09-25 00:00:00",platecolor:"2017-09-30 00:00:00",certificatetype:"微信渠道分发",
+    certificatenumber:"2017-09-22 15:32:26",starttime:"苏A321M2",endtime:"0",starttime1:" ",endtime1:"未使用"};
+    var user2={id:"红旗超市",parkname:"红旗商城停车场",cardnumber:"全价优惠",owner:"最高10元",platenumber:"2017-09-21 00:00:00",platecolor:"2017-10-15 00:00:00",certificatetype:"微信渠道分发",
+    certificatenumber:"2017-09-17 11:26:17",starttime:"川A13297",endtime:"0",starttime1:" ",endtime1:"未使用"};
+    var user3={id:"军区总院",parkname:"军区总院停车场",cardnumber:"全价优惠",owner:"最高20元",platenumber:"2017-08-18 00:00:00",platecolor:"2017-10-18 00:00:00",certificatetype:"微信渠道分发",
+    certificatenumber:"2017-09-17 11:26:17",starttime:"苏A77231",endtime:"10",starttime1:"2017-09-21 13:14:35",endtime1:"已使用"};
+    $scope.users.push(user1);
+    $scope.users.push(user2);
+    $scope.users.push(user3);
     $scope.insertUser=function(){
         $uibModal.open({
             templateUrl: 'modifyUser',
@@ -141,7 +150,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }
         $scope.checkedIndex = -1;
     };
-    $scope.refreshUser();
+//    $scope.refreshUser();
 }]);
 
 monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){

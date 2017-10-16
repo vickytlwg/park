@@ -8,13 +8,13 @@ public class PosChargeData {
 
 	int id;
 	
-	String cardNumber;
+	String cardNumber="";
 	
-	int parkId;
+	int parkId=4;
 	
-	String parkDesc;
+	String parkDesc="";
 	
-	String portNumber;
+	String portNumber="0";
 	
 	String rejectReason="";
 

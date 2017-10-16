@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("hx")
+@RequestMapping("alipay")
 public class HongxingController {
 	@Autowired
 	HongxingService hongxingService;
@@ -84,13 +85,13 @@ public class HongxingController {
 
 	@RequestMapping(value = "getRecord", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getRecord(@RequestBody Map<String, String> args) {
-		String carNumber = args.get("carNumber");
-		Map<String, Object> data = hongxingService.getFeeByCarNumber(carNumber);
-		if (data==null) {
-			return Utility.createJsonMsg(1002, "failed");
-		}
-		return Utility.createJsonMsg(1001, "sucess", data);
+	public String getRecord(@RequestBody Map<String, String> args,ModelMap modelMap) throws Exception {
+	
+		String code=hongxingService.creatPayOrder("20171008170709140-A1N603");
+	
+	
+	//	Boolean success=hongxingService.payOrderNotify("2.5","20170926085443491-AV738F","20170926085443491-AV738F");
+		return Utility.createJsonMsg(1001, "sucess", code);
 	}
 	
 	@RequestMapping(value = "/parkingPayH5", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
@@ -131,24 +132,25 @@ public class HongxingController {
 			e.printStackTrace();
 		}
 		modelMap.addAttribute("carNumber",carNumber);
-		Map<String, Object> data=new HashMap<>();
+		Map<String, Object> data=null;
 		try {
 			 data = hongxingService.getFeeByCarNumber(carNumber);
 		} catch (Exception e) {
 				return "alipayh5/noRecord";
 		}	
-		if (data.isEmpty()) {
+		if (data==null) {
 			return "alipayh5/noRecord";
 		}
 		
 		
-		String totalAmount=(String) data.get("totalAmount");
-		Integer recordId=(Integer) data.get("recordId");
+		String totalAmount=String.valueOf((double) data.get("totalAmount")/10);
 	
 		PosChargeData lastCharge = new PosChargeData();
 		lastCharge.setCardNumber(carNumber);
-		lastCharge.setChargeMoney(Double.parseDouble(totalAmount));
-		lastCharge.setEntranceDate((String)data.get("enterTime"));
+		lastCharge.setParkId(3);
+		lastCharge.setChargeMoney((double) data.get("totalAmount")/10);
+		String enterTimeStr=((String)data.get("enterTime")).replace("/", "-");
+		lastCharge.setEntranceDate(enterTimeStr);
 		lastCharge.setExitDate1(new Date());
 		lastCharge.setParkDesc("美凯龙停车场");		
 		lastCharge.setOperatorId((String)data.get("orderNo"));
@@ -158,7 +160,7 @@ public class HongxingController {
 		lastCharge = charges.get(0);
 		
 		modelMap.addAttribute("charge",totalAmount);
-		modelMap.addAttribute("enterDate",(String)data.get("enterTime"));
+		modelMap.addAttribute("enterDate",enterTimeStr);
 //		modelMap.addAttribute("exitDate",(String)data.get("totalAmount"));
 //		if (lastCharge.getExitDate()==null) {
 //			lastCharge.setExitDate1(new Date());
@@ -244,9 +246,18 @@ public class HongxingController {
 			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
 			alipayrecord.setAlitradeno(trade_no);
 			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);	
-			lastCharge.setPaidCompleted(true);
-			poschargedataService.update(lastCharge);
+			lastCharge.setPaidCompleted(true);			
 			
+			String code=hongxingService.creatPayOrder(lastCharge.getOperatorId());
+			//通知
+			Boolean success=hongxingService.payOrderNotify(receipt_amount, code, code);
+			if (success) {
+				lastCharge.setRejectReason("成功通知");
+			}
+			else {
+				lastCharge.setRejectReason("失败通知");
+			}
+			poschargedataService.update(lastCharge);
 			Map<String, String> args=new HashMap<>();
 			args.put("user_id", alipayrecord.getUserid());
 			
@@ -301,6 +312,16 @@ public class HongxingController {
 			}
 		}
 		return "success";
+	}
+	@RequestMapping(value = "/carArrive", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String carArrive(@RequestBody Map<String, Object> args){
+		String carNumber=(String) args.get("carNumber");
+		String carType=(String) args.get("carType");
+		String arriveTime=(String) args.get("arriveTime");
+		String parkName=(String) args.get("parkName");
+		int parkId=(int) args.get("parkId");
+		return null;
 	}
 	
 }

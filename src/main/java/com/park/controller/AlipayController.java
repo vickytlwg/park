@@ -51,7 +51,7 @@ import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("alipay")
+@RequestMapping("alipay0")
 public class AlipayController {
 	@Autowired
 	AliParkFeeService parkFeeService;
@@ -438,8 +438,8 @@ public class AlipayController {
 	public String testParkCreate() throws AlipayApiException{
 		Map<String, String> args=new HashMap<>();
 		args.put("city_id", "320100");
-		args.put("equipment_name", "润和创智中心停车场-九比特");
-		args.put("out_parking_id", "146");
+		args.put("equipment_name", "地磁测试停车场-九比特");
+		args.put("out_parking_id", "157");
 		args.put("parking_address", "江苏省-南京市-江宁区 ");
 		args.put("longitude", "117.814557");
 		args.put("latitude", "32.067111");
@@ -453,8 +453,8 @@ public class AlipayController {
 		args.put("shopingmall_id", "test");
 		args.put("parking_fee_description", "小车首小时内，每15分钟0.5元，首小时后，每15分钟0.5元。前15分钟免费");
 		args.put("contact_name", "刘猛");
-		args.put("contact_mobile", "13668378107");
-		args.put("parking_name", "润和创智中心停车场");
+		args.put("contact_mobile", "13668378108");
+		args.put("parking_name", "地磁测试停车场");
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkingInfoCreate(args));
 	}
 	@RequestMapping(value = "testParkingEnterinfoSync", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })

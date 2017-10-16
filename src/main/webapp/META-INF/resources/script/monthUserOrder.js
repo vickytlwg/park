@@ -8,7 +8,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
      $scope.parks=[];
     $scope.getParks=function(){
         $http({
-            url:'getParks?_t=' + (new Date()).getTime(),
+            url:'/park/getParks?_t=' + (new Date()).getTime(),
             method:'get'
         }).success(function(response){
             if(response.status=1001){
@@ -30,7 +30,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
               data.count=$scope.count;
               data.parkId=selectedParkId;
         $http({
-            url:'/park/monthUser/getByParkIdAndCount',
+            url:'/park/monthUser/getByParkIdAndCountOrder',
             method:'post',
             data:angular.toJson(data)
         }).success(function(response){
@@ -47,7 +47,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     };
     $scope.refreshUser=function(){
         $http({
-            url:'/park/monthUser/getByStartAndCount',
+            url:'/park/monthUser/getByStartAndCountOrder',
             method:'post',
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
@@ -145,11 +145,11 @@ function($scope,$http,$uibModal,textModal,$timeout){
 }]);
 
 monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInstance, $http, $timeout, index){
-    var url = '/park/monthUser/insert';
+    var url = '/park/monthUser/insertOrder';
     $scope.tempUser={};
     if(index != undefined){
         $scope.tempUser = $scope.$parent.users[index];
-        url = '/park/monthUser/update';
+        url = '/park/monthUser/updateOrder';
     }else{
     $scope.tempUser.starttime=new Date().format("yyyy-MM-dd hh:mm:ss");
     $scope.tempUser.endtime=new Date().format("yyyy-MM-dd hh:mm:ss");
@@ -159,7 +159,7 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
     $scope.parks=[];
     $scope.getParks=function(){
         $http({
-            url:'getParks?_t=' + (new Date()).getTime(),
+            url:'/park/getParks?_t=' + (new Date()).getTime(),
             method:'get'
         }).success(function(response){
             if(response.status=1001){

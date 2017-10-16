@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -200,7 +201,7 @@ public class BarrierChargeController {
 			}
 			return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 		}
-		else {		
+		else {		//出场硬件
 			dataMap.put("cT", "out");	
 			List<PosChargeData> queryCharges = null;
 			String exitDate=(String) args.get("exitDate");
@@ -208,14 +209,19 @@ public class BarrierChargeController {
 			if (exitDate != null) {
 				Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);				
 				try {
+					System.out.println("出场时间为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
 					queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+					System.out.println("出场时间为空,getDebt计算完毕: "+new Date().getTime()+"\n");
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 				}
-			} else {//出场硬件
+			} else {
 				try {
+					System.out.println("出场时间不为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
 					queryCharges = chargeSerivce.getDebt(cardNumber);
+					System.out.println("出场时间不为空,getDebt计算完毕: "+new Date().getTime()+"\n");
 				} catch (Exception e) {
 					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 				}
@@ -235,7 +241,9 @@ public class BarrierChargeController {
 					argstoali.put("parking_id", parktoalipark.getAliparkingid());
 					argstoali.put("car_number", cardNumber);
 					argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					System.out.println("支付宝同步出场计算前: "+new Date().getTime()+"\n");
 					aliparkFeeService.parkingExitinfoSync(argstoali);
+					System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
 				}
 				return Utility.createJsonMsgWithoutMsg(1003, dataMap);
 			}
@@ -245,7 +253,9 @@ public class BarrierChargeController {
 			payRet.setPaidMoney(payRet.getChargeMoney());
 			payRet.setUnPaidMoney(0);
 			payRet.setOperatorId("道闸");
+			System.out.println("poschargedata更新前: "+new Date().getTime()+"\n");
 			int num = chargeSerivce.update(payRet);
+			System.out.println("poschargedata更新后: "+new Date().getTime()+"\n");
 			dataMap.put("eD", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
 				if (!isMonthUser) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
@@ -268,7 +278,7 @@ public class BarrierChargeController {
 		if (info==null) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		int channelFlag=(int) info.get("channelFlag");
 		if (channelFlag==1) {	
 			dataMap.put("channelType", "in");
@@ -276,6 +286,7 @@ public class BarrierChargeController {
 		else {
 			dataMap.put("channelType", "out");
 		}
+		dataMap.put("time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 		return Utility.createJsonMsg(1001, "success", dataMap);
 	}
 }

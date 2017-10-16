@@ -131,6 +131,9 @@
   <select id="getByCount" resultType="com.park.model.Users">
   	select * from users limit #{start},#{count}
   </select>
+    <select id="getByUserName" resultType="com.park.model.Users">
+  	select * from users where userName=#{userName}
+  </select>
   <select id="getByUserNameAndPassword" resultType="com.park.model.Users">
   	select * from users where userName=#{userName} and passwd=#{password}
   </select>

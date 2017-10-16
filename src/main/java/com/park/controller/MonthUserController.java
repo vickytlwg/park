@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,24 @@ public String index(ModelMap modelMap, HttpServletRequest request, HttpSession s
 	}
 	return "monthUser";
 }
-
+@RequestMapping(value="order")
+public String indexOrder(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+	String username = (String) session.getAttribute("username");
+	AuthUser user = authService.getUserByUsername(username);
+	if(user != null){
+		modelMap.addAttribute("user", user);
+		boolean isAdmin = false;
+		if(user.getRole() == AuthUserRole.ADMIN.getValue())
+			isAdmin=true;
+		modelMap.addAttribute("isAdmin", isAdmin);
+		
+		Set<Page> pages = pageService.getUserPage(user.getId()); 
+		for(Page page : pages){
+			modelMap.addAttribute(page.getPageKey(), true);
+		}
+	}
+	return "monthUserOrder";
+}
 @RequestMapping(value="getParkNamesByUserId/{userId}",produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getParkNamesByUserId(@PathVariable("userId")int userId){
@@ -129,9 +147,33 @@ public String insert(@RequestBody Monthuser monthUser){
 	int num=monthUserService.insert(monthUser);
 	if (num==1) {
 		result.put("status", 1001);
+		
 	}
 	else {
 		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="insertOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String insertOrder(@RequestBody Monthuser monthUser){
+	Map<String, Object> result=new HashMap<>();
+	monthUser.setType(1);
+	Date startd=monthUser.getStarttime();
+	Date endd=monthUser.getEndtime();
+	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
+		result.put("status", 1002);
+		result.put("message", "时间不能超过24小时");
+		return Utility.gson.toJson(result);
+	}
+	int num=monthUserService.insert(monthUser);
+	if (num==1) {
+		result.put("status", 1001);
+		result.put("message", "ok");
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "failed");
 	}
 	return Utility.gson.toJson(result);
 }
@@ -142,16 +184,102 @@ public String delete(@PathVariable("id")int id){
 	int num=monthUserService.deleteByPrimaryKey(id);
 	if (num==1) {
 		result.put("status", 1001);
+		result.put("message", "ok");
 	}
 	else {
 		result.put("status", 1002);
+		result.put("message", "failed");
 	}
 	return Utility.gson.toJson(result);
 }
+
+@RequestMapping(value="deleteByNameAndParkOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String deleteByNameAndParkOrder(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	String username = (String) args.get("username");
+	int parkid = (int) args.get("parkid");
+	List<Monthuser> monthusers=monthUserService.getByUsernameAndPark(username, parkid);
+	if (monthusers.isEmpty()) {
+		result.put("status", 1002);
+		result.put("message", "没有预约");
+		return Utility.gson.toJson(result);
+	}
+	int num=0;
+	for (Monthuser monthuser : monthusers) {
+		if (monthuser.getType()==1) {
+			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
+		}
+	}
+	
+	if (num==1) {
+		result.put("status", 1001);
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "删除失败");
+	}
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="deleteByNameAndPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String deleteByNameAndPark(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	String username = (String) args.get("username");
+	int parkid = (int) args.get("parkid");
+	List<Monthuser> monthusers=monthUserService.getByUsernameAndPark(username, parkid);
+	if (monthusers.isEmpty()) {
+		result.put("status", 1002);
+		result.put("message", "没有预约");
+		return Utility.gson.toJson(result);
+	}
+	int num=0;
+	for (Monthuser monthuser : monthusers) {
+		if (monthuser.getType()==0) {
+			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
+		}
+	}
+	
+	if (num==1) {
+		result.put("status", 1001);
+		result.put("message", "ok");
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "删除失败");
+	}
+	return Utility.gson.toJson(result);
+}
+
+
 @RequestMapping(value="update",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String update(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
+	int num=monthUserService.updateByPrimaryKeySelective(monthUser);
+	if (num==1) {
+		result.put("status", 1001);
+		result.put("message", "ok");
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "failed");
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="updateOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String updateOrder(@RequestBody Monthuser monthUser){
+	Map<String, Object> result=new HashMap<>();
+	monthUser.setType(1);
+	Date startd=monthUser.getStarttime();
+	Date endd=monthUser.getEndtime();
+	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
+		result.put("status", 1002);
+		result.put("message", "时间不能超过24小时");
+		return Utility.gson.toJson(result);
+	}
 	int num=monthUserService.updateByPrimaryKeySelective(monthUser);
 	if (num==1) {
 		result.put("status", 1001);
@@ -183,11 +311,68 @@ public String getCount(){
 	result.put("count", count);
 	return Utility.gson.toJson(result);
 }
+@RequestMapping(value="getCountByParkId",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getCountByParkId(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	int parkId=(int) args.get("parkId");
+	int count=monthUserService.getCountByParkId(parkId);
+	result.put("count", count);
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="getByParkIdAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getByParkIdAndCount(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	int parkId=(int) args.get("parkId");
+	int start=(int) args.get("start");
+	int count=(int) args.get("count");
+	List<Monthuser> monthusers=monthUserService.getByParkIdAndCount(parkId, start, count);
+	if (monthusers!=null) {
+		result.put("status", 1001);
+		result.put("body", monthusers);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="getByParkIdAndCountOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getByParkIdAndCountOrder(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	int parkId=(int) args.get("parkId");
+	int start=(int) args.get("start");
+	int count=(int) args.get("count");
+	List<Monthuser> monthusers=monthUserService.getByParkIdAndCountOrder(parkId, start, count,1);
+	if (monthusers!=null) {
+		result.put("status", 1001);
+		result.put("body", monthusers);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
 @RequestMapping(value="/getByStartAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count){
 	Map<String, Object> result=new HashMap<>();
 	List<Monthuser> monthusers=monthUserService.getByStartAndCount(start, count);
+	if (monthusers!=null) {
+		result.put("status", 1001);
+		result.put("body", monthusers);
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="/getByStartAndCountOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getByStartAndCountOrder(@RequestParam("start")int start,@RequestParam("count")int count){
+	Map<String, Object> result=new HashMap<>();
+	List<Monthuser> monthusers=monthUserService.getByStartAndCountOrder(start, count,1);
 	if (monthusers!=null) {
 		result.put("status", 1001);
 		result.put("body", monthusers);

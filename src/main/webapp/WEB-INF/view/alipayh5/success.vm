@@ -11,16 +11,15 @@
 <body id="body">
   <div class="container container-success">
     <div class="header header-success">
-      <a href="./index.html">完成</a>
+     
       <p>结果详情</p>
     </div>
     <div class="main-info">
       <div class="ali-logo">
-        <img src="dist/img/alipay210.png" alt="logo">
         <p>支付成功</p>
       </div>
       <div class="park-fee">
-        <p>$chargeMoney</p>
+        
       </div>
       <div class="notice">
         <p></p>

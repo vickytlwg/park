@@ -111,8 +111,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 	@Override
 	public List<PosChargeData> getDebt(String cardNumber) throws Exception {
+		System.out.println("获取poschargedata list前: "+new Date().getTime()+"\n");
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		System.out.println("获取poschargedata list后: "+new Date().getTime()+"\n");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
+		System.out.println("poschargedata list录入支付宝前: "+new Date().getTime()+"\n");
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
 				//信息录入支付宝
@@ -128,9 +131,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				tmPosChargeDatas.add(charge);				
 			}
 		}
+		System.out.println("poschargedata list录入支付宝后: "+new Date().getTime()+"\n");
+		System.out.println("poschargedata 计算前: "+new Date().getTime()+"\n");
 		for (PosChargeData tmpcharge:tmPosChargeDatas){
 			this.calExpense(tmpcharge, new Date(),false);
 		}
+		System.out.println("poschargedata 计算后: "+new Date().getTime()+"\n");
 		return tmPosChargeDatas;
 	}
 
@@ -175,9 +181,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
+		System.out.println("获取park前: "+new Date().getTime()+"\n");
 		Park park = parkService.getParkById(charge.getParkId());
+		System.out.println("获取park后: "+new Date().getTime()+"\n");
 		Integer criterionId = park.getFeeCriterionId();
+		System.out.println("获取计费标准前: "+new Date().getTime()+"\n");
 		FeeCriterion criterion = criterionService.getById(criterionId);
+		System.out.println("获取计费标准后: "+new Date().getTime()+"\n");
 		String nightStartHour = "20";
 		String nightEndHour = "7";
 		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
@@ -185,8 +195,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			 nightEndHour = criterion.getNightendtime().split(":")[0].substring(1);
 		}	
 		int isOneTimeExpense=charge.getIsOneTimeExpense();
-		if (charge.getIsLargeCar() == false) {			
+		if (charge.getIsLargeCar() == false) {		
+			System.out.println("获取时间分割前: "+new Date().getTime()+"\n");
 			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
+			System.out.println("获取时间分割后: "+new Date().getTime()+"\n");
+			System.out.println("计费计算前: "+new Date().getTime()+"\n");
 			for(String name:dates.keySet()){
 				charge.setEntranceDate(name);
 			  if (name.substring(11,13).equals(nightStartHour)) {
@@ -202,6 +215,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
 			}
+			System.out.println("计费计算后: "+new Date().getTime()+"\n");
+			System.out.println("计费更新前: "+new Date().getTime()+"\n");
 			charge.setEntranceDate(startTime);
 			charge.setExitDate(endTime);			
 			if (charge.getPaidMoney()>=charge.getChargeMoney() ) {
@@ -215,7 +230,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			if (!isQuery) {
 				this.update(charge);
 			}
-			
+			System.out.println("计费更新后: "+new Date().getTime()+"\n");
 			
 		} else {
 			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
@@ -273,7 +288,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 		}
 		for (PosChargeData tmpcharge:tmPosChargeDatas){
-			this.calExpense(tmpcharge, exitDate,false);
+			Park park = parkService.getParkById(tmpcharge.getParkId());
+			if (park.getType()==1) {
+				this.calExpenseType1(tmpcharge, exitDate,false);
+			}
+			else {
+				this.calExpense(tmpcharge, exitDate,false);
+			}
+			
 		}
 		return tmPosChargeDatas;
 	}
@@ -372,7 +394,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				this.calExpense(charge, exitDate,true);
+				Park park = parkService.getParkById(charge.getParkId());
+				if (park.getType()==1) {
+					this.calExpenseType1(charge, exitDate,true);
+				}
+				else {
+					this.calExpense(charge, exitDate,true);
+				}
 			}
 		}
 		return charges;
@@ -733,5 +761,34 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getByCardNumberAndPort(String cardNumber, Integer portNumber) {
 		// TODO Auto-generated method stub
 		return chargeDao.getByCardNumberAndPort(cardNumber, portNumber);
+	}
+
+	@Override
+	public void calExpenseType1(PosChargeData charge, Date exitDate, Boolean isQuery) throws ParseException {
+		// TODO Auto-generated method stub
+		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
+		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
+		Park park = parkService.getParkById(charge.getParkId());
+		Integer criterionId = park.getFeeCriterionId();
+		FeeCriterion criterion = criterionService.getById(criterionId);
+		String nightStartHour = "24";
+		String nightEndHour = "0";
+		Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
+		double money=0;
+		for(String name:dates.keySet()){			
+			Date startDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+			Date endDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get("name"));
+			long diffs=endDate.getTime()-startDate.getTime()-criterion.getFreemins()*60*1000;
+			if (diffs>1000*60*60*12) {
+				money+=10;
+			}
+			if (diffs<=1000*60*60*12&&diffs>0) {
+				money+=10;
+			}
+		}
+		charge.setExitDate(endTime);
+		if (!isQuery) {
+			this.update(charge);
+		}
 	}
 }

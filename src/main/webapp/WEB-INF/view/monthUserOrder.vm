@@ -1,10 +1,10 @@
-<script src="/park/script/monthUser.js?v=1.1"></script>
+<script src="/park/script/monthUserOrder.js?v=1.1"></script>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <div class="content-wrapper" ng-app="monthUserApp" ng-controller="monthUserCtrl">
 	<section class="content-header">
           <h1>
-           月卡用户
+           预约用户
             <small></small>
           </h1>
        
@@ -17,9 +17,9 @@
 	             <div class="box-body"> 
 					<div class="btn-group">
 		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户开卡</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 账户充值</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除用户</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户预约</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 修改预约</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除预约</button>
 								<button #if(!$isAdmin) disabled#end  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
 		                	</div>	
 							<div class="pull-right">
@@ -88,7 +88,7 @@
     <button type='button' class='close' ng-click="close()" aria-hidden='true'>
         &times;
     </button>
-    <h4 class="modal-title" >月卡用户</h4>
+    <h4 class="modal-title" >预约用户</h4>
 
 </div>
 

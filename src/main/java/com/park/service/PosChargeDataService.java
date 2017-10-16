@@ -66,6 +66,8 @@ public interface PosChargeDataService {
 	
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
 	
+	public void calExpenseType1(PosChargeData charge, Date exitDate,Boolean isQuery) throws ParseException;
+	
 	public void calExpenseSmallCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
 	
 	public void calExpenseLargeCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;

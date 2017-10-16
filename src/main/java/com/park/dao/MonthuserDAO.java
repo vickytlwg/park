@@ -23,7 +23,18 @@ public interface MonthuserDAO {
     
     int getCount();
     
+    int getCountByParkId(@Param("parkId")int parkId);
+    
     List<Monthuser> getByStartAndCount(@Param("start")int start,@Param("count")int count);
     
+    List<Monthuser> getByUsernameAndPark(@Param("username")String username,@Param("parkId")int parkId);
+    
+    List<Monthuser> getByStartAndCountAndOrder(@Param("start")int start,@Param("count")int count,@Param("type")int type);
+    
     List<Monthuser> getByCardNumber(@Param("cardNumber")String cardNumber);
+    
+    List<Monthuser> getByParkIdAndCount(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count);
+    
+    List<Monthuser> getByParkIdAndCountOrder(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count,@Param("type")int type);
+
 }

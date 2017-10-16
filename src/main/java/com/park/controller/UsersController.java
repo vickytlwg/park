@@ -95,6 +95,21 @@ public class UsersController {
 		}
 		return Utility.gson.toJson(ret);
 	}
+	@RequestMapping(value = "/getByUserName", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getByUserName(@RequestBody Map<String, String> args){
+		String userName=args.get("userName");
+		List<Users> users=usersService.getByUserName(userName);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if (!users.isEmpty()) {
+			ret.put("status", 1001);
+			ret.put("body", users);
+		}
+		else {
+			ret.put("status", 1002);
+		}
+		return Utility.gson.toJson(ret);
+	}
 	@RequestMapping(value = "/reCharge", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String reCharge(@RequestBody Map<String, Object> args){
@@ -115,6 +130,7 @@ public class UsersController {
 		}
 		else {
 			ret.put("status", 1002);
+			ret.put("message", "failed");
 		}
 		return Utility.gson.toJson(ret);
 	}

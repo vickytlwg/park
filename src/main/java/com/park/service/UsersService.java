@@ -22,5 +22,7 @@ public interface UsersService {
     
     List<Users> getByCount(Integer start,Integer count);
     
+    List<Users> getByUserName(String userName);
+    
     List<Users> getByUserNameAndPassword(String userName,String password);
 }

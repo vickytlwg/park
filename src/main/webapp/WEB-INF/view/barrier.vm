@@ -118,6 +118,7 @@
 								<option value=0>出口</option>
 								<option value=1>入口</option>
 								<option value=2>剩余车位发布器</option>
+								<option value=3>道闸控制器</option>
 							</select>
 						</div>
 					</div>
