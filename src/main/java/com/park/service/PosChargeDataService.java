@@ -39,6 +39,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getByParkAndDay(int parkId,String date) throws ParseException;
 	
 	public List<PosChargeData> getDebt (String cardNumber) throws Exception;
+
+	public List<PosChargeData> getLastRecord(String carNumber,int count);
 	
 	public List<PosChargeData> getDebt (String cardNumber,Date exitDate) throws Exception;
 	

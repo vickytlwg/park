@@ -29,6 +29,8 @@ public interface MonthuserDAO {
     
     List<Monthuser> getByUsernameAndPark(@Param("username")String username,@Param("parkId")int parkId);
     
+    List<Monthuser> getByCarnumberAndPark(@Param("carnumber")String carnumber,@Param("parkId")int parkId);
+    
     List<Monthuser> getByStartAndCountAndOrder(@Param("start")int start,@Param("count")int count,@Param("type")int type);
     
     List<Monthuser> getByCardNumber(@Param("cardNumber")String cardNumber);

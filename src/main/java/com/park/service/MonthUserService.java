@@ -29,6 +29,8 @@ public interface  MonthUserService {
 	    
 	    List<Monthuser> getByUsernameAndPark(String username,int parkId);
 	    
+	    List<Monthuser> getByCarnumberAndPark(String carnumber,int parkId);
+	    
 	    List<Monthuser> getByCardNumber(String cardNumber);
 	    
 	    List<Monthuser> getByParkIdAndCount(int parkId,int start,int count);

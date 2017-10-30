@@ -17,7 +17,7 @@ public class PosChargeData {
 	String portNumber="0";
 	
 	String rejectReason="";
-
+//0是支付宝 1是微信 2是现金
     int payType=2;
 	
 	boolean isEntrance=true;

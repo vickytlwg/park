@@ -207,7 +207,13 @@
   	from monthUser left join park on park.id=monthUser.parkid where monthUser.owner=#{username} and monthUser.parkId=#{parkId}
   </select>
   
-  
+    <select id="getByCarnumberAndPark" resultType="com.park.model.Monthuser">
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
+  	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
+  	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
+  	from monthUser left join park on park.id=monthUser.parkid where monthUser.plateNumber=#{carnumber} and monthUser.parkId=#{parkId}
+  </select>
   
     <select id="getByStartAndCountAndOrder" resultType="com.park.model.Monthuser">
   	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,

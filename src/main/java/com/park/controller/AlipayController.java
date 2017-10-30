@@ -25,6 +25,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
+import com.alipay.api.request.AlipayEcoMycarParkingAgreementQueryRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingConfigSetRequest;
 import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
@@ -33,6 +34,7 @@ import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
+import com.alipay.api.response.AlipayEcoMycarParkingAgreementQueryResponse;
 import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
@@ -206,6 +208,7 @@ public class AlipayController {
 		modelMap.addAttribute("chargeMoney",posChargeData.getChargeMoney());
 		return "alipayh5/success";
 	}
+	//支付宝通知回调
 	@RequestMapping(value = "notifyUrlWebPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String notifyUrlWebPay(@RequestParam("out_trade_no")String out_trade_no,HttpServletRequest request){
@@ -221,6 +224,7 @@ public class AlipayController {
 			alipayrecord.setAlitradeno(trade_no);
 			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);	
 			lastCharge.setPaidCompleted(true);
+			lastCharge.setPayType(0);
 			poschargedataService.update(lastCharge);
 			
 			Map<String, String> args=new HashMap<>();
@@ -496,4 +500,24 @@ public class AlipayController {
 		args.put("card_number", "*");
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkingOrderSync(args));
 	}
+	
+	@RequestMapping(value = "testCarStatusQuery", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String testCarStatusQuery() throws AlipayApiException{
+		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
+		Map<String, Object> result=new HashMap<>();
+		request.setBizContent("{" +
+		" \"car_number\":\"川A1LM97\"" +
+		" }");
+		AlipayEcoMycarParkingAgreementQueryResponse response = alipayClient.execute(request);
+		if(response.isSuccess()){
+			result.put("status", 1001);
+			
+		} else {
+			result.put("status", 1002);		
+		}
+		result.put("body", response);
+		return Utility.gson.toJson(result);
+		
+		}
 }

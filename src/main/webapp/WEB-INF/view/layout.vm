@@ -201,7 +201,7 @@
 				  <ul class="treeview-menu" style="background: #3c8dbc;color:#3c8dbc">
 					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/parkBigData"><i class="fa fa-file-text-o"></i>停车大数据</a></li>
 					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/platformShow"><i class="fa fa-file-text-o"></i>今日数据</a></li>
-					<li #if(!$isAdmin && !$park_platformShow) hidden#end><a href="/park/udp/"><i class="fa fa-file-text-o"></i>UDP测试</a></li>
+					<li #if(!$isAdmin && !$park_feeOperator_2) hidden#end><a href="/park/udp/"><i class="fa fa-file-text-o"></i>UDP测试</a></li>
 
 				  </ul>
 			</li>
@@ -219,8 +219,8 @@
 				<li #if(!$isAdmin && !$park_pos) hidden#end><a href="/park/pos"><i class="fa fa-gear"></i>手持终端管理</a></li>	
 				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>包月用户管理</a></li>
 				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser/order"><i class="fa fa-user-plus"></i>预约管理</a></li>
-				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/coupons"><i class="fa fa-file-text-o"></i>优惠券管理</a></li>
-				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/blackList"><i class="fa fa-file-text-o"></i>黑白名单管理</a></li>	
+				<li #if(!$isAdmin && !$park_feeOperator_2) hidden#end><a href="/park/coupons"><i class="fa fa-file-text-o"></i>优惠券管理</a></li>
+				<li #if(!$isAdmin && !$park_feeOperator_2) hidden#end><a href="/park/blackList"><i class="fa fa-file-text-o"></i>黑白名单管理</a></li>	
 				<li #if(!$isAdmin && !$park_feeOperator) hidden#end><a href="/park/feeOperator"><i class="fa fa-user-plus"></i>收费人员管理</a></li>
 				<li #if(!$isAdmin && !$park_feeOperator_2) hidden#end><a href="/park/feeOperator/2"><i class="fa fa-user-plus"></i>巡检员管理</a></li>
 
@@ -259,8 +259,8 @@
 				  <li hidden #if(!$isAdmin && !$park_operation) hidden#end><a href="/park/operation"><i class="fa fa-bar-chart"></i>财务运营分析</a></li>
 				  <li hidden #if(!$isAdmin && !$park_data) hidden#end><a href="/park/data"><i class="fa fa-line-chart"></i>停车数据分析</a></li>
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li>
-				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
-				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
+				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
+				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
 				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/lepay/record/"><i class="fa fa-file-text-o"></i>支付数据</a></li>
@@ -285,7 +285,7 @@
 
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/leftParkingCard"><i class="fa fa-rub"></i>剩余泊位牌管理</a></li>
-                <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
+                <li #if(!$isAdmin && !$park_parkmap) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
 
 				
 				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>
@@ -318,7 +318,7 @@
                   <li #if(!$isAdmin && !$park_api_user_index) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>用户token管理</a></li>
                   <li #if(!$isAdmin && !$park_permission_roles) hidden#end><a href="/park/page/permission/roles"><i class="fa fa-user-secret"></i>角色管理</a></li>
                   <li #if(!$isAdmin && !$park_permission_role_allocate) hidden#end><a href="/park/page/permission/role/allocate"><i class="fa fa-user-secret"></i>角色分配管理</a></li>
-                  <li #if(!$isAdmin && !$park_permission_pages) hidden#end><a href="/park/page/permission/pages"><i class="fa fa-user-secret"></i>页面管理</a></li>
+                  <li #if(!$isAdmin && !$park_permission_role_allocate) hidden#end><a href="/park/page/permission/pages"><i class="fa fa-user-secret"></i>页面管理</a></li>
               </ul>
             </li>
 

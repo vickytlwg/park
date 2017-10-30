@@ -99,4 +99,10 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getByUsernameAndPark(username, parkId);
 	}
 
+	@Override
+	public List<Monthuser> getByCarnumberAndPark(String carnumber, int parkId) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByCarnumberAndPark(carnumber, parkId);
+	}
+
 }

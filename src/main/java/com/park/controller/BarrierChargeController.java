@@ -13,6 +13,8 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.park.model.*;
+import com.park.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,22 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.AlipayApiException;
 import com.park.dao.PosChargeDataDAO;
-import com.park.model.AuthUser;
-import com.park.model.AuthUserRole;
-import com.park.model.Constants;
-import com.park.model.Monthuser;
-import com.park.model.Page;
-import com.park.model.Parktoalipark;
-import com.park.model.PosChargeData;
-import com.park.service.AliParkFeeService;
-import com.park.service.AuthorityService;
-import com.park.service.HardwareService;
-import com.park.service.MonthUserParkService;
-import com.park.service.MonthUserService;
-import com.park.service.ParkToAliparkService;
-import com.park.service.PosChargeDataService;
-import com.park.service.UserPagePermissionService;
-import com.park.service.Utility;
 
 @RequestMapping("barrierCharge")
 @Controller
@@ -55,7 +41,13 @@ public class BarrierChargeController {
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	MonthUserService monthUserService;
-	
+	@Autowired
+	AlipayrecordService alipayrecordService;
+	@Autowired
+	ParkService parkService;
+	@Autowired
+	FeeCriterionService feeCriterionService;
+
 	@RequestMapping(value="insert",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String insert(@RequestBody Map<String, String> args) throws ParseException, AlipayApiException{
@@ -130,7 +122,7 @@ public class BarrierChargeController {
 }
 	@RequestMapping(value="touched",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String touched(@RequestBody Map<String, String> args) throws ParseException, AlipayApiException{
+	public String touched(@RequestBody Map<String, String> args) throws Exception{
 		String mac= args.get("mac");
 		String cardNumber=args.get("cardNumber");
 		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
@@ -226,15 +218,17 @@ public class BarrierChargeController {
 					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 				}
 			}
+			//如果没有未缴费 判断最近一次缴费时间是否超过15分钟
 			if (queryCharges.isEmpty()) {
-				if (largeCar==true) {
-					charge.setIsLargeCar(true);
-				}
+//				if (largeCar==true) {
+//					charge.setIsLargeCar(true);
+//				}
 //				charge.setCardNumber(cardNumber);
 //				charge.setParkId(parkId);
 //				charge.setParkDesc(parkName);
 //				charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 //				chargeSerivce.insert(charge);
+				/*
 				if (!parktoaliparks.isEmpty()) {
 					Parktoalipark parktoalipark=parktoaliparks.get(0);
 					Map<String, String> argstoali=new HashMap<>();
@@ -244,8 +238,43 @@ public class BarrierChargeController {
 					System.out.println("支付宝同步出场计算前: "+new Date().getTime()+"\n");
 					aliparkFeeService.parkingExitinfoSync(argstoali);
 					System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
+				}*/
+				//以下就是查询停车费状态的部分迁移
+				List<PosChargeData>  posChargeDataList=chargeSerivce.getLastRecord(cardNumber,1);
+				
+				if (posChargeDataList.isEmpty()){
+					return Utility.createJsonMsgWithoutMsg(1003, dataMap);
 				}
-				return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+				PosChargeData posChargeData=posChargeDataList.get(0);
+				List<Alipayrecord> alipayrecords=alipayrecordService.getByPosChargeId(posChargeData.getId());
+				if (alipayrecords.isEmpty()) {
+					return  Utility.createJsonMsgWithoutMsg(1003, dataMap);
+				}
+				Date payDate=alipayrecords.get(0).getDate();
+				long diff=new Date().getTime()-payDate.getTime();
+				if (diff<1000*60*15){					
+					dataMap.put("my", "0");
+					return  Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				//超过了15分钟
+				else {
+					Park park=parkService.getParkById(posChargeData.getParkId());
+					FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+					Date incomeDate=new Date(payDate.getTime()-(feeCriterion.getFreemins()-15)*1000*60);
+					PosChargeData charge2=new PosChargeData();
+					charge2.setCardNumber(posChargeData.getCardNumber());
+					charge2.setParkId(park.getId());
+					charge2.setParkDesc(posChargeData.getParkDesc());
+					charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+					int num = chargeSerivce.insert(charge2);	
+					if (num!=1) {
+						return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+					}
+					//重新查询未缴费
+					queryCharges = chargeSerivce.getDebt(cardNumber);									
+				}
+				
+				
 			}
 			//PosChargeData payRet=queryCharges.get(queryCharges.size()-1);
 			PosChargeData payRet=queryCharges.get(0);
@@ -288,5 +317,91 @@ public class BarrierChargeController {
 		}
 		dataMap.put("time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 		return Utility.createJsonMsg(1001, "success", dataMap);
+	}
+
+	/***
+	 * 查询是否已缴费接口
+	 * @throws ParseException 
+	 *
+	 * ***/
+	@RequestMapping(value="queryChargeStatus",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String queryChargeStatus(@RequestBody Map<String, String> args) throws ParseException {
+		String carNumber=args.get("carNumber");
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<PosChargeData>  posChargeDataList=chargeSerivce.getLastRecord(carNumber,1);
+		if (posChargeDataList.isEmpty()){
+			ret.put("status",1002);
+			ret.put("message","没有停车记录!");
+			return  Utility.gson.toJson(ret);
+		}
+		PosChargeData posChargeData=posChargeDataList.get(0);
+		if (!posChargeData.isPaidCompleted()){
+			ret.put("status",1002);
+			ret.put("message","未完成支付!");
+			ret.put("body",posChargeData);
+			return  Utility.gson.toJson(ret);
+		}
+		int payType=posChargeData.getPayType();
+		if (payType==0){
+			List<Alipayrecord> alipayrecords=alipayrecordService.getByPosChargeId(posChargeData.getId());
+			if (alipayrecords.isEmpty()) {
+				ret.put("status",1002);
+				ret.put("message","非支付宝支付!");
+				return  Utility.gson.toJson(ret);
+			}
+			Date payDate=alipayrecords.get(0).getDate();
+			long diff=new Date().getTime()-payDate.getTime();
+			if (diff<1000*60*15){
+				ret.put("status",1001);
+				ret.put("message","已完成支付!");
+				return  Utility.gson.toJson(ret);
+			}
+			else {
+				Park park=parkService.getParkById(posChargeData.getParkId());
+				FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+				Date incomeDate=new Date(payDate.getTime()-feeCriterion.getFreemins()*1000*60);
+				PosChargeData charge=new PosChargeData();
+				charge.setCardNumber(posChargeData.getCardNumber());
+				charge.setParkId(park.getId());
+				charge.setParkDesc(posChargeData.getParkDesc());
+				charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+				int num = chargeSerivce.insert(charge);
+				ret.put("status",1002);
+				ret.put("message","超时出场,还有未完成支付!");
+				ret.put("body", charge);
+				return  Utility.gson.toJson(ret);
+			}
+		}
+		else {
+			List<Alipayrecord> alipayrecords=alipayrecordService.getByPosChargeId(posChargeData.getId());
+			if (alipayrecords.isEmpty()) {
+				ret.put("status",1002);
+				ret.put("message","非支付宝支付!");
+				return  Utility.gson.toJson(ret);
+			}
+			Date payDate=alipayrecords.get(0).getDate();
+			long diff=new Date().getTime()-payDate.getTime();
+			if (diff<1000*60*15){
+				ret.put("status",1001);
+				ret.put("message","已完成支付!");
+				return  Utility.gson.toJson(ret);
+			}
+			else {
+				Park park=parkService.getParkById(posChargeData.getParkId());
+				FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+				Date incomeDate=new Date(payDate.getTime()-feeCriterion.getFreemins()*1000*60);
+				PosChargeData charge=new PosChargeData();
+				charge.setCardNumber(posChargeData.getCardNumber());
+				charge.setParkId(park.getId());
+				charge.setParkDesc(posChargeData.getParkDesc());
+				charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+				int num = chargeSerivce.insert(charge);
+				ret.put("status",1002);
+				ret.put("message","超时出场,还有未完成支付!");
+				ret.put("body", charge);
+				return  Utility.gson.toJson(ret);
+			}
+		}
 	}
 }

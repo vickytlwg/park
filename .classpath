@@ -52,5 +52,7 @@
 	<classpathentry kind="lib" path="lib"/>
 	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/alipay-sdk-java20170615110434-source.jar"/>
 	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/alipay-sdk-java20170615110434.jar"/>
+	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/park相关/支付宝相关/支付宝/代扣接口包_20170704/SDK/alipay-sdk-java-DEV20170627154506.jar"/>
+	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/park相关/支付宝相关/支付宝/代扣接口包_20170704/SDK/alipay-sdk-java-DEV20170627154506-source.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

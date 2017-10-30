@@ -251,7 +251,35 @@ public String deleteByNameAndPark(@RequestBody Map<String, Object> args){
 	}
 	return Utility.gson.toJson(result);
 }
-
+@RequestMapping(value="deleteByCarnumberAndPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String deleteByCarnumberAndPark(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	String carnumber = (String) args.get("carnumber");
+	int parkid = (int) args.get("parkid");
+	List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(carnumber, parkid);
+	if (monthusers.isEmpty()) {
+		result.put("status", 1002);
+		result.put("message", "没有预约");
+		return Utility.gson.toJson(result);
+	}
+	int num=0;
+	for (Monthuser monthuser : monthusers) {
+		if (monthuser.getType()==0) {
+			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
+		}
+	}
+	
+	if (num==1) {
+		result.put("status", 1001);
+		result.put("message", "ok");
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "删除失败");
+	}
+	return Utility.gson.toJson(result);
+}
 
 @RequestMapping(value="update",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody

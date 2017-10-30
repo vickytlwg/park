@@ -141,6 +141,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
+	public List<PosChargeData> getLastRecord(String carNumber, int count) {
+		return   chargeDao.getLastRecord(carNumber,count);
+	}
+
+	@Override
 	public PosChargeData pay(String cardNumber, double money) throws Exception {
 		double theMoney=money;
 		List<PosChargeData> charges = this.getCharges(cardNumber);
@@ -189,10 +194,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		FeeCriterion criterion = criterionService.getById(criterionId);
 		System.out.println("获取计费标准后: "+new Date().getTime()+"\n");
 		String nightStartHour = "20";
-		String nightEndHour = "7";
+		String nightEndHour = "07";
 		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
 			 nightStartHour = criterion.getNightstarttime().split(":")[0];
-			 nightEndHour = criterion.getNightendtime().split(":")[0].substring(1);
+			 nightEndHour = criterion.getNightendtime().split(":")[0];
 		}	
 		int isOneTimeExpense=charge.getIsOneTimeExpense();
 		if (charge.getIsLargeCar() == false) {		
@@ -202,7 +207,21 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			System.out.println("计费计算前: "+new Date().getTime()+"\n");
 			for(String name:dates.keySet()){
 				charge.setEntranceDate(name);
-			  if (name.substring(11,13).equals(nightStartHour)) {
+				int houra=Integer.parseInt(name.substring(11,13));
+				int hourNight=Integer.parseInt(nightStartHour);
+				int hourDay=Integer.parseInt(nightEndHour);
+				boolean isNight=false;
+				if (houra>12) {
+					if (houra>=hourNight) {
+						isNight=true;
+					}
+				}
+				else {
+					if (houra<hourDay) {
+						isNight=true;
+					}
+				}
+			  if (isNight) {
 				charge.setIsOneTimeExpense(1);
 				this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
@@ -236,7 +255,21 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
 			for(String name:dates.keySet()){
 				charge.setEntranceDate(name);
-			  if (name.substring(11,13).equals(nightStartHour)) {
+				int houra=Integer.parseInt(name.substring(11,13));
+				int hourNight=Integer.parseInt(nightStartHour);
+				int hourDay=Integer.parseInt(nightEndHour);
+				boolean isNight=false;
+				if (houra>12) {
+					if (houra>=hourNight) {
+						isNight=true;
+					}
+				}
+				else {
+					if (houra<hourDay) {
+						isNight=true;
+					}
+				}
+			  if (isNight) {
 				charge.setIsOneTimeExpense(1);
 				this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
 			}
@@ -329,7 +362,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1pricelarge();
 					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
-			//		double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+					//	double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
 
 					expense += intervals2 * criterion.getStep2pricelarge();
 				}
