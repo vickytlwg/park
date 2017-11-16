@@ -136,10 +136,14 @@ public class HardwareSerivceImpl implements HardwareService{
 
 	
 	@Override
-	public Map<String, Object> getInfoByMac(String mac) {
+	public List<Map<String, Object>> getInfoByMac(String mac) {
 		// TODO Auto-generated method stub
-		int type=macToType(mac);
-		
+		List<Hardware> hardwares=getHardwareByMac(mac);
+		int type=0;
+		if (!hardwares.isEmpty()) {
+			type=hardwares.get(0).getType();
+		}
+		List<Map<String, Object>> list=hardwareDAO.getInfoByMac(mac);
 		if (type!=0) {
 			return hardwareDAO.getInfoByMac(mac);
 		} else {
@@ -167,6 +171,12 @@ public class HardwareSerivceImpl implements HardwareService{
 	public List<Hardware> searchHardwareByKeywords(String mac) {
 		// TODO Auto-generated method stub
 		return hardwareDAO.searchHardwareByKeywords(mac);
+	}
+
+	@Override
+	public List<Hardware> getHardwareByMac(String mac) {
+		// TODO Auto-generated method stub
+		return hardwareDAO.getHardwareByMac(mac);
 	}
 
 	

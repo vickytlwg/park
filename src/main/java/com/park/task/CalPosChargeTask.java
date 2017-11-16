@@ -13,6 +13,7 @@ import com.jpush.Jpush;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
+import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
@@ -20,6 +21,7 @@ import com.park.service.JavaBeanXml;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
+import com.park.service.YanchengDataService;
 
 @Component
 public class CalPosChargeTask {
@@ -38,6 +40,9 @@ public class CalPosChargeTask {
 	private FeeOperatorService feeOperatorService;
 	@Autowired
 	private JavaBeanXml javaBeanXml;
+	
+	@Autowired
+	private YanchengDataService yanchengDataService;
 	@Scheduled(cron="0 0 18/1  * * ? ")
 	public void cal(){			
 		List<PosChargeData> charges = chargeService.getUnCompleted();
@@ -98,5 +103,12 @@ public class CalPosChargeTask {
 //				e.printStackTrace();
 //			}
 //		}
+	}
+	
+	@Scheduled(cron="*/8 * * * * ? ")
+	public void updateYanchengData(){
+		Park parkselect=parkService.getParkById(219);
+		String result=yanchengDataService.ParkLotFreeSpace("10028", " ", String.valueOf(parkselect.getPortCount()), String.valueOf(parkselect.getPortLeftCount()));
+	//	System.out.println(result);
 	}
 }

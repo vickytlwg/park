@@ -138,10 +138,13 @@
       parkingId = #{parkingid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="getByOutTradeNO" resultType="com.park.model.Alipayrecord">
+  <select id="getByAliTradeNO" resultMap="BaseResultMap">
+  	select * from alipayRecord where aliTradeNo=#{aliTradeNo} order by id desc
+  </select>
+   <select id="getByOutTradeNO" resultMap="BaseResultMap">
   	select * from alipayRecord where out_trade_no=#{outTradeNO} order by id desc
   </select>
-  <select id="getByPosChargeId" resultType="com.park.model.Alipayrecord">
+  <select id="getByPosChargeId" resultMap="BaseResultMap">
   	select * from alipayRecord where poschargeId=#{poschargeId} order by id desc
   </select>
 </mapper>

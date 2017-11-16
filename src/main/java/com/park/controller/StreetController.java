@@ -143,8 +143,17 @@ public class StreetController {
 	//	List<Street> streets=streetService.getByStartAndCount(start, count);
 		String username = (String) session.getAttribute("username");
 		List<Park> parkList = parkService.getParks();
-		if(username != null)
-			parkList = parkService.filterPark(parkList, username);
+		if(username != null){
+			AuthUser user = authService.getUserByUsername(username);
+			if(user.getRole() == AuthUserRole.ADMIN.getValue()){
+				result.put("status", 1001);
+				result.put("body", streetService.getByStartAndCount(0, 200));
+				return Utility.gson.toJson(result);
+			}
+			else {
+				parkList = parkService.filterPark(parkList, username);
+			}
+		}
 		Set<Street> streetsResult=new HashSet<>();
 		for (Park parktmp : parkList) {
 			if (parktmp.getType()!=3) {

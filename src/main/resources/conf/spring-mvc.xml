@@ -94,7 +94,9 @@
 		<mvc:exclude-mapping path="/plugins/**"/>	
 		<mvc:exclude-mapping path="/fee/alipaydata/insert"/>	
 		<mvc:exclude-mapping path="/alipay/**"/>	
-		<mvc:exclude-mapping path="/fee/quickpaydata/insert"/>			
+		<mvc:exclude-mapping path="/fee/quickpaydata/insert"/>		
+		<mvc:exclude-mapping path="/test1/**"/>	
+		<mvc:exclude-mapping path="/parkmap/"/>		
 		<bean class="com.park.interceptor.loginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

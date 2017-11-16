@@ -55,7 +55,8 @@ public class BarrierChargeController {
 		String cardNumber=args.get("cardNumber");
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
-		Map<String, Object> info=hardwareService.getInfoByMac(mac);
+		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);
+		Map<String, Object> info=infos.get(0);
 		if (info==null) {
 			ret.put("status", 1002);
 			return Utility.gson.toJson(ret);
@@ -128,7 +129,8 @@ public class BarrierChargeController {
 		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
-		Map<String, Object> info=hardwareService.getInfoByMac(mac);
+		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);
+		Map<String, Object> info=infos.get(0);
 		if (info==null) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
@@ -138,9 +140,11 @@ public class BarrierChargeController {
 		String parkName=(String) info.get("Name");
 		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
 		boolean isMonthUser=false;
+		Monthuser monthuserUse=new Monthuser();
 		for (Monthuser monthuser : monthusers) {
-			if (monthuser.getParkid()==parkId) {
+			if (monthuser.getParkid().intValue()==parkId.intValue()) {
 				isMonthUser=true;
+				monthuserUse=monthuser;
 				break;
 			}
 		}
@@ -149,11 +153,11 @@ public class BarrierChargeController {
 		}		
 		else{
 		
-			Monthuser monthuser=monthusers.get(0);
+			//Monthuser monthuser=monthusers.get(0);
 			dataMap.put("uT", "1");
 		//	dataMap.put("monthUserStartDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getStarttime()));
-			dataMap.put("eD", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getEndtime()));
-			Long diff=(monthuser.getEndtime().getTime()-(new Date()).getTime());
+			dataMap.put("eD", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuserUse.getEndtime()));
+			Long diff=(monthuserUse.getEndtime().getTime()-(new Date()).getTime());
 			if (diff>0) {
 				int leftDays=(int) (diff/(1000*60*60*24));
 				dataMap.put("ds", String.valueOf(leftDays));
@@ -178,14 +182,22 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num==1) {
-				if (!parktoaliparks.isEmpty()) {
-					Parktoalipark parktoalipark=parktoaliparks.get(0);
-					Map<String, String> argstoali=new HashMap<>();
-					argstoali.put("parking_id", parktoalipark.getAliparkingid());
-					argstoali.put("car_number", cardNumber);
-					argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-					aliparkFeeService.parkingEnterinfoSync(argstoali);
+				try {
+					
+					if (!parktoaliparks.isEmpty()) {
+						Parktoalipark parktoalipark=parktoaliparks.get(0);
+						Map<String, String> argstoali=new HashMap<>();
+						argstoali.put("parking_id", parktoalipark.getAliparkingid());
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						aliparkFeeService.parkingEnterinfoSync(argstoali);
+					}
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println(e);
 				}
+				
 				ret.put("status", 1001);
 			}
 			else {
@@ -303,10 +315,11 @@ public class BarrierChargeController {
 	@ResponseBody
 	public String getTypeByMac(@RequestBody Map<String, String> args) {
 		String mac= args.get("mac");
-		Map<String, Object> info=hardwareService.getInfoByMac(mac);
-		if (info==null) {
+		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
+		Map<String, Object> info=infos.get(0);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		int channelFlag=(int) info.get("channelFlag");
 		if (channelFlag==1) {	

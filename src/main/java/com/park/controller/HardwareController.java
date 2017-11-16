@@ -242,8 +242,8 @@ public class HardwareController {
 	public String getInfoByMac(@RequestBody Map<String, Object> argMap)
 	{
 		String mac = (String)argMap.get("mac");
-		Map<String, Object> data=hardwareService.getInfoByMac(mac);
-		return  Utility.gson.toJson(data);
+		List<Map<String, Object>> data=hardwareService.getInfoByMac(mac);
+		return  Utility.gson.toJson(data.get(0));
 	}
 	
 	@RequestMapping(value = "/update/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})

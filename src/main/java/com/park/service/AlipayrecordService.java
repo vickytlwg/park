@@ -20,5 +20,7 @@ public interface AlipayrecordService {
 	    
 	    List<Alipayrecord> getByOutTradeNO(String outTradeNO);
 	    
+	    List<Alipayrecord> getByAliTradeNO(String aliTradeNo);
+	    
 	    List<Alipayrecord> getByPosChargeId(int poschargeId );
 }

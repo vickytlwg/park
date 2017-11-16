@@ -161,6 +161,7 @@
       color: #0f8ce9; 
     }
   </style>
+ <script src="https://www.iotclouddashboard.com/park/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 </head>
 <body id="body">
   <div class="container">
@@ -198,10 +199,11 @@
     <div class="state">
       <p><span>!</span>付款后请15分钟内离场，超时将加收停车费</p>
     </div>
-    <button ><a href="http://www.iotclouddashboard.com/park/alipay/quickPayWeb/$chargeId/$userId/$parkingId/">立即付款</a></button>
-    <div class="contact-info">
-      <p>本服务由九比特提供</p>
-      <p>客服电话 <span>4000-0000-165</span></p>
+ <!--   <button ><a href="http://www.iotclouddashboard.com/park/alipay/quickPayWeb/$chargeId/$userId/$parkingId/">立即付款</a></button>-->
+   <button id="payButton" onclick=tradePay('$tradeNO')>立即付款</button>
+	<div class="contact-info">
+      <p></p>
+   
     </div>
   </div>
   <script>
@@ -211,5 +213,33 @@
       body.style.minHeight = viewportHeight + 'px';
     }
   </script>
+  <script type="application/javascript">
+	  
+  function tradePay(tradeNO) {			
+	
+     // 通过传入交易号唤起快捷调用方式(注意tradeNO大小写严格)
+     AlipayJSBridge.call("tradePay", {
+        tradeNO: tradeNO
+     }, function (data) {
+       if ("9000" == data.resultCode){
+	    
+		$.ajax({
+		url:'https://www.iotclouddashboard.com/park/alipay/notifyJSPay/',
+		type:'post',
+		data:{tradeNo:tradeNO},
+		success:function(data){
+		alert("支付成功!");
+		}
+		});
+
+       AlipayJSBridge.call('closeWebview');
+       }else{
+	   alert("支付失败");
+	   }
+ 
+  });
+}
+
+</script>
 </body>
 </html>

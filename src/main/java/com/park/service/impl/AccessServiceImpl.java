@@ -196,7 +196,8 @@ public class AccessServiceImpl implements AccessService{
 	private HardwareService hardwareservice;
 	@Override
 	public Map<Integer, Integer> getChannelHourCount(String mac,int macId, String date) {
-		Map<String, Object> macinfo=hardwareservice.getInfoByMac(mac);
+		List<Map<String, Object>> macinfos=hardwareservice.getInfoByMac(mac);
+		Map<String, Object> macinfo=macinfos.get(0);
 		int parkId=(int)macinfo.get("parkID");
 		List<Map<String, Object>> rets = accessDAO.getChannelHourCount(macId, date,findAccessTable(parkId, date));
 		Map<Integer, Integer> body = new HashMap<Integer, Integer>();

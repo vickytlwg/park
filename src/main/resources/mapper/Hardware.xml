@@ -28,7 +28,9 @@
 	<select id="getHardwareById" resultMap="HardwareMapper">
 		select * from hardware where id = #{param1}
 	</select> 
-	
+		<select id="getHardwareByMac" resultMap="HardwareMapper">
+		select * from hardware where mac = #{mac}
+	</select> 
 	<select id="getUnusedHardwares" resultMap="HardwareMapper">
 		select * from hardware where status = 1
 	</select> 
@@ -51,6 +53,7 @@
 	<select id="macToType" resultType="int">
 	SELECT type FROM hardware WHERE mac = #{mac}
 	</select>
+	
 	<select id="getInfoByMac" resultType="java.util.HashMap">
 	 SELECT channel.parkId AS parkID,channel.channelFlag as channelFlag, park.name AS NAME,hardware.mac AS mac FROM hardware 
 	 LEFT JOIN channel ON channel.macId=hardware.id 

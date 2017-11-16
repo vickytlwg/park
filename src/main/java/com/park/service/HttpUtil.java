@@ -55,6 +55,41 @@ public class HttpUtil {
 		return resultMap;
 		}
 
+	public static Map<String, Object> posts(String url, Map<String, String> argMap){
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(url);
+		
+		String json = new Gson().toJson(argMap);
+		StringEntity se = new StringEntity(json.toString(), "UTF-8"); 
+		se.setContentEncoding(new BasicHeader(HTTP.CONTENT_ENCODING, "UTF-8"));
+		se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=utf-8"));
+		post.setEntity(se);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+		HttpResponse response = httpClient.execute(post); 
+		StatusLine status = response.getStatusLine(); 
+		int code = status.getStatusCode();
+		resultMap.put("status", code);
+		if(code < 200 || code >=300){
+		resultMap.put("message", "request fail");
+		}else{
+		HttpEntity entity = response.getEntity();
+		String body = EntityUtils.toString(entity);
+		resultMap.put("body", body);
+		resultMap.put("message", "request success");
+		} 
+		} catch (ClientProtocolException e) {
+		e.printStackTrace();
+		post.abort();
+		} catch (IOException e) {
+		e.printStackTrace();
+		post.abort();
+		} finally{
+		httpClient.getConnectionManager().shutdown();
+		}
+		return resultMap;
+		}
+	
 		public static Map<String, Object> get(String url){
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet get = new HttpGet(url);

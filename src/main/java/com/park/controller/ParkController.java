@@ -328,6 +328,9 @@ public class ParkController {
 			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
 			{
 				parkDetail = parkService.filterParkDetail(parkDetail, username);
+				if (parkDetail.isEmpty()) {
+					parkDetail = parkService.filterParkDetail(parkService.getParkDetail(0, 1000), username);
+				}
 				//parkDetail = parkService.getPark();
 				//parkDetail = parkService.filterPark(parkDetail, username);
 			}
@@ -354,6 +357,9 @@ public class ParkController {
 			if(user != null && user.getRole() != AuthUserRole.ADMIN.getValue())
 			{
 				parkDetail = parkService.filterParkDetail(parkDetail, username);
+				if (parkDetail.isEmpty()) {
+					parkDetail = parkService.filterParkDetail(parkService.getParkDetail(0, 1000), username);
+				}
 			}
 		}			
 

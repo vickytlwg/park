@@ -91,7 +91,8 @@ public class ChannelServiceImpl implements ChannelService{
 
 	@Override
 	public int getChannelIdByMac(String mac) {
-		return this.getChannelIdByMacId(hardwareDAO.macToId(mac));
+		List<Hardware> hardwares=hardwareDAO.getHardwareByMac(mac);
+		return this.getChannelIdByMacId(hardwares.get(0).getId());
 	}
 
 	@Override

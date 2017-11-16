@@ -61,4 +61,10 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 		return alipayrecordMapper.getByPosChargeId(poschargeId);
 	}
 
+	@Override
+	public List<Alipayrecord> getByAliTradeNO(String aliTradeNo) {
+		// TODO Auto-generated method stub
+		return alipayrecordMapper.getByAliTradeNO(aliTradeNo);
+	}
+
 }

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +40,8 @@ public class NjparkController {
 	NjCarFeeRecordService njcarFeeRecordService;
 	@Autowired
 	AliParkFeeService parkFeeService;
+	
+	private static Log logger = LogFactory.getLog(NjparkController.class);
 	
 	@RequestMapping(value="carArrive",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
@@ -147,7 +151,9 @@ public class NjparkController {
 		String carType=new String((request.getParameter("carType")).getBytes("iso-8859-1"),"utf-8");
 		String gateName=new String((request.getParameter("gateName")).getBytes("iso-8859-1"),"utf-8");
 		String operatorName=new String((request.getParameter("operatorName")).getBytes("iso-8859-1"),"utf-8");
-
+		
+		logger.debug("入场:"+carNo);
+		
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
 		njcarfeerecord.setArrivetime(new Date());
 		njcarfeerecord.setCarnumber(carNo);
@@ -156,7 +162,7 @@ public class NjparkController {
 		njcarfeerecord.setStoptype("入场");
 		
 		Map<String, String> args=new HashMap<>();
-		args.put("parking_id", "PI1501317472942184881");
+		args.put("parking_id", "PI1509946268841654545");
 		args.put("car_number", carNo);
 		args.put("in_time", enterTime);
 		parkFeeService.parkingEnterinfoSync(args);
