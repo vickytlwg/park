@@ -219,7 +219,7 @@ public class BarrierChargeController {
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+					return Utility.createJsonMsg(1002, "获取费用出现异常");
 				}
 			} else {
 				try {

@@ -35,7 +35,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id
 	
 	<select id="getUnCompleted" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 limit 200
 	</select>
 	
 	<select id="getByParkIdAndCardNumber" resultMap="PosChargeDataMapper">
@@ -78,7 +78,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between
 	
 	<select id="getDebt" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{param1} order by id desc
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{param1} order by id desc limit 200
 	</select>
 	<select id="getLastRecord" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
@@ -97,7 +97,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} and
 	
 	<select id="getByCardNumber" statementType="STATEMENT" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,rejectReason,portNumber,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber like '%${cardNumber}%' order by id desc
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber like '%${cardNumber}%' order by id desc limit 200
  	</select>
  	<select id="getByCardNumberAndPort"  resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,p.name AS parkDesc,payType,rejectReason,portNumber,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
@@ -105,7 +105,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
  	</select>
  	
  	<select id="getByParkName" statementType="STATEMENT" resultMap="PosChargeDataMapper">
-		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc
+		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc limit 100
  	</select>		
 	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
