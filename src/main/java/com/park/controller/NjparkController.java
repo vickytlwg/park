@@ -29,7 +29,7 @@ import com.park.service.NjCarFeeRecordService;
 import com.park.service.NjMonthUserService;
 import com.park.service.Utility;
 
-import ch.qos.logback.classic.pattern.Util;
+
 
 @Controller
 @RequestMapping("njpark")
@@ -145,6 +145,7 @@ public class NjparkController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String parkKey=new String((request.getParameter("parkKey")).getBytes("iso-8859-1"),"utf-8");
 		String carNo=new String((request.getParameter("carNo")).getBytes("iso-8859-1"),"utf-8");
 		String orderNo=new String((request.getParameter("orderNo")).getBytes("iso-8859-1"),"utf-8");
 		String enterTime=new String((request.getParameter("enterTime")).getBytes("iso-8859-1"),"utf-8");
@@ -152,16 +153,26 @@ public class NjparkController {
 		String gateName=new String((request.getParameter("gateName")).getBytes("iso-8859-1"),"utf-8");
 		String operatorName=new String((request.getParameter("operatorName")).getBytes("iso-8859-1"),"utf-8");
 		
-		logger.debug("入场:"+carNo);
+		logger.debug("入场:"+carNo+"key:"+parkKey);
 		
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
 		njcarfeerecord.setArrivetime(new Date());
 		njcarfeerecord.setCarnumber(carNo);
 		njcarfeerecord.setCartype(carType);
-		njcarfeerecord.setParkname(gateName);
+		
 		njcarfeerecord.setStoptype("入场");
 		
 		Map<String, String> args=new HashMap<>();
+		
+		if (parkKey.equals("c1648ccf33314dc384155896cf4d00b9")) {
+			njcarfeerecord.setParkname("红星美凯龙");
+			args.put("parking_id", "PI1509946268841654545");
+		}
+		else if (parkKey.equals("ff8993a40b3a4249924f34044403b5bf")) {
+			njcarfeerecord.setParkname("家乐福停车场");
+			args.put("parking_id", "PI1501836360593635616");
+		}
+		
 		args.put("parking_id", "PI1509946268841654545");
 		args.put("car_number", carNo);
 		args.put("in_time", enterTime);

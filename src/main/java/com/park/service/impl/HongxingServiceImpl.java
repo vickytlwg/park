@@ -2,6 +2,8 @@ package com.park.service.impl;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ public class HongxingServiceImpl implements HongxingService {
 
 	@Autowired
 	HongxingRecordService hongxingRecordService;
-	
+	private static Log logger = LogFactory.getLog(HongxingServiceImpl.class);
 	@Override
-	public Map<String, Object> getFeeByCarNumber(String carNumber) {
+	public Map<String, Object> getFeeByCarNumber(String carNumber,String parkKey) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/GetCarPrice?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&carNo="+carNumber);
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/GetCarPrice?SecretKey=ABCD&parkKey="+parkKey+"&carNo="+carNumber);
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
@@ -53,9 +55,9 @@ public class HongxingServiceImpl implements HongxingService {
 	}
 
 	@Override
-	public String creatPayOrder(String orderNo) {
+	public String creatPayOrder(String orderNo,String parkKey) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/CarOrderPay?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&orderNo="+orderNo);
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/CarOrderPay?SecretKey=ABCD&parkKey="+parkKey+"&orderNo="+orderNo);
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
@@ -69,18 +71,22 @@ public class HongxingServiceImpl implements HongxingService {
 	}
 
 	@Override
-	public Boolean payOrderNotify(String paidMoney, String OrderNo, String Order) {
+	public Boolean payOrderNotify(String paidMoney, String OrderNo, String Order,String parkKey) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/PayNotify?SecretKey=ABCD&parkKey=c1648ccf33314dc384155896cf4d00b9&payOrder="
+		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/PayNotify?SecretKey=ABCD&parkKey="+parkKey+"&payOrder="
 				+ Order+"&payedSN="+OrderNo+"&payedMoney="+paidMoney);
+		
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
        }.getType() );		
+		 
 		 Boolean status=(Boolean) mapdata.get("Success");
+		 logger.info(mapdata.toString());
 		 if (status!=true) {
 			return false;
 		}
+		 
 		return true;
 	}
 

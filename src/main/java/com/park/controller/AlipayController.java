@@ -60,7 +60,7 @@ import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("alipay")
+@RequestMapping("alipay2")
 public class AlipayController {
 	@Autowired
 	AliParkFeeService parkFeeService;
@@ -112,7 +112,7 @@ public class AlipayController {
 			// 处理异常
 			e.printStackTrace();
 		}
-
+		
 		AlipayEcoMycarParkingVehicleQueryRequest request3 = new AlipayEcoMycarParkingVehicleQueryRequest();
 		request3.setBizContent("{" + "\"car_id\":\"" + car_id + "\"" + "  }");
 		String carNumber = "";
@@ -210,7 +210,6 @@ public class AlipayController {
 //
 //		return "alipayh5/index";
 //	}
-
 	@RequestMapping(value = "notifyJSPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String notifyJSPay(HttpServletRequest request) {
@@ -696,7 +695,9 @@ public class AlipayController {
 		return Utility.gson.toJson(result);
 
 	}
-
+/**
+ * 
+ * */
 	@RequestMapping(value = "OperateCarFee", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -723,9 +724,9 @@ public class AlipayController {
 			"\"out_trade_no\":\""+out_trade_no+"\"," +
 			"\"subject\":\"九比特停车缴费\"," +
 			"\"total_fee\":"+money+"," +
-			"\"seller_id\":\"2088721707329444\"," +
-			"\"parking_id\":\"PI1509946268841654545\"," +
-			"\"out_parking_id\":\"206\"," +
+			"\"seller_id\":\"2088021992523142\"," +
+			"\"parking_id\":\"PI1501317472942184881\"," +
+			"\"out_parking_id\":\"3\"," +
 			"\"agent_id\":\"2088601016329110\"," +
 			"\"car_number_color\":\"blue\"" +
 			"}");

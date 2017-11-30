@@ -1,5 +1,10 @@
 package com.park.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,7 +35,7 @@ public class TcpController {
 		String content=(String) args.get("content");
 		Boolean result=tcpServerService.sendByParkId(parkId, content);
 		if (result) {						
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 3; i++) {
 				Thread.sleep(1000);
 				System.out.println(Constants.tcpReceiveDatas);
 				if (Constants.tcpReceiveDatas.get(String.valueOf(parkId))!=null) {
@@ -47,7 +52,7 @@ public class TcpController {
 	@ResponseBody
 	public String start(){
 		try {
-			TcpServerService.StartTcpServer(8999);
+			TcpServerService.StartTcpServer(8099);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,5 +71,17 @@ public class TcpController {
         	 ret.put(s, channelsMap.get(s).remoteAddress()+"");
          }
          return Utility.createJsonMsg(1001, "success", ret);
+	}
+	@RequestMapping(value="tcp",method=RequestMethod.GET)
+	@ResponseBody
+	public void tcptest() throws UnknownHostException, IOException{
+		 String server="192.168.44.1";            	          
+	     int servPort=8099;  
+	     Socket socket=new Socket(server,servPort);
+	     InputStream in=socket.getInputStream();  
+	     OutputStream out=socket.getOutputStream();  
+	          
+	     out.write("{'parkId':'3','cardNumber':'川A1LM97'}".getBytes());  
+	     socket.close(); 
 	}
 }

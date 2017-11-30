@@ -44,19 +44,21 @@ import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.park.model.Alipayrecord;
 import com.park.model.Constants;
 import com.park.model.Hongxingrecord;
+import com.park.model.Njcarfeerecord;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.AliParkFeeService;
 import com.park.service.AlipayrecordService;
 import com.park.service.HongxingRecordService;
 import com.park.service.HongxingService;
+import com.park.service.NjCarFeeRecordService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("alipay2")
+@RequestMapping("alipay")
 public class HongxingController {
 	@Autowired
 	HongxingService hongxingService;
@@ -72,6 +74,8 @@ public class HongxingController {
 	AliParkFeeService parkFeeService;
 	@Autowired
 	ParkService parkService;
+	@Autowired
+	NjCarFeeRecordService njCarFeeRecordService;
 
 	private static Log logger = LogFactory.getLog(HongxingController.class);
 	
@@ -87,12 +91,13 @@ public class HongxingController {
 			ALIPAY_PUBLIC_KEY, SIGN_TYPE);
 	AlipayClient alipayClient2 = new DefaultAlipayClient(URL, Constants.alipayAppId4, Constants.alipayPrivateKey4,
 			FORMAT, CHARSET, Constants.alipayPublicKey4, SIGN_TYPE);
-
+	AlipayClient alipayClient3 = new DefaultAlipayClient(URL, Constants.alipayAppId6, Constants.alipayPrivateKey6,
+			FORMAT, CHARSET, Constants.alipayPublicKey6, SIGN_TYPE);
 	@RequestMapping(value = "getRecord", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getRecord(@RequestBody Map<String, String> args, ModelMap modelMap) throws Exception {
 
-		String code = hongxingService.creatPayOrder("20171008170709140-A1N603");
+		String code = hongxingService.creatPayOrder("20171008170709140-A1N603","c1648ccf33314dc384155896cf4d00b9");
 
 		// Boolean
 		// success=hongxingService.payOrderNotify("2.5","20170926085443491-AV738F","20170926085443491-AV738F");
@@ -135,26 +140,38 @@ public class HongxingController {
 			e.printStackTrace();
 		}
 		modelMap.addAttribute("carNumber", carNumber);
+		Njcarfeerecord njcarfeerecord=njCarFeeRecordService.selectByCarNumber(carNumber).get(0);
+		String parkKey="c1648ccf33314dc384155896cf4d00b9";
+		AlipayClient alipayClienttmp=alipayClient2;
+		if (njcarfeerecord.getParkname().contains("家乐福")) {
+			parkKey="ff8993a40b3a4249924f34044403b5bf";
+			alipayClienttmp=alipayClient3;
+		}
 		Map<String, Object> data = null;
 		try {
-			data = hongxingService.getFeeByCarNumber(carNumber);
+			data = hongxingService.getFeeByCarNumber(carNumber,parkKey);
 		} catch (Exception e) {
 			return "alipayh5/noRecord";
 		}
 		if (data == null) {
 			return "alipayh5/noRecord";
 		}
-
-		String totalAmount = String.valueOf((double) data.get("totalAmount") / 10);
-
+		
 		PosChargeData lastCharge = new PosChargeData();
 		lastCharge.setCardNumber(carNumber);
 		lastCharge.setParkId(3);
-		lastCharge.setChargeMoney((double) data.get("totalAmount") / 10);
+		lastCharge.setParkDesc("美凯龙停车场");
+		lastCharge.setChargeMoney((double) data.get("totalAmount") );
+		if (njcarfeerecord.getParkname().contains("家乐福")) {
+			lastCharge.setParkId(217);
+			lastCharge.setParkDesc("家乐福停车场");
+			lastCharge.setChargeMoney((double) data.get("totalAmount"));
+		}
+		
 		String enterTimeStr = ((String) data.get("enterTime")).replace("/", "-");
 		lastCharge.setEntranceDate(enterTimeStr);
 		lastCharge.setExitDate1(new Date());
-		lastCharge.setParkDesc("美凯龙停车场");
+		
 		lastCharge.setOperatorId((String) data.get("orderNo"));
 		poschargedataService.insert(lastCharge);
 
@@ -193,7 +210,8 @@ public class HongxingController {
 		modelMap.addAttribute("outTradeNO", out_trade_no);
 		modelMap.addAttribute("userId", userId);
 		modelMap.addAttribute("money", total_amount);
-		AlipayTradeCreateResponse response = alipayClient2.execute(request5);
+		AlipayTradeCreateResponse response = alipayClienttmp.execute(request5);
+		logger.error("zhifubao:"+response.getBody()+response.getSubMsg());
 		modelMap.addAttribute("tradeNO", response.getTradeNo());
 
 		Alipayrecord alipayrecord = new Alipayrecord();
@@ -263,9 +281,16 @@ public class HongxingController {
 		alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
 		lastCharge.setPaidCompleted(true);
 
-		String code = hongxingService.creatPayOrder(lastCharge.getOperatorId());
+		Njcarfeerecord njcarfeerecord=njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);
+		String parkKey="c1648ccf33314dc384155896cf4d00b9";
+		if (njcarfeerecord.getParkname().contains("家乐福")) {
+			parkKey="ff8993a40b3a4249924f34044403b5bf";
+		}
+		
+		String code = hongxingService.creatPayOrder(lastCharge.getOperatorId(),parkKey);
 		// 通知
-		Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChangeMoney()), code, code);
+		Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChargeMoney()), code, code,parkKey);
+		logger.info("调用接口参数:"+String.valueOf(lastCharge.getChargeMoney())+code+parkKey);
 		if (success) {
 			logger.info("调用美凯龙支付通知成功");
 			lastCharge.setRejectReason("成功通知");
@@ -304,88 +329,88 @@ public class HongxingController {
 		
 		return Utility.createJsonMsg(1001, "ok",dString);
 	}
-	@RequestMapping(value = "notifyUrlWebPay", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
-	@ResponseBody
-	public String notifyUrlWebPay(@RequestParam("out_trade_no") String out_trade_no, HttpServletRequest request) {
-		String trade_no = request.getParameter("trade_no");
-		String trade_status = request.getParameter("trade_status");
-		String receipt_amount = request.getParameter("receipt_amount");
-		List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);
-		Alipayrecord alipayrecord = alipayrecords.get(0);
-		PosChargeData lastCharge = poschargedataService.getById(alipayrecord.getPoschargeid());
-		if (trade_status.equals("TRADE_SUCCESS")) {
-			alipayrecord.setStatus("2");
-			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
-			alipayrecord.setAlitradeno(trade_no);
-			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
-			lastCharge.setPaidCompleted(true);
-
-			String code = hongxingService.creatPayOrder(lastCharge.getOperatorId());
-			// 通知
-			Boolean success = hongxingService.payOrderNotify(receipt_amount, code, code);
-			if (success) {
-				lastCharge.setRejectReason("成功通知");
-			} else {
-				lastCharge.setRejectReason("失败通知");
-			}
-			poschargedataService.update(lastCharge);
-			Map<String, String> args = new HashMap<>();
-			args.put("user_id", alipayrecord.getUserid());
-
-			args.put("out_parking_id", "mkl");
-			args.put("parking_name", "美凯龙停车场");
-			args.put("car_number", lastCharge.getCardNumber());
-			args.put("out_order_no", out_trade_no);
-			args.put("order_status", "0");
-			args.put("order_time", new SimpleDateFormat(Constants.DATEFORMAT).format(alipayrecord.getDate()));
-			args.put("order_no", trade_no);
-			args.put("pay_time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-			args.put("pay_type", "1");
-			args.put("pay_money", receipt_amount);
-			args.put("in_time", new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
-			args.put("parking_id", alipayrecord.getParkingid());
-			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime())
-					/ 60000;
-			args.put("in_duration", String.valueOf(parkingDuration));
-			args.put("card_number", "*");
-
-			try {
-				parkFeeService.parkingOrderSync(args);
-			} catch (AlipayApiException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-
-			Map<String, String> args = new HashMap<>();
-			args.put("user_id", alipayrecord.getUserid());
-			args.put("out_parking_id", "mkl");
-			args.put("parking_name", "美凯龙停车场");
-			args.put("car_number", lastCharge.getCardNumber());
-			args.put("out_order_no", out_trade_no);
-			args.put("order_status", "1");
-			args.put("order_time", new SimpleDateFormat(Constants.DATEFORMAT).format(alipayrecord.getDate()));
-			args.put("order_no", trade_no);
-			args.put("pay_time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-			args.put("pay_type", "1");
-			args.put("pay_money", receipt_amount);
-			args.put("in_time", new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
-			args.put("parking_id", alipayrecord.getParkingid());
-			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime())
-					/ 60000;
-			args.put("in_duration", String.valueOf(parkingDuration));
-			args.put("card_number", "*");
-
-			try {
-				parkFeeService.parkingOrderSync(args);
-			} catch (AlipayApiException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return "success";
-	}
+//	@RequestMapping(value = "notifyUrlWebPay", method = RequestMethod.POST, produces = {
+//			"application/json;charset=UTF-8" })
+//	@ResponseBody
+//	public String notifyUrlWebPay(@RequestParam("out_trade_no") String out_trade_no, HttpServletRequest request) {
+//		String trade_no = request.getParameter("trade_no");
+//		String trade_status = request.getParameter("trade_status");
+//		String receipt_amount = request.getParameter("receipt_amount");
+//		List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);
+//		Alipayrecord alipayrecord = alipayrecords.get(0);
+//		PosChargeData lastCharge = poschargedataService.getById(alipayrecord.getPoschargeid());
+//		if (trade_status.equals("TRADE_SUCCESS")) {
+//			alipayrecord.setStatus("2");
+//			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
+//			alipayrecord.setAlitradeno(trade_no);
+//			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
+//			lastCharge.setPaidCompleted(true);
+//
+//			String code = hongxingService.creatPayOrder(lastCharge.getOperatorId());
+//			// 通知
+//			Boolean success = hongxingService.payOrderNotify(receipt_amount, code, code);
+//			if (success) {
+//				lastCharge.setRejectReason("成功通知");
+//			} else {
+//				lastCharge.setRejectReason("失败通知");
+//			}
+//			poschargedataService.update(lastCharge);
+//			Map<String, String> args = new HashMap<>();
+//			args.put("user_id", alipayrecord.getUserid());
+//
+//			args.put("out_parking_id", "mkl");
+//			args.put("parking_name", "美凯龙停车场");
+//			args.put("car_number", lastCharge.getCardNumber());
+//			args.put("out_order_no", out_trade_no);
+//			args.put("order_status", "0");
+//			args.put("order_time", new SimpleDateFormat(Constants.DATEFORMAT).format(alipayrecord.getDate()));
+//			args.put("order_no", trade_no);
+//			args.put("pay_time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//			args.put("pay_type", "1");
+//			args.put("pay_money", receipt_amount);
+//			args.put("in_time", new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
+//			args.put("parking_id", alipayrecord.getParkingid());
+//			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime())
+//					/ 60000;
+//			args.put("in_duration", String.valueOf(parkingDuration));
+//			args.put("card_number", "*");
+//
+//			try {
+//				parkFeeService.parkingOrderSync(args);
+//			} catch (AlipayApiException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		} else {
+//
+//			Map<String, String> args = new HashMap<>();
+//			args.put("user_id", alipayrecord.getUserid());
+//			args.put("out_parking_id", "mkl");
+//			args.put("parking_name", "美凯龙停车场");
+//			args.put("car_number", lastCharge.getCardNumber());
+//			args.put("out_order_no", out_trade_no);
+//			args.put("order_status", "1");
+//			args.put("order_time", new SimpleDateFormat(Constants.DATEFORMAT).format(alipayrecord.getDate()));
+//			args.put("order_no", trade_no);
+//			args.put("pay_time", new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//			args.put("pay_type", "1");
+//			args.put("pay_money", receipt_amount);
+//			args.put("in_time", new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
+//			args.put("parking_id", alipayrecord.getParkingid());
+//			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime())
+//					/ 60000;
+//			args.put("in_duration", String.valueOf(parkingDuration));
+//			args.put("card_number", "*");
+//
+//			try {
+//				parkFeeService.parkingOrderSync(args);
+//			} catch (AlipayApiException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		return "success";
+//	}
 
 	//
 	@RequestMapping(value = "notifyUrl", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })

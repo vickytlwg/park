@@ -1,12 +1,5 @@
 package com.park.udp;
 
-import java.io.Console;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -16,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 public class UdpStart implements ServletContextListener {
-	private static Log logger = LogFactory.getLog(UdpStart.class);
+//	private static Log logger = LogFactory.getLog(UdpStart.class);
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub

@@ -409,8 +409,7 @@
                    
                                
                                 <table id="tbReport" class="indexData" style="width:100%" ng-click="toParkInfo()">
-                                    <tr>
-                                                 
+                                    <tr>                                                 
 									   <td>市</td>
 									   <td>应收额</td>
 									   <td>实收额</td>

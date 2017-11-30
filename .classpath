@@ -17,45 +17,19 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/bcprov-jdk16-1.45.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.client-1.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.client-1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.sdk-1.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.sdk-1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.security-1.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.security-1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.share-1.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/channel.lepay.share-1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
-	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="lib/logback-classic-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/logback-core-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/park相关/支付宝相关/支付宝/代扣接口包_20170704/SDK/alipay-sdk-java-DEV20170627154506.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/park相关/支付宝相关/支付宝/代扣接口包_20170704/SDK/alipay-sdk-java-DEV20170627154506-source.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uc-httpclient"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/盐城项目对接/DEMO-1.1/DEMO/uc-httpclient/target/uc-httpclient-2.1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/盐城项目对接/DEMO-1.1/DEMO/uc-httpclient/target/uc-httpclient-2.1.5-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/代扣接口包_20171102/alipay-sdk-java-ALL20171101201354.jar"/>
 	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/代扣接口包_20171102/alipay-sdk-java-ALL20171101201354-source.jar"/>
+	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/盐城项目对接/DEMO-1.1/DEMO/uc-httpclient-2.1.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

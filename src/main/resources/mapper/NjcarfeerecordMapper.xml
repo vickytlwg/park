@@ -246,7 +246,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByCarNumber" resultType="com.park.model.Njcarfeerecord">
-  	select * from njCarFeeRecord where carNumber=#{carNumber} order by id desc
+  	select * from njCarFeeRecord where carNumber=#{carNumber} order by id desc limit 20
   </select>
    <select id="selectByTradeNumber" resultType="com.park.model.Njcarfeerecord">
   	select * from njCarFeeRecord where tradeNumber=#{tradeNumber} order by id desc

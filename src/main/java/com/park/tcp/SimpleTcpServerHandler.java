@@ -1,14 +1,22 @@
 package com.park.tcp;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.park.model.Constants;
+import com.park.model.PosChargeData;
+import com.park.service.PosChargeDataService;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,6 +40,9 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 	 * A thread-safe Set  Using ChannelGroup, you can categorize Channels into a meaningful group.
 	 * A closed Channel is automatically removed from the collection,
 	 */
+	@Autowired
+	PosChargeDataService poschargeSerivce;
+	private static Log logger = LogFactory.getLog(SimpleTcpServerHandler.class);
 	public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	public static Map<String, Channel> channelsMap=new HashMap<>();
     @Override
@@ -54,21 +65,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
         // A closed Channel is automatically removed from ChannelGroup,
         // so there is no need to do "channels.remove(ctx.channel());"
     }
-//    @Override
-//   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-//	   System.out.println("messageCome");
-//	   Channel incoming = ctx.channel();
-//	   String s = (String)msg;
-//		
-//		System.out.println(s);
-//		for (Channel channel : channels) {
-//           if (channel != incoming){
-//               channel.writeAndFlush("[" + incoming.remoteAddress() + "]" + s + "\n");
-//           } else {
-//           	channel.writeAndFlush("[you]" + s + "\n");
-//           }
-//       }
-//   };
+
 //   @Override
 //	protected void channelRead0(ChannelHandlerContext ctx,
 //			TextWebSocketFrame msg) throws Exception { // (1)
@@ -85,8 +82,8 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
     @Override
 	protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception { // (4)
 		Channel incoming = ctx.channel();
-		System.out.println("messageCome");
-		System.out.println(s);	
+		String teString=new String(s.getBytes("utf-8"),"gb2312");
+		logger.info("messageCome:"+teString);	
 		if (s.length()<5) {
 			return;
 		}
@@ -99,6 +96,21 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 			}
 		if (mapdata.get("parkId")!=null) {
 			Constants.tcpReceiveDatas.put((String) mapdata.get("parkId"), mapdata);
+			if (mapdata.get("cardNumber")!=null) {
+				String cardNumber=(String) mapdata.get("cardNumber");
+				try {
+					List<PosChargeData> queryCharges= poschargeSerivce.queryCurrentDebt(cardNumber, new Date());
+					String status="4000";
+					if (!queryCharges.isEmpty()) {
+						PosChargeData posChargeData=queryCharges.get(0);
+						String dataSend="{'parkId':"+posChargeData.getParkId()+"";
+						incoming.writeAndFlush(dataSend);
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			
 		}
 	}
     @Override
@@ -126,7 +138,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
     	 			}
     	         }
     	         incoming.close();
-    			System.out.println( ctx.channel().remoteAddress()+"超时类型：" + type);
+    	         logger.info( ctx.channel().remoteAddress()+"超时类型：" + type);
     		}
     }
     public void sendToAll(String content){
@@ -137,12 +149,12 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
         Channel incoming = ctx.channel();
        
-		System.out.println("SimpleChatClient:"+incoming.remoteAddress()+"在线");	
+        logger.info("SimpleChatClient:"+incoming.remoteAddress()+"在线");	
 			
 			Collection<Channel> channelsc=channelsMap.values();
 			   Iterator it = channelsc.iterator();
 		        for (; it.hasNext();) {
-		        	System.out.println("mapClient:"+((Channel)(it.next())).remoteAddress()+"上线");
+		        	logger.info("mapClient:"+((Channel)(it.next())).remoteAddress()+"上线");
 		        }
 	}
 	
@@ -157,11 +169,11 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 				break;
 			}
         }
-		System.out.println("Client:"+incoming.remoteAddress()+"掉线");
+        logger.info("Client:"+incoming.remoteAddress()+"掉线");
 		Collection<Channel> channelsc=channelsMap.values();
 		   Iterator it = channelsc.iterator();
 	        for (; it.hasNext();) {
-	        	System.out.println("mapClient:"+((Channel)(it.next())).remoteAddress()+"剩下");
+	        	logger.info("mapClient:"+((Channel)(it.next())).remoteAddress()+"剩下");
 	        }
 	}
     @Override
@@ -175,7 +187,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
  				break;
  			}
          }
-		System.out.println("SimpleChatClient:"+incoming.remoteAddress()+"异常");
+         logger.info("SimpleChatClient:"+incoming.remoteAddress()+"异常");
         // 当出现异常就关闭连接
         cause.printStackTrace();
         ctx.close();

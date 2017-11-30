@@ -1,5 +1,6 @@
 package com.park.tcp;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
@@ -32,8 +33,8 @@ public class SimpleTcpServerInitializer extends ChannelInitializer<SocketChannel
 		pipeline.addLast(
 				new IdleStateHandler(READ_IDEL_TIME_OUT, WRITE_IDEL_TIME_OUT, ALL_IDEL_TIME_OUT, TimeUnit.SECONDS));
 		pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-		pipeline.addLast("decoder", new StringDecoder());
-		pipeline.addLast("encoder", new StringEncoder());
+		pipeline.addLast("decoder", new StringDecoder(Charset.forName("utf-8")));
+		pipeline.addLast("encoder", new StringEncoder(Charset.forName("UTF-8")));
 		pipeline.addLast("handler", new SimpleTcpServerHandler());
 	
 		System.out.println("SimpleChatClient:" + ch.remoteAddress() + "连接上");
