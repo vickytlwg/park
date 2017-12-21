@@ -259,7 +259,7 @@
 				  <li hidden #if(!$isAdmin && !$park_operation) hidden#end><a href="/park/operation"><i class="fa fa-bar-chart"></i>财务运营分析</a></li>
 				  <li hidden #if(!$isAdmin && !$park_data) hidden#end><a href="/park/data"><i class="fa fa-line-chart"></i>停车数据分析</a></li>
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li>
-				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
+				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
 				  <li #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
 				  <li #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/charge/taopaiche"><i class="fa fa-file-text-o"></i>套牌车查询</a></li>
 				  <li #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/feeoperatorCharge"><i class="fa fa-file-text-o"></i>收费员业绩</a></li>
@@ -285,7 +285,7 @@
 
                 <li hidden><a href="/park/channel"><i class="fa fa-mars-stroke"></i>路边车位探测</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/leftParkingCard"><i class="fa fa-rub"></i>剩余泊位牌管理</a></li>
-                <li #if(!$isAdmin && !$park_parkmap) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
+                <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
 
 				
 				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>

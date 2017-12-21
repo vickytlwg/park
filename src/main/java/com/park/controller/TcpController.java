@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -72,16 +73,18 @@ public class TcpController {
          }
          return Utility.createJsonMsg(1001, "success", ret);
 	}
-	@RequestMapping(value="tcp",method=RequestMethod.GET)
+	@RequestMapping(value="tcpSendTest",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public void tcptest() throws UnknownHostException, IOException{
+	public void tcptest(@RequestBody Map<String, Object> args) throws UnknownHostException, IOException{
+		String content=(String) args.get("content");
 		 String server="192.168.44.1";            	          
 	     int servPort=8099;  
 	     Socket socket=new Socket(server,servPort);
-	     InputStream in=socket.getInputStream();  
-	     OutputStream out=socket.getOutputStream();  
-	          
-	     out.write("{'parkId':'3','cardNumber':'川A1LM97'}".getBytes());  
+	     OutputStream os =  socket.getOutputStream();  
+         DataOutputStream bos = new DataOutputStream(os);    
+         bos.writeUTF(content+"\n");  
+         bos.flush();      
+
 	     socket.close(); 
 	}
 }

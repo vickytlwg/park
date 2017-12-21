@@ -22,11 +22,13 @@ public class HongxingServiceImpl implements HongxingService {
 	@Override
 	public Map<String, Object> getFeeByCarNumber(String carNumber,String parkKey) {
 		// TODO Auto-generated method stub
+		logger.info("getFeeByCarNumber参数:"+carNumber+","+parkKey);
 		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/GetCarPrice?SecretKey=ABCD&parkKey="+parkKey+"&carNo="+carNumber);
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
          }.getType() );		
+		 logger.info("getFeeByCarNumber返回:"+mapdata.toString());
 		 String code=(String) mapdata.get("Code");
 		 if (!code.equals("200")) {
 			return null;
@@ -57,12 +59,15 @@ public class HongxingServiceImpl implements HongxingService {
 	@Override
 	public String creatPayOrder(String orderNo,String parkKey) {
 		// TODO Auto-generated method stub
+		 logger.info("creatPayOrder参数:"+orderNo+","+parkKey);
 		Map<String, Object> map=HttpUtil.get("http://139.196.19.162/ApiPlatform/CarOrderPay?SecretKey=ABCD&parkKey="+parkKey+"&orderNo="+orderNo);
 		Object data=map.get("body");
 		 Gson gson = new Gson();
 		 Map<String, Object> mapdata=gson.fromJson((String) data, new TypeToken<Map<String, Object>>(){
+			 
         }.getType() );		
 		 Boolean status=(Boolean) mapdata.get("Success");
+		 logger.info("creatPayOrder:"+mapdata.toString());
 		 if (status!=true) {
 			return null;
 		}
@@ -82,7 +87,7 @@ public class HongxingServiceImpl implements HongxingService {
        }.getType() );		
 		 
 		 Boolean status=(Boolean) mapdata.get("Success");
-		 logger.info(mapdata.toString());
+		 logger.info("payOrderNotify:"+mapdata.toString());
 		 if (status!=true) {
 			return false;
 		}

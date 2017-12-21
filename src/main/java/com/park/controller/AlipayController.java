@@ -157,7 +157,8 @@ public class AlipayController {
 		// "\"seller_id\":\"2088601016329110\"," +
 				"\"total_amount\":" + total_amount + "," +
 
-				"\"subject\":\"停车费\"," +
+				"\"subject\":\"停车费-"+carNumber
+				+ "\"," +
 
 				"\"buyer_id\":\"" + userId + "\"," +
 
@@ -560,8 +561,8 @@ public class AlipayController {
 		Map<String, String> args = new HashMap<>();
 		String str1 = "https%3a%2f%2fopenauth.alipay.com%2foauth2%2fpublicAppAuthorize.htm%3fapp_id%3d2015101400439228%26scope%3dauth_user%26redirect_uri%3d";
 		String str2 = "https%3a%2f%2fwww.iotclouddashboard.com%2falipay%2fparkingPayH5";
-		args.put("merchant_name", "美凯龙停车场");
-		args.put("merchant_service_phone", "13668378107");
+		args.put("merchant_name", "智慧停车场");
+		args.put("merchant_service_phone", "17761747990");
 		args.put("account_no", "78947414@qq.com");
 		args.put("interface_url", str2);
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkConfigSet(args));

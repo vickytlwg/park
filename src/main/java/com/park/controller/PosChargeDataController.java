@@ -38,6 +38,7 @@ import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Feeoperator;
+import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
@@ -51,6 +52,7 @@ import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
+import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
@@ -83,7 +85,8 @@ public class PosChargeDataController {
 	private PosdataService posdataService;
 	@Autowired
 	private ExcelExportService excelService;
-
+	@Autowired
+	MonthUserService monthUserService;
 	@Autowired
 	private FeeOperatorService feeOperatorService;
 
@@ -495,7 +498,32 @@ public class PosChargeDataController {
 		// Outsideparkinfo outsideparkinfo =
 		// outsideParkInfoService.getByParkidAndDate(parkId,
 		// charge.getEntranceDate());
-
+		if (charge.getParkDesc()==null) {
+			charge.setParkDesc(park.getName());
+		}
+		Boolean isMonthUser=false;
+		Boolean isRealMonthUser=false;
+		List<Monthuser> monthusers=monthUserService.getByCardNumber(charge.getCardNumber());
+		Monthuser monthuserUse=new Monthuser();
+		for (Monthuser monthuser : monthusers) {
+			if (monthuser.getParkid().intValue()==charge.getParkId()) {
+				isMonthUser=true;
+				monthuserUse=monthuser;
+				break;
+			}
+		}
+		if (isMonthUser) {
+			Long diff=(monthuserUse.getEndtime().getTime()-(new Date()).getTime());	
+			if (diff>0) {
+				isRealMonthUser=true;
+				
+			}
+		}
+		if (isRealMonthUser) {
+			charge.setParkDesc(charge.getParkDesc()+"-包月车");
+		} else {
+			charge.setParkDesc(charge.getParkDesc()+"-临停车");
+		}
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
 		}
@@ -551,7 +579,22 @@ public class PosChargeDataController {
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
-
+	@RequestMapping(value = "/updateEDate", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String updateEDate(@RequestBody Map<String, String> args) throws ParseException {
+		String carNumber = args.get("carNumber");
+		String entranceDate=args.get("entranceDate");
+		List<PosChargeData> posChargeDatas=chargeSerivce.getLastRecord(carNumber, 1);
+		if (posChargeDatas.isEmpty()) {
+			return Utility.createJsonMsg(1002, "无记录");
+		}
+		PosChargeData posChargeData=posChargeDatas.get(0);
+		posChargeData.setEntranceDate(entranceDate);
+		int num=chargeSerivce.update(posChargeData);
+		if (num==1) {
+			return Utility.createJsonMsg(1001, "ok");
+		}
+		return Utility.createJsonMsg(1002, "failed!");
+	}
 	@RequestMapping(value = "/updateYj", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String updateYj(@RequestBody Map<String, String> args) {
 		int parkId = Integer.parseInt(args.get("parkId"));
@@ -850,6 +893,14 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
 
+	@RequestMapping(value = "/getNewFee", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getNewFee(@RequestBody PosChargeData charge) throws Exception{
+		chargeSerivce.newFeeCalcExpense(charge, charge.getExitDate(), false);
+		return Utility.createJsonMsg(1001, "success", charge);
+	}
+	
 	@RequestMapping(value = "/hardwareRecord", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody

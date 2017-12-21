@@ -18,10 +18,10 @@
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 		                	<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addUser' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateUser' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteUser' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+		                		<button  id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button  id='addUser' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button  id='updateUser' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+		                		<button  id='deleteUser' type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
 		                	</div>
 	                	<div class="pull-right">
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark">

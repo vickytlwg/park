@@ -15,6 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import com.park.model.*;
 import com.park.service.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,7 +50,9 @@ public class BarrierChargeController {
 	ParkService parkService;
 	@Autowired
 	FeeCriterionService feeCriterionService;
-
+	
+	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
+	
 	@RequestMapping(value="insert",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String insert(@RequestBody Map<String, String> args) throws ParseException, AlipayApiException{
@@ -130,6 +135,7 @@ public class BarrierChargeController {
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);
+		
 		Map<String, Object> info=infos.get(0);
 		if (info==null) {
 			return Utility.createJsonMsg(1002, "fail");
@@ -139,7 +145,9 @@ public class BarrierChargeController {
 		Integer parkId=(Integer) info.get("parkID");
 		String parkName=(String) info.get("Name");
 		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
+		Park park =parkService.getParkById(parkId);
 		boolean isMonthUser=false;
+		boolean isRealMonthUser=false;
 		Monthuser monthuserUse=new Monthuser();
 		for (Monthuser monthuser : monthusers) {
 			if (monthuser.getParkid().intValue()==parkId.intValue()) {
@@ -161,6 +169,7 @@ public class BarrierChargeController {
 			if (diff>0) {
 				int leftDays=(int) (diff/(1000*60*60*24));
 				dataMap.put("ds", String.valueOf(leftDays));
+				isRealMonthUser=true;
 			}
 			else {
 				dataMap.put("ds","-1");
@@ -178,12 +187,29 @@ public class BarrierChargeController {
 			dataMap.put("cT", "in");	
 			charge.setCardNumber(cardNumber);
 			charge.setParkId(parkId);
-			charge.setParkDesc(parkName);
+			charge.setParkDesc(park.getName()+"-临停车");
+			if(isRealMonthUser){
+				charge.setParkDesc(park.getName()+"-包月车");
+			}
+			
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num==1) {
 				try {
-					
+					Map<String, Object> argMap=new HashMap<>();
+					FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+					argMap.put("parkId", parkId);
+					argMap.put("plateNum", charge.getCardNumber());
+					argMap.put("enterTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
+					argMap.put("chargeStandard", feeCriterion.getExplaination());
+					logger.info("调用贵州入场接口..参数"+argMap.toString());
+					try {
+						Map<String, Object> infoReturn=HttpUtil.post("https://47.92.1.8:8443/parking/api/device/barrier/enterCar", argMap);
+						logger.info("调用贵州入场接口..参数"+infoReturn.toString());
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+				
 					if (!parktoaliparks.isEmpty()) {
 						Parktoalipark parktoalipark=parktoaliparks.get(0);
 						Map<String, String> argstoali=new HashMap<>();
@@ -230,6 +256,22 @@ public class BarrierChargeController {
 					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 				}
 			}
+			Map<String, Object> argMap=new HashMap<>();
+			FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+			try {
+				
+				argMap.put("parkId", parkId);
+				argMap.put("plateNum", charge.getCardNumber());
+				argMap.put("enterTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
+				argMap.put("chargeStandard", feeCriterion.getExplaination());
+				logger.info("调用贵州出场接口..参数"+argMap.toString());
+				Map<String, Object> infoReturn=HttpUtil.post("https://47.92.1.8:8443/parking/api/device/barrier/outCar", argMap);
+				logger.info("调用贵州出场接口..参数"+infoReturn.toString());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
 			//如果没有未缴费 判断最近一次缴费时间是否超过15分钟
 			if (queryCharges.isEmpty()) {
 //				if (largeCar==true) {
@@ -270,8 +312,8 @@ public class BarrierChargeController {
 				}
 				//超过了15分钟
 				else {
-					Park park=parkService.getParkById(posChargeData.getParkId());
-					FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+				//	Park park=parkService.getParkById(posChargeData.getParkId());
+				//	FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
 					Date incomeDate=new Date(payDate.getTime()-(feeCriterion.getFreemins()-15)*1000*60);
 					PosChargeData charge2=new PosChargeData();
 					charge2.setCardNumber(posChargeData.getCardNumber());

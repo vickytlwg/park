@@ -1,6 +1,17 @@
-<script src="/park/script/monthUser.js?v=1.1"></script>
+<script src="/park/script/monthUser.js?v=1.2"></script>
+<script src="/park/script/tm.pagination.js?v=1.1"></script>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/service/textModalService.js"></script>
+<style>
+        .page-list .pagination {float:left;}
+        .page-list .pagination span {cursor: pointer;}
+        .page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
+        .page-list .pagination .separate span:hover {background: none;}
+        .page-list .page-total {float:left; margin: 25px 20px;}
+        .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
+        .page-list .page-total input {width: 40px; padding-left:3px;}
+        .page-list .page-total select {width: 50px;}
+</style>
 <div class="content-wrapper" ng-app="monthUserApp" ng-controller="monthUserCtrl">
 	<section class="content-header">
           <h1>
@@ -16,11 +27,11 @@
               	<div class="box">	               
 	             <div class="box-body"> 
 					<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户开卡</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 账户充值</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除用户</button>
-								<button #if(!$isAdmin) disabled#end  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
+		                		<button   ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button   ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户开卡</button>
+		                		<button   ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 账户充值</button>
+		                		<button   ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除用户</button>
+								<button  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
 		                	</div>	
 							<div class="pull-right">
 								<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park.id as park.name for park in parks" ng-model="selectedParkid" ng-change="selectChanged(selectedParkid)">
@@ -68,7 +79,9 @@
 					          </table>
     					</div>
     				</div>
+					 <tm-pagination conf="paginationConf"></tm-pagination>
     				<div class="box-footer clearfix">
+					
       					<div id='pagination'></div>
       				</div>
 	            </div>

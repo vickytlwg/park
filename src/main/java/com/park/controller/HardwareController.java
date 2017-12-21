@@ -30,10 +30,12 @@ import com.park.model.Channel;
 import com.park.model.Hardware;
 import com.park.model.HardwareDetail;
 import com.park.model.Page;
+import com.park.model.Park;
 import com.park.model.Status;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
 import com.park.service.HardwareService;
+import com.park.service.ParkService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
@@ -44,7 +46,8 @@ public class HardwareController {
 	private HardwareService hardwareService;
 	@Autowired
 	private ChannelService channelService;
-	
+	@Autowired
+	ParkService parkService;
 	@Autowired
 	private AuthorityService authService;
 	
@@ -244,6 +247,22 @@ public class HardwareController {
 		String mac = (String)argMap.get("mac");
 		List<Map<String, Object>> data=hardwareService.getInfoByMac(mac);
 		return  Utility.gson.toJson(data.get(0));
+	}
+	@RequestMapping(value = "/getParkInfoByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkInfoByMac(@RequestBody Map<String, Object> argMap)
+	{
+		String mac = (String)argMap.get("mac");
+		
+		
+		List<Map<String, Object>> data=hardwareService.getInfoByMac(mac);
+		Map<String, Object> info=data.get(0);
+		if (info==null) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+		Integer parkId=(Integer) info.get("parkID");
+		Park park =parkService.getParkById(parkId);
+		return  Utility.gson.toJson(park);
 	}
 	
 	@RequestMapping(value = "/update/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})

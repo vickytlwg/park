@@ -45,6 +45,18 @@ function($scope,$http,$uibModal,textModal,$timeout){
         });
     
     };
+       $scope.paginationConf = {
+            currentPage: 1,
+            totalItems: 8000,
+            itemsPerPage: 10,
+            pagesLength: 10,
+            perPageOptions: [10, 20, 30, 40, 50],
+            rememberPerPage: 'perPageItems',
+            onChange: function(){
+                
+            }
+        };
+    
     $scope.refreshUser=function(){
         $http({
             url:'/park/monthUser/getByStartAndCount',

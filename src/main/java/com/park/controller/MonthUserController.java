@@ -1,7 +1,9 @@
 package com.park.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +31,7 @@ import com.park.service.AuthorityService;
 import com.park.service.MonthUserParkService;
 import com.park.service.MonthUserService;
 import com.park.service.UserPagePermissionService;
+import com.park.service.UserParkService;
 import com.park.service.Utility;
 
 @Controller
@@ -40,6 +43,9 @@ private MonthUserService monthUserService;
 private MonthUserParkService monthUserParkService;
 @Autowired
 private AuthorityService authService;
+
+@Autowired
+private UserParkService userParkService;
 
 @Autowired
 private UserPagePermissionService pageService;
@@ -384,9 +390,25 @@ public String getByParkIdAndCountOrder(@RequestBody Map<String, Object> args){
 }
 @RequestMapping(value="/getByStartAndCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
-public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count){
+public String getByStartAndCount(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){
 	Map<String, Object> result=new HashMap<>();
 	List<Monthuser> monthusers=monthUserService.getByStartAndCount(start, count);
+	String username = (String) session.getAttribute("username");
+	AuthUser user = authService.getUserByUsername(username);
+	List<Integer> filterParkIds = userParkService.getOwnParkId(user.getId());
+	Set<Integer> filterParkIdSet = new HashSet<Integer>(filterParkIds);
+	List<Monthuser> fiList=new ArrayList<>();
+	if(user.getRole() == AuthUserRole.ADMIN.getValue()){
+	}
+	else {
+	
+		for (Monthuser monthuser : monthusers) {
+			if(filterParkIdSet.contains(monthuser.getParkid())){
+				fiList.add(monthuser);
+			}  
+		}
+		monthusers=fiList;
+	}
 	if (monthusers!=null) {
 		result.put("status", 1001);
 		result.put("body", monthusers);

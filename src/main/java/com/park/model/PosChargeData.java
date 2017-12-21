@@ -22,7 +22,7 @@ public class PosChargeData {
 	
 	boolean isEntrance=true;
 	
-	String operatorId ="operotor";
+	String operatorId ="operator";
 	
 	String posId ="posid";
 	

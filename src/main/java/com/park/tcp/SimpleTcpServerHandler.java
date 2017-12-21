@@ -51,7 +51,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
        
         // Broadcast a message to multiple Channels
         channels.writeAndFlush("[SERVER] - " + incoming.remoteAddress() + " 加入\n");
-        
+
         channels.add(ctx.channel());
     }
 

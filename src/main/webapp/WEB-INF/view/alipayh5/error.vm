@@ -161,7 +161,6 @@
       color: #0f8ce9; 
     }
   </style>
- <script src="https://www.iotclouddashboard.com/park/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 </head>
 <body id="body">
   <div class="container">
@@ -172,38 +171,29 @@
     <div class="main-info">
       <div class="park-name">
         <img src="http://www.iotclouddashboard.com/park/img/logo-ninebit.png" alt="logo">
-        <p>$parkName</p>
+        <p>网络繁忙,创建订单失败</p>
       </div>
       <div class="park-fee">
-        <p>$charge</p>
+        <p>0</p>
       </div>
       <div class="fee-type">
-        <p>停车费</p>
+        <p>请重新查询费用</p>
       </div>
     </div>
     <div class="money-info">
-     <p>应付金额<span>$charge</span></p>
-      <p>实付金额<span>$charge</span></p>
-      <p>优惠金额<span>0</span></p>
+
     </div>
-	#set($hours=$parkingDuration/60)
-	#set($minutes=$parkingDuration%60)
+	
     <div class="park-info">
-      <p>车牌号<span>$carNumber</span></p>
-	  <p>停车卡号<span></span></p>
-      <p>入场时间<span>$enterDate</span></p>
-      <p>停车时长<span>$hours时$minutes分</span></p>
+     
     </div>
   </div>
   <div class="footer-info">
     <div class="state">
-      <p><span>!</span>付款后请15分钟内离场，超时将加收停车费</p>
     </div>
- <!--   <button ><a href="http://www.iotclouddashboard.com/park/alipay/quickPayWeb/$chargeId/$userId/$parkingId/">立即付款</a></button>-->
-   <button id="payButton" onclick=tradePay('$tradeNO')>立即付款</button>
-	<div class="contact-info">
-      <p></p>
-   
+    <div class="contact-info">
+      <p>本服务由九比特提供</p>
+      <p>客服电话 <span>4000-0000-165</span></p>
     </div>
   </div>
   <script>
@@ -213,33 +203,5 @@
       body.style.minHeight = viewportHeight + 'px';
     }
   </script>
-  <script type="application/javascript">
-	  
-  function tradePay(tradeNO) {			
-	
-     // 通过传入交易号唤起快捷调用方式(注意tradeNO大小写严格)
-     AlipayJSBridge.call("tradePay", {
-        tradeNO: tradeNO
-     }, function (data) {
-       if ("9000" == data.resultCode){
-	    
-		$.ajax({
-		url:'https://www.iotclouddashboard.com/park/alipay/notifyJSPay/',
-		type:'post',
-		data:{tradeNo:tradeNO},
-		success:function(data){
-		
-		}
-		});
-
-       AlipayJSBridge.call('closeWebview');
-       }else{
-	 
-	   }
- 
-  });
-}
-
-</script>
 </body>
 </html>

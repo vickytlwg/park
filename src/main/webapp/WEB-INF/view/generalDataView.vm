@@ -438,7 +438,7 @@
 										<td>{{zoneCenter.onlineparkcount}}</td>
 										<td>{{zoneCenter.carportcount}}</td>
 										<td>{{zoneCenter.onlinecarportcount}}</td>
-										<td>{{zoneCenter.carportleftcount}}</td>               
+										<td>{{zoneCenter.carportleftcount>0?zoneCenter.carportleftcount:0}}</td>               
 									  </tr> 
                                   
                                   
