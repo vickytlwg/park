@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.park.dao.ParkcarauthorityMapper" >
+  <resultMap id="BaseResultMap" type="com.park.model.Parkcarauthority" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parkId" property="parkid" jdbcType="INTEGER" />
+    <result column="typeA" property="typea" jdbcType="BIT" />
+    <result column="typeB" property="typeb" jdbcType="BIT" />
+    <result column="typeC" property="typec" jdbcType="BIT" />
+    <result column="typeD" property="typed" jdbcType="BIT" />
+    <result column="month" property="month" jdbcType="BIT" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="other2" property="other2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parkId, typeA, typeB, typeC, typeD, month, other, other2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from parkCarAuthority
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parkCarAuthority
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.park.model.Parkcarauthority" >
+    insert into parkCarAuthority (id, parkId, typeA, 
+      typeB, typeC, typeD, month, 
+      other, other2)
+    values (#{id,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, #{typea,jdbcType=BIT}, 
+      #{typeb,jdbcType=BIT}, #{typec,jdbcType=BIT}, #{typed,jdbcType=BIT}, #{month,jdbcType=BIT}, 
+      #{other,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.park.model.Parkcarauthority" >
+    insert into parkCarAuthority
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parkid != null" >
+        parkId,
+      </if>
+      <if test="typea != null" >
+        typeA,
+      </if>
+      <if test="typeb != null" >
+        typeB,
+      </if>
+      <if test="typec != null" >
+        typeC,
+      </if>
+      <if test="typed != null" >
+        typeD,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="other2 != null" >
+        other2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parkid != null" >
+        #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="typea != null" >
+        #{typea,jdbcType=BIT},
+      </if>
+      <if test="typeb != null" >
+        #{typeb,jdbcType=BIT},
+      </if>
+      <if test="typec != null" >
+        #{typec,jdbcType=BIT},
+      </if>
+      <if test="typed != null" >
+        #{typed,jdbcType=BIT},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=BIT},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        #{other2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Parkcarauthority" >
+    update parkCarAuthority
+    <set >
+      <if test="parkid != null" >
+        parkId = #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="typea != null" >
+        typeA = #{typea,jdbcType=BIT},
+      </if>
+      <if test="typeb != null" >
+        typeB = #{typeb,jdbcType=BIT},
+      </if>
+      <if test="typec != null" >
+        typeC = #{typec,jdbcType=BIT},
+      </if>
+      <if test="typed != null" >
+        typeD = #{typed,jdbcType=BIT},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=BIT},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        other2 = #{other2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.park.model.Parkcarauthority" >
+    update parkCarAuthority
+    set parkId = #{parkid,jdbcType=INTEGER},
+      typeA = #{typea,jdbcType=BIT},
+      typeB = #{typeb,jdbcType=BIT},
+      typeC = #{typec,jdbcType=BIT},
+      typeD = #{typed,jdbcType=BIT},
+      month = #{month,jdbcType=BIT},
+      other = #{other,jdbcType=VARCHAR},
+      other2 = #{other2,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getByParkId" resultType="com.park.model.Parkcarauthority">
+  	select * from parkCarAuthority where parkId=#{parkId}
+  </select>
+  <select id="getByStartAndCount" resultType="com.park.model.Parkcarauthority">
+  	select * from parkCarAuthority limit #{start},#{count}
+  </select>
+</mapper>

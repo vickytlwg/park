@@ -677,6 +677,7 @@ public class AlipayController {
 	public String QueryCarFeeStatus(@RequestBody Map<String, String> args) throws AlipayApiException {
 		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
 		String carNumber = args.get("carNumber");
+		logger.info("查询车牌是否支持代扣,车牌号:"+carNumber);
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> data = new HashMap<>();
 		data.put("carNumber", carNumber);
@@ -693,6 +694,7 @@ public class AlipayController {
 		}
 
 		result.put("body", data);
+		logger.info(carNumber+"返回结果:"+result.toString());
 		return Utility.gson.toJson(result);
 
 	}
@@ -706,6 +708,7 @@ public class AlipayController {
 		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
 		String money = args.get("money");
 		String carNumber = args.get("carNumber");
+		logger.info("代扣扣费:"+carNumber+"金额"+money);
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> data = new HashMap<>();
 		data.put("carNumber", carNumber);
@@ -732,6 +735,7 @@ public class AlipayController {
 			"\"car_number_color\":\"blue\"" +
 			"}");
 			AlipayEcoMycarParkingOrderPayResponse response2 = alipayClient.execute(request2);
+			logger.info("代扣扣费:"+carNumber+"结果:"+response2.getBody());
 			result.put("daikou", response2);
 			
 		} else {

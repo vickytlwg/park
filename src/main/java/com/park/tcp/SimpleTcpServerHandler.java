@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.park.model.Constants;
 import com.park.model.PosChargeData;
 import com.park.service.PosChargeDataService;
+import com.park.service.impl.PosChargeDataServiceImpl;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,8 +41,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 	 * A thread-safe Set  Using ChannelGroup, you can categorize Channels into a meaningful group.
 	 * A closed Channel is automatically removed from the collection,
 	 */
-	@Autowired
-	PosChargeDataService poschargeSerivce;
+	
 	private static Log logger = LogFactory.getLog(SimpleTcpServerHandler.class);
 	public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	public static Map<String, Channel> channelsMap=new HashMap<>();
@@ -82,14 +82,24 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
     @Override
 	protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception { // (4)
 		Channel incoming = ctx.channel();
-		String teString=new String(s.getBytes("utf-8"),"gb2312");
-		logger.info("messageCome:"+teString);	
+		String teString=new String(s.getBytes(),"utf-8");
+		System.out.println("接收到数据:"+teString);
+		s=teString;
 		if (s.length()<5) {
 			return;
 		}
 		Gson gson = new Gson();
-		 Map<String, Object> mapdata=gson.fromJson(s, new TypeToken<Map<String, Object>>(){
-        }.getType() );		
+		Map<String, Object> mapdata=new HashMap<>();
+		try {
+			 mapdata=gson.fromJson(s, new TypeToken<Map<String, Object>>(){
+		        }.getType() );
+		} catch (Exception e) {
+			// TODO: handle exception
+			incoming.writeAndFlush("{\"status\":"+4001+"}\n");
+			return;
+		}
+				
+		 System.out.println("转换成的map:"+mapdata.toString());
 		if (s.length()<18&&s.length()>0) {
 				 channelsMap.put((String) mapdata.get("parkId"), incoming);
 				return;
@@ -99,15 +109,23 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 			if (mapdata.get("cardNumber")!=null) {
 				String cardNumber=(String) mapdata.get("cardNumber");
 				try {
-					List<PosChargeData> queryCharges= poschargeSerivce.queryCurrentDebt(cardNumber, new Date());
+					System.out.println("查询账单: "+cardNumber);
+					List<PosChargeData> queryCharges= Constants.poschargeSerivce.queryCurrentDebt(cardNumber, new Date());
+					
 					String status="4000";
 					if (!queryCharges.isEmpty()) {
+						System.out.println("查询账单结果"+queryCharges.toString());
 						PosChargeData posChargeData=queryCharges.get(0);
-						String dataSend="{'parkId':"+posChargeData.getParkId()+"";
+						String dataSend="{\"parkId\":\""+posChargeData.getParkId()+"\",\"charge\":\""+posChargeData.getChargeMoney()
+						+"\",\"cardNumber\":\""+cardNumber+"\",\"status\":"+4000+"}\n";
 						incoming.writeAndFlush(dataSend);
+					}
+					else {
+						incoming.writeAndFlush("{\"status\":"+4001+",\"cardNumber\":"+cardNumber+"}\n");
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
+					incoming.writeAndFlush("{\"status\":"+4001+",\"cardNumber\":"+cardNumber+"}\n");
 				}
 			}
 			

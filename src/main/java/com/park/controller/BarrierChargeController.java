@@ -50,6 +50,8 @@ public class BarrierChargeController {
 	ParkService parkService;
 	@Autowired
 	FeeCriterionService feeCriterionService;
+	@Autowired
+	ParkCarAuthorityService parkCarAuthorityService;
 	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 	
@@ -131,6 +133,7 @@ public class BarrierChargeController {
 	public String touched(@RequestBody Map<String, String> args) throws Exception{
 		String mac= args.get("mac");
 		String cardNumber=args.get("cardNumber");
+		logger.info("touch车辆"+cardNumber);
 		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -143,18 +146,21 @@ public class BarrierChargeController {
 		Map<String, Object> dataMap = new TreeMap<String, Object>();
 		int channelFlag=(int) info.get("channelFlag");
 		Integer parkId=(Integer) info.get("parkID");
-		String parkName=(String) info.get("Name");
-		List<Monthuser> monthusers=monthUserService.getByCardNumber(cardNumber);
-		Park park =parkService.getParkById(parkId);
+	//	String parkName=(String) info.get("Name");
+		List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(cardNumber,parkId);
+		Park park =parkService.getParkById(parkId);		
+		List<Parkcarauthority> parkcarauthorities=parkCarAuthorityService.getByParkId(parkId);
+		Parkcarauthority parkcarauthority=new Parkcarauthority();
+		if (!parkcarauthorities.isEmpty()) {
+			parkcarauthority=parkcarauthorities.get(0);
+		}
 		boolean isMonthUser=false;
 		boolean isRealMonthUser=false;
 		Monthuser monthuserUse=new Monthuser();
-		for (Monthuser monthuser : monthusers) {
-			if (monthuser.getParkid().intValue()==parkId.intValue()) {
-				isMonthUser=true;
-				monthuserUse=monthuser;
-				break;
-			}
+
+		if (!monthusers.isEmpty()) {
+			isMonthUser=true;
+			monthuserUse=monthusers.get(0);
 		}
 		if (!isMonthUser) {
 			dataMap.put("uT", "0");			
@@ -165,8 +171,13 @@ public class BarrierChargeController {
 			dataMap.put("uT", "1");
 		//	dataMap.put("monthUserStartDate", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuser.getStarttime()));
 			dataMap.put("eD", new SimpleDateFormat(Constants.DATEFORMAT).format(monthuserUse.getEndtime()));
+			//判断是否是预约车			
+			if (monthuserUse.getType()!=0) {
+				dataMap.put("uT", "2");
+			}
 			Long diff=(monthuserUse.getEndtime().getTime()-(new Date()).getTime());
-			if (diff>0) {
+			
+			if (diff>0&&monthuserUse.getType()==0) {
 				int leftDays=(int) (diff/(1000*60*60*24));
 				dataMap.put("ds", String.valueOf(leftDays));
 				isRealMonthUser=true;
@@ -191,7 +202,9 @@ public class BarrierChargeController {
 			if(isRealMonthUser){
 				charge.setParkDesc(park.getName()+"-包月车");
 			}
-			
+			if (monthuserUse.getType()>=1) {
+				charge.setParkDesc(park.getName()+"-预约车");
+			}
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num==1) {
@@ -202,13 +215,6 @@ public class BarrierChargeController {
 					argMap.put("plateNum", charge.getCardNumber());
 					argMap.put("enterTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
 					argMap.put("chargeStandard", feeCriterion.getExplaination());
-					logger.info("调用贵州入场接口..参数"+argMap.toString());
-					try {
-						Map<String, Object> infoReturn=HttpUtil.post("https://47.92.1.8:8443/parking/api/device/barrier/enterCar", argMap);
-						logger.info("调用贵州入场接口..参数"+infoReturn.toString());
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
 				
 					if (!parktoaliparks.isEmpty()) {
 						Parktoalipark parktoalipark=parktoaliparks.get(0);
@@ -223,7 +229,7 @@ public class BarrierChargeController {
 					// TODO: handle exception
 					System.out.println(e);
 				}
-				
+				logger.info(cardNumber+"入场成功!");
 				ret.put("status", 1001);
 			}
 			else {
@@ -235,13 +241,13 @@ public class BarrierChargeController {
 			dataMap.put("cT", "out");	
 			List<PosChargeData> queryCharges = null;
 			String exitDate=(String) args.get("exitDate");
-			
+			logger.info(cardNumber+"开始出场");
 			if (exitDate != null) {
 				Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);				
 				try {
-					System.out.println("出场时间为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
+				//	System.out.println("出场时间为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
 					queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
-					System.out.println("出场时间为空,getDebt计算完毕: "+new Date().getTime()+"\n");
+				//	System.out.println("出场时间为空,getDebt计算完毕: "+new Date().getTime()+"\n");
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -249,31 +255,18 @@ public class BarrierChargeController {
 				}
 			} else {
 				try {
-					System.out.println("出场时间不为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
+				//	System.out.println("出场时间不为空,将要进行getDebt计算: "+new Date().getTime()+"\n");
 					queryCharges = chargeSerivce.getDebt(cardNumber);
-					System.out.println("出场时间不为空,getDebt计算完毕: "+new Date().getTime()+"\n");
+				//	System.out.println("出场时间不为空,getDebt计算完毕: "+new Date().getTime()+"\n");
 				} catch (Exception e) {
 					return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
 				}
 			}
-			Map<String, Object> argMap=new HashMap<>();
-			FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
-			try {
-				
-				argMap.put("parkId", parkId);
-				argMap.put("plateNum", charge.getCardNumber());
-				argMap.put("enterTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
-				argMap.put("chargeStandard", feeCriterion.getExplaination());
-				logger.info("调用贵州出场接口..参数"+argMap.toString());
-				Map<String, Object> infoReturn=HttpUtil.post("https://47.92.1.8:8443/parking/api/device/barrier/outCar", argMap);
-				logger.info("调用贵州出场接口..参数"+infoReturn.toString());
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			
-			
+			logger.info(cardNumber+"计费结束!");
+											
 			//如果没有未缴费 判断最近一次缴费时间是否超过15分钟
 			if (queryCharges.isEmpty()) {
+			FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());	
 //				if (largeCar==true) {
 //					charge.setIsLargeCar(true);
 //				}
@@ -293,6 +286,10 @@ public class BarrierChargeController {
 					aliparkFeeService.parkingExitinfoSync(argstoali);
 					System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
 				}*/
+				if(isRealMonthUser){
+					dataMap.put("my", "0");
+					return  Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
 				//以下就是查询停车费状态的部分迁移
 				List<PosChargeData>  posChargeDataList=chargeSerivce.getLastRecord(cardNumber,1);
 				
@@ -308,6 +305,11 @@ public class BarrierChargeController {
 				long diff=new Date().getTime()-payDate.getTime();
 				if (diff<1000*60*15){					
 					dataMap.put("my", "0");
+					posChargeData.setPaidCompleted(true);
+					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
+					posChargeData.setUnPaidMoney(0);
+					posChargeData.setOperatorId("道闸");
+					chargeSerivce.update(posChargeData);
 					return  Utility.createJsonMsgWithoutMsg(1001, dataMap);
 				}
 				//超过了15分钟
@@ -326,8 +328,7 @@ public class BarrierChargeController {
 					}
 					//重新查询未缴费
 					queryCharges = chargeSerivce.getDebt(cardNumber);									
-				}
-				
+				}				
 				
 			}
 			//PosChargeData payRet=queryCharges.get(queryCharges.size()-1);
@@ -336,21 +337,76 @@ public class BarrierChargeController {
 			payRet.setPaidMoney(payRet.getChargeMoney());
 			payRet.setUnPaidMoney(0);
 			payRet.setOperatorId("道闸");
-			System.out.println("poschargedata更新前: "+new Date().getTime()+"\n");
+			
 			int num = chargeSerivce.update(payRet);
-			System.out.println("poschargedata更新后: "+new Date().getTime()+"\n");
+		
 			dataMap.put("eD", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
 				if (!isMonthUser) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 				}						
 			
 			if (num==1) {
+				logger.info(cardNumber+"出场成功!");
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			}
 			else {
-				return Utility.createJsonMsg(1002, "fail");
+				return Utility.createJsonMsg(1001, "ok");
 			}	
 		}
+	}
+	
+	@RequestMapping(value="touchedNotify",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String touchedNotify(@RequestBody Map<String, String> args) throws Exception{
+		String mac= args.get("mac");
+		String cardNumber=args.get("cardNumber");
+		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
+		PosChargeData charge=new PosChargeData();
+		charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);		
+		Map<String, Object> info=infos.get(0);
+		if (info==null) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+//		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		int channelFlag=(int) info.get("channelFlag");
+		Integer parkId=(Integer) info.get("parkID");
+	//	String parkName=(String) info.get("Name");
+		List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(cardNumber,parkId);
+		Park park =parkService.getParkById(parkId);
+		if (channelFlag==1) {
+			Map<String, Object> argMap=new HashMap<>();
+			FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+			argMap.put("parkId", "bd1879d2-bc89-48e5-9e46-927d0f4ec56f");
+			argMap.put("plateNum", cardNumber);
+			argMap.put("enterTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
+			argMap.put("chargeStandard", feeCriterion.getExplaination());
+			logger.info("调用贵州入场接口..参数"+argMap.toString());
+			try {
+				Map<String, Object> infoReturn=HttpUtil.post("https://www.gkzhxxsj.com/parking/api/device/barrier/enterCar", argMap);
+				logger.info("调用贵州入场接口..返回结果"+infoReturn.toString());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		else {
+			Map<String, Object> argMap=new HashMap<>();
+			FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+			try {
+				
+				argMap.put("parkId", "bd1879d2-bc89-48e5-9e46-927d0f4ec56f");
+				argMap.put("plateNum", cardNumber);
+				argMap.put("leaveTime",new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate()));
+		//		argMap.put("chargeStandard", feeCriterion.getExplaination());
+				logger.info("调用贵州出场接口..参数"+argMap.toString());
+				Map<String, Object> infoReturn=HttpUtil.post("https://www.gkzhxxsj.com/parking/api/device/barrier/leaveCar", argMap);
+				logger.info("调用贵州出场接口..结果"+infoReturn.toString());
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return Utility.createJsonMsg(1001, "ok");
 	}
 	
 	@RequestMapping(value="getTypeByMac",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })

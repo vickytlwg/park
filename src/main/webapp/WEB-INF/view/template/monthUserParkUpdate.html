@@ -39,9 +39,9 @@
             </div>
         </div>
    </form>   
-     <div class="alert alert-info" ng-show="loading || submitted">
-            <span  ng-show='loading' > <i class="fa fa-spinner"></i></span>
-            <span ng-show='submitted'>{{result}}</span>
+     <div class="alert alert-info" ng-show="showResult || showLoader">
+            <span  ng-show='showLoader' > <i class="fa fa-spinner"></i></span>
+            <span ng-show='showResult'>{{result}}</span>
      </div>  
  </div>
  <div class="modal-footer">

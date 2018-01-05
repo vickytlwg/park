@@ -13,7 +13,7 @@ import com.park.service.Utility;
 import redis.clients.jedis.Jedis;
 
 @Controller
-@RequestMapping("njpark")
+@RequestMapping("invoice")
 public class InvoiceController {
 	@Autowired
 	InvoiceService invoiceService;
@@ -27,4 +27,5 @@ public class InvoiceController {
 		jedis.expire("invoiceAccessToken", 5000);
 		return Utility.createJsonMsg(1001, accessToken);
 	}
+	
 }

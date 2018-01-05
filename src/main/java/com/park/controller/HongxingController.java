@@ -303,7 +303,7 @@ public class HongxingController {
 		alipayrecord.setMoney(lastCharge.getChargeMoney());
 		alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
 		lastCharge.setPaidCompleted(true);
-		if (lastCharge.getRejectReason().length()>4&&lastCharge.getRejectReason().length()<10) {
+		if (lastCharge.getRejectReason().length() > 4 && lastCharge.getRejectReason().length() < 10) {
 			return Utility.createJsonMsg(1001, "已通知到!");
 		}
 
@@ -355,14 +355,15 @@ public class HongxingController {
 		return Utility.createJsonMsg(1001, "ok", dString);
 	}
 
-	@RequestMapping(value = "notifyUrltest", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@RequestMapping(value = "notifyUrltest", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public void notifyUrl1(HttpServletRequest request) {
-		Enumeration enu=request.getParameterNames();  
-		while(enu.hasMoreElements()){  
-		String paraName=(String)enu.nextElement();  
-		logger.error("notifyUrl所收到的参数:"+paraName+": "+request.getParameter(paraName));  
-		} 
+		Enumeration enu = request.getParameterNames();
+		while (enu.hasMoreElements()) {
+			String paraName = (String) enu.nextElement();
+			logger.error("notifyUrl所收到的参数:" + paraName + ": " + request.getParameter(paraName));
+		}
 	}
 	// @RequestMapping(value = "notifyUrlWebPay", method = RequestMethod.POST,
 	// produces = {
@@ -468,9 +469,9 @@ public class HongxingController {
 		String trade_no = request.getParameter("trade_no");
 		String receipt_amount = request.getParameter("receipt_amount");
 		String out_trade_no = request.getParameter("out_trade_no");
-		logger.error("alipayUrlNotify:"+out_trade_no);
+		logger.error("alipayUrlNotify:" + out_trade_no);
 		if (trade_status.equals("TRADE_SUCCESS")) {
-			List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);						
+			List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);
 			Alipayrecord alipayrecord = alipayrecords.get(0);
 			PosChargeData lastCharge = poschargedataService.getById(alipayrecord.getPoschargeid());
 			Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);
@@ -491,13 +492,13 @@ public class HongxingController {
 				lastCharge.setRejectReason("失败通知");
 			}
 			lastCharge.setPaidCompleted(true);
-			poschargedataService.update(lastCharge);			
-			
+			poschargedataService.update(lastCharge);
+
 			alipayrecord.setStatus("1");
 			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
 			alipayrecord.setAlitradeno(trade_no);
 			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
-			
+
 			Map<String, String> args = new HashMap<>();
 			args.put("user_id", alipayrecord.getUserid());
 			args.put("out_parking_id", "3");
@@ -512,7 +513,8 @@ public class HongxingController {
 			args.put("pay_money", String.valueOf(alipayrecord.getMoney()));
 			args.put("in_time", new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
 			args.put("parking_id", alipayrecord.getParkingid());
-			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime()) / 60000;
+			long parkingDuration = (lastCharge.getExitDate().getTime() - lastCharge.getEntranceDate().getTime())
+					/ 60000;
 			args.put("in_duration", String.valueOf(parkingDuration));
 			args.put("card_number", "*");
 			AlipayEcoMycarParkingOrderSyncResponse dString = new AlipayEcoMycarParkingOrderSyncResponse();
@@ -569,6 +571,35 @@ public class HongxingController {
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkingInfoCreate(args));
 	}
 
+	@RequestMapping(value = "QueryCarFeeStatus", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String QueryCarFeeStatus(@RequestBody Map<String, String> args) throws AlipayApiException {
+		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
+		String carNumber = args.get("carNumber");
+		logger.info("查询车牌是否支持代扣,车牌号:" + carNumber);
+		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
+		data.put("carNumber", carNumber);
+		request.setBizContent("{" + " \"car_number\":\"" + carNumber + "\"" + " }");
+		AlipayEcoMycarParkingAgreementQueryResponse response = alipayClient.execute(request);
+		if (response.isSuccess()) {
+			result.put("status", 1001);
+			data.put("agreementStatus", true);
+			if (response.getAgreementStatus().equals("1")) {
+				data.put("agreementStatus", false);
+			}
+		} else {
+			result.put("status", 1002);
+		}
+
+		result.put("body", data);
+		logger.info(carNumber + "返回结果:" + result.toString());
+		return Utility.gson.toJson(result);
+
+	}
+
+	// 车辆代扣缴费
 	@RequestMapping(value = "OperateCarFee", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -576,6 +607,7 @@ public class HongxingController {
 		AlipayEcoMycarParkingAgreementQueryRequest request = new AlipayEcoMycarParkingAgreementQueryRequest();
 		String money = args.get("money");
 		String carNumber = args.get("carNumber");
+		logger.info("代扣扣费:" + carNumber + "金额:" + money);
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> data = new HashMap<>();
 		data.put("carNumber", carNumber);
@@ -587,6 +619,7 @@ public class HongxingController {
 			data.put("agreementStatus", true);
 			if (response.getAgreementStatus().equals("1")) {
 				data.put("agreementStatus", false);
+				logger.info(carNumber + "不支持代扣");
 			}
 			String out_trade_no = new Date().getTime() + "wuganfee";
 			AlipayEcoMycarParkingOrderPayRequest request2 = new AlipayEcoMycarParkingOrderPayRequest();
@@ -596,6 +629,7 @@ public class HongxingController {
 					+ "\"out_parking_id\":\"206\"," + "\"agent_id\":\"2088601016329110\","
 					+ "\"car_number_color\":\"blue\"" + "}");
 			AlipayEcoMycarParkingOrderPayResponse response2 = alipayClient.execute(request2);
+			logger.info("代扣扣费:" + carNumber + "结果:" + response2.getBody());
 			result.put("daikou", response2);
 
 		} else {

@@ -154,8 +154,9 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
     $scope.tempUser.starttime=new Date().format("yyyy-MM-dd hh:mm:ss");
     $scope.tempUser.endtime=new Date().format("yyyy-MM-dd hh:mm:ss");
     }   
-    $scope.statuses=[{value:0,text:'未支付'},{value:1,text:'已支付'}];
-  
+    $scope.statuses=[{value:0,text:'未支付'},{value:1,text:'已支付'}];   
+    $scope.orderTypes=[{value:1,text:'类型A'},{value:2,text:'类型B'},{value:3,text:'类型C'},{value:4,text:'类型D'}];
+    $scope.tempUser.type=1;
     $scope.parks=[];
     $scope.getParks=function(){
         $http({

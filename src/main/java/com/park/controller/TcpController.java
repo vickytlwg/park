@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Constants;
+import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 import com.park.tcp.TcpServerService;
 
@@ -27,7 +28,7 @@ import io.netty.channel.Channel;
 @Controller
 @RequestMapping("tcp")
 public class TcpController {
-	
+	@Autowired PosChargeDataService posChargeDataService;
 	TcpServerService tcpServerService=new TcpServerService();
 	@RequestMapping(value = "send", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
@@ -52,6 +53,7 @@ public class TcpController {
 	@RequestMapping(value = "start", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String start(){
+		Constants.poschargeSerivce=posChargeDataService;
 		try {
 			TcpServerService.StartTcpServer(8099);
 		} catch (Exception e) {

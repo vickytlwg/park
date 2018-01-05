@@ -90,6 +90,7 @@ public String indexOrder(ModelMap modelMap, HttpServletRequest request, HttpSess
 @ResponseBody
 public String getParkNamesByUserId(@PathVariable("userId")int userId){
 	Map<String, Object> result=new HashMap<>();
+//	List<Monthuser> monthusers=monthUserService.get
 	List<Map<String, Object>> parkNames=monthUserParkService.getOwnParkName(userId);
 	result.put("status", 1001);
 	result.put("body", parkNames);
@@ -110,7 +111,9 @@ public String getUsersByParkId(@PathVariable("parkId")int parkId){
 @ResponseBody
 public String deletePark(@PathVariable("id")int id){
 	Map<String, Object> result=new HashMap<>();
-	int num=monthUserParkService.deleteByPrimaryKey(id);
+	Monthuserpark monthuserpark=monthUserParkService.selectByPrimaryKey(id);
+	monthUserParkService.deleteByPrimaryKey(id);
+	int num=monthUserService.deleteByPrimaryKey(monthuserpark.getMonthuserid());
 	if (num==1) {
 		result.put("status", 1001);
 	}
@@ -124,7 +127,11 @@ public String deletePark(@PathVariable("id")int id){
 @ResponseBody
 public String insertPark(@RequestBody Monthuserpark monthUserPark){
 	Map<String, Object> result=new HashMap<>();
-	int num= monthUserParkService.insert(monthUserPark);
+	Monthuser monthuser=monthUserService.selectByPrimaryKey(monthUserPark.getMonthuserid());
+	monthuser.setParkid(monthUserPark.getParkid());
+	monthuser.setId(null);
+	int num= monthUserService.insertSelective(monthuser);
+	monthUserParkService.insert(monthUserPark);
 	if (num==1) {
 		result.put("status", 1001);
 	}
@@ -137,7 +144,7 @@ public String insertPark(@RequestBody Monthuserpark monthUserPark){
 @ResponseBody
 public String deletePark(@RequestBody Monthuserpark monthUserPark){
 	Map<String, Object> result=new HashMap<>();
-	int num= monthUserParkService.deleteByUserIdAndParkId(monthUserPark);
+	int num= monthUserService.deleteByPrimaryKey(monthUserPark.getMonthuserid());
 	if (num==1) {
 		result.put("status", 1001);
 	}
@@ -150,6 +157,12 @@ public String deletePark(@RequestBody Monthuserpark monthUserPark){
 @ResponseBody
 public String insert(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
+	List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(monthUser.getCardnumber(), monthUser.getParkid());
+	if (!monthusers.isEmpty()) {
+		result.put("status", 1002);
+		result.put("message", "用户已存在");
+		return Utility.gson.toJson(result);
+	}
 	int num=monthUserService.insert(monthUser);
 	if (num==1) {
 		result.put("status", 1001);
@@ -165,13 +178,13 @@ public String insert(@RequestBody Monthuser monthUser){
 public String insertOrder(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
 	monthUser.setType(1);
-	Date startd=monthUser.getStarttime();
-	Date endd=monthUser.getEndtime();
-	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
-		result.put("status", 1002);
-		result.put("message", "时间不能超过24小时");
-		return Utility.gson.toJson(result);
-	}
+//	Date startd=monthUser.getStarttime();
+//	Date endd=monthUser.getEndtime();
+//	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
+//		result.put("status", 1002);
+//		result.put("message", "时间不能超过24小时");
+//		return Utility.gson.toJson(result);
+//	}
 	int num=monthUserService.insert(monthUser);
 	if (num==1) {
 		result.put("status", 1001);
@@ -213,7 +226,7 @@ public String deleteByNameAndParkOrder(@RequestBody Map<String, Object> args){
 	}
 	int num=0;
 	for (Monthuser monthuser : monthusers) {
-		if (monthuser.getType()==1) {
+		if (monthuser.getType()!=0) {
 			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
 		}
 	}
@@ -242,9 +255,9 @@ public String deleteByNameAndPark(@RequestBody Map<String, Object> args){
 	}
 	int num=0;
 	for (Monthuser monthuser : monthusers) {
-		if (monthuser.getType()==0) {
+//		if (monthuser.getType()==0) {
 			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
-		}
+//		}
 	}
 	
 	if (num==1) {
@@ -271,9 +284,9 @@ public String deleteByCarnumberAndPark(@RequestBody Map<String, Object> args){
 	}
 	int num=0;
 	for (Monthuser monthuser : monthusers) {
-		if (monthuser.getType()==0) {
+//		if (monthuser.getType()==0) {
 			 num=monthUserService.deleteByPrimaryKey(monthuser.getId());
-		}
+//		}
 	}
 	
 	if (num==1) {
@@ -307,13 +320,13 @@ public String update(@RequestBody Monthuser monthUser){
 public String updateOrder(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
 	monthUser.setType(1);
-	Date startd=monthUser.getStarttime();
-	Date endd=monthUser.getEndtime();
-	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
-		result.put("status", 1002);
-		result.put("message", "时间不能超过24小时");
-		return Utility.gson.toJson(result);
-	}
+//	Date startd=monthUser.getStarttime();
+//	Date endd=monthUser.getEndtime();
+//	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
+//		result.put("status", 1002);
+//		result.put("message", "时间不能超过24小时");
+//		return Utility.gson.toJson(result);
+//	}
 	int num=monthUserService.updateByPrimaryKeySelective(monthUser);
 	if (num==1) {
 		result.put("status", 1001);

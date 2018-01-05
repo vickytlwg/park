@@ -191,16 +191,17 @@
   <select id="getByCardNumber" resultType="com.park.model.Monthuser">
   	select * from monthUser where plateNumber = #{cardNumber}
   </select>
+ 
   <select id="getByStartAndCount" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
-  	from monthUser left join park on park.id=monthUser.parkid limit #{start},#{count}
+  	from monthUser left join park on park.id=monthUser.parkid order by monthUser.id desc limit #{start},#{count}
   </select>
   
     <select id="getByUsernameAndPark" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
@@ -208,29 +209,29 @@
   </select>
   
     <select id="getByCarnumberAndPark" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
-  	from monthUser left join park on park.id=monthUser.parkid where monthUser.plateNumber=#{carnumber} and monthUser.parkId=#{parkId}
+  	from monthUser left join park on park.id=monthUser.parkid where monthUser.plateNumber=#{carnumber} and monthUser.parkId=#{parkId} 
   </select>
   
     <select id="getByStartAndCountAndOrder" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
-  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
+  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,monthUser.type as type,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
   	from monthUser left join park on park.id=monthUser.parkid where monthUser.type=#{type} limit #{start},#{count}
   </select>
    <select id="getByParkIdAndCount" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
   	from monthUser left join park on park.id=monthUser.parkid where monthUser.parkid=#{parkId} limit #{start},#{count}
   </select>
     <select id="getByParkIdAndCountOrder" resultType="com.park.model.Monthuser">
-  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,
+  	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
@@ -239,4 +240,5 @@
   <select id="getCountByParkId" resultType="int">
   	select count(*) from monthUser where parkid=#{parkId}
   </select>
+  
 </mapper>

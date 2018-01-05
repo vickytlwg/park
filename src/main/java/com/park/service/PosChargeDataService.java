@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
 import com.park.model.PosChargeData;
 
@@ -49,6 +50,10 @@ public interface PosChargeDataService {
 	public List<PosChargeData> queryDebt (String cardNumber,Date exitDate) throws Exception;
 	
 	public PosChargeData newFeeCalcExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
+	
+	public PosChargeData newFeeCalcExpense1(PosChargeData charge,FeeCriterion criterion, Date exitDate,Boolean isQuery) throws Exception;
+	
+	public PosChargeData newFeeCalcExpense2(PosChargeData charge, FeeCriterion criterion,Date exitDate,Boolean isQuery) throws Exception;
 	
 	public List<PosChargeData> queryCurrentDebt (String cardNumber,Date exitDate) throws Exception;
 	

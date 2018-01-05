@@ -70,10 +70,10 @@ public class HardwareController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		if(isAdmin)
+	//	if(isAdmin)
 			return "hardware";
-		else
-			return "/login";
+	//	else
+	//		return "/login";
 	}
 	
 	@RequestMapping(value = "/getHardwares", produces = {"application/json;charset=UTF-8"})

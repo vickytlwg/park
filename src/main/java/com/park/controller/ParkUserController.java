@@ -31,6 +31,7 @@ import com.park.model.User;
 import com.park.model.UserDetail;
 import com.park.service.AuthorityService;
 import com.park.service.UserPagePermissionService;
+import com.park.service.UserParkService;
 import com.park.service.UserService;
 import com.park.service.Utility;
 
@@ -43,7 +44,8 @@ public class ParkUserController {
 	
 	@Autowired
 	private AuthorityService authService;
-	
+	@Autowired
+	UserParkService userParkService;
 	@Autowired
 	private UserPagePermissionService pageService;
 	
@@ -74,10 +76,10 @@ public class ParkUserController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		if(isAdmin)
+//		if(isAdmin)
 			return "parkUser";
-		else
-			return "redirect:platformShow";
+//		else
+	//		return "redirect:platformShow";
 	}
 	
 	
@@ -142,7 +144,7 @@ public class ParkUserController {
 	@RequestMapping(value = "/delete/parkUser/{Id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String deletePark(@PathVariable int Id){
-		
+		 userParkService.deleteUserParkMap(Id);
 		 authService.deleteUser(Id);
 		 return Utility.createJsonMsg("1001", "delete success");
 	}

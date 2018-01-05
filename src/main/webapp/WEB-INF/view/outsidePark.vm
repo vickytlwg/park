@@ -4,7 +4,7 @@
 <div class="content-wrapper" >
 	<section class="content-header">
           <h1>
-           路边停车场管理
+           路内停车场管理
             <small></small>
           </h1>       
     </section>
@@ -57,13 +57,13 @@
 										<th><span style="padding-left:15%">车位数</div></th>
 										<th><span style="padding-left:15%">剩余车位</div></th>
 										<th><span style="padding-left:15%">计费标准</div></th>
-										<th><span style="padding-left:15%">状态</div></th>
+										<th ><span style="padding-left:15%">状态</div></th>
 										<th><span style="padding-left:15%">免费</div></th>
-										<th><span style="padding-left:15%">楼层</div></th>	
+										<th ><span style="padding-left:15%">楼层</div></th>	
 										<th><span style="padding-left:15%">类型</div></th>
 										<th><span style="padding-left:15%">位置</div></th>
 										<th><span style="padding-left:15%">日期</div></th>	
-										<th><span style="padding-left:15%">图片</div></th>	
+										<th ><span style="padding-left:15%">图片</div></th>	
 					            </tr>
 					          
 					          <tbody id="parkBody"></tbody>
@@ -133,7 +133,7 @@ float:right;
 						<div class="panel-body">
 							<div class='form-group '>
 								<div class="col-sm-2 ">
-									<label class='control-label' style="float:right" for='parkName'>名称</label>
+									<label class='control-label' style="float:right" for='parkName'>名称 *</label>
 								</div>
 								<div class='col-sm-4'>
 									<input type='text' class='form-control' id='parkName' placeholder='请输入名称'>
@@ -145,7 +145,7 @@ float:right;
 								<div class='col-sm-4'>
 									<input style="display:none" type='text' class='form-control' id='channelCount' placeholder='请输入进出口数'>
 									<select class='form-control' id='parkType'>
-										<option value=3>路边停车场</option>
+										<option value=3>路内停车场</option>
 										<option value=4>充电桩</option>
 										<option value=2>其它</option>
 									</select>
@@ -154,31 +154,25 @@ float:right;
 							
 							<div class='form-group'>
 								<div class="col-sm-2 ">
-									<label class=' control-label' style="float:right" for='portCount'>车位数</label>
+									<label class=' control-label' style="float:right" for='portCount'>车位数 *</label>
 								</div>
 								<div class='col-sm-4'>
 									<input type='text' class='form-control' id='portCount' placeholder='请输入车位数'>
 								</div>
+								
 								<div class="col-sm-2 ">
 									<label class=' control-label' style="float:right" for='leftPortCount'>剩余车位数</label>
 								</div>
 									<div class='col-sm-4'>
 										<input type='text' class='form-control' id='leftPortCount' placeholder='请输入剩余车位数'>
 									</div>
-							</div>				
-							
-								<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='longitude'>经度</label>
+							</div>		
+							<div class='form-group'>
+							<div class="col-sm-2 ">
+									<label class='control-label' for='feeCriterion'>计费标准 *</label>
 								</div>
 								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='latitude'>纬度</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
+									<select  class='form-control' id='feeCriterion'></select>
 								</div>
 							</div>
 						</div>
@@ -207,12 +201,7 @@ float:right;
 							</div>
 							
 							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='feeCriterion'>计费标准</label>
-								</div>
-								<div class='col-sm-4'>
-									<select  class='form-control' id='feeCriterion'></select>
-								</div>
+								
 								<div class="col-sm-2 ">
 									<label class='control-label' for='status'>状态</label>
 								</div>
@@ -221,6 +210,21 @@ float:right;
 										<option value=0>可用</option>
 										<option value=1>不可用</option>
 									</select>
+								</div>
+							</div>
+							
+								<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='longitude'>经度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='latitude'>纬度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
 								</div>
 							</div>
 							
@@ -248,7 +252,7 @@ float:right;
 			<div class="panel panel-warning">
 					<div class="panel-heading">
 							<h3 class="panel-title">
-								隶属信息
+								隶属信息 *
 							</h3>
 						</div>
 						<div class="panel-body">
@@ -259,12 +263,12 @@ float:right;
 								<div class='col-sm-4'>
 									<div class='checkbox'>
 									<label style="float:left">
-                                        <input type="checkbox" id="isPositionChange" ng-model="isPositionChange"> 更改隶属收费信息</input>
+                                        <input type="checkbox" id="isPositionChange" ng-model="isPositionChange"> 更改隶属收费信息 *</input>
 									</label>
 									</div>
 								</div>
 								<div class="col-sm-2 ">
-									<label class='control-label'>市</label>
+									<label class='control-label'>市 *</label>
 								</div>
 								<div class='col-sm-4'>
 									<select id="zoneCenterId" class="form-control" ng-disabled="!isPositionChange" ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters" ng-model="zoneCenterId" ng-change="getAreas()" ></select>						
@@ -273,13 +277,13 @@ float:right;
 
 							<div class='form-group'>
 								<div class="col-sm-2 ">
-									<label class='control-label'>区</label>
+									<label class='control-label'>区 *</label>
                                 </div>
 								<div class='col-sm-4'>
 									<select id="areaId" class="form-control" ng-disabled="!isPositionChange" ng-options="area.id as area.name for area in areas" ng-model="areaId" ng-change="getStreets()"></select>							
 								</div>
 								<div class="col-sm-2 ">
-									<label class='control-label'>路段</label>
+									<label class='control-label'>路段 *</label>
                                     <input hidden id="tmpStreetId" type='text' ></input>
 								</div>
 								<div class='col-sm-4'>

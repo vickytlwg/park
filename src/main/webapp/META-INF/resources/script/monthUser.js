@@ -5,7 +5,8 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.checkedIndex=-1;
     $scope.start=0;
     $scope.count=200;
-     $scope.parks=[];
+    $scope.parks=[];
+   
     $scope.getParks=function(){
         $http({
             url:'getParks?_t=' + (new Date()).getTime(),
@@ -202,10 +203,8 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
                 $scope.showLoader=false;
                 $timeout(function(){
                       $scope.close('ok');
-                },2000);
-              
-                $scope.$parent.refreshUser();
-                
+                },2000);             
+                $scope.$parent.refreshUser();                
             }
             else
             {
@@ -238,9 +237,12 @@ monthUserApp.controller("userParkCtrl",function($scope,$http,$modalInstance,getP
                  $scope.parkNames+=items[i].parkname+'\n';
                  
              }
-              
+               
             }
-            
+            else{
+               
+            }
+             
         });
     };
     $scope.getParkNames();
@@ -263,7 +265,7 @@ monthUserApp.controller("userParkCtrl",function($scope,$http,$modalInstance,getP
                 $scope.getParkNames();
             }
             else{
-                textModal.open($scope, "失败","操作失败");
+                 textModal.open($scope, "失败","操作失败");
             }
         });
     };

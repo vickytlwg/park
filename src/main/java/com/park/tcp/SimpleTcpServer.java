@@ -9,7 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-@Service
+
 public class SimpleTcpServer {
 
     private int port;
@@ -47,14 +47,14 @@ public class SimpleTcpServer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        int port;
-        if (args.length > 0) {
-            port = Integer.parseInt(args[0]);
-        } else {
-            port = 8099;
-        }
-        new SimpleTcpServer(port).run();
-
-    }
+//    public static void main(String[] args) throws Exception {
+//        int port;
+//        if (args.length > 0) {
+//            port = Integer.parseInt(args[0]);
+//        } else {
+//            port = 8099;
+//        }
+//        new SimpleTcpServer(port).run();
+//
+//    }
 }
