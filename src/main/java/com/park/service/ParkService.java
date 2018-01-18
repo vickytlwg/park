@@ -23,7 +23,7 @@ public interface ParkService {
 	
 	public int nameToId(String name);
 	
-	public List<Park> getParkByName(String name);
+	public List<ParkDetail> getParkByName(String name);
 	
 	public List<ParkDetail> getParkDetail(int low, int count);
 	

@@ -2,6 +2,8 @@ package com.park.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.park.model.Parkcarauthority;
 
 public interface ParkcarauthorityMapper {
@@ -17,7 +19,7 @@ public interface ParkcarauthorityMapper {
 
     int updateByPrimaryKey(Parkcarauthority record);
     
-    List<Parkcarauthority> getByParkId(Integer parkId);
+    List<Parkcarauthority> getByParkId(@Param("parkId")Integer parkId);
     
-    List<Parkcarauthority> getByStartAndCount(Integer start,Integer count);
+    List<Parkcarauthority> getByStartAndCount(@Param("start")Integer start,@Param("count")Integer count);
 }

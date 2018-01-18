@@ -64,8 +64,13 @@
 		select id from park where name = #{param1}
 	</select>
 	
-	<select id="getParkByName" resultMap="ParkMapper">
-		select * from park where name like #{param1} or position like #{param1}
+	<select id="getParkByName" resultMap="ParkDetailMapper">
+		select park.id, park.name, park.portCount, park.channelCount, portLeftCount, feeCriterion.name as feeCriterionName, 
+		feeCriterion.id as feeCriterionId, park.status, park.isFree, park.floor, park.type,
+		 park.longitude, park.latitude, park.alias, park.mapAddr, park.position, park.date,
+		  park.contact, park.number, park.pictureUri, park.description,park.streetId,street.name as streetName 
+		  from park left join feeCriterion on park.feeCriterionId = feeCriterion.id	
+		  left join street on street.id=park.streetId where park.name like #{param1} or park.position like #{param1}
 	</select>
 	
 	<select id="getParkById" resultMap="ParkMapper">

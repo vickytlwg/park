@@ -21,4 +21,6 @@ public interface ParkCarAuthorityService {
 	List<Parkcarauthority> getByParkId(Integer parkId);
 	
     List<Parkcarauthority> getByStartAndCount(Integer start,Integer count);
+    
+    int InitRecords(Integer parkId);
 }

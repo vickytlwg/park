@@ -60,7 +60,7 @@ import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("alipay2")
+@RequestMapping("alipay")
 public class AlipayController {
 	@Autowired
 	AliParkFeeService parkFeeService;

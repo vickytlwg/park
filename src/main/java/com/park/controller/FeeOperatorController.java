@@ -99,7 +99,7 @@ public class FeeOperatorController {
 		String posNum=args.get("posNum");
 		List<Feeoperator> feeoperators=feeOperatorService.operatorValidation(account, passwd);
 		result.put("parkName", "");
-		result.put("carportsCount", "");
+		result.put("carportsCount", 0);
 		result.put("feeCriterion", "");
 		if (feeoperators.isEmpty()) {
 			result.put("status", 1002);

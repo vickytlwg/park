@@ -53,6 +53,10 @@ public class ParkCarAuthorityServiceImpl implements ParkCarAuthorityService {
 	@Override
 	public List<Parkcarauthority> getByParkId(Integer parkId) {
 		// TODO Auto-generated method stub
+		List<Parkcarauthority> parkcarauthorities=parkcarautorityMapper.getByParkId(parkId);
+		if (parkcarauthorities.isEmpty()) {
+			InitRecords(parkId);
+		}
 		return parkcarautorityMapper.getByParkId(parkId);
 	}
 
@@ -60,6 +64,20 @@ public class ParkCarAuthorityServiceImpl implements ParkCarAuthorityService {
 	public List<Parkcarauthority> getByStartAndCount(Integer start, Integer count) {
 		// TODO Auto-generated method stub
 		return parkcarautorityMapper.getByStartAndCount(start, count);
+	}
+
+	@Override
+	public int InitRecords(Integer parkId) {
+		// TODO Auto-generated method stub
+		Parkcarauthority parkcarauthority0=new Parkcarauthority();
+		parkcarauthority0.setChannel((byte) 0);
+		parkcarauthority0.setParkid(parkId);
+		Parkcarauthority parkcarauthority1=new Parkcarauthority();
+		parkcarauthority1.setChannel((byte) 1);
+		parkcarauthority1.setParkid(parkId);
+		parkcarautorityMapper.insertSelective(parkcarauthority0);
+		parkcarautorityMapper.insertSelective(parkcarauthority1);
+		return 0;
 	}
 
 }

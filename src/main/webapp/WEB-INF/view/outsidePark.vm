@@ -1,7 +1,8 @@
-<script src="/park/script/outsidePark.js?v=1.0"></script>
+<script src="/park/script/outsidePark.js?v=1.2"></script>
+<script src="/park/script/service/textModalService.js"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 
-<div class="content-wrapper" >
+<div class="content-wrapper"  >
 	<section class="content-header">
           <h1>
            路内停车场管理
@@ -15,13 +16,16 @@
 	                <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
-	                <div class="box-body">  
+	                <div class="box-body" >  
 	                	<div class="btn-group" >
 	                		<button  #if(!$isAdmin) disabled#end  id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
 	                		<button  #if(!$isAdmin) disabled#end  id='addPark' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 增加收费站点</button>
 	                		<button  #if(!$isAdmin) disabled#end  id='updatePark' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更改站点信息</button>
 	                		<button  #if(!$isAdmin) disabled#end  id='deletePark' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除收费站点</button>
-	                		<button  #if(!$isAdmin) disabled#end  id='uploadPic' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button>  	                		           			                		                		                	 
+	                		<button  #if(!$isAdmin) disabled#end  id='uploadPic' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>上传图片</button> 
+							<button  #if(!$isAdmin) disabled#end  id='authoritySet' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>权限设置</button>  	                		           			                		                		                	 
+		                	<button  #if(!$isAdmin) disabled#end  id='textSet' ng-click="textShowSet()" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>文字设置</button>  	                		           			                		                		                	 
+													
 						</div>
 						<div class="pull-right" style="width:300px">
 	                	<div class="input-group">	
@@ -115,8 +119,8 @@ float:right;
 		</div>
 
 <div class="modal fade" id="addParkModal" tabindex="-1" role="dialog" aria-labelledby='addParkLabel' aria-hidden='true'>
-	<div class='modal-dialog' style="min-width:880px">
-		<div class='modal-content' ng-app="outsideParkApp" ng-controller="outsideParkCtrl">
+	<div class='modal-dialog' style="min-width:880px"  ng-app="outsideParkApp" ng-controller="outsideParkCtrl">
+		<div class='modal-content' >
 		
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal' aria-hidden='true' ng-click="clearPosition()">&times;</button>
@@ -178,78 +182,7 @@ float:right;
 						</div>
 				</div>
 				
-				<div class="panel panel-success">
-					<div class="panel-heading">
-								 <h3 class="panel-title">
-									附加信息
-								 </h3>
-						</div>
-						<div class="panel-body">
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='contact'>联系人</label>
-                                </div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='contact' placeholder='联系人'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='number'>联系人电话</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='number' placeholder='联系人电话'>
-								</div>
-							</div>
-							
-							<div class='form-group'>
-								
-								<div class="col-sm-2 ">
-									<label class='control-label' for='status'>状态</label>
-								</div>
-								<div class='col-sm-4'>
-									<select class='form-control' id='parkStatus'>
-										<option value=0>可用</option>
-										<option value=1>不可用</option>
-									</select>
-								</div>
-							</div>
-							
-								<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='longitude'>经度</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='latitude'>纬度</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
-								</div>
-							</div>
-							
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label'>是否免费</label>
-								</div>
-								<div class='col-sm-4'>
-									<div class='checkbox'>
-										<label style="float:left">
-											<input type='checkbox' id='isFree'>免费
-										</label>
-									</div>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label'>图片地址</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='mapAddr' placeholder='请输入停车场地图地址'>
-								</div>
-							</div>
-                        </div>
-                </div>							
-																																		
-			<div class="panel panel-warning">
+				<div class="panel panel-warning">
 					<div class="panel-heading">
 							<h3 class="panel-title">
 								隶属信息 *
@@ -294,6 +227,78 @@ float:right;
                 </div>								
 					
 				
+				<div class="panel panel-success">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									附加信息
+								 </h3>
+						</div>
+						<div class="panel-body">
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='contact'>联系人</label>
+                                </div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='contact' placeholder='联系人'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='number'>联系人电话</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='number' placeholder='联系人电话'>
+								</div>
+							</div>
+
+							
+								<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='longitude'>经度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='longitude' placeholder='请输入停车场经度'>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label' for='latitude'>纬度</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='latitude' placeholder='请输入停车场纬度'>
+								</div>
+							</div>
+							
+							<div class='form-group'>
+								<div class="col-sm-2 ">
+									<label class='control-label'>是否免费</label>
+								</div>
+								<div class='col-sm-4'>
+									<div class='checkbox'>
+										<label style="float:left">
+											<input type='checkbox' id='isFree'>免费
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-2 ">
+									<label class='control-label'>图片地址</label>
+								</div>
+								<div class='col-sm-4'>
+									<input type='text' class='form-control' id='mapAddr' placeholder='请输入停车场地图地址'>
+								</div>
+							</div>							
+														
+							<div class='form-group'>								
+								<div class="col-sm-2 ">
+									<label class='control-label' for='status'>状态</label>
+								</div>
+								<div class='col-sm-4'>
+									<select class='form-control' id='parkStatus'>
+										<option value=0>可用</option>
+										<option value=1>不可用</option>
+									</select>
+								</div>
+							</div>
+							
+                        </div>
+                </div>																																												
+				
 					<div id='addParkResult'>						
 					</div>
 			</div>
@@ -335,7 +340,244 @@ float:right;
 		</div>
 	</div>
 </div>		
+
+
+<div class="modal fade"  tabindex="-1" id="parkAuthoritySet" role="dialog" aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+				<h4 class='modal-title' >停车场权限设置</h4>
+			</div>			
+			<div class='modal-body'>
+				<div class="panel panel-success">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									道闸入口允许同行
+								 </h3>
+						</div>
+						<div class="panel-body">
+		
+					<div class='col-sm-12'>
+						<div class='col-sm-2'>							
+							<div class='checkbox'>
+								<label id="month1label" style="display:none">
+                                </label>
+									<label style="float:left;">
+                                       <input type='checkbox' id='month1'>月卡</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='temporary1'>临停</input>
+									</label>
+							</div>
+                            </div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeA1'>typeA</input>
+									</label>
+							</div>
+                            </div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeB1'>typeB</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>	
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeC1'>typeC</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeD1'>typeD</input>
+									</label>
+							</div>
+							</div>
+					</div>
+			</div>	    
+			</div>	
+			
+			
+					<div class="panel panel-info">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									道闸出口允许同行
+								 </h3>
+						</div>
+						<div class="panel-body">
+		
+					<div class='col-sm-12'>
+						<div class='col-sm-2'>
+							<div class='checkbox'>
+								<label id="month0label" style="display:none">
+                                </label>
+									<label style="float:left;">
+                                       <input type='checkbox' id='month0'>月卡</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='temporary0'>临停</input>
+									</label>
+							</div>
+                            </div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeA0'>typeA</input>
+									</label>
+							</div>
+                            </div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeB0'>typeB</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>	
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeC0'>typeC</input>
+									</label>
+							</div>
+							</div>
+							<div class='col-sm-2'>
+							<div class='checkbox'>
+									<label style="float:left;">
+                                       <input type='checkbox' id='typeD0'>typeD</input>
+									</label>
+							</div>
+							</div>
+					</div>
+			</div>	 
+			
+			</div>
+			
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>
+				<button id="submitAuthorityBtn" type='button' class='btn btn-primary'>提交</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="modal fade" id="showTextSet" tabindex="-1" role="dialog" aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
+	<div class='modal-dialog'>
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+				<h4 class='modal-title' >道闸文字显示设置</h4>
+			</div>			
+			<div class='modal-body'>								
+					<div class="panel panel-success">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									道闸入口文字
+								 </h3>
+						</div>
+						<div class="panel-body">
+							<div class='form-group row'>
+								<div class="col-sm-2 " style="padding-top:10px">
+									<label class='control-label'>第一行</label>
+                                </div>
+								<div class='col-sm-10' >
+									<input type='text' class='form-control' id='text11' placeholder='第一行'>
+								</div>
+								</div>
+								<div class='form-group row' style="padding-top:10px"">
+								<div class="col-sm-2 " style="padding-top:10px">
+									<label class='control-label'>第二行</label>
+								</div>
+								<div class='col-sm-10' >
+                                    <label id="textshow1label" style="display:none"></label>
+									<input type='text' class='form-control' id='text12' placeholder='第二行'>
+								</div>	
+								</div>
+								<div class='form-group row' style="padding-top:10px">
+								<div class="col-sm-2 " style="padding-top:10px">
+									<label class='control-label' for='contact'>第三行</label>
+                                </div>
+								<div class='col-sm-10'>
+									<input type='text' class='form-control' id='text13' placeholder='第三行'>
+								</div>
+								</div>
+								<div class='form-group row' style="padding-top:10px">
+								<div class="col-sm-2 "  style="padding-top:10px">
+									<label class='control-label' for='number'>第四行</label>
+								</div>
+								<div class='col-sm-10'>
+									<input type='text' class='form-control' id='text14' placeholder='第四行'>
+								</div>
+					 </div>	
+				    </div>
+					</div>					
+					<div class="panel panel-info">
+					<div class="panel-heading">
+								 <h3 class="panel-title">
+									道闸出口文字
+								 </h3>
+						</div>
+						<div class="panel-body">
+							<div class='form-group row'>
+								<div class="col-sm-2 " style="padding-top:10px">
+									<label class='control-label'>第一行</label>
+                                </div>
+								<div class='col-sm-10' >
+                                    <label id="textshow0label" style="display:none"></label>
+									<input type='text' class='form-control' id='text01' placeholder='第一行'>
+								</div>
+								</div>
+								<div class='form-group row' style="margin-top:10px">
+								<div class="col-sm-2 " style="padding-top:10px">
+									<label class='control-label'>第二行</label>
+								</div>
+								<div class='col-sm-10' >
+									<input type='text' class='form-control' id='text02' placeholder='第二行'>
+								</div>	
+								</div>
+								<div class='form-group row' style="margin-top:10px">
+								<div class="col-sm-2 "  style="padding-top:10px">
+									<label class='control-label' for='contact'>第三行</label>
+                                </div>
+								<div class='col-sm-10'>
+									<input type='text' class='form-control' id='text03' placeholder='第三行'>
+								</div>
+								</div>
+								<div class='form-group row' style="margin-top:10px">
+								<div class="col-sm-2 "  style="padding-top:10px">
+									<label class='control-label' for='number'>第四行</label>
+								</div>
+								<div class='col-sm-10'>
+									<input type='text' class='form-control' id='text04' placeholder='第四行'>
+								</div>
+							
+				    </div>
+					</div>
+					</div>
+					</div>
 					
+			<div class='modal-footer'>
+				<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>
+				<button id="submitTextShowBtn" type='button' class='btn btn-primary'>提交</button>
+			</div>
+		</div>
+	</div>
+</div>	
+
 <div id='showMessage'>
 </div>
 

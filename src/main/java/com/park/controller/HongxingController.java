@@ -59,7 +59,7 @@ import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
 @Controller
-@RequestMapping("alipay")
+@RequestMapping("alipay2")
 public class HongxingController {
 	@Autowired
 	HongxingService hongxingService;
@@ -303,6 +303,7 @@ public class HongxingController {
 		alipayrecord.setMoney(lastCharge.getChargeMoney());
 		alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
 		lastCharge.setPaidCompleted(true);
+		lastCharge.setPayType(0);
 		if (lastCharge.getRejectReason().length() > 4 && lastCharge.getRejectReason().length() < 10) {
 			return Utility.createJsonMsg(1001, "已通知到!");
 		}
@@ -492,6 +493,7 @@ public class HongxingController {
 				lastCharge.setRejectReason("失败通知");
 			}
 			lastCharge.setPaidCompleted(true);
+			lastCharge.setPayType(0);
 			poschargedataService.update(lastCharge);
 
 			alipayrecord.setStatus("1");

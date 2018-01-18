@@ -1,4 +1,4 @@
-<script src="/park/script/monthUser.js?v=1.4"></script>
+<script src="/park/script/monthUser.js?v=1.5"></script>
 <script src="/park/script/tm.pagination.js?v=1.1"></script>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/service/textModalService.js"></script>
@@ -31,7 +31,7 @@
 		                		<button   ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户开卡</button>
 		                		<button   ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 月卡续费</button>
 		                		<button   ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除用户</button>
-								<button  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
+								<button   ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
 		                	</div>	
 							<div class="pull-right">
 								<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park.id as park.name for park in parks" ng-model="selectedParkid" ng-change="selectChanged(selectedParkid)">
@@ -42,41 +42,51 @@
 	                    <br/>    	
 						<div>
 							  <table class="table table-bordered table-hover table-condensed" style="font-size:12px">
-					          
-					            <tr>					            
-					             <th><span style=""><input type="checkbox" /></div></th>
-										<th ><span style="padding-left:15%">Id</div></th>								
-										<th><span style="padding-left:15%">停车场名</div></th>
-										<th><span style="padding-left:15%">卡号</div></th>
-										<th><span style="padding-left:15%">车主</div></th>
-										<th><span style="padding-left:15%">车牌号</div></th>
-										<th><span style="padding-left:15%">车牌颜色</div></th>
-										<th><span style="padding-left:15%">证件类型</div></th>	
-										<th><span style="padding-left:15%">证件号码</div></th>
-										<th><span style="padding-left:15%">开始时间</div></th>
-										<th><span style="padding-left:15%">结束时间</div></th>	
-										<th><span style="padding-left:15%">支付金额</div></th>	
-										<th><span style="padding-left:15%">状态</div></th>							
-					            </tr>
-					          
-					          <tbody id="parkBody"></tbody>
-							  <tr ng-repeat="user in users">
-							  <td ><input type="checkbox" ng-model="user.checked" ng-click="selectChange($index)"/></td>
-							  <td ng-bind="user.id"></td>
-							  <td ng-bind="user.parkname"></td>
-							  <td ng-bind="user.cardnumber"></td>
-							  <td ng-bind="user.owner"></td>
-							  <td ng-bind="user.platenumber"></td>
-							  <td ng-bind="user.platecolor"></td>
-							  <td ng-bind="user.certificatetype"></td>
-							  <td ng-bind="user.certificatenumber"></td>
-							  <td ng-bind="user.starttime"></td>
-							  <td ng-bind="user.endtime"></td>
-							  <td ng-bind="user.payment | currency:'￥'"></td>
-							  <td ng-if="user.status==1">已支付</td>
-							  <td ng-if="user.status==0">未支付</td>
-							  </tr>
-					          </table>
+                                        <tr>
+                                            <th><span style="">
+                                                <input type="checkbox" />
+                                </div></th>
+                                <th hidden><span style="padding-left:15%">Id
+                            </div></th>
+                            <th><span style="padding-left:15%">停车场名
+                        </div></th>
+                        <th hidden><span style="padding-left:15%" >楼层
+                    </div></th>
+                    <th><span style="padding-left:15%">车主
+                </div></th>
+                <th><span style="padding-left:15%">车牌号
+            </div></th>
+            <th hidden><span style="padding-left:15%" >车牌颜色
+        </div></th>
+        <th><span style="padding-left:15%">描述
+</div></th>
+<th hidden><span style="padding-left:15%" >电话号码</div></th>
+<th><span style="padding-left:15%">开始时间</div></th>
+<th><span style="padding-left:15%">结束时间</div></th>
+<th hidden><span style="padding-left:15%" >支付金额</div></th>
+<th><span style="padding-left:15%">状态</div></th>
+</tr>
+
+<tbody id="parkBody"></tbody>
+<tr ng-repeat="user in users">
+    <td >
+    <input type="checkbox" ng-model="user.checked" ng-click="selectChange($index)"/>
+    </td>
+    <td ng-bind="user.id" hidden></td>
+    <td ng-bind="user.parkname"></td>
+    <td ng-bind="user.cardnumber" hidden></td>
+    <td ng-bind="user.owner"></td>
+    <td ng-bind="user.platenumber"></td>
+    <td ng-bind="user.platecolor" hidden></td>
+    <td ng-bind="user.certificatetype"></td>
+    <td ng-bind="user.certificatenumber" hidden></td>
+    <td ng-bind="user.starttime"></td>
+    <td ng-bind="user.endtime"></td>
+    <td ng-bind="user.payment | currency:'￥'" hidden></td>
+    <td ng-if="user.status==1">已支付</td>
+    <td ng-if="user.status==0">未支付</td>
+</tr>
+</table>
     					</div>
     				</div>
 					 <tm-pagination conf="paginationConf"></tm-pagination>
@@ -140,7 +150,13 @@
     <input type="text" class="form-control" placeholder="YYYY-MM-DD hh:mm:ss" ng-model="tempUser.endtime">
     </div>
     </div>
-   
+       <div class="form-group">
+    <label class="col-sm-2 control-label" >类型</label>
+    <div class="col-sm-8">
+    <select ng-model="tempUser.type" ng-options="status.value as status.text for status in orderTypes" class="form-control">
+    </select>
+      </div>
+      </div>
     
     <div class="form-group">
     <label class="col-sm-2 control-label" >描述</label>

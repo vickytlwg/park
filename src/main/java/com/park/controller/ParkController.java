@@ -248,7 +248,7 @@ public class ParkController {
 	public String getParkWithName(@PathVariable String name){
 		
 	//	logger.info("get park with name: " + name);
-		List<Park> parks = parkService.getParkByName(name);
+		List<ParkDetail> parks = parkService.getParkByName(name);
 	
 		if(parks != null){
 			if( parks.size() != 0){
@@ -268,7 +268,7 @@ public class ParkController {
 	public String getParkByName(@RequestBody Map<String, Object> args){
 		String name = (String)args.get("name");
 //		logger.info("get park with name: " + name);
-		List<Park> parks = parkService.getParkByName(name);
+		List<ParkDetail> parks = parkService.getParkByName(name);
 	
 		if(parks != null){
 			if( parks.size() != 0)
@@ -407,6 +407,7 @@ public class ParkController {
 	@RequestMapping(value = "/update/parkFields", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updatePark1(@RequestBody Map<String, Object> args){
+		logger.info("更新停车场信息"+args.toString());
 		if(!args.containsKey("id"))
 			return Utility.createJsonMsg("1002", "need park id");
 		int parkId = (int) args.get("id");
@@ -487,7 +488,7 @@ public class ParkController {
 		
 		if(args.containsKey("parkingName")){
 			String parkName = (String)args.get("parkingName");
-			List<Park> parkList = parkService.getParkByName(parkName);
+			List<ParkDetail> parkList = parkService.getParkByName(parkName);
 			return Utility.createJsonMsg(1001, "get park successfully", parkList);
 		}
 		

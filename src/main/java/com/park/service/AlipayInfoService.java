@@ -21,4 +21,6 @@ public interface AlipayInfoService {
     List<Alipayinfo> getbyParkId(int parkId);
     
     List<Alipayinfo> getbyOutParkKey(String outParkKey);
+    
+    List<Alipayinfo> getByCount(Integer start,Integer count);
 }

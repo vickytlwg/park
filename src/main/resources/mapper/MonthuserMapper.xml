@@ -191,7 +191,15 @@
   <select id="getByCardNumber" resultType="com.park.model.Monthuser">
   	select * from monthUser where plateNumber = #{cardNumber}
   </select>
- 
+   <select id="getByPlateNumber" resultType="com.park.model.Monthuser">
+  		select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
+  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
+  	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
+  	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
+  	from monthUser left join park on park.id=monthUser.parkid order by monthUser.id desc where monthUser.plateNumber like '%${platenumber}%' or
+  	monthUser.owner like '%${platenumber}%'  or monthUser.certificateType like '%${platenumber}%' 
+  	order by id desc
+  </select>
   <select id="getByStartAndCount" resultType="com.park.model.Monthuser">
   	select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,

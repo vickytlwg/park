@@ -5,6 +5,8 @@ public class Parkcarauthority {
 
     private Integer parkid;
 
+    private Byte channel=0;
+
     private Boolean typea=true;
 
     private Boolean typeb=true;
@@ -18,8 +20,18 @@ public class Parkcarauthority {
     private String other;
 
     private String other2;
+    
+    private Boolean temporary;
 
-    public Integer getId() {
+    public Boolean getTemporary() {
+		return temporary;
+	}
+
+	public void setTemporary(Boolean temporary) {
+		this.temporary = temporary;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -33,6 +45,14 @@ public class Parkcarauthority {
 
     public void setParkid(Integer parkid) {
         this.parkid = parkid;
+    }
+
+    public Byte getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Byte channel) {
+        this.channel = channel;
     }
 
     public Boolean getTypea() {

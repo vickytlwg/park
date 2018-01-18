@@ -18,7 +18,7 @@ public interface ParkDAO {
 	
 	public int nameToId(String name);
 	
-	public List<Park> getParkByName(String name);
+	public List<ParkDetail> getParkByName(String name);
 	
 	public List<ParkDetail> getParkDetail(@Param("low")int low, @Param("count")int count);
 	

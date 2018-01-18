@@ -13,11 +13,12 @@ import com.google.gson.reflect.TypeToken;
 import redis.clients.jedis.Jedis;
 @Service
 public class InvoiceService {
-	 Jedis jedis = new Jedis("106.15.231.85", 6390);
 	
-	public  InvoiceService() {
-		jedis.auth("liushuijiwusi");
-	}
+//	 Jedis jedis = new Jedis("106.15.231.85", 6390);
+//	
+//	public  InvoiceService() {
+//		jedis.auth("liushuijiwusi");
+//	}
 	public String getTocken(){
 		Map<String, Object> params=new HashMap<>();
 		params.put("openid", "ceTSp96pAzxwTlmxy4c84CrooflGZsK3wHUOjMG2NzfX3SzWpvT1480038819783");

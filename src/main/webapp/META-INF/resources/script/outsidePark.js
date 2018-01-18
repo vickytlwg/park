@@ -15,7 +15,32 @@
 		bindUploadPicBtn();
 		bindSubmitPicBtn();
 		bindSearchPark();
-		initFeeCriterionSelect();				
+		initFeeCriterionSelect();	
+		
+	    bindauthoritySet();
+		bindtextSet();
+		bindsubmitAuthorityBtn();
+		bindsubmitTextShowBtn();			
+	};
+	var bindsubmitTextShowBtn=function(){
+	    $('#submitTextShowBtn').on('click', $(this), function(){
+            updateTextShowData();
+        });
+	}
+	var bindauthoritySet=function(){
+	    $('#authoritySet').on('click', $(this), function(){
+            authoritySetBtnClickHandle();
+        });
+	};
+	var bindsubmitAuthorityBtn=function(){
+	    $('#submitAuthorityBtn').on('click', $(this), function(){
+            updateAuthorityData();
+        });
+	};
+	var bindtextSet=function(){
+	    $('#textSet').on('click', $(this), function(){
+            textSetBtnClickHandle();
+        });
 	};
 	
 	var bindSearchPark = function(){
@@ -106,7 +131,35 @@
 			addBtnClickHandle();
 		});
 	};
+	var authoritySetBtnClickHandle = function(){
 	
+        var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
+        if(checkedTr.length == 0){
+            alert("选择停车场!");
+            return;
+        }
+            
+        else{
+           assignAuthority($(checkedTr[0])); 
+        }
+            
+            
+	    $('#parkAuthoritySet').modal('show');
+	};
+	var textSetBtnClickHandle = function(){
+	       
+        var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
+        if(checkedTr.length == 0){
+            alert("选择停车场!");
+            return;
+        }
+            
+        else{
+           assignParkShow($(checkedTr[0])); 
+        }
+        
+        $('#showTextSet').modal('show');
+    }
 	var addBtnClickHandle = function(){
 		$('#addParkForm')[0].reset();
 		$('input#parkName').removeAttr('parkId');
@@ -197,7 +250,159 @@
 		});
 	};
 	
-	
+	var assignAuthority=function(checkedTr){
+	    var tds = checkedTr.find('td');
+	    var parkId=parseInt($(tds[1]).text());
+	    var data = {'parkId': parkId};
+        $.ajax({
+            url: $.fn.config.webroot + "/carAuthority/getByPark" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){            
+                fillAuthorityBody(data.body);
+            },
+            error: function(data){
+                loader.remove();
+                errorHandle(data);
+            }
+        });
+	};
+	var assignParkShow=function(checkedTr){
+        var tds = checkedTr.find('td');
+        var parkId=parseInt($(tds[1]).text());
+        var data = {'parkId': parkId};
+        $.ajax({
+            url: $.fn.config.webroot + "/parkShowText/getByPark" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){            
+                fillTextShowBody(data.body);
+            },
+            error: function(data){
+               
+                
+            }
+        });
+    };
+	var fillTextShowBody=function(data){
+	      $.each(data,function(index,textShowTmp){
+	          if(textShowTmp['channel']==1){
+	              $('#textshow1label').val(textShowTmp['id']);
+	              $('#text11').val(textShowTmp['line1']);
+	              $('#text12').val(textShowTmp['line2']);
+	              $('#text13').val(textShowTmp['line3']);
+	              $('#text14').val(textShowTmp['line4']);
+	          }
+	          else{
+	              $('#textshow0label').val(textShowTmp['id']);
+                  $('#text01').val(textShowTmp['line1']);
+                  $('#text02').val(textShowTmp['line2']);
+                  $('#text03').val(textShowTmp['line3']);
+                  $('#text04').val(textShowTmp['line4']);
+	          }
+	      })
+	}
+	var updateTextShowData=function(){
+	     var data1={};
+        data1['channel']=1;
+        data1['id']=parseInt($('#textshow1label').val());
+        data1['line1']=$('#text11').val();
+        data1['line2']=$('#text12').val();
+        data1['line3']=$('#text13').val();
+        data1['line4']=$('#text14').val();
+        
+        
+        var data0={};
+        data0['channel']=0;
+        data0['id']=parseInt($('#textshow0label').val());
+        data0['line1']=$('#text01').val();
+        data0['line2']=$('#text02').val();
+        data0['line3']=$('#text03').val();
+        data0['line4']=$('#text04').val();
+        
+        var data=[];
+        data.push(data0);
+        data.push(data1);       
+          $.ajax({
+            url: $.fn.config.webroot + "/parkShowText/updateRows" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){            
+                alert("成功!");
+            },
+            error: function(data){
+                
+                alert("failed");
+            }
+        });
+	}
+	var fillAuthorityBody=function(data){	    
+	    $.each(data,function(index,authorityTmp){
+	        if(authorityTmp['channel']==1){
+	            $('#month1label').val(authorityTmp['id']);
+	            $('#month1').attr("checked",authorityTmp['month']);
+	            $('#typeA1').attr("checked",authorityTmp['typea']);
+	            $('#typeB1').attr("checked",authorityTmp['typeb']);
+	            $('#typeC1').attr("checked",authorityTmp['typec']);
+	            $('#typeD1').attr("checked",authorityTmp['typed']);
+	            $('#temporary1').attr("checked",authorityTmp['temporary']);
+	        }
+	        else{
+	            $('#month0label').val(authorityTmp['id']);
+	            $('#month0').attr("checked",authorityTmp['month']);
+                $('#typeA0').attr("checked",authorityTmp['typea']);
+                $('#typeB0').attr("checked",authorityTmp['typeb']);
+                $('#typeC0').attr("checked",authorityTmp['typec']);
+                $('#typeD0').attr("checked",authorityTmp['typed']);
+                $('#temporary0').attr("checked",authorityTmp['temporary']);
+	        }
+	    });	    
+	};
+	var updateAuthorityData=function(){
+	    var data1={};
+	    data1['channel']=1;
+	    data1['id']=parseInt($('#month1label').val());
+	    data1['month']=$('#month1').prop("checked") ;
+	    data1['typea']=$('#typeA1').prop("checked") ;
+	    data1['typeb']=$('#typeB1').prop("checked") ;
+	    data1['typec']=$('#typeC1').prop("checked") ;
+	    data1['typed']=$('#typeD1').prop("checked") ;
+	    data1['temporary']=$('#temporary1').prop("checked") ;
+	    
+	    var data0={};
+        data0['channel']=0;
+        data0['id']=parseInt($('#month0label').val());
+        data0['month']=$('#month0').prop("checked") ;
+        data0['typea']=$('#typeA0').prop("checked") ;
+        data0['typeb']=$('#typeB0').prop("checked") ;
+        data0['typec']=$('#typeC0').prop("checked") ;
+        data0['typed']=$('#typeD0').prop("checked") ;
+        data0['temporary']=$('#temporary0').prop("checked") ;
+	    
+	    var data=[];
+	    data.push(data0);
+	    data.push(data1);	    
+	      $.ajax({
+            url: $.fn.config.webroot + "/carAuthority/updateRows" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){            
+                alert("成功!");
+            },
+            error: function(data){
+                
+                alert("failed");
+            }
+        });
+	};
 	var assignAddParkForm = function(checkedTr){		
 		var tds = checkedTr.find('td');
 		$('input#parkName').attr('parkId', parseInt($(tds[1]).text()));

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.park.model.Parkcarauthority" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="parkId" property="parkid" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="TINYINT" />
     <result column="typeA" property="typea" jdbcType="BIT" />
     <result column="typeB" property="typeb" jdbcType="BIT" />
     <result column="typeC" property="typec" jdbcType="BIT" />
@@ -11,9 +12,10 @@
     <result column="month" property="month" jdbcType="BIT" />
     <result column="other" property="other" jdbcType="VARCHAR" />
     <result column="other2" property="other2" jdbcType="VARCHAR" />
+    <result column="temporary" property="temporary" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, parkId, typeA, typeB, typeC, typeD, month, other, other2
+    id, parkId, channel, typeA, typeB, typeC, typeD, month, other, other2, temporary
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -26,12 +28,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.park.model.Parkcarauthority" >
-    insert into parkCarAuthority (id, parkId, typeA, 
-      typeB, typeC, typeD, month, 
-      other, other2)
-    values (#{id,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, #{typea,jdbcType=BIT}, 
-      #{typeb,jdbcType=BIT}, #{typec,jdbcType=BIT}, #{typed,jdbcType=BIT}, #{month,jdbcType=BIT}, 
-      #{other,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR})
+    insert into parkCarAuthority (id, parkId, channel, 
+      typeA, typeB, typeC, typeD, 
+      month, other, other2, temporary
+      )
+    values (#{id,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, #{channel,jdbcType=TINYINT}, 
+      #{typea,jdbcType=BIT}, #{typeb,jdbcType=BIT}, #{typec,jdbcType=BIT}, #{typed,jdbcType=BIT}, 
+      #{month,jdbcType=BIT}, #{other,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{temporary,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Parkcarauthority" >
     insert into parkCarAuthority
@@ -41,6 +45,9 @@
       </if>
       <if test="parkid != null" >
         parkId,
+      </if>
+      <if test="channel != null" >
+        channel,
       </if>
       <if test="typea != null" >
         typeA,
@@ -63,6 +70,9 @@
       <if test="other2 != null" >
         other2,
       </if>
+      <if test="temporary != null" >
+        temporary,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,6 +80,9 @@
       </if>
       <if test="parkid != null" >
         #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=TINYINT},
       </if>
       <if test="typea != null" >
         #{typea,jdbcType=BIT},
@@ -92,6 +105,9 @@
       <if test="other2 != null" >
         #{other2,jdbcType=VARCHAR},
       </if>
+      <if test="temporary != null" >
+        #{temporary,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.park.model.Parkcarauthority" >
@@ -99,6 +115,9 @@
     <set >
       <if test="parkid != null" >
         parkId = #{parkid,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=TINYINT},
       </if>
       <if test="typea != null" >
         typeA = #{typea,jdbcType=BIT},
@@ -121,19 +140,24 @@
       <if test="other2 != null" >
         other2 = #{other2,jdbcType=VARCHAR},
       </if>
+      <if test="temporary != null" >
+        temporary = #{temporary,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.park.model.Parkcarauthority" >
     update parkCarAuthority
     set parkId = #{parkid,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=TINYINT},
       typeA = #{typea,jdbcType=BIT},
       typeB = #{typeb,jdbcType=BIT},
       typeC = #{typec,jdbcType=BIT},
       typeD = #{typed,jdbcType=BIT},
       month = #{month,jdbcType=BIT},
       other = #{other,jdbcType=VARCHAR},
-      other2 = #{other2,jdbcType=VARCHAR}
+      other2 = #{other2,jdbcType=VARCHAR},
+      temporary = #{temporary,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getByParkId" resultType="com.park.model.Parkcarauthority">

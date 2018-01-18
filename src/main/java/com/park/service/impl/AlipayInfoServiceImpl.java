@@ -3,11 +3,12 @@ package com.park.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.park.dao.AlipayinfoMapper;
 import com.park.model.Alipayinfo;
 import com.park.service.AlipayInfoService;
-
+@Service
 public class AlipayInfoServiceImpl implements AlipayInfoService {
 
 	@Autowired
@@ -59,6 +60,12 @@ public class AlipayInfoServiceImpl implements AlipayInfoService {
 	public List<Alipayinfo> getbyOutParkKey(String outParkKey) {
 		// TODO Auto-generated method stub
 		return alipayInfoMapper.getbyOutParkKey(outParkKey);
+	}
+
+	@Override
+	public List<Alipayinfo> getByCount(Integer start, Integer count) {
+		// TODO Auto-generated method stub
+		return alipayInfoMapper.getbyCount(start, count);
 	}
 
 }

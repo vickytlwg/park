@@ -156,4 +156,7 @@
    <select id="getbyOutParkKey" resultType="com.park.model.Alipayinfo">
   	select * from alipayInfo where outParkKey = #{outParkKey}
   </select>
+  <select id="getbyCount" resultType="com.park.model.Alipayinfo">
+  	select * from alipayInfo order by id desc limit #{start},#{count}
+  </select>
 </mapper>

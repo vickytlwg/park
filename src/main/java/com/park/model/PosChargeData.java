@@ -26,7 +26,7 @@ public class PosChargeData {
 	
 	String posId ="posid";
 	
-	double chargeMoney=0.0;
+	double chargeMoney=0;
 	
 	double paidMoney=0.0;
 	

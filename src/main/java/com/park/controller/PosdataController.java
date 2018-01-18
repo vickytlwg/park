@@ -37,6 +37,7 @@ import com.park.model.AuthUserRole;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
+import com.park.model.ParkDetail;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.model.posdataReceive;
@@ -107,7 +108,7 @@ public String insertPosdata(@RequestBody List<posdataReceive> posdatarecv ){
 		}
 		posdata.setEndtime(parseEndtime);
 		num+=posdataService.insert(posdata);
-		List<Park> parks=parkService.getParkByName(posdata.getSitename());
+		List<ParkDetail> parks=parkService.getParkByName(posdata.getSitename());
 		if (parks.size()==1) {
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId());
 			if (posdata.getMode()==1) {
@@ -181,7 +182,7 @@ public String insertChargeDetailArrearage(@RequestBody List<posdataReceive> posd
 		}
 		posdata.setEndtime(parseEndtime);
 		num+=posdataService.insert(posdata);
-		List<Park> parks=parkService.getParkByName(posdata.getSitename());
+		List<ParkDetail> parks=parkService.getParkByName(posdata.getSitename());
 		if (parks.size()==1) {
 			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parks.get(0).getId(),posdata.getStarttime());
 			logger.error("outsideparkOutcountBujiao "+posdata.getSitename()+" count:"+outsideparkinfo.getOutcount()+new Date().toString());

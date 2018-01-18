@@ -22,4 +22,6 @@ public interface AlipayinfoMapper {
     List<Alipayinfo> getbyParkId(@Param("parkId")int parkId);
     
     List<Alipayinfo> getbyOutParkKey(@Param("outParkKey")String outParkKey);
+    
+    List<Alipayinfo> getbyCount(@Param("start")Integer start,@Param("count")Integer count);
 }

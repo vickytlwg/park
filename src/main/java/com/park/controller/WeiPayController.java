@@ -53,6 +53,7 @@ public class WeiPayController {
 		lastCharge.setChargeMoney(Double.parseDouble(paidAmount));
 		lastCharge.setPaidCompleted(true);
 		lastCharge.setPayType(1);
+		lastCharge.setExitDate1(new Date());
 		poschargedataService.update(lastCharge);
 		//支付宝记录的添加  微信暂时添加进来
 		Alipayrecord alipayrecord=new Alipayrecord();

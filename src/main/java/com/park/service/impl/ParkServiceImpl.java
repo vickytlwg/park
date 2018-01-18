@@ -129,7 +129,7 @@ public class ParkServiceImpl implements ParkService{
 		return parkDAO.nameToId(name);
 	}
 	
-	public List<Park> getParkByName(String name){
+	public List<ParkDetail> getParkByName(String name){
 		// use like function to find park
 		return parkDAO.getParkByName("%" + name + "%");
 	}

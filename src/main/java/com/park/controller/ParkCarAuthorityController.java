@@ -1,6 +1,7 @@
 package com.park.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,6 +56,25 @@ public class ParkCarAuthorityController {
 		}
 		return "parkCarAuthority";
 	}
+	@RequestMapping(value="getByPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByPark(@RequestBody Map<String, Object> args){
+		int parkId=(int) args.get("parkId");
+		List<Parkcarauthority> parkcarauthorities=carAuthorityService.getByParkId(parkId);
+
+		Map<String, Object> result=new HashMap<>();
+		if (!parkcarauthorities.isEmpty()) {
+			result.put("status", 1001);
+			result.put("body", parkcarauthorities);
+		}
+		else {
+		
+			carAuthorityService.InitRecords(parkId);
+			result.put("body", carAuthorityService.getByParkId(parkId));
+			result.put("status", 1001);
+		}
+		return Utility.gson.toJson(result);
+	}
 	@RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String insert(@RequestBody Parkcarauthority parkcarauthority){
@@ -74,6 +94,23 @@ public class ParkCarAuthorityController {
 		int num=carAuthorityService.updateByPrimaryKeySelective(parkcarauthority);
 		Map<String, Object> result=new HashMap<>();
 		if (num==1) {
+			result.put("status", 1001);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	@RequestMapping(value="updateRows",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String updateRows(@RequestBody List<Parkcarauthority> parkcarauthority){
+		int num=0;
+		for (Parkcarauthority parkcarauthority2 : parkcarauthority) {
+			num +=carAuthorityService.updateByPrimaryKeySelective(parkcarauthority2);
+		}
+		
+		Map<String, Object> result=new HashMap<>();
+		if (num==2) {
 			result.put("status", 1001);
 		}
 		else {
