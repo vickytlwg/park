@@ -21,6 +21,9 @@ public interface HardwareDAO {
 	public List<Hardware> getUnboundHardwares(@Param("type") int type);
 	
 	public List<Hardware> getHardwareByMac(@Param("mac")String mac);
+	
+	public List<Hardware> getHardwareByMacAndType(@Param("mac")String mac,@Param("type")Integer type);
+	
 	public int getHardwareCount();
 	
 	public int macToId(String mac);

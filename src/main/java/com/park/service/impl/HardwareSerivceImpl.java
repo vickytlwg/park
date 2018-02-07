@@ -68,6 +68,10 @@ public class HardwareSerivceImpl implements HardwareService{
 	public int insertHardware(Hardware hardware) {
 		//if(checkHardwareExist(hardware.getMac()))
 		//	return 0;
+		List<Hardware> hardwares=getHardwareByMacAndType(hardware.getMac(), hardware.getType());
+		if (hardwares.isEmpty()) {
+			return 0;
+		}
 		return hardwareDAO.insertHardware(hardware);
 	}
 
@@ -177,6 +181,12 @@ public class HardwareSerivceImpl implements HardwareService{
 	public List<Hardware> getHardwareByMac(String mac) {
 		// TODO Auto-generated method stub
 		return hardwareDAO.getHardwareByMac(mac);
+	}
+
+	@Override
+	public List<Hardware> getHardwareByMacAndType(String mac, Integer type) {
+		// TODO Auto-generated method stub
+		return hardwareDAO.getHardwareByMacAndType(mac, type);
 	}
 
 	

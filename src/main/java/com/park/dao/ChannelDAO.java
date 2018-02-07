@@ -40,5 +40,7 @@ public interface ChannelDAO {
 	public void updateDateByHardwareMac(@Param("mac") String mac);
 
 	public int deleteChannel(int id);
+	
+	public int deleteByParkId(@Param("parkId")Integer parkId);
 
 }

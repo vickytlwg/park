@@ -252,9 +252,7 @@ public class HardwareController {
 	@ResponseBody
 	public String getParkInfoByMac(@RequestBody Map<String, Object> argMap)
 	{
-		String mac = (String)argMap.get("mac");
-		
-		
+		String mac = (String)argMap.get("mac");		
 		List<Map<String, Object>> data=hardwareService.getInfoByMac(mac);
 		Map<String, Object> info=data.get(0);
 		if (info==null) {
@@ -264,7 +262,32 @@ public class HardwareController {
 		Park park =parkService.getParkById(parkId);
 		return  Utility.gson.toJson(park);
 	}
+	@RequestMapping(value = "/getChannelInfoByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getChannelInfoByMac(@RequestBody Map<String, Object> argMap)
+	{
+		String mac = (String)argMap.get("mac");		
+	//	List<Map<String, Object>> data=hardwareService.getInfoByMac(mac);
+		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);	
+		if (infos.isEmpty()) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+		Map<String, Object> info=infos.get(0);
+		try {
+			int channelFlag=(int) info.get("channelFlag");
+			Map<String, Object> retMap = new HashMap<String, Object>();
+			Integer parkId=(Integer) info.get("parkID");
+			Park park =parkService.getParkById(parkId);
+			retMap.put("flag", channelFlag);
+			retMap.put("parkId", parkId);
+			retMap.put("parkName", park.getName());			
+			return  Utility.gson.toJson(retMap);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Utility.createJsonMsg(1002, "fail");
+		}
 	
+	}
 	@RequestMapping(value = "/update/hardware", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String updateHardware(@RequestBody Hardware hardware){

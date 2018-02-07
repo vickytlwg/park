@@ -278,7 +278,7 @@
 
 				<li #if(!$isAdmin && !$park_platformShowbk) hidden#end ><a href="/park/platformShowbk"><i class="fa fa-area-chart"></i>主界面</a></li>
 				
-                <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
+                <li hidden #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/parks"><i class="fa fa-car"></i>停车场管理</a></li>
 				
 				<li #if(!$isAdmin && !$park_parkmap) hidden#end><a href="/park/parkmap"><i class="fa fa-map-marker"></i>停车场分布</a></li>
                 <li #if(!$isAdmin && !$park_channel) hidden#end><a href="/park/channel"><i class="fa fa-exchange"></i>出入口管理</a></li>
@@ -288,7 +288,7 @@
                 <li #if(!$isAdmin && !$park_parks) hidden#end><a href="/park/barrier/"><i class="fa fa-rub"></i>道闸控制器管理</a></li>
 
 				
-				<li #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>
+				<li hidden #if(!$isAdmin && !$park_qhq_carportstatus) hidden#end><a href="/park/qhq_carportstatus"><i class="fa fa-line-chart"></i>秦淮区状态图</a></li>
                 <li #if(!$isAdmin && !$$park_hardware) hidden#end><a href="/park/hardware"><i class="fa fa-gear"></i>硬件设备管理</a></li>
 				
               </ul>
@@ -298,7 +298,7 @@
                 <a href="#"><i class="fa fa-dollar"></i> <span>计费管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_pos_chargeDetail) hidden#end ><a href="/park/pos/chargeDetail"><i class="fa fa-credit-card"></i>费用明细</a></li>
-				  
+				   <li #if(!$isAdmin && !$park_pos_chargeDetail) hidden#end ><a href="/park/alipayInfo/index"><i class="fa fa-credit-card"></i>支付宝信息</a></li>
 				 
               </ul>
             </li>
@@ -322,7 +322,7 @@
               </ul>
             </li>
 
-            <li class="treeview active">
+            <li class="treeview active" hidden>
                 <a href="#"><i class="fa fa-fw fa-steam"></i> <span>流量管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li #if(!$isAdmin && !$park_dataUsage) hidden#end><a href="/park/dataUsage"><i class="fa fa-cc-diners-club"></i>流量卡管理</a></li>

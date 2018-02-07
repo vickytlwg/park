@@ -41,6 +41,7 @@ import com.park.model.ParkNews;
 import com.park.model.Street;
 import com.park.service.AreaService;
 import com.park.service.AuthorityService;
+import com.park.service.ChannelService;
 import com.park.service.ParkService;
 import com.park.service.StreetService;
 import com.park.service.UserPagePermissionService;
@@ -59,7 +60,8 @@ public class ParkController {
 	private AreaService areaService;
 	@Autowired
 	private StreetService streetService;
-	
+	@Autowired
+	ChannelService channelService;
 	@Autowired
 	private UserPagePermissionService pageService;
 	
@@ -444,6 +446,7 @@ public class ParkController {
 	@RequestMapping(value = "/delete/park/{Id}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String deletePark(@PathVariable int Id){
+		channelService.deleteByParkId(Id);
 		return parkService.deletePark(Id);
 	}
 	

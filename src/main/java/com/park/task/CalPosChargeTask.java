@@ -81,8 +81,7 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0/2 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
-	//	System.out.println("任务...打印.....");
-//		javaBeanXml.updateParkFromXml();
+		javaBeanXml.updateParkFromXml();
 	//	Jpush.SendPushToAllAudiences("heart!");
 	}
 	@Scheduled(cron="0 0 23 * * ? ")

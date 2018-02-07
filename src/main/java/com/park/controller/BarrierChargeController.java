@@ -128,7 +128,7 @@ public class BarrierChargeController {
 			return Utility.createJsonMsg(1002, "fail");
 		}	
 }
-	@RequestMapping(value="touched",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@RequestMapping(value="touched",method = RequestMethod.POST, produces = { "application/json;charset=GB2312" })
 	@ResponseBody
 	public String touched(@RequestBody Map<String, String> args) throws Exception{
 		String mac= args.get("mac");
@@ -137,24 +137,27 @@ public class BarrierChargeController {
 		boolean largeCar=Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge=new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
 		List<Map<String, Object>> infos=hardwareService.getInfoByMac(mac);
-		
+		if (infos.isEmpty()) {
+			dataMap.put("status", 1003);
+			return Utility.gson.toJson(dataMap);
+		}
 		Map<String, Object> info=infos.get(0);
 		if (info==null) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
-		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		
 		int channelFlag=(int) info.get("channelFlag");
 		Integer parkId=(Integer) info.get("parkID");
 	//	String parkName=(String) info.get("Name");
 		List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(cardNumber,parkId);
 		Park park =parkService.getParkById(parkId);		
-		List<Parkcarauthority> parkcarauthorities=parkCarAuthorityService.getByParkId(parkId);
-		
+		List<Parkcarauthority> parkcarauthorities=parkCarAuthorityService.getByParkId(parkId);		
 		if (parkcarauthorities.isEmpty()) {
 			return null;
 		}
-		
+	//	dataMap.put("cD", cardNumber);
 		dataMap.put("aT", "1");
 		boolean isMonthUser=false;
 		boolean isRealMonthUser=false;
@@ -280,6 +283,13 @@ public class BarrierChargeController {
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 						aliparkFeeService.parkingEnterinfoSync(argstoali);
+					}
+					else {
+						Map<String, String> argstoali=new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					//	aliparkFeeService.parkingEnterinfoSync(argstoali);
 					}
 					
 				} catch (Exception e) {
@@ -417,8 +427,9 @@ public class BarrierChargeController {
 				if (diff<1000*60*15){					
 					dataMap.put("my", "0.0");
 					long diff1=(new Date().getTime()-posChargeData.getEntranceDate().getTime());					
-					dataMap.put("eD", getTimeDiff(diff1));
+					dataMap.put("eD", String.valueOf(diff1/(1000*60)));
 					posChargeData.setPaidCompleted(true);
+				//	posChargeData.setPayType(9);
 					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 					posChargeData.setUnPaidMoney(0);
 					posChargeData.setOperatorId("道闸");
@@ -444,24 +455,33 @@ public class BarrierChargeController {
 				}								
 			}		
 			PosChargeData payRet=new PosChargeData();
+			int tmpnn=0;
 			for (PosChargeData posChargeData : queryCharges) {
 				if (posChargeData.getParkId()==parkId.intValue()) {
 					posChargeData.setPaidCompleted(true);
 					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 					posChargeData.setUnPaidMoney(0);
+					posChargeData.setPayType(9);
 					posChargeData.setOperatorId("道闸");
-					payRet=posChargeData;
+					if (tmpnn==0) {
+						payRet=posChargeData;						
+						tmpnn++;
+					}else {
+						posChargeData.setChargeMoney(0);
+						posChargeData.setPaidMoney(0);
+					}					
 					chargeSerivce.update(posChargeData);
 				}
 				else {
 					posChargeData.setChargeMoney(0.0);
 					posChargeData.setPaidCompleted(true);
+					posChargeData.setPayType(9);
 					chargeSerivce.update(posChargeData);
 				}
 			}
 			int num = chargeSerivce.update(payRet);
 			long diff2=(new Date().getTime()-payRet.getEntranceDate().getTime());
-			dataMap.put("eD", getTimeDiff(diff2));
+			dataMap.put("eD", String.valueOf(diff2/(60*1000)));
 				if (!isRealMonthUser) {				
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));										
 				}						

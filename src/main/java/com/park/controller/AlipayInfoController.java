@@ -12,6 +12,7 @@ import org.apache.commons.beanutils.converters.IntegerArrayConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +28,7 @@ import com.park.service.AuthorityService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 
-@RequestMapping("alipayinfo")
+@RequestMapping("alipayInfo")
 @Controller
 public class AlipayInfoController {
 	
@@ -70,6 +71,20 @@ public class AlipayInfoController {
 		}
 		return Utility.gson.toJson(result);
 	}
+	@RequestMapping(value="delete/{id}",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String insert(@PathVariable("id") int id){
+		int num=alipayinfoService.deleteByPrimaryKey(id);
+		Map<String, Object> result=new HashMap<>();
+		if (num==1) {
+			result.put("status", 1001);
+		}
+		else {
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	
 	@RequestMapping(value="update",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String update(@RequestBody Alipayinfo alipayinfo){

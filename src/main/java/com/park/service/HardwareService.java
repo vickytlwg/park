@@ -31,6 +31,7 @@ public interface HardwareService {
 	public int deleteHardware(int id);
 	public List<Map<String, Object>> getInfoByMac(String mac);
 	public List<Hardware> getHardwareByMac(String mac);
+	public List<Hardware> getHardwareByMacAndType(String mac,Integer type);
 	public boolean bindHardware(int id);
 	public List<Hardware> searchHardware(String mac);
 	public List<Hardware> searchHardwareByKeywords(String mac);

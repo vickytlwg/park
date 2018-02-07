@@ -135,4 +135,11 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDAO.getChannelDetailByChannelFlag(low, count, channelFlag);
 	}
 
+
+	@Override
+	public int deleteByParkId(Integer parkId) {
+		// TODO Auto-generated method stub
+		return channelDAO.deleteByParkId(parkId);
+	}
+
 }

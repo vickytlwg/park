@@ -326,7 +326,27 @@ public class PosChargeDataController {
 		String cardNumber = args.get("cardNumber");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
 	}
-
+	@RequestMapping(value = "getByCardnumberAuthority", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+@ResponseBody
+public String getByCardnumberAuthority(@RequestBody Map<String, String> args, HttpSession session) {
+String cardNumber = args.get("cardNumber");
+String username = (String) session.getAttribute("username");
+AuthUser user = authService.getUserByUsername(username);
+List<Park> parkList = parkService.getParks();
+if (username == null)
+	return null;	
+if (user.getRole() == AuthUserRole.ADMIN.getValue())
+{
+	return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
+}
+	parkList = parkService.filterPark(parkList, username);
+	List<PosChargeData> posChargeDatas=new ArrayList<>();
+	for (Park park : parkList) {
+		posChargeDatas.addAll(chargeSerivce.getByCardNumberAndPark(cardNumber, park.getId()));
+	}
+return Utility.createJsonMsg(1001, "success", posChargeDatas);
+}
 	@RequestMapping(value = "getByCardnumberAndPort", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -973,7 +993,43 @@ public class PosChargeDataController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
+	@RequestMapping(value = "/getPayTypeCountByRange", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String getPayTypeCountByRange(@RequestBody Map<String, Object> args) throws ParseException {
+		String startDate = (String) args.get("startDate");
+		String endDate = (String) args.get("endDate");
+		int parkId = (int) args.get("parkId");
+		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDayRange(parkId, startDate, endDate);
+		int type0=0;
+		int type1=0;
+		int type2=0;
+		int type9=0;
+		for (PosChargeData posChargeData : posdatas) {
+			switch (posChargeData.getPayType()) {
+			case 0:
+				type0+=1;
+				break;
+			case 1:
+				type1+=1;
+				break;
+			case 2:
+				type2+=1;
+				break;
+			case 9:
+				type9+=1;
+				break;
 
+			default:
+				break;
+			}
+		}
+		Map<String, Object> result = new HashMap<>();
+		result.put("status", 1001);
+		result.put("alipay", type0);
+		result.put("weipay", type1);
+		result.put("cash", type2);
+		result.put("barrier", type9);
+		return  Utility.gson.toJson(result);
+	}
 	@RequestMapping(value = "/getExcelByParkAndDayRange")
 	@ResponseBody
 	public void getExcelByParkAndDayRange(HttpServletRequest request, HttpServletResponse response)

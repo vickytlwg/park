@@ -118,6 +118,8 @@
 	<delete id="deleteChannel" parameterType="int">
 		delete from channel where id = #{id}
 	</delete>
-	
+		<delete id="deleteByParkId" parameterType="int">
+		delete from channel where parkId = #{parkId}
+	</delete>
 	
 </mapper>

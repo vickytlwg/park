@@ -28,9 +28,14 @@
 	<select id="getHardwareById" resultMap="HardwareMapper">
 		select * from hardware where id = #{param1}
 	</select> 
-		<select id="getHardwareByMac" resultMap="HardwareMapper">
+	<select id="getHardwareByMac" resultMap="HardwareMapper">
 		select * from hardware where mac = #{mac}
 	</select> 
+	
+	<select id="getHardwareByMacAndType" resultMap="HardwareMapper">
+		select * from hardware where mac = #{mac} and type= #{type}
+	</select> 
+	
 	<select id="getUnusedHardwares" resultMap="HardwareMapper">
 		select * from hardware where status = 1
 	</select> 

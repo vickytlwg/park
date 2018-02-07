@@ -1,4 +1,4 @@
-#set($layout = "loginlayout.vm")
+
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=c7A2jm3enN7T0s5V8QbDHx85"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>

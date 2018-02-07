@@ -193,6 +193,7 @@ public class ParkServiceImpl implements ParkService{
 	
 	public String deletePark(int Id){
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		if(parkDAO.deletePark(Id) > 0){
 			map.put("status", "1001");
 			map.put("message", "delete success");

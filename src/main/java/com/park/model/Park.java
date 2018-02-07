@@ -13,7 +13,7 @@ public class Park {
 	private int portCount;
 	private int channelCount;
 	private int portLeftCount;
-	private Integer feeCriterionId=-1;
+	private Integer feeCriterionId=38;
 
 	private int status;
 	private int isFree;
