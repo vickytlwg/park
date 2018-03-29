@@ -178,6 +178,10 @@ public class PosChargeData {
 		this.entranceDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(entranceDate);
 	}
 	
+	public void setEntranceDate1(Date entranceDate) throws ParseException {
+		this.entranceDate =entranceDate;
+	}
+	
 	public Date getExitDate() {
 		return exitDate;
 	}

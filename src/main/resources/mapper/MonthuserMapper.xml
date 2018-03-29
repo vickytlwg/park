@@ -191,6 +191,12 @@
   <select id="getByCardNumber" resultType="com.park.model.Monthuser">
   	select * from monthUser where plateNumber = #{cardNumber}
   </select>
+  <select id="getByUserNameAndParkAndPort" resultType="com.park.model.Monthuser">
+  	select * from monthUser where owner=#{username} and parkId=#{parkId} and cardNumber=#{portNumber}
+  </select>
+   <select id="getByParkAndPort" resultType="com.park.model.Monthuser">
+  	select * from monthUser where parkId=#{parkId} and cardNumber=#{portNumber}
+  </select>
    <select id="getByPlateNumber" resultType="com.park.model.Monthuser">
   		select monthUser.id as id,monthUser.parkid as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,

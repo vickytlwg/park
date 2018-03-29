@@ -105,4 +105,16 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getByCarnumberAndPark(carnumber, parkId);
 	}
 
+	@Override
+	public List<Monthuser> getByUserNameAndParkAndPort(String username, int parkId, String portNumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByUserNameAndParkAndPort(username, parkId, portNumber);
+	}
+
+	@Override
+	public List<Monthuser> getByParkAndPort(int parkId, String portNumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByParkAndPort(parkId, portNumber);
+	}
+
 }

@@ -69,7 +69,7 @@ public class HardwareSerivceImpl implements HardwareService{
 		//if(checkHardwareExist(hardware.getMac()))
 		//	return 0;
 		List<Hardware> hardwares=getHardwareByMacAndType(hardware.getMac(), hardware.getType());
-		if (hardwares.isEmpty()) {
+		if (!hardwares.isEmpty()) {
 			return 0;
 		}
 		return hardwareDAO.insertHardware(hardware);

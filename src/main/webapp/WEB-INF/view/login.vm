@@ -6,6 +6,8 @@
     <meta name="viewport"
     content="width=device-width, initial-scale=1">
     <title> 登录 </title>
+	<link rel="shortcut icon" href="/park/img/logo-ninebit.png">
+	<link rel="Bookmark" href="/park/img/logo-ninebit.png">
     <link rel="stylesheet" href="/park/css/amazeui.min.css">
     <link rel="stylesheet" href="/park/css/loginmain.css">
 </head>

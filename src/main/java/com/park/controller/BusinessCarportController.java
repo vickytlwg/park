@@ -89,7 +89,17 @@ public class BusinessCarportController {
 				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
 		}
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
 
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}}
 		return "businessCarportAngular";
 	} 
 	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {

@@ -37,13 +37,13 @@
 										<th><span style="padding-left:15%">车位编号</span></th>
 										<th><span style="padding-left:15%">MAC</span></th>
 										<th><span style="padding-left:15%">状态</span></th>
-										<th><span style="padding-left:15%">在停车辆</span></th>
-										<th><span style="padding-left:15%">使用率</span></th>
+										<th><span style="padding-left:15%">违停车辆</span></th>
+										<th><span style="padding-left:15%">电量</span></th>
 										<th><span style="padding-left:15%">应收费用</span></th>
 										<th><span style="padding-left:15%">实际收费</span></th>
 										<th><span style="padding-left:15%">地磁计费</span></th>
 										<th><span style="padding-left:15%">位置</span></th>
-										<th><span style="padding-left:15%">描述</span></th>
+										<th><span style="padding-left:15%">消防通道占用</span></th>
 										<th><span style="padding-left:15%">日期</span></th>	
 					            </tr>
 					          <tbody id="businessCarportBody"></tbody>

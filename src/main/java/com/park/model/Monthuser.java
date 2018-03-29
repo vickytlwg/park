@@ -23,9 +23,9 @@ public class Monthuser {
 
     private String platecolor;
 
-    private String certificatetype;
+    private String certificatetype="";
 
-    private String certificatenumber;
+    private String certificatenumber="";
 
     private Date starttime;
 

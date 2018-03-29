@@ -429,6 +429,7 @@
 //		$('select#streetid').val('number:'+$(tds[15]).text());
 		$('input#number').val(checkedTr.attr('number'));
 		$('input#contact').val(checkedTr.attr('contact'));
+		$('input#description').val(checkedTr.attr('description'));
 	};
 	
 
@@ -508,6 +509,7 @@
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
 		parkFields['mapAddr'] = $('input#mapAddr').val();
+		parkFields['description'] = $('input#description').val();
 		parkFields['date'] = (new Date()).format('yyyy-MM-dd hh:mm:ss');
 		return parkFields;
 
@@ -618,7 +620,7 @@
 			tr.attr('number', data[i]['number']);
 			tr.attr('pictureUri', data[i]['pictureUri']);
 			tr.attr('position', data[i]['position']);
-			
+			tr.attr('description', data[i]['description']);
 			var type='';
 			if(data[i]['type'] == 0)
 				type='室内';
