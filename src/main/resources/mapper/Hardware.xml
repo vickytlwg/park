@@ -53,7 +53,7 @@
 	</select>
 	
 	<select id="macToId" resultType="int">
-		select id from hardware where mac = #{param1}
+		select id from hardware where mac = #{mac}
 	</select>
 	<select id="macToType" resultType="int">
 	SELECT type FROM hardware WHERE mac = #{mac}

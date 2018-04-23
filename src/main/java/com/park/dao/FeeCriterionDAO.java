@@ -2,6 +2,7 @@ package com.park.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.FeeCriterion;
@@ -18,5 +19,7 @@ public interface FeeCriterionDAO {
 	public int delete(int id);
 
 	public FeeCriterion getById(Integer id);
+	
+	List<FeeCriterion> getByKeyWords(@Param("keywords")String keywords);
 
 }

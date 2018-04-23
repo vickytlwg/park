@@ -99,6 +99,7 @@
 		<mvc:exclude-mapping path="/test1/**"/>	
 		<mvc:exclude-mapping path="/parkmap/"/>	
 		<mvc:exclude-mapping path="/SmartParkComm/**"/>	
+		<mvc:exclude-mapping path="/barrierCharge/**"/>	
 		<bean class="com.park.interceptor.loginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

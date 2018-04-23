@@ -140,7 +140,8 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 
 	@Override
 	public int updateBusinessCarportStatus(String mac, int status,Boolean isPush) throws InterruptedException {
-		int macId = hardwareDAO.macToId(mac);
+		System.out.println(mac);
+		int macId = hardwareService.macToId(mac);
 		Hardware hardware = hardwareDAO.getHardwareById(macId);
 		if(hardware.getStatus() == Status.UNUSED.getValue()){
 		//	logger.info("hardware is unused" );

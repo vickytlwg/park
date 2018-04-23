@@ -1,6 +1,6 @@
 <script src="/park/script/service/textModalService.js"></script>
 
-<script src="/park/script/feeCriterion.js?v=1.0"></script>
+<script src="/park/script/feeCriterion.js?v=1.1"></script>
 
 
 
@@ -28,6 +28,26 @@
 		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除收费标准</button>
 		                	</div>
                 	
+				<div class="pull-right" style="width:300px">
+	                	<div class="input-group">	
+						<div class="row">
+                          <div class="col-md-3 " >
+							<label style="float:right;padding-top:6px" >检索</label>
+                          </div>
+						  <div class="col-md-9">
+							 
+			               <input type="text" class="form-control" ng-model="criterion.searchKeywords" ng-keyup="criterion.myKeyup($event)">
+			               <span class="input-group-btn">
+			                  <button  class="btn btn-default" ng-click="criterion.search()" type="button" style="display:none" id="searchButton">	                    
+			                  </button>
+			               </span>
+						   
+                          </div>
+                           
+						     </div>
+			            </div><!-- /input-group -->	
+	                	</div>
+							
 	                	<br/>   
 	                    <br/> 
 						<div>

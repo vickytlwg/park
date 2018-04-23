@@ -287,4 +287,7 @@
       other = #{other,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getByKeyWords" resultMap="BaseResultMap" >
+  	select * from feeCriterion where name like '%${keywords}%'
+  </select>
 </mapper>

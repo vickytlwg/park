@@ -1,5 +1,7 @@
 package com.park.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,16 @@ public class FeeCriterionController {
 		List<FeeCriterion> criterions = criterionService.get();
 		return Utility.createJsonMsg(1001, "success", criterions);
 	}
-
+	
+	@RequestMapping(value = "/searchByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String searchByKeywords(@RequestBody Map<String, Object> args){
+		String keywords=(String) args.get("keywords");
+		if (keywords==null) {
+			return null;
+		}
+		List<FeeCriterion> criterions = criterionService.getByKeyWords(keywords);
+		return Utility.createJsonMsg(1001, "success", criterions);
+	}
 	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String insert(@RequestBody FeeCriterion criterion){

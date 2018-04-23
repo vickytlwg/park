@@ -48,7 +48,29 @@ function($scope, $http, textModal, $uibModal, $timeout) {
             textModal.open($scope, "失败", "操作失败");
         });
     };
-
+    $scope.criterion.search = function() {
+        $http({
+            url : '/park/fee/criterion/searchByKeywords',
+            method:"post",
+            data:{'keywords':$scope.criterion.searchKeywords}
+        }).success(function(response) {
+            if (response.status == 1001) {
+              $scope.criterion.items=response.body;
+            } else {
+                
+            }
+        }).error(function() {
+            
+        });
+    };
+    $scope.criterion.myKeyup = function(e){
+        var keycode = window.event?e.keyCode:e.which; 
+        
+        if(keycode==13){
+            alert("test");
+       $scope.criterion.search();
+        }
+    };
     $scope.criterion.insert = function() {
         $uibModal.open({
             templateUrl : 'modifyFeeCriterion',
@@ -134,7 +156,6 @@ chargeApp.controller('modifyCrtl', function($scope, $modalInstance, $http, $time
 
     $scope.submit = function() {
         $scope.loading = true;
-
         delete $scope.tempCriterion['checked'];
         $http.post(url, $scope.tempCriterion).success(function(response) {
             $scope.loading = false;

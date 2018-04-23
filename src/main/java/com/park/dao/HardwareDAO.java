@@ -26,7 +26,7 @@ public interface HardwareDAO {
 	
 	public int getHardwareCount();
 	
-	public int macToId(String mac);
+	public int macToId(@Param("mac")String mac);
 	public int macToType(@Param("mac")String mac);
 	
 	public List<HardwareDetail> getHardwareDetail(@Param("low")int low, @Param("count")int count);

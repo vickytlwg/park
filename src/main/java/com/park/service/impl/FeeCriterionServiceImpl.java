@@ -41,6 +41,12 @@ public class FeeCriterionServiceImpl implements FeeCriterionService{
 	public FeeCriterion getById(Integer criterionId) {
 		return criterionDAO.getById(criterionId);
 	}
+
+	@Override
+	public List<FeeCriterion> getByKeyWords(String keyWords) {
+		// TODO Auto-generated method stub
+		return criterionDAO.getByKeyWords(keyWords);
+	}
 	
 	
 

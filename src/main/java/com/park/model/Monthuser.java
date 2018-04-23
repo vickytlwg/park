@@ -140,7 +140,9 @@ public class Monthuser {
     public void setEndtime(String endtime) throws ParseException {
         this.endtime = new SimpleDateFormat(Constants.DATEFORMAT).parse(endtime);
     }
-
+    public void setEndtime1(Date endtime){
+    	this.endtime=endtime;
+    }
     public Float getPayment() {
         return payment;
     }

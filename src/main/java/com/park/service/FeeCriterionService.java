@@ -3,7 +3,6 @@ package com.park.service;
 import java.util.List;
 
 import com.park.model.FeeCriterion;
-
 public interface FeeCriterionService {
 
 	List<FeeCriterion> get();
@@ -15,5 +14,6 @@ public interface FeeCriterionService {
 	int delete(int id);
 
 	FeeCriterion getById(Integer criterionId);
-
+	
+	List<FeeCriterion> getByKeyWords(String keyWords);
 }

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -317,6 +318,45 @@ public class PosChargeDataController {
 			retMap.put("body", posChargeDatas);
 		}
 		return Utility.gson.toJson(retMap);
+	}
+	
+	@RequestMapping(value="/getParkChargeByRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getParkChargeByRange(@RequestBody Map<String, Object> args){
+		int parkId=Integer.parseInt((String)args.get("parkId"));
+		String startDay=(String)args.get("startDay");
+		String endDay=(String)args.get("endDay");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		Date parsedEndDay  = null;
+		try {
+			parsedEndDay = sdf.parse(endDay + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}	
+		
+		Calendar start =Calendar.getInstance(); 
+		start.setTime(parsedStartDay);
+		Long startTime = start.getTimeInMillis();
+		Calendar end = Calendar.getInstance();
+		end.setTime(parsedEndDay);
+		Long endTime = end.getTimeInMillis();
+		Long oneDay = 1000 * 60 * 60 * 24l;
+		Long time = startTime;  
+		Map<Long, Object> comparemap=new TreeMap<>();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		  while (time <= endTime) {  
+		        Date d = new Date(time);            
+		        Map<String, Object> posChargeDatas = chargeSerivce.getParkChargeCountByDay(parkId, df.format(d));
+		        comparemap.put(d.getTime(), posChargeDatas);
+		        time += oneDay;  
+		    }     
+		return  Utility.gson.toJson(comparemap);
 	}
 
 	@RequestMapping(value = "getByCardnumber", method = RequestMethod.POST, produces = {
