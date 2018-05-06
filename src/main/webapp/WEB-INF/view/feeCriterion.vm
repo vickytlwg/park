@@ -1,8 +1,17 @@
 <script src="/park/script/service/textModalService.js"></script>
-
+<script src="/park/script/tm.pagination.js"></script>
 <script src="/park/script/feeCriterion.js?v=1.1"></script>
 
-
+<style>
+        .page-list .pagination {float:left;}
+        .page-list .pagination span {cursor: pointer;}
+        .page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
+        .page-list .pagination .separate span:hover {background: none;}
+        .page-list .page-total {float:left; margin: 25px 20px;}
+        .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
+        .page-list .page-total input {width: 40px; padding-left:3px;}
+        .page-list .page-total select {width: 50px;}
+</style>
 
 <div class="content-wrapper" ng-app="feeCriterionApp" ng-controller="feeCriterionCtrl">
 	<section class="content-header">
@@ -57,7 +66,7 @@
 									<th><span >Id</div></th>		
 									<th><span>名称</div></th>
 									<th><span >免费时段/分</div></th>
-									<th><span >阶段1范围/分</div></th>
+						<!--		<th><span >阶段1范围/分</div></th>
 									<th><span >阶段2范围/分</div></th>
 									<th><span >计费单位 /分</div></th>
 									<th><span >计费单位2 /分</div></th>
@@ -66,11 +75,11 @@
 									<th><span >阶段3小车计费标准/元</div></th>
 									<th><span >阶段1大车计费标准/元</div></th>
 									<th><span >阶段2大车计费标准/元</div></th>
-									<th><span >阶段3大车计费标准/元</div></th>
+									<th><span >阶段3大车计费标准/元</div></th> 	
 									<th><span>最高收费/元</div></th>
 									<th><span>夜间时段</div></th>
 									<th><span>是否按次收费</div></th>
-									<th><span>价格/次</div></th>
+									<th><span>价格/次</div></th> -->
 									<th><span>收费说明</div></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
@@ -79,7 +88,7 @@
 				          		<td ng-bind="item.id"></td>
 				          		<td ng-bind="item.name"></td>
 				          		<td ng-bind="item.freemins"></td>
-				          		<td ng-bind="item.step1capacity"></td>
+				          		<!--	<td ng-bind="item.step1capacity"></td>
 				          		<td ng-bind="item.step2capacity"></td>
 								<td ng-bind="item.timeoutpriceinterval"></td>
 								<td ng-bind="item.timeoutpriceinterval2"></td>
@@ -88,17 +97,22 @@
 								<td ng-bind="item.step3price"></td>
 				          		<td ng-bind="item.step1pricelarge"></td>
 				          		<td ng-bind="item.step2pricelarge"></td>
-								<td ng-bind="item.step3pricelarge"></td>
+								<td ng-bind="item.step3pricelarge"></td>	
 				          		<td ng-bind="item.maxexpense"></td>
 				          		<td ng-bind="item.nightstarttime + '--' + item.nightendtime"></td>
 				          		<td>
 				          			<span ng-if="item.isonetimeexpense == 0">否</span>
 				          			<span ng-if="item.isonetimeexpense == 1">是</span>
 				          		</td>
-				          		<td ng-bind="item.onetimeexpense"></td>
-								<td ng-bind="item.explaination|limitTo:45"></td>
+				          		<td ng-bind="item.onetimeexpense"></td>  -->
+								<td ng-bind="item.explaination|limitTo:85"></td>
 				          </table>
+						  
     					</div>
+						
+							<tm-pagination conf="paginationConf"></tm-pagination>
+                       
+						
     				</div>
 
 <script  type="text/ng-template" id="modifyFeeCriterion">

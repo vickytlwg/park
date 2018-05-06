@@ -1,10 +1,10 @@
-var feeOperatorApp=angular.module("feeOperatorApp",['ui.bootstrap']);
+var feeOperatorApp=angular.module("feeOperatorApp",['ui.bootstrap','tm.pagination']);
 feeOperatorApp.controller("feeOperatorCtrl",['$scope', '$http','$modal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
     $scope.feeOperatores=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
-    $scope.count=50;
+    $scope.count=100;
     $scope.refreshFeeOperator=function(){
         $http({
             url:'/park/feeOperator/getByStartAndCount',
@@ -12,7 +12,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
             if(response.status==1001){
-                $scope.feeOperatores=response.body;
+                 getInitail(response.body);
             }
             else{
                textModal.open($scope,"错误","数据请求失败");
@@ -20,6 +20,31 @@ function($scope,$http,$uibModal,textModal,$timeout){
         }).error(function(){
                textModal.open($scope,"错误","数据请求失败");
         });
+    };
+      $scope.paginationConf = {
+        currentPage : 1,
+        totalItems : 500,
+        itemsPerPage : 30,
+        pagesLength : 10,
+        perPageOptions : [20, 30, 40, 50],
+        rememberPerPage : 'perPageItems',
+        onChange : function() {
+            getInitail($scope.pagedata);
+        }
+    };
+    $scope.pagedata = [];
+    $scope.currentData=[];
+    var getInitail = function(data) {
+        $scope.pagedata = data;
+        $scope.paginationConf.totalItems = data.length;
+       
+          $scope.currentData=[];
+        var start = ($scope.paginationConf.currentPage - 1) * $scope.paginationConf.itemsPerPage;
+        for (var i = 0; i < $scope.paginationConf.itemsPerPage; i++) {
+            if(data.length>(start + i))
+            $scope.currentData[i] = data[start + i];
+        };
+        $scope.feeOperatores = $scope.currentData;
     };
     $scope.searchByNameAndPhoneParkName=function(){
         if ($scope.searchText==""||$scope.searchText==undefined) {
@@ -32,7 +57,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             data:{name:$scope.searchText,phone:$scope.searchText,parkName:$scope.searchText}
         }).success(function(response){
             if(response.status==1001){
-                $scope.feeOperatores=response.body;
+                getInitail(response.body);
             }
             else{
                textModal.open($scope,"错误","数据请求失败");

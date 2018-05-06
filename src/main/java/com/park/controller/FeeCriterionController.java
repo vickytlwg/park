@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.util.Args;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import com.github.pagehelper.PageHelper;
 import com.park.model.AuthUser;
+import com.park.model.Page;
 import com.park.model.AuthUserRole;
 import com.park.model.FeeCriterion;
-import com.park.model.Page;
 import com.park.service.AuthorityService;
 import com.park.service.FeeCriterionService;
 import com.park.service.UserPagePermissionService;
@@ -63,11 +66,25 @@ public class FeeCriterionController {
 
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
-	public @ResponseBody String get(){
-		
+	public @ResponseBody String get(){		
 		List<FeeCriterion> criterions = criterionService.get();
 		return Utility.createJsonMsg(1001, "success", criterions);
 	}
+	@RequestMapping(value = "/getCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String getCount(){		
+		List<FeeCriterion> criterions = criterionService.get();
+		return Utility.createJsonMsg(1001, "success", criterions.size());
+	}
+	@RequestMapping(value = "/getByPage", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	public @ResponseBody String getByPage(@RequestBody Map<String, Object> args){
+		int start=(int) args.get("start");
+		int count=(int) args.get("count");
+		PageHelper.startPage(start,count);
+		List<FeeCriterion> criterions = criterionService.get();
+	//	long totalCount=pageinfo.getTotal();
+		return Utility.createJsonMsg(1001, "success", criterions);
+	}
+	
 	
 	@RequestMapping(value = "/searchByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public @ResponseBody String searchByKeywords(@RequestBody Map<String, Object> args){

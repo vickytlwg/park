@@ -222,7 +222,13 @@ public class PosChargeDataController {
 		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
 		// List<Park> outsideparks = new ArrayList<>();
-
+//		List<Park> outsideparks = new ArrayList<>();
+//		for (Park park : parkList) {
+//			if (park.getType() == 3) {
+//				outsideparks.add(park);
+//			}
+//		}
+//		modelMap.addAttribute("parks", outsideparks);
 		modelMap.addAttribute("parks", parkList);
 		if (user != null) {
 			modelMap.addAttribute("user", user);

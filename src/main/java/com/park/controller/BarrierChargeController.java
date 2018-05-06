@@ -1,6 +1,7 @@
 package com.park.controller;
 
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -133,8 +134,8 @@ public class BarrierChargeController {
 
 	@RequestMapping(value = "touchtest", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public String touchtest(){
-		return "ok";
+	public String touchtest(@RequestBody String aString){
+		return aString;
 	}
 	@RequestMapping(value = "touched", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
@@ -479,6 +480,9 @@ public class BarrierChargeController {
 					// posChargeData.setPayType(9);
 					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 					posChargeData.setUnPaidMoney(0);
+					if (posChargeData.getExitDate()==null) {
+						posChargeData.setExitDate1(new Date());
+					}
 					posChargeData.setOperatorId("道闸15min");
 					chargeSerivce.update(posChargeData);
 					//发送到队列
@@ -535,6 +539,9 @@ public class BarrierChargeController {
 						chargeSerivce.update(posChargeData);
 					}
 				}
+//				if (payRet.getExitDate()==null) {
+//					payRet.setExitDate1(new Date());
+//				}
 				num = chargeSerivce.update(payRet);
 			}
 			else {

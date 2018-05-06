@@ -1,4 +1,4 @@
-var chargeApp = angular.module("feeCriterionApp", ['ui.bootstrap']);
+var chargeApp = angular.module("feeCriterionApp", ['ui.bootstrap','tm.pagination']);
 chargeApp.controller("feeCriterionCtrl", ['$scope', '$http', 'textModal', '$modal', '$timeout',
 function($scope, $http, textModal, $uibModal, $timeout) {
     $scope.criterion = {
@@ -32,22 +32,22 @@ function($scope, $http, textModal, $uibModal, $timeout) {
                 textModal.open($scope, "成功", "操作成功");
             else
                 textModal.open($scope, "失败", "操作失败");
-            $scope.criterion.refresh();
+           $scope.criterion.refreshStaffPage();
         }).error(function(response) {
             textModal.open($scope, "失败", "操作失败");
         });
     };
 
-    $scope.criterion.refresh = function() {
-        $http.get('get').success(function(response) {
-            if (response.status == 1001)
-                $scope.criterion.items = response.body;
-            else
-                textModal.open($scope, "失败", "操作失败");
-        }).error(function(response) {
-            textModal.open($scope, "失败", "操作失败");
-        });
-    };
+    // $scope.criterion.refresh = function() {
+        // $http.get('get').success(function(response) {
+            // if (response.status == 1001)
+                // $scope.criterion.items = response.body;
+            // else
+                // textModal.open($scope, "失败", "操作失败");
+        // }).error(function(response) {
+            // textModal.open($scope, "失败", "操作失败");
+        // });
+    // };
     $scope.criterion.search = function() {
         $http({
             url : '/park/fee/criterion/searchByKeywords',
@@ -63,11 +63,40 @@ function($scope, $http, textModal, $uibModal, $timeout) {
             
         });
     };
+        $scope.paginationConf = {
+            currentPage: 1,
+            totalItems: 800,
+            itemsPerPage: 10,
+            pagesLength: 10,
+            perPageOptions: [10, 20, 30, 40, 50],
+            rememberPerPage: 'perPageItems',
+            onChange: function(){
+                
+            }
+        };
+        $scope.getCounts=function(){
+            $http.get('getCount').success(function(response) {
+                 if (response.status == 1001) {
+                    $scope.paginationConf.totalItems=response.body; 
+                 }
+                
+            });
+        };      
+        $scope.criterion.refreshStaffPage=function(){
+             $scope.getCounts();
+            var data={start:$scope.paginationConf.currentPage,count:$scope.paginationConf.itemsPerPage};
+             $http({
+                url:'/park/fee/criterion/getByPage',
+                method:'post',
+                data:angular.toJson(data)
+             }).success(function(response){
+                  $scope.criterion.items = response.body;
+             });
+        };
+     $scope.$watch('paginationConf',function(){$scope.criterion.refreshStaffPage();},true); 
     $scope.criterion.myKeyup = function(e){
-        var keycode = window.event?e.keyCode:e.which; 
-        
+        var keycode = window.event?e.keyCode:e.which;        
         if(keycode==13){
-            alert("test");
        $scope.criterion.search();
         }
     };
@@ -129,7 +158,7 @@ function($scope, $http, textModal, $uibModal, $timeout) {
         });
     };
 
-    $scope.criterion.refresh();
+    $scope.criterion.refreshStaffPage();
 
 }]);
 

@@ -4,7 +4,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.users=[];
     $scope.checkedIndex=-1;
     $scope.start=0;
-    $scope.count=200;
+    $scope.count=900;
      $scope.parks=[];
     $scope.getParks=function(){
         $http({
@@ -23,6 +23,31 @@ function($scope,$http,$uibModal,textModal,$timeout){
         });
     };
     $scope.getParks();
+    $scope.paginationConf = {
+        currentPage : 1,
+        totalItems : 500,
+        itemsPerPage : 30,
+        pagesLength : 10,
+        perPageOptions : [20, 30, 40, 50],
+        rememberPerPage : 'perPageItems',
+        onChange : function() {
+            getInitail($scope.pagedata);
+        }
+    };
+    $scope.pagedata = [];
+    $scope.currentData=[];
+    var getInitail = function(data) {
+        $scope.pagedata = data;
+        $scope.paginationConf.totalItems = data.length;
+       
+          $scope.currentData=[];
+        var start = ($scope.paginationConf.currentPage - 1) * $scope.paginationConf.itemsPerPage;
+        for (var i = 0; i < $scope.paginationConf.itemsPerPage; i++) {
+            if(data.length>(start + i))
+            $scope.currentData[i] = data[start + i];
+        };
+        $scope.users = $scope.currentData;
+    };
     $scope.selectChanged=function(selectedParkId){
           
               var data={};
@@ -35,7 +60,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             data:angular.toJson(data)
         }).success(function(response){
             if(response.status==1001){
-                $scope.users=response.body;
+               getInitail(response.body);
             }
             else{
                textModal.open($scope,"错误","数据请求失败");
@@ -52,7 +77,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
             params:{start:$scope.start,count:$scope.count}
         }).success(function(response){
             if(response.status==1001){
-                $scope.users=response.body;
+               getInitail(response.body);
             }
             else{
                textModal.open($scope,"错误","数据请求失败");

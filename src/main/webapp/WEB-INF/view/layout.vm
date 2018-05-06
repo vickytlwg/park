@@ -36,7 +36,7 @@
     <script src="/park/script/layout.js"></script>
 
     <script src="/park/dist/js/demo.js"></script> 
-
+	
     <script src="/park/plugins/angular/angular.min.js"></script>
    	<script src="/park/plugins/angular/angular-animate.min.js"></script>
     <script src="/park/plugins/angular/angular-cookies.min.js"></script>
@@ -50,6 +50,7 @@
     <script src="/park/script/clickjs.js"></script>
     <script src="/park/script/jquery.shCircleLoader-min.js"></script>
     <script src="/park/script/jquery.json-2.4.min.js"></script>
+	<script src="/park/script/tm.pagination.js"></script>	
 	<style >
 
 		.skin-blue .sidebar-menu>li.header {

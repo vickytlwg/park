@@ -1,4 +1,4 @@
-var chargeApp = angular.module("feeDetailApp", ['ui.bootstrap']);
+var chargeApp = angular.module("feeDetailApp", ['ui.bootstrap','tm.pagination']);
 
 chargeApp.controller("feeDetailCtrl", ['$scope', '$http', '$window','textModal', 'textModalTest','$modal', '$timeout',
 function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
@@ -35,6 +35,31 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         });
     };  
    dateInitial();
+
+     $scope.paginationConf = {
+        currentPage : 1,
+        totalItems : 500,
+        itemsPerPage : 20,
+        pagesLength : 10,
+        perPageOptions : [20, 30, 40, 50],
+        rememberPerPage : 'perPageItems',
+        onChange : function() {
+            getInitail($scope.pagedata);
+        }
+    };
+    $scope.pagedata = [];
+    $scope.currentData=[];
+    var getInitail = function(data) {
+        $scope.pagedata = data;
+        $scope.paginationConf.totalItems = data.length;      
+        $scope.currentData=[];
+        var start = ($scope.paginationConf.currentPage - 1) * $scope.paginationConf.itemsPerPage;
+        for (var i = 0; i < $scope.paginationConf.itemsPerPage; i++) {
+            if(data.length>(start + i))
+            $scope.currentData[i] = data[start + i];
+        };
+         $scope.detail.items = $scope.currentData;
+    };
 
     $scope.detail.getCount = function() {
         $http.get('count').success(function(response) {
@@ -90,7 +115,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             data:{"cardNumber":$scope.searchText}
         }).success(function(response){
             if(response.status==1001){
-                $scope.detail.items=response.body;
+                getInitail(response.body);
             }
         });
     };
@@ -117,7 +142,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             data:{"parkName":$scope.searchParkNameText}
         }).success(function(response){
             if(response.status==1001){
-                $scope.detail.items=response.body;
+               getInitail(response.body);
             }
         });
     };
@@ -165,15 +190,15 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         };
 
           $http.post('pageByParkId', {
-            start : ($scope.detail.page.index - 1) * $scope.detail.page.size,
-            count : $scope.detail.page.size,
+            start : 0,
+            count : 1000,
             parkId: parseInt($scope.selectedPark.value)
         }).success(function(response) {
             $scope.detail.loading = false;
 
             if (response.status == 1001) {
                 $scope.detail.items = [];
-                $scope.detail.items = response.body;
+                getInitail(response.body);
             } else
                 textModal.open($scope, "错误", "获取计费信息错误:" + response.status);
 
@@ -185,7 +210,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
     };
 
     //init page
-    $scope.detail.getCount();
+   // $scope.detail.getCount();
     $scope.detail.refresh = $scope.detail.getPage;
     $scope.detail.getPage();
 

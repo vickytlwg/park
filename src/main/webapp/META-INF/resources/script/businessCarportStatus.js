@@ -1,4 +1,4 @@
-var businessCarportApp = angular.module('businessCarportStatusApp', []);
+var businessCarportApp = angular.module('businessCarportStatusApp', ['ui.bootstrap','tm.pagination']);
 businessCarportApp.controller('businessCarportStatusCtrl', ['$scope', '$http', '$timeout','$interval',
 function($scope, $http, $timeout,$interval) {
     $scope.carportDetails = [];
@@ -26,10 +26,36 @@ function($scope, $http, $timeout,$interval) {
         $scope.refreshData();
     };
     
+     $scope.paginationConf = {
+        currentPage : 1,
+        totalItems : 500,
+        itemsPerPage : 30,
+        pagesLength : 10,
+        perPageOptions : [20, 30, 40, 50],
+        rememberPerPage : 'perPageItems',
+        onChange : function() {
+            getInitail($scope.pagedata);
+        }
+    };
+    $scope.pagedata = [];
+    $scope.currentData=[];
+    var getInitail = function(data) {
+        $scope.pagedata = data;
+        $scope.paginationConf.totalItems = data.length;
+       
+          $scope.currentData=[];
+        var start = ($scope.paginationConf.currentPage - 1) * $scope.paginationConf.itemsPerPage;
+        for (var i = 0; i < $scope.paginationConf.itemsPerPage; i++) {
+            if(data.length>(start + i))
+            $scope.currentData[i] = data[start + i];
+        };
+        $scope.carportStatuses = $scope.currentData;
+    };
+    
     $scope.refreshData = function() {     
         $http.get('getBusinessCarportStatusByParkId/'+$scope.selectValue.id).success(function(response) {
             if (response.status == 1001) {
-                $scope.carportStatuses = response.body;
+                getInitail(response.body);
             }
         });
         
@@ -50,7 +76,7 @@ function($scope, $http, $timeout,$interval) {
         console.log($scope.checked);
            var getdata=$http({
             method:'get',
-            url:'http://120.25.159.154/park/getBusinessCarportDetail',
+            url:'http://120.25.153.123/park/getBusinessCarportDetail',
             headers:{"token":"6f13b8f3-cc3f-4e2a-a5b4-01b9cf6b40ca-1458491724564"},
             params:{low:0,count:50,parkId:109}
           }).success(function(data){

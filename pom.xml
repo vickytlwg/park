@@ -266,6 +266,12 @@
 			<version>4.4</version>
 		</dependency>
 
+		<!-- mybatis helper -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>4.1.4</version>
+		</dependency>
 		<!-- 七牛 -->
 		<dependency>
 			<groupId>com.qiniu</groupId>
@@ -350,7 +356,7 @@
 
 
 
-	
+
 		<!-- https://mvnrepository.com/artifact/org.apache.activemq/artemis-jms-client -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>

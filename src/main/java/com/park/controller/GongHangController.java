@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +34,12 @@ public class GongHangController extends BaseApiService{
 	MonthUserService monthUserservice;
 	@Autowired
 	ParkService parkService;
-	
+	private static Log logger = LogFactory.getLog(GongHangController.class);
 	@RequestMapping(value = "queryOrderTemp", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String queryOrderTemp(@RequestBody Map<String, String> args) {
+		logger.info("工行queryOrderTemp"+args.toString());
 		String plateNo = args.get("plateNo");
 		String plateColor = args.get("plateColor");
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -67,6 +70,7 @@ public class GongHangController extends BaseApiService{
 		data.put("orderId", String.valueOf(posChargeData.getId()));
 		data.put("plateNo", plateNo);
 		data.put("plateColor", plateColor);
+		data.put("parkCode", String.valueOf(posChargeData.getParkId()));
 		data.put("startTime", new SimpleDateFormat("yyyyMMddHHmmss").format(posChargeData.getEntranceDate()));
 		double dd = (new Date().getTime() - posChargeData.getEntranceDate().getTime()) / 1000;
 		data.put("serviceTime", String.valueOf((int) dd));
@@ -79,6 +83,7 @@ public class GongHangController extends BaseApiService{
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String payOrderTemp(@RequestBody Map<String, String> args) {
+		logger.info("工行payOrderTemp"+args.toString());
 		String orderId = args.get("orderId");
 		String money = args.get("money");
 		String plateNo = args.get("plateNo");
@@ -92,7 +97,7 @@ public class GongHangController extends BaseApiService{
 		Chargedata.setPaidCompleted(true);
 		Chargedata.setOperatorId("工行");
 		Chargedata.setPayType(3);
-		Chargedata.setExitDate1(new Date());
+	//	Chargedata.setExitDate1(new Date());
 		Chargedata.setRejectReason(payTime);
 
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -109,6 +114,7 @@ public class GongHangController extends BaseApiService{
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String queryOrderLong(@RequestBody Map<String, String> args) {
+		logger.info("工行queryOrderLong"+args.toString());
 		String parkCode = args.get("parkCode");
 		String plateNo = args.get("plateNo");
 		String plateColor = args.get("plateColor");
@@ -131,6 +137,7 @@ public class GongHangController extends BaseApiService{
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String queryFeeLong(@RequestBody Map<String, Object> args) {
+		logger.info("工行queryFeeLong"+args.toString());
 		String parkCode = (String) args.get("parkCode");
 		String plateNo = (String) args.get("plateNo");
 		String plateColor = (String) args.get("plateColor");
@@ -152,6 +159,7 @@ public class GongHangController extends BaseApiService{
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String payOrderLong(@RequestBody Map<String, String> args) {
+		logger.info("工行payOrderLong"+args.toString());
 		String parkCode = args.get("parkCode");
 		String plateNo = args.get("plateNo");
 		String plateColor = args.get("plateColor");
@@ -167,7 +175,7 @@ public class GongHangController extends BaseApiService{
 			return Utility.gson.toJson(setResultError("无此包月用户"));
 		}
 		Monthuser monthuser=monthusers.get(0);
-		monthUserservice.updateByPrimaryKeySelective(monthuser);
+		
 		if (longType.equals("0")) {
 			days=days*30;
 			monthuser.setEndtime1(new Date(monthuser.getEndtime().getTime()+(long)1000*60*60*24*days));
@@ -175,7 +183,7 @@ public class GongHangController extends BaseApiService{
 		else {
 			monthuser.setEndtime1(new Date(monthuser.getEndtime().getTime()+(long)1000*60*60*24*30*days));
 		}
-	
+		monthUserservice.updateByPrimaryKeySelective(monthuser);
 		ret.put("beginDate",  new SimpleDateFormat("yyyyMMdd").format(new Date(monthuser.getStarttime().getTime())));
 		ret.put("endDate", new SimpleDateFormat("yyyyMMdd").format(monthuser.getEndtime()));
 		return Utility.gson.toJson(setResultSuccess(ret));
