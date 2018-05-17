@@ -1,4 +1,4 @@
-var pageApp = angular.module("pageApp", ['ui.bootstrap']);
+var pageApp = angular.module("pageApp", ['ui.bootstrap','tm.pagination']);
 
 pageApp.controller("pageCtrl", ['$scope', '$http',  'textModal', '$modal', '$timeout', function($scope, $http, textModal,$uibModal, $timeout){
 	
@@ -6,6 +6,32 @@ pageApp.controller("pageCtrl", ['$scope', '$http',  'textModal', '$modal', '$tim
 			items:[],
 			checkedIndex:-1
 	};
+	
+	 $scope.paginationConf = {
+        currentPage : 1,
+        totalItems : 500,
+        itemsPerPage : 20,
+        pagesLength : 10,
+        perPageOptions : [20, 30, 40, 50],
+        rememberPerPage : 'perPageItems',
+        onChange : function() {
+            getInitail($scope.pagedata);
+        }
+    };
+    $scope.pagedata = [];
+    $scope.currentData=[];
+    var getInitail = function(data) {
+        $scope.pagedata = data;
+        $scope.paginationConf.totalItems = data.length;      
+        $scope.currentData=[];
+        var start = ($scope.paginationConf.currentPage - 1) * $scope.paginationConf.itemsPerPage;
+        for (var i = 0; i < $scope.paginationConf.itemsPerPage; i++) {
+            if(data.length>(start + i))
+            $scope.currentData[i] = data[start + i];
+        };
+         $scope.page.items  = $scope.currentData;
+    };
+    
 	
 	$scope.page.checked = function(index){
 		if($scope.page.items[index].checked){
@@ -45,7 +71,7 @@ pageApp.controller("pageCtrl", ['$scope', '$http',  'textModal', '$modal', '$tim
 		$http.get('page/get')
 		.success(function(response){
 			if(response.status == 1001)
-				$scope.page.items = response.body;
+				getInitail(response.body);
 			else
 				textModal.open($scope, "失败","操作失败");
 		})

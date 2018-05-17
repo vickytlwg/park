@@ -1,8 +1,17 @@
 <script src="/park/script/service/textModalService.js"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<script src="/park/script/feeDetail.js"></script>
+<script src="/park/script/feeDetail.js?v=1.1"></script>
 <script src="/park/script/datepicker.js"></script>
-
+<style>
+        .page-list .pagination {float:left;}
+        .page-list .pagination span {cursor: pointer;}
+        .page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
+        .page-list .pagination .separate span:hover {background: none;}
+        .page-list .page-total {float:left; margin: 25px 20px;}
+        .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
+        .page-list .page-total input {width: 40px; padding-left:3px;}
+        .page-list .page-total select {width: 50px;}
+</style>
 <div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
 	<section class="content-header">
           <h1>
@@ -90,38 +99,8 @@
 								<td ng-if="item.url==''">暂无</td>
 				          </table>
     					</div>
-    					
-    			<div class="box-footer clearfix">
-                  <div ng-hide="detail.loading"><small ng-bind="'获取到' + detail.items.length + '/' + detail.page.allCounts + '条结果！'"> </small></div>
-                  <ul ng-hide="detail.page.hidden" class="pagination pagination-sm no-margin pull-right">
-                  <li ng-click='detail.firstPage()'>
-                    	<a href>第一页</a>
-                    </li>
-                    <li ng-click='detail.previousPage()'>
-                    	<a href>上一页</a>
-                    </li>
-                    <li >
-                    	<span style="display:inline; padding:0px; ">
-                    	  <div class="input-group" style="width:70px;">
-	                      	  <input type="text"  style="height:28px" name="table_search" class="form-control input-sm pull-right" ng-model="detail.page.index" >                     
-		                      <div  class="input-group-btn">
-		                        <button style="height:28px" class="btn btn-sm btn-default" ng-click="detail.getPage()"><i class="fa fa-chevron-right"></i></button>
-		                      </div>
-	                      </div>
-                    	</span>
-                    	
-                    </li>
-                    <li ng-click='detail.nextPage()'>
-                    	<a href>下一页</a>
-                    </li>
-                    <li ng-click='detail.lastPage()'>
-                    	<a href>最后页</a>
-                    </li>
-                   
-                  </ul>
-
-                </div>
-    				</div>
+    		<tm-pagination conf="paginationConf"></tm-pagination>			
+    			
 
 	            </div>
             </div>

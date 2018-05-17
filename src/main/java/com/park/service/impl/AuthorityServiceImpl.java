@@ -112,5 +112,12 @@ public class AuthorityServiceImpl implements AuthorityService{
 		return userParkDao.getOwnParkName(userId);
 	}
 
+
+	@Override
+	public List<AuthUser> getUsersByCount(int start, int count) {
+		// TODO Auto-generated method stub
+		return authDao.getUsersByCount(start, count);
+	}
+
 	
 }

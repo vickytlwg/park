@@ -59,6 +59,7 @@
  		hardware.mac as hardware_mac, businessCarport.status, businessCarport.floor, businessCarport.position, businessCarport.description, businessCarport.date from businessCarport 
  		left join park on businessCarport.parkId = park.Id  
  		left join hardware on businessCarport.macId = hardware.id 
+ 		order by businessCarport.carportNumber 
  		limit #{low}, #{count}
 		
 	</select>
@@ -69,6 +70,7 @@
  		left join park on businessCarport.parkId = park.Id  
  		left join hardware on businessCarport.macId = hardware.id 
  		where park.Id = #{parkId}
+ 		order by businessCarport.carportNumber 
  		limit #{low}, #{count}
 	</select>
 	

@@ -98,7 +98,8 @@ public class FormatTime
 	public static void main (String[] args) 
    { 
         FormatTime f = new FormatTime();
-        Map<String, String> env = f.format("2016-12-10 09:20:36","2016-12-12 12:59:36","20","7"); 
+        System.out.println("in....");
+        Map<String, String> env = f.format("2016-12-10 09:20:36","2016-12-15 12:59:36","24","0"); 
 		if(env == null)
 		{
 		    System.out.format("format error");

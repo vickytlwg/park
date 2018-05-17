@@ -16,6 +16,8 @@ public interface AuthorityService {
 	
 	public List<AuthUser> getUsers();
 	
+	public List<AuthUser> getUsersByCount(int start,int count);
+	
 	public String getUserPasswd(String username);
 	
 	public AuthUser getUser(String username);

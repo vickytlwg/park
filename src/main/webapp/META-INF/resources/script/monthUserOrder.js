@@ -1,4 +1,4 @@
-var monthUserApp=angular.module("monthUserApp",['ui.bootstrap']);
+var monthUserApp=angular.module("monthUserApp",['ui.bootstrap','tm.pagination']);
 monthUserApp.controller("monthUserCtrl",['$scope', '$http','$uibModal', 'textModal', '$timeout',
 function($scope,$http,$uibModal,textModal,$timeout){
     $scope.users=[];
@@ -26,7 +26,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
     $scope.paginationConf = {
         currentPage : 1,
         totalItems : 500,
-        itemsPerPage : 30,
+        itemsPerPage : 20,
         pagesLength : 10,
         perPageOptions : [20, 30, 40, 50],
         rememberPerPage : 'perPageItems',

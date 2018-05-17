@@ -20,6 +20,11 @@
 		select * from authUsers
 	</select>
 	
+	<select id="getUsersByCount" resultMap="AuthUserMapper">
+		select * from authUsers limit #{start},#{count}
+	</select>
+	
+	
 	<select id="getUserCount" resultType="int">
 		select count(*) from authUsers
 	</select>

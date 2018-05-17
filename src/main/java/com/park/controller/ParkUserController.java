@@ -101,7 +101,7 @@ public class ParkUserController {
 	@RequestMapping(value = "/getParkUserDetail", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String accessIndex(@RequestParam("low")int low, @RequestParam("count")int count){	
-		List<AuthUser> userList = authService.getUsers();
+		List<AuthUser> userList = authService.getUsersByCount(low, count);
 		List<AuthUserDetail> userDetail = new ArrayList<AuthUserDetail>();
 		for(AuthUser user : userList){
 			List<String> parkName = authService.getOwnUserParkName(user.getId());

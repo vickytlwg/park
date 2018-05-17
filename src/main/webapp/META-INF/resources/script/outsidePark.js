@@ -346,21 +346,33 @@
 	    $.each(data,function(index,authorityTmp){
 	        if(authorityTmp['channel']==1){
 	            $('#month1label').val(authorityTmp['id']);
-	            $('#month1').attr("checked",authorityTmp['month']);
-	            $('#typeA1').attr("checked",authorityTmp['typea']);
-	            $('#typeB1').attr("checked",authorityTmp['typeb']);
-	            $('#typeC1').attr("checked",authorityTmp['typec']);
-	            $('#typeD1').attr("checked",authorityTmp['typed']);
-	            $('#temporary1').attr("checked",authorityTmp['temporary']);
+	              $('#month1').removeProp("checked");
+	              $('#typeA1').removeProp("checked");
+	              $('#typeB1').removeProp("checked");
+	               $('#typeC1').removeProp("checked");
+                  $('#typeD1').removeProp("checked");
+                  $('#temporary1').removeProp("checked");
+	            $('#month1').prop("checked",authorityTmp['month']);
+	            $('#typeA1').prop("checked",authorityTmp['typea']);
+	            $('#typeB1').prop("checked",authorityTmp['typeb']);
+	            $('#typeC1').prop("checked",authorityTmp['typec']);
+	            $('#typeD1').prop("checked",authorityTmp['typed']);
+	            $('#temporary1').prop("checked",authorityTmp['temporary']);
 	        }
 	        else{
 	            $('#month0label').val(authorityTmp['id']);
-	            $('#month0').attr("checked",authorityTmp['month']);
-                $('#typeA0').attr("checked",authorityTmp['typea']);
-                $('#typeB0').attr("checked",authorityTmp['typeb']);
-                $('#typeC0').attr("checked",authorityTmp['typec']);
-                $('#typeD0').attr("checked",authorityTmp['typed']);
-                $('#temporary0').attr("checked",authorityTmp['temporary']);
+	            $('#month0').removeProp("checked");
+                  $('#typeA0').removeProp("checked");
+                  $('#typeB0').removeProp("checked");
+                   $('#typeC0').removeProp("checked");
+                  $('#typeD0').removeProp("checked");
+                  $('#temporary0').removeProp("checked");
+	            $('#month0').prop("checked",authorityTmp['month']);
+                $('#typeA0').prop("checked",authorityTmp['typea']);
+                $('#typeB0').prop("checked",authorityTmp['typeb']);
+                $('#typeC0').prop("checked",authorityTmp['typec']);
+                $('#typeD0').prop("checked",authorityTmp['typed']);
+                $('#temporary0').prop("checked",authorityTmp['temporary']);
 	        }
 	    });	    
 	};

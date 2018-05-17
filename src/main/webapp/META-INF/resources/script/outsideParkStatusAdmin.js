@@ -304,6 +304,23 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
         });
         return promise;
     };
+    
+     var getParkRecordsCountByRange = function(parkId, startDay, endDay) {
+        var deferred = $q.defer();
+        var promise = deferred.promise;
+        $http({
+            url : '/park/pos/getParkRecordsCountByRange',
+            method : 'post',
+            data : {
+                'parkId' : parkId,
+                'startDay' : startDay,
+                'endDay' : endDay
+            }
+        }).success(function(response) {
+            deferred.resolve(response);
+        });
+        return promise;
+    };
 
     var selectPosdataByParkAndRange = function(parkId, startDay, endDay) {
         var deferred = $q.defer();
@@ -351,6 +368,7 @@ angular.module("outsideParkStatusApp", ['ui.bootstrap']).controller("outsidePark
     };
     return {
         getParkChargeByRange : getParkChargeByRange,
+        getParkRecordsCountByRange:getParkRecordsCountByRange,
         selectPosdataByParkAndRange : selectPosdataByParkAndRange,
         getParkById : getParkById,
         getPosChargeDataByParkAndRange : getPosChargeDataByParkAndRange

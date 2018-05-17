@@ -142,11 +142,11 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	public int updateBusinessCarportStatus(String mac, int status,Boolean isPush) throws InterruptedException {
 		System.out.println(mac);
 		int macId = hardwareService.macToId(mac);
-		Hardware hardware = hardwareDAO.getHardwareById(macId);
-		if(hardware.getStatus() == Status.UNUSED.getValue()){
-		//	logger.info("hardware is unused" );
-			return 0;
-		}
+//		Hardware hardware = hardwareDAO.getHardwareById(macId);
+//		if(hardware.getStatus() == Status.UNUSED.getValue()){
+//		//	logger.info("hardware is unused" );
+//			return 0;
+//		}
 		
 //		if(hardware.getType() != HardwareType.CARPORT.getValue()){
 //			logger.info("hardware is not bound to carport");
@@ -162,7 +162,12 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 			for (Pos pos : poses) {
 				audiences.add(pos.getNum());			
 			}
-			Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
+			try {
+				Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		
 		}
 		
 		

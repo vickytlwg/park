@@ -2,6 +2,7 @@ package com.park.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.AuthUser;
@@ -10,6 +11,8 @@ import com.park.model.AuthUser;
 public interface AuthorityDAO {
 	
 	public List<AuthUser> getUsers();
+	
+	public List<AuthUser> getUsersByCount(@Param("start")int start,@Param("count")int count);
 	
 	public int getUserCount();
 	

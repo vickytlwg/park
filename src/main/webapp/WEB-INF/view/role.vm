@@ -1,8 +1,17 @@
 <script src="/park/script/service/textModalService.js"></script>
 
-<script src="/park/script/role.js"></script>
+<script src="/park/script/role.js?v=1.1"></script>
 
-
+<style>
+        .page-list .pagination {float:left;}
+        .page-list .pagination span {cursor: pointer;}
+        .page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
+        .page-list .pagination .separate span:hover {background: none;}
+        .page-list .page-total {float:left; margin: 25px 20px;}
+        .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
+        .page-list .page-total input {width: 40px; padding-left:3px;}
+        .page-list .page-total select {width: 50px;}
+</style>
 
 <div class="content-wrapper" ng-app="roleApp" ng-controller="roleCtrl">
 	<section class="content-header">
@@ -47,6 +56,7 @@
 								
 				          </table>
     					</div>
+						<tm-pagination conf="paginationConf"></tm-pagination>
     				</div>
 
 	            </div>

@@ -403,7 +403,7 @@ return Utility.gson.toJson(ret);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		String mac = (String) args.get("mac");
 		int status = Integer.parseInt((String) args.get("status"));
-		int ret = businessCarportService.updateBusinessCarportStatus(mac, status,true);
+		int ret = businessCarportService.updateBusinessCarportStatus(mac, status,false);
 		logger.info("updateBusinessCarportStatus resutl: " + ret);
 		if (ret > 0) {
 			retMap.put("status", "1001");

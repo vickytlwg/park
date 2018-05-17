@@ -62,7 +62,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id  where paidCompleted=false
 	</select>
 	<select id="getPageArrearageByParkId" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted=false and parkId=#{parkId} order by id desc limit #{start}, #{count}
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted=false and parkId=#{parkId} and chargeMoney >0 order by id desc limit #{start}, #{count}
 	</select>
 	<select id= "getByRange" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
