@@ -1,4 +1,4 @@
-<script src="/park/script/monthUserOrder.js?v=1.2"></script>
+<script src="/park/script/monthUserOrder.js?v=1.25"></script>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/service/textModalService.js"></script>
 
@@ -73,8 +73,8 @@
 							  <td ng-bind="user.starttime"></td>
 							  <td ng-bind="user.endtime"></td>
 							  <td ng-bind="user.payment | currency:'￥'"></td>
-							  <td ng-if="user.status==1">已支付</td>
-							  <td ng-if="user.status==0">未支付</td>
+							  <td ng-if="user.status==1">租用车位</td>
+							  <td ng-if="user.status==0">产权车位</td>
 							  </tr>
 					          </table>
     					</div>

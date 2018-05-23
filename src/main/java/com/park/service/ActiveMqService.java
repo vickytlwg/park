@@ -23,4 +23,5 @@ public class ActiveMqService {
 		args.put("queue", queue);
 		HttpUtil.post("http://120.25.159.154:8080/parkServer/mq/queueData",args);
 	}
+
 }

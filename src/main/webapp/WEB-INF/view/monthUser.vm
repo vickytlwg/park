@@ -1,4 +1,4 @@
-<script src="/park/script/monthUser.js?v=1.5"></script>
+<script src="/park/script/monthUser.js?v=1.55"></script>
 <script src="/park/script/tm.pagination.js?v=1.1"></script>
 <script src="/park/script/utility.js"></script>
 <script src="/park/script/service/textModalService.js"></script>
@@ -64,7 +64,7 @@
 <th><span style="padding-left:15%">开始时间</div></th>
 <th><span style="padding-left:15%">结束时间</div></th>
 <th hidden><span style="padding-left:15%" >支付金额</div></th>
-<th><span style="padding-left:15%">状态</div></th>
+<th><span style="padding-left:15%">车位类型</div></th>
 </tr>
 
 <tbody id="parkBody"></tbody>
@@ -83,8 +83,8 @@
     <td ng-bind="user.starttime"></td>
     <td ng-bind="user.endtime"></td>
     <td ng-bind="user.payment | currency:'￥'" hidden></td>
-    <td ng-if="user.status==1">已支付</td>
-    <td ng-if="user.status==0">未支付</td>
+    <td ng-if="user.status==1">租用车位</td>
+    <td ng-if="user.status==0">产权车位</td>
 </tr>
 </table>
     					</div>
@@ -189,7 +189,7 @@
     </div>
     </div>
     <div class="form-group">
-    <label class="col-sm-2 control-label" >状态</label>
+    <label class="col-sm-2 control-label" >车位类型</label>
     <div class="col-sm-8">
     <select ng-model="tempUser.status" ng-options="status.value as status.text for status in statuses" class="form-control">
     </select>

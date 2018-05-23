@@ -78,11 +78,19 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between
 	
 	<select id="getDebt" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{param1} order by id desc limit 500
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{param1} order by id desc limit 10
+	</select>
+	<select id="getDebtWithParkId" resultMap="PosChargeDataMapper">
+		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{carNumber} and parkId=#{parkId} order by id desc limit 10
 	</select>
 	<select id="getLastRecord" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
 		FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber=#{carNumber} order by id desc limit #{count}
+	</select>
+	<select id="getLastRecordWithPark" resultMap="PosChargeDataMapper">
+		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
+		FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber=#{carNumber} and parkId=#{parkId} order by id desc limit #{count}
 	</select>
 	<select id="getArrearageByCardNumber" resultMap="PosChargeDataMapper">
 	SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,isEntrance,rejectReason,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted

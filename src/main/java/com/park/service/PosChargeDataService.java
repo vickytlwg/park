@@ -8,7 +8,10 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.park.model.FeeCriterion;
+import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
+import com.park.model.Park;
+import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 
 public interface PosChargeDataService {
@@ -42,8 +45,16 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getByParkAndDay(int parkId,String date) throws ParseException;
 	
 	public List<PosChargeData> getDebt (String cardNumber) throws Exception;
+	
+	public List<PosChargeData> getDebtWithData(String cardNumber,List<Parktoalipark> parktoaliparks,List<Monthuser> monthusers,Park park) throws Exception;
 
+	public void calExpenseSmallCarWithData(PosChargeData charge, Date exitDate,Boolean isQuery,Park park,FeeCriterion criterion );
+	
+	public void calExpenseLargeCarWithData(PosChargeData charge, Date exitDate,Boolean isQuery,Park park,FeeCriterion criterion );
+	
 	public List<PosChargeData> getLastRecord(String carNumber,int count);
+	
+	public List<PosChargeData> getLastRecordWithPark(String carNumber,int count,int parkId);
 	
 	public List<PosChargeData> getDebt (String cardNumber,Date exitDate) throws Exception;
 	
@@ -52,6 +63,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> queryDebt (String cardNumber,Date exitDate) throws Exception;
 	
 	public PosChargeData newFeeCalcExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
+	
+	public PosChargeData newFeeCalcExpenseWithData(PosChargeData charge, Date exitDate,Boolean isQuery,Park park,FeeCriterion criterion) throws Exception;;
 	
 	public PosChargeData newFeeCalcExpense1(PosChargeData charge,FeeCriterion criterion, Date exitDate,Boolean isQuery) throws Exception;
 	
@@ -76,6 +89,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> repay(String cardNumber, double money) throws Exception;
 	
 	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception;
+	
+	public void calExpensewithData(PosChargeData charge, Date exitDate,Boolean isQuery,List<Monthuser> monthusers,Park park,FeeCriterion criterion) throws Exception;
 	
 	public void calExpenseType1(PosChargeData charge, Date exitDate,Boolean isQuery) throws ParseException;
 	
@@ -108,5 +123,7 @@ public interface PosChargeDataService {
 	List<PosChargeData> getCharges(String cardNumber) throws Exception;
 	
 	public List<PosChargeData> getByCardNumberAndPort(String cardNumber,Integer portNumber);
+	
+	
 
 }

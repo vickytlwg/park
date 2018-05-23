@@ -219,7 +219,7 @@ public class HongxingController {
 
 						"\"buyer_id\":\"" + userId + "\"," +
 
-						"\"extend_params\":{" + "\"sys_service_provider_id\":\"2088721707329444\"" + "}" +
+						"\"extend_params\":{" + "\"sys_service_provider_id\":\"2088821579783141\"" + "}" +
 
 						"}");
 		modelMap.addAttribute("outTradeNO", out_trade_no);

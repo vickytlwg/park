@@ -218,7 +218,7 @@ public class BarrierChargeController {
 		List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
 		Boolean isMultiCarsOneCarport=false;
 		if (park.getDescription()!=null&&park.getDescription().contains("一位多车")) {
-			logger.info(cardNumber+"是一位多车");
+			logger.info(cardNumber+"进入一位多车停车场");
 			isMultiCarsOneCarport=true;
 		}
 		// 判断是否有多个车
@@ -327,12 +327,13 @@ public class BarrierChargeController {
 						argstoali.put("parking_id", parktoalipark.getAliparkingid());
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-						aliparkFeeService.parkingEnterinfoSync(argstoali);
+						ActiveMqService.SendWithQueueName(argstoali.toString(), "aliEnterInfo");
+					//	aliparkFeeService.parkingEnterinfoSync(argstoali);
 					} else {
-						Map<String, String> argstoali = new HashMap<>();
-						argstoali.put("parking_id", "PI1501317472942184881");
-						argstoali.put("car_number", cardNumber);
-						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//						Map<String, String> argstoali = new HashMap<>();
+//						argstoali.put("parking_id", "PI1501317472942184881");
+//						argstoali.put("car_number", cardNumber);
+//						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 						// aliparkFeeService.parkingEnterinfoSync(argstoali);
 					}
 
@@ -412,7 +413,7 @@ public class BarrierChargeController {
 				try {
 					// System.out.println("出场时间不为空,将要进行getDebt计算: "+new
 					// Date().getTime()+"\n");
-					queryCharges = chargeSerivce.getDebt(cardNumber);
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park);
 					// System.out.println("出场时间不为空,getDebt计算完毕: "+new
 					// Date().getTime()+"\n");
 				} catch (Exception e) {
@@ -451,7 +452,7 @@ public class BarrierChargeController {
 					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 				}
 				// 以下就是查询停车费状态的部分迁移
-				List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecord(cardNumber, 1);
+				List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(cardNumber, 1, parkId);
 				if (posChargeDataList.isEmpty()) {
 					dataMap.put("my", "0.0");
 					return Utility.createJsonMsgWithoutMsg(1001, dataMap);

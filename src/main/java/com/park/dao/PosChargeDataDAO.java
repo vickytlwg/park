@@ -43,8 +43,12 @@ public interface PosChargeDataDAO {
 	public int update(PosChargeData item);
 	
 	public List<PosChargeData> getDebt(String cardNumber);
+	
+	public List<PosChargeData> getDebtWithParkId(@Param("carNumber")String carNumber,@Param("parkId")int parkId);
 
 	public List<PosChargeData> getLastRecord(@Param("carNumber")String carNumber,@Param("count")int count);
+	
+	public List<PosChargeData> getLastRecordWithPark(@Param("carNumber")String carNumber,@Param("count")int count,@Param("parkId")int parkId);
 	
 	public List<PosChargeData> getArrearageByCardNumber(String cardNumber);
 

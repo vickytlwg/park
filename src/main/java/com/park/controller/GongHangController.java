@@ -132,7 +132,9 @@ public class GongHangController extends BaseApiService{
 	//	ret.put("endTime", new SimpleDateFormat("yyyyMMdd").format(monthuser.getEndtime()));
 		return Utility.gson.toJson(setResultSuccess(ret));
 	}
-
+	/**
+	 * 查询包月金额
+	 * */
 	@RequestMapping(value = "queryFeeLong", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -147,11 +149,24 @@ public class GongHangController extends BaseApiService{
 		if (longType.equals("0")) {
 			days=days*30;
 		}
+		List<Monthuser> monthusers = monthUserservice.getByCarnumberAndPark(plateNo, Integer.parseInt(parkCode));
+		if (monthusers.isEmpty()) {
+			return Utility.gson.toJson(setResultError("无此包月用户"));
+		}
+		Monthuser monthuser=monthusers.get(0);
+	//	Park park=parkService.getParkById(monthuser.getParkid());
+		int amount=0;
+		if(monthuser.getStatus()!=null&&monthuser.getStatus()==0){
+			amount=Integer.parseInt(period)*80;
+		}
+		else {
+			amount=300*Integer.parseInt(period);
+		}
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("beginDate", new SimpleDateFormat("yyyyMMdd").format(new Date()));
 		//Date now=
 		ret.put("endDate", new SimpleDateFormat("yyyyMMdd").format(new Date(System.currentTimeMillis()+(long)1000*60*60*24*days)));
-		ret.put("serviceFee",String.valueOf(days*3));
+		ret.put("serviceFee",String.valueOf(amount*100));
 		return Utility.gson.toJson(setResultSuccess(ret));
 	}
 
