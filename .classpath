@@ -28,8 +28,9 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/代扣接口包_20171102/alipay-sdk-java-ALL20171101201354.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/代扣接口包_20171102/alipay-sdk-java-ALL20171101201354-source.jar"/>
-	<classpathentry kind="lib" path="C:/Users/liumeng/Desktop/盐城项目对接/DEMO-1.1/DEMO/uc-httpclient-2.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/alipay-sdk-java-ALL20171101201354.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/alipay-sdk-java-ALL20171101201354-source.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/uc-httpclient-2.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/uc-httpclient-2.1.5-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
