@@ -156,10 +156,8 @@ public class BarrierChargeController {
 		if (info == null) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
-
 		int channelFlag = (int) info.get("channelFlag");
 		Integer parkId = (Integer) info.get("parkID");
-		// String parkName=(String) info.get("Name");
 		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(cardNumber, parkId);
 		Park park = parkService.getParkById(parkId);
 		List<Parkcarauthority> parkcarauthorities = parkCarAuthorityService.getByParkId(parkId);
@@ -167,16 +165,13 @@ public class BarrierChargeController {
 			return null;
 		}
 
-		// dataMap.put("cD", cardNumber);
 		dataMap.put("aT", "1");
 		boolean isMonthUser = false;
 		boolean isRealMonthUser = false;
-		// Monthuser monthuserUse=new Monthuser();
 		int monthUserType = 9;
 		Monthuser monthuserNow = null;
 		if (!monthusers.isEmpty()) {
 			isMonthUser = true;
-			// monthuserUse=monthusers.get(0);
 			for (Monthuser tmpMonthuser : monthusers) {
 				Long diff = (tmpMonthuser.getEndtime().getTime() - (new Date()).getTime());
 				monthuserNow = tmpMonthuser;
@@ -327,7 +322,7 @@ public class BarrierChargeController {
 						argstoali.put("parking_id", parktoalipark.getAliparkingid());
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-						ActiveMqService.SendWithQueueName(argstoali.toString(), "aliEnterInfo");
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
 					//	aliparkFeeService.parkingEnterinfoSync(argstoali);
 					} else {
 //						Map<String, String> argstoali = new HashMap<>();
