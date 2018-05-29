@@ -108,7 +108,7 @@ public class ParkController {
 			
 		return "outsidePark";
 	}
-	
+	/*新加页面*/
 	@RequestMapping(value = "/outsideParks2", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String outsideParks2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		

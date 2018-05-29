@@ -80,6 +80,7 @@ public class ChannelController {
 		}		
 		return "channel";
 	}
+	/*新加页面*/
 	@RequestMapping(value = "/channel2", produces = {"application/json;charset=UTF-8"})
 	public String getChannels2(ModelMap modelMap, HttpServletRequest request, HttpSession session){		
 		String username = (String) session.getAttribute("username");

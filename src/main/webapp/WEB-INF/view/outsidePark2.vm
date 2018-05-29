@@ -8,9 +8,7 @@
 		width:100%;
 		position: absolute;
 		text-align:center;
-		/* left:50%; */
 		margin-left: 8%;
-		/* vertical-align:middle; */
 	}
 	.imglist li{
 		position:relative;

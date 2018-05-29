@@ -81,7 +81,7 @@ public class ParkUserController {
 //		else
 	//		return "redirect:platformShow";
 	}
-	
+	//新加页面
 	@RequestMapping(value = "/parkUsers2", produces = {"application/json;charset=UTF-8"})
 	public String getUsers2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		List<AuthUser> userList = authService.getUsers();

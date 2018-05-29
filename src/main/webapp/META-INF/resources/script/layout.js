@@ -74,7 +74,7 @@
         /*$('#dzkzqgl').show();*/
         /*$('#yjsbgl').show();*/
         /*$('#wzyhgl').show();*/
-        $('#wzyhgl2').show();
+        $('#wzyhgl2').show();/*新加*/
         /*$('#sybwpgl').show();*/
         /*$('#tokengl').show();*/
         /*$('#jsgl').show();*/

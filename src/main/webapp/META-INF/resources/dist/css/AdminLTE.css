@@ -31,7 +31,7 @@ body {
   min-height: 100%;
   position: static;
   overflow: hidden;
-  height:900px !important;
+  height:900px !important;/*高度设置级别*/
 }
 .wrapper:before,
 .wrapper:after {

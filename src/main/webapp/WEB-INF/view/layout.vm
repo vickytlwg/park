@@ -327,6 +327,7 @@
                 <a href="#"><i class="fa fa-fw fa-users"></i> <span>用户管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <!-- <li id="appyhgl" #if(!$isAdmin && !$park_users) hidden#end><a href="/park/users"><i class="fa fa-user"></i>App用户管理</a></li> -->
+                  <!-- 新加页面 -->
                   <li id="wzyhgl2" #if(!$isAdmin && !$park_parkUsers2) hidden#end><a href="/park/parkUsers2"><i class="fa fa-user-plus"></i>用户管理</a></li>
                   <!-- <li id="wzyhgl" #if(!$isAdmin && !$park_parkUsers) hidden#end><a href="/park/parkUsers"><i class="fa fa-user-plus"></i>网站用户管理</a></li>				  
                   <li id="tokengl" #if(!$isAdmin && !$park_api_user_index) hidden#end><a href="/park/api/user/index"><i class="fa fa-user-secret"></i>token管理</a></li>

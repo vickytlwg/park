@@ -244,7 +244,7 @@ public class PosChargeDataController {
 		}
 		return "reconciliation";
 	}
-	
+	//新加页面
 	@RequestMapping(value = "/reconciliation2", produces = { "application/json;charset=UTF-8" })
 	public String reconciliation2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
