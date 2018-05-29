@@ -16,7 +16,6 @@ import com.park.service.HttpUtil;
 import com.park.service.Utility;
 import com.util.UcSignature;
 
-import cc.uchoice.httpclient.http.HttpPost;
 
 @Controller
 @RequestMapping("yancheng")
@@ -40,7 +39,8 @@ public class YanchengController {
 		        params.put("updateTimestamp", "2017-11-01 17:00:48");
 		        String msgSign = UcSignature.signature(params, key);
 		        params.put("msgSign", msgSign);
-			return Utility.gson.toJson(HttpPost.send(reqUrl, params));
+			//return Utility.gson.toJson(HttpPost.send(reqUrl, params));
+		        return null;
 		}
 
 }

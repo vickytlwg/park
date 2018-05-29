@@ -140,7 +140,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id desc
   ]]>
   </select>
-   <select id="selectPosdataSumByParkAndRange" resultMap="java.util.HashMap">
+   <select id="selectPosdataSumByParkAndRange" resultType="java.util.HashMap">
  select sum(chargeMoney) as chargeMoney,SUM(paidMoney) AS paidMoney,SUM(unPaidMoney) AS unPaidMoney, SUM(givenMoney) AS givenMoney,SUM(changeMoney) AS changeMoney 
  where parkId=#{parkId} and entranceDate between #{startDay} and #{endDay} 
   </select>
