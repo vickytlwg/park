@@ -218,6 +218,7 @@
 				<li #if(!$isAdmin && !$park_area) hidden#end><a href="/park/area"><i class="fa fa-car"></i>区</a></li>
 				<li #if(!$isAdmin && !$park_street) hidden#end><a href="/park/street"><i class="fa fa-car"></i>路段</a></li>
 				<li #if(!$isAdmin && !$park_outsideParks) hidden#end><a href="/park/outsideParks"><i class="fa fa-car"></i>停车场</a></li>
+				<li #if(!$isAdmin && !$park_outsideParks2) hidden#end><a href="/park/outsideParks2"><i class="fa fa-car"></i>停车场2</a></li>
 				<li #if(!$isAdmin && !$park_fee_criterion_index) hidden#end ><a href="/park/fee/criterion/index"><i class="fa fa-file-text-o"></i>计费标准管理</a></li>
 				<li #if(!$isAdmin && !$park_pos) hidden#end><a href="/park/pos"><i class="fa fa-gear"></i>手持终端管理</a></li>	
 				<li #if(!$isAdmin && !$park_monthUser) hidden#end><a href="/park/monthUser"><i class="fa fa-user-plus"></i>包月用户管理</a></li>

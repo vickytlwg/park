@@ -88,6 +88,7 @@ public class UserController {
 			return "/login";
 
 	}
+	
 
 	@RequestMapping(value = "/getUserCount", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody

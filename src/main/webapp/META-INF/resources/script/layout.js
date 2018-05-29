@@ -50,30 +50,36 @@
         $('#luwaichange').removeClass("luneiluwai");
          $('#luwaichange').addClass("hhhh");
         $('#tcdsj').show();
+        /*$('#tcdsj').show();*/
         $('#tcdsj').show();
         $('#jrsj').show();
+        $('#jrsj2').show();
         // $('#s').show();
         // $('#q').show();
         // $('#ld').show();
-        $('#crkgl').show();
-        $('#tcc').show();
+       /* $('#crkgl').show();*/
+        $('#crkgl2').show();
+        /*$('#tcc').show();*/
+        $('#tcc2').show();
         $('#jfbzgl').show();
-        $('#byyhgl').show();
-        $('#yygl').show();
+        /*$('#byyhgl').show();*/
+        /*$('#yygl').show();*/
         $('#jrgk').show();
  //       $('#jrqf').show();
-        $('#cwdz').show();
-        $('#cwlszd').show();
+        /*$('#cwdz').show();*/
+        $('#cwdz2').show();
+       /* $('#cwlszd').show();*/
         $('#tcjlcx').show();
         $('#zfsj').show();
-        $('#dzkzqgl').show();
-        $('#yjsbgl').show();
-        $('#wzyhgl').show();
-        $('#sybwpgl').show();
-        $('#tokengl').show();
-        $('#jsgl').show();
-        $('#jsfpgl').show();
-        $('#ymgl').show();
+        /*$('#dzkzqgl').show();*/
+        /*$('#yjsbgl').show();*/
+        /*$('#wzyhgl').show();*/
+        $('#wzyhgl2').show();/*新加*/
+        /*$('#sybwpgl').show();*/
+        /*$('#tokengl').show();*/
+        /*$('#jsgl').show();*/
+        /*$('#jsfpgl').show();*/
+        /*$('#ymgl').show();*/
         $('#gdgl').show();
     };
     $.fn.layout.luwai = function() {
@@ -83,18 +89,22 @@
          $('#luwaichange').removeClass("hhhh");
         $('#luneichange').addClass("hhhh");
         $('#tcdsj').show();
+        $('#tcdsj').show();
         $('#jrsj').show();
+        $('#jrsj2').show();
+
         // $('#s').show();
         // $('#q').show();
         // $('#ld').show();
-        $('#tcc').show();
+        /*$('#tcc').show();*/
+        $('#tcc2').show();
         $('#jfbzgl').show();
-        $('#sczdgl').show();
-        $('#byyhgl').show();
+        /*$('#sczdgl').show();*/
+        /*$('#byyhgl').show();*/
         //  $('#yhqgl').show();
         //   $('#hbmdgl').show();
-        $('#sfrygl').show();
-        $('#xjygl').show();
+        /*$('#sfrygl').show();*/
+        /*$('#xjygl').show();*/
         $('#jrgk').show();
         // $('#jrtcfx').show();
         $('#cwsyfx').show();
@@ -103,21 +113,23 @@
         $('#cwgl').show();
         $('#cwzt').show();
         $('#bwgk').show();
-        $('#cwdz').show();
-        $('#cwlszd').show();
+        /*$('#cwdz').show();*/
+        $('#cwdz2').show();
+        /*$('#cwlszd').show();*/
         $('#tcjlcx').show();
      //   $('#tpccx').show();
-        $('#sfyyj').show();
+        /*$('#sfyyj').show();*/
         //  $('#zjm').show();
   //      $('#tccfb').show();
    //     $('#crkgl').show();
         
-        $('#yjsbgl').show();
-        $('#wzyhgl').show();
-        $('#tokengl').show();
-        $('#jsgl').show();
-        $('#jsfpgl').show();
-        $('#ymgl').show();
+        /*$('#yjsbgl').show();*/
+        /*$('#wzyhgl').show();*/
+        $('#wzyhgl2').show();
+        /*$('#tokengl').show();*/
+        /*$('#jsgl').show();*/
+        /*$('#jsfpgl').show();*/
+        /*$('#ymgl').show();*/
         $('#gdgl').show();
         //    $('#llgl').show();
         $('#llkgl').show();

@@ -81,6 +81,37 @@ public class ParkUserController {
 //		else
 	//		return "redirect:platformShow";
 	}
+	//新加页面
+	@RequestMapping(value = "/parkUsers2", produces = {"application/json;charset=UTF-8"})
+	public String getUsers2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		List<AuthUser> userList = authService.getUsers();
+		List<AuthUserDetail> userDetail = new ArrayList<AuthUserDetail>();
+		for(AuthUser user : userList){
+			List<String> parkName = authService.getOwnUserParkName(user.getId());
+			userDetail.add(new AuthUserDetail(user, parkName));
+		}
+		modelMap.put("users", userDetail);
+		logger.info("info test");		
+		
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		boolean isAdmin = false;
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+//		if(isAdmin)
+			return "parkUser2";
+//		else
+	//		return "redirect:platformShow";
+	}
 	
 	
 	@RequestMapping(value = "/getParkUserCount", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})

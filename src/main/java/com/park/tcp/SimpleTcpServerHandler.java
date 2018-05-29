@@ -19,7 +19,6 @@ import com.park.model.Constants;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.PosChargeDataService;
-import com.park.service.impl.PosChargeDataServiceImpl;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
