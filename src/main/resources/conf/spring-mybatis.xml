@@ -59,7 +59,7 @@
     </property>
     <!-- 清除无用连接的等待时间 -->
     <property name="removeAbandonedTimeout">
-      <value>180</value>
+      <value>300</value>
     </property>
     <!-- 连接属性 -->
     <property name="connectionProperties">
