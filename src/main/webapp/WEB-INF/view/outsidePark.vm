@@ -64,11 +64,12 @@
 										<th><span style="padding-left:15%">计费标准</div></th>
 										<th ><span style="padding-left:15%">状态</div></th>
 										<th><span style="padding-left:15%">免费</div></th>
-										<th ><span style="padding-left:15%">楼层</div></th>	
+										<!-- <th ><span style="padding-left:15%">楼层</div></th>	 -->
 										<th><span style="padding-left:15%">类型</div></th>
 										<th><span style="padding-left:15%">位置</div></th>
 										<th><span style="padding-left:15%">日期</div></th>	
-										<th ><span style="padding-left:15%">图片</div></th>	
+										<th ><span style="padding-left:15%">图片</div></th>
+										<th style="width: 80px;"><span style="padding-left:15%">操作</div></th>	
 					            </tr>
 					          
 					          <tbody id="parkBody"></tbody>

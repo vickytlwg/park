@@ -31,6 +31,7 @@ body {
   min-height: 100%;
   position: static;
   overflow: hidden;
+  height:900px !important;
 }
 .wrapper:before,
 .wrapper:after {

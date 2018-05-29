@@ -626,7 +626,7 @@
 			tr.append('<td data=' + data[i]['status'] + ' >' + status + '</td>');
 			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
 			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');
-			tr.append('<td>' + data[i]['floor']+ '</td>');
+			/*tr.append('<td>' + data[i]['floor']+ '</td>');*/
 			tr.attr('mapAddr', data[i]['mapAddr']);
 			tr.attr('contact', data[i]['contact']);
 			tr.attr('number', data[i]['number']);
@@ -664,7 +664,7 @@
 				$('#showPicture').html(modal.get());
 				modal.show();
 			});
-			
+			tr.append('<tr><td><a href="#">修改</a></td><td>|</td><td><a href="#">删除</a></td></tr>');
 			parkBody.append(tr);
 		}
 	};
