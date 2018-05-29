@@ -207,6 +207,28 @@ public class IndexController {
 		}
 		return "generalDataView";
 	}
+	
+	
+	@RequestMapping("/generalDataView2")
+	public String generalDataView2(ModelMap modelMap,HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "generalDataView2";
+	}
+	
+	
 	@RequestMapping("/outsideParkStatus1")
 	public String outsideParkStatus1(){
 		return "outsideParkStatus1";
@@ -227,6 +249,23 @@ public class IndexController {
 			}
 		}
 		return "platformShow";
+	}
+	@RequestMapping("/platformShow2")
+	public String platformShow2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "platformShow2";
 	}
 	@RequestMapping("/platformShowbk")
 	public String platformShowbk(ModelMap modelMap, HttpServletRequest request, HttpSession session){

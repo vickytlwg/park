@@ -50,8 +50,10 @@
         $('#luwaichange').removeClass("luneiluwai");
          $('#luwaichange').addClass("hhhh");
         $('#tcdsj').show();
+        /*$('#tcdsj').show();*/
         $('#tcdsj').show();
         $('#jrsj').show();
+        $('#jrsj2').show();
         // $('#s').show();
         // $('#q').show();
         // $('#ld').show();
@@ -87,7 +89,10 @@
          $('#luwaichange').removeClass("hhhh");
         $('#luneichange').addClass("hhhh");
         $('#tcdsj').show();
+        $('#tcdsj').show();
         $('#jrsj').show();
+        $('#jrsj2').show();
+
         // $('#s').show();
         // $('#q').show();
         // $('#ld').show();
