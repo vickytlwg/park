@@ -1,138 +1,49 @@
 <script src="/park/script/service/textModalService.js"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<script src="/park/script/tm.pagination.js"></script>	
+<script src="/park/script/tm.pagination.js"></script>
 <script src="/park/script/reconciliation.js"></script>
 <script src="/park/script/datepicker.js"></script>
-<style>
-	.imglist{
-		overflow: hidden;
-		width:100%;
-		position: absolute;
-		text-align:center;
-		margin-left: 8%;
-	}
-	.imglist li{
-		position:relative;
-		margin:10 10px;
-		float: left;
-		display:inline;
-		width:190px;
-		height:190px;
-		list-style-type:none;
-	}
-	.imglist li:nth-child(n) a{
-		-webkit-transform:none;
-		-moz-transform:none;
-		-ms-transform:rotate(2deg);
-		transform:none;
-		top:30px;
-	}
-	.imglist li a:hover{
-		-webkit-transform:scale(1.25);
-		-moz-transform:scale(1.25);
-		-ms-transform:scale(1.25);
-		transform:scale(1.25);
-		-webkit-box-shadow:0 1px 1px rgba(0,0,0,0);
-		-moz-box-shadow:0 1px 1px rgba(0,0,0,0);
-		-o-box-shadow:0 1px 1px rgba(0,0,0,0);
-		box-shadow:0 1px 1px rgba(0,0,0,0);
-		z-index: 1;
-	}
-	
-	.imglist .recod1 a{
-		background: url(/park/img/bak1a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod2 a{
-		background: url(/park/img/bak2a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod3 a{
-		background: url(/park/img/bak3.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod4 a{
-		background: url(/park/img/bak4a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod5 a{
-		background: url(/park/img/bak5a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist a{
-		position: absolute;
-		width: 190px;
-		height: 50px;
-		color:white;
-		padding-top:120px;
-		text-align:center;
-		font-size:16px;
-		left: 0;
-	}
-</style>
-<div class="content-wrapper" ng-app="feeDetailApp" ng-controller="feeDetailCtrl">
-	<section class="content-header">
-          <h1>
-            财务对账
-            <small></small>
-          </h1>     
-    </section>
-    <section class="content">
-       <div class="row">
-            <div class="col-xs-12">
-              	<div class="box">
-	               <!--  <div class="box-header">
-	                  <h3 class="box-title"></h3>
-	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:500px">
-	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;">
-	                			<li class="recod1">
-	                				<a href="/park/pos/charge/record">停车记录</a>
-	                			</li>
-	                			<li class="recod2">
-	                				<a href="/park/pos/charge/flowbill">财务流水账单</a>
-	                			</li>
-	                			<li class="recod3">
-	                				<a href="/park/pos/charge/reconciliation">财务对账</a>
-	                			</li>
-	                			<li class="recod4">
-	                				<a href="/park/lepay/record/">第三方支付</a>
-	                			</li>
-	                			<!-- <li class="recod5">
-	                				<a href="/park/feeOperator">收费员管理</a>
-	                			</li>
-	                			<li class="recod3">
-	                				<a href="/park/feeOperator/2">巡检员管理</a>
-	                			</li>
-	                			<li class="recod4">
-	                				<a href="#" target="_blank">参数配置</a>
-	                			</li>
-	                			<li class="recod5">
-	                				<a href="#" target="_blank">更多信息</a>
-	                			</li> -->
-	                		</ul>
-	                	</div>
-	                </div>
-    				<div class="box-footer clearfix">
-      					<!-- <div id='pagination'></div> -->
-      				</div>
-	            </div>
-            </div>
-        </div>
+<link rel="stylesheet" type="text/css" href="/park/css/button.css" />
 
-    </section>
-   </div>
+
+<div class="content-wrapper" ng-app="feeDetailApp"
+	ng-controller="feeDetailCtrl">
+	<section class="content-header">
+		<h1>
+			财务对账 <small></small>
+		</h1>
+	</section>
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body" style="height: 580px">
+						<div class="menu_img">
+							<ul class="imglist"
+								style="height: 600px; width: 900px; margin-top: 100px;">
+								<li class="recod"><a href="/park/pos/charge/record"
+									style="background: url(/park/img/bak1a.png) no-repeat center center;">停车记录</a>
+								<li class="recod"><a href="/park/pos/charge/flowbill"
+									style="background: url(/park/img/bak2a.png) no-repeat center center;">财务流水账单</a>
+								</li>
+								<li class="recod"><a href="/park/pos/charge/reconciliation"
+									style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
+								</li>
+								<li class="recod"><a href="/park/lepay/record/"
+									style="background: url(/park/img/bak4a.png) no-repeat center center;">第三方支付</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	
+
+	</section>
+</div>
 
 <script type="text/ng-template" id="myModalTest"> 
 	<!-- 模态框（Modal） -->

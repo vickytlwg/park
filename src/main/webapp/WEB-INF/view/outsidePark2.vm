@@ -2,86 +2,9 @@
 <script src="/park/script/outsidePark.js?v=1.4"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
-<style>
-	.imglist{
-		overflow: hidden;
-		width:100%;
-		position: absolute;
-		text-align:center;
-		margin-left: 8%;
-	}
-	.imglist li{
-		position:relative;
-		margin:10 10px;
-		float: left;
-		display:inline;
-		width:190px;
-		height:190px;
-		list-style-type:none;
-	}
-	.imglist li:nth-child(n) a{
-		-webkit-transform:none;
-		-moz-transform:none;
-		-ms-transform:rotate(2deg);
-		transform:none;
-		top:30px;
-	}
-	.imglist li a:hover{
-		-webkit-transform:scale(1.25);
-		-moz-transform:scale(1.25);
-		-ms-transform:scale(1.25);
-		transform:scale(1.25);
-		-webkit-box-shadow:0 1px 1px rgba(0,0,0,0);
-		-moz-box-shadow:0 1px 1px rgba(0,0,0,0);
-		-o-box-shadow:0 1px 1px rgba(0,0,0,0);
-		box-shadow:0 1px 1px rgba(0,0,0,0);
-		z-index: 1;
-	}
-	
-	.imglist .recod1 a{
-		background: url(/park/img/bak1a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod2 a{
-		background: url(/park/img/bak2a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod3 a{
-		background: url(/park/img/bak3.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod4 a{
-		background: url(/park/img/bak4a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist .recod5 a{
-		background: url(/park/img/bak5a.png) no-repeat center center;
-		width: 160px;
-		height: 160px;
-		border-radius:20px;
-	}
-	.imglist a{
-		position: absolute;
-		width: 190px;
-		height: 50px;
-		color:white;
-		padding-top:120px;
-		text-align:center;
-		font-size:16px;
-		left: 0;
-	}
-</style>
-<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="/park/css/button.css" />
 
-</script>
+
 
 
 <div class="content-wrapper" >
@@ -99,39 +22,37 @@
 	               <!--  <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:500px">
+	                <div class="box-body" style="height:580px">
 	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;">
-	                			<li class="recod1">
-	                				<a href="/park/outsideParks">停车场管理</a>
+	                		<ul class="imglist" style="height:600px;width:900px;margin-top:40px;" >
+	                			<li class="recod">
+	                				<a href="/park/outsideParks" style="background: url(/park/img/bak1a.png) no-repeat center center;">停车场管理</a>
 	                			</li>
-	                			<li class="recod2">
-	                				<a href="/park/fee/criterion/index">计费标准</a>
+	                			<li class="recod">
+	                				<a href="/park/fee/criterion/index" style="background: url(/park/img/bak2a.png) no-repeat center center;">计费标准</a>
 	                			</li>
-	                			<li class="recod3">
-	                				<a href="/park/monthUser">月卡用户</a>
+	                			<li class="recod">
+	                				<a href="/park/monthUser" style="background: url(/park/img/bak3.png) no-repeat center center;">月卡用户</a>
 	                			</li>
-	                			<li class="recod4">
-	                				<a href="/park/monthUser/order">预约用户</a>
+	                			<li class="recod">
+	                				<a href="/park/monthUser/order" style="background: url(/park/img/bak4a.png) no-repeat center center;">预约用户</a>
 	                			</li>
-	                			<li class="recod5">
-	                				<a href="/park/feeOperator">收费员管理</a>
+	                			<li class="recod">
+	                				<a href="/park/feeOperator" style="background: url(/park/img/bak5a.png) no-repeat center center;">收费员管理</a>
 	                			</li>
-	                			<li class="recod3">
-	                				<a href="/park/feeOperator/2">巡检员管理</a>
+	                			<li class="recod">
+	                				<a href="/park/feeOperator/2" style="background: url(/park/img/bak3.png) no-repeat center center;">巡检员管理</a>
 	                			</li>
-	                			<li class="recod4">
-	                				<a href="#" target="_blank">参数配置</a>
+	                			<li class="recod">
+	                				<a href="#" style="background: url(/park/img/bak4a.png) no-repeat center center;">参数配置</a>
 	                			</li>
-	                			<li class="recod5">
-	                				<a href="#" target="_blank">更多信息</a>
+	                			<li class="recod">
+	                				<a href="#" style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
 	                			</li>
 	                		</ul>
 	                	</div>
 	                </div>
-    				<div class="box-footer clearfix">
-      					<!-- <div id='pagination'></div> -->
-      				</div>
+
 	            </div>
             </div>
         </div>
