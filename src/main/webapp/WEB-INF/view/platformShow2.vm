@@ -17,6 +17,8 @@
 
 <script type="text/javascript"
 	src="/park/script/platformshow2angular.js"></script>
+	<script type="text/javascript"
+	src="/park/script/map2.js"></script>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>云平台</h1>
@@ -388,77 +390,15 @@
 
 
 <script type="text/javascript">
-	//百度地图API功能
-	(function($) {
-		$.fn.platformShow = {};
-		$.fn.platformShow.initial = function() {
-			chart7Init();
-		};
-		var map7;
-		var chart7Init = function() {
-			map7 = new BMap.Map("container7"); // 创建Map实例
-			point = new BMap.Point(118.8, 32.0625); // 创建点坐标
-			map7.centerAndZoom(point, 15);
-			map7.setMinZoom(2);
-			map7.setMaxZoom(12);
-			map7.enableScrollWheelZoom(); //启用滚轮放大缩小
-			mapClusterer = new BMapLib.MarkerClusterer(map7, {
-				maxZoom : 9,
-				isAverangeCenter : true
-			});
-		};
-		var mapClusterer;
-		var myIconred = new BMap.Icon("/park/image/red.png", new BMap.Size(23,
-				25), {});
-		var myIcongreen = new BMap.Icon("/park/image/green.png", new BMap.Size(
-				23, 25), {});
-		var myIconyellow = new BMap.Icon("/park/image/yellow.png",
-				new BMap.Size(23, 25), {});
-		map.setMapStyle({
-			styleJson : [ {
-				"featureType" : "land",
-				"elementType" : "all",
-				"stylers" : {
-					"color" : "#ecf0f5ff",
-					"hue" : "#ecf0f5"
-				}
-			} ]
-		});
-
-		var showparks = function(data_info) {
-			map4.clearOverlays();
-			mapClusterer.clearMarkers();
-			for (var i = 0; i < data_info.length; i++) {
-				var point = new BMap.Point(data_info[i][0], data_info[i][1]);
-				var marker;
-				// 创建标注
-				if (data_info[i][3] == 0) {
-					marker = new BMap.Marker(new BMap.Point(data_info[i][0],
-							data_info[i][1]), {
-						icon : myIconred
-					});
-				} else if (data_info[i][3] < 10) {
-					marker = new BMap.Marker(new BMap.Point(data_info[i][0],
-							data_info[i][1]), {
-						icon : myIconyellow
-					});
-				} else {
-					marker = new BMap.Marker(new BMap.Point(data_info[i][0],
-							data_info[i][1]), {
-						icon : myIcongreen
-					});
-				}
-
-				mapClusterer.addMarker(marker);
-			}
-		};
-	})(jQuery);
+	
 </script>
 
 
 	<script>
 		$(function() {
-			$.fn.platformShow.initial();
+		$.fn.map.initial();
+		//	$.fn.platformShow.initial();
+			
 		});
 	</script>
 
