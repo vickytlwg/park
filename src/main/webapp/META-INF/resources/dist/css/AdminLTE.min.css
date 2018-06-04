@@ -1673,7 +1673,10 @@ deg
 .small-box p {
     font-size: 15px;
 	margin:10px 0 0 0;
-	color:#555;
+	color:#aaa;
+}
+.small-box small {
+	color:#aaa;
 }
 
 .small-box p>small {
