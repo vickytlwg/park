@@ -57,7 +57,9 @@ public class BarrierChargeController {
 	FeeCriterionService feeCriterionService;
 	@Autowired
 	ParkCarAuthorityService parkCarAuthorityService;
-
+	@Autowired
+	PosChargeMacService posChargeMacService;
+	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
@@ -307,6 +309,10 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
+				Poschargemac poschargemac=new Poschargemac();
+				poschargemac.setMacidenter((int)info.get("macId"));
+				poschargemac.setPoschargeid(charge.getId());
+				posChargeMacService.insertSelective(poschargemac);
 				try {
 					Map<String, Object> argMap = new HashMap<>();
 					FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
@@ -567,6 +573,11 @@ public class BarrierChargeController {
 				}
 			}
 			if (num == 1) {
+				Poschargemac poschargemac=new Poschargemac();
+				poschargemac.setMacidout((int)info.get("macId"));
+				poschargemac.setPoschargeid(payRet.getId());
+				posChargeMacService.updateByPosChargeId(poschargemac); 
+				
 				logger.info(cardNumber + "出场成功!" + dataMap.toString());
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			} else {

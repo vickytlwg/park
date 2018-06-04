@@ -119,7 +119,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
  	<select id="getByParkName" statementType="STATEMENT" resultMap="PosChargeDataMapper">
 		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc limit 500
  	</select>		
-	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
+	<insert id="insert" useGeneratedKeys="true" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
 		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate,url,rejectReason,payType)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
