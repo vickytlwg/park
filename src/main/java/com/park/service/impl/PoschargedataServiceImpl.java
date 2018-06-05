@@ -1705,12 +1705,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public int getByDateAndParkCount(int parkId, String startDate, String endDate) {
 		// TODO Auto-generated method stub
-		return 0;
+		return chargeDao.getByDateAndParkCount(parkId, startDate, endDate);
 	}
 
 	@Override
 	public double getChannelCharge(int parkId, String startDate, String endDate) {
 		// TODO Auto-generated method stub
-		return 0;
+		return chargeDao.getChannelCharge(parkId, startDate, endDate);
 	}
 }
