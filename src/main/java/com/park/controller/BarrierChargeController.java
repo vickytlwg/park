@@ -1,7 +1,5 @@
 package com.park.controller;
 
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,6 +57,8 @@ public class BarrierChargeController {
 	ParkCarAuthorityService parkCarAuthorityService;
 	@Autowired
 	PosChargeMacService posChargeMacService;
+	@Autowired
+	SimilarCarNumberService similarCarNumberService;
 	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 
@@ -145,6 +145,9 @@ public class BarrierChargeController {
 		String mac = args.get("mac");
 		String cardNumber = args.get("cardNumber");
 		logger.info("touch车辆" + cardNumber);
+		
+			
+		
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge = new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -160,6 +163,13 @@ public class BarrierChargeController {
 		}
 		int channelFlag = (int) info.get("channelFlag");
 		Integer parkId = (Integer) info.get("parkID");
+		//相似车牌管理
+		List<Similarcarnumber> similarcarnumbers=similarCarNumberService.selectBySimilarCarNumberAndPark(cardNumber, parkId);
+		if (!similarcarnumbers.isEmpty()) {
+			cardNumber=similarcarnumbers.get(0).getRealnumber();
+			logger.info("更正车牌:" + cardNumber);
+		}
+		
 		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(cardNumber, parkId);
 		Park park = parkService.getParkById(parkId);
 		List<Parkcarauthority> parkcarauthorities = parkCarAuthorityService.getByParkId(parkId);
@@ -201,7 +211,10 @@ public class BarrierChargeController {
 			}
 
 		}
-
+		
+		
+		
+		
 		if (!isMonthUser) {
 			dataMap.put("uT", "0");
 		} else {

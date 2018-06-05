@@ -64,7 +64,6 @@ import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.squareup.okhttp.Request;
 
-
 @Controller
 @RequestMapping("/pos/charge")
 public class PosChargeDataController {
@@ -222,13 +221,13 @@ public class PosChargeDataController {
 		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
 		// List<Park> outsideparks = new ArrayList<>();
-//		List<Park> outsideparks = new ArrayList<>();
-//		for (Park park : parkList) {
-//			if (park.getType() == 3) {
-//				outsideparks.add(park);
-//			}
-//		}
-//		modelMap.addAttribute("parks", outsideparks);
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
 		modelMap.addAttribute("parks", parkList);
 		if (user != null) {
 			modelMap.addAttribute("user", user);
@@ -244,7 +243,8 @@ public class PosChargeDataController {
 		}
 		return "reconciliation";
 	}
-	//新加页面
+
+	// 新加页面
 	@RequestMapping(value = "/reconciliation2", produces = { "application/json;charset=UTF-8" })
 	public String reconciliation2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -253,13 +253,13 @@ public class PosChargeDataController {
 		if (username != null)
 			parkList = parkService.filterPark(parkList, username);
 		// List<Park> outsideparks = new ArrayList<>();
-//		List<Park> outsideparks = new ArrayList<>();
-//		for (Park park : parkList) {
-//			if (park.getType() == 3) {
-//				outsideparks.add(park);
-//			}
-//		}
-//		modelMap.addAttribute("parks", outsideparks);
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
 		modelMap.addAttribute("parks", parkList);
 		if (user != null) {
 			modelMap.addAttribute("user", user);
@@ -324,6 +324,15 @@ public class PosChargeDataController {
 		return "arrearage";
 	}
 
+	@RequestMapping(value = "/paidNotify", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public String paidNotify(@RequestBody Map<String, Object> args) {
+		int poschargeId=(int) args.get("poschargeId");
+		float paidAmount=(float) args.get("paidAmount");	
+		int paidType=(int) args.get("paidType");	
+		return null;
+	}
+
 	@RequestMapping(value = "/getByParkAndRange", method = RequestMethod.POST, produces = {
 			"application/json;charset=utf-8" })
 	@ResponseBody
@@ -356,82 +365,85 @@ public class PosChargeDataController {
 		}
 		return Utility.gson.toJson(retMap);
 	}
-	
-	@RequestMapping(value="/getParkChargeByRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+
+	@RequestMapping(value = "/getParkChargeByRange", method = RequestMethod.POST, produces = {
+			"application/json;charset=utf-8" })
 	@ResponseBody
-	public String getParkChargeByRange(@RequestBody Map<String, Object> args){
-		int parkId=Integer.parseInt((String)args.get("parkId"));
-		String startDay=(String)args.get("startDay");
-		String endDay=(String)args.get("endDay");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	public String getParkChargeByRange(@RequestBody Map<String, Object> args) {
+		int parkId = Integer.parseInt((String) args.get("parkId"));
+		String startDay = (String) args.get("startDay");
+		String endDay = (String) args.get("endDay");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		
-		Calendar start =Calendar.getInstance(); 
+		}
+
+		Calendar start = Calendar.getInstance();
 		start.setTime(parsedStartDay);
 		Long startTime = start.getTimeInMillis();
 		Calendar end = Calendar.getInstance();
 		end.setTime(parsedEndDay);
 		Long endTime = end.getTimeInMillis();
 		Long oneDay = 1000 * 60 * 60 * 24l;
-		Long time = startTime;  
-		Map<Long, Object> comparemap=new TreeMap<>();
+		Long time = startTime;
+		Map<Long, Object> comparemap = new TreeMap<>();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		  while (time <= endTime) {  
-		        Date d = new Date(time);            
-		        Map<String, Object> posChargeDatas = chargeSerivce.getParkChargeByDay(parkId, df.format(d));
-		        comparemap.put(d.getTime(), posChargeDatas);
-		        time += oneDay;  
-		    }     
-		return  Utility.gson.toJson(comparemap);
+		while (time <= endTime) {
+			Date d = new Date(time);
+			Map<String, Object> posChargeDatas = chargeSerivce.getParkChargeByDay(parkId, df.format(d));
+			comparemap.put(d.getTime(), posChargeDatas);
+			time += oneDay;
+		}
+		return Utility.gson.toJson(comparemap);
 	}
-	@RequestMapping(value="/getParkRecordsCountByRange",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+
+	@RequestMapping(value = "/getParkRecordsCountByRange", method = RequestMethod.POST, produces = {
+			"application/json;charset=utf-8" })
 	@ResponseBody
-	public String getParkRecordsCountByRange(@RequestBody Map<String, Object> args){
-		int parkId=Integer.parseInt((String)args.get("parkId"));
-		String startDay=(String)args.get("startDay");
-		String endDay=(String)args.get("endDay");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	public String getParkRecordsCountByRange(@RequestBody Map<String, Object> args) {
+		int parkId = Integer.parseInt((String) args.get("parkId"));
+		String startDay = (String) args.get("startDay");
+		String endDay = (String) args.get("endDay");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		
-		Calendar start =Calendar.getInstance(); 
+		}
+
+		Calendar start = Calendar.getInstance();
 		start.setTime(parsedStartDay);
 		Long startTime = start.getTimeInMillis();
 		Calendar end = Calendar.getInstance();
 		end.setTime(parsedEndDay);
 		Long endTime = end.getTimeInMillis();
 		Long oneDay = 1000 * 60 * 60 * 24l;
-		Long time = startTime;  
-		Map<Long, Object> comparemap=new TreeMap<>();
+		Long time = startTime;
+		Map<Long, Object> comparemap = new TreeMap<>();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		  while (time <= endTime) {  
-		        Date d = new Date(time);            
-		        Map<String, Object> posChargeDatas = chargeSerivce.getParkChargeCountByDay(parkId, df.format(d));
-		        comparemap.put(d.getTime(), posChargeDatas);
-		        time += oneDay;  
-		    }     
-		return  Utility.gson.toJson(comparemap);
+		while (time <= endTime) {
+			Date d = new Date(time);
+			Map<String, Object> posChargeDatas = chargeSerivce.getParkChargeCountByDay(parkId, df.format(d));
+			comparemap.put(d.getTime(), posChargeDatas);
+			time += oneDay;
+		}
+		return Utility.gson.toJson(comparemap);
 	}
 
 	@RequestMapping(value = "getByCardnumber", method = RequestMethod.POST, produces = {
@@ -441,34 +453,36 @@ public class PosChargeDataController {
 		String cardNumber = args.get("cardNumber");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
 	}
+
 	@RequestMapping(value = "getByCardnumberAuthority", method = RequestMethod.POST, produces = {
-	"application/json;charset=UTF-8" })
-@ResponseBody
-public String getByCardnumberAuthority(@RequestBody Map<String, String> args, HttpSession session) {
-String cardNumber = args.get("cardNumber");
-String username = (String) session.getAttribute("username");
-AuthUser user = authService.getUserByUsername(username);
-List<Park> parkList = parkService.getParks();
-if (username == null)
-	return null;	
-if (user.getRole() == AuthUserRole.ADMIN.getValue())
-{
-	return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
-}
-	parkList = parkService.filterPark(parkList, username);
-	List<PosChargeData> posChargeDatas=new ArrayList<>();
-	for (Park park : parkList) {
-		posChargeDatas.addAll(chargeSerivce.getByCardNumberAndPark(cardNumber, park.getId()));
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getByCardnumberAuthority(@RequestBody Map<String, String> args, HttpSession session) {
+		String cardNumber = args.get("cardNumber");
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username == null)
+			return null;
+		if (user.getRole() == AuthUserRole.ADMIN.getValue()) {
+			return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
+		}
+		parkList = parkService.filterPark(parkList, username);
+		List<PosChargeData> posChargeDatas = new ArrayList<>();
+		for (Park park : parkList) {
+			posChargeDatas.addAll(chargeSerivce.getByCardNumberAndPark(cardNumber, park.getId()));
+		}
+		return Utility.createJsonMsg(1001, "success", posChargeDatas);
 	}
-return Utility.createJsonMsg(1001, "success", posChargeDatas);
-}
+
 	@RequestMapping(value = "getByCardnumberAndPort", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByCardnumberAndPort(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
-		Integer portNumber = (Integer) args.get("portNumber");		
-		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumberAndPort(cardNumber, portNumber).get(0));
+		Integer portNumber = (Integer) args.get("portNumber");
+		return Utility.createJsonMsg(1001, "success",
+				chargeSerivce.getByCardNumberAndPort(cardNumber, portNumber).get(0));
 	}
 
 	@RequestMapping(value = "/count", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
@@ -583,7 +597,7 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 			if (num > 10) {
 				break;
 			}
-			DecimalFormat    df   = new DecimalFormat("######0.00");   
+			DecimalFormat df = new DecimalFormat("######0.00");
 			if (posChargeData.isPaidCompleted() == false && posChargeData.getExitDate() != null) {
 				num++;
 				PosChargeDataSimple posChargeDataSimple = new PosChargeDataSimple();
@@ -633,31 +647,31 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 		// Outsideparkinfo outsideparkinfo =
 		// outsideParkInfoService.getByParkidAndDate(parkId,
 		// charge.getEntranceDate());
-		if (charge.getParkDesc()==null) {
+		if (charge.getParkDesc() == null) {
 			charge.setParkDesc(park.getName());
 		}
-		Boolean isMonthUser=false;
-		Boolean isRealMonthUser=false;
-		List<Monthuser> monthusers=monthUserService.getByCardNumber(charge.getCardNumber());
-		Monthuser monthuserUse=new Monthuser();
+		Boolean isMonthUser = false;
+		Boolean isRealMonthUser = false;
+		List<Monthuser> monthusers = monthUserService.getByCardNumber(charge.getCardNumber());
+		Monthuser monthuserUse = new Monthuser();
 		for (Monthuser monthuser : monthusers) {
-			if (monthuser.getParkid().intValue()==charge.getParkId()) {
-				isMonthUser=true;
-				monthuserUse=monthuser;
+			if (monthuser.getParkid().intValue() == charge.getParkId()) {
+				isMonthUser = true;
+				monthuserUse = monthuser;
 				break;
 			}
 		}
 		if (isMonthUser) {
-			Long diff=(monthuserUse.getEndtime().getTime()-(new Date()).getTime());	
-			if (diff>0) {
-				isRealMonthUser=true;
-				
+			Long diff = (monthuserUse.getEndtime().getTime() - (new Date()).getTime());
+			if (diff > 0) {
+				isRealMonthUser = true;
+
 			}
 		}
 		if (isRealMonthUser) {
-			charge.setParkDesc(charge.getParkDesc()+"-包月车");
+			charge.setParkDesc(charge.getParkDesc() + "-包月车");
 		} else {
-			charge.setParkDesc(charge.getParkDesc()+"-临停车");
+			charge.setParkDesc(charge.getParkDesc() + "-临停车");
 		}
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
@@ -714,22 +728,25 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
-	@RequestMapping(value = "/updateEDate", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/updateEDate", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String updateEDate(@RequestBody Map<String, String> args) throws ParseException {
 		String carNumber = args.get("carNumber");
-		String entranceDate=args.get("entranceDate");
-		List<PosChargeData> posChargeDatas=chargeSerivce.getLastRecord(carNumber, 1);
+		String entranceDate = args.get("entranceDate");
+		List<PosChargeData> posChargeDatas = chargeSerivce.getLastRecord(carNumber, 1);
 		if (posChargeDatas.isEmpty()) {
 			return Utility.createJsonMsg(1002, "无记录");
 		}
-		PosChargeData posChargeData=posChargeDatas.get(0);
+		PosChargeData posChargeData = posChargeDatas.get(0);
 		posChargeData.setEntranceDate(entranceDate);
-		int num=chargeSerivce.update(posChargeData);
-		if (num==1) {
+		int num = chargeSerivce.update(posChargeData);
+		if (num == 1) {
 			return Utility.createJsonMsg(1001, "ok");
 		}
 		return Utility.createJsonMsg(1002, "failed!");
 	}
+
 	@RequestMapping(value = "/updateYj", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String updateYj(@RequestBody Map<String, String> args) {
 		int parkId = Integer.parseInt(args.get("parkId"));
@@ -1028,14 +1045,13 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 		return Utility.createJsonMsg(1001, "success", payRet);
 	}
 
-	@RequestMapping(value = "/getNewFee", method = RequestMethod.POST, produces = {
-	"application/json;charset=UTF-8" })
+	@RequestMapping(value = "/getNewFee", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getNewFee(@RequestBody PosChargeData charge) throws Exception{
+	public String getNewFee(@RequestBody PosChargeData charge) throws Exception {
 		chargeSerivce.newFeeCalcExpense(charge, charge.getExitDate(), false);
 		return Utility.createJsonMsg(1001, "success", charge);
 	}
-	
+
 	@RequestMapping(value = "/hardwareRecord", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -1108,29 +1124,31 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-	@RequestMapping(value = "/getPayTypeCountByRange", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+
+	@RequestMapping(value = "/getPayTypeCountByRange", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	public @ResponseBody String getPayTypeCountByRange(@RequestBody Map<String, Object> args) throws ParseException {
 		String startDate = (String) args.get("startDate");
 		String endDate = (String) args.get("endDate");
 		int parkId = (int) args.get("parkId");
 		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDayRange(parkId, startDate, endDate);
-		int type0=0;
-		int type1=0;
-		int type2=0;
-		int type9=0;
+		int type0 = 0;
+		int type1 = 0;
+		int type2 = 0;
+		int type9 = 0;
 		for (PosChargeData posChargeData : posdatas) {
 			switch (posChargeData.getPayType()) {
 			case 0:
-				type0+=1;
+				type0 += 1;
 				break;
 			case 1:
-				type1+=1;
+				type1 += 1;
 				break;
 			case 2:
-				type2+=1;
+				type2 += 1;
 				break;
 			case 9:
-				type9+=1;
+				type9 += 1;
 				break;
 
 			default:
@@ -1143,8 +1161,9 @@ return Utility.createJsonMsg(1001, "success", posChargeDatas);
 		result.put("weipay", type1);
 		result.put("cash", type2);
 		result.put("barrier", type9);
-		return  Utility.gson.toJson(result);
+		return Utility.gson.toJson(result);
 	}
+
 	@RequestMapping(value = "/getExcelByParkAndDayRange")
 	@ResponseBody
 	public void getExcelByParkAndDayRange(HttpServletRequest request, HttpServletResponse response)

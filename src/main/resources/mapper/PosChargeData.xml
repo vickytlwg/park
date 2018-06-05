@@ -135,20 +135,20 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 	</update>
 
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
-  <![CDATA[
+ 
   SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id desc
-  ]]>
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between #{startDay} and #{endDay} and parkId=#{parkId} order by id desc
+
   </select>
    <select id="selectPosdataSumByParkAndRange" resultType="java.util.HashMap">
- select sum(chargeMoney) as chargeMoney,SUM(paidMoney) AS paidMoney,SUM(unPaidMoney) AS unPaidMoney, SUM(givenMoney) AS givenMoney,SUM(changeMoney) AS changeMoney 
+ select sum(chargeMoney) as chargeMoney,SUM(paidMoney) AS paidMoney,SUM(unPaidMoney) AS unPaidMoney, SUM(givenMoney) AS givenMoney,SUM(changeMoney) AS changeMoney FROM posChargeData 
  where parkId=#{parkId} and entranceDate between #{startDay} and #{endDay} 
   </select>
    <select id="selectPosdataByParkAndRangeAndCarportNumber" resultMap="PosChargeDataMapper">
-  <![CDATA[
+  
   SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} and portNumber=#{carportNumber} order by id desc
-  ]]>
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between #{startDay} and #{endDay} and parkId=#{parkId} and portNumber=#{carportNumber} order by id desc
+
   </select>
 	<delete id="delete">
 		delete from PosChargeData where id=#{param1}
