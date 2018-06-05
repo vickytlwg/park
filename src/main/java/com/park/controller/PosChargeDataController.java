@@ -104,6 +104,7 @@ public class PosChargeDataController {
 	@Autowired
 	private PosChargeDataService posChargeDataService;
 	
+	//收费统计
 	@RequestMapping(value = "/getByDateAndPark", method = RequestMethod.POST, produces = {
 	"application/json;charset=utf-8" })
 	@ResponseBody
