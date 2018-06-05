@@ -46,7 +46,7 @@ import com.park.service.PosdataService;
 
 @Transactional
 @Service
-public class PoschargedataServiceImpl implements PosChargeDataService {
+public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	MonthUserService monthUserService;
@@ -76,7 +76,7 @@ public class PoschargedataServiceImpl implements PosChargeDataService {
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
 
-	private static Log logger = LogFactory.getLog(PoschargedataServiceImpl.class);
+	private static Log logger = LogFactory.getLog(PosChargeDataServiceImpl.class);
 
 	@Override
 	public PosChargeData getById(int id) {
