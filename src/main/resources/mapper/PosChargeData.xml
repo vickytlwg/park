@@ -133,7 +133,18 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate},url=#{url}
 		where id=#{id}
 	</update>
-
+	<!-- 计算总金额 -->
+ <select id="getChannelCharge" resultType="double">
+ <![CDATA[
+  	select SUM(posChargeData.chargeMoney>0) AS chargeMoney from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}; 
+  ]]> 
+  </select>
+  <!-- 获取渠道总收费笔数 -->
+ <select id="getByDateAndParkCount" resultType="int">
+  <![CDATA[
+  select SUM(posChargeData.chargeMoney) AS chargeMoney,SUM(posChargeData.chargeMoney>0) AS chargeMoney from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}
+  ]]> 
+  </select>
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
  
   SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
