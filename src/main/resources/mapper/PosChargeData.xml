@@ -133,7 +133,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate},url=#{url}
 		where id=#{id}
 	</update>
-	<!-- 计算总收费金额 -->
+	<!-- 计算总金额 -->
  <select id="getChannelCharge" resultType="double">
  <![CDATA[
   	select SUM(posChargeData.chargeMoney>0) AS chargeMoney from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}; 
