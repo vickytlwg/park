@@ -38,9 +38,9 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
      $scope.paginationConf = {
         currentPage : 1,
         totalItems : 500,
-        itemsPerPage : 20,
-        pagesLength : 10,
-        perPageOptions : [20, 30, 40, 50],
+        itemsPerPage : 15,
+        pagesLength : 15,
+        perPageOptions : [15, 30, 40, 50],
         rememberPerPage : 'perPageItems',
         onChange : function() {
             getInitail($scope.pagedata);

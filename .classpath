@@ -28,9 +28,10 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jar/alipay-sdk-java-ALL20171101201354.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jar/alipay-sdk-java-ALL20171101201354-source.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jar/uc-httpclient-2.1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Java/jar/uc-httpclient-2.1.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/alipay-sdk-java-ALL20171101201354.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/alipay-sdk-java-ALL20171101201354-source.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/uc-httpclient-2.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/uc-httpclient-2.1.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/71481/Desktop/JBT/Project/jar/fastjson-1.2.22.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

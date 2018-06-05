@@ -115,10 +115,10 @@
 	                				<a href="/park/feeOperator/2">高位视频桩</a>
 	                			</li>
 	                			<li class="recod4">
-	                				<a href="/park/hardware" target="_blank">硬件设备管理</a>
+	                				<a href="/park/hardware">硬件设备管理</a>
 	                			</li>
 	                			<li class="recod5">
-	                				<a href="/park/parks" target="_blank">设备查询</a>
+	                				<a href="/park/parks">设备查询</a>
 	                			</li>
 	                		</ul>
 	                	</div>

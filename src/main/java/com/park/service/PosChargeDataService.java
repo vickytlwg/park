@@ -15,6 +15,9 @@ import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 
 public interface PosChargeDataService {
+	public int getByDateAndParkCount(int parkId,String startDate,String endDate);
+	
+	public double getChannelCharge(int parkId,String startDate,String endDate);
 	
 	public PosChargeData getById(int id);		
 	
