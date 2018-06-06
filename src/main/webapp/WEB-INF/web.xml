@@ -3,12 +3,12 @@
     xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     id="WebApp_ID" version="2.5">
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>park</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
     	classpath:conf/spring.xml;
-  		classpath:conf/spring-mybatis.xml  		
+  		classpath:conf/spring-mybatis.xml;  		
   	</param-value>
   </context-param>
   <context-param>
@@ -50,9 +50,9 @@
    <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
- <listener>
+ <!-- <listener>
     <listener-class>com.park.udp.UdpStart</listener-class>
-  </listener> 
+ </listener>  -->
    <!-- <listener>
     <listener-class>com.park.tcp.TcpStart</listener-class>
   </listener>  -->

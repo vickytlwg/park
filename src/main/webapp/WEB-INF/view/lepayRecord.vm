@@ -30,7 +30,7 @@
 					
 	                	
 						<div>
-						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
+						 <table class="table table-hover table-bordered table-striped table-condensed text-center" id='channelTable' style="font-size:12px">
 				            <tr>				            				           										
 										<th><span>ID</span></th>										
 										<th><span>交易金额</span></th>

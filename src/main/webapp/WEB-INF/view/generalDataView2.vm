@@ -30,7 +30,8 @@
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
-
+        <script type="text/javascript" src="/park/script/parkBigData.js?v=1.0"></script>
+	   <script type="text/javascript" src="/park/script/parkBigDataAngular.js?v=1.0"></script>
 
 
 <section class="content-header">
@@ -45,47 +46,48 @@
 	<div class="row">
 		<div class="col-lg-3 col-md-3">
 			<!-- small box -->
-			<div class="small-box" style="background-color:#f5f3f0;height:400px;">
+			<div class="small-box"
+				style="background-color: #f5f3f0; height: 320px;">
 				<div class="row">
-					<div class="col-xs-4 img-responsive" style="margin-top:30px;">
-						<img src="dist/img/money.png" style="margin: 15px 0 11px 15px;" />
+					<div class="col-xs-4 img-responsive" style="margin-top:10px;">
+						<img src="dist/img/money.png" style="margin: 10px 0 5px 15px;" />
 					</div>
-					<div class="col-xs-8" style="margin-top:30px;">
+					<div class="col-xs-8">
 						<p>今日交易金额</p>
-						<h3>
+						<h3 style="margin-bottom:0px;">
 							36378 <small>元</small>
 						</h3>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-4 img-responsive">
-						<img src="dist/img/list.png" style="margin: 15px 0 11px 15px;" />
+						<img src="dist/img/list.png" style="margin: 10px 0 5px 15px;" />
 					</div>
 					<div class="col-xs-8">
 						<p>今日订单数</p>
-						<h3>
+						<h3 style="margin-bottom:0px;">
 							3678 <small>笔</small>
 						</h3>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-4 img-responsive">
-						<img src="dist/img/parking.png" style="margin: 15px 0 11px 15px;" />
+						<img src="dist/img/park.png" style="margin: 10px 0 5px 15px;" />
 					</div>
 					<div class="col-xs-8">
 						<p>在线停车场</p>
-						<h3>
+						<h3 style="margin-bottom:0px;">
 							22036 <small>个</small>
 						</h3>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-4 img-responsive">
-						<img src="dist/img/car.png" style="margin: 15px 0 11px 15px;" />
+						<img src="dist/img/car.png" style="margin: 10px 0 5px 15px;" />
 					</div>
 					<div class="col-xs-8">
 						<p>在线泊位数</p>
-						<h3>
+						<h3 style="margin-bottom:0px;">
 							3578 <small>个</small>
 						</h3>
 					</div>
@@ -93,7 +95,7 @@
 			</div>
 		</div>
 		<section class="col-lg-9 col-md-9 connectedSortable">
-			<div style="width: 100%; height: 400px; margin-bottom: 20px;">
+			<div style="width: 100%; height: 500px; margin-bottom: 20px;">
 				<div class="iframe" id="container4"
 					style="width: 100%; height: 100%; position: relative"></div>
 			</div>
@@ -101,18 +103,58 @@
 	</div>
 
 	<div class="row">
-		<div class="col-lg-3 col-md-3">
+		<div class="col-lg-3 col-md-3" style="margin-top: -190px;">
 			<section class="connectedSortable">
-				<div id="container6" style="height: 300px;"></div>
+				<div id="container6" style="height: 230px;"></div>
+			</section>
+			<section class="connectedSortable">
+				<div class="chart-responsive">
+					<div id="container5" style="height: 165px; width: 280px;"></div>
+				</div>
 			</section>
 		</div>
+		<div class="col-lg-9 col-md-9" ng-app="parkBigDataApp"
+			ng-controller="parkBigDataCtrl">
+			<div class="panel panel-default" style="margin-top:-15px;">
+				<div class="panel-heading">
+					<h3 class="panel-title">停车场实时数据</h3>
+				</div>
+				<div class="panel-body" style="padding:5px 15px">
+					<div class="row" style="width: 100%; height: 400px;">
+						<table class="table table-primary table-hover table-striped table-condensed"
+							style="margin:0 15px; font-size: 12px; vertical-align: middle;">
+							<tr>
+								<th style="text-align: center; vertical-align: middle;"><span>车牌号</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>车位号</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>动作</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>时间</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>是否收费</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>费用</span></th>
+								<th style="text-align: center; vertical-align: middle;"><span>停车场</span></th>
+							</tr>
+							<tr ng-repeat="item in items"
+								ng-class="{<!-- true:'success' -->}[item.isNew]">
+								<td ng-bind="item.cardNumber"></td>
+								<td ng-bind="item.portNumber"></td>
+								<td ng-if="item.exitDate==undefined">入场</td>
+								<td ng-if="item.exitDate!=undefined">出场</td>
+								<td ng-if="item.exitDate==undefined" ng-bind="item.entranceDate"></td>
+								<td ng-if="item.exitDate!=undefined" ng-bind="item.exitDate"></td>
+								<td ng-if="item.paidCompleted==true" class="success">已收费</td>
+								<td ng-if="item.paidCompleted==false" class="warning">未收费</td>
+								<td ng-if="item.paidCompleted==true" class="warning">收费:￥{{item.chargeMoney}}</td>
+								<td ng-if="item.paidCompleted==false">计费:￥{{item.chargeMoney}}</td>
+								<td ng-bind="item.parkDesc"></td>
+							</tr>
 
-		<section class="col-lg-9 col-md-9 connectedSortable">
-			<div class="chart-responsive">
-				<div id="container5" style="height: 300px;"></div>
+						</table>
+
+					</div>
+				</div>
 			</div>
+		</div>
 
-		</section>
+
 	</div>
 
 </section>
@@ -169,34 +211,34 @@
 			trigger : 'axis'
 		},
 		grid : {
-			x : 25,
-			y : 45,
+			x : 5,
+			y : 20,
 			x2 : 5,
 			y2 : 20,
 			borderWidth : 0
 		},
-		toolbox : {
-			show : true,
-			feature : {
-				mark : {
-					show : false
-				},
-				dataView : {
-					show : true,
-					readOnly : false
-				},
-				magicType : {
-					show : true,
-					type : [ 'line', 'bar', 'stack', 'tiled' ]
-				},
-				restore : {
-					show : true
-				},
-				saveAsImage : {
-					show : true
-				}
-			}
-		},
+		/* 		toolbox : {
+		 show : true,
+		 feature : {
+		 mark : {
+		 show : false
+		 },
+		 dataView : {
+		 show : true,
+		 readOnly : false
+		 },
+		 magicType : {
+		 show : true,
+		 type : [ 'line', 'bar']
+		 },
+		 restore : {
+		 show : false
+		 },
+		 saveAsImage : {
+		 show : true
+		 }
+		 }
+		 }, */
 		calculable : true,
 		xAxis : [ {
 			type : 'category',
@@ -287,6 +329,7 @@
 			text : '支付渠道占比',
 			left : 'center',
 			top : 20,
+			padding : 5,
 			textStyle : {
 				color : '#999',
 				fontWeight : 'normal'
@@ -345,7 +388,7 @@
 					},
 					smooth : 0.2,
 					length : 2,
-					length2 : 3
+					length2 : 2
 				}
 			},
 			itemStyle : {

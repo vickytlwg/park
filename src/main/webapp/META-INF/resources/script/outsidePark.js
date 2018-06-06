@@ -608,8 +608,8 @@
 			else{
 			    tr.append('<td >' +''+'</td>'); 
 			}
-			tr.append('<td>' + data[i]['channelCount']+ '</td>');
-			tr.append('<td>' + data[i]['portCount']+ '</td>');
+/*			tr.append('<td>' + data[i]['channelCount']+ '</td>');
+*/			tr.append('<td>' + data[i]['portCount']+ '</td>');
 			tr.append('<td>' + data[i]['portLeftCount']+ '</td>');
 			var feeCriterionId = data[i]['feeCriterionId'];
 			var feeCriterionName = data[i]['feeCriterionName'];
@@ -624,8 +624,8 @@
 			
 			var status = data[i]['status'] == 0 ? '可用':'不可用';
 			tr.append('<td data=' + data[i]['status'] + ' >' + status + '</td>');
-			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
-			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');
+			/*var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
+			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');*/
 			/*tr.append('<td>' + data[i]['floor']+ '</td>');*/
 			tr.attr('mapAddr', data[i]['mapAddr']);
 			tr.attr('contact', data[i]['contact']);
@@ -645,8 +645,8 @@
 			else 
 				type='其它';
 			tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
-			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
-			tr.append('<td>' + data[i]['date']+ '</td>');
+/*			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
+*/			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
 		//		tr.addClass('success');
 			}else{

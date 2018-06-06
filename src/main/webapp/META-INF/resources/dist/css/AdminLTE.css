@@ -31,7 +31,10 @@ body {
   min-height: 100%;
   position: static;
   overflow: hidden;
+<<<<<<< HEAD
+=======
   height:920px !important;/*高度设置级别*/
+>>>>>>> origin/master
 }
 .wrapper:before,
 .wrapper:after {
@@ -145,7 +148,7 @@ body.hold-transition .main-header .logo {
 /* Content */
 .content {
   min-height: 250px;
-  padding: 15px;
+  padding-top: 5px;
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
@@ -312,7 +315,7 @@ a:focus {
 }
 .content-header {
   position: relative;
-  padding: 15px 15px 0 15px;
+  padding: 10px 10px 0 10px;
 }
 .content-header > h1 {
   margin: 0;

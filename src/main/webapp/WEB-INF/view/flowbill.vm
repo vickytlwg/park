@@ -39,11 +39,9 @@
 							
 						  </div>
 						</div>	
-	                	<br/>   
-	                    <br/> 
-						<div>
-						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-				            <tr>				            
+	            						<div>
+						 <table class="table table-hover table-bordered table-striped table-condensed text-center" id='channelTable' style="font-size:12px">
+								<tr class="info" style="height: 30px; line-height: 30px;">
 				             <th><span style=""><input type="checkbox" /></th>
 									<th><span >id</span></th>		
 										<th><span>车牌</span></th>										
@@ -81,7 +79,7 @@
 								<td ng-if="item.paidCompleted==true&&item.payType==0">支付宝</td>
 								<td ng-if="item.paidCompleted==true&&item.payType==1">微信</td>
 								<td ng-if="item.paidCompleted==true&&item.payType==2">现金</td>
-								<td ng-if="item.paidCompleted==true&&item.payType==9">道闸</td>
+								<td ng-if="item.paidCompleted==true&&item.payType==9">现金</td>
 								
 				          		<td ng-if="item.url!=''"><a href={{item.url}} target="_blank">查看
                                 </a></td>

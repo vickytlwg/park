@@ -22,46 +22,44 @@
     </section>
     <section class="content">
        <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="padding:0 5px 0 5px;">
               	<div class="box">
 	                <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
-	                <div class="box-body">  
+	                <div class="box-body" style="padding:0px;">  
 		                	<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.refresh()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加收费标准</button>
-								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel1()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span>按次收费模版添加</button>
-								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel2()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.update()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新收费标准</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除收费标准</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.refresh()" type="button" class="btn btn-info" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()" type="button" class="btn btn-primary" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span> 添加收费标准</button>
+								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel1()" type="button" class="btn btn-warning" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span>按次收费模版添加</button>
+								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel2()" type="button" class="btn bg-maroon" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.update()" type="button" class="btn btn-success" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-edit"></span> 更新收费标准</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()" type="button" class="btn btn-danger" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-remove"></span> 删除收费标准</button>
 		                	</div>
-                	
-				<div class="pull-right" style="width:300px">
+                						<div class="pull-right" style="width:300px">
 	                	<div class="input-group">	
 						<div class="row">
-                          <div class="col-md-3 " >
-							<label style="float:right;padding-top:6px" >检索</label>
-                          </div>
-						  <div class="col-md-9">
-							 
+                          <div class="col-md-9 " >
 			               <input type="text" class="form-control" ng-model="criterion.searchKeywords" ng-keyup="criterion.myKeyup($event)">
-			               <span class="input-group-btn">
-			                  <button  class="btn btn-default" ng-click="criterion.search()" type="button" style="display:none" id="searchButton">	                    
-			                  </button>
+                          
+                          </div>
+						  <div class="col-md-3" style="margin-left:-15px;">
+						   <span class="input-group-btn">
+			                  <button  class="btn btn-default" ng-click="criterion.search()" type="button"id="searchButton">	                    
+			                  检索</button>
 			               </span>
-						   
                           </div>
                            
 						     </div>
 			            </div><!-- /input-group -->	
 	                	</div>
+                
 							
 	                	<br/>   
 	                    <br/> 
 						<div>
-						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-				            <tr>				            
+						 <table class="table table-bordered table-hover  table-condensed table-striped text-center" id='channelTable' style="font-size:12px">
+					            <tr class="info" style="height:30px;line-height:30px;">					            
 				             <th><span style=""><input type="checkbox" /></div></th>
 									<th><span >Id</div></th>		
 									<th><span>名称</div></th>
