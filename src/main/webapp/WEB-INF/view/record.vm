@@ -21,15 +21,12 @@
     </section>
     <section class="content">
        <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="padding: 0 5px 0 5px;">
               	<div class="box">
-	                <div class="box-header">
-	                  <h3 class="box-title"></h3>
-	                </div><!-- /.box-header -->
+
 	               <div class="box-body">  
-					<div class="panel panel-default">
-						<div class="panel-body">
-		                	<div class="row" style="padding-top:15px">
+					
+						         	<div class="row" style="padding-top:5px;">
 								
 								<div class="col-md-1">
                                         <label class="label-control" style="float:right;padding-top:10px">车牌号:</label>
@@ -44,7 +41,7 @@
 								<div class="col-md-2">
                                         <label class="label-control" style="float:right;padding-top:10px">输入停车场:</label>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<input type="text" ng-model="searchParkNameText" class="form-control" style="float:right"/>										
                                     </div>
 									<div class="col-md-1">
@@ -53,13 +50,11 @@
                                     </div>
 		                	</div>
 
-							
-						  </div>
-						</div>	
+					</div>
 	                              
 						<div>
 						 <table class="table table-bordered table-hover table-striped table-condensed" id='channelTable' style="font-size:12px">
-								<tr class="info" style="height: 30px; line-height: 30px;">
+								<tr class="info" style="height: 30px; line-height: 30px;padding: 0px;">
 				             <th><span style=""><input type="checkbox" /></th>
 									<th><span >id</span></th>		
 										<th><span>车牌</span></th>										

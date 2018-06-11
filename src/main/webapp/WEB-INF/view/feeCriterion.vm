@@ -3,68 +3,132 @@
 <script src="/park/script/feeCriterion.js?v=1.1"></script>
 
 <style>
-        .page-list .pagination {float:left;}
-        .page-list .pagination span {cursor: pointer;}
-        .page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
-        .page-list .pagination .separate span:hover {background: none;}
-        .page-list .page-total {float:left; margin: 25px 20px;}
-        .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
-        .page-list .page-total input {width: 40px; padding-left:3px;}
-        .page-list .page-total select {width: 50px;}
+.page-list .pagination {
+	float: left;
+}
+
+.page-list .pagination span {
+	cursor: pointer;
+}
+
+.page-list .pagination .separate span {
+	cursor: default;
+	border-top: none;
+	border-bottom: none;
+}
+
+.page-list .pagination .separate span:hover {
+	background: none;
+}
+
+.page-list .page-total {
+	float: left;
+	margin: 25px 20px;
+}
+
+.page-list .page-total input, .page-list .page-total select {
+	height: 26px;
+	border: 1px solid #ddd;
+}
+
+.page-list .page-total input {
+	width: 40px;
+	padding-left: 3px;
+}
+
+.page-list .page-total select {
+	width: 50px;
+}
 </style>
 
-<div class="content-wrapper" ng-app="feeCriterionApp" ng-controller="feeCriterionCtrl">
+<div class="content-wrapper" ng-app="feeCriterionApp"
+	ng-controller="feeCriterionCtrl">
 	<section class="content-header">
-          <h1>
-            收费标准管理
-            <small></small>
-          </h1>     
-    </section>
-    <section class="content">
-       <div class="row">
-            <div class="col-xs-12" style="padding:0 5px 0 5px;">
-              	<div class="box">
-	                <div class="box-header">
-	                  <h3 class="box-title"></h3>
-	                </div><!-- /.box-header -->
-	                <div class="box-body" style="padding:0px;">  
-		                	<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.refresh()" type="button" class="btn btn-info" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()" type="button" class="btn btn-primary" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span> 添加收费标准</button>
-								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel1()" type="button" class="btn btn-warning" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span>按次收费模版添加</button>
-								<button #if(!$isAdmin) disabled#end ng-click="criterion.insertModel2()" type="button" class="btn bg-maroon" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.update()" type="button" class="btn btn-success" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-edit"></span> 更新收费标准</button>
-		                		<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()" type="button" class="btn btn-danger" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-remove"></span> 删除收费标准</button>
-		                	</div>
-                						<div class="pull-right" style="width:300px">
-	                	<div class="input-group">	
-						<div class="row">
-                          <div class="col-md-9 " >
-			               <input type="text" class="form-control" ng-model="criterion.searchKeywords" ng-keyup="criterion.myKeyup($event)">
-                          
-                          </div>
-						  <div class="col-md-3" style="margin-left:-15px;">
-						   <span class="input-group-btn">
-			                  <button  class="btn btn-default" ng-click="criterion.search()" type="button"id="searchButton">	                    
-			                  检索</button>
-			               </span>
-                          </div>
-                           
-						     </div>
-			            </div><!-- /input-group -->	
-	                	</div>
-                
-							
-	                	<br/>   
-	                    <br/> 
+		<h1>
+			收费标准管理 <small></small>
+		</h1>
+	</section>
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12" style="padding: 0 5px 0 5px;">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title"></h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body" style="padding: 0px;">
+						<div class="btn-group" style="margin-left: 10px;">
+							<button #if(!$isAdmin) disabled#end
+								ng-click="criterion.refresh()" type="button"
+								class="btn btn-info"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-refresh"></span> 刷新
+							</button>
+							<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()"
+								type="button" class="btn btn-primary"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-pencil"></span> 添加收费标准
+							</button>
+							<button #if(!$isAdmin) disabled#end
+								ng-click="criterion.insertModel1()" type="button"
+								class="btn btn-warning"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-pencil"></span>按次收费模版添加
+							</button>
+							<button #if(!$isAdmin) disabled#end
+								ng-click="criterion.insertModel2()" type="button"
+								class="btn bg-maroon"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加
+							</button>
+							<button #if(!$isAdmin) disabled#end ng-click="criterion.update()"
+								type="button" class="btn btn-success"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-edit"></span> 更新收费标准
+							</button>
+							<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()"
+								type="button" class="btn btn-danger"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-remove"></span> 删除收费标准
+							</button>
+						</div>
+						<div class="pull-right" style="width: 300px">
+							<div class="input-group">
+								<div class="row">
+									<div class="col-md-9 ">
+										<input type="text" class="form-control"
+											ng-model="criterion.searchKeywords"
+											ng-keyup="criterion.myKeyup($event)">
+
+									</div>
+									<div class="col-md-3" style="margin-left: -15px;">
+										<span class="input-group-btn">
+											<button class="btn btn-default" ng-click="criterion.search()"
+												type="button" id="searchButton">搜索</button>
+										</span>
+									</div>
+
+								</div>
+							</div>
+							<!-- /input-group -->
+						</div>
+
+
+						<br /> <br />
 						<div>
-						 <table class="table table-bordered table-hover  table-condensed table-striped text-center" id='channelTable' style="font-size:12px">
-					            <tr class="info" style="height:30px;line-height:30px;">					            
-				             <th><span style=""><input type="checkbox" /></div></th>
-									<th><span >Id</div></th>		
-									<th><span>名称</div></th>
-									<th><span >免费时段/分</div></th>
-						<!--		<th><span >阶段1范围/分</div></th>
+							<table
+								class="table table-bordered table-hover  table-condensed table-striped text-center"
+								id='channelTable' style="font-size: 12px">
+								<tr class="info" style="height: 30px; line-height: 30px;">
+									<th><span style=""><input type="checkbox" />
+										</div></th>
+									<th><span>Id
+											</div></th>
+									<th><span>名称
+											</div></th>
+									<th><span>免费时段/分
+											</div></th>
+									<!--		<th><span >阶段1范围/分</div></th>
 									<th><span >阶段2范围/分</div></th>
 									<th><span >计费单位 /分</div></th>
 									<th><span >计费单位2 /分</div></th>
@@ -78,15 +142,17 @@
 									<th><span>夜间时段</div></th>
 									<th><span>是否按次收费</div></th>
 									<th><span>价格/次</div></th> -->
-									<th><span>收费说明</div></th>
-				            </tr>
-				          <tbody id="channelBody"></tbody>
-				          	<tr  ng-repeat = "item in criterion.items">
-				          		<td ><input type="checkbox" ng-model="item.checked" ng-click="criterion.checked($index)"/></td>
-				          		<td ng-bind="item.id"></td>
-				          		<td ng-bind="item.name"></td>
-				          		<td ng-bind="item.freemins"></td>
-				          		<!--	<td ng-bind="item.step1capacity"></td>
+									<th><span>收费说明
+											</div></th>
+								</tr>
+								<tbody id="channelBody"></tbody>
+								<tr ng-repeat="item in criterion.items">
+									<td><input type="checkbox" ng-model="item.checked"
+										ng-click="criterion.checked($index)" /></td>
+									<td ng-bind="item.id"></td>
+									<td ng-bind="item.name"></td>
+									<td ng-bind="item.freemins"></td>
+									<!--	<td ng-bind="item.step1capacity"></td>
 				          		<td ng-bind="item.step2capacity"></td>
 								<td ng-bind="item.timeoutpriceinterval"></td>
 								<td ng-bind="item.timeoutpriceinterval2"></td>
@@ -103,17 +169,17 @@
 				          			<span ng-if="item.isonetimeexpense == 1">是</span>
 				          		</td>
 				          		<td ng-bind="item.onetimeexpense"></td>  -->
-								<td ng-bind="item.explaination|limitTo:85"></td>
-				          </table>
-						  
-    					</div>
-						
-							<tm-pagination conf="paginationConf"></tm-pagination>
-                       
-						
-    				</div>
+									<td ng-bind="item.explaination|limitTo:85"></td>
+							</table>
 
-<script  type="text/ng-template" id="modifyFeeCriterion">
+						</div>
+
+						<tm-pagination conf="paginationConf"></tm-pagination>
+
+
+					</div>
+
+					<script type="text/ng-template" id="modifyFeeCriterion">
 <div class='modal-content' style="min-width:880px">
 <div class="modal-header panel panel-warning">
 <div class="panel-heading">
@@ -244,8 +310,8 @@
 </div>
 </div>
 
-</script>	
-<script  type="text/ng-template" id="FeeCriterionModel1">
+</script>
+					<script type="text/ng-template" id="FeeCriterionModel1">
 <div class='modal-content' style="min-width:880px">
 <div class="modal-header panel panel-warning">
 <div class="panel-heading">
@@ -378,8 +444,8 @@
 </div>
 </div>
 
-</script>	
-<script  type="text/ng-template" id="FeeCriterionModel2">
+</script>
+					<script type="text/ng-template" id="FeeCriterionModel2">
 <div class='modal-content' style="min-width:880px">
 <div class="modal-header panel panel-warning">
 <div class="panel-heading">
@@ -510,11 +576,11 @@
 </div>
 </div>
 
-</script>						
-	            </div>
-            </div>
-        </div>
+</script>
+				</div>
+			</div>
+		</div>
 
-    </section>
-				
+	</section>
+
 </div>

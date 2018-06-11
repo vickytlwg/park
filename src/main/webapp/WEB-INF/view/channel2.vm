@@ -39,19 +39,17 @@
 	                			<li class="recod">
 	                				<a href="/park/feeOperator/2" style="background: url(/park/img/bak3.png) no-repeat center center;">高位视频桩</a>
 	                			</li>
-<<<<<<< HEAD
 	                			<li class="recod">
 	                				<a href="/park/hardware" style="background: url(/park/img/bak4a.png) no-repeat center center;">硬件设备管理</a>
 	                			</li>
 	                			<li class="recod">
 	                				<a href="/park/parks" style="background: url(/park/img/bak5a.png) no-repeat center center;">设备查询</a>
-=======
 	                			<li class="recod4">
 	                				<a href="/park/hardware">硬件设备管理</a>
 	                			</li>
 	                			<li class="recod5">
 	                				<a href="/park/parks">设备查询</a>
->>>>>>> origin/master
+
 	                			</li>
 	                		</ul>
 	                	</div>

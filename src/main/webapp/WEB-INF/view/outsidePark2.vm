@@ -10,10 +10,7 @@
 <div class="content-wrapper" >
 	<section class="content-header">
           <h1>
-           停车场管理
-            <small style="padding-left:15px"><a href="/park/zoneCenter">
-            市</a></small><small style="padding-left:15px"><a href="/park/area">区</a></small><small style="padding-left:15px"><a href="/park/street">路段</a></small>
-          </h1>       
+           停车场管理</h1>       
     </section>
     <section class="content">
        <div class="row">

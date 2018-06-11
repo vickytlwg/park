@@ -52,8 +52,8 @@
 					<div class="box-header">
 						<h3 class="box-title"></h3>
 					</div>
-					<div class="box-body" style="padding: 0px;">
-						<div class="btn-group">
+					<div class="box-body">
+						<div class="btn-group" style="margin-left:10px;">
 							<button #if(!$isAdmin) disabled#end
 								ng-click="refreshFeeOperator()" type="button"
 								class="btn btn-info"
@@ -64,19 +64,19 @@
 								ng-click="insertFeeOperator()" type="button"
 								class="btn btn-primary"
 								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-pencil"></span> 添加收费员
+								<span class="glyphicon glyphicon-pencil"></span> 添加
 							</button>
 							<button #if(!$isAdmin) disabled#end
 								ng-click="updateFeeOperator()" type="button"
 								class="btn btn-warning"
 								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-edit"></span> 更新收费员信息
+								<span class="glyphicon glyphicon-edit"></span> 更改
 							</button>
 							<button #if(!$isAdmin) disabled#end
 								ng-click="deleteFeeOperator()" type="button"
 								class="btn  btn-danger"
 								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-remove"></span> 删除收费员
+								<span class="glyphicon glyphicon-remove"></span> 删除
 							</button>
 						</div>
 
@@ -112,12 +112,13 @@
 								<th><span>Id</span></th>
 								<th><span>操作员帐号</span></th>
 								<th><span>操作员姓名</span></th>
-								<th><span>操作员身份证</span></th>
+								<!-- 								<th><span>操作员身份证</span></th>
+ -->
 								<th><span>联系电话</span></th>
 								<th><span>签到状态</span></th>
 								<th><span>上次签到时间</span></th>
-								<th><span>最后执勤收费点</span></th>
-								<th><span>最后执勤终端</span></th>
+<!-- 								<th><span>最后执勤收费点</span></th>
+ -->								<th><span>最后执勤终端</span></th>
 								<th><span>注册时间</span></th>
 
 							</tr>
@@ -129,13 +130,13 @@
 								<td ng-bind="feeOperator.id"></td>
 								<td ng-bind="feeOperator.account"></td>
 								<td ng-bind="feeOperator.name"></td>
-								<td ng-bind="feeOperator.idnumber"></td>
-								<td ng-bind="feeOperator.phone"></td>
+<!-- 								<td ng-bind="feeOperator.idnumber"></td>
+ -->								<td ng-bind="feeOperator.phone"></td>
 								<td ng-if="feeOperator.signstatus==false">未签到</td>
 								<td ng-if="feeOperator.signstatus==true">已签到</td>
 								<td ng-bind="feeOperator.lastsigndate"></td>
-								<td ng-bind="feeOperator.parkname"></td>
-								<td ng-bind="feeOperator.lastposnum"></td>
+<!-- 								<td ng-bind="feeOperator.parkname"></td>
+ -->								<td ng-bind="feeOperator.lastposnum"></td>
 								<td ng-bind="feeOperator.registerdate"></td>
 							</tr>
 						</table>

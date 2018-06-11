@@ -206,9 +206,9 @@
 			
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
-				tr.addClass('success');
-			}else{
 				tr.addClass('active');
+			}else{
+				tr.addClass('default');
 			}
 			businessCarportBody.append(tr);
 		}
@@ -474,9 +474,9 @@
 			
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
-				tr.addClass('success');
-			}else{
 				tr.addClass('active');
+			}else{
+				tr.addClass('default');
 			}
 			channelBody.append(tr);
 		}
