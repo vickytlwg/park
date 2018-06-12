@@ -51,7 +51,7 @@ function($scope,$http,$uibModal,textModal,$timeout){
         totalItems : 500,
         itemsPerPage : 30,
         pagesLength : 10,
-        perPageOptions : [20, 30, 40, 50],
+        perPageOptions : [10,20, 30, 40, 50],
         rememberPerPage : 'perPageItems',
         onChange : function() {
             getInitail($scope.pagedata);

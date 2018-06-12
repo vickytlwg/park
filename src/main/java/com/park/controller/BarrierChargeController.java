@@ -1,7 +1,5 @@
 package com.park.controller;
 
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +55,11 @@ public class BarrierChargeController {
 	FeeCriterionService feeCriterionService;
 	@Autowired
 	ParkCarAuthorityService parkCarAuthorityService;
-
+	@Autowired
+	PosChargeMacService posChargeMacService;
+	@Autowired
+	SimilarCarNumberService similarCarNumberService;
+	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 
 	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
@@ -143,6 +145,9 @@ public class BarrierChargeController {
 		String mac = args.get("mac");
 		String cardNumber = args.get("cardNumber");
 		logger.info("touch车辆" + cardNumber);
+		
+			
+		
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge = new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -156,10 +161,15 @@ public class BarrierChargeController {
 		if (info == null) {
 			return Utility.createJsonMsg(1002, "fail");
 		}
-
 		int channelFlag = (int) info.get("channelFlag");
 		Integer parkId = (Integer) info.get("parkID");
-		// String parkName=(String) info.get("Name");
+		//相似车牌管理
+		List<Similarcarnumber> similarcarnumbers=similarCarNumberService.selectBySimilarCarNumberAndPark(cardNumber, parkId);
+		if (!similarcarnumbers.isEmpty()) {
+			cardNumber=similarcarnumbers.get(0).getRealnumber();
+			logger.info("更正车牌:" + cardNumber);
+		}
+		
 		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(cardNumber, parkId);
 		Park park = parkService.getParkById(parkId);
 		List<Parkcarauthority> parkcarauthorities = parkCarAuthorityService.getByParkId(parkId);
@@ -167,16 +177,13 @@ public class BarrierChargeController {
 			return null;
 		}
 
-		// dataMap.put("cD", cardNumber);
 		dataMap.put("aT", "1");
 		boolean isMonthUser = false;
 		boolean isRealMonthUser = false;
-		// Monthuser monthuserUse=new Monthuser();
 		int monthUserType = 9;
 		Monthuser monthuserNow = null;
 		if (!monthusers.isEmpty()) {
 			isMonthUser = true;
-			// monthuserUse=monthusers.get(0);
 			for (Monthuser tmpMonthuser : monthusers) {
 				Long diff = (tmpMonthuser.getEndtime().getTime() - (new Date()).getTime());
 				monthuserNow = tmpMonthuser;
@@ -204,7 +211,10 @@ public class BarrierChargeController {
 			}
 
 		}
-
+		
+		
+		
+		
 		if (!isMonthUser) {
 			dataMap.put("uT", "0");
 		} else {
@@ -312,6 +322,10 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
+				Poschargemac poschargemac=new Poschargemac();
+				poschargemac.setMacidenter((int)info.get("macId"));
+				poschargemac.setPoschargeid(charge.getId());
+				posChargeMacService.insertSelective(poschargemac);
 				try {
 					Map<String, Object> argMap = new HashMap<>();
 					FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
@@ -327,7 +341,7 @@ public class BarrierChargeController {
 						argstoali.put("parking_id", parktoalipark.getAliparkingid());
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-						ActiveMqService.SendWithQueueName(argstoali.toString(), "aliEnterInfo");
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
 					//	aliparkFeeService.parkingEnterinfoSync(argstoali);
 					} else {
 //						Map<String, String> argstoali = new HashMap<>();
@@ -572,6 +586,11 @@ public class BarrierChargeController {
 				}
 			}
 			if (num == 1) {
+				Poschargemac poschargemac=new Poschargemac();
+				poschargemac.setMacidout((int)info.get("macId"));
+				poschargemac.setPoschargeid(payRet.getId());
+				posChargeMacService.updateByPosChargeId(poschargemac); 
+				
 				logger.info(cardNumber + "出场成功!" + dataMap.toString());
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			} else {

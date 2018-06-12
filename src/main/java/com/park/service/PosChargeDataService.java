@@ -108,7 +108,13 @@ public interface PosChargeDataService {
 	
 	public Map<String, Object> getParkChargeByDay(int parkId, String day);
 	
+	public Map<String, Object> selectPosdataSumByParkAndRange(Date startDay, Date endDay,int parkId);
+	
 	public Map<String, Object> getParkChargeCountByDay(int parkId, String day);
+	
+	public Map<String, Object> calInByParkAndRange(int parkId, Date startDate, Date endDate);
+	
+	public Map<String, Object> calOutByParkAndRange(int parkId, Date startDate, Date endDate);
 	
 	public List<PosChargeData> getByCardNumber(String cardNumber);
 	

@@ -51,6 +51,9 @@
 	                				<a href="/park/parks">设备查询</a>
 
 	                			</li>
+	                			<li class="recod">
+	                				<a href="/park/parks" style="background: url(/park/img/bak5a.png) no-repeat center center;">设备查询</a>
+	                			</li>
 	                		</ul>
 	                	</div>
 	                </div>

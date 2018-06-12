@@ -188,7 +188,7 @@ public class AliParkFeeService {
 		AlipayEcoMycarParkingExitinfoSyncRequest request = new AlipayEcoMycarParkingExitinfoSyncRequest();
 		String parking_id=args.get("parking_id");
 		String car_number=args.get("car_number");
-		String in_time=args.get("in_time");
+		String in_time=args.get("out_time");
 		request.setBizContent("{" +
 				"\"parking_id\":\""
 				+ parking_id
@@ -196,7 +196,7 @@ public class AliParkFeeService {
 				"\"car_number\":\""
 				+ car_number
 				+ "\"," +
-				"\"in_time\":\""
+				"\"out_time\":\""
 				+ in_time
 				+ "\"" +
 				"  }");

@@ -10,9 +10,9 @@ userApp.controller("userCtrl", ['$scope', '$http',  'textModal', '$modal', '$tim
 	 $scope.paginationConf = {
         currentPage : 1,
         totalItems : 500,
-        itemsPerPage : 30,
+        itemsPerPage : 10,
         pagesLength : 10,
-        perPageOptions : [20, 30, 40, 50],
+        perPageOptions : [10,20, 30, 40, 50],
         rememberPerPage : 'perPageItems',
         onChange : function() {
             getInitail($scope.pagedata);

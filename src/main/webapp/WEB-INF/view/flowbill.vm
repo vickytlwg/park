@@ -114,6 +114,44 @@
 							</table>
 						</div>
 						<tm-pagination conf="paginationConf"></tm-pagination>
+										<th><span>应收费</span></th>
+										<!--	<th><span>补交</span></th> -->
+								<!--		<th><span>找零</span></th>	-->
+										<th><span>进场时间</span></th>	
+										<th><span>离场时间</span></th>
+										<th><span>缴费渠道</span></th>
+										<th><span>未缴理由</span></th>
+										<th><span>查看图片</span></th>
+				            </tr>
+				          <tbody id="channelBody"></tbody>
+				          	<tr  ng-repeat = "item in detail.items |orderBy:'id':true">
+				          		<td ><input type="checkbox" ng-model="item.checked" /></td>
+				          		<td ng-bind="item.id"></td>
+				          		<td ng-bind="item.cardNumber"></td>
+				          		<td ng-bind="item.parkDesc"></td>
+				          		<td ng-bind="item.portNumber"></td>
+				          		<td ng-bind="item.operatorId"></td>
+				          		<td ng-if="item.paidCompleted==true" class="success">已收费</td>
+								<td ng-if="item.paidCompleted==false" class="warning">未收费</td>
+				          		 <!--  		<td ng-bind="item.paidMoney"></td>  -->
+				          		<td ng-bind="item.chargeMoney"></td>
+					 <!-- 			<td ng-bind="item.givenMoney"></td>   -->
+				        <!--    		<td ng-bind="item.changeMoney"></td>  -->
+				          		<td ng-bind="item.entranceDate"></td>
+				          		<td ng-bind="item.exitDate"></td>
+								<td ng-if="item.paidCompleted==false">无</td>
+								<td ng-if="item.paidCompleted==true&&item.payType==0">支付宝</td>
+								<td ng-if="item.paidCompleted==true&&item.payType==1">微信</td>
+								<td ng-if="item.paidCompleted==true&&item.payType==2">现金</td>
+								<td ng-if="item.paidCompleted==true&&item.payType==9">现金</td>
+								
+				          		<td ng-if="item.url!=''"><a href={{item.url}} target="_blank">查看
+                                </a></td>
+								<td ng-if="item.url==''">暂无</td>
+				          </table>
+    					</div>
+    					<tm-pagination conf="paginationConf"></tm-pagination>
+    			
 
 
 					</div>

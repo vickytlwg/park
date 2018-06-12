@@ -119,7 +119,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
  	<select id="getByParkName" statementType="STATEMENT" resultMap="PosChargeDataMapper">
 		select * from posChargeData where parkDesc like '%${parkName}%' order by id desc limit 500
  	</select>		
-	<insert id="insert" parameterType="PosChargeData" keyProperty="id">
+	<insert id="insert" useGeneratedKeys="true" parameterType="PosChargeData" keyProperty="id">
 		insert into posChargeData(cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
 		paidMoney, unPaidMoney,givenMoney,changeMoney, isOneTimeExpense, paidCompleted,isLargeCar, entranceDate, exitDate,url,rejectReason,payType)
 		values(#{cardNumber}, #{parkId}, #{parkDesc}, #{portNumber}, #{isEntrance}, #{operatorId}, #{posId}, #{chargeMoney},
@@ -146,16 +146,20 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
   ]]> 
   </select>
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
-  <![CDATA[
+ 
   SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} order by id desc
-  ]]>
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between #{startDay} and #{endDay} and parkId=#{parkId} order by id desc
+
+  </select>
+   <select id="selectPosdataSumByParkAndRange" resultType="java.util.HashMap">
+ select sum(chargeMoney) as chargeMoney,SUM(paidMoney) AS paidMoney,SUM(unPaidMoney) AS unPaidMoney, SUM(givenMoney) AS givenMoney,SUM(changeMoney) AS changeMoney FROM posChargeData 
+ where parkId=#{parkId} and entranceDate between #{startDay} and #{endDay} 
   </select>
    <select id="selectPosdataByParkAndRangeAndCarportNumber" resultMap="PosChargeDataMapper">
-  <![CDATA[
+  
   SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{endDay} and entranceDate >= #{startDay} and parkId=#{parkId} and portNumber=#{carportNumber} order by id desc
-  ]]>
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between #{startDay} and #{endDay} and parkId=#{parkId} and portNumber=#{carportNumber} order by id desc
+
   </select>
 	<delete id="delete">
 		delete from PosChargeData where id=#{param1}
@@ -167,6 +171,14 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate <= #{en
 	#{startDate} and #{endDate} 
 	GROUP BY feeOperator.account
  </select>
+ <select id="calInByParkAndRange" resultType="java.util.HashMap">
+		SELECT count(*) as count FROM posChargeData WHERE parkId=#{parkId} AND entranceDate
+		BETWEEN  #{startDate} AND #{endDate}
+	</select>
+	<select id="calOutByParkAndRange" resultType="java.util.HashMap">
+		SELECT count(*) as count FROM posChargeData WHERE parkId=#{parkId} AND exitDate
+		BETWEEN  #{startDate} AND #{endDate}
+	</select>
 <delete id="deleteByParkIdAndDate">
 	 <![CDATA[
 	delete from posChargeData where parkId=#{parkId} and entranceDate>=#{startDay} and entranceDate<=#{endDay}

@@ -76,6 +76,7 @@
 		<mvc:interceptor>	
 		<mvc:mapping path="/*/**"/>
 		<mvc:exclude-mapping path="/login"/>
+		<mvc:exclude-mapping path="/urlLogin/**"/>
 		<mvc:exclude-mapping path="/authority"/>
 		<mvc:exclude-mapping path="/image/**"/>
 		<mvc:exclude-mapping path="/iot/**"/>

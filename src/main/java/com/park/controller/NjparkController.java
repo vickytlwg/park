@@ -145,13 +145,13 @@ public class NjparkController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String parkKey=new String((request.getParameter("parkKey")).getBytes("iso-8859-1"),"utf-8");
-		String carNo=new String((request.getParameter("carNo")).getBytes("iso-8859-1"),"utf-8");
-		String orderNo=new String((request.getParameter("orderNo")).getBytes("iso-8859-1"),"utf-8");
-		String enterTime=new String((request.getParameter("enterTime")).getBytes("iso-8859-1"),"utf-8");
-		String carType=new String((request.getParameter("carType")).getBytes("iso-8859-1"),"utf-8");
-		String gateName=new String((request.getParameter("gateName")).getBytes("iso-8859-1"),"utf-8");
-		String operatorName=new String((request.getParameter("operatorName")).getBytes("iso-8859-1"),"utf-8");
+		String parkKey=request.getParameter("parkKey");
+		String carNo=request.getParameter("carNo");
+		String orderNo=request.getParameter("orderNo");
+		String enterTime=request.getParameter("enterTime");
+		String carType=request.getParameter("carType");
+		String gateName=request.getParameter("gateName");
+		String operatorName=request.getParameter("operatorName");
 		
 		logger.debug("入场:"+carNo+"key:"+parkKey);
 		

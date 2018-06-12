@@ -147,7 +147,7 @@ public class HardwareSerivceImpl implements HardwareService{
 		if (!hardwares.isEmpty()) {
 			type=hardwares.get(0).getType();
 		}
-		List<Map<String, Object>> list=hardwareDAO.getInfoByMac(mac);
+	//	List<Map<String, Object>> list=hardwareDAO.getInfoByMac(mac);
 		if (type!=0) {
 			return hardwareDAO.getInfoByMac(mac);
 		} else {

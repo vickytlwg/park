@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +56,8 @@ public class IndexController {
 		}
 	}
 	
+	
+	
 	@RequestMapping(value = "authority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	public String authority(ModelMap modelMap, @RequestParam("username") String username,@RequestParam("password") String password,HttpSession session,HttpServletRequest request){
 		if(authService.checkUserAccess(username, password)){
@@ -80,6 +83,34 @@ public class IndexController {
 			return "redirect:login";
 		}	
 	}
+	
+	
+	@RequestMapping(value = "urlLogin/{username}/{password}/", method = RequestMethod.GET)
+	public String urlLogin(ModelMap modelMap, @PathVariable("username") String username,@PathVariable("password") String password,HttpSession session,HttpServletRequest request){
+		if(authService.checkUserAccess(username, password)){
+			session.setAttribute("username", username);			
+			//String url=request.getServletPath();
+			AuthUser user = authService.getUserByUsername(username);			
+			if(user != null){
+				session.setAttribute("userId", user.getId());
+	//			modelMap.addAttribute("user", user);
+				boolean isAdmin = false;
+				if(user.getRole() == AuthUserRole.ADMIN.getValue())
+					isAdmin=true;
+	//			modelMap.addAttribute("isAdmin", isAdmin);
+
+			}
+			String redirectUrl=(String) session.getAttribute("redirectUrl");
+			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
+				redirectUrl=redirectUrl.substring(5);
+				return "redirect:"+redirectUrl;
+			}
+			return "platformShow";
+		}else{
+			return "login";
+		}	
+	}
+	
 	@RequestMapping(value = "login")
 	public String login(HttpServletRequest request, HttpServletResponse response){
 		return "login";

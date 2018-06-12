@@ -71,5 +71,11 @@ public interface PosChargeDataDAO {
 	
 	public List<PosChargeData> getByParkName(@Param("parkName")String parkName);
 	
+	public Map<String, Object> calInByParkAndRange(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
+	
+	public Map<String, Object> calOutByParkAndRange(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
+	
+	public Map<String, Object> selectPosdataSumByParkAndRange(@Param("startDay") Date startDay, @Param("endDay") Date endDay,@Param("parkId")int parkId);
+	
 	public List<Map<String, Object>> getFeeOperatorChargeData(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
