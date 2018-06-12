@@ -259,7 +259,7 @@
 		//$('input#chargeNight').val($(tds[7]).text());	
 		$('select#parkStatus').val($(tds[7]).attr('data'));
 		$('input#isFree')[0].checked = parseInt($(tds[8]).attr('data')) == 1 ? true : false;
-		$('input#floorCount').val($(tds[9]).text());
+//		$('input#floorCount').val($(tds[9]).text());
 		$('select#parkType').val($(tds[10]).attr('data'));
 		var positionInput = $('input#position');
 		positionInput.val($(tds[12]).text());
@@ -368,8 +368,8 @@
 		parkFields['number'] = $('input#number').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
-		parkFields['floor'] = parseInt($('input#floorCount').val());
-		parkFields['type'] = parseInt($('select#parkType').val());
+/*		parkFields['floor'] = parseInt($('input#floorCount').val());
+*/		parkFields['type'] = parseInt($('select#parkType').val());
 		parkFields['position'] = getAreaNamebyID(getAreaID())+' '+$('input#positionlast').val();
 		parkFields['longitude'] = parseFloat($('input#longitude').val());
 		parkFields['latitude'] = parseFloat($('input#latitude').val());
@@ -501,7 +501,7 @@
 			tr.append('<td data=' + data[i]['status'] + ' >' + status + '</td>');
 			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
 			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');
-			tr.append('<td>' + data[i]['floor']+ '</td>');
+//			tr.append('<td>' + data[i]['floor']+ '</td>');
 			tr.attr('mapAddr', data[i]['mapAddr']);
 			tr.attr('contact', data[i]['contact']);
 			tr.attr('number', data[i]['number']);
@@ -521,9 +521,9 @@
 			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
-				tr.addClass('success');
-			}else{
 				tr.addClass('active');
+			}else{
+				tr.addClass('default');
 			}
 		
 			var picUri = data[i]['pictureUri']

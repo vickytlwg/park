@@ -1,6 +1,7 @@
 angular.module("parkBigDataApp", []).
 controller("parkBigDataCtrl", ['$scope','$interval','httpService',
 function($scope,$interval,httpService) {
+var data={low:0,count:5};
 var data={low:0,count:4};
 $scope.items={};
 var lastestId=0;

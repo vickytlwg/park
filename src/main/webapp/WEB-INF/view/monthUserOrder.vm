@@ -23,15 +23,18 @@
 
     <section class="content">
        <div class="row">
-            <div class="col-xs-12">
+            <div class="col-md-12" style="padding:0 5px 0 5px;">
               	<div class="box">	               
-	             <div class="box-body"> 
-					<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户预约</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 修改预约</button>
-		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除预约</button>
-								<button #if(!$isAdmin) disabled#end  ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
+	               <div class="box-header">
+	                  <h3 class="box-title"></h3>
+	                </div><!-- /.box-header -->
+	                <div class="box-body" style="padding:0px;">  
+					<div class="btn-group" style="margin-left:10px;">
+		                		<button #if(!$isAdmin) disabled#end  ng-click="refreshUser()" type="button" class="btn btn-info" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="insertUser()" type="button" class="btn btn-primary" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-pencil"></span> 预约</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="updateUser()" type="button" class="btn btn-warning" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-edit"></span> 修改</button>
+		                		<button #if(!$isAdmin) disabled#end  ng-click="deleteUser()" type="button" class="btn  btn-danger" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+								<button #if(!$isAdmin) disabled#end  ng-click="updateUserPark()" type="button" class="btn bg-maroon" style="border-radius:25px;margin-right:5px;"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
 		                	</div>	
 							<div class="pull-right">
 								<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park.id as park.name for park in parks" ng-model="selectedParkid" ng-change="selectChanged(selectedParkid)">
@@ -41,22 +44,22 @@
 	                    <br/>   
 	                    <br/>    	
 						<div>
-							  <table class="table table-bordered table-hover table-condensed" style="font-size:12px">
+							  <table class="table table-bordered table-hover table-condensed table-striped text-center" style="font-size:12px">
 					          
-					            <tr>					            
-					             <th><span style=""><input type="checkbox" /></div></th>
-										<th ><span style="padding-left:15%">Id</div></th>								
-										<th><span style="padding-left:15%">停车场名</div></th>
-										<th><span style="padding-left:15%">卡号</div></th>
-										<th><span style="padding-left:15%">车主</div></th>
-										<th><span style="padding-left:15%">车牌号</div></th>
-										<th><span style="padding-left:15%">车牌颜色</div></th>
-										<th><span style="padding-left:15%">证件类型</div></th>	
-										<th><span style="padding-left:15%">证件号码</div></th>
-										<th><span style="padding-left:15%">开始时间</div></th>
-										<th><span style="padding-left:15%">结束时间</div></th>	
-										<th><span style="padding-left:15%">支付金额</div></th>	
-										<th><span style="padding-left:15%">状态</div></th>							
+								<tr class="info" style="height: 30px; line-height: 30px;">
+					             <th><span style=""><input type="checkbox" /></span></th>
+										<th><span>Id</span></th>								
+										<th><span>停车场名</span></th>
+										<th><span>卡号</span></th>
+										<th><span>车主</span></th>
+										<th><span>车牌号</span></th>
+										<th><span>车牌颜色</span></th>
+										<th><span>证件类型</span></th>	
+										<th><span>证件号码</span></th>
+										<th><span>开始时间</span></th>
+										<th><span>结束时间</span></th>	
+										<th><span>支付金额</span></th>	
+										<th><span>状态</span></th>							
 					            </tr>
 					          
 					          <tbody id="parkBody"></tbody>

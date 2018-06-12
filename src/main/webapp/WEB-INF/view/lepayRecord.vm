@@ -21,17 +21,17 @@
     </section>
     <section class="content">
        <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12" style="padding: 0 5px 0 5px;">
               	<div class="box">
 	                <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div><!-- /.box-header -->
-	               <div class="box-body">  
+	               <div class="box-body" style="padding:0px;">  
 					
 	                	
 						<div>
-						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-				            <tr>				            				           										
+						 <table class="table table-hover table-bordered table-striped table-condensed text-center" id='channelTable' style="font-size:12px">
+					            <tr class="info" style="height: 30px; line-height: 30px;">					            
 										<th><span>ID</span></th>										
 										<th><span>交易金额</span></th>
 										<th><span>来源</span></th>

@@ -306,9 +306,9 @@ var bindSearchSubmitMacBtnClick = function(){
 			
 			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
-				tr.addClass('success');
-			}else{
 				tr.addClass('active');
+			}else{
+				tr.addClass('default');
 			}
 			macBody.append(tr);
 		}
