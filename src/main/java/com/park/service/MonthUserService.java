@@ -1,6 +1,9 @@
 package com.park.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.park.model.Monthuser;
 
@@ -39,5 +42,6 @@ public interface  MonthUserService {
 	    List<Monthuser> getByParkIdAndCount(int parkId,int start,int count);
 	    
 	    List<Monthuser> getByParkIdAndCountOrder(int parkId,int start,int count,int type);
-	    	    
+	   
+	    Map<String, Object> statisticsInfo(int parkId,int type);
 }

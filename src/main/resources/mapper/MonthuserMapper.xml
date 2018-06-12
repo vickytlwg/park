@@ -254,5 +254,7 @@
   <select id="getCountByParkId" resultType="int">
   	select count(*) from monthUser where parkid=#{parkId}
   </select>
-  
+  <select id="statisticsInfo" resultType="java.util.HashMap">
+  	SELECT COUNT(*) AS count,SUM(payment) AS payment FROM monthUser WHERE parkId=#{parkId} AND type=#{type}
+  </select>
 </mapper>

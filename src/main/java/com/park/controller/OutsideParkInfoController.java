@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Area;
+import com.park.model.AuthUser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
 import com.park.model.Street;
 import com.park.model.Zonecenter;
 import com.park.service.AreaService;
+import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
@@ -46,6 +48,34 @@ public class OutsideParkInfoController {
 	private PosChargeDataService posChargeDataService;
 	@Autowired 
 	private OutsideParkInfoService outsideParkInfoService;
+	@Autowired
+	private MonthUserService monthuserService;
+	@RequestMapping(value="monthUserInfo",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String monthUserInfo(HttpSession session){
+		String username = (String) session.getAttribute("username");
+		List<Park> parkList = parkService.getParks();
+		if (username != null){
+			parkList = parkService.filterPark(parkList, username);
+		}
+		long monthUserCount=0;
+		double payment=0;
+		for (Park park : parkList) {
+			Map<String, Object> tmpdata=monthuserService.statisticsInfo(park.getId(), 0);
+			if (tmpdata!=null) {
+				monthUserCount+=tmpdata.get("count")==null?0:(long) tmpdata.get("count");
+				payment+=tmpdata.get("payment")==null?0:(double)tmpdata.get("payment");
+			}
+			
+		}
+		Map<String, Object> ret=new HashMap<>();
+		Map<String, Object> result=new HashMap<>();
+		result.put("count", monthUserCount);
+		result.put("payment", payment);
+		ret.put("body", result);
+		ret.put("status", 1001);
+		return Utility.gson.toJson(ret);
+	}
 	@RequestMapping(value="zoneCenterInfo",method=RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String zoneCenterInfo(@RequestParam("start")int start,@RequestParam("count")int count,HttpSession session){

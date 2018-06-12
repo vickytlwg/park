@@ -1,6 +1,7 @@
 package com.park.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,6 +116,12 @@ public class MonthUserServiceImpl implements MonthUserService {
 	public List<Monthuser> getByParkAndPort(int parkId, String portNumber) {
 		// TODO Auto-generated method stub
 		return monthUserDao.getByParkAndPort(parkId, portNumber);
+	}
+
+	@Override
+	public Map<String, Object> statisticsInfo(int parkId, int type) {
+		// TODO Auto-generated method stub
+		return monthUserDao.statisticsInfo(parkId, type);
 	}
 
 }
