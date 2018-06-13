@@ -2,7 +2,6 @@
 <link href="/park/css/xx_list.css" rel="stylesheet" />
 <link href="/park/css/xx_pname.css" rel="stylesheet" />
 <link href="/park/css/smallbox.css" rel="stylesheet" />
-<link rel="stylesheet" href="/park/css/bootstrap.min.css" />
 <script type="text/javascript"
 	src="http://api.map.baidu.com/api?v=2.0&ak=c7A2jm3enN7T0s5V8QbDHx85"></script>
 <script type="text/javascript"

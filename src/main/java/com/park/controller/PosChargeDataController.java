@@ -454,7 +454,8 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumber(cardNumber));
 	}
 
-	@RequestMapping(value = "getByCardnumberAuthority", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
+	@RequestMapping(value = "getByCardnumberAuthority", method = RequestMethod.POST, produces = {
+			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByCardnumberAuthority(@RequestBody Map<String, String> args, HttpSession session) {
 		String cardNumber = args.get("cardNumber");
