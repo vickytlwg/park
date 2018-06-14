@@ -123,6 +123,9 @@ public class HardwareSerivceImpl implements HardwareService{
 		if(id== null || id < 0)
 			return true;
 		Hardware hardware = this.getHardwareById(id);
+		if (hardware==null) {
+			return false;
+		}
 		int ret = 0;
 		if(hardware.getStatus() != status){
 			hardware.setStatus(status);
