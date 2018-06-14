@@ -133,17 +133,36 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate},url=#{url}
 		where id=#{id}
 	</update>
-	<!-- 计算总金额 -->
- <select id="getChannelCharge" resultType="double">
+	<!-- 查询各渠道收费统计 -->
+ <!-- <select id="getByDateAndParkCount" resultType="java.util.HashMap">
  <![CDATA[
-  	select SUM(posChargeData.chargeMoney>0) AS chargeMoney from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}; 
+  	select payType as payType,sum(chargeMoney) as chargeMoney from posChargeData where 
+  	parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} GROUP BY payType
+  ]]> 
+  </select> -->
+<!-- 获取笔数-->
+ <select id="getByDateAndParkCount2" resultType="java.lang.String">
+ <![CDATA[
+  	select SUM(posChargeData.chargeMoney>0) AS totalCount
+  	from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
   ]]> 
   </select>
-  <!-- 获取渠道总收费笔数 -->
- <select id="getByDateAndParkCount" resultType="int">
-  <![CDATA[
-  select SUM(posChargeData.chargeMoney) AS chargeMoney,SUM(posChargeData.chargeMoney>0) AS chargeMoney from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate}
-  ]]> 
+  <!-- 获取金额-->
+  <select id="getByDateAndParkCount4" resultType="java.lang.String">
+	  select SUM(posChargeData.chargeMoney) AS totalAmount from posChargeData 
+where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+  </select>
+  <!-- 获取渠道 笔数-->
+ <select id="getByDateAndParkCount" resultType="java.lang.String">
+	  select sum(posChargeData.chargeMoney>0) AS totalCount from posChargeData 
+where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+ and payType = #{payType}
+  </select>
+    <!-- 获取渠道 金额-->
+  <select id="getByDateAndParkCount3" resultType="java.lang.String">
+	  select SUM(posChargeData.chargeMoney) AS totalAmount from posChargeData 
+where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+ and payType = #{payType}
   </select>
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
  

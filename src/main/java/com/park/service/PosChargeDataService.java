@@ -15,6 +15,13 @@ import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 
 public interface PosChargeDataService {
+	
+	//查询收费总笔数、收费总金额、各渠道收费统计
+		public String getByDateAndParkCount2(int parkId,String startDate,String endDate);
+		public String getByDateAndParkCount4(int parkId,String startDate,String endDate);
+		//各渠道收费统计
+		public String getByDateAndParkCount(int parkId,String startDate,String endDate,int payType);
+		public String getByDateAndParkCount3(int parkId,String startDate,String endDate,int payType);
 	//收费统计
 	public int getByDateAndParkCount(int parkId,String startDate,String endDate);
 	

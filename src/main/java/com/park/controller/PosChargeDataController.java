@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,6 +97,82 @@ public class PosChargeDataController {
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
+	
+	@Autowired
+	private PosChargeDataService posChargeDataService;
+	
+	//查询收费总笔数、收费总金额、各渠道收费统计
+		@RequestMapping(value = "/getByDateAndParkCount", produces = {"application/json;charset=utf-8" })
+		@ResponseBody
+		public String getByDateAndParkCount(@RequestBody Map<String, Object> args,HttpServletRequest request, HttpSession session) throws Exception{
+			int parkId=Integer.parseInt((String)args.get("parkId"));
+			String startDate=(String)args.get("startDate");
+			String endDate=(String)args.get("endDate");
+			Map<String, Object> retMap = new HashMap<String, Object>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date parsedStartDay = null;
+			try {
+				parsedStartDay = sdf.parse(startDate + " 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			Date parsedEndDay = null;
+			try {
+				parsedEndDay = sdf.parse(endDate + " 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			int payTypezfb=0;
+			int payTypewx=1;
+			int payTypexj=2;
+			int payTypeqt=3;
+			int payTypeyl=4;
+			int payTypegh=5;
+			/*int payTypedj=9;*/
+			//查询收费总笔数、收费总金额、各渠道收费统计
+			String results2=posChargeDataService.getByDateAndParkCount2(parkId,startDate, endDate);
+			String resultszfbbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypezfb);
+			String resultswxbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypewx);
+			String resultsxjbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypexj);
+			String resultsqtbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeqt);
+			String resultsylbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeyl);
+			String resultsghbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypegh);
+			
+			String results4=posChargeDataService.getByDateAndParkCount4(parkId,startDate, endDate);
+			String resultszfbje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypezfb);
+			String resultswxje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypewx);
+			String resultsxjje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypexj);
+			String resultsqtje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeqt);
+			String resultsylje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeyl);
+			String resultsghje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypegh);
+			
+			retMap.put("totalAmount", results4==null?new BigDecimal("0"):new BigDecimal(results4));
+			retMap.put("alipayAmount", resultszfbje==null?new BigDecimal("0"):new BigDecimal(resultszfbje));
+			retMap.put("wechartAmount", resultswxje==null?new BigDecimal("0"):new BigDecimal(resultswxje));
+			retMap.put("cashAmount", resultsxjje==null?new BigDecimal("0"):new BigDecimal(resultsxjje));
+			retMap.put("unionPayAmount", resultsylje==null?new BigDecimal("0"):new BigDecimal(resultsylje));
+			retMap.put("cbcAmount", resultsghje==null?new BigDecimal("0"):new BigDecimal(resultsghje));
+			retMap.put("otherAmount", resultsqtje==null?new BigDecimal("0"):new BigDecimal(resultsqtje));
+			
+			retMap.put("totalCount", results2==null?new BigDecimal("0"):new BigDecimal(results2));
+			retMap.put("alipayCount", resultszfbbs==null?new BigDecimal("0"):new BigDecimal(resultszfbbs));
+			retMap.put("wechartCount", resultswxbs==null?new BigDecimal("0"):new BigDecimal(resultswxbs));
+			retMap.put("cashCount", resultsxjbs==null?new BigDecimal("0"):new BigDecimal(resultsxjbs));
+			retMap.put("unionPayCount", resultsylbs==null?new BigDecimal("0"):new BigDecimal(resultsylbs));
+			retMap.put("cbcCount", resultsghbs==null?new BigDecimal("0"):new BigDecimal(resultsghbs));
+			retMap.put("otherCount", resultsqtbs==null?new BigDecimal("0"):new BigDecimal(resultsqtbs));
+//			return Utility.createJsonMsg(1001, "success", results);
+			//查收费笔数
+			/*int count  = posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate);*/
+			/*if (count > 0) {
+				retMap.put("status", 1001);
+				retMap.put("message", "success");
+				retMap.put("body", count);
+			} else {
+				retMap.put("status", 1002);
+			}*/
+			return Utility.createJsonMsg(1001, "success", retMap);
+		}
 
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
 	public String feeDetailIndex(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
