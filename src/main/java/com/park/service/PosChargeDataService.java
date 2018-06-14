@@ -23,9 +23,9 @@ public interface PosChargeDataService {
 		public String getByDateAndParkCount(int parkId,String startDate,String endDate,int payType);
 		public String getByDateAndParkCount3(int parkId,String startDate,String endDate,int payType);
 	//收费统计
-	public int getByDateAndParkCount(int parkId,String startDate,String endDate);
+	/*public int getByDateAndParkCount(int parkId,String startDate,String endDate);
 	
-	public double getChannelCharge(int parkId,String startDate,String endDate);
+	public double getChannelCharge(int parkId,String startDate,String endDate);*/
 	
 	public PosChargeData getById(int id);		
 	
