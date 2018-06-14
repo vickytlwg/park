@@ -351,7 +351,7 @@ float:right;
 </div>		
 
 
-<div class="modal fade"  tabindex="-1" id="parkAuthoritySet" role="dialog" aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
+<div class="modal fade"  tabindex="-1" id="parkAuthoritySet" style="min-width:900px" role="dialog" aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
 	<div class='modal-dialog'>
 		<div class='modal-content'>
 			<div class='modal-header'>
@@ -377,6 +377,15 @@ float:right;
 									</label>
 							</div>
 							</div>
+							<div class='col-sm-3'>
+							<div class='checkbox'>
+								<label id="month0label" style="display:none">
+                                </label>
+									<label style="float:left;">
+                                       <input type='checkbox' id='month1expire'>月卡过期</input>
+									</label>
+							</div>
+							</div>
 							<div class='col-sm-2'>
 							<div class='checkbox'>
 									<label style="float:left;">
@@ -384,31 +393,31 @@ float:right;
 									</label>
 							</div>
                             </div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeA1'>typeA</input>
+                                       <input type='checkbox' id='typeA1'>tA</input>
 									</label>
 							</div>
                             </div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeB1'>typeB</input>
+                                       <input type='checkbox' id='typeB1'>tB</input>
 									</label>
 							</div>
 							</div>
-							<div class='col-sm-2'>	
+							<div class='col-sm-1'>	
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeC1'>typeC</input>
+                                       <input type='checkbox' id='typeC1'>tC</input>
 									</label>
 							</div>
 							</div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeD1'>typeD</input>
+                                       <input type='checkbox' id='typeD1'>tD</input>
 									</label>
 							</div>
 							</div>
@@ -435,6 +444,15 @@ float:right;
 									</label>
 							</div>
 							</div>
+							<div class='col-sm-3'>
+							<div class='checkbox'>
+								<label id="month0label" style="display:none">
+                                </label>
+									<label style="float:left;">
+                                       <input type='checkbox' id='month0expire'>月卡过期</input>
+									</label>
+							</div>
+							</div>
 							<div class='col-sm-2'>
 							<div class='checkbox'>
 									<label style="float:left;">
@@ -442,31 +460,31 @@ float:right;
 									</label>
 							</div>
                             </div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeA0'>typeA</input>
+                                       <input type='checkbox' id='typeA0'>tA</input>
 									</label>
 							</div>
                             </div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeB0'>typeB</input>
+                                       <input type='checkbox' id='typeB0'>tB</input>
 									</label>
 							</div>
 							</div>
-							<div class='col-sm-2'>	
+							<div class='col-sm-1'>	
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeC0'>typeC</input>
+                                       <input type='checkbox' id='typeC0'>tC</input>
 									</label>
 							</div>
 							</div>
-							<div class='col-sm-2'>
+							<div class='col-sm-1'>
 							<div class='checkbox'>
 									<label style="float:left;">
-                                       <input type='checkbox' id='typeD0'>typeD</input>
+                                       <input type='checkbox' id='typeD0'>tD</input>
 									</label>
 							</div>
 							</div>

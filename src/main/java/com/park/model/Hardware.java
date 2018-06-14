@@ -35,7 +35,7 @@ public class Hardware {
 		this.id = id;
 	}
 	public void setMac(String mac) {
-		this.mac = mac;
+		this.mac = mac.trim();
 	}
 	public void setType(int type) {
 		this.type = type;
