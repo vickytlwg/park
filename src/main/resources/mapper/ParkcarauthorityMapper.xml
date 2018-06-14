@@ -13,9 +13,11 @@
     <result column="other" property="other" jdbcType="VARCHAR" />
     <result column="other2" property="other2" jdbcType="VARCHAR" />
     <result column="temporary" property="temporary" jdbcType="BIT" />
+    <result column="monthExpired" property="monthexpired" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, parkId, channel, typeA, typeB, typeC, typeD, month, other, other2, temporary
+    id, parkId, channel, typeA, typeB, typeC, typeD, month, other, other2, temporary, 
+    monthExpired
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -30,12 +32,12 @@
   <insert id="insert" parameterType="com.park.model.Parkcarauthority" >
     insert into parkCarAuthority (id, parkId, channel, 
       typeA, typeB, typeC, typeD, 
-      month, other, other2, temporary
-      )
+      month, other, other2, temporary, 
+      monthExpired)
     values (#{id,jdbcType=INTEGER}, #{parkid,jdbcType=INTEGER}, #{channel,jdbcType=TINYINT}, 
       #{typea,jdbcType=BIT}, #{typeb,jdbcType=BIT}, #{typec,jdbcType=BIT}, #{typed,jdbcType=BIT}, 
-      #{month,jdbcType=BIT}, #{other,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{temporary,jdbcType=BIT}
-      )
+      #{month,jdbcType=BIT}, #{other,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, #{temporary,jdbcType=BIT}, 
+      #{monthexpired,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Parkcarauthority" >
     insert into parkCarAuthority
@@ -73,6 +75,9 @@
       <if test="temporary != null" >
         temporary,
       </if>
+      <if test="monthexpired != null" >
+        monthExpired,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -107,6 +112,9 @@
       </if>
       <if test="temporary != null" >
         #{temporary,jdbcType=BIT},
+      </if>
+      <if test="monthexpired != null" >
+        #{monthexpired,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -143,6 +151,9 @@
       <if test="temporary != null" >
         temporary = #{temporary,jdbcType=BIT},
       </if>
+      <if test="monthexpired != null" >
+        monthExpired = #{monthexpired,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -157,7 +168,8 @@
       month = #{month,jdbcType=BIT},
       other = #{other,jdbcType=VARCHAR},
       other2 = #{other2,jdbcType=VARCHAR},
-      temporary = #{temporary,jdbcType=BIT}
+      temporary = #{temporary,jdbcType=BIT},
+      monthExpired = #{monthexpired,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getByParkId" resultType="com.park.model.Parkcarauthority">

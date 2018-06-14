@@ -22,6 +22,8 @@ public class Parkcarauthority {
     private String other2;
     
     private Boolean temporary;
+    
+    private Boolean monthexpired;
 
     public Boolean getTemporary() {
 		return temporary;
@@ -109,5 +111,13 @@ public class Parkcarauthority {
 
     public void setOther2(String other2) {
         this.other2 = other2 == null ? null : other2.trim();
+    }
+    
+    public Boolean getMonthexpired() {
+        return monthexpired;
+    }
+
+    public void setMonthexpired(Boolean monthexpired) {
+        this.monthexpired = monthexpired;
     }
 }

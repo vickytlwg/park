@@ -353,6 +353,7 @@
                   $('#typeD1').removeProp("checked");
                   $('#temporary1').removeProp("checked");
 	            $('#month1').prop("checked",authorityTmp['month']);
+	            $('#month1expire').prop("checked",authorityTmp['monthexpired']);
 	            $('#typeA1').prop("checked",authorityTmp['typea']);
 	            $('#typeB1').prop("checked",authorityTmp['typeb']);
 	            $('#typeC1').prop("checked",authorityTmp['typec']);
@@ -368,6 +369,7 @@
                   $('#typeD0').removeProp("checked");
                   $('#temporary0').removeProp("checked");
 	            $('#month0').prop("checked",authorityTmp['month']);
+	            $('#month0expire').prop("checked",authorityTmp['monthexpired']);
                 $('#typeA0').prop("checked",authorityTmp['typea']);
                 $('#typeB0').prop("checked",authorityTmp['typeb']);
                 $('#typeC0').prop("checked",authorityTmp['typec']);
@@ -381,6 +383,7 @@
 	    data1['channel']=1;
 	    data1['id']=parseInt($('#month1label').val());
 	    data1['month']=$('#month1').prop("checked") ;
+	    data1['monthexpired']=$('#month1expire').prop("checked") ;
 	    data1['typea']=$('#typeA1').prop("checked") ;
 	    data1['typeb']=$('#typeB1').prop("checked") ;
 	    data1['typec']=$('#typeC1').prop("checked") ;
@@ -391,6 +394,7 @@
         data0['channel']=0;
         data0['id']=parseInt($('#month0label').val());
         data0['month']=$('#month0').prop("checked") ;
+        data1['monthexpire']=$('#month0expire').prop("checked") ;
         data0['typea']=$('#typeA0').prop("checked") ;
         data0['typeb']=$('#typeB0').prop("checked") ;
         data0['typec']=$('#typeC0').prop("checked") ;

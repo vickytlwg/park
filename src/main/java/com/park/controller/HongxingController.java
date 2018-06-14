@@ -116,6 +116,7 @@ public class HongxingController {
 		AlipaySystemOauthTokenResponse oauthTokenResponse = null;
 		try {
 			oauthTokenResponse = alipayClient.execute(request);
+			logger.info("alipaytoken返回:"+oauthTokenResponse.getBody());
 		} catch (AlipayApiException e) {
 			// 处理异常
 			e.printStackTrace();
@@ -127,13 +128,16 @@ public class HongxingController {
 		request3.setBizContent("{" + "\"car_id\":\"" + car_id + "\"" + "  }");
 		String carNumber = "";
 		try {
-			AlipayEcoMycarParkingVehicleQueryResponse response3 = alipayClient2.execute(request3, access_token);
+			AlipayEcoMycarParkingVehicleQueryResponse response3 = alipayClient.execute(request3, access_token);
+			logger.info("alipay停车信息返回:"+response3.getBody());
 			carNumber = response3.getCarNumber();
 		} catch (AlipayApiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		logger.info("alipay停车查询:"+carNumber+" userId:"+userId);
 		modelMap.addAttribute("carNumber", carNumber);
+		
 		Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(carNumber).get(0);
 		String parkKey = "c1648ccf33314dc384155896cf4d00b9";
 		AlipayClient alipayClienttmp = alipayClient2;
@@ -145,13 +149,14 @@ public class HongxingController {
 		String orderCreate = "";
 		try {
 			data = hongxingService.getFeeByCarNumber(carNumber, parkKey);
+			
 		} catch (Exception e) {
 			return "alipayh5/noRecord";
 		}
 		if (data == null) {
 			return "alipayh5/noRecord";
 		}
-
+		logger.info("红星费用:"+data.toString());
 		try {
 			String code = hongxingService.creatPayOrder((String) data.get("orderNo"), parkKey);
 			if (code == null) {

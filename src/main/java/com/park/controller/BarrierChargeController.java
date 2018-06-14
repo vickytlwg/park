@@ -187,7 +187,7 @@ public class BarrierChargeController {
 			for (Monthuser tmpMonthuser : monthusers) {
 				Long diff = (tmpMonthuser.getEndtime().getTime() - (new Date()).getTime());
 				monthuserNow = tmpMonthuser;
-				if (tmpMonthuser.getType() == 0) {
+				if (tmpMonthuser.getType() == 0) {//月卡
 					monthUserType = 0;
 					if (diff > 0) {
 						int leftDays = (int) (diff / (1000 * 60 * 60 * 24));
@@ -197,7 +197,7 @@ public class BarrierChargeController {
 						break;
 					} else {
 						dataMap.put("ds", "-1");
-						monthUserType = 9; //月卡或预约过期
+						monthUserType = 8; //月卡过期
 					}
 
 				} else {
@@ -282,6 +282,11 @@ public class BarrierChargeController {
 					dataMap.put("aT", "0");
 				}
 				break;
+			case 8:
+				if (parkcarauthority.getMonthexpired() != true) {
+					dataMap.put("aT", "0");
+				}
+				break;	
 			case 9:
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
@@ -401,6 +406,11 @@ public class BarrierChargeController {
 					dataMap.put("aT", "0");
 				}
 				break;
+			case 8:
+				if (parkcarauthority.getMonthexpired() != true) {
+					dataMap.put("aT", "0");
+				}
+				break;	
 			case 9:
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
