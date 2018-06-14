@@ -32,7 +32,7 @@
 
         <script type="text/javascript" src="/park/script/parkBigData.js?v=1.0"></script>
 	   <script type="text/javascript" src="/park/script/parkBigDataAngular.js?v=1.0"></script>
-       <script type="text/javascript" src="/park/script/generalData_getdata.js"</script>
+       <script type="text/javascript" src="/park/script/generalData_getdata.js"></script>
 
 <section class="content-header">
 	<h1>云平台</h1>

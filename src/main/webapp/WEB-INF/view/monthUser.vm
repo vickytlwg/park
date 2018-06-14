@@ -51,31 +51,42 @@
 
 	<section class="content">
 		<div class="row">
-			<div class="col-xs-12" style="padding:0 5px 0 5px;">
-              	<div class="box">
-	                <div class="box-header">
-	                  <h3 class="box-title"></h3>
-	                </div><!-- /.box-header -->
-	                <div class="box-body" style="padding:0px;">  
-		                	<div class="btn-group" style="margin-left:10px;">
+			<div class="col-xs-12" style="padding: 0 5px 0 5px;">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title"></h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body" style="padding: 0px;">
+						<div class="btn-group" style="margin-left: 10px;">
 							<button ng-click="refreshUser()" type="button"
-								class="btn btn-info" style="border-radius:25px;margin-right:5px;">
+								class="btn btn-info"
+								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-refresh"></span> 刷新
 							</button>
 							<button ng-click="insertUser()" type="button"
-								class="btn btn-primary" style="border-radius:25px;margin-right:5px;">
+								class="btn btn-primary"
+								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-pencil"></span> 开卡
 							</button>
-							<button ng-click="updateUser()" type="button" class="btn btn-warning" style="border-radius:25px;margin-right:5px;">
+							<button ng-click="updateUser()" type="button"
+								class="btn btn-warning"
+								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-edit"></span> 续费
 							</button>
 							<button ng-click="deleteUser()" type="button"
-								class="btn  btn-danger" style="border-radius:25px;margin-right:5px;">
+								class="btn  btn-danger"
+								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-remove"></span> 删除
 							</button>
 							<button ng-click="updateUserPark()" type="button"
-								class="btn  bg-maroon" style="border-radius:25px;margin-right:5px;">
+								class="btn  bg-maroon"
+								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-edit"></span> 所属停车场
+							</button>
+							<button type="button" class="btn  btn-default"
+								style="border-radius: 25px; margin-right: 5px;">
+								<a href="/park/similarcarnumber"> 相似车牌管理</a>
 							</button>
 						</div>
 						<div class="pull-right">
@@ -89,44 +100,19 @@
 							</select>
 						</div>
 						<br /> <br />
-          <h1>
-           月卡用户
-             <small style="padding-left:15px"><a href="/park/similarcarnumber">
-            相似车牌管理</a></small>
-          </h1>
-       
-    </section>
-
-    <section class="content">
-       <div class="row">
-            <div class="col-xs-12">
-              	<div class="box">	               
-	             <div class="box-body"> 
-					<div class="btn-group">
-		                		<button   ng-click="refreshUser()" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button   ng-click="insertUser()" type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 用户开卡</button>
-		                		<button   ng-click="updateUser()" type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 月卡续费</button>
-		                		<button   ng-click="deleteUser()" type="button" class="btn  bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除用户</button>
-								<button   ng-click="updateUserPark()" type="button" class="btn  bg-olive"><span class="glyphicon glyphicon-edit"></span> 所属停车场</button>
-		                	</div>	
-							<div class="pull-right">
-								<select class="form-control" style="padding:1px;font-size:14px;height:35px" ng-options="park.id as park.name for park in parks" ng-model="selectedParkid" ng-change="selectChanged(selectedParkid)">
-	                		#if($isAdmin) <option value=-1>所有停车场</option>#end           		
-	                	</select>
-	                	</div>
-	                    <br/>   
-	                    <br/>    	
 						<div>
 							<table
 								class="table table-bordered table-hover table-condensed table-striped text-center"
 								style="font-size: 12px">
 								<tr class="info" style="height: 30px; line-height: 30px;">
 									<th><span style=""> <input type="checkbox" />
-											</span></th>
-<!-- 									<th hidden><span>Id </span></th>
- -->									<th><span>停车场名 </span></th>
-<!-- 									<th hidden><span>楼层 </span></th>
- -->									<th><span>车主 </span></th>
+									</span></th>
+									<!-- 									<th hidden><span>Id </span></th>
+ -->
+									<th><span>停车场名 </span></th>
+									<!-- 									<th hidden><span>楼层 </span></th>
+ -->
+									<th><span>车主 </span></th>
 									<th><span>车牌号 </span></th>
 									<!-- 									<th hidden><span>车牌颜色 </span></th>
  -->
@@ -159,21 +145,18 @@
 								</tr>
 							</table>
 						</div>
-					</div>
-					<tm-pagination conf="paginationConf"></tm-pagination>
+						<tm-pagination conf="paginationConf"></tm-pagination>
 					<div class="box-footer clearfix">
 
 						<div id='pagination'></div>
 					</div>
-				</div>
-			</div>
-		</div>
-
+					</div>
+					</div>
+					</div>
+					</div>
 	</section>
-
-
-
-
+	
+			
 
 
 	<script type="text/ng-template" id="modifyUser">

@@ -29,8 +29,8 @@
 	                </div><!-- /.box-header -->
 	                <div class="box-body">  
 						<div>
-						 <table class="table table-hover  table-condensed" id='channelTable' style="font-size:12px">
-				            <tr>				            
+						 <table class="table table-hover table-striped table-condensed" id='channelTable' style="font-size:12px">
+								<tr class="info" style="height: 30px; line-height: 30px;">
 									<th><span >Id</span></th>		
 									<th><span>用户</span></th>
 									<th><span>角色管理</span></th>

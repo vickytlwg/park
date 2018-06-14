@@ -67,11 +67,21 @@
 							<button #if(!$isAdmin) disabled#end ng-click="criterion.insert()"
 								type="button" class="btn btn-primary"
 								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-pencil"></span> 添加收费标准
+								<span class="glyphicon glyphicon-pencil"></span> 添加
+							</button>
+							<button #if(!$isAdmin) disabled#end ng-click="criterion.update()"
+								type="button" class="btn btn-warning"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-edit"></span> 更新
+							</button>
+							<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()"
+								type="button" class="btn btn-danger"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="glyphicon glyphicon-remove"></span> 删除
 							</button>
 							<button #if(!$isAdmin) disabled#end
 								ng-click="criterion.insertModel1()" type="button"
-								class="btn btn-warning"
+								class="btn bg-blue"
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-pencil"></span>按次收费模版添加
 							</button>
@@ -81,16 +91,7 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加
 							</button>
-							<button #if(!$isAdmin) disabled#end ng-click="criterion.update()"
-								type="button" class="btn btn-success"
-								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-edit"></span> 更新收费标准
-							</button>
-							<button #if(!$isAdmin) disabled#end ng-click="criterion.remove()"
-								type="button" class="btn btn-danger"
-								style="border-radius: 25px; margin-right: 5px;">
-								<span class="glyphicon glyphicon-remove"></span> 删除收费标准
-							</button>
+							
 						</div>
 						<div class="pull-right" style="width: 300px">
 							<div class="input-group">

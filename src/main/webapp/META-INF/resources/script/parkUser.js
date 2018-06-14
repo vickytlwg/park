@@ -103,9 +103,9 @@
 			tr.append('<td>' + parkName + '</td>');
 					
 			if( i % 2 == 0){
-				tr.addClass('success');
-			}else{
 				tr.addClass('active');
+			}else{
+				tr.addClass('default');
 			}
 			userBody.append(tr);
 		}
