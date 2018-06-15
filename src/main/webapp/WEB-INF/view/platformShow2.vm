@@ -29,7 +29,7 @@
 						<div class="row" ng-controller="getdataCtrl">
 							<div class="col-lg-3 col-md-3">
 								<div class="small-box"
-									style="background-color: #f5f3f0; height: 220px; margin-top: 0px;">
+									style="background-color: #f5f3f0; height: 200px; margin-top: 0px;">
 									<div class="row" style="padding-top: 10px;">
 										<div class="col-xs-4 img-responsive">
 											<img src="dist/img/money.png"
@@ -78,7 +78,7 @@
 								</div>
 							</div>
 							<section class="col-lg-9 col-md-9 connectedSortable"
-								style="margin-left: -10px;">
+								style="margin-left: -10px;height:400px;">
 								<div
 									style="min-width: 850px; height: 400px; margin-bottom: 20px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1)">
 									<div class="iframe" id="container7"
@@ -88,19 +88,19 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-3 col-md-3" style="margin-top: -190px;">
+							<div class="col-lg-3 col-md-3" style="margin: -190px 0 0 -5px;">
 								<section class="connectedSortable">
-									<div id="container6" style="height: 230px;"></div>
+									<div id="container6" style="height: 230px; min-width: 280px;"></div>
 								</section>
 								<section class="connectedSortable">
 									<div class="chart-responsive">
 										<div id="container5"
-											style="height: 165px; min-width: 280px; margin-top: -30px;"></div>
+											style="height: 180px; min-width: 280px; margin-top: -20px;"></div>
 									</div>
 								</section>
 							</div>
-							<div class="col-lg-9 col-md-9" ng-controller="parkBigDataCtrl">
-								<div class="panel panel-default">
+							<div class="col-lg-9 col-md-9" ng-controller="parkBigDataCtrl" style="padding:0 20px 0 10px;">
+								<div class="panel panel-default" style="min-width: 850px;height:210px;">
 									<div class="panel-heading">
 										<h3 class="panel-title">停车场实时数据</h3>
 									</div>
@@ -184,7 +184,11 @@
 		},
 		grid : 
 		{
-			x: '7%', y: '10%', width: '86%', height: '86%'
+			x: '4%',
+			y: '0%', 
+			width: '90%', 
+			height: '86%',
+			borderWidth : 0
 		},
 		/* 		toolbox : {
 		 show : true,
@@ -209,6 +213,7 @@
 		 }
 		 }, */
 		calculable : true,
+		
 		xAxis : [ {
 			type : 'category',
 			boundaryGap : false,
@@ -233,7 +238,7 @@
 				lineStyle : {
 					type : 'solid',
 					color : '#999', //左边线的颜色
-					width : '1' //坐标线的宽度
+					width : '0', //坐标线的宽度
 				}
 			}
 		} ],
@@ -345,21 +350,23 @@
 			roseType : 'radius',
 			label : {
 				normal : {
-					textStyle : {
+					show:true,
+					position: 'inside',
+/* 					textStyle : {
 						color : 'rgba(255, 255, 255, 0.3)'
-					}
+					} */
 				}
 			},
-			labelLine : {
+/* 			labelLine : {
 				normal : {
 					lineStyle : {
 						color : 'rgba(255, 255, 255, 0.3)'
 					},
-					smooth : 0.2,
-					length : 2,
-					length2 : 2
+					smooth : false,
+					length : 1,
+					length2 : 1
 				}
-			},
+			}, */
 			itemStyle : {
 				normal : {
 					shadowBlur : 200,
