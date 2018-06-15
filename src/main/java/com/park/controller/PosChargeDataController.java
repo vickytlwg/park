@@ -130,21 +130,21 @@ public class PosChargeDataController {
 			int payTypegh=5;
 			/*int payTypedj=9;*/
 			//查询收费总笔数、收费总金额、各渠道收费统计
-			String results2=posChargeDataService.getByDateAndParkTotalCounts(parkId,startDate, endDate);
-			String resultszfbbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypezfb);
-			String resultswxbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypewx);
-			String resultsxjbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypexj);
-			String resultsqtbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypeqt);
-			String resultsylbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypeyl);
-			String resultsghbs=posChargeDataService.getByDateAndParkTotalCount(parkId,startDate, endDate,payTypegh);
+			String results2=posChargeDataService.getByDateAndParkCount2(parkId,startDate, endDate);
+			String resultszfbbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypezfb);
+			String resultswxbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypewx);
+			String resultsxjbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypexj);
+			String resultsqtbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeqt);
+			String resultsylbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeyl);
+			String resultsghbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypegh);
 			
-			String results4=posChargeDataService.getByDateAndParkAmountCounts(parkId,startDate, endDate);
-			String resultszfbje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypezfb);
-			String resultswxje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypewx);
-			String resultsxjje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypexj);
-			String resultsqtje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypeqt);
-			String resultsylje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypeyl);
-			String resultsghje=posChargeDataService.getByDateAndParkAmountCount(parkId,startDate, endDate,payTypegh);
+			String results4=posChargeDataService.getByDateAndParkCount4(parkId,startDate, endDate);
+			String resultszfbje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypezfb);
+			String resultswxje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypewx);
+			String resultsxjje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypexj);
+			String resultsqtje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeqt);
+			String resultsylje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeyl);
+			String resultsghje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypegh);
 			
 			retMap.put("totalAmount", results4==null?new BigDecimal("0"):new BigDecimal(results4));
 			retMap.put("alipayAmount", resultszfbje==null?new BigDecimal("0"):new BigDecimal(resultszfbje));
