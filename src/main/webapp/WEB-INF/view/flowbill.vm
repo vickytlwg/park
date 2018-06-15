@@ -112,6 +112,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 	</section>
 
 	<script type="text/ng-template" id="myModalTest"> 

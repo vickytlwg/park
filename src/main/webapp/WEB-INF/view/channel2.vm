@@ -43,7 +43,7 @@
 	                				<a href="/park/hardware" style="background: url(/park/img/bak4a.png) no-repeat center center;">硬件设备管理</a>
 	                			</li>
 	                			<li class="recod">
-	                				<a href="/park/parks" style="background: url(/park/img/bak5a.png) no-repeat center center;">设备查询</a>
+	                				<a href="/park/pos" style="background: url(/park/img/bak5a.png) no-repeat center center;">设备查询</a>
 	                			</li>
 	                		</ul>
 	                	</div>
