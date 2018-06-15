@@ -140,8 +140,6 @@ public interface PosChargeDataService {
 	List<PosChargeData> getCharges(String cardNumber) throws Exception;
 	
 	public List<PosChargeData> getByCardNumberAndPort(String cardNumber,Integer portNumber);
-	double getChannelCharge(int parkId, String startDate, String endDate);
-	int getByDateAndParkCount(int parkId, String startDate, String endDate);
 	
 	
 

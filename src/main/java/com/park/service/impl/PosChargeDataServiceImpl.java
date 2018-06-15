@@ -1701,17 +1701,18 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return chargeDao.calOutByParkAndRange(parkId, startDate, endDate);
 	}
 
-	@Override
+	/*@Override
 	public int getByDateAndParkCount(int parkId, String startDate, String endDate) {
 		// TODO Auto-generated method stub
 		return chargeDao.getByDateAndParkCount(parkId, startDate, endDate);
 	}
 
+
 	@Override
 	public double getChannelCharge(int parkId, String startDate, String endDate) {
 		// TODO Auto-generated method stub
 		return chargeDao.getChannelCharge(parkId, startDate, endDate);
-	}
+	}*/
 
 	@Override
 	public String getByDateAndParkCount2(int parkId, String startDate, String endDate) {

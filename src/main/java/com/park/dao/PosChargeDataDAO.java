@@ -21,9 +21,9 @@ public interface PosChargeDataDAO {
 
 	
 	//收费统计
-	public int getByDateAndParkCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
+	/*public int getByDateAndParkCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
 	
-	public double getChannelCharge(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
+	public double getChannelCharge(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);*/
 	
 	public PosChargeData getById(int id);
 

@@ -64,7 +64,8 @@
         $('#jfbzgl').show();
         /*$('#byyhgl').show();*/
         /*$('#yygl').show();*/
-        $('#jrgk').show();
+        /*$('#jrgk').show();*/
+        $('#jrgk2').show();
  //       $('#jrqf').show();
         /*$('#cwdz').show();*/
         $('#cwdz2').show();
@@ -80,7 +81,8 @@
         /*$('#jsgl').show();*/
         /*$('#jsfpgl').show();*/
         /*$('#ymgl').show();*/
-        $('#gdgl').show();
+       /* $('#gdgl').show();*/
+        $('#gdgl2').show();
     };
     $.fn.layout.luwai = function() {
         $.cookie("lunei", "false");
@@ -105,7 +107,8 @@
         //   $('#hbmdgl').show();
         /*$('#sfrygl').show();*/
         /*$('#xjygl').show();*/
-        $('#jrgk').show();
+        /*$('#jrgk').show();*/
+        $('#jrgk2').show();
         // $('#jrtcfx').show();
         $('#cwsyfx').show();
         //   $('#zdsfgk').show();
@@ -130,7 +133,8 @@
         /*$('#jsgl').show();*/
         /*$('#jsfpgl').show();*/
         /*$('#ymgl').show();*/
-        $('#gdgl').show();
+        /*$('#gdgl').show();*/
+        $('#gdgl2').show();
         //    $('#llgl').show();
         $('#llkgl').show();
         $('#llt').show();

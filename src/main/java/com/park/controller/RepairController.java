@@ -57,6 +57,27 @@ public String Repair(ModelMap modelMap, HttpServletRequest request, HttpSession 
 	}
 	return "repair";
 }
+@RequestMapping(value = "/repair2", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+public String Repair2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+	
+	String username = (String) session.getAttribute("username");
+	AuthUser user = authService.getUserByUsername(username);
+	if(user != null){
+		modelMap.addAttribute("user", user);
+		boolean isAdmin = false;
+		if(user.getRole() == AuthUserRole.ADMIN.getValue())
+			isAdmin=true;
+		modelMap.addAttribute("isAdmin", isAdmin);
+		
+		Set<Page> pages = pageService.getUserPage(user.getId()); 
+		for(Page page : pages){
+			modelMap.addAttribute(page.getPageKey(), true);
+		}
+	}
+		
+	return "repair2";
+}
+
 @RequestMapping(value="/getall",produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String getall(){

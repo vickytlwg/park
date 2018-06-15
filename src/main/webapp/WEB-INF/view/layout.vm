@@ -250,7 +250,8 @@
 				<a href="#"><i class="fa fa-fw fa-cab"></i> <span>数据查看</span> <i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
 					
-					<li id="jrgk" #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li>
+					<!-- <li id="jrgk" #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li> -->
+					<li id="jrgk2" #if(!$isAdmin && !$park_outsideParkStatus2) hidden#end><a href="/park/outsideParkStatus2"><i class="fa fa-pie-chart"></i>今日概况</a></li>
 					<li id="jrtcfx" #if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a href="/park/outsideParkStatusAdmin"><i class="fa fa-pie-chart"></i>今日停车分析</a></li>
 					<li id="zdsyfx" #if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>车位使用分析</a></li>		
 					<li id="zdsfgk" #if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
@@ -355,7 +356,8 @@
 		 <li class="treeview active">
                 <a href="#"><i class="fa fa-cog"></i> <span>运维管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                  <li id="gdgl" #if(!$isAdmin && !$park_repair) hidden#end><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li>
+                 <!--  <li id="gdgl" #if(!$isAdmin && !$park_repair) hidden#end><a href="/park/repair"><i class="fa fa-file"></i>工单管理</a></li> -->
+              	  <li id="gdgl2" #if(!$isAdmin && !$park_repair2) hidden#end><a href="/park/repair/repair2"><i class="fa fa-file"></i>工单管理2</a></li>
               </ul>
             </li>
 			
