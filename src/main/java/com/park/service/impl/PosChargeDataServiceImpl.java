@@ -1285,26 +1285,26 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		
 		//查询收费总笔数、收费总金额、各渠道收费统计
 		@Override
-		public String getByDateAndParkCount2(int parkId, String startDate, String endDate) {
+		public String getByDateAndParkTotalCounts(int parkId, String startDate, String endDate) {
 			// TODO Auto-generated method stub
-			return chargeDao.getByDateAndParkCount2(parkId,startDate,endDate);
+			return chargeDao.getByDateAndParkTotalCounts(parkId,startDate,endDate);
 		}
 		@Override
-		public String getByDateAndParkCount4(int parkId, String startDate, String endDate) {
+		public String getByDateAndParkAmountCounts(int parkId, String startDate, String endDate) {
 			// TODO Auto-generated method stub
-			return chargeDao.getByDateAndParkCount4(parkId,startDate,endDate);
+			return chargeDao.getByDateAndParkAmountCounts(parkId,startDate,endDate);
 		}
 		//各渠道收费统计
 			@Override
-			public String getByDateAndParkCount(int parkId, String startDate, String endDate,int payType) {
+			public String getByDateAndParkTotalCount(int parkId, String startDate, String endDate,int payType) {
 				// TODO Auto-generated method stub
-				return chargeDao.getByDateAndParkCount(parkId,startDate,endDate,payType);
+				return chargeDao.getByDateAndParkTotalCount(parkId,startDate,endDate,payType);
 			}
 			
 			@Override
-			public String getByDateAndParkCount3(int parkId, String startDate, String endDate,int payType) {
+			public String getByDateAndParkAmountCount(int parkId, String startDate, String endDate,int payType) {
 				// TODO Auto-generated method stub
-				return chargeDao.getByDateAndParkCount3(parkId,startDate,endDate,payType);
+				return chargeDao.getByDateAndParkAmountCount(parkId,startDate,endDate,payType);
 			}
 
 }
