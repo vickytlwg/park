@@ -107,7 +107,7 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
                     tmparray[0]=parkdata[i].longitude;
                     tmparray[1]=parkdata[i].latitude;
                       var v_html = '<div id="tipsjt"></div>';
-                        v_html += '    <h4 class="font14 green relative">'+'<a href=/park/outsideParkStatusAdminWithPark/' +parkdata[i].id+'/>'+ parkdata[i].name +'</a>'+ '<i class="i pointer" onclick="closeTip()"></i></h4>';
+                        v_html += '    <h4 class="font14 green relative">'+'<a href=/park/outsideParkStatusAdminWithPark/' +parkdata[i].id+'/ target=_blank/>'+ parkdata[i].name +'</a>'+ '<i class="i pointer" onclick="closeTip()"></i></h4>';
                         v_html += "<img style='float:right;margin:4px;margin-top:10px' id='imgDemo' src='http://onz6nkuxs.bkt.clouddn.com/timg.jpg'  height='304' title='停车场'/>";
                         v_html += '<p class="font14">空余车位：<b class="red">' + parkdata[i].portLeftCount + '</b> 个' + (parkdata[i].portLeftCount > 0 ? '<a href="#" class="but_b back_orange font18 radius_3 absolute reservation" style="right:10px;" pid="' + i+ '"><i class="i"></i>预定</a>' : '') + '</p>';
                         v_html += '<p class="green font14">收费标准：</p> ';

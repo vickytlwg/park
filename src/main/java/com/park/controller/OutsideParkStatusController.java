@@ -113,6 +113,6 @@ public class OutsideParkStatusController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "outsideParkStatusAdmin";
+		return "outsideParkStatusAdminWithPark";
 	}
 }
