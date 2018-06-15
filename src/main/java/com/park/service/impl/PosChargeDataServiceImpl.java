@@ -1,4 +1,5 @@
 package com.park.service.impl;
+
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.text.DecimalFormat;
@@ -43,11 +44,10 @@ import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.PosdataService;
 
-
 @Transactional
 @Service
 public class PosChargeDataServiceImpl implements PosChargeDataService {
-		
+
 	@Autowired
 	MonthUserService monthUserService;
 	@Autowired
@@ -55,31 +55,28 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	ParkService parkService;
-	
+
 	@Autowired
 	FormatTime formatTime;
-	
-	@Autowired 
+
+	@Autowired
 	private CarportStatusDetailDAO carportStatusDetailDAO;
-		
+
 	@Autowired
 	FeeCriterionService criterionService;
+
 	
-	@Autowired
-	PosdataService posdataService;
-	
+
 	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
-	
+
 	@Autowired
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
 
-	
-	
 	private static Log logger = LogFactory.getLog(PosChargeDataServiceImpl.class);
-	
+
 	@Override
 	public PosChargeData getById(int id) {
 		return chargeDao.getById(id);
@@ -108,17 +105,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public int insert(PosChargeData item) {
 		if (ArrayUtils.contains(Constants.parkToQuene, item.getParkId())) {
-			PosChargeData tmPosChargeData=item;
+			PosChargeData tmPosChargeData = item;
 			tmPosChargeData.setExitDate1(tmPosChargeData.getEntranceDate());
-			String str=JsonUtils.objectToJson(tmPosChargeData);
+			String str = JsonUtils.objectToJson(tmPosChargeData);
 			item.setExitDate1(null);
-			System.out.println("active插入前"+new Date().getTime());
+			System.out.println("active插入前" + new Date().getTime());
 			try {
 				ActiveMqService.SendPosChargeData(str);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			System.out.println("active插入后"+new Date().getTime());
+			System.out.println("active插入后" + new Date().getTime());
 		}
 		return chargeDao.insert(item);
 	}
@@ -127,184 +124,193 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public int update(PosChargeData item) {
 		return chargeDao.update(item);
 	}
+
 	@Override
 	public List<PosChargeData> getCharges(String cardNumber) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
-		
-		for (PosChargeData tmpcharge:charges){
-		
+
+		for (PosChargeData tmpcharge : charges) {
+
 			if (tmpcharge.getExitDate() == null) {
-			this.calExpense(tmpcharge, new Date(),false);}
+				this.calExpense(tmpcharge, new Date(), false);
+			}
 		}
 		return charges;
 	}
+
 	@Override
 	public List<PosChargeData> getDebt(String cardNumber) throws Exception {
-		System.out.println("获取poschargedata list前: "+new Date().getTime()+"\n");
+		// System.out.println("获取poschargedata list前: "+new
+		// Date().getTime()+"\n");
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
-		System.out.println("获取poschargedata list后: "+new Date().getTime()+"\n");
+		// System.out.println("获取poschargedata list后: "+new
+		// Date().getTime()+"\n");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
-		System.out.println("poschargedata list录入支付宝前: "+new Date().getTime()+"\n");
+		// System.out.println("poschargedata list录入支付宝前: "+new
+		// Date().getTime()+"\n");
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				//信息录入支付宝
-				List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(charge.getParkId());
+				// 信息录入支付宝
+				List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(charge.getParkId());
 				try {
 					if (!parktoaliparks.isEmpty()) {
-						Parktoalipark parktoalipark=parktoaliparks.get(0);
-						Map<String, String> argstoali=new HashMap<>();
+						Parktoalipark parktoalipark = parktoaliparks.get(0);
+						Map<String, String> argstoali = new HashMap<>();
 						argstoali.put("parking_id", parktoalipark.getAliparkingid());
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-						aliparkFeeService.parkingExitinfoSync(argstoali);
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+						// aliparkFeeService.parkingExitinfoSync(argstoali);
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
-				
-				tmPosChargeDatas.add(charge);				
+
+				tmPosChargeDatas.add(charge);
 			}
 		}
-		System.out.println("poschargedata list录入支付宝后: "+new Date().getTime()+"\n");
-		System.out.println("poschargedata 计算前: "+new Date().getTime()+"\n");
-		for (PosChargeData tmpcharge:tmPosChargeDatas){
-			this.calExpense(tmpcharge, new Date(),false);
+		// System.out.println("poschargedata list录入支付宝后: "+new
+		// Date().getTime()+"\n");
+		// System.out.println("poschargedata 计算前: "+new Date().getTime()+"\n");
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
+			this.calExpense(tmpcharge, new Date(), false);
 		}
-		int tmpint=0;
-		for (PosChargeData tmpcharge:tmPosChargeDatas){
+		int tmpint = 0;
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			tmpint++;
-			if (tmpint>1) {
+			if (tmpint > 1) {
 				tmpcharge.setChargeMoney(0);
 				tmpcharge.setRejectReason("平台清场");
 				update(tmpcharge);
-			}}
-		System.out.println("poschargedata 计算后: "+new Date().getTime()+"\n");
+			}
+		}
+		// System.out.println("poschargedata 计算后: "+new Date().getTime()+"\n");
 		return tmPosChargeDatas;
 	}
 
 	@Override
 	public List<PosChargeData> getLastRecord(String carNumber, int count) {
-		return   chargeDao.getLastRecord(carNumber,count);
+		return chargeDao.getLastRecord(carNumber, count);
 	}
 
 	@Override
 	public PosChargeData pay(String cardNumber, double money) throws Exception {
-		double theMoney=money;
+		double theMoney = money;
 		List<PosChargeData> charges = this.getCharges(cardNumber);
-//		for (PosChargeData charge : charges) {
-//			if (money >= charge.getUnPaidMoney()) {
-//				money -= charge.getUnPaidMoney();
-//				charge.setPaidCompleted(true);
-//				this.update(charge);
-//			}
-//		}
+		// for (PosChargeData charge : charges) {
+		// if (money >= charge.getUnPaidMoney()) {
+		// money -= charge.getUnPaidMoney();
+		// charge.setPaidCompleted(true);
+		// this.update(charge);
+		// }
+		// }
 		int count = charges.size();
 		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
-		
-	//	Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+
+		// Outsideparkinfo
+		// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 		if (money >= 0) {
-			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
 			lastCharge.setPaidCompleted(true);
-			DecimalFormat df = new DecimalFormat("0.00"); 
-			String data=df.format(lastCharge.getChangeMoney() + money);
-			lastCharge.setChangeMoney(Double.parseDouble(data));				
-//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
-//			outsideparkinfo.setPossigndate(new Date());
-						
+			DecimalFormat df = new DecimalFormat("0.00");
+			String data = df.format(lastCharge.getChangeMoney() + money);
+			lastCharge.setChangeMoney(Double.parseDouble(data));
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			// outsideparkinfo.setPossigndate(new Date());
+
+		} else {
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney() - theMoney);
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+theMoney));
+			// outsideparkinfo.setPossigndate(new Date());
 		}
-		else {
-			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
-			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney()-theMoney);
-	//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+theMoney));
-	//		outsideparkinfo.setPossigndate(new Date());
-		}
-	// 	outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		this.update(lastCharge);
 		return lastCharge;
 	}
 
 	@Override
-	public void calExpense(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {		
-		
-		Boolean isMonthUser=false;
-		Boolean isRealMonthUser=false;
-	//	Boolean isMonthUserMoreCars=false;
-		List<Monthuser> monthusers=monthUserService.getByCarnumberAndPark(charge.getCardNumber(),charge.getParkId());
-		Monthuser monthuserUse=new Monthuser();
+	public void calExpense(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
+
+		Boolean isMonthUser = false;
+		Boolean isRealMonthUser = false;
+		// Boolean isMonthUserMoreCars=false;
+		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(charge.getCardNumber(), charge.getParkId());
+		Monthuser monthuserUse = new Monthuser();
 		for (Monthuser monthuser : monthusers) {
-			if (monthuser.getType()==0) {
-				Long diff=(monthuser.getEndtime().getTime()-(new Date()).getTime());
-				if (diff>0) {
-					isMonthUser=true;
-					monthuserUse=monthuser;
-					isRealMonthUser=true;
+			if (monthuser.getType() == 0) {
+				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());
+				if (diff > 0) {
+					isMonthUser = true;
+					monthuserUse = monthuser;
+					isRealMonthUser = true;
 					break;
-				}								
+				}
 			}
 		}
 		Park park = parkService.getParkById(charge.getParkId());
-		Boolean isMultiCarsOneCarport=false;
-		if (park.getDescription()!=null&&park.getDescription().contains("一位多车")) {
-			isMultiCarsOneCarport=true;
+		Boolean isMultiCarsOneCarport = false;
+		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
+			isMultiCarsOneCarport = true;
 		}
 
-/*		
-		if (isRealMonthUser&&monthuserUse.getOwner()!=null&&!monthuserUse.getOwner().equals("")) {
-			List<Monthuser> monthuserss=monthUserService.getByUsernameAndPark(monthuserUse.getOwner(), monthuserUse.getParkid());
-			List<Monthuser> realMonthUsers=new ArrayList<>();
-			for (Monthuser monthuser : monthuserss) {
-				if (monthuser.getType().intValue()==0) {
-					realMonthUsers.add(monthuser);
-				}
-			}
-			if (realMonthUsers.size()>1) {
-				isMonthUserMoreCars=true;
-				for (Monthuser monthuser : realMonthUsers) {
-					if (monthuser.getPlatecolor().equals("已入场")) {
-						isRealMonthUser=false;
-						break;
-					}				
-				}
-			}		
-		} */
-		
-		if (isMultiCarsOneCarport&&isRealMonthUser&&monthuserUse.getPlatecolor()!=null&&monthuserUse.getPlatecolor().equals("包月转为临停")) {
-			isRealMonthUser=false;
-			monthuserUse.setPlatecolor("出场完结");	
-			monthUserService.updateByPrimaryKeySelective(monthuserUse);	
+		/*
+		 * if (isRealMonthUser&&monthuserUse.getOwner()!=null&&!monthuserUse.
+		 * getOwner().equals("")) { List<Monthuser>
+		 * monthuserss=monthUserService.getByUsernameAndPark(monthuserUse.
+		 * getOwner(), monthuserUse.getParkid()); List<Monthuser>
+		 * realMonthUsers=new ArrayList<>(); for (Monthuser monthuser :
+		 * monthuserss) { if (monthuser.getType().intValue()==0) {
+		 * realMonthUsers.add(monthuser); } } if (realMonthUsers.size()>1) {
+		 * isMonthUserMoreCars=true; for (Monthuser monthuser : realMonthUsers)
+		 * { if (monthuser.getPlatecolor().equals("已入场")) {
+		 * isRealMonthUser=false; break; } } } }
+		 */
+
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
+			isRealMonthUser = false;
+			monthuserUse.setPlatecolor("出场完结");
+			monthUserService.updateByPrimaryKeySelective(monthuserUse);
 		}
-		if (isMultiCarsOneCarport&&isRealMonthUser&&monthuserUse.getPlatecolor()!=null&&monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
-			isRealMonthUser=false;
-			List<Monthuser> monthuserss=monthUserService.getByParkAndPort(monthuserUse.getParkid(), monthuserUse.getCardnumber());
-			
-			for (Monthuser monthuser : monthuserss) {				
-				if (isMultiCarsOneCarport&&isRealMonthUser&&monthuserUse.getPlatecolor()!=null&&monthuser.getPlatecolor().contains("包月出场")) {
-					String[] datas=monthuser.getPlatecolor().split("#");
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
+			isRealMonthUser = false;
+			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
+					monthuserUse.getCardnumber());
+
+			for (Monthuser monthuser : monthuserss) {
+				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+						&& monthuser.getPlatecolor().contains("包月出场")) {
+					String[] datas = monthuser.getPlatecolor().split("#");
 					try {
-						Date dateout=new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
-						charge.setExitDate1(dateout);//更改出场时间为原先包月车的出场时间
-						exitDate=dateout;
+						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
+						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
+						exitDate = dateout;
 						charge.setRejectReason("临停转包月");
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
 					monthuser.setPlatecolor("出场完结");
 					monthUserService.updateByPrimaryKeySelective(monthuser);
-					monthuserUse.setPlatecolor("出场完结");									
+					monthuserUse.setPlatecolor("出场完结");
 					for (Monthuser strMonthUser : monthuserss) {
 						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
-							monthuserUse.setPlatecolor("包月出场#"+new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 							strMonthUser.setPlatecolor("临停恢复为包月");
 							monthUserService.updateByPrimaryKeySelective(strMonthUser);
 							break;
 						}
 					}
-					monthUserService.updateByPrimaryKeySelective(monthuserUse);	
+					monthUserService.updateByPrimaryKeySelective(monthuserUse);
 					break;
-				}				
+				}
 			}
-			
+
 		}
 		if (isRealMonthUser) {
 			charge.setChargeMoney(0);
@@ -312,30 +318,31 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			charge.setExitDate1(exitDate);
 			charge.setPaidCompleted(true);
 			if (!isQuery) {
-				if (isMultiCarsOneCarport&&monthuserUse.getPlatecolor().equals("多车包月入场")) {
+				if (isMultiCarsOneCarport && monthuserUse.getPlatecolor().equals("多车包月入场")) {
 					monthuserUse.setPlatecolor("出场完结");
-					List<Monthuser> monthuserss=monthUserService.getByUsernameAndPark(monthuserUse.getOwner(), monthuserUse.getParkid());
+					List<Monthuser> monthuserss = monthUserService.getByUsernameAndPark(monthuserUse.getOwner(),
+							monthuserUse.getParkid());
 					for (Monthuser monthuser : monthuserss) {
 						if (monthuser.getPlatecolor().equals("包月转为临停")) {
 							monthuser.setPlatecolor("临停恢复为包月");
-							monthuserUse.setPlatecolor("包月出场#"+new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 							monthUserService.updateByPrimaryKeySelective(monthuser);
 							break;
 						}
 					}
 					monthUserService.updateByPrimaryKeySelective(monthuserUse);
-				}				
+				}
 				this.update(charge);
 			}
 			return;
 		}
-		
-	
+
 		Integer criterionId = park.getFeeCriterionId();
 		FeeCriterion criterion = criterionService.getById(criterionId);
-		
-		if (criterion.getType()==2) {
-			newFeeCalcExpense2(charge, criterion,exitDate, isQuery);
+
+		if (criterion.getType() == 2) {
+			newFeeCalcExpense2(charge, criterion, exitDate, isQuery);
 			if (isRealMonthUser) {
 				charge.setChargeMoney(0);
 				charge.setUnPaidMoney(0);
@@ -343,10 +350,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			if (!isQuery) {
 				this.update(charge);
 			}
-			return ;
+			return;
 		}
-		if (criterion.getType()==1) {
-			newFeeCalcExpense1(charge, criterion,exitDate, isQuery);
+		if (criterion.getType() == 1) {
+			newFeeCalcExpense1(charge, criterion, exitDate, isQuery);
 			if (isRealMonthUser) {
 				charge.setChargeMoney(0);
 				charge.setUnPaidMoney(0);
@@ -354,122 +361,120 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			if (!isQuery) {
 				this.update(charge);
 			}
-			return ;
+			return;
 		}
-		
+
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";
 		String nightEndHour = "07";
-		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
-			 nightStartHour = criterion.getNightstarttime().split(":")[0];
-			 nightEndHour = criterion.getNightendtime().split(":")[0];
-		}	
-		int isOneTimeExpense=charge.getIsOneTimeExpense();
-		if (charge.getIsLargeCar() == false) {		
-			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);		
-			for(String name:dates.keySet()){
-				charge.setEntranceDate(name);
-				int houra=Integer.parseInt(name.substring(11,13));
-				int hourNight=Integer.parseInt(nightStartHour);
-				int hourDay=Integer.parseInt(nightEndHour);
-				boolean isNight=false;
-				if (houra>12) {
-					if (houra>=hourNight) {
-						isNight=true;
-					}
-				}
-				else {
-					if (houra<hourDay) {
-						isNight=true;
-					}
-				}
-			  if (isNight) {
-				charge.setIsOneTimeExpense(1);
-				this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			  else if(isOneTimeExpense==0) {
-				  charge.setIsOneTimeExpense(0);
-				  this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			  else {
-					charge.setIsOneTimeExpense(1);
-					this.calExpenseSmallCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			}
-			System.out.println("计费计算后: "+new Date().getTime()+"\n");
-			System.out.println("计费更新前: "+new Date().getTime()+"\n");
-			charge.setEntranceDate(startTime);
-			charge.setExitDate(endTime);			
-			if (charge.getPaidMoney()>=charge.getChargeMoney()&&!isQuery ) {
-				charge.setUnPaidMoney(0);
-				charge.setPaidCompleted(true);
-				charge.setChangeMoney(charge.getPaidMoney()-charge.getChargeMoney());
-			}
-			else {
-				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
-			}
-			if (isRealMonthUser) {
-				charge.setChargeMoney(0);
-				charge.setUnPaidMoney(0);
-			}
-			if (!isQuery) {
-				this.update(charge);
-			}
-			System.out.println("计费更新后: "+new Date().getTime()+"\n");
-			
-		} else {
-			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
-			for(String name:dates.keySet()){
-				charge.setEntranceDate(name);
-				int houra=Integer.parseInt(name.substring(11,13));
-				int hourNight=Integer.parseInt(nightStartHour);
-				int hourDay=Integer.parseInt(nightEndHour);
-				boolean isNight=false;
-				if (houra>12) {
-					if (houra>=hourNight) {
-						isNight=true;
-					}
-				}
-				else {
-					if (houra<hourDay) {
-						isNight=true;
-					}
-				}
-			  if (isNight) {
-				charge.setIsOneTimeExpense(1);
-				this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			  else if(isOneTimeExpense==0) {
-				  charge.setIsOneTimeExpense(0);
-				  this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			  else {
-					charge.setIsOneTimeExpense(1);
-					this.calExpenseLargeCar(charge,new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),isQuery);
-			}
-			}
-			charge.setEntranceDate(startTime);
-			charge.setExitDate(endTime);			
-			if (charge.getPaidMoney()>=charge.getChargeMoney()&&!isQuery ) {
-				charge.setUnPaidMoney(0);
-				charge.setPaidCompleted(true);
-				charge.setChangeMoney(charge.getPaidMoney()-charge.getChargeMoney());
-			}
-			else {
-				charge.setUnPaidMoney(charge.getChargeMoney()-charge.getPaidMoney());
-			}
-			if (isRealMonthUser) {
-				//charge.setPaidMoney(0);
-				charge.setChargeMoney(0);
-				charge.setUnPaidMoney(0);
-			}
-			if (!isQuery) {
-				this.update(charge);
-			}
-			
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
 		}
-		
+		int isOneTimeExpense = charge.getIsOneTimeExpense();
+		if (charge.getIsLargeCar() == false) {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				}
+			}
+			// System.out.println("计费计算后: "+new Date().getTime()+"\n");
+			// System.out.println("计费更新前: "+new Date().getTime()+"\n");
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			// System.out.println("计费更新后: "+new Date().getTime()+"\n");
+
+		} else {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				// charge.setPaidMoney(0);
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+
+		}
+
 	}
 
 	@Override
@@ -478,39 +483,39 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
-			//信息录入支付宝
+			// 信息录入支付宝
 			if (charge.getExitDate() == null) {
-				List<Parktoalipark> parktoaliparks=parkToAliparkService.getByParkId(charge.getParkId());
+				List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(charge.getParkId());
 				try {
 					if (!parktoaliparks.isEmpty()) {
-						Parktoalipark parktoalipark=parktoaliparks.get(0);
-						Map<String, String> argstoali=new HashMap<>();
+						Parktoalipark parktoalipark = parktoaliparks.get(0);
+						Map<String, String> argstoali = new HashMap<>();
 						argstoali.put("parking_id", parktoalipark.getAliparkingid());
 						argstoali.put("car_number", cardNumber);
 						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(exitDate));
-						aliparkFeeService.parkingExitinfoSync(argstoali);
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+						// aliparkFeeService.parkingExitinfoSync(argstoali);
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
-				
-				tmPosChargeDatas.add(charge);				
+
+				tmPosChargeDatas.add(charge);
 			}
 		}
-		for (PosChargeData tmpcharge:tmPosChargeDatas){
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			Park park = parkService.getParkById(tmpcharge.getParkId());
-			if (park.getType()==1) {
-				this.calExpenseType1(tmpcharge, exitDate,false);
+			if (park.getType() == 1) {
+				this.calExpenseType1(tmpcharge, exitDate, false);
+			} else {
+				this.calExpense(tmpcharge, exitDate, false);
 			}
-			else {
-				this.calExpense(tmpcharge, exitDate,false);
-			}
-			
+
 		}
-		int tmpint=0;
-		for (PosChargeData tmpcharge:tmPosChargeDatas){
+		int tmpint = 0;
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			tmpint++;
-			if (tmpint>1) {
+			if (tmpint > 1) {
 				tmpcharge.setChargeMoney(0);
 				tmpcharge.setRejectReason("平台清场");
 				update(tmpcharge);
@@ -520,7 +525,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public void calExpenseLargeCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
+	public void calExpenseLargeCar(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
 		Park park = parkService.getParkById(charge.getParkId());
 
 		Integer criterionId = park.getFeeCriterionId();
@@ -528,15 +533,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterionId == null)
 			throw new Exception("no fee criterion");
 		FeeCriterion criterion = criterionService.getById(criterionId);
-		if (criterion.getIsonetimeexpense()!=null&&criterion.getIsonetimeexpense().intValue()==1) {
-			charge.setIsOneTimeExpense(1); 
+		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
+			charge.setIsOneTimeExpense(1);
 		}
 		charge.setExitDate1(exitDate);
 		double expense = 0;
 		float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
-		if (charge.getIsOneTimeExpense() == 1&&diffMin >= criterion.getFreemins()) {
+		if (charge.getIsOneTimeExpense() == 1 && diffMin >= criterion.getFreemins()) {
 			expense = criterion.getOnetimeexpense();
-		} else {	
+		} else {
 			float firstHour = criterion.getStep1capacity();
 			if (diffMin > criterion.getFreemins()) {
 				if (diffMin <= firstHour) {
@@ -547,21 +552,22 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					double intervals1 = Math
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1pricelarge();
-						double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
-						//	double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
+					// double intervals2 = Math.ceil((diffMin - firstHour) /
+					// (criterion.getTimeoutpriceinterval()/2));
 
 					expense += intervals2 * criterion.getStep2pricelarge();
 				}
 			}
 		}
-		charge.setChargeMoney(expense+charge.getChargeMoney());
-		if (charge.getChargeMoney()>(criterion.getMaxexpense()*2)) {
-			charge.setChargeMoney(criterion.getMaxexpense()*2);
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
+			charge.setChargeMoney(criterion.getMaxexpense() * 2);
 		}
 	}
 
 	@Override
-	public void calExpenseSmallCar(PosChargeData charge, Date exitDate,Boolean isQuery) throws Exception {
+	public void calExpenseSmallCar(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
 
 		Park park = parkService.getParkById(charge.getParkId());
 
@@ -574,14 +580,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		charge.setExitDate1(exitDate);
 		double expense = 0;
-		if (criterion.getIsonetimeexpense()!=null&&criterion.getIsonetimeexpense().intValue()==1) {
-			charge.setIsOneTimeExpense(1); 
+		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
+			charge.setIsOneTimeExpense(1);
 		}
-		float diffMin = (float) Math.ceil((charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f));
-		if (charge.getIsOneTimeExpense() == 1&&diffMin >= criterion.getFreemins()) {
+		float diffMin = (float) Math
+				.ceil((charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f));
+		if (charge.getIsOneTimeExpense() == 1 && diffMin >= criterion.getFreemins()) {
 			expense = criterion.getOnetimeexpense();
 		} else {
-			
+
 			float firstHour = criterion.getStep1capacity();
 
 			if (diffMin > criterion.getFreemins()) {
@@ -594,17 +601,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
 					expense = intervals1 * criterion.getStep1price();
 					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
-					//	double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()/2));
+					// double intervals2 = Math.ceil((diffMin - firstHour) /
+					// (criterion.getTimeoutpriceinterval()/2));
 					expense += intervals2 * criterion.getStep2price();
 				}
 			}
 		}
-		charge.setChargeMoney(expense+charge.getChargeMoney());
-		if (charge.getChargeMoney()>criterion.getMaxexpense()) {
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
 			charge.setChargeMoney(criterion.getMaxexpense());
 		}
 
-		
 	}
 
 	@Override
@@ -614,11 +621,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
 				Park park = parkService.getParkById(charge.getParkId());
-				if (park.getType()==1) {
-					this.calExpenseType1(charge, exitDate,true);
-				}
-				else {
-					this.calExpense(charge, exitDate,true);
+				if (park.getType() == 1) {
+					this.calExpenseType1(charge, exitDate, true);
+				} else {
+					this.calExpense(charge, exitDate, true);
 				}
 			}
 		}
@@ -634,26 +640,26 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public Map<String, Object> getParkChargeByDay(int parkId, String day) {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(day + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(day + " 23:59:59");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		List<PosChargeData> posChargeDatas=selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
-		Map<String, Object> retmap=new HashMap<>();
-		float chargeTotal=0;
-		float realReceiveMoney=0;
-		for(PosChargeData posData:posChargeDatas){
-			chargeTotal+=posData.getChargeMoney();
-			realReceiveMoney+=posData.getGivenMoney()+posData.getPaidMoney()-posData.getChangeMoney();
+		}
+		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		Map<String, Object> retmap = new HashMap<>();
+		float chargeTotal = 0;
+		float realReceiveMoney = 0;
+		for (PosChargeData posData : posChargeDatas) {
+			chargeTotal += posData.getChargeMoney();
+			realReceiveMoney += posData.getGivenMoney() + posData.getPaidMoney() - posData.getChangeMoney();
 		}
 		retmap.put("totalMoney", chargeTotal);
 		retmap.put("realMoney", realReceiveMoney);
@@ -666,11 +672,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
-				tmPosChargeDatas.add(charge);				
+				tmPosChargeDatas.add(charge);
 			}
 		}
-		for (PosChargeData tmpcharge:tmPosChargeDatas){
-			this.calExpense(tmpcharge, exitDate,true);
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
+			this.calExpense(tmpcharge, exitDate, true);
 		}
 		return tmPosChargeDatas;
 	}
@@ -689,7 +695,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public List<PosChargeData> repay(String cardNumber, double money) throws Exception {
-		double theMoney=money;
+		double theMoney = money;
 		List<PosChargeData> charges = this.getCharges(cardNumber);
 		for (PosChargeData charge : charges) {
 			if (money >= charge.getUnPaidMoney()) {
@@ -703,11 +709,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			int count = charges.size();
 			PosChargeData lastCharge = charges.get(0);
 			lastCharge.setChangeMoney(lastCharge.getChangeMoney() + money);
-			lastCharge.setGivenMoney(theMoney+lastCharge.getGivenMoney());
-//			Outsideparkinfo outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
-//			outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
-//			outsideparkinfo.setPossigndate(new Date());
-//			outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			// Outsideparkinfo
+			// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+lastCharge.getPaidMoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			// outsideparkinfo.setPossigndate(new Date());
+			// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 			this.update(lastCharge);
 		}
 		return charges;
@@ -726,38 +734,40 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public List<PosChargeData> getByParkAndDay(int parkId, String date) throws ParseException  {
+	public List<PosChargeData> getByParkAndDay(int parkId, String date) throws ParseException {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
-		Date startDate=sFormat.parse(date+" 00:00:00");
-		Date endDate=sFormat.parse(date+" 23:59:59");
+		SimpleDateFormat sFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+		Date startDate = sFormat.parse(date + " 00:00:00");
+		Date endDate = sFormat.parse(date + " 23:59:59");
 		return chargeDao.getByRange(parkId, startDate, endDate);
 	}
 
 	@Override
 	public List<PosChargeData> getAllByDay(String date) throws ParseException {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
-		Date startDate=sFormat.parse(date+" 00:00:00");
-		Date endDate=sFormat.parse(date+" 23:59:59");
-		return chargeDao.getAllByDay(startDate,endDate);
+		SimpleDateFormat sFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+		Date startDate = sFormat.parse(date + " 00:00:00");
+		Date endDate = sFormat.parse(date + " 23:59:59");
+		return chargeDao.getAllByDay(startDate, endDate);
 	}
+
 	@Override
-	public List<PosChargeData> getByParkAndDayRange(int parkId, String startDate,String endDate) throws ParseException  {
+	public List<PosChargeData> getByParkAndDayRange(int parkId, String startDate, String endDate)
+			throws ParseException {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
-		Date dstartDate=sFormat.parse(startDate+" 00:00:00");
-		Date dendDate=sFormat.parse(endDate+" 23:59:59");
+		SimpleDateFormat sFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+		Date dstartDate = sFormat.parse(startDate + " 00:00:00");
+		Date dendDate = sFormat.parse(endDate + " 23:59:59");
 		return chargeDao.getByRange(parkId, dstartDate, dendDate);
 	}
 
 	@Override
-	public List<PosChargeData> getAllByDayRange(String startDate,String endDate) throws ParseException {
+	public List<PosChargeData> getAllByDayRange(String startDate, String endDate) throws ParseException {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sFormat=new SimpleDateFormat(Constants.DATEFORMAT);
-		Date dstartDate=sFormat.parse(startDate+" 00:00:00");
-		Date dendDate=sFormat.parse(endDate+" 23:59:59");
-		return chargeDao.getAllByDay(dstartDate,dendDate);
+		SimpleDateFormat sFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+		Date dstartDate = sFormat.parse(startDate + " 00:00:00");
+		Date dendDate = sFormat.parse(endDate + " 23:59:59");
+		return chargeDao.getAllByDay(dstartDate, dendDate);
 	}
 
 	@Override
@@ -785,11 +795,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public List<PosChargeData> getParkCarportStatusToday(int parkId,Date tmpdate) {
+	public List<PosChargeData> getParkCarportStatusToday(int parkId, Date tmpdate) {
 		// TODO Auto-generated method stub
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
-		
-		String day=sdf.format(tmpdate)+" 00:00:00";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		String day = sdf.format(tmpdate) + " 00:00:00";
 		return chargeDao.getParkCarportStatusToday(parkId, day);
 	}
 
@@ -810,88 +820,119 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		Outsideparkinfo outsideparkinfo=new Outsideparkinfo();
-		Outsideparkinfo outsideparkinfo2=new Outsideparkinfo();		
-		outsideparkinfo2 = outsideParkInfoService.getByParkidAndDate(parkId,new Date());
-		 
-		if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()!=null) {
-			outsideparkinfo.setPossigndate(outsideparkinfo2.getPossigndate());
-		}
-		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		Outsideparkinfo outsideparkinfo = new Outsideparkinfo();
+//		Outsideparkinfo outsideparkinfo2 = new Outsideparkinfo();
+//		outsideparkinfo2 = outsideParkInfoService.getByParkidAndDate(parkId, new Date());
+//
+//		if (outsideparkinfo2 != null && outsideparkinfo2.getPossigndate() != null) {
+//			outsideparkinfo.setPossigndate(outsideparkinfo2.getPossigndate());
+//		}
+	//	List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		Map<String, Object> parkSumData = selectPosdataSumByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+	//	System.out.println(parkSumData.toString());
+		Map<String, Object> parkInCount = calInByParkAndRange(parkId, parsedStartDay, parsedEndDay);
+	//	System.out.println(parkInCount.toString());
+		Map<String, Object> parkOutCount = calOutByParkAndRange(parkId, parsedStartDay, parsedEndDay);
+	//	System.out.println(parkOutCount.toString());
 		outsideparkinfo.setParkid(parkId);
 		outsideparkinfo.setCarportcount(park.getPortCount());
 		outsideparkinfo.setUnusedcarportcount(park.getPortLeftCount());
-		if (!posChargeDatas.isEmpty()) {			
-			if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()==null) {
-				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
-			}
-			else if(outsideparkinfo2!=null&&posChargeDatas.get(0).getEntranceDate().getTime()>outsideparkinfo2.getPossigndate().getTime()){
-				outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
-			}
-			
-			for(PosChargeData posChargeData : posChargeDatas){
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
-				outsideparkinfo.setAmountmoney((float) (outsideparkinfo.getAmountmoney()+posChargeData.getChargeMoney()));
-				if (posChargeData.getExitDate()==null) {
-					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
-				}
-				else {				
-					outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-				}				
-				outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));			
-				if(!posChargeData.isPaidCompleted()) 
-				{
-					if (posChargeData.getChargeMoney()>(posChargeData.getPaidMoney()+posChargeData.getGivenMoney())) {
-						outsideparkinfo.setArrearage((float) (outsideparkinfo.getArrearage()+posChargeData.getChargeMoney()-posChargeData.getPaidMoney()-posChargeData.getGivenMoney()));
-					}
-			//		outsideparkinfo.setRealmoney((float) (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
-				}
-			}	
-		}
-		else {
-			List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(park.getName(), parsedStartDay, parsedEndDay);			
-			//outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
-			//从数据表中获取数据
-			if (posdatas.isEmpty()) {
-				return outsideparkinfo;
-			}
-			outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
-			for(Posdata posdata:posdatas){
-				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
-				
-				if (posdata.getIsarrearage()==false) {
-					if (posdata.getMode()==0) {	
-					outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);															
-					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);																				
-				}
-					else {
-						outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-						outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
-						outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
-					}
-				}
-				
-				else {
-					outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
-				}
-				
-			}
-			/*List<Posdata> posdatas=posdataService.selectPosdataByParkAndRange(park.getName(), parsedStartDay, parsedEndDay);
-			outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
-			for(Posdata posdata :posdatas){
-				outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
-				outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
-				if (posdata.getEndtime()==null) {
-					outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
-				}
-				else{
-					outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
-				}
-				if (posdata.get) {
-					
-				}
-			}*/
-		}
+
+		outsideparkinfo.setAmountmoney( parkSumData==null?0:(float)(double) parkSumData.get("chargeMoney"));
+		outsideparkinfo.setRealmoney((parkSumData==null?0:(float)(double) parkSumData.get("givenMoney")) + (parkSumData==null?0:(float)(double) parkSumData.get("paidMoney"))
+				- (parkSumData==null?0:(float)(double) parkSumData.get("changeMoney")));
+		outsideparkinfo.setEntrancecount(parkInCount==null?0:(int)(long) parkInCount.get("count"));
+		outsideparkinfo.setOutcount(parkOutCount==null?0:(int)(long) parkOutCount.get("count"));
+		outsideparkinfo.setArrearage(outsideparkinfo.getAmountmoney() - outsideparkinfo.getRealmoney());
+		// if (!posChargeDatas.isEmpty()) {
+		// if (outsideparkinfo2!=null&&outsideparkinfo2.getPossigndate()==null)
+		// {
+		// outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+		// }
+		// else
+		// if(outsideparkinfo2!=null&&posChargeDatas.get(0).getEntranceDate().getTime()>outsideparkinfo2.getPossigndate().getTime()){
+		// outsideparkinfo.setPossigndate(posChargeDatas.get(0).getEntranceDate());
+		// }
+		// //
+		// outsideparkinfo.setAmountmoney((float)parkSumData.get("chargeMoney"));
+		// //
+		// outsideparkinfo.setRealmoney((float)parkSumData.get("givenMoney")+(float)parkSumData.get("paidMoney")-(float)parkSumData.get("changeMoney"));
+		// outsideparkinfo.setEntrancecount((int)parkInCount.get("count"));
+		// outsideparkinfo.setOutcount((int)parkOutCount.get("count"));
+		// outsideparkinfo.setArrearage(outsideparkinfo.getAmountmoney()-outsideparkinfo.getRealmoney());
+		// for(PosChargeData posChargeData : posChargeDatas){
+		// outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+		// outsideparkinfo.setAmountmoney((float)
+		// (outsideparkinfo.getAmountmoney()+posChargeData.getChargeMoney()));
+		// if (posChargeData.getExitDate()==null) {
+		// outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
+		// }
+		// else {
+		// outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+		// }
+		// outsideparkinfo.setRealmoney((float)
+		// (outsideparkinfo.getRealmoney()+posChargeData.getGivenMoney()+posChargeData.getPaidMoney()-posChargeData.getChangeMoney()));
+		// if(!posChargeData.isPaidCompleted())
+		// {
+		// if
+		// (posChargeData.getChargeMoney()>(posChargeData.getPaidMoney()+posChargeData.getGivenMoney()))
+		// {
+		// outsideparkinfo.setArrearage((float)
+		// (outsideparkinfo.getArrearage()+posChargeData.getChargeMoney()-posChargeData.getPaidMoney()-posChargeData.getGivenMoney()));
+		// }
+		// // outsideparkinfo.setRealmoney((float)
+		// (outsideparkinfo.getRealmoney()+posChargeData.getPaidMoney()));
+		// }
+		// }
+		// }
+		// else {
+		// List<Posdata>
+		// posdatas=posdataService.selectPosdataByParkAndRange(park.getName(),
+		// parsedStartDay, parsedEndDay);
+		// //outsideparkinfo=outsideParkInfoService.getByParkidAndDate(parkId);
+		// //从数据表中获取数据
+		// if (posdatas.isEmpty()) {
+		// return outsideparkinfo;
+		// }
+		// outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
+		// for(Posdata posdata:posdatas){
+		// outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+posdata.getMoney().floatValue());
+		//
+		// if (posdata.getIsarrearage()==false) {
+		// if (posdata.getMode()==0) {
+		// outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1);
+		// outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()-1);
+		// }
+		// else {
+		// outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1);
+		// outsideparkinfo.setUnusedcarportcount(outsideparkinfo.getUnusedcarportcount()+1);
+		// outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
+		// }
+		// }
+		//
+		// else {
+		// outsideparkinfo.setRealmoney(outsideparkinfo.getRealmoney()+posdata.getGiving().floatValue()+posdata.getRealmoney().floatValue()-posdata.getReturnmoney().floatValue());
+		// }
+		//
+		// }
+		/*
+		 * List<Posdata>
+		 * posdatas=posdataService.selectPosdataByParkAndRange(park.getName(),
+		 * parsedStartDay, parsedEndDay);
+		 * outsideparkinfo.setPossigndate(posdatas.get(0).getStarttime());
+		 * for(Posdata posdata :posdatas){
+		 * outsideparkinfo.setEntrancecount(outsideparkinfo.getEntrancecount()+1
+		 * ); outsideparkinfo.setAmountmoney(outsideparkinfo.getAmountmoney()+
+		 * posdata.getMoney().floatValue()); if (posdata.getEndtime()==null) {
+		 * outsideparkinfo.setUnusedcarportcount(outsideparkinfo.
+		 * getUnusedcarportcount()-1); } else{
+		 * outsideparkinfo.setOutcount(outsideparkinfo.getOutcount()+1); } if
+		 * (posdata.get) {
+		 * 
+		 * } }
+		 */
+		// }
+		System.out.println("返回结果:"+outsideparkinfo);
 		return outsideparkinfo;
 	}
 
@@ -907,13 +948,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<Park> parkList = parkService.getParks();
 		if (userName != null)
 			parkList = parkService.filterPark(parkList, userName);
-		int num=120/parkList.size();
-		if (num<1) {
-			num=2;
+		int num = 120 / parkList.size();
+		if (num < 1) {
+			num = 2;
 		}
-		List<PosChargeData> posChargeDatas=new ArrayList<PosChargeData>();
-		for(Park park:parkList){
-			List<PosChargeData> tmPosChargeDatas=getPageByParkId(park.getId(), 0, num);
+		List<PosChargeData> posChargeDatas = new ArrayList<PosChargeData>();
+		for (Park park : parkList) {
+			List<PosChargeData> tmPosChargeDatas = getPageByParkId(park.getId(), 0, num);
 			posChargeDatas.addAll(tmPosChargeDatas);
 		}
 		return posChargeDatas;
@@ -941,23 +982,24 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public List<PosChargeData> hardwareRecord(Integer parkId, String startDate, String endDate) throws Exception {
 		// TODO Auto-generated method stub
-		List<Map<String, Object>> carportStatusDetails=carportStatusDetailDAO.getDetailByParkIdAndDateRange(parkId, startDate, endDate);
-		List<PosChargeData> posChargeDatas=new ArrayList<>();
-		SimpleDateFormat sFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		for(Map<String, Object> c:carportStatusDetails){
-			if (c.get("endTime")!=null) {
-				PosChargeData tmPosChargeData=new PosChargeData();
-			//	tmPosChargeData.setCardNumber(Integer.toString(c.getCarportId()));
+		List<Map<String, Object>> carportStatusDetails = carportStatusDetailDAO.getDetailByParkIdAndDateRange(parkId,
+				startDate, endDate);
+		List<PosChargeData> posChargeDatas = new ArrayList<>();
+		SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (Map<String, Object> c : carportStatusDetails) {
+			if (c.get("endTime") != null) {
+				PosChargeData tmPosChargeData = new PosChargeData();
+				// tmPosChargeData.setCardNumber(Integer.toString(c.getCarportId()));
 				tmPosChargeData.setEntranceDate(sFormat.format(c.get("startTime")));
 				tmPosChargeData.setExitDate(sFormat.format(c.get("endTime")));
 				tmPosChargeData.setParkId(parkId);
 				tmPosChargeData.setPortNumber(String.valueOf(c.get("carportNumber")));
 				tmPosChargeData.setIsLargeCar(false);
-				tmPosChargeData.setIsOneTimeExpense(0);	
+				tmPosChargeData.setIsOneTimeExpense(0);
 				posChargeDatas.add(tmPosChargeData);
-			}			
+			}
 		}
-		for(PosChargeData p:posChargeDatas){
+		for (PosChargeData p : posChargeDatas) {
 			this.calExpense(p, p.getExitDate(), true);
 		}
 		return posChargeDatas;
@@ -967,7 +1009,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public PosChargeData updateRejectReason(String cardNumber, String rejectReason) throws Exception {
 		// TODO Auto-generated method stub
 		List<PosChargeData> charges = this.getCharges(cardNumber);
-		if(charges.isEmpty()){
+		if (charges.isEmpty()) {
 			return null;
 		}
 		PosChargeData lastCharge = charges.get(0);
@@ -992,17 +1034,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		FeeCriterion criterion = criterionService.getById(criterionId);
 		String nightStartHour = "24";
 		String nightEndHour = "0";
-		Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
-		double money=0;
-		for(String name:dates.keySet()){			
-			Date startDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
-			Date endDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
-			long diffs=endDate.getTime()-startDate.getTime()-criterion.getFreemins()*60*1000;
-			if (diffs>1000*60*60*12) {
-				money+=10;
+		Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+		double money = 0;
+		for (String name : dates.keySet()) {
+			Date startDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+			Date endDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
+			long diffs = endDate.getTime() - startDate.getTime() - criterion.getFreemins() * 60 * 1000;
+			if (diffs > 1000 * 60 * 60 * 12) {
+				money += 10;
 			}
-			if (diffs<=1000*60*60*12&&diffs>0) {
-				money+=10;
+			if (diffs <= 1000 * 60 * 60 * 12 && diffs > 0) {
+				money += 10;
 			}
 		}
 		charge.setExitDate(endTime);
@@ -1012,169 +1054,178 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public PosChargeData newFeeCalcExpense(PosChargeData charge, Date exitDate, Boolean isQuery)
-			throws Exception {
+	public PosChargeData newFeeCalcExpense(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
 		// TODO Auto-generated method stub
-		if (exitDate==null) {
-			exitDate=new Date();
+		if (exitDate == null) {
+			exitDate = new Date();
 		}
 		charge.setExitDate1(exitDate);
 		Park park = parkService.getParkById(charge.getParkId());
 		Integer criterionId = park.getFeeCriterionId();
-		FeeCriterion criterion = criterionService.getById(criterionId);		
-		//入场免费时间处理
-		int freeMinutes=criterion.getFreemins();
-	
-		Date entranceDate=new Date(charge.getEntranceDate().getTime()+freeMinutes*60*1000);
-		
+		FeeCriterion criterion = criterionService.getById(criterionId);
+		// 入场免费时间处理
+		int freeMinutes = criterion.getFreemins();
+
+		Date entranceDate = new Date(charge.getEntranceDate().getTime() + freeMinutes * 60 * 1000);
+
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(entranceDate);
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";
 		String nightEndHour = "8";
-		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
-			 nightStartHour = criterion.getNightstarttime().split(":")[0];
-			 nightEndHour = criterion.getNightendtime().split(":")[0];
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
 		}
-		if (entranceDate.getTime()>exitDate.getTime()) {
+		if (entranceDate.getTime() > exitDate.getTime()) {
 			charge.setChargeMoney(0);
 			return charge;
 		}
-		Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);		
-		double money=0;
-//		for(String name:dates.keySet()){			
-//			Date startDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
-//			Date endDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
-//			String nightStartHour2 = "20";
-//			String nightEndHour2 = "8";
-//			Map<String,String> dates2=formatTime.format(new SimpleDateFormat(Constants.DATEFORMAT).format(startDate), new SimpleDateFormat(Constants.DATEFORMAT).format(endDate), nightStartHour2,nightEndHour2);
-//			for(String name2:dates2.keySet()){					
-//				Date startDate2=new SimpleDateFormat(Constants.DATEFORMAT).parse(name2);
-//				Date endDate2=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates2.get(name2));
-//				
-//			}
-//			long diffs=endDate.getTime()-startDate.getTime()-criterion.getFreemins()*60*1000;
-//			if (diffs>1000*60*60*12) {
-//				money+=10;
-//			}
-//			if (diffs<=1000*60*60*12&&diffs>0) {
-//				money+=10;
-//			}
-//		}
-		
-		double step1Price=criterion.getStep1price();
-		double step2Price=criterion.getStep2price();
-		int step1Minutes=15;
-		int step2minutes=60;
+		Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+		double money = 0;
+		// for(String name:dates.keySet()){
+		// Date startDate=new
+		// SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+		// Date endDate=new
+		// SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
+		// String nightStartHour2 = "20";
+		// String nightEndHour2 = "8";
+		// Map<String,String> dates2=formatTime.format(new
+		// SimpleDateFormat(Constants.DATEFORMAT).format(startDate), new
+		// SimpleDateFormat(Constants.DATEFORMAT).format(endDate),
+		// nightStartHour2,nightEndHour2);
+		// for(String name2:dates2.keySet()){
+		// Date startDate2=new
+		// SimpleDateFormat(Constants.DATEFORMAT).parse(name2);
+		// Date endDate2=new
+		// SimpleDateFormat(Constants.DATEFORMAT).parse(dates2.get(name2));
+		//
+		// }
+		// long
+		// diffs=endDate.getTime()-startDate.getTime()-criterion.getFreemins()*60*1000;
+		// if (diffs>1000*60*60*12) {
+		// money+=10;
+		// }
+		// if (diffs<=1000*60*60*12&&diffs>0) {
+		// money+=10;
+		// }
+		// }
+
+		double step1Price = criterion.getStep1price();
+		double step2Price = criterion.getStep2price();
+		int step1Minutes = 15;
+		int step2minutes = 60;
 		if (charge.getIsLargeCar()) {
-			step1Price=criterion.getStep1pricelarge();
-			step2Price=criterion.getStep2pricelarge();
+			step1Price = criterion.getStep1pricelarge();
+			step2Price = criterion.getStep2pricelarge();
 		}
-		for(String name:dates.keySet()){
-			logger.info("计费**车牌号:"+charge.getCardNumber()+"时间:"+name+"-"+dates.get(name));
-			Date startDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
-			Date endDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
-			String startd=name.substring(11,13);
-			if (Integer.parseInt(startd)>=Integer.parseInt(nightEndHour)&&Integer.parseInt(startd)<Integer.parseInt(nightStartHour)) {
-				long diffs=endDate.getTime()-startDate.getTime();
-				double hours=Math.ceil((double)diffs/(1000*60*step1Minutes));
-				money+=hours*step1Price;
+		for (String name : dates.keySet()) {
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "时间:" + name + "-" + dates.get(name));
+			Date startDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+			Date endDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
+			String startd = name.substring(11, 13);
+			if (Integer.parseInt(startd) >= Integer.parseInt(nightEndHour)
+					&& Integer.parseInt(startd) < Integer.parseInt(nightStartHour)) {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step1Minutes));
+				money += hours * step1Price;
+			} else {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step2minutes));
+				money += hours * step2Price;
 			}
-			else {
-				long diffs=endDate.getTime()-startDate.getTime();
-				double hours=Math.ceil((double)diffs/(1000*60*step2minutes));
-				money+=hours*step2Price;
-			}
-			logger.info("计费**车牌号:"+charge.getCardNumber()+"费用:"+money);
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + money);
 		}
 		charge.setChargeMoney(money);
 		return charge;
 	}
-	//按次
+
+	// 按次
 	@Override
-	public PosChargeData newFeeCalcExpense1(PosChargeData charge,FeeCriterion criterion, Date exitDate, Boolean isQuery) throws Exception {
-		if (exitDate==null) {
-			exitDate=new Date();
+	public PosChargeData newFeeCalcExpense1(PosChargeData charge, FeeCriterion criterion, Date exitDate,
+			Boolean isQuery) throws Exception {
+		if (exitDate == null) {
+			exitDate = new Date();
 		}
 		charge.setExitDate1(exitDate);
-		Date entranceDate=new Date(charge.getEntranceDate().getTime()+criterion.getFreemins()*60*1000);
-		if (entranceDate.getTime()>=exitDate.getTime()) {
+		Date entranceDate = new Date(charge.getEntranceDate().getTime() + criterion.getFreemins() * 60 * 1000);
+		if (entranceDate.getTime() >= exitDate.getTime()) {
 			charge.setChargeMoney(0);
 			return charge;
 		}
-		entranceDate=new Date(charge.getEntranceDate().getTime());
-		float price=criterion.getStep1price();
+		entranceDate = new Date(charge.getEntranceDate().getTime());
+		float price = criterion.getStep1price();
 		if (charge.getIsLargeCar()) {
-			price=criterion.getStep1pricelarge();
+			price = criterion.getStep1pricelarge();
 		}
-		if (criterion.getIsonetimeexpense()==0) {			
-			double diff=exitDate.getTime()-entranceDate.getTime();
-			double size=Math.ceil((diff/(1000*60))/criterion.getTimeoutpriceinterval());
-			charge.setChargeMoney(price*size);
-		}
-		else {
+		if (criterion.getIsonetimeexpense() == 0) {
+			double diff = exitDate.getTime() - entranceDate.getTime();
+			double size = Math.ceil((diff / (1000 * 60)) / criterion.getTimeoutpriceinterval());
+			charge.setChargeMoney(price * size);
+		} else {
 			String nightStartHour = "24";
 			String nightEndHour = "0";
 			String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(entranceDate);
 			String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
-			Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);
-			charge.setChargeMoney(price*dates.size());
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			charge.setChargeMoney(price * dates.size());
 		}
 		return charge;
 	}
 
 	@Override
-	public PosChargeData newFeeCalcExpense2(PosChargeData charge,FeeCriterion criterion,Date exitDate, Boolean isQuery) throws Exception {
-		if (exitDate==null) {
-			exitDate=new Date();
+	public PosChargeData newFeeCalcExpense2(PosChargeData charge, FeeCriterion criterion, Date exitDate,
+			Boolean isQuery) throws Exception {
+		if (exitDate == null) {
+			exitDate = new Date();
 		}
 		charge.setExitDate1(exitDate);
-			
-		//入场免费时间处理
-		int freeMinutes=criterion.getFreemins();
-	
-		Date entranceDate=new Date(charge.getEntranceDate().getTime()+freeMinutes*60*1000);
-		
+
+		// 入场免费时间处理
+		int freeMinutes = criterion.getFreemins();
+
+		Date entranceDate = new Date(charge.getEntranceDate().getTime() + freeMinutes * 60 * 1000);
+
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(entranceDate);
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";
 		String nightEndHour = "8";
-		if (criterion.getNightstarttime()!=null&&criterion.getNightendtime()!=null) {
-			 nightStartHour = criterion.getNightstarttime().split(":")[0];
-			 nightEndHour = criterion.getNightendtime().split(":")[0];
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
 		}
-		if (entranceDate.getTime()>exitDate.getTime()) {
+		if (entranceDate.getTime() > exitDate.getTime()) {
 			charge.setChargeMoney(0);
 			return charge;
 		}
-		Map<String,String> dates=formatTime.format(startTime, endTime, nightStartHour,nightEndHour);		
-		double money=0;
+		Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+		double money = 0;
 
-		double step1Price=criterion.getStep1price();
-		double step2Price=criterion.getStep3price();
-		int step1Minutes=15;
-		int step2minutes=60;
+		double step1Price = criterion.getStep1price();
+		double step2Price = criterion.getStep3price();
+		int step1Minutes = 15;
+		int step2minutes = 60;
 		if (charge.getIsLargeCar()) {
-			step1Price=criterion.getStep1pricelarge();
-			step2Price=criterion.getStep3pricelarge();
+			step1Price = criterion.getStep1pricelarge();
+			step2Price = criterion.getStep3pricelarge();
 		}
-		for(String name:dates.keySet()){
-			logger.info("计费**车牌号:"+charge.getCardNumber()+"时间:"+name+"-"+dates.get(name));
-			Date startDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
-			Date endDate=new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
-			String startd=name.substring(11,13);
-			if (Integer.parseInt(startd)>=Integer.parseInt(nightEndHour)&&Integer.parseInt(startd)<Integer.parseInt(nightStartHour)) {
-				long diffs=endDate.getTime()-startDate.getTime();
-				double hours=Math.ceil((double)diffs/(1000*60*step1Minutes));
-				money+=hours*step1Price;
-				logger.info("计费**车牌号:"+charge.getCardNumber()+"费用:"+hours*step1Price);
+		for (String name : dates.keySet()) {
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "时间:" + name + "-" + dates.get(name));
+			Date startDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+			Date endDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
+			String startd = name.substring(11, 13);
+			if (Integer.parseInt(startd) >= Integer.parseInt(nightEndHour)
+					&& Integer.parseInt(startd) < Integer.parseInt(nightStartHour)) {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step1Minutes));
+				money += hours * step1Price;
+				logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + hours * step1Price);
+			} else {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step2minutes));
+				money += hours * step2Price;
+				logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + hours * step2Price);
 			}
-			else {
-				long diffs=endDate.getTime()-startDate.getTime();
-				double hours=Math.ceil((double)diffs/(1000*60*step2minutes));
-				money+=hours*step2Price;
-				logger.info("计费**车牌号:"+charge.getCardNumber()+"费用:"+hours*step2Price);
-			}
-			logger.info("计费**车牌号:"+charge.getCardNumber()+"累积费用:"+money);
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "累积费用:" + money);
 		}
 		charge.setChargeMoney(money);
 		return charge;
@@ -1189,122 +1240,500 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public Map<String, Object> getParkChargeCountByDay(int parkId, String day) {
 		// TODO Auto-generated method stub
-	
+
 		Park park = parkService.getParkById(parkId);
-		String parkName=park.getName();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String parkName = park.getName();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(day + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(day + " 23:59:59");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		List<PosChargeData> posChargeDatas=selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
-		Map<String, Object> retmap=new HashMap<>();
-		int outcount=0;
+		}
+		List<PosChargeData> posChargeDatas = selectPosdataByParkAndRange(parsedStartDay, parsedEndDay, parkId);
+		Map<String, Object> retmap = new HashMap<>();
+		int outcount = 0;
 		if (posChargeDatas.isEmpty()) {
 			retmap.put("in", 0);
 			retmap.put("out", 0);
-		}else {
+		} else {
 			for (PosChargeData posChargeData : posChargeDatas) {
-				if (posChargeData.getExitDate()!=null) {
-					outcount+=1;
+				if (posChargeData.getExitDate() != null) {
+					outcount += 1;
 				}
 			}
 			retmap.put("in", posChargeDatas.size());
 			retmap.put("out", outcount);
 		}
-		
+
 		return retmap;
 	}
 
 	@Override
 	public List<PosChargeData> getDebtWithData(String cardNumber, List<Parktoalipark> parktoaliparks,
 			List<Monthuser> monthusers, Park park) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
+		if (charges.isEmpty()) {
+			return charges;
+		}
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				tmPosChargeDatas.add(charge);
+			}
+
+		}
+
+		if (!parktoaliparks.isEmpty() && tmPosChargeDatas.get(0).getExitDate() == null) {
+			// 信息录入支付宝
+			try {
+				Parktoalipark parktoalipark = parktoaliparks.get(0);
+				Map<String, String> argstoali = new HashMap<>();
+				argstoali.put("parking_id", parktoalipark.getAliparkingid());
+				argstoali.put("car_number", cardNumber);
+				argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		this.calExpense(tmPosChargeDatas.get(0), new Date(), false);
+
+		int tmpint = 0;
+		for (PosChargeData tmpcharge : tmPosChargeDatas) {
+			tmpint++;
+			if (tmpint > 1) {
+				tmpcharge.setChargeMoney(0);
+				tmpcharge.setExitDate1(new Date());
+				tmpcharge.setRejectReason("平台清场");
+				update(tmpcharge);
+			}
+		}
+		return tmPosChargeDatas;
 	}
 
 	@Override
 	public void calExpenseSmallCarWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
 			FeeCriterion criterion) {
-		// TODO Auto-generated method stub
-		
+		charge.setExitDate1(exitDate);
+		double expense = 0;
+		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
+			charge.setIsOneTimeExpense(1);
+		}
+		float diffMin = (float) Math
+				.ceil((charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f));
+		if (charge.getIsOneTimeExpense() == 1 && diffMin >= criterion.getFreemins()) {
+			expense = criterion.getOnetimeexpense();
+		} else {
+
+			float firstHour = criterion.getStep1capacity();
+
+			if (diffMin > criterion.getFreemins()) {
+				if (diffMin <= firstHour) {
+					double intervals = Math
+							.ceil((diffMin - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals * criterion.getStep1price();
+				} else {
+					double intervals1 = Math
+							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals1 * criterion.getStep1price();
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
+					// double intervals2 = Math.ceil((diffMin - firstHour) /
+					// (criterion.getTimeoutpriceinterval()/2));
+					expense += intervals2 * criterion.getStep2price();
+				}
+			}
+		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
+			charge.setChargeMoney(criterion.getMaxexpense());
+		}
+
 	}
 
 	@Override
 	public void calExpenseLargeCarWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
 			FeeCriterion criterion) {
-		// TODO Auto-generated method stub
-		
+		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
+			charge.setIsOneTimeExpense(1);
+		}
+		charge.setExitDate1(exitDate);
+		double expense = 0;
+		float diffMin = (charge.getExitDate().getTime() - charge.getEntranceDate().getTime()) / (1000 * 60f);
+		if (charge.getIsOneTimeExpense() == 1 && diffMin >= criterion.getFreemins()) {
+			expense = criterion.getOnetimeexpense();
+		} else {
+			float firstHour = criterion.getStep1capacity();
+			if (diffMin > criterion.getFreemins()) {
+				if (diffMin <= firstHour) {
+					double intervals = Math
+							.ceil((diffMin - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals * criterion.getStep1pricelarge();
+				} else {
+					double intervals1 = Math
+							.ceil((firstHour - criterion.getFreemins()) / criterion.getTimeoutpriceinterval());
+					expense = intervals1 * criterion.getStep1pricelarge();
+					double intervals2 = Math.ceil((diffMin - firstHour) / (criterion.getTimeoutpriceinterval()));
+					// double intervals2 = Math.ceil((diffMin - firstHour) /
+					// (criterion.getTimeoutpriceinterval()/2));
+
+					expense += intervals2 * criterion.getStep2pricelarge();
+				}
+			}
+		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
+			charge.setChargeMoney(criterion.getMaxexpense() * 2);
+		}
+
 	}
 
 	@Override
 	public List<PosChargeData> getLastRecordWithPark(String carNumber, int count, int parkId) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PosChargeData newFeeCalcExpenseWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
-			FeeCriterion criterion) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return chargeDao.getLastRecordWithPark(carNumber, count, parkId);
 	}
 
 	@Override
 	public void calExpensewithData(PosChargeData charge, Date exitDate, Boolean isQuery, List<Monthuser> monthusers,
 			Park park, FeeCriterion criterion) throws Exception {
-		// TODO Auto-generated method stub
-		
+		Boolean isMonthUser = false;
+		Boolean isRealMonthUser = false;
+		Monthuser monthuserUse = new Monthuser();
+		for (Monthuser monthuser : monthusers) {
+			if (monthuser.getType() == 0) {
+				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());
+				if (diff > 0) {
+					isMonthUser = true;
+					monthuserUse = monthuser;
+					isRealMonthUser = true;
+					break;
+				}
+			}
+		}
+		Boolean isMultiCarsOneCarport = false;
+		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
+			isMultiCarsOneCarport = true;
+		}
+
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
+			isRealMonthUser = false;
+			monthuserUse.setPlatecolor("出场完结");
+			monthUserService.updateByPrimaryKeySelective(monthuserUse);
+		}
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
+			isRealMonthUser = false;
+			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
+					monthuserUse.getCardnumber());
+
+			for (Monthuser monthuser : monthuserss) {
+				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+						&& monthuser.getPlatecolor().contains("包月出场")) {
+					String[] datas = monthuser.getPlatecolor().split("#");
+					try {
+						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
+						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
+						exitDate = dateout;
+						charge.setRejectReason("临停转包月");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					monthuser.setPlatecolor("出场完结");
+					monthUserService.updateByPrimaryKeySelective(monthuser);
+					monthuserUse.setPlatecolor("出场完结");
+					for (Monthuser strMonthUser : monthuserss) {
+						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							strMonthUser.setPlatecolor("临停恢复为包月");
+							monthUserService.updateByPrimaryKeySelective(strMonthUser);
+							break;
+						}
+					}
+					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+					break;
+				}
+			}
+
+		}
+		if (isRealMonthUser) {
+			charge.setChargeMoney(0);
+			charge.setUnPaidMoney(0);
+			charge.setExitDate1(exitDate);
+			charge.setPaidCompleted(true);
+			if (!isQuery) {
+				if (isMultiCarsOneCarport && monthuserUse.getPlatecolor().equals("多车包月入场")) {
+					monthuserUse.setPlatecolor("出场完结");
+					List<Monthuser> monthuserss = monthUserService.getByUsernameAndPark(monthuserUse.getOwner(),
+							monthuserUse.getParkid());
+					for (Monthuser monthuser : monthuserss) {
+						if (monthuser.getPlatecolor().equals("包月转为临停")) {
+							monthuser.setPlatecolor("临停恢复为包月");
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							monthUserService.updateByPrimaryKeySelective(monthuser);
+							break;
+						}
+					}
+					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+				}
+				this.update(charge);
+			}
+			return;
+		}
+
+		if (criterion.getType() == 2) {
+			newFeeCalcExpense2(charge, criterion, exitDate, isQuery);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		if (criterion.getType() == 1) {
+			newFeeCalcExpense1(charge, criterion, exitDate, isQuery);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+
+		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
+		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
+		String nightStartHour = "20";
+		String nightEndHour = "07";
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
+		}
+		int isOneTimeExpense = charge.getIsOneTimeExpense();
+		if (charge.getIsLargeCar() == false) {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseSmallCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+		} else {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseLargeCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCarWithData(charge,
+							new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)), isQuery, park,
+							criterion);
+				}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				// charge.setPaidMoney(0);
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+
+		}
+
 	}
 
-		@Override
-		public Map<String, Object> selectPosdataSumByParkAndRange(Date startDay, Date endDay, int parkId) {
-			// TODO Auto-generated method stub
-			return null;
+	@Override
+	public PosChargeData newFeeCalcExpenseWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
+			FeeCriterion criterion) throws Exception {
+		if (exitDate == null) {
+			exitDate = new Date();
 		}
-
-		@Override
-		public Map<String, Object> calInByParkAndRange(int parkId, Date startDate, Date endDate) {
-			// TODO Auto-generated method stub
-			return null;
+		charge.setExitDate1(exitDate);
+		// 入场免费时间处理
+		int freeMinutes = criterion.getFreemins();
+		Date entranceDate = new Date(charge.getEntranceDate().getTime() + freeMinutes * 60 * 1000);
+		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(entranceDate);
+		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
+		String nightStartHour = "20";
+		String nightEndHour = "8";
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
 		}
-
-		@Override
-		public Map<String, Object> calOutByParkAndRange(int parkId, Date startDate, Date endDate) {
-			// TODO Auto-generated method stub
-			return null;
+		if (entranceDate.getTime() > exitDate.getTime()) {
+			charge.setChargeMoney(0);
+			return charge;
 		}
-		
-		//查询收费总笔数、收费总金额、各渠道收费统计
-		@Override
-		public String getByDateAndParkCount2(int parkId, String startDate, String endDate) {
-			// TODO Auto-generated method stub
-			return chargeDao.getByDateAndParkCount2(parkId,startDate,endDate);
+		Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+		double money = 0;
+		double step1Price = criterion.getStep1price();
+		double step2Price = criterion.getStep2price();
+		int step1Minutes = 15;
+		int step2minutes = 60;
+		if (charge.getIsLargeCar()) {
+			step1Price = criterion.getStep1pricelarge();
+			step2Price = criterion.getStep2pricelarge();
 		}
-		@Override
-		public String getByDateAndParkCount4(int parkId, String startDate, String endDate) {
-			// TODO Auto-generated method stub
-			return chargeDao.getByDateAndParkCount4(parkId,startDate,endDate);
-		}
-		//各渠道收费统计
-			@Override
-			public String getByDateAndParkCount(int parkId, String startDate, String endDate,int payType) {
-				// TODO Auto-generated method stub
-				return chargeDao.getByDateAndParkCount(parkId,startDate,endDate,payType);
+		for (String name : dates.keySet()) {
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "时间:" + name + "-" + dates.get(name));
+			Date startDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(name);
+			Date endDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name));
+			String startd = name.substring(11, 13);
+			if (Integer.parseInt(startd) >= Integer.parseInt(nightEndHour)
+					&& Integer.parseInt(startd) < Integer.parseInt(nightStartHour)) {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step1Minutes));
+				money += hours * step1Price;
+			} else {
+				long diffs = endDate.getTime() - startDate.getTime();
+				double hours = Math.ceil((double) diffs / (1000 * 60 * step2minutes));
+				money += hours * step2Price;
 			}
-			
-			@Override
-			public String getByDateAndParkCount3(int parkId, String startDate, String endDate,int payType) {
-				// TODO Auto-generated method stub
-				return chargeDao.getByDateAndParkCount3(parkId,startDate,endDate,payType);
-			}
+			logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + money);
+		}
+		charge.setChargeMoney(money);
+		return charge;
+	}
 
+	@Override
+	public Map<String, Object> selectPosdataSumByParkAndRange(Date startDay, Date endDay, int parkId) {
+		// TODO Auto-generated method stub
+		return chargeDao.selectPosdataSumByParkAndRange(startDay, endDay, parkId);
+	}
+
+	@Override
+	public Map<String, Object> calInByParkAndRange(int parkId, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.calInByParkAndRange(parkId, startDate, endDate);
+	}
+
+	@Override
+	public Map<String, Object> calOutByParkAndRange(int parkId, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.calOutByParkAndRange(parkId, startDate, endDate);
+	}
+
+	@Override
+	public int getByDateAndParkCount(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCount(parkId, startDate, endDate);
+	}
+
+	@Override
+	public double getChannelCharge(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getChannelCharge(parkId, startDate, endDate);
+	}
+
+	@Override
+	public String getByDateAndParkCount2(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCount2(parkId, startDate, endDate);
+	}
+
+	@Override
+	public String getByDateAndParkCount4(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCount4(parkId, startDate, endDate);
+	}
+
+	@Override
+	public String getByDateAndParkCount(int parkId, String startDate, String endDate, int payType) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCount(parkId, startDate, endDate, payType);
+	}
+
+	@Override
+	public String getByDateAndParkCount3(int parkId, String startDate, String endDate, int payType) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCount3(parkId, startDate, endDate, payType);
+	}
 }
