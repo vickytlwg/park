@@ -249,7 +249,7 @@
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
   	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
-  	from monthUser left join park on park.id=monthUser.parkid where monthUser.parkid=#{parkId} and monthUser.type=#{type} limit #{start},#{count}
+  	from monthUser left join park on park.id=monthUser.parkid where monthUser.parkid=#{parkId} and monthUser.type=#{type}  order by id limit #{start},#{count}
   </select>
   <select id="getCountByParkId" resultType="int">
   	select count(*) from monthUser where parkid=#{parkId}

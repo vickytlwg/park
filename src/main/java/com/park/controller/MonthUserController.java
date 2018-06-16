@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import com.park.model.Monthuser;
 import com.park.model.Monthuserpark;
 import com.park.model.Page;
 import com.park.service.AuthorityService;
+import com.park.service.HardwareService;
 import com.park.service.MonthUserParkService;
 import com.park.service.MonthUserService;
 import com.park.service.UserPagePermissionService;
@@ -43,7 +45,8 @@ private MonthUserService monthUserService;
 private MonthUserParkService monthUserParkService;
 @Autowired
 private AuthorityService authService;
-
+@Autowired
+HardwareService hardwareService;
 @Autowired
 private UserParkService userParkService;
 
@@ -122,7 +125,68 @@ public String deletePark(@PathVariable("id")int id){
 	}
 	return Utility.gson.toJson(result);
 }
-
+@RequestMapping(value="getAmountBarrier",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getAmountBarrier(@RequestBody Map<String, Object> args){
+	String mac=(String) args.get("mac");
+	Map<String, Object> result=new HashMap<>();
+	List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+	Map<String, Object> info = infos.get(0);
+	Integer parkId = (Integer) info.get("parkID");
+	List<Monthuser> monthusers=monthUserService.getByParkIdAndCountOrder(parkId,0,1000,0);
+	List<Monthuser> realMonthusers=new ArrayList<>();
+	
+	for (Monthuser monthuser : monthusers) {
+		if (monthuser.getEndtime().getTime()>new Date().getTime()) {
+			realMonthusers.add(monthuser);
+		}
+	}
+	if (!realMonthusers.isEmpty()) {
+		result.put("status", 1001);
+		result.put("body", Math.ceil(realMonthusers.size()/50));
+	}
+	else {
+		result.put("status", 1002);
+	}
+	return Utility.gson.toJson(result);
+}
+@RequestMapping(value="getDataBarrier",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String getDataBarrier(@RequestBody Map<String, Object> args){
+	String mac=(String) args.get("mac");
+	int order=(int) args.get("order");
+	Map<String, Object> result=new HashMap<>();
+	List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+	Map<String, Object> info = infos.get(0);
+	Integer parkId = (Integer) info.get("parkID");
+	List<Monthuser> monthusers=monthUserService.getByParkIdAndCountOrder(parkId,0,1000,0);
+	List<Monthuser> realMonthusers=new ArrayList<>();
+	List<String> data=new ArrayList<>();
+	for (Monthuser monthuser : monthusers) {
+		if (monthuser.getEndtime().getTime()>new Date().getTime()) {
+			realMonthusers.add(monthuser);
+		}
+	}
+	if (realMonthusers.isEmpty()) {
+		result.put("status", 1002);
+		return Utility.gson.toJson(result);
+	}
+	StringBuilder carnumber=new StringBuilder();
+	for (int i = 50*order; i < 50*order+50; i++) {
+		if (i<realMonthusers.size()) {
+			data.add(realMonthusers.get(i).getPlatenumber().substring(4));			
+		}		
+	}
+	for (int i = 0; i < data.size()-1; i++) {
+		carnumber.append(data.get(i));
+		carnumber.append("&");
+	}
+	carnumber.append(data.get(data.size()-1));
+	
+	result.put("status", 1001);
+	result.put("body", carnumber.toString());
+	return Utility.gson.toJson(result);
+}
 @RequestMapping(value="insertPark",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String insertPark(@RequestBody Monthuserpark monthUserPark){
