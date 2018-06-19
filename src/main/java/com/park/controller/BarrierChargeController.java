@@ -310,13 +310,23 @@ public class BarrierChargeController {
 				for (Monthuser tmMonthuser : realMonthUsers) {
 					if (tmMonthuser.getPlatecolor().equals("多车包月入场")
 							|| tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
-						isMonthUserCarIn = true;
+						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
+							isMonthUserCarIn = true;
+						}
+						
 					}
 				}
 				monthuserNow.setPlatecolor("多车包月入场");
 				if (isMonthUserCarIn) {
 					monthuserNow.setPlatecolor("包月转为临停");
 					dataMap.put("uT", "0");
+					try {
+						dataMap.remove("ds");
+						dataMap.remove("eD");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
 				}
 				monthUserService.updateByPrimaryKeySelective(monthuserNow);
 			}

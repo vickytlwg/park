@@ -173,7 +173,7 @@
                                         </div>
                                         <div class="panel-bottom hidddiv">
                                             <p>
-                                                应收总金额&nbsp;<b>{{dayAmountMoney}}</b>&nbsp;元
+                                                应收总金额&nbsp;<b>{{dayAmountMoney|number:2}}</b>&nbsp;元
                                             </p>
                                         </div>
                                         <div class="dataHover block1">
@@ -200,7 +200,7 @@
                                             <span class="panel-value "  data-to="{{dayRealMoney}}" data-speed="1500">{{dayRealMoney}}</span>&nbsp;元
                                         </div>
                                         <div class="panel-bottom hidddiv">
-                                            实收总金额&nbsp;<b>{{dayRealMoney}}</b>&nbsp;元
+                                            实收总金额&nbsp;<b>{{dayRealMoney|number:2}}</b>&nbsp;元
                                         </div>
                                         <div class="dataHover block2">
                                             <table>

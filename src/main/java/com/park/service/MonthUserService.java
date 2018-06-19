@@ -44,4 +44,6 @@ public interface  MonthUserService {
 	    List<Monthuser> getByParkIdAndCountOrder(int parkId,int start,int count,int type);
 	   
 	    Map<String, Object> statisticsInfo(int parkId,int type);
+	    
+	    
 }

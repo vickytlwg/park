@@ -1,5 +1,5 @@
 
-<script src="/park/script/similarCarNumber.js?v=1.0"></script>
+<script src="/park/script/similarCarNumber.js?v=1.1"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <style>
 .page-list .pagination {

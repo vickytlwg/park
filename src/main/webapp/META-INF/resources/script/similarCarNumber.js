@@ -187,6 +187,7 @@ function($scope, $http, $uibModal, textModal, $timeout) {
     $scope.loading = false;
     $scope.submitted = false;
     $scope.result = "";
+    $scope.selectPark=$scope.$parent.selectValue.id;
     $scope.submit = function() {
         $scope.tmpSimilarCarNumber.parkid = $scope.selectPark;
         $scope.loading = true;
