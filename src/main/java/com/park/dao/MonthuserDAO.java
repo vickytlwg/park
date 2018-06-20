@@ -1,5 +1,6 @@
 package com.park.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,5 +46,6 @@ public interface MonthuserDAO {
     List<Monthuser> getByParkIdAndCountOrder(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count,@Param("type")int type);
     
     Map<String, Object> statisticsInfo(@Param("parkId")int parkId,@Param("type")int type);
-
+    
+    List<Map<String, Object>> getMonthuserCountsByDateRangeAndPark(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate,@Param("maxCount")int maxCount);
 }

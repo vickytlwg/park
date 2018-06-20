@@ -1248,7 +1248,7 @@ public class PosChargeDataController {
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String parkId = request.getParameter("parkId");
-
+		
 		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDayRange(Integer.parseInt(parkId), startDate, endDate);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
@@ -1262,6 +1262,30 @@ public class PosChargeDataController {
 			e.printStackTrace();
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
+	}
+	
+	@RequestMapping(value = "/getMonthuserCountsByPark")
+	@ResponseBody
+	public void getMonthuserCountsByPark(HttpServletRequest request, HttpServletResponse response) throws NumberFormatException, ParseException, FileNotFoundException{
+		String startDate = request.getParameter("startDate");
+		startDate=startDate+ " 00:00:00";
+		String endDate = request.getParameter("endDate");
+		endDate=endDate+ " 23:59:59";
+		String parkId = request.getParameter("parkId");
+		String count = request.getParameter("count");
+		List<Map<String, Object>> datas=monthUserService.getMonthuserCountsByDateRangeAndPark(Integer.parseInt(parkId), new SimpleDateFormat(Constants.DATEFORMAT).parse(startDate),  new SimpleDateFormat(Constants.DATEFORMAT).parse(endDate), Integer.parseInt(count));
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers = { "姓名", "停车次数", "车牌号"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "monthusercount.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceMonthCountsInfoExcel("停车次数", headers, datas, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR + "monthusercount.xlsx", response);
 	}
 
 	@RequestMapping(value = "/getExcelByDayRange")

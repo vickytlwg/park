@@ -79,6 +79,9 @@
 		<mvc:exclude-mapping path="/urlLogin/**"/>
 		<mvc:exclude-mapping path="/monthUser/getDataBarrier"/>
 		<mvc:exclude-mapping path="/monthUser/getAmountBarrier"/>
+		<mvc:exclude-mapping path="/monthUser/getDataBarrier/"/>
+		<mvc:exclude-mapping path="/monthUser/getAmountBarrier/"/>
+		<mvc:exclude-mapping path="/pos/charge/getMonthuserCountsByPark"/>
 		<mvc:exclude-mapping path="/authority"/>
 		<mvc:exclude-mapping path="/image/**"/>
 		<mvc:exclude-mapping path="/iot/**"/>

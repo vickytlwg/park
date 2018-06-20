@@ -254,6 +254,15 @@
   <select id="getCountByParkId" resultType="int">
   	select count(*) from monthUser where parkid=#{parkId}
   </select>
+  <select id="getMonthuserCountsByDateRangeAndPark" resultType="java.util.HashMap">
+  	<![CDATA[
+  	SELECT d.count,d.cardNumber,monthUser.`owner` FROM (SELECT COUNT(p.cardNumber) AS COUNT,p.cardNumber FROM 
+  	posChargeData AS p LEFT JOIN monthUser AS m ON p.cardNumber=m.plateNumber
+	WHERE p.parkId=#{parkId} AND p.entranceDate BETWEEN #{startDate} AND #{endDate} 
+	GROUP BY p.cardNumber  ORDER BY COUNT DESC)d LEFT JOIN monthUser ON monthUser.plateNumber=d.cardNumber  
+	WHERE COUNT>=#{maxCount} ORDER BY d.count DESC
+  	 ]]>
+  </select>
   <select id="statisticsInfo" resultType="java.util.HashMap">
   	SELECT COUNT(*) AS count,SUM(payment) AS payment FROM monthUser WHERE parkId=#{parkId} AND type=#{type}
   </select>

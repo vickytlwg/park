@@ -150,7 +150,7 @@ public String getAmountBarrier(@RequestBody Map<String, Object> args){
 	}
 	return Utility.gson.toJson(result);
 }
-@RequestMapping(value="getDataBarrier",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@RequestMapping(value="getDataBarrier",method=RequestMethod.POST,produces={"application/text;charset=utf-8"})
 @ResponseBody
 public String getDataBarrier(@RequestBody Map<String, Object> args){
 	String mac=(String) args.get("mac");
@@ -179,7 +179,7 @@ public String getDataBarrier(@RequestBody Map<String, Object> args){
 	}
 	for (int i = 0; i < data.size()-1; i++) {
 		carnumber.append(data.get(i));
-		carnumber.append("&");
+		carnumber.append("!");
 	}
 	carnumber.append(data.get(data.size()-1));
 	

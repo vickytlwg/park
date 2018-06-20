@@ -63,13 +63,13 @@
 	 SELECT channel.parkId AS parkID,channel.channelFlag as channelFlag, park.name AS NAME,hardware.mac AS mac,hardware.id as macId FROM hardware 
 	 LEFT JOIN channel ON channel.macId=hardware.id 
 	 LEFT JOIN park ON park.id=channel.parkId
-	 WHERE mac=#{mac}
+	 WHERE mac=#{mac} order by channel.id desc
 	</select>
 	<select id="getInfoByMacCarport" resultType="java.util.HashMap">
 	 SELECT businessCarport.parkId AS parkID, park.name AS NAME,hardware.mac AS mac,hardware.id as macId FROM hardware 
 	 LEFT JOIN businessCarport ON businessCarport.macId=hardware.id 
 	 LEFT JOIN park ON park.id=businessCarport.parkId
-	 WHERE mac=#{mac}
+	 WHERE mac=#{mac} order by channel.id desc
 	</select>
 	<select id="searchHardware" resultMap="HardwareMapper">
 	select * from hardware where mac = #{param1}

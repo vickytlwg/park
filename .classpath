@@ -30,7 +30,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/alipay-sdk-java-ALL20171101201354-source.jar"/>
 	<classpathentry kind="lib" path="lib/alipay-sdk-java-ALL20171101201354.jar"/>
-	<classpathentry kind="lib" path="D:/开发工具/jar/uc-httpclient-2.1.5.jar"/>
-	<classpathentry kind="lib" path="D:/开发工具/jar/uc-httpclient-2.1.5-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

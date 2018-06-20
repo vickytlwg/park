@@ -1,5 +1,6 @@
 package com.park.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,5 +46,6 @@ public interface  MonthUserService {
 	   
 	    Map<String, Object> statisticsInfo(int parkId,int type);
 	    
-	    
+	    List<Map<String, Object>> getMonthuserCountsByDateRangeAndPark(int parkId,Date startDate,Date endDate,int maxCount);
+
 }
