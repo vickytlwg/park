@@ -1276,7 +1276,7 @@ public class PosChargeDataController {
 		List<Map<String, Object>> datas=monthUserService.getMonthuserCountsByDateRangeAndPark(Integer.parseInt(parkId),new SimpleDateFormat(Constants.DATEFORMAT).parse(startDate),new SimpleDateFormat(Constants.DATEFORMAT).parse(endDate), Integer.parseInt(count));
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "姓名", "停车次数", "车牌号"};
+		String[] headers = { "姓名", "停车次数", "车牌号","类型"};
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "monthusercount.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceMonthCountsInfoExcel("停车次数", headers, datas, workbook);
