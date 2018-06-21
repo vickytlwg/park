@@ -193,7 +193,7 @@ public class ExcelExportService {
 			
 			XSSFCell cell4 = row1.createCell(3);				
 			cell4.setCellStyle(style2);
-			cell4.setCellValue(posdata.get("type")==null?"":(String)posdata.get("type"));
+			cell4.setCellValue(posdata.get("type")==null?-1:(int)posdata.get("type"));
 						
 		}
 	}
