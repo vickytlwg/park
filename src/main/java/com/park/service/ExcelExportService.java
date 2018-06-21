@@ -190,6 +190,10 @@ public class ExcelExportService {
 			XSSFCell cell3 = row1.createCell(2);				
 			cell3.setCellStyle(style2);
 			cell3.setCellValue((String)posdata.get("cardNumber"));
+			
+			XSSFCell cell4 = row1.createCell(3);				
+			cell4.setCellStyle(style2);
+			cell4.setCellValue(posdata.get("type")==null?"":(String)posdata.get("type"));
 						
 		}
 	}
