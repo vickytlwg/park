@@ -57,7 +57,7 @@ public interface PosChargeDataService {
 	
 	public List<PosChargeData> getDebt (String cardNumber) throws Exception;
 	
-	public List<PosChargeData> getDebtWithData(String cardNumber,List<Parktoalipark> parktoaliparks,List<Monthuser> monthusers,Park park) throws Exception;
+	public List<PosChargeData> getDebtWithData(String cardNumber,List<Parktoalipark> parktoaliparks,List<Monthuser> monthusers,Park park,Boolean isMultiFeeCtriterion,int carType) throws Exception;
 
 	public void calExpenseSmallCarWithData(PosChargeData charge, Date exitDate,Boolean isQuery,Park park,FeeCriterion criterion );
 	
@@ -140,6 +140,8 @@ public interface PosChargeDataService {
 	List<PosChargeData> getCharges(String cardNumber) throws Exception;
 	
 	public List<PosChargeData> getByCardNumberAndPort(String cardNumber,Integer portNumber);
+	void calExpenseMulti(PosChargeData charge, Date exitDate, Boolean isQuery, Boolean isMultiFeeCtriterion, int carType)
+			throws Exception;
 	
 	
 
