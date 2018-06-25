@@ -27,6 +27,7 @@ import com.park.dao.PosdataDAO;
 import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
+import com.park.model.Feecriteriontopark;
 import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
@@ -36,6 +37,7 @@ import com.park.model.Posdata;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
 import com.park.service.FeeCriterionService;
+import com.park.service.FeecriterionToParkService;
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
@@ -65,6 +67,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Autowired
 	FeeCriterionService criterionService;
 
+	@Autowired
+	FeecriterionToParkService feecriterionToParkService;
 	
 
 	@Autowired
@@ -233,7 +237,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public void calExpense(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
+	public void calExpenseMulti(PosChargeData charge, Date exitDate, Boolean isQuery,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 
 		Boolean isMonthUser = false;
 		Boolean isRealMonthUser = false;
@@ -256,19 +260,6 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
 			isMultiCarsOneCarport = true;
 		}
-
-		/*
-		 * if (isRealMonthUser&&monthuserUse.getOwner()!=null&&!monthuserUse.
-		 * getOwner().equals("")) { List<Monthuser>
-		 * monthuserss=monthUserService.getByUsernameAndPark(monthuserUse.
-		 * getOwner(), monthuserUse.getParkid()); List<Monthuser>
-		 * realMonthUsers=new ArrayList<>(); for (Monthuser monthuser :
-		 * monthuserss) { if (monthuser.getType().intValue()==0) {
-		 * realMonthUsers.add(monthuser); } } if (realMonthUsers.size()>1) {
-		 * isMonthUserMoreCars=true; for (Monthuser monthuser : realMonthUsers)
-		 * { if (monthuser.getPlatecolor().equals("已入场")) {
-		 * isRealMonthUser=false; break; } } } }
-		 */
 
 		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
 				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
@@ -932,7 +923,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		 * } }
 		 */
 		// }
-		System.out.println("返回结果:"+outsideparkinfo);
+	//	System.out.println("返回结果:"+outsideparkinfo);
 		return outsideparkinfo;
 	}
 
@@ -1277,7 +1268,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public List<PosChargeData> getDebtWithData(String cardNumber, List<Parktoalipark> parktoaliparks,
-			List<Monthuser> monthusers, Park park) throws Exception {
+			List<Monthuser> monthusers, Park park,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		if (charges.isEmpty()) {
@@ -1305,8 +1296,18 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 		}
 
-		this.calExpense(tmPosChargeDatas.get(0), new Date(), false);
-
+	//	this.calExpenseMulti(tmPosChargeDatas.get(0), new Date(), false,isMultiFeeCtriterion,carType);
+		FeeCriterion criterion=null;
+		if (isMultiFeeCtriterion) {
+			List<Feecriteriontopark> feecriteriontoparks=feecriterionToParkService.getByParkAndType(park.getId(), carType);
+			if (!feecriteriontoparks.isEmpty()) {
+				criterion=criterionService.getById(feecriteriontoparks.get(0).getCriterionid());
+			}
+		}
+		else {
+			criterion=criterionService.getById(park.getFeeCriterionId());
+		}
+		this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
 		int tmpint = 0;
 		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			tmpint++;
@@ -1736,5 +1737,250 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public String getByDateAndParkCount3(int parkId, String startDate, String endDate, int payType) {
 		// TODO Auto-generated method stub
 		return chargeDao.getByDateAndParkCount3(parkId, startDate, endDate, payType);
+	}
+
+	@Override
+	public void calExpense(PosChargeData charge, Date exitDate, Boolean isQuery) throws Exception {
+		Boolean isMonthUser = false;
+		Boolean isRealMonthUser = false;
+		// Boolean isMonthUserMoreCars=false;
+		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(charge.getCardNumber(), charge.getParkId());
+		Monthuser monthuserUse = new Monthuser();
+		for (Monthuser monthuser : monthusers) {
+			if (monthuser.getType() == 0) {
+				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());
+				if (diff > 0) {
+					isMonthUser = true;
+					monthuserUse = monthuser;
+					isRealMonthUser = true;
+					break;
+				}
+			}
+		}
+		Park park = parkService.getParkById(charge.getParkId());
+		Boolean isMultiCarsOneCarport = false;
+		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
+			isMultiCarsOneCarport = true;
+		}
+
+		/*
+		 * if (isRealMonthUser&&monthuserUse.getOwner()!=null&&!monthuserUse.
+		 * getOwner().equals("")) { List<Monthuser>
+		 * monthuserss=monthUserService.getByUsernameAndPark(monthuserUse.
+		 * getOwner(), monthuserUse.getParkid()); List<Monthuser>
+		 * realMonthUsers=new ArrayList<>(); for (Monthuser monthuser :
+		 * monthuserss) { if (monthuser.getType().intValue()==0) {
+		 * realMonthUsers.add(monthuser); } } if (realMonthUsers.size()>1) {
+		 * isMonthUserMoreCars=true; for (Monthuser monthuser : realMonthUsers)
+		 * { if (monthuser.getPlatecolor().equals("已入场")) {
+		 * isRealMonthUser=false; break; } } } }
+		 */
+
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
+			isRealMonthUser = false;
+			monthuserUse.setPlatecolor("出场完结");
+			monthUserService.updateByPrimaryKeySelective(monthuserUse);
+		}
+		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
+			isRealMonthUser = false;
+			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
+					monthuserUse.getCardnumber());
+
+			for (Monthuser monthuser : monthuserss) {
+				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+						&& monthuser.getPlatecolor().contains("包月出场")) {
+					String[] datas = monthuser.getPlatecolor().split("#");
+					try {
+						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
+						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
+						exitDate = dateout;
+						charge.setRejectReason("临停转包月");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					monthuser.setPlatecolor("出场完结");
+					monthUserService.updateByPrimaryKeySelective(monthuser);
+					monthuserUse.setPlatecolor("出场完结");
+					for (Monthuser strMonthUser : monthuserss) {
+						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							strMonthUser.setPlatecolor("临停恢复为包月");
+							monthUserService.updateByPrimaryKeySelective(strMonthUser);
+							break;
+						}
+					}
+					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+					break;
+				}
+			}
+
+		}
+		if (isRealMonthUser) {
+			charge.setChargeMoney(0);
+			charge.setUnPaidMoney(0);
+			charge.setExitDate1(exitDate);
+			charge.setPaidCompleted(true);
+			if (!isQuery) {
+				if (isMultiCarsOneCarport && monthuserUse.getPlatecolor().equals("多车包月入场")) {
+					monthuserUse.setPlatecolor("出场完结");
+					List<Monthuser> monthuserss = monthUserService.getByUsernameAndPark(monthuserUse.getOwner(),
+							monthuserUse.getParkid());
+					for (Monthuser monthuser : monthuserss) {
+						if (monthuser.getPlatecolor().equals("包月转为临停")) {
+							monthuser.setPlatecolor("临停恢复为包月");
+							monthuserUse.setPlatecolor(
+									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+							monthUserService.updateByPrimaryKeySelective(monthuser);
+							break;
+						}
+					}
+					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+				}
+				this.update(charge);
+			}
+			return;
+		}
+
+		Integer criterionId = park.getFeeCriterionId();
+		FeeCriterion criterion = criterionService.getById(criterionId);
+
+		if (criterion.getType() == 2) {
+			newFeeCalcExpense2(charge, criterion, exitDate, isQuery);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		if (criterion.getType() == 1) {
+			newFeeCalcExpense1(charge, criterion, exitDate, isQuery);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+
+		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
+		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
+		String nightStartHour = "20";
+		String nightEndHour = "07";
+		if (criterion.getNightstarttime() != null && criterion.getNightendtime() != null) {
+			nightStartHour = criterion.getNightstarttime().split(":")[0];
+			nightEndHour = criterion.getNightendtime().split(":")[0];
+		}
+		int isOneTimeExpense = charge.getIsOneTimeExpense();
+		if (charge.getIsLargeCar() == false) {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseSmallCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				}
+			}
+			// System.out.println("计费计算后: "+new Date().getTime()+"\n");
+			// System.out.println("计费更新前: "+new Date().getTime()+"\n");
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			// System.out.println("计费更新后: "+new Date().getTime()+"\n");
+
+		} else {
+			Map<String, String> dates = formatTime.format(startTime, endTime, nightStartHour, nightEndHour);
+			for (String name : dates.keySet()) {
+				charge.setEntranceDate(name);
+				int houra = Integer.parseInt(name.substring(11, 13));
+				int hourNight = Integer.parseInt(nightStartHour);
+				int hourDay = Integer.parseInt(nightEndHour);
+				boolean isNight = false;
+				if (houra > 12) {
+					if (houra >= hourNight) {
+						isNight = true;
+					}
+				} else {
+					if (houra < hourDay) {
+						isNight = true;
+					}
+				}
+				if (isNight) {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else if (isOneTimeExpense == 0) {
+					charge.setIsOneTimeExpense(0);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				} else {
+					charge.setIsOneTimeExpense(1);
+					this.calExpenseLargeCar(charge, new SimpleDateFormat(Constants.DATEFORMAT).parse(dates.get(name)),
+							isQuery);
+				}
+			}
+			charge.setEntranceDate(startTime);
+			charge.setExitDate(endTime);
+			if (charge.getPaidMoney() >= charge.getChargeMoney() && !isQuery) {
+				charge.setUnPaidMoney(0);
+				charge.setPaidCompleted(true);
+				charge.setChangeMoney(charge.getPaidMoney() - charge.getChargeMoney());
+			} else {
+				charge.setUnPaidMoney(charge.getChargeMoney() - charge.getPaidMoney());
+			}
+			if (isRealMonthUser) {
+				// charge.setPaidMoney(0);
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+
+		}
+
+		
 	}
 }

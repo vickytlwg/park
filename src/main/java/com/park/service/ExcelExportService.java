@@ -2,6 +2,7 @@ package com.park.service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -124,6 +125,76 @@ public class ExcelExportService {
 				String zuobiao="("+dataUsageCardDetail.getLatitude()+","+
 				dataUsageCardDetail.getLongitude()+")";
 				cell6.setCellValue(zuobiao);															
+		}
+	}
+	public void produceMonthCountsInfoExcel(String title, String[] headers, List<Map<String, Object>> dataset,
+			XSSFWorkbook workbook) {
+		XSSFSheet sheet = workbook.createSheet(title);
+		// 设置表格默认列宽度为25个字节
+		sheet.setDefaultColumnWidth(25);
+		// 生成一个样式
+		XSSFCellStyle style = workbook.createCellStyle();
+		// 设置这些样式
+		style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+		style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		// 生成一个字体
+		XSSFFont font = workbook.createFont();
+		font.setColor(HSSFColor.VIOLET.index);
+		font.setFontHeightInPoints((short) 12);
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		// 把字体应用到当前的样式
+		style.setFont(font);
+
+		XSSFCellStyle style2 = workbook.createCellStyle();
+		style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+		style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		// 生成另一个字体
+		XSSFFont font2 = workbook.createFont();
+		font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+		// 把字体应用到当前的样式
+		style2.setFont(font2);
+		
+		// 产生表格标题行
+		XSSFRow row = sheet.createRow(0);
+		for (int i = 0; i < headers.length; i++) {
+			XSSFCell cell = row.createCell(i);
+			cell.setCellStyle(style);
+			XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+			cell.setCellValue(text);
+		}
+		
+		for(int j=0;j<dataset.size();j++){
+			XSSFRow row1 = sheet.createRow(j+1);
+			Map<String, Object> posdata=dataset.get(j);
+			
+			XSSFCell cell1 = row1.createCell(0);				
+			cell1.setCellStyle(style2);
+			
+			cell1.setCellValue(posdata.get("owner")==null?"":(String)posdata.get("owner"));
+			
+			XSSFCell cell2 = row1.createCell(1);				
+			cell2.setCellStyle(style2);
+			cell2.setCellValue((long)posdata.get("count"));
+			
+			XSSFCell cell3 = row1.createCell(2);				
+			cell3.setCellStyle(style2);
+			cell3.setCellValue((String)posdata.get("cardNumber"));
+			
+			XSSFCell cell4 = row1.createCell(3);				
+			cell4.setCellStyle(style2);
+			cell4.setCellValue(posdata.get("type")==null?-1:(int)posdata.get("type"));
+						
 		}
 	}
 	public void produceExceldataPosData(String title, String[] headers, List<Posdata> dataset,

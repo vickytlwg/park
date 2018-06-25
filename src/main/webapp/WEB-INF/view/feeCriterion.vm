@@ -91,7 +91,10 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加
 							</button>
-
+							<button type="button" class="btn  btn-default"
+								style="border-radius: 25px; margin-right: 5px;">
+								<a href="/park/feecriterionToPark/index"> 多计费标准管理</a>
+							</button>
 						</div>
 						<div class="pull-right" style="width: 300px">
 							<div class="input-group">

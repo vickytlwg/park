@@ -1,6 +1,8 @@
 package com.park.controller;
 
 
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,77 +64,77 @@ public class BarrierChargeController {
 	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 
-	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	@ResponseBody
-	public String insert(@RequestBody Map<String, String> args) throws ParseException, AlipayApiException {
-		String mac = args.get("mac");
-		String cardNumber = args.get("cardNumber");
-		PosChargeData charge = new PosChargeData();
-		Map<String, Object> ret = new HashMap<String, Object>();
-		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
-		Map<String, Object> info = infos.get(0);
-		if (info == null) {
-			ret.put("status", 1002);
-			return Utility.gson.toJson(ret);
-		}
-		Integer parkId = (Integer) info.get("parkID");
-		String parkName = (String) info.get("Name");
-
-		charge.setCardNumber(cardNumber);
-		charge.setParkId(parkId);
-		charge.setParkDesc(parkName);
-		charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		int num = chargeSerivce.insert(charge);
-		if (num == 1) {
-			List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
-			if (!parktoaliparks.isEmpty()) {
-				Parktoalipark parktoalipark = parktoaliparks.get(0);
-				Map<String, String> argstoali = new HashMap<>();
-				argstoali.put("parking_id", parktoalipark.getAliparkingid());
-				argstoali.put("car_number", cardNumber);
-				argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				aliparkFeeService.parkingEnterinfoSync(argstoali);
-			}
-			ret.put("status", 1001);
-		} else {
-			ret.put("status", 1002);
-		}
-		return Utility.gson.toJson(ret);
-	}
-
-	@RequestMapping(value = "exit", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	@ResponseBody
-	public String exit(@RequestBody Map<String, Object> args) throws ParseException {
-		String cardNumber = (String) args.get("cardNumber");
-		List<PosChargeData> queryCharges = null;
-		String exitDate = (String) args.get("exitDate");
-		if (exitDate != null) {
-			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
-			try {
-				queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				return Utility.createJsonMsg(1002, e);
-			}
-		} else {
-			try {
-				queryCharges = chargeSerivce.getDebt(cardNumber);
-			} catch (Exception e) {
-				return Utility.createJsonMsg(1002, e);
-			}
-		}
-		PosChargeData payRet = queryCharges.get(0);
-		payRet.setPaidCompleted(true);
-		payRet.setPaidMoney(payRet.getChargeMoney());
-		payRet.setUnPaidMoney(0);
-		payRet.setOperatorId("道闸");
-		int num = chargeSerivce.update(payRet);
-		if (num == 1) {
-			return Utility.createJsonMsg(1001, "success", payRet);
-		} else {
-			return Utility.createJsonMsg(1002, "fail");
-		}
-	}
+//	@RequestMapping(value = "insert", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+//	@ResponseBody
+//	public String insert(@RequestBody Map<String, String> args) throws ParseException, AlipayApiException {
+//		String mac = args.get("mac");
+//		String cardNumber = args.get("cardNumber");
+//		PosChargeData charge = new PosChargeData();
+//		Map<String, Object> ret = new HashMap<String, Object>();
+//		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+//		Map<String, Object> info = infos.get(0);
+//		if (info == null) {
+//			ret.put("status", 1002);
+//			return Utility.gson.toJson(ret);
+//		}
+//		Integer parkId = (Integer) info.get("parkID");
+//		String parkName = (String) info.get("Name");
+//
+//		charge.setCardNumber(cardNumber);
+//		charge.setParkId(parkId);
+//		charge.setParkDesc(parkName);
+//		charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//		int num = chargeSerivce.insert(charge);
+//		if (num == 1) {
+//			List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
+//			if (!parktoaliparks.isEmpty()) {
+//				Parktoalipark parktoalipark = parktoaliparks.get(0);
+//				Map<String, String> argstoali = new HashMap<>();
+//				argstoali.put("parking_id", parktoalipark.getAliparkingid());
+//				argstoali.put("car_number", cardNumber);
+//				argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+//				aliparkFeeService.parkingEnterinfoSync(argstoali);
+//			}
+//			ret.put("status", 1001);
+//		} else {
+//			ret.put("status", 1002);
+//		}
+//		return Utility.gson.toJson(ret);
+//	}
+//
+//	@RequestMapping(value = "exit", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+//	@ResponseBody
+//	public String exit(@RequestBody Map<String, Object> args) throws ParseException {
+//		String cardNumber = (String) args.get("cardNumber");
+//		List<PosChargeData> queryCharges = null;
+//		String exitDate = (String) args.get("exitDate");
+//		if (exitDate != null) {
+//			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+//			try {
+//				queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				return Utility.createJsonMsg(1002, e);
+//			}
+//		} else {
+//			try {
+//				queryCharges = chargeSerivce.getDebt(cardNumber);
+//			} catch (Exception e) {
+//				return Utility.createJsonMsg(1002, e);
+//			}
+//		}
+//		PosChargeData payRet = queryCharges.get(0);
+//		payRet.setPaidCompleted(true);
+//		payRet.setPaidMoney(payRet.getChargeMoney());
+//		payRet.setUnPaidMoney(0);
+//		payRet.setOperatorId("道闸");
+//		int num = chargeSerivce.update(payRet);
+//		if (num == 1) {
+//			return Utility.createJsonMsg(1001, "success", payRet);
+//		} else {
+//			return Utility.createJsonMsg(1002, "fail");
+//		}
+//	}
 
 	@RequestMapping(value = "touchtest", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
@@ -231,6 +233,10 @@ public class BarrierChargeController {
 			logger.info(cardNumber+"进入一位多车停车场");
 			isMultiCarsOneCarport=true;
 		}
+		Boolean isMultiFeeCtriterion=false;
+		if (park.getDescription().contains("多计费标准")) {
+			isMultiFeeCtriterion=true;
+		}
 		// 判断是否有多个车
 		List<Monthuser> realMonthUsers = new ArrayList<>();
 		if (monthuserNow != null && monthuserNow.getCardnumber() != null&& !monthuserNow.getCardnumber().equals("") ) {
@@ -310,13 +316,23 @@ public class BarrierChargeController {
 				for (Monthuser tmMonthuser : realMonthUsers) {
 					if (tmMonthuser.getPlatecolor().equals("多车包月入场")
 							|| tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
-						isMonthUserCarIn = true;
+						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
+							isMonthUserCarIn = true;
+						}
+						
 					}
 				}
 				monthuserNow.setPlatecolor("多车包月入场");
 				if (isMonthUserCarIn) {
 					monthuserNow.setPlatecolor("包月转为临停");
 					dataMap.put("uT", "0");
+					try {
+						dataMap.remove("ds");
+						dataMap.remove("eD");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
 				}
 				monthUserService.updateByPrimaryKeySelective(monthuserNow);
 			}
@@ -419,13 +435,15 @@ public class BarrierChargeController {
 			default:
 				break;
 			}
-
+			
 			if (exitDate != null) {
 				Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 				try {
 					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
 					// Date().getTime()+"\n");
-					queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+				//	queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,isMultiFeeCtriterion,monthUserType);
+
 					// System.out.println("出场时间为空,getDebt计算完毕: "+new
 					// Date().getTime()+"\n");
 
@@ -437,7 +455,7 @@ public class BarrierChargeController {
 				try {
 					// System.out.println("出场时间不为空,将要进行getDebt计算: "+new
 					// Date().getTime()+"\n");
-					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park);
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,isMultiFeeCtriterion,monthUserType);
 					// System.out.println("出场时间不为空,getDebt计算完毕: "+new
 					// Date().getTime()+"\n");
 				} catch (Exception e) {

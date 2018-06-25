@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -122,6 +123,13 @@ public class MonthUserServiceImpl implements MonthUserService {
 	public Map<String, Object> statisticsInfo(int parkId, int type) {
 		// TODO Auto-generated method stub
 		return monthUserDao.statisticsInfo(parkId, type);
+	}
+
+	@Override
+	public List<Map<String, Object>> getMonthuserCountsByDateRangeAndPark(int parkId, Date startDate, Date endDate,
+			int maxCount) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getMonthuserCountsByDateRangeAndPark(parkId, startDate, endDate, maxCount);
 	}
 
 }

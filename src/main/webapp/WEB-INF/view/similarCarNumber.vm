@@ -1,5 +1,5 @@
 
-<script src="/park/script/similarCarNumber.js?v=1.0"></script>
+<script src="/park/script/similarCarNumber.js?v=1.1"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <style>
 .page-list .pagination {
@@ -143,7 +143,7 @@
 
 								<tr class="success">
 									<th><span style="">选择</span></th>
-									<th><span style="padding-left: 15%">Id</span></th>
+									<th hidden><span style="padding-left: 15%" >Id</span></th>
 									<th><span style="padding-left: 15%">相似车牌</span></th>
 									<th><span style="padding-left: 15%">真实车牌</span></th>
 									<th><span style="padding-left: 15%">说明</span></th>
@@ -153,7 +153,7 @@
 									ng-click="selectChange($index)">
 									<td><input type="checkbox"
 										ng-model="similarCarNumber.checked" /></td>
-									<td ng-bind="similarCarNumber.id"></td>
+									<td ng-bind="similarCarNumber.id" hidden></td>
 									<td ng-bind="similarCarNumber.similarnumber"></td>
 									<td ng-bind="similarCarNumber.realnumber"></td>
 									<td ng-bind="similarCarNumber.other"></td>

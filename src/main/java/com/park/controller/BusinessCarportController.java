@@ -51,7 +51,7 @@ public class BusinessCarportController {
 
 	@Autowired
 	private UserPagePermissionService pageService;
-	
+
 	@Autowired
 	private AuthorityService authService;
 
@@ -70,14 +70,15 @@ public class BusinessCarportController {
 			if (user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
 
 		return "businessCarport";
 	}
+
 	@RequestMapping(value = "/businessCarportAngular", produces = { "application/json;charset=UTF-8" })
 	public String getbusinessCarportAngular(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -99,9 +100,11 @@ public class BusinessCarportController {
 			Set<Page> pages = pageService.getUserPage(user.getId());
 			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
-			}}
+			}
+		}
 		return "businessCarportAngular";
-	} 
+	}
+
 	@RequestMapping(value = "/getBusinessCarportCount", method = RequestMethod.GET, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -159,71 +162,72 @@ public class BusinessCarportController {
 	@ResponseBody
 	public String getDayCarportStatusDetail(@RequestParam("carportId") int carportId,
 			@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		
-		List<CarportStatusDetail> details = businessCarportService.getDayCarportStatusDetail(carportId, parsedStartDay, parsedEndDay);
+		}
+
+		List<CarportStatusDetail> details = businessCarportService.getDayCarportStatusDetail(carportId, parsedStartDay,
+				parsedEndDay);
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("carportStatusDetail", details);
 		return Utility.createJsonMsg(1001, "get carportStatus success", body);
 	}
-	
+
 	@RequestMapping(value = "/getCarportUsage", method = RequestMethod.GET, produces = {
-	"application/json;charset=UTF-8" })
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getCarportUsage(@RequestParam("carportId") int carportId,
-		@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	public String getCarportUsage(@RequestParam("carportId") int carportId, @RequestParam("startDay") String startDay,
+			@RequestParam("endDay") String endDay) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		
+		}
+
 		double usageRate = businessCarportService.getCarportUsage(carportId, parsedStartDay, parsedEndDay);
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("usage", usageRate);
 		body.put("unusage", 1 - usageRate);
 		return Utility.createJsonMsg(1001, "get carportUsage success", body);
 	}
-	
+
 	@RequestMapping(value = "/getParkUsage", method = RequestMethod.GET, produces = {
-	"application/json;charset=UTF-8" })
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getParkUsage(@RequestParam("parkId") int parkId,
-		@RequestParam("startDay") String startDay, @RequestParam("endDay") String endDay) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	public String getParkUsage(@RequestParam("parkId") int parkId, @RequestParam("startDay") String startDay,
+			@RequestParam("endDay") String endDay) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
 			parsedStartDay = sdf.parse(startDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		Date parsedEndDay  = null;
+		}
+		Date parsedEndDay = null;
 		try {
 			parsedEndDay = sdf.parse(endDay + " 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}	
-		
+		}
+
 		double usage = businessCarportService.getParkUsage(parkId, parsedStartDay, parsedEndDay);
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("usage", usage);
@@ -247,10 +251,10 @@ public class BusinessCarportController {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String accessIndex(@RequestParam("low") int low, @RequestParam("count") int count,
-			@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
+			@RequestParam(value = "parkId", required = false) Integer parkId, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		response.setHeader("Access-Control-Allow-Headers","token,content-type");
+		response.setHeader("Access-Control-Allow-Headers", "token,content-type");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
 				parkId);
@@ -265,65 +269,68 @@ public class BusinessCarportController {
 		return Utility.gson.toJson(ret);
 
 	}
-	
-@RequestMapping(value = "/getBusinessCarportDetailSimple", method = RequestMethod.GET, produces = {
-	"application/json;charset=UTF-8" })
-@ResponseBody
-public String getBusinessCarportDetailSimple(@RequestParam("low") int low, @RequestParam("count") int count,
-	@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
-Map<String, Object> ret = new HashMap<String, Object>();
-List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
-		parkId);
-if (businessCarportDetail != null) {
-	List<BusinessCarportDetailSimple> businessCarportDetailSimples=new ArrayList<BusinessCarportDetailSimple>();
-	for(BusinessCarportDetail tmpbusiness:businessCarportDetail){
-		BusinessCarportDetailSimple tmpdata=new BusinessCarportDetailSimple();
-		tmpdata.setCarportNumber(tmpbusiness.getCarportNumber());
-		tmpdata.setDate(tmpbusiness.getDate());
-		tmpdata.setStatus(tmpbusiness.getStatus());
-		businessCarportDetailSimples.add(tmpdata);
+
+	@RequestMapping(value = "/getBusinessCarportDetailSimple", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getBusinessCarportDetailSimple(@RequestParam("low") int low, @RequestParam("count") int count,
+			@RequestParam(value = "parkId", required = false) Integer parkId, HttpServletResponse response) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
+				parkId);
+		if (businessCarportDetail != null) {
+			List<BusinessCarportDetailSimple> businessCarportDetailSimples = new ArrayList<BusinessCarportDetailSimple>();
+			for (BusinessCarportDetail tmpbusiness : businessCarportDetail) {
+				BusinessCarportDetailSimple tmpdata = new BusinessCarportDetailSimple();
+				tmpdata.setCarportNumber(tmpbusiness.getCarportNumber());
+				tmpdata.setDate(tmpbusiness.getDate());
+				tmpdata.setStatus(tmpbusiness.getStatus());
+				businessCarportDetailSimples.add(tmpdata);
+			}
+			ret.put("status", "1001");
+			// ret.put("message", "get businessCarport detail success");
+			ret.put("body", businessCarportDetailSimples);
+		} else {
+			ret.put("status", "1002");
+			// ret.put("message", "get businessCarport detail fail");
+		}
+		return Utility.gson.toJson(ret);
 	}
-	ret.put("status", "1001");
-	//ret.put("message", "get businessCarport detail success");
-	ret.put("body", businessCarportDetailSimples);
-} else {
-	ret.put("status", "1002");
-	//ret.put("message", "get businessCarport detail fail");
-}
-return Utility.gson.toJson(ret);
-}
-@RequestMapping(value = "/getBCDSimpleLimitSeconds", method = RequestMethod.GET, produces = {
-"application/json;charset=UTF-8" })
-@ResponseBody
-public String getBCDSimpleLimitSecond(@RequestParam("low") int low, @RequestParam("count") int count,@RequestParam(value ="seconds", required = false) Integer seconds,
-@RequestParam(value = "parkId", required = false) Integer parkId,HttpServletResponse response) {
-Map<String, Object> ret = new HashMap<String, Object>();
-List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
-	parkId);
-if (seconds==null) {
-	seconds=10;
-}
-if (businessCarportDetail != null) {
-List<BusinessCarportDetailSimple> businessCarportDetailSimples=new ArrayList<BusinessCarportDetailSimple>();
-for(BusinessCarportDetail tmpbusiness:businessCarportDetail){
-	if (new Date().getTime()-tmpbusiness.getDate().getTime()>1000*seconds) {
-		continue;
+
+	@RequestMapping(value = "/getBCDSimpleLimitSeconds", method = RequestMethod.GET, produces = {
+			"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getBCDSimpleLimitSecond(@RequestParam("low") int low, @RequestParam("count") int count,
+			@RequestParam(value = "seconds", required = false) Integer seconds,
+			@RequestParam(value = "parkId", required = false) Integer parkId, HttpServletResponse response) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<BusinessCarportDetail> businessCarportDetail = businessCarportService.getBusinessCarportDetail(low, count,
+				parkId);
+		if (seconds == null) {
+			seconds = 10;
+		}
+		if (businessCarportDetail != null) {
+			List<BusinessCarportDetailSimple> businessCarportDetailSimples = new ArrayList<BusinessCarportDetailSimple>();
+			for (BusinessCarportDetail tmpbusiness : businessCarportDetail) {
+				if (new Date().getTime() - tmpbusiness.getDate().getTime() > 1000 * seconds) {
+					continue;
+				}
+				BusinessCarportDetailSimple tmpdata = new BusinessCarportDetailSimple();
+				tmpdata.setCarportNumber(tmpbusiness.getCarportNumber());
+				tmpdata.setDate(tmpbusiness.getDate());
+				tmpdata.setStatus(tmpbusiness.getStatus());
+				businessCarportDetailSimples.add(tmpdata);
+			}
+			ret.put("status", "1001");
+			// ret.put("message", "get businessCarport detail success");
+			ret.put("body", businessCarportDetailSimples);
+		} else {
+			ret.put("status", "1002");
+			// ret.put("message", "get businessCarport detail fail");
+		}
+		return Utility.gson.toJson(ret);
 	}
-	BusinessCarportDetailSimple tmpdata=new BusinessCarportDetailSimple();
-	tmpdata.setCarportNumber(tmpbusiness.getCarportNumber());
-	tmpdata.setDate(tmpbusiness.getDate());
-	tmpdata.setStatus(tmpbusiness.getStatus());
-	businessCarportDetailSimples.add(tmpdata);
-}
-ret.put("status", "1001");
-//ret.put("message", "get businessCarport detail success");
-ret.put("body", businessCarportDetailSimples);
-} else {
-ret.put("status", "1002");
-//ret.put("message", "get businessCarport detail fail");
-}
-return Utility.gson.toJson(ret);
-}
+
 	@RequestMapping(value = "/insert/businessCarport", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -341,35 +348,36 @@ return Utility.gson.toJson(ret);
 		retMap.put("message", "insert businessCarport fail, mac has already been used");
 		return Utility.gson.toJson(retMap);
 	}
+
 	@RequestMapping(value = "/addMacAndInsertBusinessCarport", method = RequestMethod.POST, produces = {
-	"application/json;charset=UTF-8" })
+			"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String addMacAndInsertBusinessCarport(@RequestBody Map<String, Object> args){
-		Map<String, Object> result=new HashMap<>();
-		String mac =(String) args.get("mac");
-		String macDescription=(String) args.get("macDesc");
-		Hardware hardware=new Hardware();
+	public String addMacAndInsertBusinessCarport(@RequestBody Map<String, Object> args) {
+		Map<String, Object> result = new HashMap<>();
+		String mac = (String) args.get("mac");
+		String macDescription = (String) args.get("macDesc");
+		Hardware hardware = new Hardware();
 		hardware.setMac(mac);
 		hardware.setDescription(macDescription);
 		hardware.setType(0);
 		hardware.setStatus(1);
 		hardware.setDate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-		int ret =  hardwareService.insertHardware(hardware);
-		if (ret!=1) {
+		int ret = hardwareService.insertHardware(hardware);
+		if (ret != 1) {
 			result.put("status", 1002);
 			result.put("message", "硬件插入失败");
 			return Utility.gson.toJson(result);
 		}
-		int macId=hardware.getId();
-		int parkId=(int) args.get("parkId");
-		int carportNumber=(int) args.get("carportNumber");
-		BusinessCarport businessCarport=new BusinessCarport();
+		int macId = hardware.getId();
+		int parkId = (int) args.get("parkId");
+		int carportNumber = (int) args.get("carportNumber");
+		BusinessCarport businessCarport = new BusinessCarport();
 		businessCarport.setCarportNumber(carportNumber);
 		businessCarport.setDate(new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 		businessCarport.setMacId(macId);
 		businessCarport.setStatus(0);
 		businessCarport.setParkId(parkId);
-		if (businessCarportService.insertBusinessCarport(businessCarport)==1) {
+		if (businessCarportService.insertBusinessCarport(businessCarport) == 1) {
 			businessCarportService.updateBusinessCarport(businessCarport);
 			result.put("status", 1001);
 			result.put("message", "成功插入硬件并绑定成功");
@@ -379,6 +387,7 @@ return Utility.gson.toJson(ret);
 		result.put("message", "绑定失败");
 		return Utility.gson.toJson(result);
 	}
+
 	@RequestMapping(value = "/update/businessCarport", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -403,7 +412,7 @@ return Utility.gson.toJson(ret);
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		String mac = (String) args.get("mac");
 		int status = Integer.parseInt((String) args.get("status"));
-		int ret = businessCarportService.updateBusinessCarportStatus(mac, status,false);
+		int ret = businessCarportService.updateBusinessCarportStatus(mac, status, false);
 		logger.info("updateBusinessCarportStatus resutl: " + ret);
 		if (ret > 0) {
 			retMap.put("status", "1001");
@@ -422,22 +431,21 @@ return Utility.gson.toJson(ret);
 	public String updateBusinessCarportsStatus(@RequestBody Map<String, Object> args) throws InterruptedException {
 		List<String> updatedMac = new ArrayList<String>();
 		List<Object> carportsStatus = (List<Object>) args.get("carportStatus");
-		int i=1;
+		int i = 1;
 		for (Object item : carportsStatus) {
 			Map<String, Object> arg = (Map<String, Object>) item;
 			String mac = (String) arg.get("mac");
 			int status = Integer.parseInt((String) arg.get("status").toString());
 			int ret;
-			if (i==1) {
-				ret = businessCarportService.updateBusinessCarportStatus(mac, status,true);
-			}else{
-				ret = businessCarportService.updateBusinessCarportStatus(mac, status,false);
-			}			
+			if (i == 1) {
+				ret = businessCarportService.updateBusinessCarportStatus(mac, status, true);
+			} else {
+				ret = businessCarportService.updateBusinessCarportStatus(mac, status, false);
+			}
 			i++;
 			if (ret > 0)
 				updatedMac.add(mac);
-			
-			
+
 		}
 
 		return Utility.createJsonMsg(1001, "updated mac", updatedMac) + "eof\n";
@@ -460,20 +468,23 @@ return Utility.gson.toJson(ret);
 		}
 		return Utility.gson.toJson(retMap);
 	}
-	@RequestMapping(value="/insertBusinessCarportNum",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+
+	@RequestMapping(value = "/insertBusinessCarportNum", method = RequestMethod.POST, produces = {
+			"application/json;charset=utf-8" })
 	@ResponseBody
-	public String insertBusinessCarportNum(@RequestBody Map<String, Object> args){
-		Integer carportstart=(Integer) args.get("carportStart");
-		Integer carporttotal=(Integer) args.get("carportTotal");
-		Integer parkid=(Integer) args.get("parkId");
-		int insertnum=businessCarportService.insertBusinessCarportNum(parkid, carportstart, carporttotal);
-		Map<String, Object> ret=new HashMap<>();
+	public String insertBusinessCarportNum(@RequestBody Map<String, Object> args) {
+		Integer carportstart = (Integer) args.get("carportStart");
+		Integer carporttotal = (Integer) args.get("carportTotal");
+		Integer parkid = (Integer) args.get("parkId");
+		int insertnum = businessCarportService.insertBusinessCarportNum(parkid, carportstart, carporttotal);
+		Map<String, Object> ret = new HashMap<>();
 		ret.put("num", insertnum);
 		return Utility.gson.toJson(ret);
-		
+
 	}
-	@RequestMapping(value="/businessCarportStatus")
-	public String businessCarportStatus(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+
+	@RequestMapping(value = "/businessCarportStatus")
+	public String businessCarportStatus(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if (user != null) {
@@ -482,19 +493,22 @@ return Utility.gson.toJson(ret);
 			if (user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin = true;
 			modelMap.addAttribute("isAdmin", isAdmin);
-			Set<Page> pages = pageService.getUserPage(user.getId()); 
-			for(Page page : pages){
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
 		return "businessCarportStatus";
 	}
-	@RequestMapping(value="/getBusinessCarportStatusByParkId/{parkId}",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+
+	@RequestMapping(value = "/getBusinessCarportStatusByParkId/{parkId}", method = RequestMethod.GET, produces = {
+			"application/json;charset=utf-8" })
 	@ResponseBody
-	public String getBusinessCarportStatusByParkId(@PathVariable("parkId") int parkId) throws ParseException, Exception{
-		Map<String, Object> result=new HashMap<>();
-		List<BusinessCarportStatus> businessCarportStatus=businessCarportService.getBusinessStatusByParkId(parkId);
-		
+	public String getBusinessCarportStatusByParkId(@PathVariable("parkId") int parkId)
+			throws ParseException, Exception {
+		Map<String, Object> result = new HashMap<>();
+		List<BusinessCarportStatus> businessCarportStatus = businessCarportService.getBusinessStatusByParkId(parkId);
+
 		result.put("status", "1001");
 		result.put("body", businessCarportStatus);
 		return Utility.gson.toJson(result);
