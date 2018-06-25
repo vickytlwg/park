@@ -85,9 +85,9 @@
                         tr.append('<td>' + data[i]['status'] + '</td>');
                         tr.append('<td>' + data[i]['dataUsage'] + '</td>');
                         if (i % 2 == 0) {
-                            tr.addClass('success');
-                        } else {
                             tr.addClass('active');
+                        } else {
+                            tr.addClass('default');
                         }
                         tr.attr("id", data[i]['id']);
                         tr.attr("parkId", data[i]["parkId"]);
@@ -415,9 +415,9 @@
             tr.append('<td>' + data[i]['status'] + '</td>');
             tr.append('<td>' + data[i]['dataUsage'] + '</td>');
             if (i % 2 == 0) {
-                tr.addClass('success');
-            } else {
                 tr.addClass('active');
+            } else {
+                tr.addClass('default');
             }
             tr.attr("id", data[i]['id']);
             tr.attr("parkId", data[i]["parkId"]);

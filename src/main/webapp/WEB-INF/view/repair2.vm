@@ -20,7 +20,7 @@
 	                </div> --><!-- /.box-header -->
 	                <div class="box-body" style="height:580px">
 	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;margin-top:40px;" >
+	                		<ul class="imglist" style="height:600px;width:900px;margin-top:100px;" >
 	                			<li class="recod">
 	                				<a href="/park/repair" style="background: url(/park/img/bak1a.png) no-repeat center center;">工单管理</a>
 	                			</li>

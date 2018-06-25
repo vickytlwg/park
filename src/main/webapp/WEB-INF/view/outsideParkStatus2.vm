@@ -17,7 +17,7 @@
 	                </div> --><!-- /.box-header -->
 	                <div class="box-body" style="height:580px">
 	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;margin-top:60px;" >
+	                		<ul class="imglist" style="height:600px;min-width:900px;margin-top:100px;" >
 	                			<li class="recod">
 	                				<a href="/park/parkingInfo" style="background: url(/park/img/bak1a.png) no-repeat center center;">今日数据</a>
 	                			</li>

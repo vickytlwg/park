@@ -1,4 +1,48 @@
 <script src="/park/script/leftParkingCard.js?v=1.1"></script>
+<style>
+.form-group label {
+	font-size: 10px;
+}
+
+.form-group {
+	margin-bottom: 10px;
+}
+
+.modal-dialog .form-control {
+	display: block;
+	width: 100%;
+	height: 28px;
+	padding: 4px 4px;
+	font-size: 10px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+}
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3,
+	.col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9,
+	.col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3,
+	.col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9,
+	.col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3,
+	.col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9,
+	.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3,
+	.col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+	position: relative;
+	min-height: 1px;
+	padding-right: 10px;
+	padding-left: 10px
+}
+</style>
 
 <div class="content-wrapper">
 	<section class="content-header">
@@ -39,7 +83,7 @@
 								<span class="glyphicon glyphicon-remove"></span> 删除
 							</button>
 						</div>
-						
+
 
 						<div class="row" style="margin-top: 15px">
 							<div class="col-md-3">
@@ -58,12 +102,12 @@
 								<button type="button" id="daysearch" class="btn btn-success">查询</button>
 							</div>
 							<div class="col-md-3">
-							<select class="form-control"
-								style="padding: 1px; font-size: 14px; height: 35px"
-								id="searchPark"> #if($isAdmin)
-								<option value=-1>所有停车场</option>#end
-							</select>
-						</div>
+								<select class="form-control"
+									style="padding: 1px; font-size: 14px; height: 35px"
+									id="searchPark"> #if($isAdmin)
+									<option value=-1>所有停车场</option>#end
+								</select>
+							</div>
 						</div>
 						<br />
 						<div>
@@ -106,39 +150,35 @@
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
 					aria-hidden='true'>&times;</button>
-				<h4 class='modal-title' id='addChannelLabel'>剩余泊位牌信息</h4>
+				<h3 class='modal-title text-center' id='addChannelLabel'>剩余泊位牌信息</h3>
 			</div>
 
 			<div class='modal-body'>
 				<form class='form-horizontal' id='addChannelForm' role='form'>
 					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='parkName'>停车场名称</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<select class='form-control' id='parkName'>
 								<option>请选择停车场</option>
 							</select>
 						</div>
 						<div id='parkNameLoader'></div>
-					</div>
-					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='channelNumber'>通道编号</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<input type='text' class='form-control' id='channelNumber'
 								placeholder='通道编号'>
 						</div>
 					</div>
 					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='macId'>硬件地址</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<select class='form-control' id='macId'>
 								<option>请选择MAC ID</option>
 							</select>
 						</div>
 						<div id='macIdLoader'></div>
-					</div>
-					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='channelFlag'>标志</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<select class='form-control' id='channelFlag'>
 								<option value=0>出口</option>
 								<option value=1>入口</option>
@@ -148,16 +188,14 @@
 					</div>
 					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='channelStatus'>状态</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<select class='form-control' id='channelStatus'>
 								<option value=1>可用</option>
 								<option value=0>不可用</option>
 							</select>
 						</div>
-					</div>
-					<div class='form-group'>
 						<label class='col-sm-2 control-label' for='channelDesc'>描述</label>
-						<div class='col-sm-8'>
+						<div class='col-sm-3'>
 							<input type='text' class='form-control' id='channelDesc'
 								placeholder='请输入描述信息'>
 						</div>

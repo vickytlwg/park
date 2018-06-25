@@ -11,6 +11,8 @@
         .page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
         .page-list .page-total input {width: 40px; padding-left:3px;}
         .page-list .page-total select {width: 50px;}
+
+
 </style>
 <div class="content-wrapper" ng-app="monthUserApp" ng-controller="monthUserCtrl">
 	<section class="content-header">
@@ -98,12 +100,13 @@
 
 
 <script  type="text/ng-template" id="modifyUser">
+<div class='modal-content' style="min-width:700px;margin-left:-50px;">
 
 <div class="modal-header">
     <button type='button' class='close' ng-click="close()" aria-hidden='true'>
         &times;
     </button>
-    <h4 class="modal-title" >预约用户</h4>
+    <h3 class="modal-title text-center" >预约用户</h3>
 
 </div>
 
@@ -112,81 +115,79 @@
         
 
          <div class="form-group">
-    <label class="col-sm-2 control-label" >停车场(必填)</label>
-    <div class="col-sm-8">
+    <label class="col-sm-2 control-label" >停车场*</label>
+    <div class="col-sm-3">
     <select class="form-control" ng-options="park.id as park.name for park in parks" ng-model="tempUser.parkid"></select>
     </div>
-    </div>
-     <div class="form-group">
-    <label class="col-sm-2 control-label" >车牌号(必选)</label>
-    <div class="col-sm-8">
+    <label class="col-sm-2 control-label" >车牌号*</label>
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入车牌号" ng-model="tempUser.platenumber">
     </div>
     </div>
-      <div class="form-group">
-    <label class="col-sm-2 control-label" >车主(必填)</label>
-    <div class="col-sm-8">
+     <div class="form-group">
+
+    <label class="col-sm-2 control-label" >车主*</label>
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入车主姓名" ng-model="tempUser.owner">
     </div>
-    </div>
-  
-      <div class="form-group">
-    <label class="col-sm-2 control-label" >开始时间(必填)</label>
-    <div class="col-sm-8">
-    <input type="text" class="form-control" placeholder="YYYY-MM-DD hh:mm:ss" ng-model="tempUser.starttime">
-    </div>
-    </div>
-    <div class="form-group">
-    <label class="col-sm-2 control-label" >结束时间(必填)</label>
-    <div class="col-sm-8">
-    <input type="text" class="form-control" placeholder="YYYY-MM-DD hh:mm:ss" ng-model="tempUser.endtime">
-    </div>
-    </div>
-     <div class="form-group">
     <label class="col-sm-2 control-label" >类型</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <select ng-model="tempUser.type" ng-options="status.value as status.text for status in orderTypes" class="form-control">
     </select>
       </div>
-      </div>
-    
-    <div class="form-group">
+    </div>
+
+  
+      <div class="form-group">
+    <label class="col-sm-2 control-label" >开始时间*</label>
+    <div class="col-sm-3">
+    <input type="text" class="form-control" placeholder="YYYY-MM-DD hh:mm:ss" ng-model="tempUser.starttime">
+    </div>
+    <label class="col-sm-2 control-label" >结束时间*</label>
+    <div class="col-sm-3">
+    <input type="text" class="form-control" placeholder="YYYY-MM-DD hh:mm:ss" ng-model="tempUser.endtime">
+    </div>
+    </div>
+
+     <div class="form-group">
+
     <label class="col-sm-2 control-label" >描述</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入描述" ng-model="tempUser.certificatetype">
     </div>
-    </div>
-  <div class="form-group">
     <label class="col-sm-2 control-label" >楼层</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入楼层" ng-model="tempUser.cardnumber">
     </div>
-    </div>
-    <div class="form-group">
+      </div>
+    
+
+  <div class="form-group">
+
     <label class="col-sm-2 control-label" >电话号码</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入证件号码" ng-model="tempUser.certificatenumber">
     </div>
-    </div>
-<div class="form-group">
     <label class="col-sm-2 control-label" >车牌颜色</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入车牌颜色" ng-model="tempUser.platecolor">
     </div>
     </div>
-    <div class="form-group">
+
+<div class="form-group">
+
     <label class="col-sm-2 control-label" >支付金额</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <input type="text" class="form-control" placeholder="请输入支付金额" ng-model="tempUser.payment">
     </div>
-    </div>
-    <div class="form-group">
     <label class="col-sm-2 control-label" >状态</label>
-    <div class="col-sm-8">
+    <div class="col-sm-3">
     <select ng-model="tempUser.status" ng-options="status.value as status.text for status in statuses" class="form-control">
     </select>
       </div>
-      </div>
+    </div>
+
+
         <div class="alert alert-info" ng-show="(showResult || showLoader)">
             <span  ng-show='showLoader'  skip-ng-show= "yes" ng-activity-indicator= "CircledGrey"></span>
             <span ng-show='showResult'>{{result}}</span>
@@ -202,6 +203,7 @@
     <button ng-click="submit()"  type="button" class="btn btn-primary">
         确定
     </button>
+</div>
 </div>
 </script>
 </div>

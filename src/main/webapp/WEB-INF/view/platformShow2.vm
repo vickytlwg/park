@@ -17,6 +17,11 @@
 <script type="text/javascript"
 	src="/park/script/platformshow2angular.js"></script>
 <script type="text/javascript" src="/park/script/map2.js"></script>
+<style>
+.anchorBL {
+	display: none;
+}
+</style>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>云平台</h1>
@@ -384,11 +389,6 @@
 
 	// 使用刚指定的配置项和数据显示图表。
 	myChart.setOption(option);
-</script>
-
-
-<script type="text/javascript">
-	
 </script>
 
 
