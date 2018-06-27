@@ -1,8 +1,6 @@
 package com.park.controller;
 
 
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,11 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.park.model.*;
 import com.park.service.*;
