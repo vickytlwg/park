@@ -49,11 +49,13 @@ import com.park.model.Pos;
 import com.park.model.PosChargeData;
 import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
+import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
+import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
@@ -787,7 +789,8 @@ public class PosChargeDataController {
 				argstoali.put("parking_id", parktoalipark.getAliparkingid());
 				argstoali.put("car_number", charge.getCardNumber());
 				argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				aliparkFeeService.parkingEnterinfoSync(argstoali);
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
+		//		aliparkFeeService.parkingEnterinfoSync(argstoali);
 			}
 			return Utility.createJsonMsg(1001, "success");
 		}

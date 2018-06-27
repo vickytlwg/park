@@ -102,39 +102,39 @@ public class BarrierChargeController {
 //		return Utility.gson.toJson(ret);
 //	}
 //
-//	@RequestMapping(value = "exit", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-//	@ResponseBody
-//	public String exit(@RequestBody Map<String, Object> args) throws ParseException {
-//		String cardNumber = (String) args.get("cardNumber");
-//		List<PosChargeData> queryCharges = null;
-//		String exitDate = (String) args.get("exitDate");
-//		if (exitDate != null) {
-//			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
-//			try {
-//				queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				return Utility.createJsonMsg(1002, e);
-//			}
-//		} else {
-//			try {
-//				queryCharges = chargeSerivce.getDebt(cardNumber);
-//			} catch (Exception e) {
-//				return Utility.createJsonMsg(1002, e);
-//			}
-//		}
-//		PosChargeData payRet = queryCharges.get(0);
-//		payRet.setPaidCompleted(true);
-//		payRet.setPaidMoney(payRet.getChargeMoney());
-//		payRet.setUnPaidMoney(0);
-//		payRet.setOperatorId("道闸");
-//		int num = chargeSerivce.update(payRet);
-//		if (num == 1) {
-//			return Utility.createJsonMsg(1001, "success", payRet);
-//		} else {
-//			return Utility.createJsonMsg(1002, "fail");
-//		}
-//	}
+	@RequestMapping(value = "exit", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String exit(@RequestBody Map<String, Object> args) throws ParseException {
+		String cardNumber = (String) args.get("cardNumber");
+		List<PosChargeData> queryCharges = null;
+		String exitDate = (String) args.get("exitDate");
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			try {
+				queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, e);
+			}
+		} else {
+			try {
+				queryCharges = chargeSerivce.getDebt(cardNumber);
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, e);
+			}
+		}
+		PosChargeData payRet = queryCharges.get(0);
+		payRet.setPaidCompleted(true);
+		payRet.setPaidMoney(payRet.getChargeMoney());
+		payRet.setUnPaidMoney(0);
+		payRet.setOperatorId("道闸");
+		int num = chargeSerivce.update(payRet);
+		if (num == 1) {
+			return Utility.createJsonMsg(1001, "success", payRet);
+		} else {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+	}
 
 	@RequestMapping(value = "touchtest", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody

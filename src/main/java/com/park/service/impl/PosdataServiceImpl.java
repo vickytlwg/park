@@ -90,24 +90,23 @@ public class PosdataServiceImpl implements PosdataService {
 		}	
 		Park park = parkService.getParkById(parkId);
 		String parkName=park.getName();
-		List<Posdata> posdata=selectPosdataByParkAndRange(parkName,parsedStartDay,parsedEndDay);
-		if (posdata.isEmpty()) {
+		
 			return posChargeService.getParkChargeByDay(parkId, day);
-		}
-		Map<String, Object> retmap=new HashMap<>();
-		float chargeTotal=0;
-		float realReceiveMoney=0;
-		for (Posdata posdata2 : posdata) {
-			if (posdata2.getMode()==1) {
-				chargeTotal+=posdata2.getMoney().floatValue();
-				realReceiveMoney+=posdata2.getGiving().floatValue()+posdata2.getRealmoney().floatValue()-
-						posdata2.getReturnmoney().floatValue();
-			}
-			
-		}
-		retmap.put("totalMoney", chargeTotal);
-		retmap.put("realMoney", realReceiveMoney);
-		return retmap;
+		
+//		Map<String, Object> retmap=new HashMap<>();
+//		float chargeTotal=0;
+//		float realReceiveMoney=0;
+//		for (Posdata posdata2 : posdata) {
+//			if (posdata2.getMode()==1) {
+//				chargeTotal+=posdata2.getMoney().floatValue();
+//				realReceiveMoney+=posdata2.getGiving().floatValue()+posdata2.getRealmoney().floatValue()-
+//						posdata2.getReturnmoney().floatValue();
+//			}
+//			
+//		}
+//		retmap.put("totalMoney", chargeTotal);
+//		retmap.put("realMoney", realReceiveMoney);
+//		return retmap;
 	}
 	@Override
 	public List<Posdata> getPosdataByCarportAndRange(String parkName, String carportId, Date startDay, Date endDay) {

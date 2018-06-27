@@ -1307,6 +1307,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		else {
 			criterion=criterionService.getById(park.getFeeCriterionId());
 		}
+		if (criterion==null) {
+			criterion=criterionService.getById(park.getFeeCriterionId());
+		}
 		this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
 		int tmpint = 0;
 		for (PosChargeData tmpcharge : tmPosChargeDatas) {

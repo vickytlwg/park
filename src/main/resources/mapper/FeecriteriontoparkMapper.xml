@@ -93,7 +93,7 @@
   <select id="getByPark" resultType="java.util.HashMap" >
   select feeCriterionToPark.id,feeCriterionToPark.parkId,feeCriterionToPark.criterionId,feeCriterionToPark.carType,
   feeCriterionToPark.other,feeCriterion.name from feeCriterionToPark left join feeCriterion on feeCriterion.id=feeCriterionToPark.criterionId
-    where feeCriterionToPark.parkId=4
+    where feeCriterionToPark.parkId=#{parkId}
   </select>
   
    <select id="getByParkAndType" resultMap="BaseResultMap" >

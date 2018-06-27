@@ -28,6 +28,7 @@ function($scope, $http, $uibModal, textModal, $timeout) {
  $scope.feecriterionToParks=[];
    
     $scope.parkselectChange = function(parkid) {
+          $scope.feeCritionToParks = [];
         $scope.refreshFeecriterionToPark();
         angular.forEach($scope.parks,function(item){
             if(item.id==$scope.parkId){

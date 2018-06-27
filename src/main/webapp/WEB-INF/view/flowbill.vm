@@ -101,8 +101,9 @@
 									<td ng-if="item.paidCompleted==true&&item.payType==0">支付宝</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==1">微信</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==2">现金</td>
+									<td ng-if="item.paidCompleted==true&&item.payType==3">工行</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==9">现金</td>
-
+									<td ng-bind="item.rejectReason"></td>
 									<td ng-if="item.url!=''"><a href={{item.url}}
 										target="_blank">查看 </a></td>
 									<td ng-if="item.url==''">暂无</td>

@@ -86,8 +86,7 @@
 								style="padding: 1px; font-size: 14px; height: 35px"
 								ng-options="park.id as park.name for park in parks"
 								ng-model="parkId"
-								ng-change="parkselectChange(parkId)">
-							
+								ng-change="parkselectChange(parkId)">							
 							</select>
 						</div>
 						<br /> <br />

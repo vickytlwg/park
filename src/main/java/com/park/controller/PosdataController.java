@@ -52,7 +52,7 @@ import com.park.service.Utility;
 
 
 @Controller
-@RequestMapping("/pos1")
+@RequestMapping("/pos")
 public class PosdataController {
 	
 @Autowired

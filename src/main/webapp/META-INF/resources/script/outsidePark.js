@@ -426,7 +426,7 @@
 		$('input#street').val($(tds[3]).text());	
 		$('input#channelCount').val($(tds[4]).text());
 		$('input#portCount').val($(tds[5]).text());
-		$('input#leftPortCount').val($(tds[6]).text());		
+		$('input#portLeftCount').val($(tds[5]).text());		
 		if($('select#feeCriterion option').length == 0)
 			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'));
 		else
@@ -435,11 +435,11 @@
 		$('select#parkStatus').val($(tds[8]).attr('data'));
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
 		$('input#floorCount').val($(tds[10]).text());
-		$('select#parkType').val($(tds[11]).attr('data'));
+		$('select#parkType').val($(tds[9]).attr('data'));
 //		var positionInput = $('input#position');
 //		positionInput.val($(tds[12]).text());
-		$('input#longitude').val($(tds[12]).attr('longitude'));
-		$('input#latitude').val($(tds[12]).attr('latitude'));
+		$('input#longitude').val(checkedTr.attr('longitude'));
+		$('input#latitude').val(checkedTr.attr('latitude'));
 		$('input#mapAddr').val(checkedTr.attr('mapAddr'));		
 		$('#tmpStreetId').text($(tds[15]).text());
 //		$('select#streetid').val('number:'+$(tds[15]).text());
@@ -507,7 +507,7 @@
 		
 		parkFields['channelCount'] = parseInt($('input#channelCount').val());
 		parkFields['portCount'] = parseInt($('input#portCount').val());
-		parkFields['portLeftCount'] = parseInt($('input#leftPortCount').val());
+		parkFields['portLeftCount'] = parseInt($('input#portLeftCount').val());
 		
 		var feeCriterionId = parseInt($('select#feeCriterion').val());
 		if(feeCriterionId >= 0 )
@@ -515,6 +515,7 @@
 		parkFields['feeCriterionId'] = parseInt($('select#feeCriterion').val());		
 		parkFields['contact'] = $('input#contact').val();
 		parkFields['number'] = $('input#number').val();
+		parkFields['portLeftCount'] = $('input#portLeftCount').val();
 		parkFields['status'] = parseInt($('select#parkStatus').val());
 		parkFields['isFree'] = $('input#isFree')[0].checked ? 1 : 0;
 		parkFields['floor'] = parseInt($('input#floorCount').val());
@@ -628,15 +629,17 @@
 			
 			var status = data[i]['status'] == 0 ? '可用':'不可用';
 			tr.append('<td data=' + data[i]['status'] + ' >' + status + '</td>');
-			/*var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
-			tr.append('<td data=' + data[i]['isFree'] + ' >' + free + '</td>');*/
-			/*tr.append('<td>' + data[i]['floor']+ '</td>');*/
+			var free = parseInt(data[i]['isFree']) == 1 ? '是' : '否';
+		//	tr.append('<td  data=' + data[i]['isFree'] + ' >' + free + '</td>');
+		//	tr.append('<td> style=“display:none” ' + data[i]['floor']+ '</td>');
 			tr.attr('mapAddr', data[i]['mapAddr']);
 			tr.attr('contact', data[i]['contact']);
 			tr.attr('number', data[i]['number']);
 			tr.attr('pictureUri', data[i]['pictureUri']);
 			tr.attr('position', data[i]['position']);
 			tr.attr('description', data[i]['description']);
+			tr.attr('longitude',data[i]['longitude']);
+			tr.attr('latitude',data[i]['latitude']);
 			var type='';
 			if(data[i]['type'] == 0)
 				type='室内';
@@ -649,8 +652,8 @@
 			else 
 				type='其它';
 			tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
-/*			tr.append('<td longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
-*/			tr.append('<td>' + data[i]['date']+ '</td>');
+			//tr.append('<td hidden longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
+			tr.append('<td>' + data[i]['date']+ '</td>');
 			if( i % 2 == 0){
 		//		tr.addClass('success');
 			}else{
