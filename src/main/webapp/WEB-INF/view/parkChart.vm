@@ -33,12 +33,12 @@
 							   <p>本月流量信息: <span id="monthAccessVal"></span></p>
 							   <p>剩余车位信息: <span id="leftPortVal"></span><p>
 						</div> -->
-			<div class="row" style="padding-top:10px">
+			<div style="padding-top:10px">
             <div class="col-lg-5 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3 id="parkName"></h3>
+                  <h3 id="parkName" style="    font-size: 40px;"></h3>
                  
                 </div>
                 <div class="icon">
@@ -88,7 +88,7 @@
             </div><!-- ./col -->
           </div>
 						<div id="chart-header">
-							<div class="row">
+							<div>
 								
 								<div class="col-md-3">
 									<div class="form-group">

@@ -103,15 +103,15 @@
 
 								<tr>
 									<th><span style=""><input type="checkbox" /></span></th>
-									<th><span style="padding-left: 15%">Id</span></th>
-									<th><span style="padding-left: 15%">设备终端号</span></th>
-									<th><span style="padding-left: 15%">所属停车场</span></th>
-									<th><span style="padding-left: 15%">设备类型</span></th>
-									<th><span style="padding-left: 15%">设备型号</span></th>
-									<th><span style="padding-left: 15%">最后活跃时间</span></th>
-									<th><span style="padding-left: 15%">添加时间</span></th>
-									<th><span style="padding-left: 15%">所属路段</span></th>
-									<th><span style="padding-left: 15%">操作员</span></th>
+									<th><span>Id</span></th>
+									<th><span>设备终端号</span></th>
+									<th><span>所属停车场</span></th>
+									<th><span>设备类型</span></th>
+									<th><span>设备型号</span></th>
+									<th><span>最后活跃时间</span></th>
+									<th><span>添加时间</span></th>
+									<th><span>所属路段</span></th>
+									<th><span>操作员</span></th>
 
 
 								</tr>

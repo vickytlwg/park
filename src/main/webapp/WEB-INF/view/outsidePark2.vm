@@ -41,7 +41,7 @@
 	                				<a href="/park/feeOperator/2" style="background: url(/park/img/bak3.png) no-repeat center center;">巡检员管理</a>
 	                			</li>
 	                			<li class="recod">
-	                				<a href="#" style="background: url(/park/img/bak4a.png) no-repeat center center;">参数配置</a>
+	                				<a href="/park/pos" style="background: url(/park/img/bak4a.png) no-repeat center center;">POS机管理</a>
 	                			</li>
 	                			<li class="recod">
 	                				<a href="#" style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>

@@ -2,6 +2,11 @@
 <script src="/park/script/service/textModalService.js"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 <script src="https://use.fontawesome.com/a416e9e97f.js"></script>
+
+<style>
+.form-group label {
+	float:right;
+}</style>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>
@@ -62,12 +67,13 @@
 							<div class="input-group">
 								<div class="row">
 									<div class="col-md-9 ">
-										<input type="text" class="form-control" id="searchContent">
+										<input type="text" class="form-control" id="searchContent"
+											style="    height:30px;font-size: 16px;">
 
 									</div>
 									<div class="col-md-3" style="margin-left: -15px;">
 										<span class="input-group-btn">
-											<button class="btn btn-default" type="button"
+											<button class="btn btn-default btn-sm" type="button"
 												id="searchButton">搜索</button>
 										</span>
 
@@ -120,11 +126,11 @@
 
 </div>
 
-<style>
+<!-- <style>
 label {
 	float: right;
 }
-</style>
+</style> -->
 
 <div class="modal fade" id="searchParkByLocation" tabindex="1"
 	role="dialog" aria-labelledby='searchParkLoction' aria-hidden='true'>
@@ -135,7 +141,7 @@ label {
 					aria-hidden='true'>&times;</button>
 				<h4 class='modal-title' id='addMacLabel'>查找停车场</h4>
 			</div>
-			<div class='modal-body'>
+			<div class='modal-body' style="padding-bottom: 0px;">
 
 				<form class='form-horizontal' id='searchMacForm' role='form'>
 					<div class='form-group'>
@@ -159,37 +165,44 @@ label {
 
 <div class="modal fade" id="addParkModal" tabindex="-1" role="dialog"
 	aria-labelledby='addParkLabel' aria-hidden='true'>
-	<div class='modal-dialog' style="min-width: 880px; min-height: 1200px"
+	<div class='modal-dialog' style="min-width: 800px; min-height: 1200px"
 		ng-app="outsideParkApp" ng-controller="outsideParkCtrl">
 		<div class='modal-content'>
 
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
 					aria-hidden='true' ng-click="clearPosition()">&times;</button>
-				<h2 class='modal-title' style="padding-left: 40%" id='addParkLabel'>收费站点信息</h2>
+				<h3 class='modal-title text-center' id='addParkLabel'>收费站点信息</h3>
 			</div>
 			<div class='modal-body '>
 				<form class='form-horizontal' id='addParkForm' role='form'>
+
 					<div class="panel panel-info">
 						<div class="panel-heading">
 							<h3 class="panel-title">基本信息</h3>
 						</div>
 						<div class="panel-body">
-							<div class='form-group '>
-								<div class="col-sm-2 ">
-									<label class='control-label' style="float: right"
-										for='parkName'>名称 *</label>
+							<div class='form-group'>
+								<div class="col-sm-1">
+									<label class='control-label' for='parkName'>名称 *</label>
 								</div>
-								<div class='col-sm-4'>
+								<div class='col-sm-2'>
 									<input type='text' class='form-control' id='parkName'
 										placeholder='请输入名称'>
 								</div>
-								<div class="col-sm-2 ">
+								<div class="col-sm-1" style="padding-right: 0;">
+									<label class=' control-label' for='portCount'>车位数 *</label>
+								</div>
+								<div class='col-sm-2'>
+									<input type='text' class='form-control' id='portCount'
+										placeholder='请输入车位数'>
+								</div>
+								<div class="col-sm-1 ">
 									<label style="display: none" class='control-label'
 										style="float:right" for='channelCount'>进出口数</label> <label
-										class='control-label' style="float: right" for='parkType'>类型</label>
+										class='control-label' for='parkType'>类型</label>
 								</div>
-								<div class='col-sm-4'>
+								<div class='col-sm-2'>
 									<input style="display: none" type='text' class='form-control'
 										id='channelCount' placeholder='请输入进出口数'> <select
 										class='form-control' id='parkType'>
@@ -198,83 +211,31 @@ label {
 										<option value=2>其它</option>
 									</select>
 								</div>
+
 							</div>
 
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class=' control-label' style="float: right"
-										for='portCount'>车位数 *</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='portCount'
-										placeholder='请输入车位数'>
-								</div>
+							<div class='form-group' style="margin-bottom: 0px;">
 
-								<div class="col-sm-2 ">
+								<div class="col-sm-1 ">
 									<label class=' control-label' style="float: right" 	for='leftPortCount'>剩余车位</label>
 								</div>
-								<div class='col-sm-4'>
+								<div class='col-sm-2'>
 									<input type='text' class='form-control' id='portLeftCount' placeholder='请输入剩余车位数'>
+
 								</div>
-							</div>
-							<div class='form-group'>
-								<div class="col-sm-2 ">
+								<div class="col-sm-1" style="padding: 0px;">
 									<label class='control-label' for='feeCriterion'>计费标准</label>
 								</div>
-								<div class='col-sm-4'>
+								<div class='col-sm-2'>
 									<select class='form-control' id='feeCriterion'></select>
 								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-warning">
-						<div class="panel-heading">
-							<h3 class="panel-title">隶属信息 *</h3>
-						</div>
-						<div class="panel-body">
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label'>是否更改</label>
+								<div class="col-sm-1" style="padding: 0px;">
+									<label class='control-label'>是否免费</label>
 								</div>
-								<div class='col-sm-4'>
-									<div class='checkbox'>
-										<label style="float: left"> <input type="checkbox"
-											id="isPositionChange" ng-model="isPositionChange">
-											更改隶属收费信息 *</input>
-										</label>
+								<div class='col-sm-2'>
+									<div class='checkbox' style="float:left;">
+										<label><input type='checkbox' id='isFree'>免费 </label>
 									</div>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label'>市 *</label>
-								</div>
-								<div class='col-sm-4'>
-									<select id="zoneCenterId" class="form-control"
-										ng-disabled="!isPositionChange"
-										ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters"
-										ng-model="zoneCenterId" ng-change="getAreas()"></select>
-								</div>
-							</div>
-
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label'>区 *</label>
-								</div>
-								<div class='col-sm-4'>
-									<select id="areaId" class="form-control"
-										ng-disabled="!isPositionChange"
-										ng-options="area.id as area.name for area in areas"
-										ng-model="areaId" ng-change="getStreets()"></select>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label'>路段 *</label> <input hidden
-										id="tmpStreetId" type='text'></input>
-								</div>
-								<div class='col-sm-4'>
-									<select id="streetid" class="form-control"
-										ng-disabled="!isPositionChange"
-										ng-options="street.id as street.name for street in streets"
-										ng-model="streetid" ng-change="streetIdChange()"></select>
 								</div>
 							</div>
 						</div>
@@ -286,62 +247,55 @@ label {
 							<h3 class="panel-title">附加信息</h3>
 						</div>
 						<div class="panel-body">
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='contact'>联系人</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='contact'
-										placeholder='联系人'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='number'>联系人电话</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='number'
-										placeholder='联系人电话'>
-								</div>
-							</div>
-
-
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='longitude'>经度</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='longitude'
-										placeholder='请输入停车场经度'>
-								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='latitude'>纬度</label>
-								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='latitude'
-										placeholder='请输入停车场纬度'>
-								</div>
-							</div>
-
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label'>是否免费</label>
-								</div>
-								<div class='col-sm-4'>
-									<div class='checkbox'>
-										<label style="float: left"> <input type='checkbox'
-											id='isFree'>免费
-										</label>
+							<div>
+								<div class='form-group'>
+									<div class="col-sm-1 ">
+										<label class='control-label' for='contact'>联系人</label>
+									</div>
+									<div class='col-sm-2'>
+										<input type='text' class='form-control' id='contact'
+											placeholder='联系人'>
+									</div>
+									<div class="col-sm-1 ">
+										<label class='control-label' for='number'>电话</label>
+									</div>
+									<div class='col-sm-2'>
+										<input type='text' class='form-control' id='number'
+											placeholder='联系人电话'>
+									</div>
+									<div class="col-sm-1 ">
+										<label class='control-label' for='longitude'>经度</label>
+									</div>
+									<div class='col-sm-2'>
+										<input type='text' class='form-control' id='longitude'
+											placeholder='请输入停车场经度'>
+									</div>
+									<div class="col-sm-1 ">
+										<label class='control-label' for='latitude'>纬度</label>
+									</div>
+									<div class='col-sm-2'>
+										<input type='text' class='form-control' id='latitude'
+											placeholder='请输入停车场纬度'>
 									</div>
 								</div>
-								<div class="col-sm-2 ">
-									<label class='control-label'>图片地址</label>
+								<div class='form-group'>
+									<div class="col-sm-1 " style="padding: 0px;">
+										<label class='control-label'>图片地址</label>
+									</div>
+									<div class='col-sm-5'>
+										<input type='text' class='form-control' id='mapAddr'
+											placeholder='请输入停车场地图地址'>
+									</div>
+									<div class="col-sm-1 " style="padding: 0px;">
+										<label class='control-label' for='number'>功能属性</label>
+									</div>
+									<div class='col-sm-5'>
+										<input type='text' class='form-control' id='description'
+											placeholder='特性描述'>
+									</div>
 								</div>
-								<div class='col-sm-4'>
-									<input type='text' class='form-control' id='mapAddr'
-										placeholder='请输入停车场地图地址'>
-								</div>
-							</div>
 
-							<div class='form-group'>
+								<!-- 							<div class='form-group'>
 								<div class="col-sm-2 ">
 									<label class='control-label' for='status'>状态</label>
 								</div>
@@ -351,23 +305,66 @@ label {
 										<option value=1>不可用</option>
 									</select>
 								</div>
-							</div>
+							</div> -->
 
-							<div class='form-group'>
-								<div class="col-sm-2 ">
-									<label class='control-label' for='number'>功能属性</label>
-								</div>
-								<div class='col-sm-10'>
-									<input type='text' class='form-control' id='description'
-										placeholder='特性描述'>
-								</div>
-							</div>
+								<!-- 							<div class='form-group'></div>
+ -->
 
+							</div>
 
 						</div>
 					</div>
+					<div class="panel panel-warning" style="margin-bottom: 0;">
+						<div class="panel-heading">
+							<h3 class="panel-title" style="display: inline;">隶属信息 *</h3>
+							<!-- 							<label class='control-label'>是否更改</label>
+ -->
+							<div class='checkbox' style="display: inline;">
+								<label> <input type="checkbox" id="isPositionChange"
+									ng-model="isPositionChange"> 更改隶属收费信息 *</input>
+								</label>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div class='form-group'>
 
-					<div id='addParkResult'></div>
+								<div class="col-sm-1" style="padding: 0;">
+									<label class='control-label'>市 *</label>
+								</div>
+								<div class='col-sm-2'>
+									<select id="zoneCenterId" class="form-control"
+										ng-disabled="!isPositionChange"
+										ng-options="zoneCenter.id as zoneCenter.name for zoneCenter in zoneCenters"
+										ng-model="zoneCenterId" ng-change="getAreas()"></select>
+								</div>
+								<div class="col-sm-1 ">
+									<label class='control-label'>区 *</label>
+								</div>
+								<div class='col-sm-2'>
+									<select id="areaId" class="form-control"
+										ng-disabled="!isPositionChange"
+										ng-options="area.id as area.name for area in areas"
+										ng-model="areaId" ng-change="getStreets()"></select>
+								</div>
+								<div class="col-sm-1 ">
+									<label class='control-label'>路段 *</label> <input hidden
+										id="tmpStreetId" type='text'></input>
+								</div>
+								<div class='col-sm-2'>
+									<select id="streetid" class="form-control"
+										ng-disabled="!isPositionChange"
+										ng-options="street.id as street.name for street in streets"
+										ng-model="streetid" ng-change="streetIdChange()"></select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- 					<div id='addParkResult'></div>
+ -->
+				</form>
+
 			</div>
 
 			<div class='modal-footer'>
@@ -388,7 +385,7 @@ label {
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
 					aria-hidden='true'>&times;</button>
-				<h4 class='modal-title' id='uploadParkPicLabel'>上传停车场图片</h4>
+				<h3 class='modal-title text-center' id='uploadParkPicLabel'>上传停车场图片</h3>
 			</div>
 			<div class='modal-body'>
 				<form></form>
@@ -423,7 +420,7 @@ label {
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
 					aria-hidden='true'>&times;</button>
-				<h4 class='modal-title'>停车场权限设置</h4>
+				<h3 class='modal-title text-center'>停车场权限设置</h3>
 			</div>
 			<div class='modal-body'>
 				<div class="panel panel-success">
@@ -569,7 +566,7 @@ label {
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
 					aria-hidden='true'>&times;</button>
-				<h4 class='modal-title'>道闸文字显示设置</h4>
+				<h3 class='modal-title text-center'>道闸文字显示设置</h3>
 			</div>
 			<div class='modal-body'>
 				<div class="panel panel-success">
@@ -581,16 +578,14 @@ label {
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label'>第一行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text11'
 									placeholder='第一行'>
 							</div>
-						</div>
-						<div class='form-group row' style="padding-top: 10px"">
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label'>第二行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<label id="textshow1label" style="display: none"></label> <input
 									type='text' class='form-control' id='text12' placeholder='第二行'>
 							</div>
@@ -599,20 +594,19 @@ label {
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label' for='contact'>第三行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text13'
 									placeholder='第三行'>
 							</div>
-						</div>
-						<div class='form-group row' style="padding-top: 10px">
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label' for='number'>第四行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text14'
 									placeholder='第四行'>
 							</div>
 						</div>
+
 					</div>
 				</div>
 				<div class="panel panel-info">
@@ -624,39 +618,36 @@ label {
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label'>第一行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<label id="textshow0label" style="display: none"></label> <input
 									type='text' class='form-control' id='text01' placeholder='第一行'>
 							</div>
-						</div>
-						<div class='form-group row' style="margin-top: 10px">
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label'>第二行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text02'
 									placeholder='第二行'>
 							</div>
 						</div>
+
 						<div class='form-group row' style="margin-top: 10px">
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label' for='contact'>第三行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text03'
 									placeholder='第三行'>
 							</div>
-						</div>
-						<div class='form-group row' style="margin-top: 10px">
 							<div class="col-sm-2 " style="padding-top: 10px">
 								<label class='control-label' for='number'>第四行</label>
 							</div>
-							<div class='col-sm-10'>
+							<div class='col-sm-3'>
 								<input type='text' class='form-control' id='text04'
 									placeholder='第四行'>
 							</div>
-
 						</div>
+
 					</div>
 				</div>
 			</div>
