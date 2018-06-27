@@ -146,9 +146,7 @@ public class BarrierChargeController {
 	public String touched(@RequestBody Map<String, String> args) throws Exception {
 		String mac = args.get("mac");
 		String cardNumber = args.get("cardNumber");
-		logger.info("touch车辆" + cardNumber);
-		
-			
+		logger.info("touch车辆" + cardNumber);					
 		
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge = new PosChargeData();
@@ -253,7 +251,8 @@ public class BarrierChargeController {
 			if (largeCar == true) {
 				charge.setIsLargeCar(true);
 			}
-
+			
+			charge.setParkDesc(park.getName() + "-临停车");
 			// 取得入口权限
 			Parkcarauthority parkcarauthority = parkcarauthorities.get(0);
 			for (Parkcarauthority tmParkcarauthority : parkcarauthorities) {
@@ -266,36 +265,43 @@ public class BarrierChargeController {
 			case 0:
 				if (parkcarauthority.getMonth() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月车");
 				}
 				break;
 			case 1:
 				if (parkcarauthority.getTypea() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月A");
 				}
 				break;
 			case 2:
 				if (parkcarauthority.getTypeb() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月B");
 				}
 				break;
 			case 3:
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月C");
 				}
 				break;
 			case 4:
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月D");
 				}
 				break;
 			case 8:
 				if (parkcarauthority.getMonthexpired() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-包月过期");
 				}
 				break;	
 			case 9:
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
+					charge.setParkDesc(park.getName() + "-临停车");
 				}
 				break;
 			default:
@@ -324,6 +330,7 @@ public class BarrierChargeController {
 				}
 				monthuserNow.setPlatecolor("多车包月入场");
 				if (isMonthUserCarIn) {
+					charge.setParkDesc(park.getName() + "-包月转临停");
 					monthuserNow.setPlatecolor("包月转为临停");
 					dataMap.put("uT", "0");
 					try {
@@ -337,9 +344,7 @@ public class BarrierChargeController {
 				monthUserService.updateByPrimaryKeySelective(monthuserNow);
 			}
 
-			if (monthUserType >= 1 && monthUserType <= 5) {
-				charge.setParkDesc(park.getName() + "-预约车");
-			}
+		
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
@@ -437,7 +442,7 @@ public class BarrierChargeController {
 			}
 			
 			if (exitDate != null) {
-				Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			//	Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 				try {
 					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
 					// Date().getTime()+"\n");

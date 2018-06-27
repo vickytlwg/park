@@ -1,5 +1,6 @@
 package com.park.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,13 @@ public class MonthUserServiceImpl implements MonthUserService {
 	@Override
 	public List<Monthuser> getByCarnumberAndPark(String carnumber, int parkId) {
 		// TODO Auto-generated method stub
-		return monthUserDao.getByCarnumberAndPark(carnumber, parkId);
+		List<Monthuser> monthusers =new ArrayList<>();
+		try {
+			monthusers= monthUserDao.getByCarnumberAndPark(carnumber, parkId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return monthusers;
 	}
 
 	@Override
