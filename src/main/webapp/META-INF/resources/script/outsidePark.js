@@ -352,6 +352,7 @@
 	               $('#typeC1').removeProp("checked");
                   $('#typeD1').removeProp("checked");
                   $('#temporary1').removeProp("checked");
+                  $('#temporary10').removeProp("checked");
 	            $('#month1').prop("checked",authorityTmp['month']);
 	            $('#month1expire').prop("checked",authorityTmp['monthexpired']);
 	            $('#typeA1').prop("checked",authorityTmp['typea']);
@@ -359,6 +360,7 @@
 	            $('#typeC1').prop("checked",authorityTmp['typec']);
 	            $('#typeD1').prop("checked",authorityTmp['typed']);
 	            $('#temporary1').prop("checked",authorityTmp['temporary']);
+	            $('#temporary10').prop("checked",authorityTmp['temporary0']);
 	        }
 	        else{
 	            $('#month0label').val(authorityTmp['id']);
@@ -368,6 +370,7 @@
                    $('#typeC0').removeProp("checked");
                   $('#typeD0').removeProp("checked");
                   $('#temporary0').removeProp("checked");
+                  $('#temporary00').removeProp("checked");
 	            $('#month0').prop("checked",authorityTmp['month']);
 	            $('#month0expire').prop("checked",authorityTmp['monthexpired']);
                 $('#typeA0').prop("checked",authorityTmp['typea']);
@@ -375,6 +378,7 @@
                 $('#typeC0').prop("checked",authorityTmp['typec']);
                 $('#typeD0').prop("checked",authorityTmp['typed']);
                 $('#temporary0').prop("checked",authorityTmp['temporary']);
+                $('#temporary00').prop("checked",authorityTmp['temporary0']);
 	        }
 	    });	    
 	};
@@ -389,18 +393,18 @@
 	    data1['typec']=$('#typeC1').prop("checked") ;
 	    data1['typed']=$('#typeD1').prop("checked") ;
 	    data1['temporary']=$('#temporary1').prop("checked") ;
-	    
+	    data1['temporary0']=$('#temporary10').prop("checked") ;
 	    var data0={};
         data0['channel']=0;
         data0['id']=parseInt($('#month0label').val());
         data0['month']=$('#month0').prop("checked") ;
-        data1['monthexpire']=$('#month0expire').prop("checked") ;
+        data0['monthexpired']=$('#month0expire').prop("checked") ;
         data0['typea']=$('#typeA0').prop("checked") ;
         data0['typeb']=$('#typeB0').prop("checked") ;
         data0['typec']=$('#typeC0').prop("checked") ;
         data0['typed']=$('#typeD0').prop("checked") ;
         data0['temporary']=$('#temporary0').prop("checked") ;
-	    
+	    data0['temporary0']=$('#temporary00').prop("checked") ;
 	    var data=[];
 	    data.push(data0);
 	    data.push(data1);	    
@@ -434,8 +438,8 @@
 		//$('input#chargeNight').val($(tds[7]).text());	
 		$('select#parkStatus').val($(tds[8]).attr('data'));
 		$('input#isFree')[0].checked = parseInt($(tds[9]).attr('data')) == 1 ? true : false;
-		$('input#floorCount').val($(tds[10]).text());
-		$('select#parkType').val($(tds[9]).attr('data'));
+		$('input#floorCount').val(checkedTr.attr('parkType'));
+		$('select#parkType').val(checkedTr.attr('parkType'));
 //		var positionInput = $('input#position');
 //		positionInput.val($(tds[12]).text());
 		$('input#longitude').val(checkedTr.attr('longitude'));
@@ -640,6 +644,7 @@
 			tr.attr('description', data[i]['description']);
 			tr.attr('longitude',data[i]['longitude']);
 			tr.attr('latitude',data[i]['latitude']);
+			
 			var type='';
 			if(data[i]['type'] == 0)
 				type='室内';
@@ -651,6 +656,7 @@
                 type='充电桩';
 			else 
 				type='其它';
+			tr.attr('parkType',data[i]['type']);
 			tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
 			//tr.append('<td hidden longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
 			tr.append('<td>' + data[i]['date']+ '</td>');

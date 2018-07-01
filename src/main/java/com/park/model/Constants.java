@@ -24,7 +24,7 @@ public class  Constants{
 	public static  String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static  int ACCESSTABLESCOUNT = 500;
 	public static  String URL = "http://www.iotclouddashboard.com/parkpictures/";
-	public static  String UPLOADDIR = "/alidata/server/tomcat7/webapps/parkpictures/";
+	public static  String UPLOADDIR = "/root/apache-tomcat-8.5.20/webapps/parkpictures/";
 	public static  String WEBAPIURL="http://www.iotclouddashboard.com/park";
 	public static  Set<Udpconnectors>  udpconnectors=new HashSet<>();
 	public static  DatagramSocket socket=null;

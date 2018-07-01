@@ -227,7 +227,7 @@ public class BarrierChargeController {
 			isMultiCarsOneCarport=true;
 		}
 		Boolean isMultiFeeCtriterion=false;
-		if (park.getDescription().contains("多计费标准")) {
+		if (park.getDescription()!=null&&park.getDescription().contains("多计费标准")) {
 			isMultiFeeCtriterion=true;
 		}
 		// 判断是否有多个车
@@ -258,45 +258,52 @@ public class BarrierChargeController {
 			}
 			switch (monthUserType) {
 			case 0:
+				charge.setParkDesc(park.getName() + "-包月车");
 				if (parkcarauthority.getMonth() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月车");
+					
 				}
 				break;
 			case 1:
+				charge.setParkDesc(park.getName() + "-包月A");
 				if (parkcarauthority.getTypea() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月A");
+					
 				}
 				break;
 			case 2:
+				charge.setParkDesc(park.getName() + "-包月B");
 				if (parkcarauthority.getTypeb() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月B");
+					
 				}
 				break;
 			case 3:
+				charge.setParkDesc(park.getName() + "-包月C");
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月C");
+					
 				}
 				break;
 			case 4:
+				charge.setParkDesc(park.getName() + "-包月D");
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月D");
+					
 				}
 				break;
 			case 8:
+				charge.setParkDesc(park.getName() + "-包月过期");
 				if (parkcarauthority.getMonthexpired() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-包月过期");
+					
 				}
 				break;	
 			case 9:
+				charge.setParkDesc(park.getName() + "-临停车");
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
-					charge.setParkDesc(park.getName() + "-临停车");
+					
 				}
 				break;
 			default:
