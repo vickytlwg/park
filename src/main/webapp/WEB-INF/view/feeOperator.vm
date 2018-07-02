@@ -52,8 +52,8 @@
 					<div class="box-header">
 						<h3 class="box-title"></h3>
 					</div>
-					<div class="box-body"  style="padding: 0px;">
-						<div class="btn-group" style="margin-left:10px;">
+					<div class="box-body" style="padding: 0px;">
+						<div class="btn-group" style="margin-left: 10px;">
 							<button #if(!$isAdmin) disabled#end
 								ng-click="refreshFeeOperator()" type="button"
 								class="btn btn-info"
@@ -80,23 +80,23 @@
 							</button>
 						</div>
 
-						<div class="pull-right" style="width: 300px">
-							<div class="input-group">
-								<div class="row">
-									<div class="col-md-9 ">
-										<input type="text" ng-model="searchText" class="form-control"
-											style="float: right" />
+						<div class="pull-right" style="margin-right: 20px">
+					<!-- 		<div class="input-group">
+								<div class="row"> -->
+									<div>
+										<input type="search" ng-model="searchText" ng-keyup="operatorkeyup($event)" class="form-control"
+											placeholder="搜索" />
 									</div>
-									<div class="col-md-3" style="margin-left: -15px;">
+									<!-- <div class="col-md-3" style="margin-left: -15px;">
 										<span class="input-group-btn">
 											<button type="button" class="btn btn-default"
 												ng-click="searchByNameAndPhoneParkName()" type="button"
 												id="searchButton">查找</button>
 										</span>
-									</div>
+									</div> -->
 
-								</div>
-							</div>
+								<!-- </div>
+							</div> -->
 							<!-- /input-group -->
 						</div>
 					</div>
@@ -104,10 +104,10 @@
 
 					<div>
 						<table
-								class="table table-bordered table-hover table-condensed table-striped text-center"
-								style="font-size: 12px">
+							class="table table-bordered table-hover table-condensed table-striped text-center"
+							style="font-size: 12px">
 
-								<tr class="info" style="height: 30px; line-height: 30px;">
+							<tr class="info" style="height: 30px; line-height: 30px;">
 								<th><span><input type="checkbox" /></span></th>
 								<th><span>Id</span></th>
 								<th><span>操作员帐号</span></th>
@@ -117,8 +117,9 @@
 								<th><span>联系电话</span></th>
 								<th><span>签到状态</span></th>
 								<th><span>上次签到时间</span></th>
-<!-- 								<th><span>最后执勤收费点</span></th>
- -->								<th><span>最后执勤终端</span></th>
+								<!-- 								<th><span>最后执勤收费点</span></th>
+ -->
+								<th><span>最后执勤终端</span></th>
 								<th><span>注册时间</span></th>
 
 							</tr>
@@ -130,13 +131,15 @@
 								<td ng-bind="feeOperator.id"></td>
 								<td ng-bind="feeOperator.account"></td>
 								<td ng-bind="feeOperator.name"></td>
-<!-- 								<td ng-bind="feeOperator.idnumber"></td>
- -->								<td ng-bind="feeOperator.phone"></td>
+								<!-- 								<td ng-bind="feeOperator.idnumber"></td>
+ -->
+								<td ng-bind="feeOperator.phone"></td>
 								<td ng-if="feeOperator.signstatus==false">未签到</td>
 								<td ng-if="feeOperator.signstatus==true">已签到</td>
 								<td ng-bind="feeOperator.lastsigndate"></td>
-<!-- 								<td ng-bind="feeOperator.parkname"></td>
- -->								<td ng-bind="feeOperator.lastposnum"></td>
+								<!-- 								<td ng-bind="feeOperator.parkname"></td>
+ -->
+								<td ng-bind="feeOperator.lastposnum"></td>
 								<td ng-bind="feeOperator.registerdate"></td>
 							</tr>
 						</table>

@@ -1,13 +1,15 @@
 .form-group label {
 	font-size: 12px;
 }
+
 .form-group {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
+
 .form-control {
 	display: block;
 	width: 100%;
-	min-height: 28px;
+	min-height: 20px;
 	padding: 4px 4px;
 	font-size: 12px;
 	line-height: 1.42857143;
@@ -24,8 +26,9 @@
 		.15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
 }
+
 textarea.form-control {
-    height: auto;
+	height: auto;
 }
 
 .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3,
@@ -40,4 +43,53 @@ textarea.form-control {
 	min-height: 1px;
 	padding-right: 10px;
 	padding-left: 10px
+}
+
+input {
+	outline: none;
+}
+
+input[type=search] {
+	-webkit-appearance: textfield;
+	-webkit-box-sizing: content-box;
+	font-family: inherit;
+	font-size: 100%;
+}
+
+input::-webkit-search-decoration, input::-webkit-search-cancel-button {
+	display: none;
+}
+
+input[type=search] {
+	background: #ededed
+		url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png)
+		no-repeat 9px center;
+	border: solid 1px #ccc;
+	text-align:center;
+	padding: 6px 10px 6px 10px;
+	width: 50px;
+	height:20px;
+	-webkit-border-radius: 10em;
+	-moz-border-radius: 10em;
+	border-radius: 10em;
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	transition: all .5s;
+}
+
+input[type=search]:focus {
+	width: 130px;
+	background-color: #fff;
+	border-color: #66CC75;
+	-webkit-box-shadow: 0 0 5px rgba(109, 207, 246, .5);
+	-moz-box-shadow: 0 0 5px rgba(109, 207, 246, .5);
+	box-shadow: 0 0 5px rgba(109, 207, 246, .5);
+}
+
+input:-moz-placeholder {
+	color: #999;
+}
+
+input::-webkit-input-placeholder {
+	color: #999;
 }

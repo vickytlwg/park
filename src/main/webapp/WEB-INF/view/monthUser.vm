@@ -86,10 +86,10 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-edit"></span> 所属停车场
 							</button>
-							<button type="button" class="btn  btn-default"
+<!-- 							<button type="button" class="btn  btn-default"
 								style="border-radius: 25px; margin-right: 5px;">
 								<a href="/park/similarcarnumber"> 相似车牌管理</a>
-							</button>
+							</button> -->
 						</div>
 						<div class="pull-right">
 							<select class="form-control"

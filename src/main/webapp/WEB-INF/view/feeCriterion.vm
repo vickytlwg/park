@@ -91,33 +91,33 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-pencil"></span>白天晚上模版添加
 							</button>
-							<button type="button" class="btn  btn-default"
+							<!-- <button type="button" class="btn  btn-default"
 								style="border-radius: 25px; margin-right: 5px;">
 								<a href="/park/feecriterionToPark/index"> 多计费标准管理</a>
-							</button>
+							</button> -->
 						</div>
-						<div class="pull-right" style="width: 300px">
-							<div class="input-group">
-								<div class="row">
-									<div class="col-md-9 ">
-										<input type="text" class="form-control" style="height:30px;"
+						<div class="pull-right" style="margin-right: 20px">
+<!-- 							<div class="input-group">
+ --><!-- 								<div class="row">
+ -->									<div>
+										<input type="search" class="form-control"
 											ng-model="criterion.searchKeywords"
-											ng-keyup="criterion.myKeyup($event)">
+											ng-keyup="criterion.myKeyup($event)" placeholder="搜索">
 
 									</div>
-									<div class="col-md-3" style="margin-left: -15px;">
+									<!-- <div class="col-md-3" style="margin-left: -15px;">
 										<span class="input-group-btn">
 											<button class="btn btn-default btn-sm" ng-click="criterion.search()"
 												type="button" id="searchButton">搜索</button>
 										</span>
-									</div>
+									</div> -->
 
-								</div>
-							</div>
+<!-- 								</div>
+ -->							</div>
 						</div>
 
 
-						<br /> <br />
+						<br />
 						<div>
 							<table
 								class="table table-bordered table-hover  table-condensed table-striped text-center"
