@@ -265,32 +265,46 @@ public class BarrierChargeController {
 				}
 				break;
 			case 1:
-				charge.setParkDesc(park.getName() + "-包月A");
+				charge.setParkDesc(park.getName() + "-预约");
 				if (parkcarauthority.getTypea() != true) {
 					dataMap.put("aT", "0");
 					
 				}
 				break;
 			case 2:
-				charge.setParkDesc(park.getName() + "-包月B");
+				charge.setParkDesc(park.getName() + "-包月A1");
 				if (parkcarauthority.getTypeb() != true) {
 					dataMap.put("aT", "0");
 					
 				}
 				break;
 			case 3:
-				charge.setParkDesc(park.getName() + "-包月C");
+				charge.setParkDesc(park.getName() + "-包月A2");
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
 					
 				}
 				break;
 			case 4:
-				charge.setParkDesc(park.getName() + "-包月D");
+				charge.setParkDesc(park.getName() + "-包月B");
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
 					
 				}
+				break;
+			case 5:
+				charge.setParkDesc(park.getName() + "-包月D");
+		//		if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+					
+		//		}
+				break;
+			case 6:
+				charge.setParkDesc(park.getName() + "-包月E");
+			//	if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+					
+		//		}
 				break;
 			case 8:
 				charge.setParkDesc(park.getName() + "-包月过期");
@@ -313,10 +327,7 @@ public class BarrierChargeController {
 			dataMap.put("cT", "in");
 			charge.setCardNumber(cardNumber);
 			charge.setParkId(parkId);
-			charge.setParkDesc(park.getName() + "-临停车");
-			if (isRealMonthUser) {
-				charge.setParkDesc(park.getName() + "-包月车");
-			}
+	
 			// 判断包月车已入场
 
 			Boolean isMonthUserCarIn = false;
@@ -428,6 +439,16 @@ public class BarrierChargeController {
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
 				}
+				break;
+			case 5:
+			//	if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+			//	}
+				break;
+			case 6:
+			//	if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+			//	}
 				break;
 			case 8:
 				if (parkcarauthority.getMonthexpired() != true) {
