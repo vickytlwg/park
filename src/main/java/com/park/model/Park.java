@@ -31,7 +31,7 @@ public class Park {
 	private String contact;
 	private String number;
 	private String pictureUri;
-	private String description;
+	private String description="";
 
 	
 	public int getId() {

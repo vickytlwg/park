@@ -1,4 +1,4 @@
-<script src="/park/script/outsidePark.js?v=1.4"></script>
+<script src="/park/script/outsidePark.js?v=1.5"></script>
 <script src="/park/script/service/textModalService.js"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 <script src="https://use.fontawesome.com/a416e9e97f.js"></script>
@@ -444,7 +444,7 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-3'>
+							<div class='col-sm-2'>
 								<div class='checkbox'>
 									<label id="month0label" style="display: none"> </label> <label
 										style="float: left;"> <input type='checkbox'
@@ -452,10 +452,15 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-2'>
+							<div class='col-sm-3'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='temporary1'>临停</input>
+										id='temporary1'>临停有费</input>
+									</label>
+								</div>
+									<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='temporary10'>临停0费</input>
 									</label>
 								</div>
 							</div>
@@ -507,7 +512,7 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-3'>
+							<div class='col-sm-2'>
 								<div class='checkbox'>
 									<label id="month0label" style="display: none"> </label> <label
 										style="float: left;"> <input type='checkbox'
@@ -515,10 +520,15 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-2'>
+							<div class='col-sm-3'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='temporary0'>临停</input>
+										id='temporary0'>临停有费</input>
+									</label>
+								</div>
+									<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='temporary00'>临停0费</input>
 									</label>
 								</div>
 							</div>

@@ -172,7 +172,7 @@ public String getDataBarrier(@RequestBody Map<String, Object> args){
 	}
 	StringBuilder carnumber=new StringBuilder();
 	for (int i = 50*order; i < 50*order+50; i++) {
-		if (i<realMonthusers.size()) {
+		if (i<realMonthusers.size()&&realMonthusers.get(i).getPlatenumber()!=null&&realMonthusers.get(i).getPlatenumber().length()>5) {			
 			data.add(realMonthusers.get(i).getPlatenumber().substring(4));			
 		}		
 	}
