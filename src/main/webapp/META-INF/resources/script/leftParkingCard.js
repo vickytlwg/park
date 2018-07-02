@@ -14,7 +14,7 @@
 		fillSearchPark();
 		bindSearchParkChange();
 		renderPagination();
-		bindSearchBtn();
+		bindDaySearch();
 		bindKeywordsSearch();
 	};
 	
@@ -27,31 +27,44 @@
 		});
 	};
 	
-	var bindKeywordsSearch=function(){
-	    $('#keywordsSearch').on('click',function(){
-	        var keywords=$('#keywordsInput').val();
-	        if(keywords=='')
-	        {
-	            alert("请输入查询内容");
-	            return;
-	        }
-	        var errorHandle=function(){
-	          alert("发送请求失败");  
-	        };
-	        var data={"keywords":keywords};
-	        $.ajax({
-	            url:$.fn.config.webroot + "/getChannelDetailByKeywords",
-	            type:'post',
-	            dataType:'json',
-	            contentType:'application/json;charset=utf-8',
-	            data:$.toJSON(data),
-	            success:function(data){
-	                fillchannelTbody(data);
-	                $('#pagination').html('');
-	            },
-	            error:errorHandle
-	        });
-	    });
+	var bindKeywordsSearch = function() {
+		$('#keywordsInput').keyup(function(event) {
+			if (event.keyCode == "13") {
+				var val = $('#keywordsInput').val();
+				if (val != "")
+					KeywordsSearch(val);
+			}
+		});
+		$('#keywordsSearch').on('click', $(this), function() {
+			var val = $('#keywordsInput').val();
+			if (val == "" || val == null) {
+				alert("请输入查询内容");
+				return;
+			}
+			KeywordsSearch(val);
+
+		});
+	};
+
+	var KeywordsSearch = function(keywords) {
+		var errorHandle = function() {
+			alert("发送请求失败");
+		};
+		var data = {
+			"keywords" : keywords
+		};
+		$.ajax({
+			url : $.fn.config.webroot + "/getChannelDetailByKeywords",
+			type : 'post',
+			dataType : 'json',
+			contentType : 'application/json;charset=utf-8',
+			data : $.toJSON(data),
+			success : function(data) {
+				fillchannelTbody(data);
+				$('#pagination').html('');
+			},
+			error : errorHandle
+		});
 	};
 	
 	var fillSearchPark = function(){
@@ -120,34 +133,44 @@
 		});
 	};
 	
-	var bindSearchBtn=function(){
-	  //  $('#daynum').val(2);
-	    $('#daysearch').on('click',$(this),function(){
-	        var day=$('#daynum').val();
-	        if(day==undefined||day=="")
-	        {
-	            alert("请输入天数");
-	            return;
-	        }
-	       if(isNaN(day))
-	       {
-	           alert('输入数字');
-	           return;
-	       }
-            var url=$.fn.config.webroot + "/getChannelDetailByDate?day=-"+day;
-            $.ajax({
-            url:url,
-            type: 'get',
-            success: function(data){
-                $('#pagination').html('');
-                fillchannelTbody(data);
-            },
-            error: function(data){
-                alert("操作失败~~~");
-                errorHandle(data);
-            }
-        });
-	    });
+
+	var bindDaySearch = function() {
+		$('#daynum').keyup(function(event) {
+			if (event.keyCode == "13") {
+				var val = $('#daynum').val();
+				if (val != "")
+					daySearch(val);
+			}
+		});
+		$('#daysearch').on('click', $(this), function() {
+			var val = $('#daynum').val();
+			if (val == undefined || val == "") {
+				alert("请输入天数");
+				return;
+			}
+			if (isNaN(val)) {
+				alert('输入数字');
+				return;
+			}
+			daySearch(val);
+
+		});
+	};
+	var daySearch = function(daycounts) {
+		var val = $('#daynum').val();
+		var url = $.fn.config.webroot + "/getChannelDetailByDate?day=-" + val;
+		$.ajax({
+			url : url,
+			type : 'get',
+			success : function(data) {
+				$('#pagination').html('');
+				fillchannelTbody(data);
+			},
+			error : function(data) {
+				alert("操作失败~~~");
+				errorHandle(data);
+			}
+		});
 	};
 	
 	var renderPagination = function(){

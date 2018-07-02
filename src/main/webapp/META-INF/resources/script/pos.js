@@ -67,6 +67,13 @@ function($scope,$http,$uibModal,textModal,$timeout){
                textModal.open($scope,"错误","数据请求失败");
         });
     };
+    $scope.poskeyup = function(e) {
+		var keycode = window.event ? e.keyCode
+				: e.which;
+		if (keycode == 13) {
+			$scope.searchByParkNameAndNumber();
+		}
+	};
     $scope.insertPos=function(){
         $uibModal.open({
             templateUrl: '/park/views/template/ucNewPos.html?v=1.0',

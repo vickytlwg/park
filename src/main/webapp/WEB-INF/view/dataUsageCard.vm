@@ -46,7 +46,13 @@
 								<span class="glyphicon glyphicon-pencil"></span> 导出excel
 							</button>
 						</div>
-
+						<div style="display: inline-block;">
+							<input type="search" class="form-control" id="keywords" style="min-width: 70px;"
+								placeholder="关键字搜索">
+						</div>
+						
+						
+						
 						<div class="pull-right">
 							<select class="form-control"
 								style="padding: 1px; font-size: 14px; height: 35px"
@@ -54,18 +60,18 @@
 								<option value=$park.id>$park.name</option> #end
 							</select>
 						</div>
-						<div class="pull-right" style="padding-right: 40px">
+						<!-- <div class="pull-right" style="padding-right: 40px">
 							<div class="row">
 								<div class="col-md-9">
 									<input type="text" class="form-control" id="keywords"
-										placeholder="输入关键字">
+										placeholder="关键字搜索">
 								</div>
 								<div class="col-md-3">
 									<button type="button" id="keywordsSearch"
 										class="btn btn-default">搜索</button>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<br />
 					<div>

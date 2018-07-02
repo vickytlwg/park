@@ -100,6 +100,13 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
+    $scope.carnumberkeyup = function(e) {
+		var keycode = window.event ? e.keyCode
+				: e.which;
+		if (keycode == 13) {
+			$scope.searchByCardnumber();
+		}
+	};
     $scope.getExcelByDay=function(){  
          $window.location.href="getExcelByDay?date="+$scope.searchDate;
         };
@@ -127,6 +134,13 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
+    $scope.parknamekeyup = function(e) {
+		var keycode = window.event ? e.keyCode
+				: e.which;
+		if (keycode == 13) {
+			$scope.searchByParkName();
+		}
+	};
     //first page
     $scope.detail.firstPage = function() {
         if ($scope.detail.page.index <= 1)

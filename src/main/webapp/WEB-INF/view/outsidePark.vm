@@ -5,8 +5,9 @@
 
 <style>
 .form-group label {
-	float:right;
-}</style>
+	float: right;
+}
+</style>
 <div class="content-wrapper">
 	<section class="content-header">
 		<h1>
@@ -61,27 +62,30 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="fa fa-magic"></span>文字设置
 							</button>
-
+							<button type="button" class="btn  btn-default"
+								style="border-radius: 25px; margin-right: 5px;">
+								<a href="/park/similarcarnumber"> 相似车牌管理</a>
+							</button>
+							<button type="button" class="btn  btn-default"
+								style="border-radius: 25px; margin-right: 5px;">
+								<a href="/park/feecriterionToPark/index"> 多计费标准管理</a>
+							</button>
 						</div>
-						<div class="pull-right" style="width: 300px">
-							<div class="input-group">
-								<div class="row">
-									<div class="col-md-9 ">
-										<input type="text" class="form-control" id="searchContent"
-											style="    height:30px;font-size: 16px;">
+						<div class="pull-right" style="margin-right: 20px;">
+							<div>
+								<input type="search" class="form-control" id="searchContent"
+									placeholder="搜索">
 
-									</div>
-									<div class="col-md-3" style="margin-left: -15px;">
+							</div>
+							<!-- 	<div class="col-md-3" style="margin-left: -15px;">
 										<span class="input-group-btn">
 											<button class="btn btn-default btn-sm" type="button"
 												id="searchButton">搜索</button>
 										</span>
 
-									</div>
+									</div> -->
 
-								</div>
-							</div>
-							<!-- /input-group -->
+
 						</div>
 
 
@@ -183,7 +187,7 @@ label {
 						</div>
 						<div class="panel-body">
 							<div class='form-group'>
-								<div class="col-sm-1">
+								<div class="col-sm-2">
 									<label class='control-label' for='parkName'>名称 *</label>
 								</div>
 								<div class='col-sm-2'>
@@ -216,11 +220,13 @@ label {
 
 							<div class='form-group' style="margin-bottom: 0px;">
 
-								<div class="col-sm-1 ">
-									<label class=' control-label' style="float: right" 	for='leftPortCount'>剩余车位</label>
+								<div class="col-sm-2 ">
+									<label class=' control-label' style="float: right"
+										for='leftPortCount'>剩余车位</label>
 								</div>
 								<div class='col-sm-2'>
-									<input type='text' class='form-control' id='portLeftCount' placeholder='请输入剩余车位数'>
+									<input type='text' class='form-control' id='portLeftCount'
+										placeholder='请输入剩余车位数'>
 
 								</div>
 								<div class="col-sm-1" style="padding: 0px;">
@@ -233,7 +239,7 @@ label {
 									<label class='control-label'>是否免费</label>
 								</div>
 								<div class='col-sm-2'>
-									<div class='checkbox' style="float:left;">
+									<div class='checkbox' style="float: left;">
 										<label><input type='checkbox' id='isFree'>免费 </label>
 									</div>
 								</div>

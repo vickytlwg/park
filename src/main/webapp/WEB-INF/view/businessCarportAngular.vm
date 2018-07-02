@@ -31,12 +31,12 @@
 	              
 	                <div class="box-body">  
 		                	<div class="btn-group">
-		                		<button #if(!$isAdmin) disabled#end ng-click='refreshData()' id="refresh" type="button" class="btn bg-purple"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
-		                		<button #if(!$isAdmin) disabled#end id='addBusinessCarport' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
-		                		<button #if(!$isAdmin) disabled#end id='updateBusinessCarport' type="button" class="btn bg-navy"><span class="glyphicon glyphicon-edit"></span> 更新</button>
-		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn bg-orange"><span class="glyphicon glyphicon-remove"></span> 删除</button>
-								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-olive"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
-								<button #if(!$isAdmin) disabled#end type="button" class="btn bg-navy" ng-click="addMacAndInsertBusinessCarport()"><span class="glyphicon glyphicon-pencil"></span> 添加硬件与绑定</button>
+		                		<button #if(!$isAdmin) disabled#end ng-click='refreshData()' id="refresh" type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span> 刷新</button>
+		                		<button #if(!$isAdmin) disabled#end id='addBusinessCarport' type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> 添加</button>
+		                		<button #if(!$isAdmin) disabled#end id='updateBusinessCarport' type="button" class="btn btn-warning"><span class="glyphicon glyphicon-edit"></span> 更新</button>
+		                		<button #if(!$isAdmin) disabled#end id='deleteBusinessCarport' type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+								<button #if(!$isAdmin) disabled#end id='addBusinessCarportNum' type="button" class="btn bg-maroon"><span class="glyphicon glyphicon-pencil"></span> 分配车位</button>
+								<button #if(!$isAdmin) disabled#end type="button" class="btn btn-success" ng-click="addMacAndInsertBusinessCarport()"><span class="glyphicon glyphicon-pencil"></span> 添加硬件与绑定</button>
 		                	</div>
 	                	<div class="pull-right">
 	                	<select class="form-control" style="padding:1px;font-size:14px;height:35px" id="searchPark" ng-model="selectValue" ng-options="park.name for park in parks" ng-change="selectChange()">
@@ -47,21 +47,21 @@
 	                	<br/>   
 	                    <br/> 
 						<div >
-							 <table class="table table-bordered table-hover" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
-					            <tr>
+							 <table class="table table-bordered table-hover text-center table-striped" id='businessCarportTable' style="font-size:12px;vertical-align: middle;">
+					            <tr class="info" style="height: 30px; line-height: 30px;">
 										<th ></th>
-										<th ><span style="padding-left:15%">Id</span></th>		
-										<th><span style="padding-left:15%">停车场名称</span></th>
-										<th><span style="padding-left:15%">停车位编号</span></th>
-										<th><span style="padding-left:15%">MAC</span></th>
-										<th><span style="padding-left:15%">状态</span></th>
-										<th><span style="padding-left:15%">楼层</span></th>
-										<th><span style="padding-left:15%">位置</span></th>
-										<th><span style="padding-left:15%">描述</span></th>
-										<th><span style="padding-left:15%">日期</span></th>	
+										<th ><span>Id</span></th>		
+										<th><span>停车场名称</span></th>
+										<th><span>停车位编号</span></th>
+										<th><span>MAC</span></th>
+										<th><span>状态</span></th>
+										<th><span>楼层</span></th>
+										<th><span>位置</span></th>
+										<th><span>描述</span></th>
+										<th><span>日期</span></th>	
 					            </tr>
 					          <tbody id="businessCarportBody"></tbody>
-							  <tr ng-repeat="item in carportDetails|orderBy:'carportNumber'" >
+							  <tr ng-repeat="item in carportDetails|orderBy:'carportNumber'">
 								<td style=" text-align: center;vertical-align: middle;" ><input type="checkbox" /></td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$odd" class='success'>{{item.id}}</td>
 								<td style=" text-align: center;vertical-align: middle;" ng-if="$even" class='info'>{{item.id}}</td>

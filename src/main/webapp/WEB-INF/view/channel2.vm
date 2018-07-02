@@ -31,7 +31,7 @@
 	                				<a href="/park/leftParkingCard" style="background: url(/park/img/bak3.png) no-repeat center center;">诱导屏管理</a>
 	                			</li>
 	                			<li class="recod">
-	                				<a href="/park/monthUser/order" style="background: url(/park/img/bak4a.png) no-repeat center center;">地磁管理</a>
+	                				<a href="/park/businessCarportAngular" style="background: url(/park/img/bak4a.png) no-repeat center center;">地磁管理</a>
 	                			</li>
 	                			<li class="recod">
 	                				<a href="/park/feeOperator" style="background: url(/park/img/bak5a.png) no-repeat center center;">地锁管理</a>

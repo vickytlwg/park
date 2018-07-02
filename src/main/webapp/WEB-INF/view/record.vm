@@ -26,28 +26,28 @@
 
 	               <div class="box-body">  
 					
-						         	<div class="row" style="padding-top:5px;">
+						         	<div style="padding-top:5px;">
 								
-								<div class="col-md-1">
+								<!-- <div class="col-md-1">
                                         <label class="label-control" style="float:right;padding-top:10px">车牌号:</label>
-								</div>
-								<div class="col-md-2">
-										<input type="text" ng-model="searchText" class="form-control" style="float:right"/>										
+								</div> -->
+								<div style="display:inline-block">
+										<input type="search" ng-model="searchText" ng-keyup="carnumberkeyup($event)"  class="form-control" placeholder="车牌号"/>										
                                     </div>
-								<div class="col-md-1">
+								<!-- <div class="col-md-1">
 										<button  type="button" class="btn btn-info" ng-click="searchByCardnumber()" style="float:left">查找
                                         </button>
-                                   </div>	
-								<div class="col-md-2">
+                                   </div> -->	
+								<!-- <div class="col-md-2">
                                         <label class="label-control" style="float:right;padding-top:10px">输入停车场:</label>
-									</div>
-									<div class="col-md-2">
-										<input type="text" ng-model="searchParkNameText" class="form-control" style="float:right"/>										
+									</div> -->
+									<div style="display:inline-block">
+										<input type="search" ng-model="searchParkNameText" ng-keyup="parknamekeyup($event)" class="form-control" placeholder="停车场"/>										
                                     </div>
-									<div class="col-md-1">
+									<!-- <div class="col-md-1">
 										<button  type="button" class="btn btn-info" ng-click="searchByParkName()" style="float:left">查找
                                         </button>
-                                    </div>
+                                    </div> -->
 		                	</div>
 
 					</div>

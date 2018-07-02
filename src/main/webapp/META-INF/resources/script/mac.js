@@ -13,7 +13,9 @@
 		bindSeacherBtnClick();
 		renderMac(0, $.fn.page.pageSize);
 		renderPagination();
-		bindsearchKeyWords();
+/*		bindsearchKeyWords();
+*/		bindKeywordsSearch();
+		KeywordsSearch();
 	};
 	
 	/**bind tr click*/
@@ -24,8 +26,61 @@
 				$(this).find('input[type="checkbox"]').click();
 		});
 	};
-	var bindsearchKeyWords=function(){
-	    $("#searchmacbtn").on('click',function(){
+	var bindKeywordsSearch = function() {
+		$('#searmacinput').keyup(function(event) {
+			if (event.keyCode == "13") {
+				var val = $('#searmacinput').val();
+				if (val != "")
+					KeywordsSearch(val);
+			}
+		});
+		$('#searchmacbtn').on('click', $(this), function() {
+			var val = $('#searmacinput').val();
+			if (val == "" || val == null) {
+				alert("请输入查询内容");
+				return;
+			}
+			KeywordsSearch(val);
+
+		});
+	};
+
+/*	var KeywordsSearch = function(keywords) {
+		var errorHandle = function() {
+			alert("发送请求失败");
+		};
+		var data = {
+			"keywords" : keywords
+		};
+		$.ajax({
+			url : $.fn.config.webroot + "/getChannelDetailByKeywords",
+			type : 'post',
+			dataType : 'json',
+			contentType : 'application/json;charset=utf-8',
+			data : $.toJSON(data),
+			success : function(data) {
+				fillchannelTbody(data);
+				$('#pagination').html('');
+			},
+			error : errorHandle
+		});
+	};*/
+	var KeywordsSearch=function(){
+		var keywords=$('#searmacinput').val();
+        $.ajax({
+            url:"/park/searchHardwareByKeywords?mac="+keywords,
+            type:'get',
+            datatype:'json',
+            success:function(data){
+                if(data['state'] == 1001){   
+                    $('#pagination').html('');  
+                    fillMacTbody(data);
+                    }
+            }
+        });
+	};
+		
+/*	    $("#searchmacbtn").on('click',function(){
 	        var keywords=$('#searmacinput').val();
 	        $.ajax({
 	            url:"/park/searchHardwareByKeywords?mac="+keywords,
@@ -39,7 +94,7 @@
 	            }
 	        });
 	    });
-	};
+	};*/
 	/**bind refresh click***/
 	var bindRefreshClick = function(){
 		var refreshBtn = $('#refresh');
