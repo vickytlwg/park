@@ -93,6 +93,16 @@ li:hover {
 .hhhh {
 	color: #ffffff
 }
+
+.xh {
+	text-align: center;
+	border: 1px solid #99CCCC;
+	background-color: rgba(103, 171, 210, 0.87);
+	width: 80px;
+	/* 	-moz-border-radius:  25px 0px 0 25px; /* 老的 Firefox */
+	*/
+}
+
 </style>
 <link rel="stylesheet" href="/park/css/stylexh.css">
 
@@ -114,83 +124,97 @@ li:hover {
 				<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
 					role="button"> <span class="sr-only">Toggle navigation</span>
 				</a>
+				<div class="btn-group pull-right" style="margin-top: 3px;">
+					<button type="button" class="btn btn-primary">
+						<a href="#" id="luneichange"> <i class="fa fa-road"></i> <span>路外停车</span>
+						</a>
+					</button>
+					<button type="button" class="btn btn-primary">
+						<a href="#" id="luwaichange"> <i class="glyphicon fa fa-car"></i>
+							<span>路内停车</span>
+						</a>
+					</button>
 
-				<div style="color: rgb(255, 255, 255)" class="hidden-xs">
-					<!--
-        	
-				
-				-->
-					<div class="col-sm-1  col-md-offset-3"
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5);">
-						<center>
-							<a href="#" id="luneichange">
-								<div style="margin-top: 5px; font-size: 16px">
-									<span class="glyphicon fa fa-car"></span>
-								</div>
-								<p style="font-weight: bold">路外停车</p>
-							</a>
-						</center>
+					<button type="button" class="btn btn-primary">
+						<a href="#" style="color: #ffffff"> <i class="fa fa-codepen"></i>
+							<span>诱导平台</span>
+						</a>
+					</button>
+					<button type="button" class="btn btn-primary">
+						<a href="#" style="color: #ffffff"> <i
+							class="fa fa-share-alt-square" aria-hidden="true"></i> <span
+							style="font-weight: bold">共享停车</span>
+						</a>
+					</button>
+					<button type="button" class="btn btn-primary">
+						<a href="#" style="color: #ffffff"><i
+							class="fa fa-battery-half" aria-hidden="true"></i> <span>充电桩</span>
+						</a>
+					</button>
+					<button type="button" class="btn btn-primary">
+						<a href="/park/login" style="color: #ffffff"> <i
+							class="fa fa-sign-out" aria-hidden="true"></i> <span
+							style="font-weight: bold">退出</span>
+						</a>
+					</button>
+					<!-- <button type="button" class="btn  btn-default"
+								style="border-radius: 25px; margin-right: 5px;">
+								<a href="/park/feecriterionToPark/index"> 多计费标准管理</a>
+							</button> -->
+				</div>
+				<!-- <div style="float: right;">
+
+					<div class="col-sm-1 xh" style="border-radius: 25px 0px 0 25px;">
+						<a href="#" id="luneichange">
+							<div style="margin-top: 2px; font-size: 12px">
+								<span class="glyphicon fa fa-car"></span>
+							</div> <span style="font-size: 10px;">路外停车</span>
+						</a>
 					</div>
-					<div class="col-sm-1"
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5);">
-						<center>
-							<a href="#" id="luwaichange">
-								<div style="margin-top: 5px; font-size: 16px">
-									<span class="glyphicon fa fa-car"></span>
-								</div>
-								<p style="font-weight: bold">路内停车</p>
-							</a>
-						</center>
+					<div class="col-sm-1 xh">
+						<a href="#" id="luwaichange">
+							<div style="margin-top: 2px; font-size: 16px">
+								<span class="glyphicon fa fa-car"></span>
+							</div> <span style="font-weight: bold">路内停车</span>
+						</a>
 					</div>
 
-					<div class="col-sm-1 "
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(255, 255, 255, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5)">
+					<div class="col-sm-1 xh">
+						<a href="#" style="color: #ffffff">
+							<div style="margin-top: 2px; font-size: 16px">
+								<span class="glyphicon fa fa-car"></span>
+							</div> <span style="font-weight: bold">诱导平台</span>
+						</a>
+					</div>
+					<div class="col-sm-1 xh">
+						<a href="#" style="color: #ffffff">
+							<div style="margin-top: 2px; font-size: 16px">
+								<span class="glyphicon fa fa-car"></span>
+							</div> <span style="font-weight: bold">共享停车</span>
+						</a>
+					</div>
+
+
+					<div class="col-sm-1 xh">
 						<center>
 							<a href="#" style="color: #ffffff">
-								<div style="margin-top: 5px;font-size: 16px">
+								<div style="margin-top: 2px; font-size: 16px">
 									<span class="glyphicon fa fa-car"></span>
-								</div>
-								<p style="font-weight: bold">诱导平台</p>
-							</a>
-						</center>
-					</div>
-					<div class="col-sm-1"
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5)">
-						<center>
-							<a href="#" style="color: #ffffff">
-								<div style="margin-top: 5px; font-size: 16px">
-									<span class="glyphicon fa fa-car"></span>
-								</div>
-								<p style="font-weight: bold">共享停车</p>
+								</div> <span style="font-weight: bold">充电桩</span>
 							</a>
 						</center>
 					</div>
 
-
-					<div class="col-sm-1"
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5)">
-						<center>
-							<a href="#" style="color: #ffffff">
-								<div style="margin-top: 5px; font-size: 16px">
-									<span class="glyphicon fa fa-car"></span>
-								</div>
-								<p style="font-weight: bold">充电桩</p>
-							</a>
-						</center>
-					</div>
-
-					<div class="col-sm-1"
-						style="background: rgba(103, 171, 210, 0.87); border-left: 1px solid rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255, 255, 255, 0.5);">
+					<div class="col-sm-1 xh" style="border-radius: 0 25px 25px 0;">
 						<center>
 							<a href="/park/login" style="color: #ffffff">
-								<div style="margin-top: 5px; font-size: 16px">
+								<div style="margin-top: 2px; font-size: 16px">
 									<span class="glyphicon glyphicon-log-out"></span>
-								</div>
-								<p style="font-weight: bold">退出</p>
+								</div> <span style="font-weight: bold">退出</span>
 							</a>
 						</center>
 					</div>
-				</div>
+				</div> -->
 				<!-- Navbar Right Menu -->
 				<div class="navbar-custom-menu">
 					<ul class="nav navbar-nav">
@@ -291,25 +315,24 @@ li:hover {
 						<ul class="treeview-menu">
 
 							<!-- <li id="jrgk" #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/parkingInfo"><i class="fa fa-pie-chart"></i>今日概况</a></li> -->
-							<li id="jrgk2"
-								#if(!$isAdmin && !$park_outsideParkStatus2) hidden#end><a
-								href="/park/outsideParkStatus2"><i class="fa fa-pie-chart"></i>今日概况</a></li>
-							<li id="jrtcfx"
-								#if(!$isAdmin && !$park_outsideParkStatusAdmin) hidden#end><a
-								href="/park/outsideParkStatusAdmin"><i
+							<li id="jrgk2" #if(!$isAdmin && !$park_outsideParkStatus2)
+								hidden#end><a href="/park/outsideParkStatus2"><i
+									class="fa fa-pie-chart"></i>今日概况</a></li>
+							<li id="jrtcfx" #if(!$isAdmin && !$park_outsideParkStatusAdmin)
+								hidden#end><a href="/park/outsideParkStatusAdmin"><i
 									class="fa fa-pie-chart"></i>今日停车分析</a></li>
-							<li id="zdsyfx"
-								#if(!$isAdmin && !$park_pos_carportUsage) hidden#end><a
-								href="/park/pos/carportUsage"><i class="fa fa-pie-chart"></i>车位使用分析</a></li>
-							<li id="zdsfgk"
-								#if(!$isAdmin && !$park_outsideParkStatus) hidden#end><a
-								href="/park/outsideParkStatus"><i class="fa fa-pie-chart"></i>站点收费概况</a></li>
-							<li id="jrqf"
-								#if(!$isAdmin && !$park_pos_charge_arrearage) hidden#end><a
-								href="/park/pos/charge/arrearage"><i class="fa fa-pie-chart"></i>今日欠费</a></li>
-							<li id="zdzt"
-								hidden #if(!$isAdmin && !$park_posStatus) hidden#end><a
-								href="/park/posStatus"><i class="fa fa-pie-chart"></i>终端状态</a></li>
+							<li id="zdsyfx" #if(!$isAdmin && !$park_pos_carportUsage)
+								hidden#end><a href="/park/pos/carportUsage"><i
+									class="fa fa-pie-chart"></i>车位使用分析</a></li>
+							<li id="zdsfgk" #if(!$isAdmin && !$park_outsideParkStatus)
+								hidden#end><a href="/park/outsideParkStatus"><i
+									class="fa fa-pie-chart"></i>站点收费概况</a></li>
+							<li id="jrqf" #if(!$isAdmin && !$park_pos_charge_arrearage)
+								hidden#end><a href="/park/pos/charge/arrearage"><i
+									class="fa fa-pie-chart"></i>今日欠费</a></li>
+							<li id="zdzt" hidden #if(!$isAdmin && !$park_posStatus)
+								hidden#end><a href="/park/posStatus"><i
+									class="fa fa-pie-chart"></i>终端状态</a></li>
 							<li id="cwgl" #if(!$isAdmin && !$park_businessCarport) hidden#end><a
 								href="/park/businessCarportAngular"><i class="fa fa-car"></i>车位管理</a></li>
 							<li id="cwzt" #if(!$isAdmin && !$park_businessCarport) hidden#end><a
@@ -322,9 +345,9 @@ li:hover {
 						<ul class="treeview-menu">
 							<li id="bwgk" #if(!$isAdmin && !$park_carportstatus) hidden#end><a
 								href="/park/carportstatus"><i class="fa fa-area-chart"></i>泊位概况</a></li>
-							<li id="sfyxx"
-								hidden #if(!$isAdmin && !$park_feeOperatorInfo) hidden#end><a
-								href="/park/feeOperatorInfo"><i class="fa fa-area-chart"></i>收费员信息</a></li>
+							<li id="sfyxx" hidden #if(!$isAdmin && !$park_feeOperatorInfo)
+								hidden#end><a href="/park/feeOperatorInfo"><i
+									class="fa fa-area-chart"></i>收费员信息</a></li>
 						</ul></li>
 
 					<li class="treeview active"><a href="#"><i
@@ -335,9 +358,8 @@ li:hover {
 				  <li id="cwyyfx" hidden #if(!$isAdmin && !$park_operation) hidden#end><a href="/park/operation"><i class="fa fa-bar-chart"></i>财务运营分析</a></li>
 				  <li id="tcsjfx" hidden #if(!$isAdmin && !$park_data) hidden#end><a href="/park/data"><i class="fa fa-line-chart"></i>停车数据分析</a></li>
 				  <li id="cwdz" #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/reconciliation"><i class="fa fa-file-text-o"></i>财务对账</a></li> -->
-							<li id="cwdz2"
-								#if(!$isAdmin && !$park_pos_reconciliation2) hidden#end><a
-								href="/park/pos/charge/reconciliation2"><i
+							<li id="cwdz2" #if(!$isAdmin && !$park_pos_reconciliation2)
+								hidden#end><a href="/park/pos/charge/reconciliation2"><i
 									class="fa fa-file-text-o"></i>财务管理</a></li>
 							<!-- <li id="cwlszd" #if(!$isAdmin && !$park_parkingInfo) hidden#end><a href="/park/pos/charge/flowbill"><i class="fa fa-file-text-o"></i>财务流水账单</a></li>				
 				  <li id="tcjlcx" #if(!$isAdmin && !$park_pos_reconciliation) hidden#end><a href="/park/pos/charge/record"><i class="fa fa-file-text-o"></i>停车记录查询</a></li>
@@ -373,12 +395,12 @@ li:hover {
 							class="fa fa-dollar"></i> <span>计费管理</span> <i
 							class="fa fa-angle-left pull-right"></i></a>
 						<ul class="treeview-menu">
-							<li id="fymx"
-								#if(!$isAdmin && !$park_pos_chargeDetail) hidden#end><a
-								href="/park/pos/chargeDetail"><i class="fa fa-credit-card"></i>费用明细</a></li>
-							<li id="zfbxx"
-								#if(!$isAdmin && !$park_pos_chargeDetail) hidden#end><a
-								href="/park/alipayInfo/index"><i class="fa fa-credit-card"></i>支付宝信息</a></li>
+							<li id="fymx" #if(!$isAdmin && !$park_pos_chargeDetail)
+								hidden#end><a href="/park/pos/chargeDetail"><i
+									class="fa fa-credit-card"></i>费用明细</a></li>
+							<li id="zfbxx" #if(!$isAdmin && !$park_pos_chargeDetail)
+								hidden#end><a href="/park/alipayInfo/index"><i
+									class="fa fa-credit-card"></i>支付宝信息</a></li>
 
 						</ul></li>
 

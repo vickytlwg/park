@@ -204,7 +204,7 @@ a:hover, a:active, a:focus {
 	margin-bottom: 0;
 	margin-left: 160px;
 	border: none;
-	min-height: 50px;
+	min-height: 40px;
 	border-radius: 0;
 }
 
@@ -265,7 +265,7 @@ a:hover, a:active, a:focus {
 	float: left;
 	background-color: transparent;
 	background-image: none;
-	padding: 15px 15px;
+	padding: 10px 10px;
 	font-family: fontAwesome;
 }
 
@@ -307,9 +307,9 @@ a:hover, a:active, a:focus {
 	transition: width 0.3s ease-in-out;
 	display: block;
 	float: left;
-	height: 50px;
+	height: 40px;
 	font-size: 20px;
-	line-height: 50px;
+	line-height: 40px;
 	text-align: center;
 	width: 160px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -447,7 +447,7 @@ a:hover, a:active, a:focus {
 	position: absolute;
 	top: 0;
 	left: 0;
-	padding-top: 50px;
+	padding-top: 40px;
 	min-height: 100%;
 	height: 900px !important;
 	width: 160px;
