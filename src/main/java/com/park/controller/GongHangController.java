@@ -94,10 +94,11 @@ public class GongHangController extends BaseApiService{
 		int poschargeId = Integer.parseInt(orderId);
 		PosChargeData Chargedata = posChargedataService.getById(poschargeId);
 		Chargedata.setChargeMoney(Double.parseDouble(money) / 100);
+		//Chargedata.setPaidMoney(Double.parseDouble(money) / 100);
 		Chargedata.setPaidCompleted(true);
 		Chargedata.setOperatorId("工行");
 		Chargedata.setPayType(3);
-	//	Chargedata.setExitDate1(new Date());
+		Chargedata.setExitDate1(new Date());
 		Chargedata.setRejectReason(payTime);
 
 		Map<String, Object> ret = new HashMap<String, Object>();

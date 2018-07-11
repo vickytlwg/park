@@ -180,7 +180,7 @@ monthUserApp.controller("monthUserModify",function($scope, textModal,$modalInsta
     $scope.tempUser.endtime=new Date().format("yyyy-MM-dd hh:mm:ss");
     }   
     $scope.statuses=[{value:0,text:'产权车位'},{value:1,text:'租用车位'}];   
-    $scope.orderTypes=[{value:1,text:'类型A'},{value:2,text:'类型B'},{value:3,text:'类型C'},{value:4,text:'类型D'}];
+    $scope.orderTypes=[{value:1,text:'预约'},{value:2,text:'包月A1'},{value:3,text:'包月A2'},{value:4,text:'包月B'},{value:5,text:'包月D'},{value:6,text:'包月E'}];
     $scope.tempUser.type=1;
     $scope.parks=[];
     $scope.getParks=function(){

@@ -48,6 +48,13 @@ public class PosChargeData {
 
 	String url="";
 	
+    private Double discount=0.0;
+
+    private Byte discountType=0;
+
+    private Double other=0.0;
+
+    private String other2="";
 
 	public int getId() {
 		return id;
@@ -65,6 +72,38 @@ public class PosChargeData {
 		this.payType = payType;
 	} 
 	
+	public Double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
+	public Byte getDiscountType() {
+		return discountType;
+	}
+
+	public void setDiscountType(Byte discountType) {
+		this.discountType = discountType;
+	}
+
+	public Double getOther() {
+		return other;
+	}
+
+	public void setOther(Double other) {
+		this.other = other;
+	}
+
+	public String getOther2() {
+		return other2;
+	}
+
+	public void setOther2(String other2) {
+		this.other2 = other2;
+	}
+
 	public String getRejectReason() {
 		return rejectReason;
 	}

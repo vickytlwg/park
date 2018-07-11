@@ -31,6 +31,7 @@ import com.park.model.Feecriteriontopark;
 import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
+import com.park.model.Parknoticeauthority;
 import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
@@ -41,6 +42,7 @@ import com.park.service.FeecriterionToParkService;
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
+import com.park.service.ParkNoticeAuthorityService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
@@ -63,7 +65,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	private CarportStatusDetailDAO carportStatusDetailDAO;
-
+	@Autowired
+	ParkNoticeAuthorityService parkNoticeAuthorityService;
+	
 	@Autowired
 	FeeCriterionService criterionService;
 
@@ -120,6 +124,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				// TODO: handle exception
 			}
 			System.out.println("active插入后" + new Date().getTime());
+		}
+		Parknoticeauthority parknoticeauthority=parkNoticeAuthorityService.getByParkId(item.getParkId()).get(0);
+		if (parknoticeauthority!=null&&parknoticeauthority.getWeixin()==true) {
+			Map<String, String> argstoali = new HashMap<>();
+			argstoali.put("parkName", item.getParkDesc());
+			argstoali.put("carNumber", item.getCardNumber());
+			argstoali.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinEnterInfo");
 		}
 		return chargeDao.insert(item);
 	}

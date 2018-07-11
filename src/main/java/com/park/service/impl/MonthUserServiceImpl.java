@@ -139,4 +139,10 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getMonthuserCountsByDateRangeAndPark(parkId, startDate, endDate, maxCount);
 	}
 
+	@Override
+	public List<Monthuser> getLast3Number(String lastNumber, int parkId) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getLast3Number(lastNumber, parkId);
+	}
+
 }

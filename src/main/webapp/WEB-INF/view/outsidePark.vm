@@ -57,6 +57,11 @@
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="fa fa-user-o"></span> 权限设置
 							</button>
+							<button #if(!$isAdmin) disabled#end id='noticeAuthoritySet'
+								type="button" class="btn bg-maroon"
+								style="border-radius: 25px; margin-right: 5px;">
+								<span class="fa fa-user-o"></span>推送设置
+							</button>
 							<button #if(!$isAdmin) disabled#end id='textSet'
 								ng-click="textShowSet()" type="button" class="btn btn-primary"
 								style="border-radius: 25px; margin-right: 5px;">
@@ -421,7 +426,7 @@ label {
 <div class="modal fade" tabindex="-1" id="parkAuthoritySet"
 	style="min-width: 900px" role="dialog"
 	aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
-	<div class='modal-dialog'>
+	<div class='modal-dialog' style="min-width: 900px">
 		<div class='modal-content'>
 			<div class='modal-header'>
 				<button type='button' class='close' data-dismiss='modal'
@@ -452,14 +457,14 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-3'>
+							<div class='col-sm-2'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='temporary1'>临停有费</input>
+										id='temporary1'>临停</input>
 									</label>
 								</div>
-									<div class='checkbox'>
-									<label style="float: left;"> <input type='checkbox'
+									<div class='checkbox' hidden>
+									<label style="float: left;" hidden> <input type='checkbox'
 										id='temporary10'>临停0费</input>
 									</label>
 								</div>
@@ -467,21 +472,28 @@ label {
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeA1'>tA</input>
+										id='yuyue1'>预约</input>
 									</label>
 								</div>
 							</div>
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeB1'>tB</input>
+										id='typeA1'>tA1</input>
 									</label>
 								</div>
 							</div>
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeC1'>tC</input>
+										id='typeB1'>tA2</input>
+									</label>
+								</div>
+							</div>
+							<div class='col-sm-1'>
+								<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='typeC1'>tB</input>
 									</label>
 								</div>
 							</div>
@@ -492,6 +504,14 @@ label {
 									</label>
 								</div>
 							</div>
+							<div class='col-sm-1'>
+								<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='typeE1'>tE</input>
+									</label>
+								</div>
+							</div>
+								
 						</div>
 					</div>
 				</div>
@@ -520,7 +540,7 @@ label {
 									</label>
 								</div>
 							</div>
-							<div class='col-sm-3'>
+							<div class='col-sm-2'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
 										id='temporary0'>临停有费</input>
@@ -535,21 +555,28 @@ label {
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeA0'>tA</input>
+										id='yuyue0'>预约</input>
 									</label>
 								</div>
 							</div>
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeB0'>tB</input>
+										id='typeA0'>tA1</input>
 									</label>
 								</div>
 							</div>
 							<div class='col-sm-1'>
 								<div class='checkbox'>
 									<label style="float: left;"> <input type='checkbox'
-										id='typeC0'>tC</input>
+										id='typeB0'>tA2</input>
+									</label>
+								</div>
+							</div>
+							<div class='col-sm-1'>
+								<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='typeC0'>tB</input>
 									</label>
 								</div>
 							</div>
@@ -560,6 +587,14 @@ label {
 									</label>
 								</div>
 							</div>
+							<div class='col-sm-1'>
+								<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='typeE0'>tE</input>
+									</label>
+								</div>
+							</div>
+								
 						</div>
 					</div>
 
@@ -574,6 +609,74 @@ label {
 		</div>
 	</div>
 </div>
+
+
+
+<div class="modal fade" tabindex="-1" id="parknoticeAuthoritySet"
+	style="min-width: 900px" role="dialog"
+	aria-labelledby='uploadParkPicLabel' aria-hidden='true'>
+	<div class='modal-dialog' >
+		<div class='modal-content'>
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal'
+					aria-hidden='true'>&times;</button>
+				<h3 class='modal-title text-center'>停车场权限设置</h3>
+			</div>
+			<div class='modal-body'>
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">通知推送设置</h3>
+					</div>
+					<div class="panel-body">
+
+						<div class='col-sm-12'>
+							<div class='col-sm-3'>
+								<div class='checkbox'>
+									<label id="noticeId" style="display: none"> </label> <label
+										style="float: left;"> <input type='checkbox'
+										id='weixin'>微信通知</input>
+									</label>
+								</div>
+							</div>
+							<div class='col-sm-3'>
+								<div class='checkbox'>
+									 <label
+										style="float: left;"> <input type='checkbox'
+										id='alipay'>支付宝通知</input>
+									</label>
+								</div>
+							</div>
+							<div class='col-sm-2'>
+								<div class='checkbox'>
+									<label style="float: left;"> <input type='checkbox'
+										id='gongshang'>工行</input>
+									</label>
+								</div>
+									
+							</div>
+
+						
+						
+					
+						
+								
+						</div>
+					</div>
+				</div>
+
+
+			
+	<div class='modal-footer'>
+					<button type='button' class='btn btn-default' data-dismiss='modal'>关闭</button>
+					<button id="submitNoticeAuthorityBtn" type='button'
+						class='btn btn-primary'>提交</button>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <div class="modal fade" id="showTextSet" tabindex="-1" role="dialog"
 	aria-labelledby='uploadParkPicLabel' aria-hidden='true'>

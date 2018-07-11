@@ -103,6 +103,7 @@
 		<mvc:exclude-mapping path="/alipay/**"/>	
 		<mvc:exclude-mapping path="/fee/quickpaydata/insert"/>		
 		<mvc:exclude-mapping path="/test1/**"/>	
+		<mvc:exclude-mapping path="/zjj/**"/>	
 		<mvc:exclude-mapping path="/parkmap/"/>	
 		<mvc:exclude-mapping path="/SmartParkComm/**"/>	
 		<mvc:exclude-mapping path="/barrierCharge/**"/>	

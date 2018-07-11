@@ -18,8 +18,10 @@
 		initFeeCriterionSelect();	
 		
 	    bindauthoritySet();
+	    bindnoticeauthoritySet();
 		bindtextSet();
 		bindsubmitAuthorityBtn();
+		bindsubmitNoticeAuthorityBtn();
 		bindsubmitTextShowBtn();			
 	};
 	var bindsubmitTextShowBtn=function(){
@@ -32,9 +34,19 @@
             authoritySetBtnClickHandle();
         });
 	};
+	var bindnoticeauthoritySet=function(){
+	     $('#noticeAuthoritySet').on('click', $(this), function(){
+            noticeauthoritySetBtnClickHandle();
+        });
+	};
 	var bindsubmitAuthorityBtn=function(){
 	    $('#submitAuthorityBtn').on('click', $(this), function(){
             updateAuthorityData();
+        });
+	};
+	var bindsubmitNoticeAuthorityBtn=function(){
+	      $('#submitNoticeAuthorityBtn').on('click', $(this), function(){
+            updateNoticeAuthorityData();
         });
 	};
 	var bindtextSet=function(){
@@ -131,6 +143,19 @@
 			addBtnClickHandle();
 		});
 	};
+	var noticeauthoritySetBtnClickHandle=function(){
+	     var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
+        if(checkedTr.length == 0){
+            alert("选择停车场!");
+            return;
+        }
+         else{
+           assignNoticeAuthority($(checkedTr[0])); 
+        }
+            
+            
+        $('#parknoticeAuthoritySet').modal('show');
+	}
 	var authoritySetBtnClickHandle = function(){
 	
         var checkedTr = $('#parkBody').find('input[type="checkbox"]:checked').parents('tr');
@@ -249,7 +274,25 @@
 			}
 		});
 	};
-	
+	var assignNoticeAuthority=function(checkedTr){
+	      var tds = checkedTr.find('td');
+        var parkId=parseInt($(tds[1]).text());
+        var data = {'parkId': parkId};
+        $.ajax({
+            url: $.fn.config.webroot + "/noitceAuthority/getByPark" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data),
+            success: function(data){            
+                fillNoticeAuthorityBody(data.body);
+            },
+            error: function(data){
+                loader.remove();
+                errorHandle(data);
+            }
+        });
+	};
 	var assignAuthority=function(checkedTr){
 	    var tds = checkedTr.find('td');
 	    var parkId=parseInt($(tds[1]).text());
@@ -341,7 +384,18 @@
                 alert("failed");
             }
         });
-	}
+	};
+	var fillNoticeAuthorityBody=function(data){
+	    $.each(data,function(index,authorityNotice){
+	        $('#noticeId').val(authorityNotice['id']);
+	        $('#weixin').removeProp("checked");
+	        $('#alipay').removeProp("checked");
+	        $('#gongshang').removeProp("checked");
+	        $('#weixin').prop('checked',authorityNotice['weixin']);
+	        $('#alipay').prop('checked',authorityNotice['alipay']);
+	        $('#gongshang').prop('checked',authorityNotice['gongshang']);
+	    });
+	};
 	var fillAuthorityBody=function(data){	    
 	    $.each(data,function(index,authorityTmp){
 	        if(authorityTmp['channel']==1){
@@ -351,6 +405,8 @@
 	              $('#typeB1').removeProp("checked");
 	               $('#typeC1').removeProp("checked");
                   $('#typeD1').removeProp("checked");
+                  $('#typeE1').removeProp("checked");
+                  $('#yuyue1').removeProp("checked");
                   $('#temporary1').removeProp("checked");
                   $('#temporary10').removeProp("checked");
 	            $('#month1').prop("checked",authorityTmp['month']);
@@ -359,6 +415,8 @@
 	            $('#typeB1').prop("checked",authorityTmp['typeb']);
 	            $('#typeC1').prop("checked",authorityTmp['typec']);
 	            $('#typeD1').prop("checked",authorityTmp['typed']);
+	            $('#typeE1').prop("checked",authorityTmp['typee']);
+	            $('#yuyue1').prop("checked",authorityTmp['yuyue']);
 	            $('#temporary1').prop("checked",authorityTmp['temporary']);
 	            $('#temporary10').prop("checked",authorityTmp['temporary0']);
 	        }
@@ -369,6 +427,8 @@
                   $('#typeB0').removeProp("checked");
                    $('#typeC0').removeProp("checked");
                   $('#typeD0').removeProp("checked");
+                  $('#typeE0').removeProp("checked");
+                  $('#yuyue0').removeProp("checked");
                   $('#temporary0').removeProp("checked");
                   $('#temporary00').removeProp("checked");
 	            $('#month0').prop("checked",authorityTmp['month']);
@@ -377,10 +437,33 @@
                 $('#typeB0').prop("checked",authorityTmp['typeb']);
                 $('#typeC0').prop("checked",authorityTmp['typec']);
                 $('#typeD0').prop("checked",authorityTmp['typed']);
+                $('#typeE0').prop("checked",authorityTmp['typee']);
+                $('#yuyue0').prop("checked",authorityTmp['yuyue']);
                 $('#temporary0').prop("checked",authorityTmp['temporary']);
                 $('#temporary00').prop("checked",authorityTmp['temporary0']);
 	        }
 	    });	    
+	};
+	var updateNoticeAuthorityData=function(){
+	      var data1={};
+	      data1['id']=parseInt($('#noticeId').val());
+	      data1['weixin']=$('#weixin').prop("checked") ;
+	      data1['alipay']=$('#alipay').prop("checked") ;
+	      data1['gongshang']=$('#gongshang').prop("checked") ;
+	         $.ajax({
+            url: $.fn.config.webroot + "/noitceAuthority/update" ,
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',          
+            datatype: 'json',
+            data: $.toJSON(data1),
+            success: function(data){            
+                alert("成功!");
+            },
+            error: function(data){
+                
+                alert("failed");
+            }
+        });
 	};
 	var updateAuthorityData=function(){
 	    var data1={};
@@ -392,6 +475,8 @@
 	    data1['typeb']=$('#typeB1').prop("checked") ;
 	    data1['typec']=$('#typeC1').prop("checked") ;
 	    data1['typed']=$('#typeD1').prop("checked") ;
+	    data1['typee']=$('#typeE1').prop("checked") ;
+	    data1['yuyue']=$('#yuyue1').prop("checked") ;
 	    data1['temporary']=$('#temporary1').prop("checked") ;
 	    data1['temporary0']=$('#temporary10').prop("checked") ;
 	    var data0={};
@@ -403,6 +488,8 @@
         data0['typeb']=$('#typeB0').prop("checked") ;
         data0['typec']=$('#typeC0').prop("checked") ;
         data0['typed']=$('#typeD0').prop("checked") ;
+        data0['typee']=$('#typeE').prop("checked") ;
+        data0['yuyue']=$('#yuyue').prop("checked") ;
         data0['temporary']=$('#temporary0').prop("checked") ;
 	    data0['temporary0']=$('#temporary00').prop("checked") ;
 	    var data=[];

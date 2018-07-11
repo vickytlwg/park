@@ -40,6 +40,8 @@ public interface  MonthUserService {
 	    
 	    List<Monthuser> getByCardNumber(String cardNumber);
 	    
+	    List<Monthuser> getLast3Number(String lastNumber,int parkId);
+	    
 	    List<Monthuser> getByParkIdAndCount(int parkId,int start,int count);
 	    
 	    List<Monthuser> getByParkIdAndCountOrder(int parkId,int start,int count,int type);
