@@ -28,7 +28,7 @@
 }
 
 .small-box h3 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: normal;
     margin: 0 0 10px 0;
     white-space: nowrap;
@@ -37,7 +37,7 @@
 }
 
 .small-box p {
-    font-size: 15px;
+    font-size: 12px;
 	margin:0;
 	color:#aaa;
 }
