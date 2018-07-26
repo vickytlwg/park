@@ -748,9 +748,9 @@ public class PosChargeDataController {
 			}
 		}
 		if (isRealMonthUser) {
-			charge.setParkDesc(charge.getParkDesc() + "-包月车");
+			charge.setParkDesc(charge.getParkDesc() + "-p包月车");
 		} else {
-			charge.setParkDesc(charge.getParkDesc() + "-临停车");
+			charge.setParkDesc(charge.getParkDesc() + "-p临停车");
 		}
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");

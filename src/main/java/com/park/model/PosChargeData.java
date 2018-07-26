@@ -55,10 +55,26 @@ public class PosChargeData {
     private Double other=0.0;
 
     private String other2="";
+    
+    private String outUrl="";
 
 	public int getId() {
 		return id;
 	}
+
+	
+
+	public String getOutUrl() {
+		return outUrl;
+	}
+
+
+
+	public void setOutUrl(String outUrl) {
+		this.outUrl = outUrl;
+	}
+
+
 
 	public void setId(int id) {
 		this.id = id;

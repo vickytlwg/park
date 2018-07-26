@@ -31,6 +31,7 @@ import com.park.model.Feecriteriontopark;
 import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
+import com.park.model.Parkcarauthority;
 import com.park.model.Parknoticeauthority;
 import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
@@ -42,6 +43,7 @@ import com.park.service.FeecriterionToParkService;
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
+import com.park.service.ParkCarAuthorityService;
 import com.park.service.ParkNoticeAuthorityService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
@@ -164,6 +166,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		// System.out.println("poschargedata list录入支付宝前: "+new
 		// Date().getTime()+"\n");
+		
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
 				// 信息录入支付宝
@@ -178,6 +181,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
 						// aliparkFeeService.parkingExitinfoSync(argstoali);
 					}
+					List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(charge.getParkId());
+					if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+					}
+					
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -498,6 +510,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(exitDate));
 						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
 						// aliparkFeeService.parkingExitinfoSync(argstoali);
+					}
+					List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(charge.getParkId());
+					if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -1293,7 +1313,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		}
 
-		if (!parktoaliparks.isEmpty() && tmPosChargeDatas.get(0).getExitDate() == null) {
+		if (!parktoaliparks.isEmpty() && !tmPosChargeDatas.isEmpty()&&tmPosChargeDatas.get(0).getExitDate() == null) {
 			// 信息录入支付宝
 			try {
 				Parktoalipark parktoalipark = parktoaliparks.get(0);
@@ -1302,7 +1322,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				argstoali.put("car_number", cardNumber);
 				argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
-
+				
+				
+				List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(tmPosChargeDatas.get(0).getParkId());
+				if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+					Map<String, String> argstoali2 = new HashMap<>();
+					argstoali2.put("parking_id", "PI1501317472942184881");
+					argstoali2.put("car_number", cardNumber);
+					argstoali2.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali2), "aliExitInfo");
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -1322,7 +1351,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterion==null) {
 			criterion=criterionService.getById(park.getFeeCriterionId());
 		}
-		this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
+		if (!tmPosChargeDatas.isEmpty()) {
+			this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
+		}
 		int tmpint = 0;
 		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			tmpint++;
@@ -1424,6 +1455,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		Boolean isMonthUser = false;
 		Boolean isRealMonthUser = false;
 		Monthuser monthuserUse = new Monthuser();
+		
 		for (Monthuser monthuser : monthusers) {
 			if (monthuser.getType() == 0) {
 				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());

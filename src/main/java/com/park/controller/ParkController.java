@@ -398,6 +398,7 @@ public class ParkController {
 	@ResponseBody
 	public String getParkByLocationkeywords(@RequestBody Map<String, Object> args){
 		String str=(String) args.get("keywords");
+		str=str.trim();
 		List<Park> parkDetail=parkService.getParkDetailByKeywords(str);
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if(parkDetail != null){

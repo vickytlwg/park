@@ -101,18 +101,9 @@ public class AlipayController {
 			// 处理异常
 			e.printStackTrace();
 		}
-		AlipayUserInfoShareRequest request2 = new AlipayUserInfoShareRequest();
+		//AlipayUserInfoShareRequest request2 = new AlipayUserInfoShareRequest();
 		String access_token = oauthTokenResponse.getAccessToken();
 		String userId = oauthTokenResponse.getUserId();
-		try {
-			AlipayUserInfoShareResponse userinfoShareResponse = alipayClient.execute(request2, access_token);
-			// userId = userinfoShareResponse.getUserId();
-
-		} catch (AlipayApiException e) {
-			// 处理异常
-			e.printStackTrace();
-		}
-		
 		AlipayEcoMycarParkingVehicleQueryRequest request3 = new AlipayEcoMycarParkingVehicleQueryRequest();
 		request3.setBizContent("{" + "\"car_id\":\"" + car_id + "\"" + "  }");
 		String carNumber = "";

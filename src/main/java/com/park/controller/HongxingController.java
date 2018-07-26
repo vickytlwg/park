@@ -42,6 +42,7 @@ import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeCreateResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
+import com.park.model.AlipayChargeInfo;
 import com.park.model.Alipayrecord;
 import com.park.model.Constants;
 import com.park.model.Hongxingrecord;
@@ -138,57 +139,12 @@ public class HongxingController {
 		logger.info("alipay停车查询:"+carNumber+" userId:"+userId);
 		modelMap.addAttribute("carNumber", carNumber);
 		
-		Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(carNumber).get(0);
-		String parkKey = "c1648ccf33314dc384155896cf4d00b9";
-		AlipayClient alipayClienttmp = alipayClient2;
-		if (njcarfeerecord.getParkname().contains("家乐福")) {
-			parkKey = "ff8993a40b3a4249924f34044403b5bf";
-			alipayClienttmp = alipayClient3;
-		}
-		Map<String, Object> data = null;
-		String orderCreate = "";
-		try {
-			data = hongxingService.getFeeByCarNumber(carNumber, parkKey);
-			
-		} catch (Exception e) {
+		AlipayChargeInfo alipayChargeInfo=alipayrecordService.getChargeDataByCarNumber(carNumber);
+		if (!alipayChargeInfo.isValidate()) {
 			return "alipayh5/noRecord";
 		}
-		if (data == null) {
-			return "alipayh5/noRecord";
-		}
-		logger.info("红星费用:"+data.toString());
-		try {
-			String code = hongxingService.creatPayOrder((String) data.get("orderNo"), parkKey);
-			if (code == null) {
-				return "alipayh5/error";
-			}
-			orderCreate = code;
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		PosChargeData lastCharge = new PosChargeData();
-		lastCharge.setRejectReason(orderCreate);
-		lastCharge.setCardNumber(carNumber);
-		lastCharge.setParkId(3);
-		lastCharge.setParkDesc("美凯龙停车场");
-		lastCharge.setChargeMoney((double) data.get("totalAmount"));
-		if (njcarfeerecord.getParkname().contains("家乐福")) {
-			lastCharge.setParkId(217);
-			lastCharge.setParkDesc("家乐福停车场");
-			lastCharge.setChargeMoney((double) data.get("totalAmount"));
-		}
-
-		String enterTimeStr = ((String) data.get("enterTime")).replace("/", "-");
-		lastCharge.setEntranceDate(enterTimeStr);
-		lastCharge.setExitDate1(new Date());
-
-		lastCharge.setOperatorId((String) data.get("orderNo"));
-		poschargedataService.insert(lastCharge);
-
-		List<PosChargeData> charges = poschargedataService.queryDebt(carNumber, new Date());
-		lastCharge = charges.get(0);
-
+		PosChargeData lastCharge =alipayChargeInfo.getPosChargeData();
+		AlipayClient alipayclientU=alipayChargeInfo.getAlipayClient();
 		modelMap.addAttribute("charge", lastCharge.getChargeMoney());
 		modelMap.addAttribute("enterDate",
 				new SimpleDateFormat(Constants.DATEFORMAT).format(lastCharge.getEntranceDate()));
@@ -216,14 +172,16 @@ public class HongxingController {
 
 						"\"buyer_id\":\"" + userId + "\"," +
 
-						"\"extend_params\":{" + "\"sys_service_provider_id\":\"2088821579783141\"" + "}" +
+						"\"extend_params\":{" + "\"sys_service_provider_id\":\""
+								+ alipayChargeInfo.getServiceProvideId()
+								+ "\"" + "}" +
 
 						"}");
 		modelMap.addAttribute("outTradeNO", out_trade_no);
 		modelMap.addAttribute("userId", userId);
 		modelMap.addAttribute("money", total_amount);
 
-		AlipayTradeCreateResponse response = alipayClienttmp.execute(request5);
+		AlipayTradeCreateResponse response = alipayclientU.execute(request5);
 		logger.error("zhifubao:" + response.getBody() + response.getSubMsg());
 		modelMap.addAttribute("tradeNO", response.getTradeNo());
 
@@ -239,7 +197,8 @@ public class HongxingController {
 
 		return "alipayh5/index";
 	}
-
+	
+	
 	// @RequestMapping(value = "quickPayWeb/{chargeId}/{userId}/{parkingId}",
 	// method = RequestMethod.GET, produces = {
 	// "application/json;charset=UTF-8" })
@@ -304,25 +263,27 @@ public class HongxingController {
 		if (lastCharge.getRejectReason().length() > 4 && lastCharge.getRejectReason().length() < 10) {
 			return Utility.createJsonMsg(1001, "已通知到!");
 		}
+		if (lastCharge.getParkId()==3) {
+			Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);
+			String parkKey = "c1648ccf33314dc384155896cf4d00b9";
+			if (njcarfeerecord.getParkname().contains("家乐福")) {
+				parkKey = "ff8993a40b3a4249924f34044403b5bf";
+			}
 
-		Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);
-		String parkKey = "c1648ccf33314dc384155896cf4d00b9";
-		if (njcarfeerecord.getParkname().contains("家乐福")) {
-			parkKey = "ff8993a40b3a4249924f34044403b5bf";
+			String code = lastCharge.getRejectReason();
+			// 通知
+			Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChargeMoney()), code, code,
+					parkKey);
+			logger.info("调用接口参数:" + String.valueOf(lastCharge.getChargeMoney()) + code + parkKey);
+			if (success) {
+				logger.info("调用美凯龙支付通知成功");
+				lastCharge.setRejectReason("成功通知");
+			} else {
+				logger.info("调用美凯龙支付失败");
+				lastCharge.setRejectReason("失败通知");
+			}
 		}
-
-		String code = lastCharge.getRejectReason();
-		// 通知
-		Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChargeMoney()), code, code,
-				parkKey);
-		logger.info("调用接口参数:" + String.valueOf(lastCharge.getChargeMoney()) + code + parkKey);
-		if (success) {
-			logger.info("调用美凯龙支付通知成功");
-			lastCharge.setRejectReason("成功通知");
-		} else {
-			logger.info("调用美凯龙支付失败");
-			lastCharge.setRejectReason("失败通知");
-		}
+		
 		poschargedataService.update(lastCharge);
 		Map<String, String> args = new HashMap<>();
 		args.put("user_id", alipayrecord.getUserid());
@@ -472,23 +433,29 @@ public class HongxingController {
 			List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);
 			Alipayrecord alipayrecord = alipayrecords.get(0);
 			PosChargeData lastCharge = poschargedataService.getById(alipayrecord.getPoschargeid());
-			Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);
-			String parkKey = "c1648ccf33314dc384155896cf4d00b9";
-			if (njcarfeerecord.getParkname().contains("家乐福")) {
-				parkKey = "ff8993a40b3a4249924f34044403b5bf";
+			//如果是美凯龙这边的停车场
+			if (lastCharge.getParkId()==3) {
+				Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(lastCharge.getCardNumber()).get(0);			
+				String parkKey = "c1648ccf33314dc384155896cf4d00b9";
+				if (njcarfeerecord.getParkname().contains("家乐福")) {
+					parkKey = "ff8993a40b3a4249924f34044403b5bf";
+				}
+				String code = lastCharge.getRejectReason();
+				// 通知
+				Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChargeMoney()), code, code,
+						parkKey);
+				logger.info("调用接口参数:" + String.valueOf(lastCharge.getChargeMoney()) + code + parkKey);
+				if (success) {
+					logger.info("调用美凯龙支付通知成功");
+					lastCharge.setRejectReason("成功通知nt");
+				} else {
+					logger.info("调用美凯龙支付失败");
+					lastCharge.setRejectReason("失败通知");
+				}
+			}else {
+				lastCharge.setRejectReason(trade_no);
 			}
-			String code = lastCharge.getRejectReason();
-			// 通知
-			Boolean success = hongxingService.payOrderNotify(String.valueOf(lastCharge.getChargeMoney()), code, code,
-					parkKey);
-			logger.info("调用接口参数:" + String.valueOf(lastCharge.getChargeMoney()) + code + parkKey);
-			if (success) {
-				logger.info("调用美凯龙支付通知成功");
-				lastCharge.setRejectReason("成功通知nt");
-			} else {
-				logger.info("调用美凯龙支付失败");
-				lastCharge.setRejectReason("失败通知");
-			}
+			
 			lastCharge.setPaidCompleted(true);
 			lastCharge.setPayType(0);
 			poschargedataService.update(lastCharge);

@@ -27,12 +27,13 @@
     <result column="discountType" property="discounttype" jdbcType="TINYINT" />
     <result column="other" property="other" jdbcType="DOUBLE" />
     <result column="other2" property="other2" jdbcType="VARCHAR" />
+    <result column="outUrl" property="outurl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, cardNumber, parkId, parkDesc, portNumber, isEntrance, operatorId, posId, chargeMoney, 
     paidMoney, unPaidMoney, givenMoney, changeMoney, isOneTimeExpense, paidCompleted, 
     isLargeCar, entranceDate, exitDate, url, rejectReason, payType, discount, discountType, 
-    other, other2
+    other, other2, outUrl
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -53,7 +54,7 @@
       isLargeCar, entranceDate, exitDate, 
       url, rejectReason, payType, 
       discount, discountType, other, 
-      other2)
+      other2, outUrl)
     values (#{id,jdbcType=INTEGER}, #{cardnumber,jdbcType=VARCHAR}, #{parkid,jdbcType=INTEGER}, 
       #{parkdesc,jdbcType=VARCHAR}, #{portnumber,jdbcType=VARCHAR}, #{isentrance,jdbcType=BIT}, 
       #{operatorid,jdbcType=VARCHAR}, #{posid,jdbcType=VARCHAR}, #{chargemoney,jdbcType=DOUBLE}, 
@@ -62,7 +63,7 @@
       #{islargecar,jdbcType=BIT}, #{entrancedate,jdbcType=TIMESTAMP}, #{exitdate,jdbcType=TIMESTAMP}, 
       #{url,jdbcType=VARCHAR}, #{rejectreason,jdbcType=VARCHAR}, #{paytype,jdbcType=TINYINT}, 
       #{discount,jdbcType=DOUBLE}, #{discounttype,jdbcType=TINYINT}, #{other,jdbcType=DOUBLE}, 
-      #{other2,jdbcType=VARCHAR})
+      #{other2,jdbcType=VARCHAR}, #{outurl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.PoschargedataNew" >
     insert into posChargeData
@@ -142,6 +143,9 @@
       <if test="other2 != null" >
         other2,
       </if>
+      <if test="outurl != null" >
+        outUrl,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -218,6 +222,9 @@
       </if>
       <if test="other2 != null" >
         #{other2,jdbcType=VARCHAR},
+      </if>
+      <if test="outurl != null" >
+        #{outurl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -296,6 +303,9 @@
       <if test="other2 != null" >
         other2 = #{other2,jdbcType=VARCHAR},
       </if>
+      <if test="outurl != null" >
+        outUrl = #{outurl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -324,7 +334,8 @@
       discount = #{discount,jdbcType=DOUBLE},
       discountType = #{discounttype,jdbcType=TINYINT},
       other = #{other,jdbcType=DOUBLE},
-      other2 = #{other2,jdbcType=VARCHAR}
+      other2 = #{other2,jdbcType=VARCHAR},
+      outUrl = #{outurl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

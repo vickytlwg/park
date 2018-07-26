@@ -201,6 +201,7 @@ public class ChannelController {
 	public String getChannelDetailByKeywords(@RequestBody Map<String, Object> args){	
 		Map<String, Object> ret = new HashMap<String, Object>();
 		String keywords=(String) args.get("keywords");
+		keywords=keywords.trim();
 		List<ChannelDetail> channelDetail = channelService.getChannelDetailByKeywords(keywords);
 		if(channelDetail != null){
 			ret.put("status", "1001");

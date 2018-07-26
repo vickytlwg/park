@@ -2,68 +2,64 @@ package com.park.model;
 
 import java.util.Date;
 
-public class PoschargedataNew {
+public class ChargedataParkWithTable {
     private Integer id;
 
-    private String cardnumber="不识别";
+    private String carnumber;
 
     private Integer parkid;
 
-    private String parkdesc="默认";
+    private String parkdesc;
 
-    private String portnumber="默认";
-
-    private Boolean isentrance=true;
+    private String portnumber;
 
     private String operatorid;
 
     private String posid;
 
-    private Double chargemoney=0.0;
+    private Integer chargemoney;
 
-    private Double paidmoney=0.0;
+    private Integer paidmoney;
 
-    private Double unpaidmoney=0.0;
+    private Integer unpaidmoney;
 
-    private Double givenmoney=0.0;
+    private Integer givenmoney;
 
-    private Double changemoney=0.0;
+    private Integer changemoney;
 
     private Boolean isonetimeexpense;
 
-    private Boolean paidcompleted=false;
+    private Boolean paidcompleted;
 
-    private Boolean islargecar=false;
+    private Boolean islargecar;
 
     private Date entrancedate;
 
     private Date exitdate;
 
-    private String url="";
+    private String inpictureurl;
+
+    private String outpirctureurl;
 
     private String rejectreason;
 
-    private Byte paytype=2;
+    private Byte paytype;
 
-    private Double discount=0.0;
+    private Integer discount;
 
-    private Byte discounttype=0;
+    private String discounttype;
+    
+    private String tableName;
 
-    private Double other;
+	private Integer reserve1;
+
+    private String reserve2;
+
+    private Integer other;
 
     private String other2;
-    
-    private String outurl;
 
-    public String getOuturl() {
-		return outurl;
-	}
-
-	public void setOuturl(String outurl) {
-		this.outurl = outurl;
-	}
-
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -71,12 +67,12 @@ public class PoschargedataNew {
         this.id = id;
     }
 
-    public String getCardnumber() {
-        return cardnumber;
+    public String getCarnumber() {
+        return carnumber;
     }
 
-    public void setCardnumber(String cardnumber) {
-        this.cardnumber = cardnumber == null ? null : cardnumber.trim();
+    public void setCarnumber(String carnumber) {
+        this.carnumber = carnumber == null ? null : carnumber.trim();
     }
 
     public Integer getParkid() {
@@ -87,6 +83,14 @@ public class PoschargedataNew {
         this.parkid = parkid;
     }
 
+    public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+    
     public String getParkdesc() {
         return parkdesc;
     }
@@ -101,14 +105,6 @@ public class PoschargedataNew {
 
     public void setPortnumber(String portnumber) {
         this.portnumber = portnumber == null ? null : portnumber.trim();
-    }
-
-    public Boolean getIsentrance() {
-        return isentrance;
-    }
-
-    public void setIsentrance(Boolean isentrance) {
-        this.isentrance = isentrance;
     }
 
     public String getOperatorid() {
@@ -127,43 +123,43 @@ public class PoschargedataNew {
         this.posid = posid == null ? null : posid.trim();
     }
 
-    public Double getChargemoney() {
+    public Integer getChargemoney() {
         return chargemoney;
     }
 
-    public void setChargemoney(Double chargemoney) {
+    public void setChargemoney(Integer chargemoney) {
         this.chargemoney = chargemoney;
     }
 
-    public Double getPaidmoney() {
+    public Integer getPaidmoney() {
         return paidmoney;
     }
 
-    public void setPaidmoney(Double paidmoney) {
+    public void setPaidmoney(Integer paidmoney) {
         this.paidmoney = paidmoney;
     }
 
-    public Double getUnpaidmoney() {
+    public Integer getUnpaidmoney() {
         return unpaidmoney;
     }
 
-    public void setUnpaidmoney(Double unpaidmoney) {
+    public void setUnpaidmoney(Integer unpaidmoney) {
         this.unpaidmoney = unpaidmoney;
     }
 
-    public Double getGivenmoney() {
+    public Integer getGivenmoney() {
         return givenmoney;
     }
 
-    public void setGivenmoney(Double givenmoney) {
+    public void setGivenmoney(Integer givenmoney) {
         this.givenmoney = givenmoney;
     }
 
-    public Double getChangemoney() {
+    public Integer getChangemoney() {
         return changemoney;
     }
 
-    public void setChangemoney(Double changemoney) {
+    public void setChangemoney(Integer changemoney) {
         this.changemoney = changemoney;
     }
 
@@ -207,12 +203,20 @@ public class PoschargedataNew {
         this.exitdate = exitdate;
     }
 
-    public String getUrl() {
-        return url;
+    public String getInpictureurl() {
+        return inpictureurl;
     }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
+    public void setInpictureurl(String inpictureurl) {
+        this.inpictureurl = inpictureurl == null ? null : inpictureurl.trim();
+    }
+
+    public String getOutpirctureurl() {
+        return outpirctureurl;
+    }
+
+    public void setOutpirctureurl(String outpirctureurl) {
+        this.outpirctureurl = outpirctureurl == null ? null : outpirctureurl.trim();
     }
 
     public String getRejectreason() {
@@ -231,27 +235,43 @@ public class PoschargedataNew {
         this.paytype = paytype;
     }
 
-    public Double getDiscount() {
+    public Integer getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 
-    public Byte getDiscounttype() {
+    public String getDiscounttype() {
         return discounttype;
     }
 
-    public void setDiscounttype(Byte discounttype) {
-        this.discounttype = discounttype;
+    public void setDiscounttype(String discounttype) {
+        this.discounttype = discounttype == null ? null : discounttype.trim();
     }
 
-    public Double getOther() {
+    public Integer getReserve1() {
+        return reserve1;
+    }
+
+    public void setReserve1(Integer reserve1) {
+        this.reserve1 = reserve1;
+    }
+
+    public String getReserve2() {
+        return reserve2;
+    }
+
+    public void setReserve2(String reserve2) {
+        this.reserve2 = reserve2 == null ? null : reserve2.trim();
+    }
+
+    public Integer getOther() {
         return other;
     }
 
-    public void setOther(Double other) {
+    public void setOther(Integer other) {
         this.other = other;
     }
 

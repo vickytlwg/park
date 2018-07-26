@@ -488,8 +488,8 @@
         data0['typeb']=$('#typeB0').prop("checked") ;
         data0['typec']=$('#typeC0').prop("checked") ;
         data0['typed']=$('#typeD0').prop("checked") ;
-        data0['typee']=$('#typeE').prop("checked") ;
-        data0['yuyue']=$('#yuyue').prop("checked") ;
+        data0['typee']=$('#typeE0').prop("checked") ;
+        data0['yuyue']=$('#yuyue0').prop("checked") ;
         data0['temporary']=$('#temporary0').prop("checked") ;
 	    data0['temporary0']=$('#temporary00').prop("checked") ;
 	    var data=[];

@@ -92,6 +92,7 @@ public class FeeCriterionController {
 		if (keywords==null) {
 			return null;
 		}
+		keywords=keywords.trim();
 		List<FeeCriterion> criterions = criterionService.getByKeyWords(keywords);
 		return Utility.createJsonMsg(1001, "success", criterions);
 	}

@@ -140,7 +140,37 @@ public class BarrierChargeController {
 	public String touchtest(@RequestBody String aString) {
 		return aString;
 	}
-
+	@RequestMapping(value = "touchedPictureUrl", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public void touchedPictureUrl(@RequestBody Map<String, String> args){
+		String mac = args.get("mac");
+		String cardNumber = args.get("cardNumber");
+		String url=args.get("url");
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
+			dataMap.put("status", 1003);
+			return ;
+		}
+		Map<String, Object> info = infos.get(0);
+		if (info == null) {
+			return ;
+		}
+		int channelFlag = (int) info.get("channelFlag");
+		Integer parkId = (Integer) info.get("parkID");
+		List<PosChargeData> posChargeDatas=chargeSerivce.getByCardNumberAndPark(cardNumber, parkId);
+		if (posChargeDatas.isEmpty()) {
+			return;
+		}
+		
+		if (channelFlag == 1) {
+			posChargeDatas.get(0).setUrl(url);
+			
+		}else {
+			posChargeDatas.get(0).setOutUrl(url);
+		}
+		chargeSerivce.update(posChargeDatas.get(0));
+	}
 	@RequestMapping(value = "touchedMonthUser", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public void touchedMonthUser(@RequestBody Map<String, String> args) throws Exception {
@@ -239,6 +269,7 @@ public class BarrierChargeController {
 						break;
 					} else {
 						dataMap.put("ds", "-1");
+						dataMap.put("uT", "1");
 						monthUserType = 8; // 月卡过期
 					}
 
@@ -260,7 +291,7 @@ public class BarrierChargeController {
 			// Monthuser monthuser=monthusers.get(0);
 			dataMap.put("uT", "1");
 			// 判断是否是预约车
-			if (monthUserType != 0 && monthUserType != 9) {
+			if (monthUserType==1) {
 				dataMap.put("uT", "2");
 			}
 		}
@@ -285,7 +316,9 @@ public class BarrierChargeController {
 				}
 			}
 		}
-
+		
+		Parknoticeauthority parknoticeauthority = parkNoticeAuthorityService
+				.getByParkId(parkId).get(0);
 		// 入口硬件
 		if (channelFlag == 1) {
 			if (largeCar == true) {
@@ -434,7 +467,14 @@ public class BarrierChargeController {
 						// Date()));
 						// aliparkFeeService.parkingEnterinfoSync(argstoali);
 					}
-
+					
+					if (parknoticeauthority != null && parknoticeauthority.getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
+					}
 				} catch (Exception e) {
 					// TODO: handle exception
 					System.out.println(e);
@@ -450,7 +490,10 @@ public class BarrierChargeController {
 			List<PosChargeData> queryCharges = null;
 			String exitDate = (String) args.get("exitDate");
 			logger.info(cardNumber + "开始出场");
-
+			if (monthuserNow!=null) {
+				realMonthUsers.add(monthuserNow);
+			}
+			
 			// 取得出口权限
 			Parkcarauthority parkcarauthority = parkcarauthorities.get(0);
 			for (Parkcarauthority tmParkcarauthority : parkcarauthorities) {
@@ -459,6 +502,184 @@ public class BarrierChargeController {
 					break;
 				}
 			}
+
+			if (exitDate != null) {
+				// Date eDate = new
+				// SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+				try {
+					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
+					// Date().getTime()+"\n");
+					// queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
+
+					// System.out.println("出场时间为空,getDebt计算完毕: "+new
+					// Date().getTime()+"\n");
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return Utility.createJsonMsg(1002, "获取费用出现异常");
+				}
+			} else {
+				try {
+					// System.out.println("出场时间不为空,将要进行getDebt计算: "+new
+					// Date().getTime()+"\n");
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
+					// System.out.println("出场时间不为空,getDebt计算完毕: "+new
+					// Date().getTime()+"\n");
+				} catch (Exception e) {
+					return Utility.createJsonMsg(1002, e);
+				}
+			}
+			logger.info(cardNumber + "计费结束!");
+			double shouldChargeMoney=0;
+			// 如果没有未缴费 判断最近一次缴费时间是否超过15分钟
+			if (queryCharges.isEmpty()) {
+				logger.info(cardNumber + "没有未缴费!");
+				FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
+				// if (largeCar==true) {
+				// charge.setIsLargeCar(true);
+				// }
+				// charge.setCardNumber(cardNumber);
+				// charge.setParkId(parkId);
+				// charge.setParkDesc(parkName);
+				// charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd
+				// HH:mm:ss").format(new Date()));
+				// chargeSerivce.insert(charge);
+				/*
+				 * if (!parktoaliparks.isEmpty()) { Parktoalipark
+				 * parktoalipark=parktoaliparks.get(0); Map<String, String>
+				 * argstoali=new HashMap<>(); argstoali.put("parking_id",
+				 * parktoalipark.getAliparkingid()); argstoali.put("car_number",
+				 * cardNumber); argstoali.put("out_time", new SimpleDateFormat(
+				 * "yyyy-MM-dd HH:mm:ss").format(new Date()));
+				 * System.out.println("支付宝同步出场计算前: "+new Date().getTime()+"\n");
+				 * aliparkFeeService.parkingExitinfoSync(argstoali);
+				 * System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
+				 * }
+				 */
+				if (isRealMonthUser && realMonthUsers.size() == 1) {
+					// dataMap.put("my", "0.0");
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				// 以下就是查询停车费状态的部分迁移
+				List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(cardNumber, 1, parkId);
+				if (posChargeDataList.isEmpty()) {
+					dataMap.put("my", "0.0");
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				PosChargeData posChargeData = posChargeDataList.get(0);
+				if (posChargeData.getExitDate()==null) {
+					posChargeData.setExitDate1(new Date());
+				}
+				
+				//发送到队列
+
+				if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true) {
+					Map<String, String> argstoali = new HashMap<>();
+					argstoali.put("parkName", posChargeData.getParkDesc());
+					argstoali.put("carNumber", posChargeData.getCardNumber());
+					argstoali.put("enterTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getEntranceDate()));
+					argstoali.put("exitTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getExitDate()));
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+				}
+				
+				Date payDate = new Date();
+				if (posChargeData.getPayType() == 0) {
+					List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
+					if (alipayrecords.isEmpty()) {
+						// dataMap.put("my", "0.0");
+						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+					}
+					payDate = alipayrecords.get(0).getDate();
+				} else if (posChargeData.getPayType() == 1) {
+					payDate = posChargeData.getExitDate();
+				}
+				if (payDate == null) {
+					payDate = new Date();
+				}
+				long diff = new Date().getTime() - payDate.getTime();
+				if (diff < 1000 * 60 * 15) {
+					dataMap.put("my", "0.0");
+					long diff1 = (new Date().getTime() - posChargeData.getEntranceDate().getTime());
+					dataMap.put("eD", String.valueOf(diff1 / (1000 * 60)));
+					posChargeData.setPaidCompleted(true);
+					// posChargeData.setPayType(9);
+					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
+					posChargeData.setUnPaidMoney(0);
+					if (posChargeData.getExitDate() == null) {
+						posChargeData.setExitDate1(new Date());
+					}
+					posChargeData.setOperatorId("15minPaid");
+					chargeSerivce.update(posChargeData);
+
+				
+					
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				// 超过了15分钟
+				else {
+					// Park
+					// park=parkService.getParkById(posChargeData.getParkId());
+					// FeeCriterion
+					// feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+					Date incomeDate = new Date(
+							payDate.getTime() - (long) (feeCriterion.getFreemins() - 15) * 1000 * 60);
+					PosChargeData charge2 = new PosChargeData();
+					charge2.setCardNumber(posChargeData.getCardNumber());
+					charge2.setParkId(park.getId());
+					charge2.setOperatorId("超时15分钟");
+					charge2.setParkDesc(posChargeData.getParkDesc());
+					charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+					int num = chargeSerivce.insert(charge2);
+					if (num != 1) {
+						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+					}
+					// 重新查询未缴费
+					queryCharges = chargeSerivce.getDebt(cardNumber);
+				}
+			}
+			
+			PosChargeData payRet = new PosChargeData();
+			int tmpnn = 0;
+			logger.info(cardNumber + "计费完毕后处理");
+			int num = 0;
+			if (!queryCharges.isEmpty()) {
+				for (PosChargeData posChargeData : queryCharges) {
+					if (posChargeData.getParkId() == parkId.intValue()) {
+						posChargeData.setPaidCompleted(true);
+						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
+						posChargeData.setUnPaidMoney(0);
+						posChargeData.setPayType(9);
+						posChargeData.setOperatorId("道闸");
+						if (tmpnn == 0) {
+							payRet = posChargeData;
+							tmpnn++;
+						} else {
+							posChargeData.setChargeMoney(0);
+							posChargeData.setPaidMoney(0);
+						}
+						chargeSerivce.update(posChargeData);
+					} else {
+						posChargeData.setChargeMoney(0.0);
+						posChargeData.setPaidCompleted(true);
+						posChargeData.setPayType(9);
+						chargeSerivce.update(posChargeData);
+					}
+				}
+				// if (payRet.getExitDate()==null) {
+				// payRet.setExitDate1(new Date());
+				// }
+				shouldChargeMoney=payRet.getChargeMoney();
+				num = chargeSerivce.update(payRet);
+			} else {
+				logger.info(cardNumber + "查询计费结果为空!!!");
+				return Utility.createJsonMsg(1002, "计费结果为空");
+			}
+			
 			switch (monthUserType) {
 			case 0:
 				if (parkcarauthority.getMonth() != true) {
@@ -501,7 +722,10 @@ public class BarrierChargeController {
 				}
 				break;
 			case 9:
-				if (parkcarauthority.getTemporary() != true) {
+				if (parkcarauthority.getTemporary() != true&&shouldChargeMoney>0) {
+					dataMap.put("aT", "0");
+				}
+				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
 					dataMap.put("aT", "0");
 				}
 				break;
@@ -509,182 +733,22 @@ public class BarrierChargeController {
 				break;
 			}
 
-			if (exitDate != null) {
-				// Date eDate = new
-				// SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
-				try {
-					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
-					// Date().getTime()+"\n");
-					// queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
-					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
-							isMultiFeeCtriterion, monthUserType);
-
-					// System.out.println("出场时间为空,getDebt计算完毕: "+new
-					// Date().getTime()+"\n");
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					return Utility.createJsonMsg(1002, "获取费用出现异常");
-				}
-			} else {
-				try {
-					// System.out.println("出场时间不为空,将要进行getDebt计算: "+new
-					// Date().getTime()+"\n");
-					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
-							isMultiFeeCtriterion, monthUserType);
-					// System.out.println("出场时间不为空,getDebt计算完毕: "+new
-					// Date().getTime()+"\n");
-				} catch (Exception e) {
-					return Utility.createJsonMsg(1002, e);
-				}
-			}
-			logger.info(cardNumber + "计费结束!");
-
-			// 如果没有未缴费 判断最近一次缴费时间是否超过15分钟
-			if (queryCharges.isEmpty()) {
-				logger.info(cardNumber + "没有未缴费!");
-				FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
-				// if (largeCar==true) {
-				// charge.setIsLargeCar(true);
-				// }
-				// charge.setCardNumber(cardNumber);
-				// charge.setParkId(parkId);
-				// charge.setParkDesc(parkName);
-				// charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd
-				// HH:mm:ss").format(new Date()));
-				// chargeSerivce.insert(charge);
-				/*
-				 * if (!parktoaliparks.isEmpty()) { Parktoalipark
-				 * parktoalipark=parktoaliparks.get(0); Map<String, String>
-				 * argstoali=new HashMap<>(); argstoali.put("parking_id",
-				 * parktoalipark.getAliparkingid()); argstoali.put("car_number",
-				 * cardNumber); argstoali.put("out_time", new SimpleDateFormat(
-				 * "yyyy-MM-dd HH:mm:ss").format(new Date()));
-				 * System.out.println("支付宝同步出场计算前: "+new Date().getTime()+"\n");
-				 * aliparkFeeService.parkingExitinfoSync(argstoali);
-				 * System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
-				 * }
-				 */
-				if (isRealMonthUser && realMonthUsers.size() == 1) {
-					// dataMap.put("my", "0.0");
-					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
-				}
-				// 以下就是查询停车费状态的部分迁移
-				List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(cardNumber, 1, parkId);
-				if (posChargeDataList.isEmpty()) {
-					dataMap.put("my", "0.0");
-					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
-				}
-				PosChargeData posChargeData = posChargeDataList.get(0);
-				Date payDate = new Date();
-				if (posChargeData.getPayType() == 0) {
-					List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
-					if (alipayrecords.isEmpty()) {
-						// dataMap.put("my", "0.0");
-						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
-					}
-					payDate = alipayrecords.get(0).getDate();
-				} else if (posChargeData.getPayType() == 1) {
-					payDate = posChargeData.getExitDate();
-				}
-				if (payDate == null) {
-					payDate = new Date();
-				}
-				long diff = new Date().getTime() - payDate.getTime();
-				if (diff < 1000 * 60 * 15) {
-					dataMap.put("my", "0.0");
-					long diff1 = (new Date().getTime() - posChargeData.getEntranceDate().getTime());
-					dataMap.put("eD", String.valueOf(diff1 / (1000 * 60)));
-					posChargeData.setPaidCompleted(true);
-					// posChargeData.setPayType(9);
-					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
-					posChargeData.setUnPaidMoney(0);
-					if (posChargeData.getExitDate() == null) {
-						posChargeData.setExitDate1(new Date());
-					}
-					posChargeData.setOperatorId("道闸15min");
-					chargeSerivce.update(posChargeData);
-
-					// 发送到队列
-					if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
-						ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(posChargeData));
-					}
-					Parknoticeauthority parknoticeauthority = parkNoticeAuthorityService
-							.getByParkId(posChargeData.getParkId()).get(0);
-					if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true) {
-						Map<String, String> argstoali = new HashMap<>();
-						argstoali.put("parkName", posChargeData.getParkDesc());
-						argstoali.put("carNumber", posChargeData.getCardNumber());
-						argstoali.put("enterTime",
-								new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getEntranceDate()));
-						argstoali.put("exitTime",
-								new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getExitDate()));
-						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
-					}
-					
-					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
-				}
-				// 超过了15分钟
-				else {
-					// Park
-					// park=parkService.getParkById(posChargeData.getParkId());
-					// FeeCriterion
-					// feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
-					Date incomeDate = new Date(
-							payDate.getTime() - (long) (feeCriterion.getFreemins() - 15) * 1000 * 60);
-					PosChargeData charge2 = new PosChargeData();
-					charge2.setCardNumber(posChargeData.getCardNumber());
-					charge2.setParkId(park.getId());
-					charge2.setOperatorId("超时15分钟");
-					charge2.setParkDesc(posChargeData.getParkDesc());
-					charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
-					int num = chargeSerivce.insert(charge2);
-					if (num != 1) {
-						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
-					}
-					// 重新查询未缴费
-					queryCharges = chargeSerivce.getDebt(cardNumber);
-				}
-			}
-			PosChargeData payRet = new PosChargeData();
-			int tmpnn = 0;
-			logger.info(cardNumber + "计费完毕后处理");
-			int num = 0;
-			if (!queryCharges.isEmpty()) {
-				for (PosChargeData posChargeData : queryCharges) {
-					if (posChargeData.getParkId() == parkId.intValue()) {
-						posChargeData.setPaidCompleted(true);
-						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
-						posChargeData.setUnPaidMoney(0);
-						posChargeData.setPayType(9);
-						posChargeData.setOperatorId("道闸");
-						if (tmpnn == 0) {
-							payRet = posChargeData;
-							tmpnn++;
-						} else {
-							posChargeData.setChargeMoney(0);
-							posChargeData.setPaidMoney(0);
-						}
-						chargeSerivce.update(posChargeData);
-					} else {
-						posChargeData.setChargeMoney(0.0);
-						posChargeData.setPaidCompleted(true);
-						posChargeData.setPayType(9);
-						chargeSerivce.update(posChargeData);
-					}
-				}
-				// if (payRet.getExitDate()==null) {
-				// payRet.setExitDate1(new Date());
-				// }
-				num = chargeSerivce.update(payRet);
-			} else {
-				logger.info(cardNumber + "查询计费结果为空!!!");
-				return Utility.createJsonMsg(1002, "计费结果为空");
-			}
-
+		
+			
 			// 发送到队列
 			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
 				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
+			}
+		
+			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
+				Map<String, String> argstoali = new HashMap<>();
+				argstoali.put("parkName", payRet.getParkDesc());
+				argstoali.put("carNumber", payRet.getCardNumber());
+				argstoali.put("enterTime",
+						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+				argstoali.put("exitTime",
+						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
 			}
 
 			if (payRet.getEntranceDate() == null) {
