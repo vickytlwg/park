@@ -52,7 +52,7 @@ public class IndexController {
 					modelMap.addAttribute(page.getPageKey(), true);
 				}
 			}
-			return "platformShow";
+			return "platformShow2";
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class IndexController {
 				redirectUrl=redirectUrl.substring(5);
 				return "redirect:"+redirectUrl;
 			}
-			return "redirect:platformShow";
+			return "redirect:platformShow2";
 		}else{
 			return "redirect:login";
 		}	
@@ -105,7 +105,7 @@ public class IndexController {
 				redirectUrl=redirectUrl.substring(5);
 				return "redirect:"+redirectUrl;
 			}
-			return "platformShow";
+			return "platformShow2";
 		}else{
 			return "login";
 		}	
