@@ -15,11 +15,59 @@
 <script type="text/javascript" src="/park/script/utility.js"></script>
 
 <script type="text/javascript"
-	src="/park/script/platformshow2angular.js"></script>
-<script type="text/javascript" src="/park/script/map2.js"></script>
+	src="/park/script/platformshow2angular.js?v=1.0"></script>
+<script type="text/javascript" src="/park/script/map2.js?v=1.0"></script>
 <style>
 .anchorBL {
 	display: none;
+}
+
+.panel {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.panel-default {
+	border-color: #6fa8dcff
+}
+
+.panel-default>.panel-heading {
+	color: #fff;
+	background-color: rgba(0, 0, 0, 0.4);
+	border-color: #6fa8dcff
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+	border-top-color: #6fa8dcff
+}
+
+.panel-default>.panel-heading .badge {
+	color: #f5f5f5;
+	background-color: #333
+}
+
+.panel-default>.panel-footer+.panel-collapse>.panel-body {
+	border-bottom-color: #ddd
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+	background-color: rgba(9, 73, 131, 0.4)
+}
+
+.table-hover>tbody>tr:hover {
+	background-color: rgba(9, 73, 131, 0.5)
+}
+
+tr {
+	color: #fff;
+}
+
+tbody {
+	border-color: #6fa8dcff;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td,
+	.table>tbody>tr>td, .table>tfoot>tr>td {
+	border-top: 1px solid #6fa8dcff;
 }
 </style>
 <div class="content-wrapper">
@@ -30,11 +78,15 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="box">
-					<div class="box-body" style="height: 630px; padding: 8px;">
+					<div class="box-body" style="height: 630px; padding: 0px;">
 						<div class="row" ng-controller="getdataCtrl">
-							<div class="col-lg-3 col-md-3">
+							<section class="col-lg-12 col-md-12 connectedSortable"
+								style="height: 400px;">
+								<div id="container7"
+									style="min-width: 850px; height: 610px; margin-bottom: 20px; position: relative; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1)">
+								</div>
 								<div class="small-box"
-									style="background-color: #f5f3f0; height: 200px; margin-top: 0px;">
+									style="height: 200px; min-width: 250px; background: rgba(0, 0, 0, 0.4); margin-top: 0px; position: absolute; top: 10px; left: 20px;">
 									<div class="row" style="padding-top: 10px;">
 										<div class="col-xs-4 img-responsive">
 											<img src="dist/img/money.png"
@@ -81,19 +133,89 @@
 										</div>
 									</div>
 								</div>
-							</div>
-							<section class="col-lg-9 col-md-9 connectedSortable"
-								style="margin-left: -10px;height:400px;">
-								<div
-									style="min-width: 850px; height: 400px; margin-bottom: 20px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1)">
-									<div class="iframe" id="container7"
-										style="width: 100%; height: 100%; position: relative; border-radius: 5px; box-shadow: 1px 1px 1px #aaaaaa;"></div>
+								<div class="panel-group" id="accordion" role="tablist"
+									aria-multiselectable="true" style="position: absolute; top: 220px; left: 20px;">
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse"
+													data-parent="#accordion" href="#collapseOne"
+													aria-expanded="false" aria-controls="collapseOne">
+													支付渠道占比 <span class="glyphicon glyphicon-menu-down pull-right" aria-hidden="true"></span>
+													</a>
+											</h4>
+										</div>
+										<div id="collapseOne" class="panel-collapse collapse in"
+											role="tabpanel" aria-labelledby="headingOne">
+											<div class="panel-body" id="container6" style="height: 150px; min-width: 250px;"></div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingTwo">
+											<h4 class="panel-title">
+												<a class="collapsed" role="button" data-toggle="collapse"
+													data-parent="#accordion" href="#collapseTwo"
+													aria-expanded="false" aria-controls="collapseTwo">
+													近七日交易额 <span class="glyphicon glyphicon-menu-down pull-right" aria-hidden="true"></span>
+													</a>
+											</h4>
+										</div>
+										<div id="collapseTwo" class="panel-collapse collapse in"
+											role="tabpanel" aria-labelledby="headingTwo">
+											<div class="panel-body" id="container5" style="height: 150px; min-width: 250px;"></div>
+										</div>
+									</div>
+									
+								</div>
+
+							<div ng-controller="parkBigDataCtrl"
+									style="padding: 0 20px 0 10px; position: absolute; top: 10px; right: 0px;">
+									<div class="panel panel-default"
+										style="width: 250px; min-height: 590px; background-color: rgba(0, 0, 0, 0.4) !important;">
+										<div class="panel-heading">
+											<h3 class="panel-title">停车场实时数据</h3>
+										</div>
+										<div class="panel-body" style="padding: 0;">
+											<table
+												class="table table-primary table-hover table-striped table-condensed text-center"
+												style="font-size: 12px;">
+												<tr>
+													<th><span>车牌号</span></th>
+													<!-- <th><span>车位号</span></th>
+												<th><span>动作</span></th> -->
+													<th><span>时间</span></th>
+													<!-- 												<th><span>是否收费</span></th>
+ -->
+													<!-- <th><span>费用</span></th> -->
+													<th><span>停车场</span></th>
+												</tr>
+												<tr ng-repeat="item in items" ng-class="[item.isNew]">
+													<td ng-bind="item.cardNumber"></td>
+													<td ng-bind="item.portNumber" hidden="hidden"></td>
+													<td ng-if="item.exitDate==undefined" hidden="hidden">入场</td>
+													<td ng-if="item.exitDate!=undefined" hidden="hidden">出场</td>
+													<td ng-if="item.exitDate==undefined"
+														ng-bind="item.entranceDate"></td>
+													<td ng-if="item.exitDate!=undefined"
+														ng-bind="item.exitDate"></td>
+													<td ng-if="item.paidCompleted==true" class="success"
+														hidden="hidden">已收费</td>
+													<td ng-if="item.paidCompleted==false" class="warning"
+														hidden="hidden">未收费</td>
+													<td ng-if="item.paidCompleted==true" class="warning"
+														hidden="hidden">收费:￥{{item.chargeMoney}}</td>
+													<td ng-if="item.paidCompleted==false" hidden="hidden">计费:￥{{item.chargeMoney}}</td>
+													<td ng-bind="item.parkDesc"></td>
+												</tr>
+											</table>
+										</div>
+									</div>
 								</div>
 							</section>
 						</div>
 
 						<div class="row">
-							<div class="col-lg-3 col-md-3" style="margin: -190px 0 0 -5px;">
+							<!-- <div class="col-lg-3 col-md-3" style="margin: -190px 0 0 -5px;">
 								<section class="connectedSortable">
 									<div id="container6" style="height: 230px; min-width: 280px;"></div>
 								</section>
@@ -103,46 +225,48 @@
 											style="height: 180px; min-width: 280px; margin-top: -20px;"></div>
 									</div>
 								</section>
-							</div>
-							<div class="col-lg-9 col-md-9" ng-controller="parkBigDataCtrl" style="padding:0 20px 0 10px;">
-								<div class="panel panel-default" style="min-width: 850px;height:210px;">
+							</div> -->
+							<!-- 							<div class="col-lg-9 col-md-9" ng-controller="parkBigDataCtrl"
+								style="padding: 0 20px 0 10px;">
+								<div class="panel panel-default"
+									style="min-width: 400px; height: 210px;background-color : rgba(0, 0, 0, 0.4)!important;
+									">
 									<div class="panel-heading">
 										<h3 class="panel-title">停车场实时数据</h3>
 									</div>
-									<div class="panel-body" style="padding:0;">
-											<table
-												class="table table-primary table-hover table-striped table-condensed text-center"
-												style="font-size: 12px;">
-												<tr>
-													<th><span>车牌号</span></th>
-													<th><span>车位号</span></th>
-													<th><span>动作</span></th>
-													<th><span>时间</span></th>
-													<th><span>是否收费</span></th>
-													<th><span>费用</span></th>
-													<th><span>停车场</span></th>
-												</tr>
-												<tr ng-repeat="item in items" ng-class="[item.isNew]">
-													<td ng-bind="item.cardNumber"></td>
-													<td ng-bind="item.portNumber"></td>
-													<td ng-if="item.exitDate==undefined">入场</td>
-													<td ng-if="item.exitDate!=undefined">出场</td>
-													<td ng-if="item.exitDate==undefined"
-														ng-bind="item.entranceDate"></td>
-													<td ng-if="item.exitDate!=undefined"
-														ng-bind="item.exitDate"></td>
-													<td ng-if="item.paidCompleted==true" class="success">已收费</td>
-													<td ng-if="item.paidCompleted==false" class="warning">未收费</td>
-													<td ng-if="item.paidCompleted==true" class="warning">收费:￥{{item.chargeMoney}}</td>
-													<td ng-if="item.paidCompleted==false">计费:￥{{item.chargeMoney}}</td>
-													<td ng-bind="item.parkDesc"></td>
-												</tr>
+									<div class="panel-body" style="padding: 0;">
+										<table
+											class="table table-primary table-hover table-striped table-condensed text-center"
+											style="font-size: 12px;">
+											<tr>
+												<th><span>车牌号</span></th>
+												<th><span>车位号</span></th>
+												<th><span>动作</span></th>
+												<th><span>时间</span></th>
+												<th><span>是否收费</span></th>
+												<th><span>费用</span></th>
+												<th><span>停车场</span></th>
+											</tr>
+											<tr ng-repeat="item in items" ng-class="[item.isNew]">
+												<td ng-bind="item.cardNumber"></td>
+												<td ng-bind="item.portNumber" hidden="hidden"></td>
+												<td ng-if="item.exitDate==undefined" hidden="hidden">入场</td>
+												<td ng-if="item.exitDate!=undefined" hidden="hidden">出场</td>
+												<td ng-if="item.exitDate==undefined"
+													ng-bind="item.entranceDate"></td>
+												<td ng-if="item.exitDate!=undefined" ng-bind="item.exitDate"></td>
+												<td ng-if="item.paidCompleted==true" class="success" hidden="hidden">已收费</td>
+												<td ng-if="item.paidCompleted==false" class="warning" hidden="hidden">未收费</td>
+												<td ng-if="item.paidCompleted==true" class="warning">收费:￥{{item.chargeMoney}}</td>
+												<td ng-if="item.paidCompleted==false">计费:￥{{item.chargeMoney}}</td>
+												<td ng-bind="item.parkDesc"></td>
+											</tr>
 
-											</table>
+										</table>
 
-										</div>
+									</div>
 								</div>
-							</div>
+							</div> -->
 
 
 						</div>
@@ -177,22 +301,17 @@
 	var option = {
 		/* 		baseOption : 
 		 { */
-		title : {
-			text : '近七日交易额/千元',
-			textStyle : {
-				color : '#999',
-				fontWeight : 'normal'
-			}
-		},
+		backgroundColor : 'rgba(0, 0, 0, 0.4)',
+
+
 		tooltip : {
 			trigger : 'axis'
 		},
-		grid : 
-		{
-			x: '4%',
-			y: '0%', 
-			width: '90%', 
-			height: '86%',
+		grid : {
+			x : '4%',
+			y : '0%',
+			width : '90%',
+			height : '86%',
 			borderWidth : 0
 		},
 		/* 		toolbox : {
@@ -218,7 +337,7 @@
 		 }
 		 }, */
 		calculable : true,
-		
+
 		xAxis : [ {
 			type : 'category',
 			boundaryGap : false,
@@ -302,19 +421,7 @@
 
 	// 指定图表的配置项和数据
 	var option = {
-		backgroundColor : '#fff',
-
-		title : {
-			text : '支付渠道占比',
-			left : 'center',
-			top : 20,
-			padding : 5,
-			textStyle : {
-				color : '#999',
-				fontWeight : 'normal'
-			}
-		},
-
+		backgroundColor : 'rgba(0, 0, 0, 0.4)',
 		tooltip : {
 			trigger : 'item',
 			formatter : "{a} <br/>{b} : {c} ({d}%)"
@@ -355,23 +462,23 @@
 			roseType : 'radius',
 			label : {
 				normal : {
-					show:true,
-					position: 'inside',
-/* 					textStyle : {
-						color : 'rgba(255, 255, 255, 0.3)'
-					} */
+					show : true,
+					position : 'inner',
+				/* 					textStyle : {
+				 color : 'rgba(255, 255, 255, 0.3)'
+				 } */
 				}
 			},
-/* 			labelLine : {
-				normal : {
-					lineStyle : {
-						color : 'rgba(255, 255, 255, 0.3)'
-					},
-					smooth : false,
-					length : 1,
-					length2 : 1
-				}
-			}, */
+			/* 			labelLine : {
+			 normal : {
+			 lineStyle : {
+			 color : 'rgba(255, 255, 255, 0.3)'
+			 },
+			 smooth : false,
+			 length : 1,
+			 length2 : 1
+			 }
+			 }, */
 			itemStyle : {
 				normal : {
 					shadowBlur : 200,
