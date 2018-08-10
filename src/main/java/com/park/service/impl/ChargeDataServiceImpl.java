@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.park.dao.ChargedataParkMapper;
 import com.park.model.ChargedataPark;
+import com.park.model.ChargedataParkWithTable;
 import com.park.service.ChargeDataService;
 @Service
 public class ChargeDataServiceImpl implements ChargeDataService {
@@ -53,6 +54,32 @@ public class ChargeDataServiceImpl implements ChargeDataService {
 		// TODO Auto-generated method stub
 		String tableName="chargedata_"+parkId;
 		chargedataparkMapper.generateTable(tableName);
+	}
+
+	@Override
+	public int insertTable(ChargedataParkWithTable record) {
+		// TODO Auto-generated method stub
+		int num=0;
+		try {
+			num=chargedataparkMapper.insertSelectiveTable(record);
+		} catch (Exception e) {
+			// TODO: handle exception
+			generateTable(record.getParkid());
+			num=chargedataparkMapper.insertSelectiveTable(record);
+		}
+		return num;
+	}
+
+	@Override
+	public int updateByPrimaryKeyTable(ChargedataParkWithTable record) {
+		// TODO Auto-generated method stub
+		return chargedataparkMapper.updateByPrimaryKeyTable(record);
+	}
+
+	@Override
+	public int insertSelectiveTable(ChargedataParkWithTable record) {
+		// TODO Auto-generated method stub
+		return chargedataparkMapper.insertSelectiveTable(record);
 	}
 
 }

@@ -75,4 +75,38 @@ public class WeiPayController {
 		}
 		return Utility.gson.toJson(ret);
 	}
+	
+	@RequestMapping(value = "notifyPayWithExitTime", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String updateExitTime(@RequestBody Map<String, Object> args){
+		int poschargeId=(int) args.get("poschargeId");
+		String paidAmount=(String) args.get("paidAmount");	
+		String tradeNo=(String) args.get("tradeNo");	
+		//更新poschargeData的状态
+		PosChargeData lastCharge =poschargedataService.getById(poschargeId);
+		lastCharge.setChargeMoney(Double.parseDouble(paidAmount));
+		lastCharge.setPaidCompleted(true);
+		lastCharge.setPayType(1);
+		lastCharge.setExitDate1(new Date());
+		lastCharge.setRejectReason("weipay"+new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+		poschargedataService.update(lastCharge);
+		//支付宝记录的添加  微信暂时添加进来
+		Alipayrecord alipayrecord=new Alipayrecord();
+		alipayrecord.setStatus("5");
+		alipayrecord.setMoney(Double.parseDouble(paidAmount));
+		alipayrecord.setAlitradeno(tradeNo);
+		alipayrecord.setPoschargeid(poschargeId);
+		alipayrecord.setDate(new Date());
+		int num=alipayrecordService.insertSelective(alipayrecord);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if (num==1) {
+			ret.put("status", 1001);
+			ret.put("message", "success");
+		}
+		else {
+			ret.put("status", 1002);
+			ret.put("message", "failed");
+		}
+		return Utility.gson.toJson(ret);
+	}
 }

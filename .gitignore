@@ -2,6 +2,7 @@
 /log/*.log
 /tmp
 .project
+/.project
 .settings/
 /.classpath
 /.externalToolBuilders

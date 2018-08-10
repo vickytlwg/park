@@ -1,6 +1,7 @@
 package com.park.service.impl;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -25,6 +26,7 @@ import com.park.dao.CarportStatusDetailDAO;
 import com.park.dao.PosChargeDataDAO;
 import com.park.dao.PosdataDAO;
 import com.park.model.CarportStatusDetail;
+import com.park.model.ChargedataParkWithTable;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Feecriteriontopark;
@@ -38,6 +40,7 @@ import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
+import com.park.service.ChargeDataService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeecriterionToParkService;
 import com.park.service.JsonUtils;
@@ -81,6 +84,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	private OutsideParkInfoService outsideParkInfoService;
 
 	@Autowired
+	ChargeDataService chargedataService;
+	
+	@Autowired
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
@@ -114,6 +120,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public int insert(PosChargeData item) {
+		
+		Parknoticeauthority parknoticeauthority=parkNoticeAuthorityService.getByParkId(item.getParkId()).get(0);
+		if (parknoticeauthority!=null&&parknoticeauthority.getWeixin()==true) {
+			Map<String, String> argstoali = new HashMap<>();
+			argstoali.put("parkName", item.getParkDesc());
+			argstoali.put("carNumber", item.getCardNumber());
+			argstoali.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinEnterInfo");
+		}
+		int num=chargeDao.insert(item);
+		//在插入之后 要不获取不到id
 		if (ArrayUtils.contains(Constants.parkToQuene, item.getParkId())) {
 			PosChargeData tmPosChargeData = item;
 			tmPosChargeData.setExitDate1(tmPosChargeData.getEntranceDate());
@@ -127,15 +144,33 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			System.out.println("active插入后" + new Date().getTime());
 		}
-		Parknoticeauthority parknoticeauthority=parkNoticeAuthorityService.getByParkId(item.getParkId()).get(0);
-		if (parknoticeauthority!=null&&parknoticeauthority.getWeixin()==true) {
-			Map<String, String> argstoali = new HashMap<>();
-			argstoali.put("parkName", item.getParkDesc());
-			argstoali.put("carNumber", item.getCardNumber());
-			argstoali.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-			ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinEnterInfo");
+		if (num==1&&false) {
+			ChargedataParkWithTable chargedataParkWithTable=new ChargedataParkWithTable();
+			chargedataParkWithTable.setTableName("chargeData_"+item.getParkId());
+			chargedataParkWithTable.setParkdesc(item.getParkDesc());
+			chargedataParkWithTable.setParkid(item.getParkId());
+			chargedataParkWithTable.setCarnumber(item.getCardNumber());
+			chargedataParkWithTable.setChangemoney((int) (item.getChangeMoney()*100));
+			chargedataParkWithTable.setChargemoney((int) (item.getChargeMoney()*100));
+			chargedataParkWithTable.setGivenmoney((int) (item.getGivenMoney()*100));
+			chargedataParkWithTable.setInpictureurl(item.getUrl());
+			chargedataParkWithTable.setOperatorid(item.getOperatorId());
+			chargedataParkWithTable.setIslargecar(item.getIsLargeCar());
+			chargedataParkWithTable.setIsonetimeexpense(item.getIsOneTimeExpense()>0?true:false);
+			chargedataParkWithTable.setUnpaidmoney((int) (item.getUnPaidMoney()*100));
+			chargedataParkWithTable.setPaidcompleted(item.isPaidCompleted());
+			chargedataParkWithTable.setRejectreason(item.getRejectReason());
+			chargedataParkWithTable.setDiscount((int) (item.getDiscount()*100));
+			chargedataParkWithTable.setEntrancedate(item.getEntranceDate());
+			chargedataParkWithTable.setDiscounttype(String.valueOf(item.getDiscountType()));
+		//	chargedataService.insertTable(chargedataParkWithTable);
 		}
-		return chargeDao.insert(item);
+		if (num==1) {
+			Park park=parkService.getParkById(item.getParkId());
+		//	park.setPortLeftCount();
+			parkService.updateLeftPortCount(park.getId(),(park.getPortLeftCount()-1)>=0?(park.getPortLeftCount()-1):0);
+		}
+		return num;
 	}
 
 	@Override
@@ -630,10 +665,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
-			charge.setChargeMoney(criterion.getMaxexpense());
+		if (expense > criterion.getMaxexpense()) {
+			//charge.setChargeMoney(criterion.getMaxexpense());
+			expense=criterion.getMaxexpense();
 		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		
 
 	}
 
@@ -1399,10 +1436,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
-			charge.setChargeMoney(criterion.getMaxexpense());
+		if (expense > criterion.getMaxexpense()) {
+			expense=criterion.getMaxexpense();
 		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		
 
 	}
 
@@ -1436,10 +1474,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
-			charge.setChargeMoney(criterion.getMaxexpense() * 2);
+		if (expense > criterion.getMaxexpense()) {
+			expense=criterion.getMaxexpense();
 		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+//		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
+//			charge.setChargeMoney(criterion.getMaxexpense() * 2);
+//		}
 
 	}
 

@@ -42,6 +42,7 @@ import com.park.model.Street;
 import com.park.service.AreaService;
 import com.park.service.AuthorityService;
 import com.park.service.ChannelService;
+import com.park.service.HardwareService;
 import com.park.service.ParkService;
 import com.park.service.StreetService;
 import com.park.service.UserPagePermissionService;
@@ -64,7 +65,8 @@ public class ParkController {
 	ChannelService channelService;
 	@Autowired
 	private UserPagePermissionService pageService;
-	
+	@Autowired
+	HardwareService hardwareService;
 	private static Log logger = LogFactory.getLog(ParkController.class);
 	
 	@RequestMapping(value = "/parks", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
@@ -141,7 +143,24 @@ public class ParkController {
 		ret.put("message", "get park success");
 		return Utility.gson.toJson(ret);
 	}
-
+	@RequestMapping(value = "/getParkByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkByMac(@RequestBody Map<String, String> args){		
+		Map<String, Object> ret = new HashMap<String, Object>();
+		String mac = args.get("mac");
+		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
+			ret.put("status", 1003);
+			return Utility.gson.toJson(ret);
+		}
+		Map<String, Object> info = infos.get(0);
+		Integer parkId = (Integer) info.get("parkID");
+		Park park = parkService.getParkById(parkId);			
+		ret.put("status", 1001);
+		ret.put("body", park);
+		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
 	@RequestMapping(value = "/getOutsideParkByStreetId/{streetId}", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getOutsideParkByStreetId(@PathVariable("streetId")int streetId){		
