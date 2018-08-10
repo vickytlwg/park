@@ -69,7 +69,7 @@
  //       $('#jrqf').show();
         /*$('#cwdz').show();*/
         $('#cwdz2').show();
-        $('#sfyyj').show();
+       /* $('#sfyyj').show();*/
 
        /* $('#cwlszd').show();*/
         $('#tcjlcx').show();
@@ -123,7 +123,7 @@
         /*$('#cwlszd').show();*/
         $('#tcjlcx').show();
      //   $('#tpccx').show();
-        $('#sfyyj').show();
+       // $('#sfyyj').show();
         //  $('#zjm').show();
   //      $('#tccfb').show();
    //     $('#crkgl').show();
