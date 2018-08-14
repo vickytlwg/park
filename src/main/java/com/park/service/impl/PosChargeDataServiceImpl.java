@@ -294,7 +294,47 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		this.update(lastCharge);
 		return lastCharge;
 	}
+	
+	@Override
+	public PosChargeData payWithOperatorId(String cardNumber, double money,String operatorId) throws Exception {
+		double theMoney = money;
+		List<PosChargeData> charges = this.getCharges(cardNumber);
+		// for (PosChargeData charge : charges) {
+		// if (money >= charge.getUnPaidMoney()) {
+		// money -= charge.getUnPaidMoney();
+		// charge.setPaidCompleted(true);
+		// this.update(charge);
+		// }
+		// }
+		int count = charges.size();
+		PosChargeData lastCharge = charges.get(0);
+		money -= lastCharge.getUnPaidMoney();
 
+		// Outsideparkinfo
+		// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+		if (money >= 0) {
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			lastCharge.setPaidCompleted(true);
+			DecimalFormat df = new DecimalFormat("0.00");
+			String data = df.format(lastCharge.getChangeMoney() + money);
+			lastCharge.setChangeMoney(Double.parseDouble(data));
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			// outsideparkinfo.setPossigndate(new Date());
+
+		} else {
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney() - theMoney);
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+theMoney));
+			// outsideparkinfo.setPossigndate(new Date());
+		}
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		lastCharge.setOperatorId(operatorId);
+		this.update(lastCharge);
+		return lastCharge;
+	}
+	
 	@Override
 	public void calExpenseMulti(PosChargeData charge, Date exitDate, Boolean isQuery,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 

@@ -309,7 +309,8 @@ public class ExcelExportService {
 				date=sdf.format(posdata.getEndtime());
 			}	
 			cell13.setCellValue(date);
-
+			
+			
 		}
 	}
 	public void produceExceldataPosChargeData(String title, String[] headers, List<PosChargeData> dataset,
@@ -416,6 +417,10 @@ public class ExcelExportService {
 					XSSFCell cell12= row1.createCell(11);				
 					cell12.setCellStyle(style2);
 					cell12.setCellValue(posdata.getRejectReason());
+					
+					XSSFCell cell13 = row1.createCell(12);				
+					cell13.setCellStyle(style2);
+					cell13.setCellValue(posdata.getDiscount());
 					
 				}
 				

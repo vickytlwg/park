@@ -164,10 +164,10 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
-				Poschargemac poschargemac = new Poschargemac();
-				poschargemac.setMacidenter((int) info.get("macId"));
-				poschargemac.setPoschargeid(charge.getId());
-				posChargeMacService.insertSelective(poschargemac);
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidenter((int) info.get("macId"));
+//				poschargemac.setPoschargeid(charge.getId());
+//				posChargeMacService.insertSelective(poschargemac);
 				}
 		}else {
 			List<PosChargeData> queryCharges = chargeSerivce.getDebt(cardNumber);
@@ -398,10 +398,10 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
-				Poschargemac poschargemac = new Poschargemac();
-				poschargemac.setMacidenter((int) info.get("macId"));
-				poschargemac.setPoschargeid(charge.getId());
-				posChargeMacService.insertSelective(poschargemac);
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidenter((int) info.get("macId"));
+//				poschargemac.setPoschargeid(charge.getId());
+//				posChargeMacService.insertSelective(poschargemac);
 				try {
 
 					if (!parktoaliparks.isEmpty()) {
@@ -720,11 +720,14 @@ public class BarrierChargeController {
 				}
 			}
 			if (num == 1) {
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidout((int) info.get("macId"));
+//				poschargemac.setPoschargeid(payRet.getId());
+//				posChargeMacService.updateByPosChargeId(poschargemac);
 				Poschargemac poschargemac = new Poschargemac();
 				poschargemac.setMacidout((int) info.get("macId"));
 				poschargemac.setPoschargeid(payRet.getId());
-				posChargeMacService.updateByPosChargeId(poschargemac);
-
+				posChargeMacService.insertSelective(poschargemac);
 				logger.info(cardNumber + "出场成功!" + dataMap.toString());
 				
 				parkService.updateLeftPortCount(parkId, park.getPortLeftCount()+1);
@@ -960,10 +963,10 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
-				Poschargemac poschargemac = new Poschargemac();
-				poschargemac.setMacidenter((int) info.get("macId"));
-				poschargemac.setPoschargeid(charge.getId());
-				posChargeMacService.insertSelective(poschargemac);
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidenter((int) info.get("macId"));
+//				poschargemac.setPoschargeid(charge.getId());
+//				posChargeMacService.insertSelective(poschargemac);
 				try {
 
 					if (!parktoaliparks.isEmpty()) {
@@ -1251,10 +1254,7 @@ public class BarrierChargeController {
 
 		
 			
-			// 发送到队列
-			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
-				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
-			}
+		
 		
 			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
 				Map<String, String> argstoali = new HashMap<>();
@@ -1288,13 +1288,17 @@ public class BarrierChargeController {
 				logger.info(cardNumber+"免密开闸");
 				payRet.setPayType(7);
 			}
+			// 发送到队列
+			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
+				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
+			}
 			num = chargeSerivce.update(payRet);
 			if (num == 1) {
 				Poschargemac poschargemac = new Poschargemac();
 				poschargemac.setMacidout((int) info.get("macId"));
 				poschargemac.setPoschargeid(payRet.getId());
-				posChargeMacService.updateByPosChargeId(poschargemac);
-
+				posChargeMacService.insertSelective(poschargemac);
+				
 				logger.info(cardNumber + "出场成功!" + dataMap.toString());
 				
 				parkService.updateLeftPortCount(parkId, park.getPortLeftCount()+1);

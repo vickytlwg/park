@@ -147,7 +147,7 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 			}
 			String enterTimeStr = ((String) data.get("enterTime")).replace("/", "-");
 			lastCharge.setEntranceDate(enterTimeStr);
-			lastCharge.setExitDate1(new Date());
+		//	lastCharge.setExitDate1(new Date());
 			lastCharge.setOperatorId((String) data.get("orderNo"));
 			poschargedataService.insert(lastCharge);
 			charges = poschargedataService.queryDebt(carNumber, new Date());
