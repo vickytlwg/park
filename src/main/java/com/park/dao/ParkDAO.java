@@ -20,6 +20,8 @@ public interface ParkDAO {
 	
 	public List<ParkDetail> getParkByName(String name);
 	
+	public List<ParkDetail> getParkByNameandParkName(@Param("name")String name);
+	
 	public List<ParkDetail> getParkDetail(@Param("low")int low, @Param("count")int count);
 	
 	public List<ParkDetail> getOutsideParkDetail(@Param("low")int low, @Param("count")int count);

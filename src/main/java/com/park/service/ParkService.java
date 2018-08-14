@@ -25,6 +25,8 @@ public interface ParkService {
 	
 	public List<ParkDetail> getParkByName(String name);
 	
+	public List<ParkDetail> getParkByNameandParkName(String name);
+	
 	public List<ParkDetail> getParkDetail(int low, int count);
 	
 	public List<ParkDetail> getOutsideParkDetail(int low, int count);

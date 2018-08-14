@@ -9,12 +9,26 @@
 		<result property="username" column="username" />
 		<result property="password" column="password"/>
 		<result property="role" column="role" />
-	</resultMap>   
-
+	</resultMap>
+	
 	<select id="getUserPasswd" parameterType="java.lang.String" resultType="java.lang.String">
 		select password from authUsers where username=#{param1}
 	</select>
 	
+	<select id="getParkByNameandParkId" resultMap="AuthUserMapper">
+		select a1.id,a1.username,a1.`password`,a1.role,p3.name 
+		from authUsers a1
+		left join userPark u2 on a1.id=u2.userId 
+		left join park p3 on u2.parkId=p3.id 
+		where a1.username LIKE '%${param1}%' or p3.name LIKE '%${param1}%'
+	</select>
+	<!-- <select id="getParkByName" resultMap="ParkMapper">
+		select a1.id,a1.username,a1.`password`,a1.role,p3.name 
+		from authUsers a1
+		left join userPark u2 on a1.id=u2.userId 
+		left join park p3 on u2.parkId=p3.id 
+		where p3.name LIKE '%${name}%' 
+	</select> -->
 	
 	<select id="getUsers" resultMap="AuthUserMapper">
 		select * from authUsers

@@ -10,6 +10,44 @@
 		bindAddButton();
 		bindDeleteButton();
 		bindAddPageRadio();
+		bindSearchPark();
+	};
+	
+	
+	var bindSearchPark = function(){
+		$('#searchContent').keyup(function (event) {
+    if (event.keyCode == "13") {
+    var val = $('#searchContent').val();
+    if(val!="")
+    searchPark(val);
+ }
+});
+		$('#searchButton').on('click', $(this), function(){
+			var val = $('#searchContent').val();
+			if(val==""||val==null)
+			{
+			    return;
+			}
+			searchPark(val);
+			
+		});
+	};
+	
+	var searchPark = function(username){
+		$.ajax({
+			url: $.fn.config.webroot + "/getParkByNameandParkId",
+			type: 'post',	
+			contentType: 'application/json;charset=utf-8',	
+			datatype: 'json',
+			data:$.toJSON({"username":username}),
+			success: function(data){
+				filluserTbody(data);
+				$('#pagination').html('');
+			},
+			error: function(data){
+				errorHandle(data);
+			}
+		});
 	};
 	
 	/**bind tr click*/
@@ -74,9 +112,17 @@
 	
 	var filluserTbody = function(data){
 		var userBody = $("#userBody");
-		$.fn.loader.removeLoader($('#userDiv'));
+		$.fn.loader.removeLoader($('#userDiv')); 
 		userBody.html('');
 		data = data["body"];
+/*		console.log("data---iiii--");
+		console.log("data.body---iiii--"+data.body);
+		console.log("data-----"+data);
+		console.log("data-----"+data.length);*/
+//		var cc = jQuery.parseJSON(data);
+//		console.log("data------cc----"+cc);
+		console.log("data-----"+data.length);
+		
 		for(var i = 0; i < data.length; i++){
 			var tr = $("<tr></tr>");
 			tr.attr("role", data[i]['role']);

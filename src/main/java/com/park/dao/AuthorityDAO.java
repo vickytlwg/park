@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.AuthUser;
+import com.park.model.AuthUserDetail;
 
 @Repository
 public interface AuthorityDAO {
@@ -25,6 +26,8 @@ public interface AuthorityDAO {
 	public int deleteUser(int id);
 	
 	public int updateUser(AuthUser user);
+	
+	public List<AuthUser> getParkByNameandParkId(@Param("username")String username);
 	
 	
 }

@@ -27,11 +27,16 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserDetail;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
+import com.park.model.Park;
+import com.park.model.ParkDetail;
+import com.park.model.PosChargeData;
 import com.park.model.User;
 import com.park.model.UserDetail;
 import com.park.service.AuthorityService;
+import com.park.service.ParkService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.UserParkService;
+import com.park.service.UserRoleService;
 import com.park.service.UserService;
 import com.park.service.Utility;
 
@@ -48,8 +53,48 @@ public class ParkUserController {
 	UserParkService userParkService;
 	@Autowired
 	private UserPagePermissionService pageService;
+	@Autowired
+	private UserRoleService userRoleService;
+	@Autowired
+	private ParkService parkService;
 	
 	private static Log logger = LogFactory.getLog(ParkUserController.class);
+	
+	@RequestMapping(value = "/getParkByNameandParkId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkByNameandParkId(@RequestBody Map<String, Object> args){
+		String username = (String)args.get("username");
+		/*String name=(String)args.get("name");*/
+//		logger.info("get park with name: " + name);
+		List<AuthUser> queryname = authService.getParkByNameandParkId(username);
+		List<AuthUserDetail> userDetail = new ArrayList<AuthUserDetail>();
+		if(queryname != null){
+			if( queryname.size() != 0){
+				for(AuthUser user : queryname){
+					List<String> parkName = authService.getOwnUserParkName(user.getId());
+					userDetail.add(new AuthUserDetail(user, parkName));
+				}
+			}
+		}
+		return Utility.createJsonMsg("1001", "get user detail success", userDetail);
+	}
+	
+	/*@RequestMapping(value = "/getParkByNameandParkName", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkByNameandParkName(@RequestBody Map<String, Object> args){
+		String name = (String)args.get("name");
+		List<ParkDetail> parkname = parkService.getParkByNameandParkName(name);
+		List<AuthUserDetail> userDetail = new ArrayList<AuthUserDetail>();
+		if(parkname != null){
+			if( parkname.size() != 0){
+				for(ParkDetail park : parkname){
+					List<String> parkName = authService.getOwnUserParkName(park.getId());
+					userDetail.add(new AuthUserDetail(park, parkName));
+				}
+			}
+		}
+		return Utility.createJsonMsg("1001", "get user detail success", userDetail);
+	}*/
 	
 	@RequestMapping(value = "/parkUsers", produces = {"application/json;charset=UTF-8"})
 	public String getUsers(ModelMap modelMap, HttpServletRequest request, HttpSession session){
@@ -176,6 +221,7 @@ public class ParkUserController {
 	@ResponseBody
 	public String deletePark(@PathVariable int Id){
 		 userParkService.deleteUserParkMap(Id);
+		 userRoleService.deleteUserRoleMap(Id);
 		 authService.deleteUser(Id);
 		 return Utility.createJsonMsg("1001", "delete success");
 	}

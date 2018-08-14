@@ -3,6 +3,8 @@ package com.park.service;
 import java.util.List;
 
 import com.park.model.AuthUser;
+import com.park.model.AuthUserDetail;
+import com.park.model.ParkDetail;
 
 public interface AuthorityService {
 
@@ -27,4 +29,6 @@ public interface AuthorityService {
 	public int deleteUser(int id);
 	
 	public int updateUser(AuthUser user, List<Integer> parkIds);
+	
+	public List<AuthUser> getParkByNameandParkId(String username);
 }
