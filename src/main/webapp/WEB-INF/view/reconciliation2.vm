@@ -20,7 +20,7 @@
 					<div class="box-body" style="height: 580px">
 						<div class="menu_img">
 							<ul class="imglist"
-								style="height: 600px; width: 900px; margin-top: 100px;">
+								style="height: 600px; width: 900px; margin-top: 40px;">
 								<li class="recod"><a href="/park/pos/charge/record"
 									style="background: url(/park/img/bak1a.png) no-repeat center center;">停车记录</a>
 								<li class="recod"><a href="/park/pos/charge/flowbill"
@@ -32,6 +32,19 @@
 								<li class="recod"><a href="/park/lepay/record/"
 									style="background: url(/park/img/bak4a.png) no-repeat center center;">第三方支付</a>
 								</li>
+								<li class="recod"><a
+									href="/park/pos/charge/feeoperatorCharge"
+									style="background: url(/park/img/bak5a.png) no-repeat center center;">收费员业绩</a>
+								</li>
+								<li class="recod"><a href="#"
+									style="background: url(/park/img/bak3.png) no-repeat center center;">停车记录</a>
+								</li>
+								<li class="recod"><a href="#"
+									style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>
+								</li>
+								<li class="recod"><a href="#"
+									style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -40,7 +53,7 @@
 		</div>
 
 
-	
+
 
 	</section>
 </div>
