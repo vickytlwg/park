@@ -278,6 +278,13 @@ public class ParkServiceImpl implements ParkService{
 	}
 
 
+	@Override
+	public List<ParkDetail> getParkByNameandParkName(String name) {
+		// TODO Auto-generated method stub
+		return parkDAO.getParkByNameandParkName(name);
+	}
+
+
 
 	
 

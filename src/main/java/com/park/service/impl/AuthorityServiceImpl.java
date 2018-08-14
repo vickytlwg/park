@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.park.dao.AuthorityDAO;
 import com.park.dao.UserParkDAO;
 import com.park.model.AuthUser;
+import com.park.model.AuthUserDetail;
 import com.park.model.UserPark;
 import com.park.service.AuthorityService;
 import com.park.service.UserParkService;
@@ -117,6 +118,13 @@ public class AuthorityServiceImpl implements AuthorityService{
 	public List<AuthUser> getUsersByCount(int start, int count) {
 		// TODO Auto-generated method stub
 		return authDao.getUsersByCount(start, count);
+	}
+
+
+	@Override
+	public List<AuthUser> getParkByNameandParkId(String username) {
+		// TODO Auto-generated method stub
+		return authDao.getParkByNameandParkId(username);
 	}
 
 	
