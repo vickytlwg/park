@@ -179,7 +179,7 @@ public class AreaController {
 			}
 		}
 		
-		if (areasResult!=null) {
+		if (!areasResult.isEmpty()) {
 			result.put("status", 1001);
 			result.put("body", areasResult);
 		}

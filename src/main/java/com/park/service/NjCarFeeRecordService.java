@@ -20,4 +20,6 @@ public interface NjCarFeeRecordService {
 	    List<Njcarfeerecord> selectByCarNumber(String carNumber);
 	    
 	    List<Njcarfeerecord> selectByTradeNumber(String tradeNumber);
+	    
+	    List<Njcarfeerecord> selectByCount(int count);
 }

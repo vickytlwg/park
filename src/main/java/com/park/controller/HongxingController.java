@@ -162,7 +162,7 @@ public class HongxingController {
 		AlipayTradeCreateRequest request5 = new AlipayTradeCreateRequest();
 		String out_trade_no = new Date().getTime() + "parkingfee";
 
-		poschargedataService.getCharges(lastCharge.getCardNumber());
+	//	poschargedataService.getCharges(lastCharge.getCardNumber());
 		String total_amount = String.valueOf(lastCharge.getChargeMoney());
 		request5.setNotifyUrl("http://www.iotclouddashboard.com/park/alipay/notifyUrl");
 		request5.setBizContent(

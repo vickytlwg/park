@@ -730,6 +730,22 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		return charges;
 	}
+	@Override
+	public List<PosChargeData> queryDebtWithParkId(String cardNumber, Date exitDate,Integer parkId) throws Exception {
+		// TODO Auto-generated method stub
+		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, parkId);
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				Park park = parkService.getParkById(charge.getParkId());
+				if (park.getType() == 1) {
+					this.calExpenseType1(charge, exitDate, true);
+				} else {
+					this.calExpense(charge, exitDate, true);
+				}
+			}
+		}
+		return charges;
+	}
 
 	@Override
 	public List<PosChargeData> selectPosdataByParkAndRange(Date startDay, Date endDay, int parkId) {
@@ -1379,11 +1395,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getDebtWithData(String cardNumber, List<Parktoalipark> parktoaliparks,
 			List<Monthuser> monthusers, Park park,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+		logger.info(""+cardNumber+"取得未付款记录"+ charges.size()+"条");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		if (charges.isEmpty()) {
 			return charges;
 		}
 		for (PosChargeData charge : charges) {
+			logger.info(charge.getCardNumber()+"入场"+charge.getEntranceDate()+" "+charge.getParkDesc());
 			if (charge.getExitDate() == null) {
 				tmPosChargeDatas.add(charge);
 			}
@@ -1447,6 +1465,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public void calExpenseSmallCarWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
 			FeeCriterion criterion) {
+		
 		charge.setExitDate1(exitDate);
 		double expense = 0;
 		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
@@ -1481,7 +1500,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		charge.setChargeMoney(expense + charge.getChargeMoney());
 		
-
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1521,7 +1540,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 //		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
 //			charge.setChargeMoney(criterion.getMaxexpense() * 2);
 //		}
-
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1552,7 +1571,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
 			isMultiCarsOneCarport = true;
 		}
-
+		logger.info(charge.getCardNumber()+" 是否月卡:"+isRealMonthUser+" 计费标准:"+criterion.getName());
 		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
 				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
 			isRealMonthUser = false;
@@ -1596,6 +1615,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		}
 		if (isRealMonthUser) {
+			logger.info(charge.getCardNumber()+"月卡结算完毕!");
 			charge.setChargeMoney(0);
 			charge.setUnPaidMoney(0);
 			charge.setExitDate1(exitDate);

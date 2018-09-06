@@ -60,4 +60,10 @@ public class NjCarFeeRecordServiceImpl implements NjCarFeeRecordService {
 		return njCarFeeRecordMapper.selectByTradeNumber(tradeNumber);
 	}
 
+	@Override
+	public List<Njcarfeerecord> selectByCount(int count) {
+		// TODO Auto-generated method stub
+		return njCarFeeRecordMapper.selectByCount(count);
+	}
+
 }

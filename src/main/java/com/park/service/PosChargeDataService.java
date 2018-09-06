@@ -143,6 +143,7 @@ public interface PosChargeDataService {
 	void calExpenseMulti(PosChargeData charge, Date exitDate, Boolean isQuery, Boolean isMultiFeeCtriterion, int carType)
 			throws Exception;
 	PosChargeData payWithOperatorId(String cardNumber, double money, String operatorId) throws Exception;
+	List<PosChargeData> queryDebtWithParkId(String cardNumber, Date exitDate, Integer parkId) throws Exception;
 	
 	
 

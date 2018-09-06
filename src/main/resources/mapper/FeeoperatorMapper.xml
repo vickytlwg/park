@@ -15,10 +15,11 @@
     <result column="registerDate" property="registerdate" jdbcType="TIMESTAMP" />
     <result column="other" property="other" jdbcType="VARCHAR" />
     <result column="IDNumber" property="idnumber" jdbcType="CHAR" />
+    <result column="money" property="money" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, account, name, passwd, phone, signStatus, lastSignDate, lastStreetId, lastPosNum, 
-    lastParkId, registerDate, other, IDNumber
+    lastParkId, registerDate, other, IDNumber, money
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -35,12 +36,12 @@
       passwd, phone, signStatus, 
       lastSignDate, lastStreetId, lastPosNum, 
       lastParkId, registerDate, other, 
-      IDNumber)
+      IDNumber, money)
     values (#{id,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{passwd,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{signstatus,jdbcType=BIT}, 
       #{lastsigndate,jdbcType=TIMESTAMP}, #{laststreetid,jdbcType=INTEGER}, #{lastposnum,jdbcType=VARCHAR}, 
       #{lastparkid,jdbcType=INTEGER}, #{registerdate,jdbcType=TIMESTAMP}, #{other,jdbcType=VARCHAR}, 
-      #{idnumber,jdbcType=CHAR})
+      #{idnumber,jdbcType=CHAR}, #{money,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.park.model.Feeoperator" >
     insert into feeOperator
@@ -84,6 +85,9 @@
       <if test="idnumber != null" >
         IDNumber,
       </if>
+      <if test="money != null" >
+        money,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -124,6 +128,9 @@
       </if>
       <if test="idnumber != null" >
         #{idnumber,jdbcType=CHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -166,6 +173,9 @@
       <if test="idnumber != null" >
         IDNumber = #{idnumber,jdbcType=CHAR},
       </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -182,7 +192,8 @@
       lastParkId = #{lastparkid,jdbcType=INTEGER},
       registerDate = #{registerdate,jdbcType=TIMESTAMP},
       other = #{other,jdbcType=VARCHAR},
-      IDNumber = #{idnumber,jdbcType=CHAR}
+      IDNumber = #{idnumber,jdbcType=CHAR},
+      money = #{money,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   

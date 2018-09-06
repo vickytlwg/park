@@ -32,8 +32,18 @@ public class Feeoperator {
     private String other;
 
     private String idnumber;
+    
+    private Integer money=0;
 
-    public Integer getId() {
+    public Integer getMoney() {
+		return money;
+	}
+
+	public void setMoney(Integer money) {
+		this.money = money;
+	}
+
+	public Integer getId() {
         return id;
     }
 

@@ -516,7 +516,7 @@
 		$('input#parkName').val($(tds[2]).text());	
 		$('input#street').val($(tds[3]).text());	
 		$('input#channelCount').val($(tds[4]).text());
-		$('input#portCount').val($(tds[5]).text());
+		$('input#portCount').val($(tds[4]).text());
 		$('input#portLeftCount').val($(tds[5]).text());		
 		if($('select#feeCriterion option').length == 0)
 			initFeeCriterionSelect($(checkedTr).attr('feeCriterionId'));

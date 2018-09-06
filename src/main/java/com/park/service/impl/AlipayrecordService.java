@@ -105,9 +105,17 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 		AlipayChargeInfo alipayChargeInfo=new AlipayChargeInfo();
 		alipayChargeInfo.setAlipayClient(alipayClient);
 		alipayChargeInfo.setServiceProvideId("2088721707329444");
+		if (!charges.isEmpty()&&charges.get(0).getParkDesc()!=null&&charges.get(0).getParkDesc().contains("美凯龙")) {
+			charges.clear();
+		}
 		if (charges.isEmpty()) {//查找红星美凯龙的支付信息
 			alipayChargeInfo.setServiceProvideId("2088821579783141");
-			Njcarfeerecord njcarfeerecord = njCarFeeRecordService.selectByCarNumber(carNumber).get(0);
+			List<Njcarfeerecord> njcarfeerecords=njCarFeeRecordService.selectByCarNumber(carNumber);
+			if (njcarfeerecords.isEmpty()) {
+				alipayChargeInfo.setValidate(false);
+				return alipayChargeInfo;
+			}
+			Njcarfeerecord njcarfeerecord=njcarfeerecords.get(0);
 			String parkKey = "c1648ccf33314dc384155896cf4d00b9";
 			if (njcarfeerecord.getParkname().contains("家乐福")) {
 				parkKey = "ff8993a40b3a4249924f34044403b5bf";
@@ -120,19 +128,23 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 			} catch (Exception e) {
 				// TODO: handle exception
 				alipayChargeInfo.setValidate(false);
+				return alipayChargeInfo;
 			}
 			if (data == null) {
 				alipayChargeInfo.setValidate(false);
+				return alipayChargeInfo;
 			}
 			logger.info("红星费用:"+data.toString());
 			try {
 				String code = hongxingService.creatPayOrder((String) data.get("orderNo"), parkKey);
 				if (code == null) {
 					alipayChargeInfo.setValidate(false);
+					return alipayChargeInfo;
 				}
 				orderCreate = code;
 			} catch (Exception e) {
 				alipayChargeInfo.setValidate(false);
+				return alipayChargeInfo;
 			}
 			PosChargeData lastCharge = new PosChargeData();
 			lastCharge.setRejectReason(orderCreate);
@@ -150,9 +162,9 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 		//	lastCharge.setExitDate1(new Date());
 			lastCharge.setOperatorId((String) data.get("orderNo"));
 			poschargedataService.insert(lastCharge);
-			charges = poschargedataService.queryDebt(carNumber, new Date());
-			lastCharge = charges.get(0);
-			alipayChargeInfo.setPosChargeData(charges.get(0));
+		//	charges = poschargedataService.queryDebt(carNumber, new Date());
+		//	lastCharge = charges.get(0);
+			alipayChargeInfo.setPosChargeData(lastCharge);
 			
 			
 		}

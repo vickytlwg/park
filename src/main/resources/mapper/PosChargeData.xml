@@ -89,7 +89,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 an
 	</select>
 	<select id="getDebtWithParkId" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted,discount,discountType,other,other2,outUrl
-FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{carNumber} and parkId=#{parkId} order by id desc limit 1
+FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where paidCompleted = 0 and cardNumber=#{carNumber} and parkId=#{parkId} and posChargeData.id>1100000 order by id desc limit 3
 	</select>
 	<select id="getLastRecord" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted,discount,discountType,other,other2,outUrl

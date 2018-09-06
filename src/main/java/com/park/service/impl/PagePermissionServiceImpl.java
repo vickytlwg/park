@@ -84,7 +84,12 @@ public class PagePermissionServiceImpl implements PagePermissionService{
 
 	@Override
 	public int updateUserRole(int userId, List<Integer> roleIds) {
-		this.deleteUserRole(userId);
+		try {
+			this.deleteUserRole(userId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		for(Integer roleId : roleIds){
 			UserRole userRole = new UserRole();
 			userRole.setUserId(userId);

@@ -178,6 +178,622 @@ public class BarrierChargeController {
 	public String touched(@RequestBody Map<String, String> args) throws Exception {
 		String mac = args.get("mac");
 		String cardNumber = args.get("cardNumber");
+		cardNumber=cardNumber.trim();
+		logger.info("touch车辆" + cardNumber);
+
+		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
+		PosChargeData charge = new PosChargeData();
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
+			dataMap.put("status", 1003);
+			return Utility.gson.toJson(dataMap);
+		}
+		Map<String, Object> info = infos.get(0);
+		if (info == null) {
+			return Utility.createJsonMsg(1002, "fail");
+		}
+		int channelFlag = (int) info.get("channelFlag");
+		Integer parkId = (Integer) info.get("parkID");
+		// 相似车牌管理
+		List<Similarcarnumber> similarcarnumbers = similarCarNumberService.selectBySimilarCarNumberAndPark(cardNumber,
+				parkId);
+		if (!similarcarnumbers.isEmpty()) {
+			cardNumber = similarcarnumbers.get(0).getRealnumber();
+			logger.info("更正车牌:" + cardNumber);
+		}
+
+		List<Monthuser> monthusers = monthUserService.getByCarnumberAndPark(cardNumber, parkId);
+		Park park = parkService.getParkById(parkId);
+		List<Parkcarauthority> parkcarauthorities = parkCarAuthorityService.getByParkId(parkId);
+		if (parkcarauthorities.isEmpty()) {
+			return null;
+		}
+
+		dataMap.put("aT", "1");
+		
+		boolean isMonthUser = false;
+		boolean isRealMonthUser = false;
+		int monthUserType = 9;
+		Monthuser monthuserNow = null;
+		if (!monthusers.isEmpty()) {
+			isMonthUser = true;
+			for (Monthuser tmpMonthuser : monthusers) {
+				Long diff = (tmpMonthuser.getEndtime().getTime() - (new Date()).getTime());
+				monthuserNow = tmpMonthuser;
+				if (tmpMonthuser.getType() == 0) {// 月卡
+					monthUserType = 0;
+					if (diff > 0) {
+						int leftDays = (int) (diff / (1000 * 60 * 60 * 24));
+						dataMap.put("ds", String.valueOf(leftDays));
+						isRealMonthUser = true;
+						dataMap.put("eD", new SimpleDateFormat(Constants.DATEFORMAT).format(tmpMonthuser.getEndtime()));
+						break;
+					} else {
+						dataMap.put("ds", "-1");
+						dataMap.put("uT", "1");
+						monthUserType = 8; // 月卡过期
+					}
+
+				} else {
+					if (diff >= 0) {
+						monthUserType = tmpMonthuser.getType();
+						break;
+					} else {
+						isMonthUser = false;
+					}
+				}
+			}
+
+		}
+
+		if (!isMonthUser) {
+			dataMap.put("uT", "0");
+		} else {
+			// Monthuser monthuser=monthusers.get(0);
+			dataMap.put("uT", "1");
+			// 判断是否是预约车
+			if (monthUserType==1) {
+				dataMap.put("uT", "2");
+			}
+		}
+		List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
+		Boolean isMultiCarsOneCarport = false;
+		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
+			logger.info(cardNumber + "进入一位多车停车场");
+			isMultiCarsOneCarport = true;
+		}
+		Boolean isMultiFeeCtriterion = false;
+		if (park.getDescription() != null && park.getDescription().contains("多计费标准")) {
+			isMultiFeeCtriterion = true;
+		}
+		// 判断是否有多个车
+		List<Monthuser> realMonthUsers = new ArrayList<>();
+		if (monthuserNow != null && monthuserNow.getCardnumber() != null && !monthuserNow.getCardnumber().equals("")) {
+			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserNow.getParkid(),
+					monthuserNow.getCardnumber());
+			for (Monthuser monthuser : monthuserss) {
+				if (monthuser.getType().intValue() == 0) {
+					realMonthUsers.add(monthuser);
+				}
+			}
+		}
+		
+		Parknoticeauthority parknoticeauthority = parkNoticeAuthorityService
+				.getByParkId(parkId).get(0);
+		// 入口硬件
+		if (channelFlag == 1) {
+			if (largeCar == true) {
+				charge.setIsLargeCar(true);
+			}
+
+			charge.setParkDesc(park.getName() + "-临停车");
+			// 取得入口权限
+			Parkcarauthority parkcarauthority = parkcarauthorities.get(0);
+			for (Parkcarauthority tmParkcarauthority : parkcarauthorities) {
+				if (tmParkcarauthority.getChannel() == 1) {
+					parkcarauthority = tmParkcarauthority;
+					break;
+				}
+			}
+			
+			//贵州队列发送
+			if (parkId==334) {
+				Map<String, String> guiyang = new HashMap<>();
+				guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
+				guiyang.put("type", "in");
+				guiyang.put("plateNum", cardNumber);
+				guiyang.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
+			}
+			
+			switch (monthUserType) {
+			case 0:
+				charge.setParkDesc(park.getName() + "-包月车");
+				if (parkcarauthority.getMonth() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 1:
+				charge.setParkDesc(park.getName() + "-预约");
+				if (parkcarauthority.getYuyue() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 2:
+				charge.setParkDesc(park.getName() + "-包月A1");
+				if (parkcarauthority.getTypea() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 3:
+				charge.setParkDesc(park.getName() + "-包月A2");
+				if (parkcarauthority.getTypeb() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 4:
+				charge.setParkDesc(park.getName() + "-包月B");
+				if (parkcarauthority.getTypec() != true) {
+					dataMap.put("aT", "0");
+				}
+				break;
+			case 5:
+				charge.setParkDesc(park.getName() + "-包月D");
+				if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 6:
+				charge.setParkDesc(park.getName() + "-包月E");
+				if (parkcarauthority.getTypee() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 8:
+				charge.setParkDesc(park.getName() + "-包月过期");
+				if (parkcarauthority.getMonthexpired() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 9:
+				charge.setParkDesc(park.getName() + "-临停车");
+				if (parkcarauthority.getTemporary() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			default:
+				break;
+			}
+
+			dataMap.put("cT", "in");
+			charge.setCardNumber(cardNumber);
+			charge.setParkId(parkId);
+
+			// 判断包月车已入场
+
+			Boolean isMonthUserCarIn = false;
+			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
+				for (Monthuser tmMonthuser : realMonthUsers) {
+					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
+							isMonthUserCarIn = true;
+						}
+
+					}
+				}
+				monthuserNow.setPlatecolor("多车包月入场");
+				if (isMonthUserCarIn) {
+					charge.setParkDesc(park.getName() + "-包月转临停");
+					monthuserNow.setPlatecolor("包月转为临停");
+					dataMap.put("uT", "0");
+					try {
+						dataMap.remove("ds");
+						dataMap.remove("eD");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+				}
+				monthUserService.updateByPrimaryKeySelective(monthuserNow);
+			}
+
+			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			int num = chargeSerivce.insert(charge);
+			if (num == 1) {
+				//发送topic队列
+				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+					charge.setEntrance(true);
+					ActiveMqService.SendTopicWithMac(charge,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
+					}
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidenter((int) info.get("macId"));
+//				poschargemac.setPoschargeid(charge.getId());
+//				posChargeMacService.insertSelective(poschargemac);
+				try {
+
+					if (!parktoaliparks.isEmpty()) {
+						Parktoalipark parktoalipark = parktoaliparks.get(0);
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", parktoalipark.getAliparkingid());
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
+						
+					} else {
+						// Map<String, String> argstoali = new HashMap<>();
+						// argstoali.put("parking_id", "PI1501317472942184881");
+						// argstoali.put("car_number", cardNumber);
+						// argstoali.put("in_time", new
+						// SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new
+						// Date()));
+						// aliparkFeeService.parkingEnterinfoSync(argstoali);
+					}
+					
+					if (parknoticeauthority != null && parknoticeauthority.getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("in_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliEnterInfo");
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println(e);
+				}
+				logger.info(cardNumber + "入场成功!" + dataMap.toString());
+				ret.put("status", 1001);
+			} else {
+				ret.put("status", 1002);
+			}
+			return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+		} else { // 出场硬件
+			dataMap.put("cT", "out");
+			dataMap.put("pT", "9");
+			List<PosChargeData> queryCharges = null;
+			String exitDate = (String) args.get("exitDate");
+			logger.info(cardNumber + "开始出场");
+			if (monthuserNow!=null) {
+				realMonthUsers.add(monthuserNow);
+			}
+			
+			// 取得出口权限
+			Parkcarauthority parkcarauthority = parkcarauthorities.get(0);
+			for (Parkcarauthority tmParkcarauthority : parkcarauthorities) {
+				if (tmParkcarauthority.getChannel() == 0) {
+					parkcarauthority = tmParkcarauthority;
+					break;
+				}
+			}
+
+			if (exitDate != null) {
+				// Date eDate = new
+				// SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+				try {
+					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
+					// Date().getTime()+"\n");
+					// queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
+
+					// System.out.println("出场时间为空,getDebt计算完毕: "+new
+					// Date().getTime()+"\n");
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					return Utility.createJsonMsg(1002, "获取费用出现异常");
+				}
+			} else {
+				try {
+					// System.out.println("出场时间不为空,将要进行getDebt计算: "+new
+					// Date().getTime()+"\n");
+					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
+					// System.out.println("出场时间不为空,getDebt计算完毕: "+new
+					// Date().getTime()+"\n");
+				} catch (Exception e) {
+					return Utility.createJsonMsg(1002, e);
+				}
+			}
+			logger.info(cardNumber + "计费结束!");
+			double shouldChargeMoney=0;
+			// 如果没有未缴费 判断最近一次缴费时间是否超过15分钟
+			if (queryCharges.isEmpty()) {
+				logger.info(cardNumber + "没有未缴费!");
+				FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
+				// if (largeCar==true) {
+				// charge.setIsLargeCar(true);
+				// }
+				// charge.setCardNumber(cardNumber);
+				// charge.setParkId(parkId);
+				// charge.setParkDesc(parkName);
+				// charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd
+				// HH:mm:ss").format(new Date()));
+				// chargeSerivce.insert(charge);
+				/*
+				 * if (!parktoaliparks.isEmpty()) { Parktoalipark
+				 * parktoalipark=parktoaliparks.get(0); Map<String, String>
+				 * argstoali=new HashMap<>(); argstoali.put("parking_id",
+				 * parktoalipark.getAliparkingid()); argstoali.put("car_number",
+				 * cardNumber); argstoali.put("out_time", new SimpleDateFormat(
+				 * "yyyy-MM-dd HH:mm:ss").format(new Date()));
+				 * System.out.println("支付宝同步出场计算前: "+new Date().getTime()+"\n");
+				 * aliparkFeeService.parkingExitinfoSync(argstoali);
+				 * System.out.println("支付宝同步出场计算后: "+new Date().getTime()+"\n");
+				 * }
+				 */
+				if (isRealMonthUser && realMonthUsers.size() == 1) {
+					// dataMap.put("my", "0.0");
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				// 以下就是查询停车费状态的部分迁移
+				List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(cardNumber, 1, parkId);
+				if (posChargeDataList.isEmpty()) {
+					dataMap.put("my", "0.0");
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				PosChargeData posChargeData = posChargeDataList.get(0);
+				//支付类型
+				dataMap.put("pT", String.valueOf(posChargeData.getPayType()));
+				if (posChargeData.getExitDate()==null) {
+					posChargeData.setExitDate1(new Date());
+				}
+				
+				//发送到队列
+
+				if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true) {
+					Map<String, String> argstoali = new HashMap<>();
+					argstoali.put("parkName", posChargeData.getParkDesc());
+					argstoali.put("carNumber", posChargeData.getCardNumber());
+					argstoali.put("enterTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getEntranceDate()));
+					argstoali.put("exitTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getExitDate()));
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+				}
+				
+				Date payDate = new Date();
+				if (posChargeData.getPayType() == 0) {
+					List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
+					if (alipayrecords.isEmpty()) {
+						// dataMap.put("my", "0.0");
+						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+					}
+					payDate = alipayrecords.get(0).getDate();
+				} else if (posChargeData.getPayType() == 1) {
+					payDate = posChargeData.getExitDate();
+				}
+				if (payDate == null) {
+					payDate = new Date();
+				}
+				
+				long diff = new Date().getTime() - payDate.getTime();
+				if (diff < 1000 * 60 * 15) {
+					dataMap.put("my", "0.0");
+					long diff1 = (new Date().getTime() - posChargeData.getEntranceDate().getTime());
+					dataMap.put("eD", String.valueOf(diff1 / (1000 * 60)));
+					posChargeData.setPaidCompleted(true);
+					// posChargeData.setPayType(9);
+					posChargeData.setPaidMoney(posChargeData.getChargeMoney());
+					posChargeData.setUnPaidMoney(0);
+					if (posChargeData.getExitDate() == null) {
+						posChargeData.setExitDate1(new Date());
+					}
+				//	posChargeData.setOperatorId("15minPaid");
+					chargeSerivce.update(posChargeData);
+
+				
+					
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
+				// 超过了15分钟
+				else {
+					// Park
+					// park=parkService.getParkById(posChargeData.getParkId());
+					// FeeCriterion
+					// feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+					Date incomeDate = new Date(
+							payDate.getTime() - (long) (feeCriterion.getFreemins() - 15) * 1000 * 60);
+					PosChargeData charge2 = new PosChargeData();
+					charge2.setCardNumber(posChargeData.getCardNumber());
+					charge2.setParkId(park.getId());
+					charge2.setOperatorId("超时15分钟");
+					charge2.setParkDesc(posChargeData.getParkDesc());
+					charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+					int num = chargeSerivce.insert(charge2);
+					if (num != 1) {
+						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+					}
+					// 重新查询未缴费
+					queryCharges = chargeSerivce.getDebt(cardNumber);
+				}
+			}
+			
+			PosChargeData payRet = new PosChargeData();
+			int tmpnn = 0;
+			logger.info(cardNumber + "计费完毕后处理");
+			int num = 0;
+			if (!queryCharges.isEmpty()) {
+				for (PosChargeData posChargeData : queryCharges) {
+					if (posChargeData.getParkId() == parkId.intValue()) {
+						posChargeData.setPaidCompleted(true);
+						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
+						posChargeData.setUnPaidMoney(0);
+						posChargeData.setPayType(9);
+						posChargeData.setOperatorId("道闸");
+						if (tmpnn == 0) {
+							payRet = posChargeData;
+							tmpnn++;
+						} else {
+							posChargeData.setChargeMoney(0);
+							posChargeData.setPaidMoney(0);
+						}
+						chargeSerivce.update(posChargeData);
+					} else {
+						posChargeData.setChargeMoney(0.0);
+						posChargeData.setPaidCompleted(true);
+						posChargeData.setPayType(9);
+						chargeSerivce.update(posChargeData);
+					}
+				}
+				// if (payRet.getExitDate()==null) {
+				// payRet.setExitDate1(new Date());
+				// }
+				shouldChargeMoney=payRet.getChargeMoney();
+				num = chargeSerivce.update(payRet);
+			} else {
+				logger.info(cardNumber + "查询计费结果为空!!!");
+				return Utility.createJsonMsg(1002, "计费结果为空");
+			}
+			
+			switch (monthUserType) {
+			case 0:
+				if (parkcarauthority.getMonth() != true) {
+					dataMap.put("aT", "0");
+				}
+				break;
+			case 1:
+				charge.setParkDesc(park.getName() + "-预约");
+				if (parkcarauthority.getYuyue() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 2:
+				charge.setParkDesc(park.getName() + "-包月A1");
+				if (parkcarauthority.getTypea() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 3:
+				charge.setParkDesc(park.getName() + "-包月A2");
+				if (parkcarauthority.getTypeb() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 4:
+				charge.setParkDesc(park.getName() + "-包月B");
+				if (parkcarauthority.getTypec() != true) {
+					dataMap.put("aT", "0");
+				}
+				break;
+			case 5:
+				charge.setParkDesc(park.getName() + "-包月D");
+				if (parkcarauthority.getTyped() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 6:
+				charge.setParkDesc(park.getName() + "-包月E");
+				if (parkcarauthority.getTypee() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 8:
+				charge.setParkDesc(park.getName() + "-包月过期");
+				if (parkcarauthority.getMonthexpired() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 9:
+				if (parkcarauthority.getTemporary() != true&&shouldChargeMoney>0) {
+					dataMap.put("aT", "0");
+				}
+				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
+					dataMap.put("aT", "0");
+				}
+				break;
+			default:
+				break;
+			}	
+			// 发送到贵州
+			if (parkId==334) {
+				Map<String, String> guiyang = new HashMap<>();
+				guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
+				guiyang.put("type", "out");
+				guiyang.put("plateNum", cardNumber);
+				guiyang.put("leaveTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
+			}
+			//发送到topic
+			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+				payRet.setEntrance(false);
+			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
+			}
+			// 发送到队列
+			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
+				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
+			}
+		
+			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
+				Map<String, String> argstoali = new HashMap<>();
+				argstoali.put("parkName", payRet.getParkDesc());
+				argstoali.put("carNumber", payRet.getCardNumber());
+				argstoali.put("enterTime",
+						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+				argstoali.put("exitTime",
+						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+			}
+
+			if (payRet.getEntranceDate() == null) {
+
+				return Utility.createJsonMsg(1003, "无入场记录");
+			}
+
+			long diff2 = (new Date().getTime() - payRet.getEntranceDate().getTime());
+			dataMap.put("eD", String.valueOf(diff2 / (60 * 1000)));
+			if (!isRealMonthUser) {
+				dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
+			}
+			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
+				if (payRet.getChargeMoney() > 0) {
+					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
+					dataMap.put("uT", "0");
+				}
+			}
+			
+			dataMap.put("pT", String.valueOf(payRet.getPayType()));
+			
+			if (num == 1) {
+//				Poschargemac poschargemac = new Poschargemac();
+//				poschargemac.setMacidout((int) info.get("macId"));
+//				poschargemac.setPoschargeid(payRet.getId());
+//				posChargeMacService.updateByPosChargeId(poschargemac);
+				Poschargemac poschargemac = new Poschargemac();
+				poschargemac.setMacidout((int) info.get("macId"));
+				poschargemac.setPoschargeid(payRet.getId());
+				posChargeMacService.insertSelective(poschargemac);
+				logger.info(cardNumber + "出场成功!" + dataMap.toString());
+				
+				parkService.updateLeftPortCount(parkId, park.getPortLeftCount()+1);
+				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+			} else {
+				return Utility.createJsonMsg(1001, "ok");
+			}
+		}
+	}
+
+	//合肥touched  主要是针对到道闸又返回  再出费用为0做的修补
+	@RequestMapping(value = "hefeitouched", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public String hefeitouched(@RequestBody Map<String, String> args) throws Exception {
+		String mac = args.get("mac");
+		String cardNumber = args.get("cardNumber");
 		logger.info("touch车辆" + cardNumber);
 
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
@@ -295,6 +911,17 @@ public class BarrierChargeController {
 					break;
 				}
 			}
+			
+			//贵州队列发送
+			if (parkId==334) {
+				Map<String, String> guiyang = new HashMap<>();
+				guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
+				guiyang.put("type", "in");
+				guiyang.put("plateNum", cardNumber);
+				guiyang.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
+			}
+			
 			switch (monthUserType) {
 			case 0:
 				charge.setParkDesc(park.getName() + "-包月车");
@@ -328,7 +955,6 @@ public class BarrierChargeController {
 				charge.setParkDesc(park.getName() + "-包月B");
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
-
 				}
 				break;
 			case 5:
@@ -398,6 +1024,11 @@ public class BarrierChargeController {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num = chargeSerivce.insert(charge);
 			if (num == 1) {
+				//发送topic队列
+				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+					charge.setEntrance(true);
+					ActiveMqService.SendTopicWithMac(charge,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
+					}
 //				Poschargemac poschargemac = new Poschargemac();
 //				poschargemac.setMacidenter((int) info.get("macId"));
 //				poschargemac.setPoschargeid(charge.getId());
@@ -441,6 +1072,7 @@ public class BarrierChargeController {
 			return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 		} else { // 出场硬件
 			dataMap.put("cT", "out");
+			dataMap.put("pT", "9");
 			List<PosChargeData> queryCharges = null;
 			String exitDate = (String) args.get("exitDate");
 			logger.info(cardNumber + "开始出场");
@@ -527,7 +1159,7 @@ public class BarrierChargeController {
 				if (posChargeData.getExitDate()==null) {
 					posChargeData.setExitDate1(new Date());
 				}
-				
+				dataMap.put("pT", String.valueOf(posChargeData.getPayType()));
 				//发送到队列
 
 				if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true) {
@@ -555,7 +1187,14 @@ public class BarrierChargeController {
 				if (payDate == null) {
 					payDate = new Date();
 				}
+				
 				long diff = new Date().getTime() - payDate.getTime();
+				//防止逃费
+				if (posChargeData.getPayType()==9&&diff<1000*60*60) {
+					dataMap.put("my", String.valueOf(posChargeData.getChargeMoney()));
+					dataMap.put("eD", String.valueOf((new Date().getTime() - posChargeData.getEntranceDate().getTime()) / (1000 * 60)));
+					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
+				}
 				if (diff < 1000 * 60 * 15) {
 					dataMap.put("my", "0.0");
 					long diff1 = (new Date().getTime() - posChargeData.getEntranceDate().getTime());
@@ -567,7 +1206,7 @@ public class BarrierChargeController {
 					if (posChargeData.getExitDate() == null) {
 						posChargeData.setExitDate1(new Date());
 					}
-					posChargeData.setOperatorId("15minPaid");
+				//	posChargeData.setOperatorId("15minPaid");
 					chargeSerivce.update(posChargeData);
 
 				
@@ -641,38 +1280,51 @@ public class BarrierChargeController {
 				}
 				break;
 			case 1:
-				if (parkcarauthority.getTypea() != true) {
+				charge.setParkDesc(park.getName() + "-预约");
+				if (parkcarauthority.getYuyue() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 2:
-				if (parkcarauthority.getTypeb() != true) {
+				charge.setParkDesc(park.getName() + "-包月A1");
+				if (parkcarauthority.getTypea() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 3:
+				charge.setParkDesc(park.getName() + "-包月A2");
+				if (parkcarauthority.getTypeb() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 4:
+				charge.setParkDesc(park.getName() + "-包月B");
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
 				}
 				break;
-			case 4:
+			case 5:
+				charge.setParkDesc(park.getName() + "-包月D");
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
-				}
-				break;
-			case 5:
-				if (parkcarauthority.getTypee() != true) {
-					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 6:
-				if (parkcarauthority.getYuyue() != true) {
+				charge.setParkDesc(park.getName() + "-包月E");
+				if (parkcarauthority.getTypee() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 8:
+				charge.setParkDesc(park.getName() + "-包月过期");
 				if (parkcarauthority.getMonthexpired() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 9:
@@ -686,7 +1338,20 @@ public class BarrierChargeController {
 			default:
 				break;
 			}	
-			
+			// 发送到贵州
+			if (parkId==334) {
+				Map<String, String> guiyang = new HashMap<>();
+				guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
+				guiyang.put("type", "out");
+				guiyang.put("plateNum", cardNumber);
+				guiyang.put("leaveTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
+			}
+			//发送到topic
+			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+				payRet.setEntrance(false);
+			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
+			}
 			// 发送到队列
 			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
 				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
@@ -719,6 +1384,7 @@ public class BarrierChargeController {
 					dataMap.put("uT", "0");
 				}
 			}
+			dataMap.put("pT", String.valueOf(payRet.getPayType()));
 			if (num == 1) {
 //				Poschargemac poschargemac = new Poschargemac();
 //				poschargemac.setMacidout((int) info.get("macId"));
@@ -738,6 +1404,7 @@ public class BarrierChargeController {
 		}
 	}
 
+	
 	@RequestMapping(value = "gonghangtouched", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public String gonghangtouched(@RequestBody Map<String, String> args) throws Exception {
@@ -1206,46 +1873,65 @@ public class BarrierChargeController {
 				}
 				break;
 			case 1:
-				if (parkcarauthority.getTypea() != true) {
+				charge.setParkDesc(park.getName() + "-预约");
+				if (parkcarauthority.getYuyue() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 2:
-				if (parkcarauthority.getTypeb() != true) {
+				charge.setParkDesc(park.getName() + "-包月A1");
+				if (parkcarauthority.getTypea() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 3:
+				charge.setParkDesc(park.getName() + "-包月A2");
+				if (parkcarauthority.getTypeb() != true) {
+					dataMap.put("aT", "0");
+
+				}
+				break;
+			case 4:
+				charge.setParkDesc(park.getName() + "-包月B");
 				if (parkcarauthority.getTypec() != true) {
 					dataMap.put("aT", "0");
 				}
 				break;
-			case 4:
+			case 5:
+				charge.setParkDesc(park.getName() + "-包月D");
 				if (parkcarauthority.getTyped() != true) {
 					dataMap.put("aT", "0");
-				}
-				break;
-			case 5:
-				if (parkcarauthority.getTypee() != true) {
-					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 6:
-				if (parkcarauthority.getYuyue() != true) {
+				charge.setParkDesc(park.getName() + "-包月E");
+				if (parkcarauthority.getTypee() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 8:
+				charge.setParkDesc(park.getName() + "-包月过期");
 				if (parkcarauthority.getMonthexpired() != true) {
 					dataMap.put("aT", "0");
+
 				}
 				break;
 			case 9:
 				if (parkcarauthority.getTemporary() != true&&shouldChargeMoney>0) {
 					dataMap.put("aT", "0");
 				}
+				else {
+					dataMap.put("aT", "1");
+				}
 				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
 					dataMap.put("aT", "0");
+				}
+				else {
+					dataMap.put("aT", "1");
 				}
 				break;
 			default:

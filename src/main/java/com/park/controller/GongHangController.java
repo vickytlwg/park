@@ -42,6 +42,7 @@ public class GongHangController extends BaseApiService {
 	public String queryOrderTemp(@RequestBody Map<String, String> args) {
 		logger.info("工行queryOrderTemp" + args.toString());
 		String plateNo = args.get("plateNo");
+		String parkCode = args.get("parkCode");
 		String plateColor = args.get("plateColor");
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("code", "0");
@@ -55,7 +56,12 @@ public class GongHangController extends BaseApiService {
 		List<PosChargeData> queryCharges = new ArrayList<>();
 		try {
 			Date exitdate = new Date();
-			queryCharges = posChargedataService.queryDebt(plateNo, exitdate);
+			if (parkCode==null) {
+				queryCharges = posChargedataService.queryDebt(plateNo, exitdate);
+			}
+			else {
+				queryCharges = posChargedataService.queryDebtWithParkId(plateNo, exitdate, Integer.parseInt(parkCode));
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -237,4 +237,21 @@ public class NjparkController {
 		njcarFeeRecordService.insertSelective(njcarfeerecord);
 		return Utility.createJsonMsg(1001, "ok");
 	}
+	
+	//获取前多少条记录
+	@RequestMapping(value="getByCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByCount(@RequestBody Map<String, Object> args){
+		int count=(int) args.get("count");
+		List<Njcarfeerecord> njcarfeerecords=njcarFeeRecordService.selectByCount(count);
+		Map<String, Object> result=new HashMap<>();
+		if (!njcarfeerecords.isEmpty()) {
+			result.put("status", 1001);
+			result.put("body", njcarfeerecords);
+		}
+		else {
+			result.put("status", 1001);
+		}
+		return Utility.gson.toJson(result);
+	}
 }
