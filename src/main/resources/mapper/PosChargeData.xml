@@ -133,13 +133,16 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 		paidCompleted=#{paidCompleted},isLargeCar=#{isLargeCar}, entranceDate=#{entranceDate}, exitDate=#{exitDate},url=#{url}
 		where id=#{id}
 	</update>
-	<!-- 查询各渠道收费统计 -->
- <!-- <select id="getByDateAndParkCount" resultType="java.util.HashMap">
- <![CDATA[
-  	select payType as payType,sum(chargeMoney) as chargeMoney from posChargeData where 
-  	parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} GROUP BY payType
-  ]]> 
-  </select> -->
+	
+  
+  <!-- 获取停车场总金额 -->
+	<select id="getParkByMoney" resultType="com.park.model.Park">
+		select *
+		from authUsers a1
+		left join userPark u2 on a1.id=u2.userId 
+		left join park p3 on u2.parkId=p3.id 
+		where a1.username LIKE '%${username}%'
+	</select>
 <!-- 获取笔数-->
  <select id="getByDateAndParkCount2" resultType="java.lang.String">
  <![CDATA[

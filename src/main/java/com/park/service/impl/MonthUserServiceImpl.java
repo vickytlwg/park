@@ -139,4 +139,16 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getMonthuserCountsByDateRangeAndPark(parkId, startDate, endDate, maxCount);
 	}
 
+	@Override
+	public Monthuser selectById(int parkId, Date starttime, Date endtime, String platenumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.selectById(parkId, starttime, endtime, platenumber);
+	}
+	
+	@Override
+	public Monthuser getByPlateNumberById(int id) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByPlateNumberById(id);
+	}
+
 }

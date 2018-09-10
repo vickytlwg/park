@@ -1,5 +1,6 @@
 package com.park.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -236,9 +237,34 @@ public String insert(@RequestBody Monthuser monthUser){
 	}
 	return Utility.gson.toJson(result);
 }
+
 @RequestMapping(value="insertOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody
 public String insertOrder(@RequestBody Monthuser monthUser){
+	Map<String, Object> result=new HashMap<>();
+	monthUser.setType(1);
+	//	Date startd=monthUser.getStarttime();
+	//	Date endd=monthUser.getEndtime();
+	//	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
+	//		result.put("status", 1002);
+	//		result.put("message", "时间不能超过24小时");
+	//		return Utility.gson.toJson(result);
+	//	}
+	int num=monthUserService.insert(monthUser);
+	if (num==1) {
+		result.put("status", 1001);
+		result.put("message", "ok");
+	}
+	else {
+		result.put("status", 1002);
+		result.put("message", "failed");
+	}
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="insertOrderById",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+@ResponseBody
+public String insertOrderById(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
 	monthUser.setType(1);
 //	Date startd=monthUser.getStarttime();
@@ -248,8 +274,20 @@ public String insertOrder(@RequestBody Monthuser monthUser){
 //		result.put("message", "时间不能超过24小时");
 //		return Utility.gson.toJson(result);
 //	}
+	int id=-1;
 	int num=monthUserService.insert(monthUser);
 	if (num==1) {
+		
+		int parkId=monthUser.getParkid();
+		Date starttime=monthUser.getStarttime();
+		Date endtime=monthUser.getEndtime();
+		String platenumber=monthUser.getPlatenumber();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String str=sdf.format(starttime);
+		String str2=sdf.format(endtime);
+		Monthuser monthUsers=monthUserService.selectById(parkId, starttime, endtime, platenumber);
+		id=monthUsers.getId();
+		result.put("id", id);
 		result.put("status", 1001);
 		result.put("message", "ok");
 	}
@@ -271,6 +309,36 @@ public String delete(@PathVariable("id")int id){
 	else {
 		result.put("status", 1002);
 		result.put("message", "failed");
+	}
+	return Utility.gson.toJson(result);
+}
+
+@RequestMapping(value="deleteByIdandnumber",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+@ResponseBody
+public String deleteByIdandnumber(@RequestBody Map<String, Object> args){
+	Map<String, Object> result=new HashMap<>();
+	/*Object objectId= args.get("id");*/
+	int id=(int) args.get("id");
+	Monthuser user=monthUserService.getByPlateNumberById(id);
+	String platenumber=user.getPlatenumber();   
+
+	Object platenumberObj= args.get("plateNumber");
+	String platenumber2="";
+	int resultnum=0;
+	if(platenumberObj==null){
+		result.put("status", 1002);
+		result.put("message", "无法预约删除！");
+		//resultnum=monthUserService.deleteByPrimaryKey(id);
+	}else{
+		platenumber2=args.get("plateNumber").toString();
+		if(platenumber.equals(platenumber2)){
+			resultnum=monthUserService.deleteByPrimaryKey(id);
+			result.put("status", 1001);
+			result.put("message", "删除预约成功！");
+		}else{
+			result.put("status", 1003);
+			result.put("message", "删除预约失败！");
+		}
 	}
 	return Utility.gson.toJson(result);
 }

@@ -14,6 +14,10 @@ public interface MonthuserDAO {
     int deleteByPrimaryKey(Integer id);
 
     int insert(Monthuser record);
+    
+    Monthuser getByPlateNumberById(@Param("id")int id);
+    
+    Monthuser selectById(@Param("parkId")int parkId,@Param("starttime")Date starttime,@Param("endtime")Date endtime,@Param("platenumber")String platenumber );
 
     int insertSelective(Monthuser record);
 

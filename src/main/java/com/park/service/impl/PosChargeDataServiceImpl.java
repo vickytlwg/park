@@ -1986,4 +1986,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		
 	}
+
+	@Override
+	public List<Park> getParkByMoney(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return chargeDao.getParkByMoney(map);
+	}
 }

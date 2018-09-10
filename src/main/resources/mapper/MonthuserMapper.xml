@@ -26,10 +26,23 @@
     from monthUser
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="getByPlateNumberById" resultType="com.park.model.Monthuser" parameterType="java.lang.Integer">
+  	select * from monthUser where id= #{id}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from monthUser
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  
+  <select id="selectById" resultType="com.park.model.Monthuser">
+  		select monthUser.id,monthUser.parkId from monthUser where 
+  		parkId=#{parkId} and 
+  		platenumber=#{platenumber} and 
+  		starttime=#{starttime} and 
+  		endtime=#{endtime} 
+  		ORDER BY id DESC limit 1
+  </select>
+  
  <insert id="insert" parameterType="com.park.model.Monthuser">
     insert into monthUser (id, type, parkId, 
       cardNumber, owner, plateNumber, 
