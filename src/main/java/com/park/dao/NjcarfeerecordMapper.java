@@ -22,4 +22,6 @@ public interface NjcarfeerecordMapper {
     List<Njcarfeerecord> selectByCarNumber(@Param("carNumber")String carNumber);
     
     List<Njcarfeerecord> selectByTradeNumber(@Param("tradeNumber")String tradeNumber);
+    
+    List<Njcarfeerecord> selectByCount(@Param("count")int count);
 }

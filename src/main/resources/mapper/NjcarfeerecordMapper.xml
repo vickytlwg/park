@@ -251,4 +251,7 @@
    <select id="selectByTradeNumber" resultType="com.park.model.Njcarfeerecord">
   	select * from njCarFeeRecord where tradeNumber=#{tradeNumber} order by id desc
   </select>
+  <select id="selectByCount" resultType="com.park.model.Njcarfeerecord">
+  	select * from njCarFeeRecord order by id desc limit #{count}
+  </select>
 </mapper>

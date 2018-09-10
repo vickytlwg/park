@@ -1,6 +1,7 @@
 package com.park.service.impl;
 
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -25,22 +26,28 @@ import com.park.dao.CarportStatusDetailDAO;
 import com.park.dao.PosChargeDataDAO;
 import com.park.dao.PosdataDAO;
 import com.park.model.CarportStatusDetail;
+import com.park.model.ChargedataParkWithTable;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Feecriteriontopark;
 import com.park.model.Monthuser;
 import com.park.model.Outsideparkinfo;
 import com.park.model.Park;
+import com.park.model.Parkcarauthority;
+import com.park.model.Parknoticeauthority;
 import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
+import com.park.service.ChargeDataService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeecriterionToParkService;
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
+import com.park.service.ParkCarAuthorityService;
+import com.park.service.ParkNoticeAuthorityService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
@@ -63,7 +70,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Autowired
 	private CarportStatusDetailDAO carportStatusDetailDAO;
-
+	@Autowired
+	ParkNoticeAuthorityService parkNoticeAuthorityService;
+	
 	@Autowired
 	FeeCriterionService criterionService;
 
@@ -74,6 +83,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Autowired
 	private OutsideParkInfoService outsideParkInfoService;
 
+	@Autowired
+	ChargeDataService chargedataService;
+	
 	@Autowired
 	AliParkFeeService aliparkFeeService;
 	@Autowired
@@ -108,6 +120,17 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 	@Override
 	public int insert(PosChargeData item) {
+		
+		Parknoticeauthority parknoticeauthority=parkNoticeAuthorityService.getByParkId(item.getParkId()).get(0);
+		if (parknoticeauthority!=null&&parknoticeauthority.getWeixin()==true) {
+			Map<String, String> argstoali = new HashMap<>();
+			argstoali.put("parkName", item.getParkDesc());
+			argstoali.put("carNumber", item.getCardNumber());
+			argstoali.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinEnterInfo");
+		}
+		int num=chargeDao.insert(item);
+		//在插入之后 要不获取不到id
 		if (ArrayUtils.contains(Constants.parkToQuene, item.getParkId())) {
 			PosChargeData tmPosChargeData = item;
 			tmPosChargeData.setExitDate1(tmPosChargeData.getEntranceDate());
@@ -121,7 +144,33 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			System.out.println("active插入后" + new Date().getTime());
 		}
-		return chargeDao.insert(item);
+		if (num==1&&false) {
+			ChargedataParkWithTable chargedataParkWithTable=new ChargedataParkWithTable();
+			chargedataParkWithTable.setTableName("chargeData_"+item.getParkId());
+			chargedataParkWithTable.setParkdesc(item.getParkDesc());
+			chargedataParkWithTable.setParkid(item.getParkId());
+			chargedataParkWithTable.setCarnumber(item.getCardNumber());
+			chargedataParkWithTable.setChangemoney((int) (item.getChangeMoney()*100));
+			chargedataParkWithTable.setChargemoney((int) (item.getChargeMoney()*100));
+			chargedataParkWithTable.setGivenmoney((int) (item.getGivenMoney()*100));
+			chargedataParkWithTable.setInpictureurl(item.getUrl());
+			chargedataParkWithTable.setOperatorid(item.getOperatorId());
+			chargedataParkWithTable.setIslargecar(item.getIsLargeCar());
+			chargedataParkWithTable.setIsonetimeexpense(item.getIsOneTimeExpense()>0?true:false);
+			chargedataParkWithTable.setUnpaidmoney((int) (item.getUnPaidMoney()*100));
+			chargedataParkWithTable.setPaidcompleted(item.isPaidCompleted());
+			chargedataParkWithTable.setRejectreason(item.getRejectReason());
+			chargedataParkWithTable.setDiscount((int) (item.getDiscount()*100));
+			chargedataParkWithTable.setEntrancedate(item.getEntranceDate());
+			chargedataParkWithTable.setDiscounttype(String.valueOf(item.getDiscountType()));
+		//	chargedataService.insertTable(chargedataParkWithTable);
+		}
+		if (num==1) {
+			Park park=parkService.getParkById(item.getParkId());
+		//	park.setPortLeftCount();
+			parkService.updateLeftPortCount(park.getId(),(park.getPortLeftCount()-1)>=0?(park.getPortLeftCount()-1):0);
+		}
+		return num;
 	}
 
 	@Override
@@ -152,6 +201,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		// System.out.println("poschargedata list录入支付宝前: "+new
 		// Date().getTime()+"\n");
+		
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
 				// 信息录入支付宝
@@ -166,6 +216,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
 						// aliparkFeeService.parkingExitinfoSync(argstoali);
 					}
+					List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(charge.getParkId());
+					if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+					}
+					
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -235,7 +294,47 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		this.update(lastCharge);
 		return lastCharge;
 	}
+	
+	@Override
+	public PosChargeData payWithOperatorId(String cardNumber, double money,String operatorId) throws Exception {
+		double theMoney = money;
+		List<PosChargeData> charges = this.getCharges(cardNumber);
+		// for (PosChargeData charge : charges) {
+		// if (money >= charge.getUnPaidMoney()) {
+		// money -= charge.getUnPaidMoney();
+		// charge.setPaidCompleted(true);
+		// this.update(charge);
+		// }
+		// }
+		int count = charges.size();
+		PosChargeData lastCharge = charges.get(0);
+		money -= lastCharge.getUnPaidMoney();
 
+		// Outsideparkinfo
+		// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
+		if (money >= 0) {
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			lastCharge.setPaidCompleted(true);
+			DecimalFormat df = new DecimalFormat("0.00");
+			String data = df.format(lastCharge.getChangeMoney() + money);
+			lastCharge.setChangeMoney(Double.parseDouble(data));
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+lastCharge.getGivenMoney()-lastCharge.getChangeMoney()));
+			// outsideparkinfo.setPossigndate(new Date());
+
+		} else {
+			lastCharge.setGivenMoney(theMoney + lastCharge.getGivenMoney());
+			lastCharge.setUnPaidMoney(lastCharge.getUnPaidMoney() - theMoney);
+			// outsideparkinfo.setRealmoney((float)
+			// (outsideparkinfo.getRealmoney()+theMoney));
+			// outsideparkinfo.setPossigndate(new Date());
+		}
+		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
+		lastCharge.setOperatorId(operatorId);
+		this.update(lastCharge);
+		return lastCharge;
+	}
+	
 	@Override
 	public void calExpenseMulti(PosChargeData charge, Date exitDate, Boolean isQuery,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 
@@ -487,6 +586,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
 						// aliparkFeeService.parkingExitinfoSync(argstoali);
 					}
+					List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(charge.getParkId());
+					if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+						Map<String, String> argstoali = new HashMap<>();
+						argstoali.put("parking_id", "PI1501317472942184881");
+						argstoali.put("car_number", cardNumber);
+						argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
+					}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -598,10 +705,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
-			charge.setChargeMoney(criterion.getMaxexpense());
+		if (expense > criterion.getMaxexpense()) {
+			//charge.setChargeMoney(criterion.getMaxexpense());
+			expense=criterion.getMaxexpense();
 		}
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		
 
 	}
 
@@ -609,6 +718,22 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> queryDebt(String cardNumber, Date exitDate) throws Exception {
 		// TODO Auto-generated method stub
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		for (PosChargeData charge : charges) {
+			if (charge.getExitDate() == null) {
+				Park park = parkService.getParkById(charge.getParkId());
+				if (park.getType() == 1) {
+					this.calExpenseType1(charge, exitDate, true);
+				} else {
+					this.calExpense(charge, exitDate, true);
+				}
+			}
+		}
+		return charges;
+	}
+	@Override
+	public List<PosChargeData> queryDebtWithParkId(String cardNumber, Date exitDate,Integer parkId) throws Exception {
+		// TODO Auto-generated method stub
+		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, parkId);
 		for (PosChargeData charge : charges) {
 			if (charge.getExitDate() == null) {
 				Park park = parkService.getParkById(charge.getParkId());
@@ -1270,18 +1395,20 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getDebtWithData(String cardNumber, List<Parktoalipark> parktoaliparks,
 			List<Monthuser> monthusers, Park park,Boolean isMultiFeeCtriterion,int carType) throws Exception {
 		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+		logger.info(""+cardNumber+"取得未付款记录"+ charges.size()+"条");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		if (charges.isEmpty()) {
 			return charges;
 		}
 		for (PosChargeData charge : charges) {
+			logger.info(charge.getCardNumber()+"入场"+charge.getEntranceDate()+" "+charge.getParkDesc());
 			if (charge.getExitDate() == null) {
 				tmPosChargeDatas.add(charge);
 			}
 
 		}
 
-		if (!parktoaliparks.isEmpty() && tmPosChargeDatas.get(0).getExitDate() == null) {
+		if (!parktoaliparks.isEmpty() && !tmPosChargeDatas.isEmpty()&&tmPosChargeDatas.get(0).getExitDate() == null) {
 			// 信息录入支付宝
 			try {
 				Parktoalipark parktoalipark = parktoaliparks.get(0);
@@ -1290,7 +1417,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				argstoali.put("car_number", cardNumber);
 				argstoali.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "aliExitInfo");
-
+				
+				
+				List<Parknoticeauthority> parkcarauthorities = parkNoticeAuthorityService.getByParkId(tmPosChargeDatas.get(0).getParkId());
+				if (!parkcarauthorities.isEmpty() && (parkcarauthorities.get(0)).getAlipay() == true){
+					Map<String, String> argstoali2 = new HashMap<>();
+					argstoali2.put("parking_id", "PI1501317472942184881");
+					argstoali2.put("car_number", cardNumber);
+					argstoali2.put("out_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali2), "aliExitInfo");
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -1310,7 +1446,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (criterion==null) {
 			criterion=criterionService.getById(park.getFeeCriterionId());
 		}
-		this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
+		if (!tmPosChargeDatas.isEmpty()) {
+			this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
+		}
 		int tmpint = 0;
 		for (PosChargeData tmpcharge : tmPosChargeDatas) {
 			tmpint++;
@@ -1327,6 +1465,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public void calExpenseSmallCarWithData(PosChargeData charge, Date exitDate, Boolean isQuery, Park park,
 			FeeCriterion criterion) {
+		
 		charge.setExitDate1(exitDate);
 		double expense = 0;
 		if (criterion.getIsonetimeexpense() != null && criterion.getIsonetimeexpense().intValue() == 1) {
@@ -1356,11 +1495,12 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > criterion.getMaxexpense()) {
-			charge.setChargeMoney(criterion.getMaxexpense());
+		if (expense > criterion.getMaxexpense()) {
+			expense=criterion.getMaxexpense();
 		}
-
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+		
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1393,11 +1533,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				}
 			}
 		}
-		charge.setChargeMoney(expense + charge.getChargeMoney());
-		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
-			charge.setChargeMoney(criterion.getMaxexpense() * 2);
+		if (expense > criterion.getMaxexpense()) {
+			expense=criterion.getMaxexpense();
 		}
-
+		charge.setChargeMoney(expense + charge.getChargeMoney());
+//		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
+//			charge.setChargeMoney(criterion.getMaxexpense() * 2);
+//		}
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1412,6 +1555,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		Boolean isMonthUser = false;
 		Boolean isRealMonthUser = false;
 		Monthuser monthuserUse = new Monthuser();
+		
 		for (Monthuser monthuser : monthusers) {
 			if (monthuser.getType() == 0) {
 				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());
@@ -1427,7 +1571,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (park.getDescription() != null && park.getDescription().contains("一位多车")) {
 			isMultiCarsOneCarport = true;
 		}
-
+		logger.info(charge.getCardNumber()+" 是否月卡:"+isRealMonthUser+" 计费标准:"+criterion.getName());
 		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
 				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
 			isRealMonthUser = false;
@@ -1471,6 +1615,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		}
 		if (isRealMonthUser) {
+			logger.info(charge.getCardNumber()+"月卡结算完毕!");
 			charge.setChargeMoney(0);
 			charge.setUnPaidMoney(0);
 			charge.setExitDate1(exitDate);

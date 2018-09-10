@@ -5,37 +5,33 @@ public class Parkcarauthority {
 
     private Integer parkid;
 
-    private Byte channel=0;
+    private Byte channel;
 
-    private Boolean typea=true;
+    private Boolean typea;
 
-    private Boolean typeb=true;
+    private Boolean typeb;
 
-    private Boolean typec=true;
+    private Boolean typec;
 
-    private Boolean typed=true;
+    private Boolean typed;
 
-    private Boolean month=true;
+    private Boolean month;
 
     private String other;
 
     private String other2;
-    
+
     private Boolean temporary;
-    
+
     private Boolean monthexpired;
-    
+
     private Boolean temporary0;
 
-    public Boolean getTemporary() {
-		return temporary;
-	}
+    private Boolean yuyue;
 
-	public void setTemporary(Boolean temporary) {
-		this.temporary = temporary;
-	}
+    private Boolean typee;
 
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -114,7 +110,15 @@ public class Parkcarauthority {
     public void setOther2(String other2) {
         this.other2 = other2 == null ? null : other2.trim();
     }
-    
+
+    public Boolean getTemporary() {
+        return temporary;
+    }
+
+    public void setTemporary(Boolean temporary) {
+        this.temporary = temporary;
+    }
+
     public Boolean getMonthexpired() {
         return monthexpired;
     }
@@ -122,12 +126,28 @@ public class Parkcarauthority {
     public void setMonthexpired(Boolean monthexpired) {
         this.monthexpired = monthexpired;
     }
-    
+
     public Boolean getTemporary0() {
         return temporary0;
     }
 
     public void setTemporary0(Boolean temporary0) {
         this.temporary0 = temporary0;
+    }
+
+    public Boolean getYuyue() {
+        return yuyue;
+    }
+
+    public void setYuyue(Boolean yuyue) {
+        this.yuyue = yuyue;
+    }
+
+    public Boolean getTypee() {
+        return typee;
+    }
+
+    public void setTypee(Boolean typee) {
+        this.typee = typee;
     }
 }

@@ -109,7 +109,7 @@
     where poschargeId = #{poschargeid,jdbcType=INTEGER}
   </update>
   <select id="selectByMac" resultMap="BaseResultMap">
-  	select * from posChargeMac where macIdEnter=#{macId} or macIdOut=#{macId} order by id desc limit #{count}
+  	select * from posChargeMac where  macIdOut=#{macId} order by id desc limit #{count}
   </select>
   
 </mapper>

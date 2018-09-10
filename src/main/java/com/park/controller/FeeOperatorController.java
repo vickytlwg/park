@@ -92,11 +92,13 @@ public class FeeOperatorController {
 	}
 	@RequestMapping(value="validation",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String Validation(@RequestBody Map<String, String> args) throws ParseException{
+	public String Validation(@RequestBody Map<String, Object> args) throws ParseException{
 		Map<String, Object> result=new HashMap<>();
-		String account=args.get("account");
-		String passwd=args.get("passwd");
-		String posNum=args.get("posNum");
+		String account=(String) args.get("account");
+		String passwd=(String) args.get("passwd");
+		String posNum=(String) args.get("posNum");
+		Double money=args.get("money")!=null?(double) args.get("money"):null;
+		Boolean needMoney=args.get("needMoney")!=null?(boolean)args.get("needMoney"):false;
 		List<Feeoperator> feeoperators=feeOperatorService.operatorValidation(account, passwd);
 		result.put("parkName", "");
 		result.put("carportsCount", 0);
@@ -124,7 +126,13 @@ public class FeeOperatorController {
 				FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
 				result.put("feeCriterion", feeCriterion);
 				operator.setSignstatus(true);
+				if (money!=null) {
+					operator.setMoney((int) (money*100));
+				}
 				feeOperatorService.updateByPrimaryKeySelective(operator);
+				if (needMoney) {
+					result.put("money", (double)operator.getMoney()/100);
+				}
 				result.put("parkName", park.getName());
 				result.put("parkId", park.getId());
 				result.put("carportsCount", park.getPortCount());

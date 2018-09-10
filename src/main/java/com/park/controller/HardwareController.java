@@ -183,6 +183,7 @@ public class HardwareController {
 	public String searchHardwareByKeywords(@RequestParam("mac")String mac) throws UnsupportedEncodingException{
 		mac=new String(mac.getBytes("ISO-8859-1"), "UTF-8");
 		Map<String, Object> ret=new HashMap<>();
+		mac=mac.trim();
 		List<Hardware> hardwares=hardwareService.searchHardwareByKeywords(mac);
 		if(hardwares != null)
 		{

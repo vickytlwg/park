@@ -33,6 +33,7 @@ import com.park.model.PosChargeData;
 import com.park.model.User;
 import com.park.model.UserDetail;
 import com.park.service.AuthorityService;
+import com.park.service.PagePermissionService;
 import com.park.service.ParkService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.UserParkService;
@@ -57,7 +58,8 @@ public class ParkUserController {
 	private UserRoleService userRoleService;
 	@Autowired
 	private ParkService parkService;
-	
+	@Autowired
+	PagePermissionService pagePermissService;
 	private static Log logger = LogFactory.getLog(ParkUserController.class);
 	
 	@RequestMapping(value = "/getParkByNameandParkId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
@@ -210,8 +212,19 @@ public class ParkUserController {
 		 
 		int count  = authService.insertUser(user, parkIds);
 		
-		if(count > 0)
+		if(count > 0){
+			try {
+				List<Integer> roleIds = new ArrayList<>();
+				roleIds.add(1);
+				pagePermissService.updateUserRole(user.getId(), roleIds);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				return Utility.createJsonMsg("1002", "insert failed");
+			}
 			return Utility.createJsonMsg("1001", "insert success");
+		}
+			
 		else
 			return Utility.createJsonMsg("1002", "insert failed");
 	}

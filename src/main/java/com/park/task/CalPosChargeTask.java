@@ -3,6 +3,7 @@ package com.park.task;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
+import com.park.service.HttpUtil;
 import com.park.service.JavaBeanXml;
 import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
@@ -78,6 +80,10 @@ public class CalPosChargeTask {
 	@Scheduled(cron="0 30 0 * * ? ")
 	public void dayInfo(){
 		outsideParkInfoService.insertDayParkInfo();		
+		Random rand = new Random();
+		int a=rand.nextInt(25)+2;
+		String url="http://park.hfcsbc.cn:8080/parkScreenPMS/ReceiveParkNum.action?parkId=3401040062&total=70&Surplus="+a;
+		HttpUtil.get(url);
 	}
 	@Scheduled(cron="0 0/2 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{

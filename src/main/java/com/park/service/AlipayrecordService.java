@@ -2,7 +2,9 @@ package com.park.service;
 
 import java.util.List;
 
+import com.park.model.AlipayChargeInfo;
 import com.park.model.Alipayrecord;
+import com.park.model.PosChargeData;
 
 public interface AlipayrecordService {
 	 
@@ -23,4 +25,6 @@ public interface AlipayrecordService {
 	    List<Alipayrecord> getByAliTradeNO(String aliTradeNo);
 	    
 	    List<Alipayrecord> getByPosChargeId(int poschargeId );
+	    
+	    AlipayChargeInfo getChargeDataByCarNumber(String carNumber) throws Exception;
 }

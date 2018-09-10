@@ -131,6 +131,9 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 				Constants.parkService.updatePark(park);
 				incoming.writeAndFlush("{\"status\":" + 4000 + ",\"parkId\":" + parkId + "}\n");
 			}
+			   else {
+				   incoming.writeAndFlush("{\"status\":" + 4000 + ",\"parkId\":" + parkId + "}\n");
+			}
 			} catch (Exception e) {
 				// TODO: handle exception
 				incoming.writeAndFlush("{\"status\":" + 4001 + ",\"parkId\":" + parkId + "}\n");
@@ -149,7 +152,7 @@ public class SimpleTcpServerHandler extends SimpleChannelInboundHandler<String> 
 				posChargeData.setCardNumber(cardNumber);
 				posChargeData.setEntranceDate1(new SimpleDateFormat("yyyyMMddHHmmss").parse(startTime));
 				posChargeData.setExitDate1(new SimpleDateFormat("yyyyMMddHHmmss").parse(endTime));
-				posChargeData.setChargeMoney(Integer.parseInt(shouldCharge)/100);
+				posChargeData.setChargeMoney((double)(Integer.parseInt(shouldCharge)/100));
 				posChargeData.setRejectReason("tcp");
 				posChargeData.setOperatorId(tradeNumber);
 				Constants.poschargeSerivce.insert(posChargeData);

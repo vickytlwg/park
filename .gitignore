@@ -1,8 +1,9 @@
 /target
 /log/*.log
 /tmp
+.project
 /.project
-/.settings
+.settings/
 /.classpath
 /.externalToolBuilders
 

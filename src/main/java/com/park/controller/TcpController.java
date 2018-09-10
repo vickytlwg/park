@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Constants;
+import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 import com.park.tcp.TcpServerService;
@@ -28,7 +29,10 @@ import io.netty.channel.Channel;
 @Controller
 @RequestMapping("tcp")
 public class TcpController {
-	@Autowired PosChargeDataService posChargeDataService;
+	@Autowired 
+	PosChargeDataService posChargeDataService;
+	@Autowired
+	ParkService parkService;
 	TcpServerService tcpServerService=new TcpServerService();
 	@RequestMapping(value = "send", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
@@ -54,6 +58,7 @@ public class TcpController {
 	@ResponseBody
 	public String start(){
 		Constants.poschargeSerivce=posChargeDataService;
+		Constants.parkService=parkService;
 		try {
 			TcpServerService.StartTcpServer(8099);
 		} catch (Exception e) {
@@ -79,14 +84,18 @@ public class TcpController {
 	@ResponseBody
 	public void tcptest(@RequestBody Map<String, Object> args) throws UnknownHostException, IOException{
 		String content=(String) args.get("content");
-		 String server="192.168.44.1";            	          
-	     int servPort=8099;  
-	     Socket socket=new Socket(server,servPort);
-	     OutputStream os =  socket.getOutputStream();  
-         DataOutputStream bos = new DataOutputStream(os);    
-         bos.writeUTF(content+"\n");  
-         bos.flush();      
-
-	     socket.close(); 
+		int parkId=(int) args.get("parkId");
+//		 String server="192.168.44.1";            	          
+//	     int servPort=8099;  
+//	     Socket socket=new Socket(server,servPort);
+//	     OutputStream os =  socket.getOutputStream();  
+//         DataOutputStream bos = new DataOutputStream(os);    
+//         bos.writeUTF(content+"\n");  
+//         bos.flush();      
+//
+//	     socket.close(); 
+		tcpServerService.sendByParkId(parkId, content);
 	}
+	
+	
 }

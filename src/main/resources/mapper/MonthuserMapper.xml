@@ -264,6 +264,9 @@
   	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
   	from monthUser left join park on park.id=monthUser.parkid where monthUser.parkid=#{parkId} and monthUser.type=#{type}  order by id limit #{start},#{count}
   </select>
+  <select id="getLast3Number" resultType="com.park.model.Monthuser">
+  	SELECT * FROM monthUser WHERE SUBSTRING(plateNumber,5,7)=#{lastNumber} and parkId=#{parkId}
+  </select>
   <select id="getCountByParkId" resultType="int">
   	select count(*) from monthUser where parkid=#{parkId}
   </select>
@@ -276,6 +279,7 @@
 	WHERE d.count>=#{maxCount} ORDER BY d.count DESC
   	 ]]>
   </select>
+  
   <select id="statisticsInfo" resultType="java.util.HashMap">
   	SELECT COUNT(*) AS count,SUM(payment) AS payment FROM monthUser WHERE parkId=#{parkId} AND type=#{type}
   </select>

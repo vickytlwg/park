@@ -55,7 +55,7 @@
 		select * from authUsers where username=#{param1}
 	</select>
 	
-	<insert id="insertUser" parameterType="AuthUser" keyProperty="id">
+	<insert id="insertUser" parameterType="AuthUser" keyProperty="id" useGeneratedKeys="true">
 		insert into authUsers(username, password, role)
 		values(#{username}, #{password}, #{role})
 	</insert>

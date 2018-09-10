@@ -1,5 +1,7 @@
 package com.park.controller;
 
+import static org.hamcrest.CoreMatchers.not;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -1046,9 +1048,9 @@ public class PosChargeDataController {
 			}
 		}
 		if (isRealMonthUser) {
-			charge.setParkDesc(charge.getParkDesc() + "-包月车");
+			charge.setParkDesc(charge.getParkDesc() + "-p包月车");
 		} else {
-			charge.setParkDesc(charge.getParkDesc() + "-临停车");
+			charge.setParkDesc(charge.getParkDesc() + "-p临停车");
 		}
 		if (park == null || park.getFeeCriterionId() == null) {
 			return Utility.createJsonMsg(1002, "请先绑定计费标准到停车场");
@@ -1105,8 +1107,84 @@ public class PosChargeDataController {
 			return Utility.createJsonMsg(1001, "success");
 		else
 			return Utility.createJsonMsg(1002, "failed");
+	}@RequestMapping(value = "/rollbackExit", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String rollbackExit(@RequestBody Map<String, Object> args) {
+		String cardNumber=(String) args.get("plateNumber");
+		int id=(int) args.get("id");
+		PosChargeData posChargeData=posChargeDataService.getById(id);
+		if (posChargeData==null) {
+			return Utility.createJsonMsg(1002, "无记录");
+		}
+		if (!posChargeData.getCardNumber().equals(cardNumber)) {
+			return Utility.createJsonMsg(1002, "车牌错误");
+		}
+		posChargeData.setPaidCompleted(false);
+		posChargeData.setChargeMoney(0);
+		posChargeData.setPaidMoney(0);
+		posChargeData.setDiscount(0.0);
+		posChargeData.setExitDate1(null);
+		int ret = posChargeDataService.update(posChargeData);
+		if (ret == 1)
+			return Utility.createJsonMsg(1001, "success");
+		else
+			return Utility.createJsonMsg(1002, "failed");
 	}
-
+	@RequestMapping(value = "/updatePayType", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String updatePayType(@RequestBody Map<String, Object> args){
+		int chargeId=(int) args.get("chargeId");
+		int payType=(int)args.get("payType");
+		String carNumber=(String) args.get("carNumber");
+		PosChargeData posChargeData=posChargeDataService.getById(chargeId);
+		if (posChargeData!=null&&posChargeData.getCardNumber().equals(carNumber)) {
+			posChargeData.setPayType(payType);
+			posChargeDataService.update(posChargeData);
+			return Utility.createJsonMsg(1001, "success");
+		}
+		return Utility.createJsonMsg(1002, "failed");
+		
+	}
+	@RequestMapping(value = "/updateWithPlateNumber", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String updateWithPlateNumber(@RequestBody Map<String, Object> args){
+		String cardNumber=(String) args.get("plateNumber");
+		String operatorId=args.get("operatorId")!=null?(String) args.get("operatorId"):null;
+		String rejectReason=args.get("rejectReason")!=null?(String) args.get("rejectReason"):null;
+		int id=(int) args.get("id");
+		double chargeMoney=args.get("chargeMoney")!=null?(double) args.get("chargeMoney"):-1;
+		double paidMoney=args.get("paidMoney")!=null?(double) args.get("paidMoney"):-1;
+		double discount=args.get("discount")!=null?(double) args.get("discount"):-1;
+		
+		PosChargeData posChargeData=posChargeDataService.getById(id);
+		if (posChargeData==null) {
+			return Utility.createJsonMsg(1002, "无记录");
+		}
+		if (!posChargeData.getCardNumber().equals(cardNumber)) {
+			return Utility.createJsonMsg(1002, "车牌错误");
+		}
+		if (operatorId!=null) {
+			posChargeData.setOperatorId(operatorId);
+		}
+		if (rejectReason!=null) {
+			posChargeData.setRejectReason(rejectReason);
+		}
+		if (chargeMoney!=-1) {
+			posChargeData.setChargeMoney(chargeMoney);
+		}
+		if (paidMoney!=-1) {
+			posChargeData.setPaidMoney(paidMoney);
+		}
+		if (discount!=-1) {
+			posChargeData.setDiscount(discount);
+		}
+		int num=posChargeDataService.update(posChargeData);
+		if (num==1) {
+			return Utility.createJsonMsg(1001, "success");
+		}
+		else {
+			return Utility.createJsonMsg(1002, "failed");
+		}
+	}
 	@RequestMapping(value = "/updateEDate", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String updateEDate(@RequestBody Map<String, String> args) throws ParseException {
@@ -1253,15 +1331,22 @@ public class PosChargeDataController {
 		String cardNumber = (String) args.get("cardNumber");
 		double money = (double) args.get("money");
 		String exitDate = (String) args.get("exitDate");
+		String operatorId=(String) args.get("operatorId");
+		
 		PosChargeData payRet = null;
 
 		Date eDate = new Date();
 		if (exitDate != null) {
 			eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
 		}
-		List<PosChargeData> unpaidCharges = chargeSerivce.getDebt(cardNumber, eDate);
+//		List<PosChargeData> unpaidCharges = chargeSerivce.getDebt(cardNumber, eDate);
 		try {
-			payRet = chargeSerivce.pay(cardNumber, money);
+			if (operatorId==null) {
+				payRet = chargeSerivce.pay(cardNumber, money);
+			}
+			else {
+				payRet=chargeSerivce.payWithOperatorId(cardNumber, money, operatorId);
+			}
 		} catch (Exception e) {
 			return Utility.createJsonMsg(1002, "没有欠费条目或请先绑定停车场计费标准");
 		}
@@ -1447,7 +1532,7 @@ public class PosChargeDataController {
 		List<PosChargeData> posdatas = chargeSerivce.getPage(0, 100000);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间","优惠金额" };
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
@@ -1469,7 +1554,7 @@ public class PosChargeDataController {
 		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDay(Integer.parseInt(parkId), date);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间","优惠金额" };
 		SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
 		String filename = sFormat.format(new Date()) + "poschargedata.xlsx";
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
@@ -1491,7 +1576,7 @@ public class PosChargeDataController {
 		List<PosChargeData> posdatas = chargeSerivce.getAllByDay(date);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间","优惠金额" };
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
@@ -1553,7 +1638,7 @@ public class PosChargeDataController {
 		List<PosChargeData> posdatas = chargeSerivce.getByParkAndDayRange(Integer.parseInt(parkId), startDate, endDate);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间","优惠金额" };
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);
@@ -1598,7 +1683,7 @@ public class PosChargeDataController {
 		List<PosChargeData> posdatas = chargeSerivce.getAllByDayRange(startDate, endDate);
 		String docsPath = request.getSession().getServletContext().getRealPath("/");
 		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
-		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间" };
+		String[] headers = { "车牌", "停车场名", "车位号", "操作员id", "收费状态", "押金", "应收费", "补交", "返还", "进场时间", "离场时间","优惠金额" };
 		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "poschargedata.xlsx");
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		excelService.produceExceldataPosChargeData("收费明细", headers, posdatas, workbook);

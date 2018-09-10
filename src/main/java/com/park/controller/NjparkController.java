@@ -47,16 +47,31 @@ public class NjparkController {
 	@ResponseBody
 	public String carArrive(@RequestBody Map<String, Object> args) throws ParseException{
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
-		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
+		if (args.get("tradeDate")!=null) {
+			try {
+				njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
+
+			} catch (Exception e) {
+				njcarfeerecord.setTradedate(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("tradeDate")));
+			}
+		}
+		else{
+			njcarfeerecord.setTradedate(new Date());
+		}
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
-		njcarfeerecord.setCartype((String) args.get("carType"));
-		njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
+		njcarfeerecord.setCartype(args.get("carType")!=null?(String) args.get("carType"):"");
+		try {
+			njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
+		} catch (Exception e) {
+			// TODO: handle exception
+			njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
+		}
 		njcarfeerecord.setParkid((int)args.get("parkId"));
-		njcarfeerecord.setParkname((String) args.get("parkName"));
-		njcarfeerecord.setTradenumber((String) args.get("tradeNumber"));
-		njcarfeerecord.setStoptype((String) args.get("stopType"));
-		njcarfeerecord.setPaidmoney((int)args.get("paidMoney"));
-		njcarfeerecord.setPicturepath((String) args.get("picturePath"));
+		njcarfeerecord.setParkname(args.get("parkName")!=null?(String) args.get("parkName"):"");
+		njcarfeerecord.setTradenumber(args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
+		njcarfeerecord.setStoptype(args.get("stopType")!=null?(String) args.get("stopType"):"");
+		njcarfeerecord.setPaidmoney(args.get("paidMoney")!=null?(int)args.get("paidMoney"):0);
+		njcarfeerecord.setPicturepath(args.get("picturePath")!=null?(String) args.get("picturePath"):"");
 		int num=njcarFeeRecordService.insertSelective(njcarfeerecord);
 		
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -71,28 +86,39 @@ public class NjparkController {
 	@ResponseBody
 	public String carLeave(@RequestBody Map<String, Object> args) throws ParseException{
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
-		njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
+	//	njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
-		njcarfeerecord.setCartype((String) args.get("carType"));
-		njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
-		njcarfeerecord.setParkid((int)args.get("parkId"));
-		njcarfeerecord.setParkname((String) args.get("parkName"));
-		njcarfeerecord.setTradenumber((String) args.get("tradeNumber"));
-		njcarfeerecord.setStoptype((String) args.get("stopType"));
-		njcarfeerecord.setPaidmoney((int)args.get("paidMoney"));
-		njcarfeerecord.setPicturepath((String) args.get("picturePath"));
-		List<Njcarfeerecord> njcarfeeSelecteds=njcarFeeRecordService.selectByTradeNumber((String) args.get("tradeNumber"));
+		njcarfeerecord.setCartype(args.get("carType")!=null?(String) args.get("carType"):"");
+		try {
+			njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
+		} catch (Exception e) {
+			// TODO: handle exception
+			njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
+		}		njcarfeerecord.setParkid((int)args.get("parkId"));
+		njcarfeerecord.setParkname(args.get("parkName")!=null?(String) args.get("parkName"):"");
+		njcarfeerecord.setTradenumber((String) args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
+		njcarfeerecord.setStoptype((String) args.get("stopType")!=null?(String) args.get("stopType"):"");
+		njcarfeerecord.setPaidmoney(args.get("paidMoney")!=null?(int)args.get("paidMoney"):0);
+		njcarfeerecord.setPicturepath(args.get("picturePath")!=null?(String) args.get("picturePath"):"");
+		List<Njcarfeerecord> njcarfeeSelecteds=njcarFeeRecordService.selectByTradeNumber(args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
 		if (njcarfeeSelecteds.isEmpty()) {
 			return Utility.createJsonMsg(1002, "无入场信息");
 		}
 		njcarfeerecord=njcarfeeSelecteds.get(0);
-		njcarfeerecord.setLeavetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("leaveTime")));
-		njcarfeerecord.setShouldcharge((int) args.get("shouldCharge"));
-		njcarfeerecord.setArrearspay((int) args.get("arrearsPay"));
-		njcarfeerecord.setDiscount((int) args.get("discount"));
-		njcarfeerecord.setOtherpay((int) args.get("otherPay"));
-		njcarfeerecord.setRealpay((int) args.get("realPay"));
-		njcarfeerecord.setInvoiceurl((String) args.get("invoiceUrl"));
+		try {
+			njcarfeerecord.setLeavetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("leaveTime")));
+		} catch (Exception e) {
+			// TODO: handle exception
+			njcarfeerecord.setLeavetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String)args.get("leaveTime")));
+
+			
+		}
+		njcarfeerecord.setShouldcharge(args.get("shouldCharge")!=null?(int) args.get("shouldCharge"):0);
+		njcarfeerecord.setArrearspay(args.get("arrearsPay")!=null?(int) args.get("arrearsPay"):0);
+		njcarfeerecord.setDiscount(args.get("discount")!=null?(int) args.get("discount"):0);
+		njcarfeerecord.setOtherpay(args.get("otherPay")!=null?(int) args.get("otherPay"):0);
+		njcarfeerecord.setRealpay(args.get("realPay")!=null?(int) args.get("realPay"):0);
+		njcarfeerecord.setInvoiceurl(args.get("invoiceUrl")!=null?(String) args.get("invoiceUrl"):"");
 		int num=njcarFeeRecordService.updateByPrimaryKeySelective(njcarfeerecord);
 		if (num==1) {
 			return Utility.createJsonMsg(1001, "success");
@@ -210,5 +236,22 @@ public class NjparkController {
 		njcarfeerecord.setInvoiceurl(outTime);
 		njcarFeeRecordService.insertSelective(njcarfeerecord);
 		return Utility.createJsonMsg(1001, "ok");
+	}
+	
+	//获取前多少条记录
+	@RequestMapping(value="getByCount",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getByCount(@RequestBody Map<String, Object> args){
+		int count=(int) args.get("count");
+		List<Njcarfeerecord> njcarfeerecords=njcarFeeRecordService.selectByCount(count);
+		Map<String, Object> result=new HashMap<>();
+		if (!njcarfeerecords.isEmpty()) {
+			result.put("status", 1001);
+			result.put("body", njcarfeerecords);
+		}
+		else {
+			result.put("status", 1001);
+		}
+		return Utility.gson.toJson(result);
 	}
 }
