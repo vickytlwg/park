@@ -32,8 +32,15 @@ public class Park {
 	private String number;
 	private String pictureUri;
 	private String description="";
+	private int parkId;
 
 	
+	public int getParkId() {
+		return parkId;
+	}
+	public void setParkId(int parkId) {
+		this.parkId = parkId;
+	}
 	public int getId() {
 		return id;
 	}

@@ -13,6 +13,10 @@ public interface  MonthUserService {
 	    int deleteByPrimaryKey(Integer id);
 
 	    int insert(Monthuser record);
+	    
+	    Monthuser getByPlateNumberById(int id);
+	    
+	    Monthuser selectById(int parkId,Date starttime,Date endtime,String platenumber );
 
 	    int insertSelective(Monthuser record);
 
