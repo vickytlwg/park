@@ -166,6 +166,18 @@ chargeApp
 									}
 								});
 							};
+							$scope.criterion.insertModel4 = function() {
+                                $uibModal.open({
+                                    templateUrl : 'FeeCriterionModel4',
+                                    controller : 'model4Crtl',
+                                    scope : $scope,
+                                    resolve : {
+                                        index : function() {
+                                            return undefined;
+                                        }
+                                    }
+                                });
+                            };
 							$scope.criterion.update = function() {
 								if ($scope.criterion.checkedIndex == -1)
 									return;
@@ -243,6 +255,59 @@ chargeApp.controller('modifyCrtl', function($scope, $modalInstance, $http,
 	$scope.close = function() {
 		$modalInstance.close('cancel');
 	};
+
+});
+chargeApp.controller('model4Crtl', function($scope, $modalInstance, $http,
+        $timeout, index) {
+
+    var url = 'insert';
+    $scope.tempCriterion = {};
+    $scope.onetimeExpense = false;
+    if (index != undefined) {
+        $scope.tempCriterion = $scope.$parent.criterion.items[index];
+        if ($scope.tempCriterion.isonetimeexpense == 1) {
+            $scope.onetimeExpense = true;
+        }
+        url = 'modify';
+    } else {
+        $scope.tempCriterion.maxexpense = 9999;
+        $scope.tempCriterion.nightstarttime = '20:00';
+        $scope.tempCriterion.nightendtime = '08:00';
+    }
+
+    $scope.loading = false;
+    $scope.submitted = false;
+    $scope.result = "";
+
+    $scope.submit = function() {
+        $scope.loading = true;
+        delete $scope.tempCriterion['checked'];
+        $scope.tempCriterion.type=4;
+        $http.post(url, $scope.tempCriterion).success(function(response) {
+            $scope.loading = false;
+            $scope.submitted = true;
+            if (response.status == 1001) {
+                $scope.result = "成功";
+                $timeout(function() {
+                    $scope.result = "";
+                    $modalInstance.close('ok');
+                    $scope.$parent.criterion.refresh();
+                }, 2000);
+            } else {
+                $scope.result = "失败:" + response.status;
+
+            }
+        }).error(function() {
+            $scope.loading = false;
+            $scope.submitted = true;
+            $scope.result = "失败";
+            // $modalInstance.close('faled');
+        });
+    };
+
+    $scope.close = function() {
+        $modalInstance.close('cancel');
+    };
 
 });
 chargeApp.controller('model1Crtl', function($scope, $modalInstance, $http,

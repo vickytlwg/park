@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.park.model.AdminArgs;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Constants;
@@ -434,6 +435,15 @@ public class ParkController {
 	@RequestMapping(value = "/insert/park", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String insertPark(@RequestBody Park park){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if (AdminArgs.isGuest) {
+			int parkcount=parkService.getParkCount();
+			if (parkcount>=AdminArgs.maxParkCount) {
+				ret.put("status", "1002");
+				ret.put("message", "超过最大限制数");
+				return Utility.gson.toJson(ret);
+			}
+		}
 		return parkService.insertPark(park);
 	}
 	

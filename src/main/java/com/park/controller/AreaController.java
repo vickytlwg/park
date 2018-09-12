@@ -63,6 +63,7 @@ public class AreaController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
+		
 		return "area";
 	}
 	

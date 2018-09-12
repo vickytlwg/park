@@ -1,5 +1,5 @@
 <script src="/park/script/businessCarportAngular.js?v=1.32"></script>
-<script src="/park/script/businessCarport.js?v=1.21"></script>
+<script src="/park/script/businessCarport.js?v=1.31"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
 <script src="/park/script/datepicker.js"></script>
 <script src="/park/script/highcharts.js"></script>

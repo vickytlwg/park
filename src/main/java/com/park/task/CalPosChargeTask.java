@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.jpush.Jpush;
+import com.park.model.AdminArgs;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Outsideparkinfo;
@@ -47,7 +48,10 @@ public class CalPosChargeTask {
 	YanchengDataService yanchengDataService;
 
 	@Scheduled(cron="0 0 18/1  * * ? ")
-	public void cal(){			
+	public void cal(){	
+		if (AdminArgs.isGuest) {
+			return;
+		}
 		List<PosChargeData> charges = chargeService.getUnCompleted();
 		for(PosChargeData charge : charges){
 			Date now = new Date();	
@@ -79,7 +83,10 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 30 0 * * ? ")
 	public void dayInfo(){
-		outsideParkInfoService.insertDayParkInfo();		
+		outsideParkInfoService.insertDayParkInfo();	
+		if (AdminArgs.isGuest) {
+			return;
+		}
 		Random rand = new Random();
 		int a=rand.nextInt(25)+2;
 		String url="http://park.hfcsbc.cn:8080/parkScreenPMS/ReceiveParkNum.action?parkId=3401040062&total=70&Surplus="+a;
@@ -87,6 +94,9 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0/2 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
+		if (AdminArgs.isGuest) {
+			return;
+		}
 		javaBeanXml.updateParkFromXml();
 	//	Jpush.SendPushToAllAudiences("heart!");
 	}
