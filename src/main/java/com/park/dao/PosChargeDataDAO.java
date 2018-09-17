@@ -52,6 +52,8 @@ public interface PosChargeDataDAO {
 	
 	public int count();
 	
+	public int gongcount();
+	
 	public int deleteById(@Param("id")int id);
 	
 	public int insert(PosChargeData item);

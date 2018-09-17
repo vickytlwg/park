@@ -2137,4 +2137,10 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.getParkByMoney(map);
 	}
+
+	@Override
+	public int gongcount() {
+		// TODO Auto-generated method stub
+		return chargeDao.gongcount();
+	}
 }

@@ -60,8 +60,8 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
          $scope.detail.items = $scope.currentData;
     };
     
-    $scope.detail.getCount = function() {
-        $http.get('count').success(function(response) {
+    $scope.detail.getCount2 = function() {
+        $http.get('gongCount').success(function(response) {
             if (response.status == 1001) {
                 $scope.detail.page.hidden = false;
                 $scope.detail.page.allCounts = response.body;
@@ -77,23 +77,23 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
         });
     };
-    
+
     //previous page
-    $scope.detail.previousPage = function() {
+    $scope.detail.previousPage2 = function() {
         if ($scope.detail.page.index <= 1)
             return;
         $scope.detail.page.index--;
-        $scope.detail.getPage();
+        $scope.detail.getPage2();
     };
     $scope.searchText="";
-    $scope.searchByCardnumber=function(){
+    $scope.searchByCarnumber=function(){
         if($scope.searchText==""||$scope.searchText==undefined){
             return;
         }
         $http({
-            url:'getByCardnumberAuthority',
+            url:'getByCarnumberAuthority',
             method:'post',
-            data:{"cardNumber":$scope.searchText}
+            data:{"carNumber":$scope.searchText}
         }).success(function(response){
             if(response.status==1001){
                getInitail(response.body);
@@ -104,9 +104,10 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
-			$scope.searchByCardnumber();
+			$scope.searchByCarnumber();
 		}
 	};
+	
     $scope.getExcelByDay=function(){  
          $window.location.href="getExcelByDay?date="+$scope.searchDate;
         };
@@ -146,7 +147,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         if ($scope.detail.page.index <= 1)
             return;
         $scope.detail.page.index = 1;
-        $scope.detail.getPage();
+        $scope.detail.getPage2();
     };
 
     //next page
@@ -154,7 +155,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         if ($scope.detail.page.index >= $scope.detail.page.indexRange.length)
             return;
         $scope.detail.page.index++;
-        $scope.detail.getPage();
+        $scope.detail.getPage2();
     };
 
     //last page
@@ -162,29 +163,29 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         if ($scope.detail.page.index >= $scope.detail.page.indexRange.length)
             return;
         $scope.detail.page.index = $scope.detail.page.indexRange.length;
-        $scope.detail.getPage();
+        $scope.detail.getPage2();
     };
 
-    //get one page detail
-    $scope.detail.getPage = function() {
-        if ($scope.detail.page.index > $scope.detail.page.indexRange.length) {
-            textModal.open($scope, "错误", "当前页不存在!");
-            return;
-        }
-        $scope.detail.loading = true;
-
-        var pageArgs = {
-            page : {
-                index : $scope.detail.page.index,
-                size : $scope.detail.page.size
-            },
-            property : ["id", "name", "sex", "phone", "createTime"],
-            order : {
-                createTime : true
+    //get one page detail    
+        $scope.detail.getPage2 = function() {
+            if ($scope.detail.page.index > $scope.detail.page.indexRange.length) {
+                textModal.open($scope, "错误", "当前页不存在!");
+                return;
             }
-        };
+            $scope.detail.loading = true;
 
-        $http.post('page', {
+            var pageArgs = {
+                page : {
+                    index : $scope.detail.page.index,
+                    size : $scope.detail.page.size
+                },
+                property : ["id", "name", "sex", "phone", "createTime"],
+                order : {
+                    createTime : true
+                }
+            };
+        
+        $http.post('gongpage', {
             low : ($scope.detail.page.index - 1) * $scope.detail.page.size,
             count : $scope.detail.page.size
         }).success(function(response) {
@@ -201,13 +202,12 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             textModal.open($scope, "错误", "获取计费信息错误: " + +response.status);
 
         });
-        
     };
 
     //init page
-    $scope.detail.getCount();
-    $scope.detail.refresh = $scope.detail.getPage;
-    $scope.detail.getPage();
+    $scope.detail.getCount2();
+    $scope.detail.refresh2 = $scope.detail.getPage2;
+    $scope.detail.getPage2();
 
 }]);
 
