@@ -149,6 +149,9 @@ public interface PosChargeDataService {
 	PosChargeData payWithOperatorId(String cardNumber, double money, String operatorId) throws Exception;
 	List<PosChargeData> queryDebtWithParkId(String cardNumber, Date exitDate, Integer parkId) throws Exception;
 	
+	PosChargeData newFeeCalcExpense4(PosChargeData charge, FeeCriterion criterion, Date exitDate, Boolean isQuery,
+			Park park) throws Exception;
+	
 	
 
 }

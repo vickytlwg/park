@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,10 +44,11 @@ public class WeiPayController {
 	@Autowired
 	AlipayrecordService alipayrecordService;
 	
-	
+	private static Log logger = LogFactory.getLog(WeiPayController.class);
 	@RequestMapping(value = "commonNotifyPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String commonNotifyPay(@RequestBody Map<String, Object> args){
+		logger.info("commonNotifyPay:"+args.toString());
 		int poschargeId=(int) args.get("poschargeId");
 		String paidAmount=(String) args.get("paidAmount");	
 		String tradeNo=(String) args.get("tradeNo");
@@ -66,6 +69,21 @@ public class WeiPayController {
 	//	lastCharge.setExitDate1(new Date());
 		lastCharge.setRejectReason("weipay"+new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 		poschargedataService.update(lastCharge);
+		//清场重复入场的
+		try {
+			List<PosChargeData> posChargeDatas=poschargedataService.getDebt(lastCharge.getCardNumber());
+			for (PosChargeData posChargeData : posChargeDatas) {
+				if (posChargeData.getParkId()==lastCharge.getParkId()) {
+					posChargeData.setPaidCompleted(true);
+					posChargeData.setPaidMoney(0);
+					posChargeData.setRejectReason("微信支付清场");
+					poschargedataService.update(posChargeData);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//支付宝记录的添加  微信暂时添加进来
 		Alipayrecord alipayrecord=new Alipayrecord();
 		alipayrecord.setStatus("5");
@@ -83,6 +101,7 @@ public class WeiPayController {
 			ret.put("status", 1002);
 			ret.put("message", "failed");
 		}
+		logger.info(ret.toString());
 		return Utility.gson.toJson(ret);
 	}
 	
@@ -90,11 +109,13 @@ public class WeiPayController {
 	@RequestMapping(value = "notifyPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String notifyUrlWebPay(@RequestBody Map<String, Object> args){
+		logger.info("notifyPay:"+args.toString());
 		int poschargeId=(int) args.get("poschargeId");
 		String paidAmount=(String) args.get("paidAmount");	
 		String tradeNo=(String) args.get("tradeNo");
 	//	String plateNumber=(String) args.get("plateNumber");
 	//	int payType=args.get("payType")!=null?(int)args.get("payType"):1;
+		
 		Map<String, Object> ret = new HashMap<String, Object>();
 		//更新poschargeData的状态
 		PosChargeData lastCharge =poschargedataService.getById(poschargeId);
@@ -106,6 +127,22 @@ public class WeiPayController {
 	//	lastCharge.setExitDate1(new Date());
 		lastCharge.setRejectReason("weipay"+new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
 		poschargedataService.update(lastCharge);
+		
+		try {
+			List<PosChargeData> posChargeDatas=poschargedataService.getDebt(lastCharge.getCardNumber());
+			for (PosChargeData posChargeData : posChargeDatas) {
+				if (posChargeData.getParkId()==lastCharge.getParkId()) {
+					posChargeData.setPaidCompleted(true);
+					posChargeData.setPaidMoney(0);
+					posChargeData.setRejectReason("微信支付清场");
+					poschargedataService.update(posChargeData);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//支付宝记录的添加  微信暂时添加进来
 		Alipayrecord alipayrecord=new Alipayrecord();
 		alipayrecord.setStatus("5");
@@ -123,12 +160,14 @@ public class WeiPayController {
 			ret.put("status", 1002);
 			ret.put("message", "failed");
 		}
+		logger.info("notifyPay:"+ret.toString());
 		return Utility.gson.toJson(ret);
 	}
 	
 	@RequestMapping(value = "notifyPayWithExitTime", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String updateExitTime(@RequestBody Map<String, Object> args){
+		logger.info("notifyPayWithExitTime:"+args.toString());
 		int poschargeId=(int) args.get("poschargeId");
 		String paidAmount=(String) args.get("paidAmount");	
 		String tradeNo=(String) args.get("tradeNo");	
@@ -157,6 +196,7 @@ public class WeiPayController {
 			ret.put("status", 1002);
 			ret.put("message", "failed");
 		}
+		logger.info("notifyPayWithExitTime:"+args.toString());
 		return Utility.gson.toJson(ret);
 	}
 }

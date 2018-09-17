@@ -1,6 +1,6 @@
 package com.park.service.impl;
 
-import static org.hamcrest.CoreMatchers.nullValue;
+
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
 
 import java.text.DecimalFormat;
@@ -16,6 +16,7 @@ import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.tools.config.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -1254,7 +1255,33 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		charge.setChargeMoney(money);
 		return charge;
 	}
-
+	//24小时
+	@Override
+	public PosChargeData newFeeCalcExpense4(PosChargeData charge, FeeCriterion criterion, Date exitDate,
+			Boolean isQuery,Park park) throws Exception {
+		Date enterDate=charge.getEntranceDate();
+		Date enterDateNew=new Date(enterDate.getTime()+criterion.getFreemins()*1000*60);
+		long diff=(exitDate.getTime()-enterDateNew.getTime())/(1000*60);
+		if (diff<=0) {
+			charge.setChargeMoney(0);
+			return charge;
+		}
+		int leftMinuts=(int) (diff%(60*24));
+		int days=(int) (diff/(60*24));
+		double money=days*criterion.getMaxexpense();
+		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
+		charge.setEntranceDate1(newEnterTime);
+		if (charge.getIsLargeCar()) {
+			calExpenseLargeCarWithData(charge, exitDate, isQuery, park, criterion);
+		}
+		else {
+			calExpenseSmallCarWithData(charge, exitDate, isQuery,park, criterion);
+		}
+		charge.setEntranceDate1(enterDate);
+		charge.setChargeMoney(charge.getChargeMoney()+money);
+		
+		return charge;
+	}
 	// 按次
 	@Override
 	public PosChargeData newFeeCalcExpense1(PosChargeData charge, FeeCriterion criterion, Date exitDate,
@@ -1663,7 +1690,20 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
-
+		
+		if (criterion.getType() == 4) {
+			newFeeCalcExpense4(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		
+		
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";
@@ -1994,7 +2034,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		Integer criterionId = park.getFeeCriterionId();
 		FeeCriterion criterion = criterionService.getById(criterionId);
-
+		//白天晚上模版
 		if (criterion.getType() == 2) {
 			newFeeCalcExpense2(charge, criterion, exitDate, isQuery);
 			if (isRealMonthUser) {
@@ -2006,6 +2046,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
+		//按次收费
 		if (criterion.getType() == 1) {
 			newFeeCalcExpense1(charge, criterion, exitDate, isQuery);
 			if (isRealMonthUser) {

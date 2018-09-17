@@ -332,7 +332,7 @@
 	var bindDeleteBtnClick = function(){
 		$('#deleteBusinessCarport').on('click', $(this), function(){
 			var checkedTr = $('#businessCarportBody').find('input[type="checkbox"]:checked').parents('tr');
-			
+			//var checkedTr=$('input[type="checkbox"]:checked').parents('tr');
 			if(checkedTr > 1)
 				return;
 			var modal = new $.Modal("businessCarportDelete", "删除停车位", "是否删除停车位!");
@@ -344,7 +344,8 @@
 	};
 	
 	var deleteClickHandle = function(){
-		var checkedTr = $('#businessCarportBody').find('input[type="checkbox"]:checked').parents('tr');
+	//	var checkedTr = $('#businessCarportBody').find('input[type="checkbox"]:checked').parents('tr');
+		  var checkedTr=$('input[type="checkbox"]:checked').parents('tr');
 		var id = parseInt($(checkedTr.find('td')[1]).text());
 		$.ajax({
 			url:$.fn.config.webroot + '/delete/businessCarport/' + id,
