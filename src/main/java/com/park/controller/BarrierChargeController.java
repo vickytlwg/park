@@ -1192,6 +1192,7 @@ public class BarrierChargeController {
 				//防止逃费
 				if (posChargeData.getPayType()==9&&diff<1000*60*60) {
 					dataMap.put("my", String.valueOf(posChargeData.getChargeMoney()));
+					dataMap.put("aT", "0");
 					dataMap.put("eD", String.valueOf((new Date().getTime() - posChargeData.getEntranceDate().getTime()) / (1000 * 60)));
 					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 				}
