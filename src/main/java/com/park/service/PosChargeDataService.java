@@ -89,6 +89,8 @@ public interface PosChargeDataService {
 	
 	public int count();
 	
+	public int gongcount();
+	
 	public int deleteById(int id);
 	
 	public int insert(PosChargeData item);

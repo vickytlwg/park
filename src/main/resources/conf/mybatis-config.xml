@@ -28,7 +28,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
          <typeAlias alias="Page" type="com.park.model.Page"/>  
          <typeAlias alias="Role" type="com.park.model.Role"/>  
          <typeAlias alias="PagePermission" type="com.park.model.PagePermission"/>  
-         <typeAlias alias="UserRole" type="com.park.model.UserRole"/>  
+         <typeAlias alias="UserRole" type="com.park.model.UserRole"/>
+         <typeAlias alias="GongzxRecord" type="com.park.model.GongzxRecord"/>    
     </typeAliases>
  
  	<plugins>

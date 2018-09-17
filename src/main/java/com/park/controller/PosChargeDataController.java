@@ -112,7 +112,7 @@ public class PosChargeDataController {
 		public Object getParkByMoney(@RequestBody Map<String, Object> args) throws Exception{
 			@SuppressWarnings("unused")
 			Map<String, Object> retMap = new HashMap<String, Object>();
-			/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 			Date date=new Date();*/
 			Object usernameObj= args.get("username");
 			Object startDateObj=   args.get("startDate");
@@ -533,7 +533,7 @@ public class PosChargeDataController {
 		}
 		return "record";
 	}
-
+	
 	@RequestMapping(value = "/taopaiche", produces = { "application/json;charset=UTF-8" })
 	public String taopaiche(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
 		String username = (String) session.getAttribute("username");
@@ -869,6 +869,7 @@ public class PosChargeDataController {
 		int count = chargeSerivce.count();
 		return Utility.createJsonMsg(1001, "success", count);
 	}
+	
 
 	@RequestMapping(value = "/getById", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
@@ -909,22 +910,18 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", result);
 	}
 
+	
 	@RequestMapping(value = "/page", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String page(@RequestBody Map<String, Object> args, HttpSession session) {
+		@SuppressWarnings("unused")
 		int low = (int) args.get("low");
+		@SuppressWarnings("unused")
 		int count = (int) args.get("count");
 		String userName = (String) session.getAttribute("username");
+		List<PosChargeData> list=chargeSerivce.getByParkAuthority(userName);
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkAuthority(userName));
 	}
 
-	@RequestMapping(value = "/getByCount", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
-	@ResponseBody
-	public String getByCount(@RequestBody Map<String, Object> args) {
-		int low = (int) args.get("low");
-		int count = (int) args.get("count");
-		List<PosChargeData> posChargeDatas = chargeSerivce.getPage(low, count);
-		return Utility.createJsonMsg(1001, "success", posChargeDatas);
-	}
 
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
