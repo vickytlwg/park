@@ -72,4 +72,16 @@ public class GongzxRecordServiceImpl implements GongzxRecordService{
 		return gongzxrecorddao.getByParkName(parkName);
 	}
 
+	@Override
+	public int insert(GongzxRecord record) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.insert(record);
+	}
+
+	@Override
+	public int update(GongzxRecord record) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.update(record);
+	}
+
 }
