@@ -57,7 +57,7 @@ import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
-import com.park.service.HttpUtil;
+/*import com.park.service.HttpUtil;*/
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
@@ -69,6 +69,7 @@ import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
 import com.squareup.okhttp.Request;
+import com.util.HttpUtil;
 
 @Controller
 @RequestMapping("/pos/charge")
@@ -106,28 +107,46 @@ public class PosChargeDataController {
 	@Autowired
 	private PosChargeDataService posChargeDataService;
 	
+	private double abcZongjine=0.0;
+	private int abcZongBishu=0;
+	
+/*	@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getDataDetail(@RequestBody Map<String, Object> args, HttpSession session) {
+		String userName = (String) session.getAttribute("username");
+		String startDateStr=args.get("startDate").toString();
+		String endDateStr=args.get("endDate").toString();
+		Map<String, Object> getBillDataMap=new HashMap<>();
+		getBillDataMap.put("username", userName);
+		getBillDataMap.put("startDate", startDateStr);
+		getBillDataMap.put("endDate", endDateStr);
+		args.put("username", userName);
+		String url = "http://localhost:8088/parkinfo/pos/charge/getParkByMoney";
+		//String getBillData="";
+		//getBillData=HttpUtil.postS(url,getBillDataMap);
+		//System.out.println(String.format("参数名称:%s,参数解释：%s",getBillData ,"初始化登录获取账单数据"));
+		return HttpUtil.postS(url, getBillDataMap);
+
+	}*/
+	
 	//查询停车场总金额
 		@RequestMapping(value = "/getParkByMoney",produces = {"application/json;charset=utf-8" })
 		@ResponseBody
 		public Object getParkByMoney(@RequestBody Map<String, Object> args) throws Exception{
 			@SuppressWarnings("unused")
 			Map<String, Object> retMap = new HashMap<String, Object>();
-			/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-			Date date=new Date();*/
 			Object usernameObj= args.get("username");
 			Object startDateObj=   args.get("startDate");
 			Object endDateObj=   args.get("endDate");
 			String username=String.valueOf(usernameObj);
 			String startDate=String.valueOf(startDateObj);
 			String endDate=String.valueOf(endDateObj);
-			
 			Map<String, Object> map = new HashMap<String, Object>();
 			Map<String, Object> map2 = new HashMap<String, Object>();
 			map.put("username", username);
 			map.put("startDate", startDate);
 			map.put("endDate", endDate);
-			/*String startDate="2018-09-01";
-			String endDate=sdf.format(date);*/
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date parsedStartDay = null;
 			try {
@@ -142,7 +161,6 @@ public class PosChargeDataController {
 				e.printStackTrace();
 			}
 			List<Park> listparkId = chargeSerivce.getParkByMoney(map);
-			/*Park a=listparkId.get(0);*/
 			int totalCount = 0;
 			int alipayCount=0;
 			int wechartCount=0;
@@ -150,6 +168,7 @@ public class PosChargeDataController {
 			int otherCount=0;
 			int unionPayCount=0;
 			int cbcCount=0;
+			int cashCount2=0;
 			
 			Double totalAmount = 0.0;
 			Double alipayAmount=0.0;
@@ -158,79 +177,21 @@ public class PosChargeDataController {
 			Double otherAmount=0.0;
 			Double unionPayAmount=0.0;
 			Double cbcAmount=0.0;
-			
+			Double cashAmount2=0.0;
+			abcZongjine=0.0;
+			abcZongBishu=0;
+			Map<String, Object> mapmap=null;
 			for (int i = 0; i <listparkId.size(); i++) {
 				int userId = listparkId.get(i).getId();
 				int parkId = listparkId.get(i).getParkId();
 				map2.put("parkId", parkId);
 				map2.put("startDate", startDate);
 				map2.put("endDate", endDate);
-				Map<String, Object> mapmap = getByDateAndParkCount(map2);
-				for(String key : mapmap.keySet()){
-					if(key.equals("totalCount")){
-						totalCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("alipayCount")){
-						alipayCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("wechartCount")){
-						wechartCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("cashCount")){
-						cashCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("otherCount")){
-						otherCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("unionPayCount")){
-						unionPayCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("cbcCount")){
-						cbcCount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("totalAmount")){
-						totalAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("alipayAmount")){
-						alipayAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("wechartAmount")){
-						wechartAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("cashAmount")){
-						cashAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("otherAmount")){
-						otherAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("unionPayAmount")){
-						unionPayAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-					if(key.equals("cbcAmount")){
-						cbcAmount += Double.parseDouble(mapmap.get(key).toString());
-					}
-				}
+			    mapmap = getByDateAndParkCount(map2);
+			    System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
 			}
-			
-			Map<String, Object> map33 = new HashMap<String, Object>();
-			map33.put("totalCount", totalCount);
-			map33.put("alipayCount", alipayCount);
-			map33.put("wechartCount", wechartCount);
-			map33.put("cashCount", cashCount);
-			map33.put("otherCount", otherCount);
-			map33.put("unionPayCount", unionPayCount);
-			map33.put("cbcCount", cbcCount);
-			
-			map33.put("totalAmount", totalAmount);
-			map33.put("alipayAmount", alipayAmount);
-			map33.put("wechartAmount", wechartAmount);
-			map33.put("cashAmount", cashAmount);
-			map33.put("otherAmount", otherAmount);
-			map33.put("unionPayAmount", unionPayAmount);
-			map33.put("cbcAmount", cbcAmount);
-			return Utility.createJsonMsg(1001, "success", map33);
-			
-		}
+			return Utility.createJsonMsg(1001, "success", mapmap);
+	}
 		
 		
 		//查询收费总笔数、收费总金额、各渠道收费统计
@@ -251,6 +212,7 @@ public class PosChargeDataController {
 					Double otherAmount=0.0;
 					Double unionPayAmount=0.0;
 					Double cbcAmount=0.0;
+					Double cashAmount2=0.0;
 					
 					int totalCount=0;
 					int alipayCount=0;
@@ -259,6 +221,7 @@ public class PosChargeDataController {
 					int otherCount=0;
 					int unionPayCount=0;
 					int cbcCount=0;
+					int cashCount2=0;
 					
 					Map<String, Object> retMap = new HashMap<String, Object>();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -280,7 +243,9 @@ public class PosChargeDataController {
 					int payTypeqt=3;
 					int payTypeyl=4;
 					int payTypegh=5;
-					/*int payTypedj=9;*/
+					int payTypexj2=9;
+					
+					
 					//查询收费总笔数、收费总金额、各渠道收费统计
 					String results2=chargeSerivce.getByDateAndParkCount2(parkId,startDate, endDate);
 					String resultszfbbs=chargeSerivce.getByDateAndParkCount(parkId,startDate, endDate,payTypezfb);
@@ -289,6 +254,7 @@ public class PosChargeDataController {
 					String resultsqtbs=chargeSerivce.getByDateAndParkCount(parkId,startDate, endDate,payTypeqt);
 					String resultsylbs=chargeSerivce.getByDateAndParkCount(parkId,startDate, endDate,payTypeyl);
 					String resultsghbs=chargeSerivce.getByDateAndParkCount(parkId,startDate, endDate,payTypegh);
+					String resultsxj2bs=chargeSerivce.getByDateAndParkCount(parkId,startDate, endDate,payTypexj2);
 					
 					String results4=chargeSerivce.getByDateAndParkCount4(parkId,startDate, endDate);
 					String resultszfbje=chargeSerivce.getByDateAndParkCount3(parkId,startDate, endDate,payTypezfb);
@@ -297,6 +263,7 @@ public class PosChargeDataController {
 					String resultsqtje=chargeSerivce.getByDateAndParkCount3(parkId,startDate, endDate,payTypeqt);
 					String resultsylje=chargeSerivce.getByDateAndParkCount3(parkId,startDate, endDate,payTypeyl);
 					String resultsghje=chargeSerivce.getByDateAndParkCount3(parkId,startDate, endDate,payTypegh);
+					String resultsxj2je=chargeSerivce.getByDateAndParkCount3(parkId,startDate, endDate,payTypexj2);
 					
 					retMap.put("totalAmount", results4==null?new BigDecimal("0"):new BigDecimal(results4));
 					retMap.put("alipayAmount", resultszfbje==null?new BigDecimal("0"):new BigDecimal(resultszfbje));
@@ -305,6 +272,7 @@ public class PosChargeDataController {
 					retMap.put("unionPayAmount", resultsylje==null?new BigDecimal("0"):new BigDecimal(resultsylje));
 					retMap.put("cbcAmount", resultsghje==null?new BigDecimal("0"):new BigDecimal(resultsghje));
 					retMap.put("otherAmount", resultsqtje==null?new BigDecimal("0"):new BigDecimal(resultsqtje));
+					retMap.put("cashAmount2", resultsqtje==null?new BigDecimal("0"):new BigDecimal(resultsxj2je));
 					
 					retMap.put("totalCount", results2==null?new BigDecimal("0"):new BigDecimal(results2));
 					retMap.put("alipayCount", resultszfbbs==null?new BigDecimal("0"):new BigDecimal(resultszfbbs));
@@ -313,34 +281,39 @@ public class PosChargeDataController {
 					retMap.put("unionPayCount", resultsylbs==null?new BigDecimal("0"):new BigDecimal(resultsylbs));
 					retMap.put("cbcCount", resultsghbs==null?new BigDecimal("0"):new BigDecimal(resultsghbs));
 					retMap.put("otherCount", resultsqtbs==null?new BigDecimal("0"):new BigDecimal(resultsqtbs));
+					retMap.put("cashCount2", resultsqtbs==null?new BigDecimal("0"):new BigDecimal(resultsxj2bs));
 					
-					double results2double=0;
+					int results2double=0;
 					if(results2 != null){
-						results2double=Double.parseDouble(results2);
+						results2double=Integer.parseInt(results2);
 					}
-					double resultszfbbsdouble=0;
+					int resultszfbbsdouble=0;
 					if(resultszfbbs !=null){
-						resultszfbbsdouble=Double.parseDouble(resultszfbbs);
+						resultszfbbsdouble=Integer.parseInt(resultszfbbs);
 					}
-					double resultswxbsdouble=0;
+					int resultswxbsdouble=0;
 					if(resultswxbs !=null){
-						resultswxbsdouble=Double.parseDouble(resultswxbs);
+						resultswxbsdouble=Integer.parseInt(resultswxbs);
 					}
-					double resultsxjbsdouble=0;
+					int resultsxjbsdouble=0;
 					if(resultsxjbs !=null){
-						resultsxjbsdouble=Double.parseDouble(resultsxjbs);
+						resultsxjbsdouble=Integer.parseInt(resultsxjbs);
 					}
-					double resultsqtbsdouble=0;
+					int resultsqtbsdouble=0;
 					if(resultsqtbs !=null){
-						resultsqtbsdouble=Double.parseDouble(resultsqtbs);
+						resultsqtbsdouble=Integer.parseInt(resultsqtbs);
 					}
-					double resultsylbsdouble=0;
+					int resultsylbsdouble=0;
 					if(resultsylbs !=null){
-						resultsylbsdouble=Double.parseDouble(resultsylbs);
+						resultsylbsdouble=Integer.parseInt(resultsylbs);
 					}
-					double resultsghbsdouble=0;
+					int resultsghbsdouble=0;
 					if(resultsghbs !=null){
-						resultsghbsdouble=Double.parseDouble(resultsghbs);
+						resultsghbsdouble=Integer.parseInt(resultsghbs);
+					}
+					int resultsxj2bsdouble=0;
+					if(resultsxj2bs !=null){
+						resultsxj2bsdouble=Integer.parseInt(resultsxj2bs);
 					}
 					
 					double results4double=0;
@@ -371,42 +344,47 @@ public class PosChargeDataController {
 					if(resultsghje !=null){
 						resultsghjedouble=Double.parseDouble(resultsghje);
 					}
-					totalCount+=results2double+resultszfbbsdouble+resultswxbsdouble+resultsxjbsdouble+resultsqtbsdouble
-							+resultsylbsdouble+resultsghbsdouble;
+					double resultsxj2jedouble=0;
+					if(resultsxj2je !=null){
+						resultsxj2jedouble=Double.parseDouble(resultsxj2je);
+					}
+					
+					abcZongBishu+=results2double;
 					alipayCount+=resultszfbbsdouble;
 					wechartCount+=resultswxbsdouble;
 					cashCount+=resultsxjbsdouble;
 					otherCount+=resultsqtbsdouble;
 					unionPayCount+=resultsylbsdouble;
 					cbcCount+=resultsghbsdouble;
-					
-					totalAmount+=results4double+resultszfbjedouble+resultswxjedouble+resultsxjjedouble+resultsqtjedouble
-							+resultsyljedouble+resultsghjedouble;
+					cashCount2+=resultsxj2bsdouble;
+				
+					abcZongjine+=results4double;
 					alipayAmount+=resultszfbjedouble;
 					wechartAmount+=resultswxjedouble;
 					cashAmount+=resultsxjjedouble;
 					otherAmount+=resultsqtjedouble;
 					unionPayAmount+=resultsyljedouble;
 					cbcAmount+=resultsghjedouble;
-					
-
+					cashAmount2+=resultsxj2jedouble;
 					
 					Map<String, Object> map222 = new HashMap<String , Object>();
-					map222.put("totalAmount", totalAmount);
+					map222.put("totalAmount", abcZongjine);
 					map222.put("alipayAmount", alipayAmount);
 					map222.put("wechartAmount", wechartAmount);
 					map222.put("cashAmount", cashAmount);
 					map222.put("otherAmount", otherAmount);
 					map222.put("unionPayAmount", unionPayAmount);
 					map222.put("cbcAmount", cbcAmount);
+					map222.put("cashAmount2", cashAmount2);
 					
-					map222.put("totalCount", totalCount);
+					map222.put("totalCount", abcZongBishu);
 					map222.put("alipayCount", alipayCount);
 					map222.put("wechartCount", wechartCount);
 					map222.put("cashCount", cashCount);
 					map222.put("otherCount", otherCount);
 					map222.put("unionPayCount", unionPayCount);
 					map222.put("cbcCount", cbcCount);
+					map222.put("cashCount2", cashCount2);
 					return map222;
 				}
 	
