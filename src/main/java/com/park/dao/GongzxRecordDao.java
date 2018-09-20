@@ -22,4 +22,7 @@ public interface GongzxRecordDao {
 	public List<GongzxRecord> getByCarNumberAndPark(@Param("carNumber")String carNumber,@Param("parkId")int parkId);
 	
 	public List<GongzxRecord> getByParkName(@Param("parkName")String parkName);
+	
+	public int update(GongzxRecord record);
+	public int insert(GongzxRecord record);
 }

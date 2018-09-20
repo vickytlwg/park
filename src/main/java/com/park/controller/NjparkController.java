@@ -20,11 +20,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.AlipayApiException;
+import com.park.dao.GongzxrecordMapper;
 import com.park.model.Constants;
+import com.park.model.GongzxRecord;
+import com.park.model.Gongzxrecord2;
 import com.park.model.Monthuser;
 import com.park.model.Njcarfeerecord;
 import com.park.model.Njmonthuser;
 import com.park.service.AliParkFeeService;
+import com.park.service.GongzxRecordService;
 import com.park.service.NjCarFeeRecordService;
 import com.park.service.NjMonthUserService;
 import com.park.service.Utility;
@@ -40,39 +44,79 @@ public class NjparkController {
 	NjCarFeeRecordService njcarFeeRecordService;
 	@Autowired
 	AliParkFeeService parkFeeService;
+	@Autowired
+	GongzxRecordService gongzxRecordService;
+	@Autowired
+	GongzxrecordMapper gongzxrecordMapper;
 	
 	private static Log logger = LogFactory.getLog(NjparkController.class);
 	
 	@RequestMapping(value="carArrive",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
-	public String carArrive(@RequestBody Map<String, Object> args) throws ParseException{
+	public String carArrive(@RequestBody Map<String, Object> args) throws ParseException{	
+		logger.info("carArrive:"+args.toString());
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
+		
+		GongzxRecord gongzxRecord=new GongzxRecord();
+		Gongzxrecord2 gongzxrecord2=new Gongzxrecord2();
+		
 		if (args.get("tradeDate")!=null) {
 			try {
-				njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
+				njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));				
 
 			} catch (Exception e) {
 				njcarfeerecord.setTradedate(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("tradeDate")));
 			}
+			
 		}
 		else{
 			njcarfeerecord.setTradedate(new Date());
 		}
+		
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
+		gongzxRecord.setCarNumber(njcarfeerecord.getCarnumber());
+		gongzxrecord2.setCarnumber(njcarfeerecord.getCarnumber());
 		njcarfeerecord.setCartype(args.get("carType")!=null?(String) args.get("carType"):"");
+		
 		try {
 			njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
 		} catch (Exception e) {
 			// TODO: handle exception
 			njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
 		}
+		
+		gongzxRecord.setArriveTime(njcarfeerecord.getArrivetime());
+		gongzxrecord2.setArrivetime(gongzxRecord.getArriveTime());
 		njcarfeerecord.setParkid((int)args.get("parkId"));
+		
+		gongzxRecord.setParkId(njcarfeerecord.getParkid());
+		gongzxrecord2.setParkid(njcarfeerecord.getParkid());
+		
 		njcarfeerecord.setParkname(args.get("parkName")!=null?(String) args.get("parkName"):"");
+		gongzxRecord.setParkName(njcarfeerecord.getParkname());
+		gongzxrecord2.setParkname(njcarfeerecord.getParkname());
+		
 		njcarfeerecord.setTradenumber(args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
+		gongzxRecord.setTradeNumber(njcarfeerecord.getTradenumber());
+		gongzxrecord2.setTradenumber(njcarfeerecord.getTradenumber());
+		
 		njcarfeerecord.setStoptype(args.get("stopType")!=null?(String) args.get("stopType"):"");
+		gongzxRecord.setStopType(njcarfeerecord.getStoptype());
+		gongzxrecord2.setStoptype(njcarfeerecord.getStoptype());
+		
 		njcarfeerecord.setPaidmoney(args.get("paidMoney")!=null?(int)args.get("paidMoney"):0);
+		gongzxRecord.setRealPay(Double.valueOf(String.valueOf(njcarfeerecord.getPaidmoney())));
+		gongzxrecord2.setRealpay(Double.valueOf(String.valueOf(njcarfeerecord.getPaidmoney())));
+		
 		njcarfeerecord.setPicturepath(args.get("picturePath")!=null?(String) args.get("picturePath"):"");
+		gongzxRecord.setPicturePath(njcarfeerecord.getPicturepath());
+		gongzxrecord2.setPicturepath(njcarfeerecord.getPicturepath());
+		
 		int num=njcarFeeRecordService.insertSelective(njcarfeerecord);
+		
+		
+		logger.info("test:"+gongzxrecord2);
+		gongzxrecordMapper.insertSelective(gongzxrecord2);
 		
 		Map<String, Object> ret = new HashMap<String, Object>();
 		if (num==1) {
@@ -86,20 +130,33 @@ public class NjparkController {
 	@ResponseBody
 	public String carLeave(@RequestBody Map<String, Object> args) throws ParseException{
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
+		GongzxRecord gongzxRecord=new GongzxRecord();
 	//	njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
+		gongzxRecord.setCardNumber(njcarfeerecord.getCarnumber());
 		njcarfeerecord.setCartype(args.get("carType")!=null?(String) args.get("carType"):"");
+		
 		try {
 			njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
 		} catch (Exception e) {
 			// TODO: handle exception
 			njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
-		}		njcarfeerecord.setParkid((int)args.get("parkId"));
+		}		
+		njcarfeerecord.setParkid((int)args.get("parkId"));
 		njcarfeerecord.setParkname(args.get("parkName")!=null?(String) args.get("parkName"):"");
 		njcarfeerecord.setTradenumber((String) args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
 		njcarfeerecord.setStoptype((String) args.get("stopType")!=null?(String) args.get("stopType"):"");
 		njcarfeerecord.setPaidmoney(args.get("paidMoney")!=null?(int)args.get("paidMoney"):0);
 		njcarfeerecord.setPicturepath(args.get("picturePath")!=null?(String) args.get("picturePath"):"");
+		
+		gongzxRecord.setParkId(njcarfeerecord.getParkid());
+		gongzxRecord.setArriveTime(njcarfeerecord.getArrivetime());
+		gongzxRecord.setParkName(njcarfeerecord.getParkname());
+		gongzxRecord.setStopType(njcarfeerecord.getStoptype());
+		gongzxRecord.setRealPay(Double.valueOf(String.valueOf(njcarfeerecord.getPaidmoney())));
+		gongzxRecord.setPicturePath(njcarfeerecord.getPicturepath());
+		gongzxRecordService.insert(gongzxRecord);
+		
 		List<Njcarfeerecord> njcarfeeSelecteds=njcarFeeRecordService.selectByTradeNumber(args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
 		if (njcarfeeSelecteds.isEmpty()) {
 			return Utility.createJsonMsg(1002, "无入场信息");

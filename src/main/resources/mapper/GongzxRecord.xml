@@ -4,35 +4,78 @@
 	<resultMap id="GongzxRecordMapper" type="GongzxRecord">
 		<id property="id" column="id" />
 		<result property="carNumber" column="carNumber" />
-		<result property="cardNumber" column="cardNumber"/>
-		<result property="arriveTime" column="arriveTime"/>
+		<result property="cardNumber" column="cardNumber" />
+		<result property="arriveTime" column="arriveTime" />
+		<result property="leaveTime" column="leaveTime" />
 		<result property="parkId" column="parkId" />
-		<result property="parkName" column="parkName"/>
-		<result property="stopType" column="stopType"/>
+		<result property="parkName" column="parkName" />
+		<result property="stopType" column="stopType" />
 		<result property="shouldCharge" column="shouldCharge" />
-		<result property="discount" column="discount"/>
-		<result property="realPay" column="realPay"/>
-		<result property="picturePath" column="picturePath"/>
-		<result property="other" column="other"/>
-	</resultMap> 
+		<result property="discount" column="discount" />
+		<result property="realPay" column="realPay" />
+		<result property="picturePath" column="picturePath" />
+		<result property="other" column="other" />
+		<result column="tradeNumber" property="tradeNumber" />
+	</resultMap>
 	<select id="gongcount" resultType="int">
-		select count(*) from gongzxrecord
+		select count(*) from
+		gongzxrecord
 	</select>
 	<select id="getPageByParkId" resultMap="GongzxRecordMapper">
-		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other 
-		FROM gongzxrecord 
-		LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} order by id desc limit #{start}, #{count}
+		SELECT
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		FROM gongzxrecord
+		LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} order by id desc
+		limit #{start}, #{count}
 	</select>
-	<select id="getByCarNumber" statementType="STATEMENT" resultMap="GongzxRecordMapper">
-		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other 
-		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where carNumber like '%${carNumber}%' order by id desc limit 200
- 	</select>
- 	<select id="getByCarNumberAndPark" statementType="STATEMENT" resultMap="GongzxRecordMapper">
-		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other 
-		FROM gongzxrecord 
-		LEFT JOIN park AS p ON parkId=p.id where carNumber like '%${carNumber}%' and parkId= '${parkId}' order by id desc
- 	</select>
- 	<select id="getByParkName" statementType="STATEMENT" resultMap="GongzxRecordMapper">
-		select * from gongzxrecord where parkName like '%${parkName}%' order by id desc limit 500
- 	</select>
+	<select id="update" parameterType="com.park.model.GongzxRecord">
+		update gongzxrecord
+		set carNumber = #{carNumber,jdbcType=VARCHAR},
+		cardNumber = #{cardNumber,jdbcType=VARCHAR},
+		arriveTime = #{arriveTime,jdbcType=TIMESTAMP},
+		parkId = #{parkTd,jdbcType=INTEGER},
+		parkName = #{parkName,jdbcType=VARCHAR},
+		stopType = #{stopType,jdbcType=VARCHAR},
+		shouldCharge = #{shouldCharge,jdbcType=DOUBLE},
+		discount = #{discount,jdbcType=DOUBLE},
+		realPay = #{realPay,jdbcType=DOUBLE},
+		picturePath = #{picturePath,jdbcType=VARCHAR},
+		other = #{other,jdbcType=VARCHAR},
+		tradeNumber = #{tradeNumber,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<insert id="insert" parameterType="com.park.model.GongzxRecord">
+		insert into gongzxrecord (id, carNumber, cardNumber,
+		arriveTime, parkId, parkName,
+		stopType, shouldCharge, discount,
+		realPay, picturePath, other,
+		tradeNumber)
+		values (#{id,jdbcType=INTEGER}, #{carNumber,jdbcType=VARCHAR},
+		#{cardNumber,jdbcType=VARCHAR},
+		#{arriveTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=INTEGER}, #{parkName,jdbcType=VARCHAR},
+		#{stopType,jdbcType=VARCHAR}, #{shouldCharge,jdbcType=DOUBLE},
+		#{discount,jdbcType=DOUBLE},
+		#{realPay,jdbcType=DOUBLE}, #{picturePath,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR},
+		#{tradeNumber,jdbcType=VARCHAR})
+	</insert>
+	<select id="getByCarNumber" statementType="STATEMENT"
+		resultMap="GongzxRecordMapper">
+		SELECT
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where carNumber
+		like '%${carNumber}%' order by id desc limit 200
+	</select>
+	<select id="getByCarNumberAndPark" statementType="STATEMENT"
+		resultMap="GongzxRecordMapper">
+		SELECT
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		FROM gongzxrecord
+		LEFT JOIN park AS p ON parkId=p.id where carNumber like '%${carNumber}%'
+		and parkId= '${parkId}' order by id desc
+	</select>
+	<select id="getByParkName" statementType="STATEMENT"
+		resultMap="GongzxRecordMapper">
+		select * from gongzxrecord where parkName like
+		'%${parkName}%' order by id desc limit 500
+	</select>
 </mapper>

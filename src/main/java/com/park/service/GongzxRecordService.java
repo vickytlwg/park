@@ -3,7 +3,6 @@ package com.park.service;
 import java.util.List;
 
 import com.park.model.GongzxRecord;
-import com.park.model.PosChargeData;
 
 public interface GongzxRecordService {
 	public int gongcount();
@@ -17,4 +16,10 @@ public interface GongzxRecordService {
 	public List<GongzxRecord> getByCarNumberAndPark(String carNumber,int parkId);
 	
 	public List<GongzxRecord> getByParkName(String parkName);
+	
+	public int insert(GongzxRecord record);
+	
+	public int update(GongzxRecord record);
+	
+	
 }
