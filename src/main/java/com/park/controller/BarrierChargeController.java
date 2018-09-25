@@ -1192,6 +1192,7 @@ public class BarrierChargeController {
 				//防止逃费
 				if (posChargeData.getPayType()==9&&diff<1000*60*60) {
 					dataMap.put("my", String.valueOf(posChargeData.getChargeMoney()));
+					dataMap.put("aT", "0");
 					dataMap.put("eD", String.valueOf((new Date().getTime() - posChargeData.getEntranceDate().getTime()) / (1000 * 60)));
 					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 				}
@@ -1404,13 +1405,13 @@ public class BarrierChargeController {
 		}
 	}
 
-	
+	//无感支付
 	@RequestMapping(value = "gonghangtouched", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public String gonghangtouched(@RequestBody Map<String, String> args) throws Exception {
 		String mac = args.get("mac");
 		String cardNumber = args.get("cardNumber");
-		logger.info("touch车辆" + cardNumber);
+		logger.info("gonghangtouched车辆" + cardNumber);
 
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge = new PosChargeData();
@@ -1836,7 +1837,7 @@ public class BarrierChargeController {
 			if (!queryCharges.isEmpty()) {
 				for (PosChargeData posChargeData : queryCharges) {
 					if (posChargeData.getParkId() == parkId.intValue()) {
-				//		posChargeData.setPaidCompleted(true);
+						posChargeData.setPaidCompleted(true);
 						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 						posChargeData.setUnPaidMoney(0);
 						posChargeData.setPayType(9);

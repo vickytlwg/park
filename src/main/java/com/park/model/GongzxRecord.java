@@ -4,17 +4,25 @@ import java.util.Date;
 
 public class GongzxRecord {
 	private int id;
-	private String carNumber;
-	private String cardNumber;
+	private String carNumber=" ";
+	private String cardNumber="";
 	private Date arriveTime;
 	private int parkId;
 	private String parkName;
-	private String stopType;
-	private Double shouldCharge;
-	private Double discount;
-	private Double realPay;
-	private String picturePath;
-	private String other;
+	private String stopType="";
+	private Double shouldCharge=0.0;
+	private Double discount=0.0;
+	private Double realPay=0.0;
+	private String picturePath="";
+	private String other="";
+	private String tradeNumber="";
+	
+	public String getTradeNumber() {
+		return tradeNumber;
+	}
+	public void setTradeNumber(String tradeNumber) {
+		this.tradeNumber = tradeNumber;
+	}
 	public int getId() {
 		return id;
 	}
