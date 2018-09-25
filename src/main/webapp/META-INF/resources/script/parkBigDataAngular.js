@@ -1,5 +1,5 @@
-angular.module("parkBigDataApp", []).
-controller("parkBigDataCtrl", ['$scope','$interval','httpService',
+var app=angular.module("parkBigDataApp", []);
+app.controller("parkBigDataCtrl", ['$scope','$interval','httpService',
 function($scope,$interval,httpService) {
 var data={low:0,count:10};
 $scope.items={};
@@ -24,8 +24,8 @@ $interval(function(){
     $scope.items=response;
 });
 },2000);
-}])
-.service("httpService",function($http,$q){
+}]);
+app.service("httpService",function($http,$q){
     return {
         getPosData:function(data){
             var deferred=$q.defer();
