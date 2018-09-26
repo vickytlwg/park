@@ -1,5 +1,5 @@
-angular.module("parkBigDataApp", []).
-controller("parkBigDataCtrl", ['$scope','$interval','httpService',
+var app=angular.module("parkBigDataApp", []);
+app.controller("parkBigDataCtrl", ['$scope','$interval','httpService',
 function($scope,$interval,httpService) {
 var data={low:0,count:10};
 $scope.items={};
@@ -24,8 +24,8 @@ $interval(function(){
     $scope.items=response;
 });
 },2000);
-}])
-.service("httpService",function($http,$q){
+}]);
+app.service("httpService",function($http,$q){
     return {
         getPosData:function(data){
             var deferred=$q.defer();
@@ -46,7 +46,8 @@ $interval(function(){
             return promise;
         }
     };
-}).controller("getdataCtrl",["$scope",'$interval',"httpService2",function($scope,$interval,httpService){
+})
+app.controller("getdataCtrl",["$scope",'$interval',"httpService2",function($scope,$interval,httpService){
       $scope.processData=function(data){
       $scope.dayAmountMoney=0;
       $scope.dayRealMoney=0;
@@ -76,10 +77,8 @@ $interval(function(){
       $scope.processData(result);
   });
 },6000);
-    
-  
-}]).
-service("httpService2",['$http','$q',function($http,$q){
+}]);
+app.service("httpService2",['$http','$q',function($http,$q){
       return {
         getZoneCenterInfo:function() {
         var deferred = $q.defer();

@@ -153,25 +153,25 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where cardNumber = #{cardN
 <!-- 获取笔数-->
  <select id="getByDateAndParkCount2" resultType="java.lang.String">
  <![CDATA[
-  	select SUM(posChargeData.chargeMoney>0) AS totalCount
-  	from posChargeData where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+  	select SUM(posChargeData.chargeMoney>=0) AS totalCount
+  	from posChargeData where parkId=#{parkId} and exitDate between #{startDate} and #{endDate} 
   ]]> 
   </select>
   <!-- 获取金额-->
   <select id="getByDateAndParkCount4" resultType="java.lang.String">
 	  select SUM(posChargeData.chargeMoney) AS totalAmount from posChargeData 
-where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+where parkId=#{parkId} and exitDate between #{startDate} and #{endDate} 
   </select>
   <!-- 获取渠道 笔数-->
  <select id="getByDateAndParkCount" resultType="java.lang.String">
-	  select sum(posChargeData.chargeMoney>0) AS totalCount from posChargeData 
-where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+	  select sum(posChargeData.chargeMoney>=0) AS totalCount from posChargeData 
+where parkId=#{parkId} and exitDate between #{startDate} and #{endDate} 
  and payType = #{payType}
   </select>
     <!-- 获取渠道 金额-->
   <select id="getByDateAndParkCount3" resultType="java.lang.String">
 	  select SUM(posChargeData.chargeMoney) AS totalAmount from posChargeData 
-where parkId=#{parkId} and entranceDate between #{startDate} and #{endDate} 
+where parkId=#{parkId} and exitDate between #{startDate} and #{endDate} 
  and payType = #{payType}
   </select>
  <select id="selectPosdataByParkAndRange" resultMap="PosChargeDataMapper">
