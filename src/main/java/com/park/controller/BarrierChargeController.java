@@ -1925,15 +1925,10 @@ public class BarrierChargeController {
 				if (parkcarauthority.getTemporary() != true&&shouldChargeMoney>0) {
 					dataMap.put("aT", "0");
 				}
-				else {
-					dataMap.put("aT", "1");
-				}
 				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
 					dataMap.put("aT", "0");
 				}
-				else {
-					dataMap.put("aT", "1");
-				}
+				
 				break;
 			default:
 				break;
