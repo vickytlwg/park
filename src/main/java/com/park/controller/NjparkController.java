@@ -1,6 +1,13 @@
 package com.park.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -293,6 +300,34 @@ public class NjparkController {
 		njcarfeerecord.setInvoiceurl(outTime);
 		njcarFeeRecordService.insertSelective(njcarfeerecord);
 		return Utility.createJsonMsg(1001, "ok");
+	}
+	
+	@RequestMapping(value="getFeeT",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String getFeeT(@RequestBody Map<String, Object> args) throws UnknownHostException, IOException {
+		String ip = "120.25.234.195";
+		int port = 9090;
+		Socket sck = new Socket(ip, port);
+		int parkId=108;
+		String cardNumber="川A00011";		
+		String content = "{\"parkId\":\""
+				+ parkId
+				+ "\",\"cardNumber\":\""
+				+ cardNumber
+				+ "\"}\r\n";
+		byte[] bstream = content.getBytes("GBK"); // 转化为字节流
+		OutputStream os = sck.getOutputStream(); // 输出流
+		os.write(bstream);
+		os.flush();
+		
+		InputStream is = sck.getInputStream();		
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"GBK"));
+		String info=br.readLine();
+		os.close();
+		br.close();
+		sck.close();
+		
+		return info;
 	}
 	
 	//获取前多少条记录

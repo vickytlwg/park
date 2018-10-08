@@ -1841,7 +1841,7 @@ public class BarrierChargeController {
 						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 						posChargeData.setUnPaidMoney(0);
 						posChargeData.setPayType(9);
-						posChargeData.setOperatorId("工行");
+						posChargeData.setOperatorId("道闸");
 						if (tmpnn == 0) {
 							payRet = posChargeData;
 							tmpnn++;
