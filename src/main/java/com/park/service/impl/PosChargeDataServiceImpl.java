@@ -1679,7 +1679,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
-		if (criterion.getType() == 1) {
+		if (criterion.getType() == 1) {//按次
 			newFeeCalcExpense1(charge, criterion, exitDate, isQuery);
 			if (isRealMonthUser) {
 				charge.setChargeMoney(0);
@@ -1691,7 +1691,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			return;
 		}
 		
-		if (criterion.getType() == 4) {
+		if (criterion.getType() == 4) {//24小时
 			newFeeCalcExpense4(charge, criterion, exitDate, isQuery,park);
 			if (isRealMonthUser) {
 				charge.setChargeMoney(0);
@@ -1702,7 +1702,18 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
-		
+		//三个计费阶段
+		if (criterion.getType()==6) {
+			newFeeCalcExpense6(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
 		
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
@@ -1817,6 +1828,32 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		}
 
+	}
+	//
+	private void newFeeCalcExpense6(PosChargeData charge, FeeCriterion criterion, Date exitDate, Boolean isQuery,
+			Park park) {
+		// TODO Auto-generated method stub
+		Date enterDate=charge.getEntranceDate();
+		Date enterDateNew=new Date(enterDate.getTime()+criterion.getFreemins()*1000*60);
+		long diff=(exitDate.getTime()-enterDateNew.getTime())/(1000*60);
+		if (diff<=0) {
+			charge.setChargeMoney(0);
+			return ;
+		}
+		int leftMinuts=(int) (diff%(60*24));
+		int days=(int) (diff/(60*24));
+	//	double money=days*criterion.getMaxexpense();
+	//	Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
+		//前三小时免费，3-5小时5元，5-12小时10元，12-24小时20元
+		if (diff<=2*60&&diff>0) {
+			charge.setChargeMoney(criterion.getStep1price());
+		}
+		if (diff>2*60&&diff<=9*60) {
+			charge.setChargeMoney(criterion.getStep2price());
+		}
+		if (diff>10*60) {
+			charge.setChargeMoney(criterion.getOnetimeexpense());
+		}
 	}
 
 	@Override
