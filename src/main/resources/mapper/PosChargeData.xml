@@ -81,7 +81,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where entranceDate between
 	</select>
 	<select id="count" resultType="int">
 		select count(*) from posChargeData
-	</select>
+	</select> 
 	
 	<select id="getDebt" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,payType,portNumber,rejectReason,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted,discount,discountType,other,other2,outUrl

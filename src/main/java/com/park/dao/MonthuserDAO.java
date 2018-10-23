@@ -17,8 +17,8 @@ public interface MonthuserDAO {
     
     Monthuser getByPlateNumberById(@Param("id")int id);
     
-    Monthuser selectById(@Param("parkId")int parkId,@Param("starttime")Date starttime,@Param("endtime")Date endtime,@Param("platenumber")String platenumber );
-
+    Monthuser selectById(@Param("parkId")int parkId,@Param("type")int type,@Param("owner")String owner,@Param("starttime")Date starttime,@Param("endtime")Date endtime,@Param("platenumber")String platenumber );
+    
     int insertSelective(Monthuser record);
 
     Monthuser selectByPrimaryKey(Integer id);
@@ -30,6 +30,8 @@ public interface MonthuserDAO {
     int getCount();
     
     int getCountByParkId(@Param("parkId")int parkId);
+    
+    List<Monthuser> getByPlateNumberBytype(@Param("platenumber")String platenumber,@Param("type")int type, @Param("owner")String owner,@Param("certificatetype")String certificatetype);
     
     List<Monthuser> getByStartAndCount(@Param("start")int start,@Param("count")int count);
     
