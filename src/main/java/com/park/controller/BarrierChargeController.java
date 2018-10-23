@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import com.park.model.*;
 import com.park.service.*;
+import com.sun.istack.internal.logging.Logger;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
@@ -552,13 +553,19 @@ public class BarrierChargeController {
 
 				if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true) {
 					Map<String, String> argstoali = new HashMap<>();
-					argstoali.put("parkName", posChargeData.getParkDesc());
-					argstoali.put("carNumber", posChargeData.getCardNumber());
-					argstoali.put("enterTime",
-							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getEntranceDate()));
-					argstoali.put("exitTime",
-							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getExitDate()));
-					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+					try {
+						argstoali.put("parkName", posChargeData.getParkDesc());
+						argstoali.put("carNumber", posChargeData.getCardNumber());
+						argstoali.put("enterTime",
+								new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getEntranceDate()));
+						argstoali.put("exitTime",
+								new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(posChargeData.getExitDate()));
+						ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+					} catch (Exception e) {
+						// TODO: handle exception
+						logger.info(cardNumber+"weixinoutinfo："+e);
+					}
+				
 				}
 				
 				Date payDate = new Date();
@@ -739,15 +746,20 @@ public class BarrierChargeController {
 				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
 			}
 		
-			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
-				Map<String, String> argstoali = new HashMap<>();
-				argstoali.put("parkName", payRet.getParkDesc());
-				argstoali.put("carNumber", payRet.getCardNumber());
-				argstoali.put("enterTime",
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
-				argstoali.put("exitTime",
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
-				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {				
+				try {
+					Map<String, String> argstoali = new HashMap<>();
+					argstoali.put("parkName", payRet.getParkDesc());
+					argstoali.put("carNumber", payRet.getCardNumber());
+					argstoali.put("enterTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+					argstoali.put("exitTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+				} catch (Exception e) {
+					// TODO: handle exception
+					logger.info(cardNumber+"发送微信出场通知错误："+e);
+				}
 			}
 
 			if (payRet.getEntranceDate() == null) {
@@ -1242,6 +1254,7 @@ public class BarrierChargeController {
 			logger.info(cardNumber + "计费完毕后处理");
 			int num = 0;
 			if (!queryCharges.isEmpty()) {
+				logger.info(cardNumber + "计费完毕后处理1245");
 				for (PosChargeData posChargeData : queryCharges) {
 					if (posChargeData.getParkId() == parkId.intValue()) {
 						posChargeData.setPaidCompleted(true);
@@ -1256,11 +1269,13 @@ public class BarrierChargeController {
 							posChargeData.setChargeMoney(0);
 							posChargeData.setPaidMoney(0);
 						}
+						logger.info(cardNumber + "计费完毕后处理1260");
 						chargeSerivce.update(posChargeData);
 					} else {
 						posChargeData.setChargeMoney(0.0);
 						posChargeData.setPaidCompleted(true);
 						posChargeData.setPayType(9);
+						logger.info(cardNumber + "计费完毕后处理1266");
 						chargeSerivce.update(posChargeData);
 					}
 				}
@@ -1269,12 +1284,13 @@ public class BarrierChargeController {
 				// }
 				shouldChargeMoney=payRet.getChargeMoney();
 				num = chargeSerivce.update(payRet);
+				logger.info(cardNumber + "计费完毕后处理1275-"+num);
 			} else {
 				logger.info(cardNumber + "查询计费结果为空!!!");
 				return Utility.createJsonMsg(1002, "计费结果为空");
 			}
-			
-			switch (monthUserType) {
+			logger.info(cardNumber + "权限-"+monthUserType);
+			switch (monthUserType) {		
 			case 0:
 				if (parkcarauthority.getMonth() != true) {
 					dataMap.put("aT", "0");
@@ -1339,36 +1355,37 @@ public class BarrierChargeController {
 			default:
 				break;
 			}	
-			// 发送到贵州
-			if (parkId==334) {
-				Map<String, String> guiyang = new HashMap<>();
-				guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
-				guiyang.put("type", "out");
-				guiyang.put("plateNum", cardNumber);
-				guiyang.put("leaveTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
-			}
+			logger.info(cardNumber + "发送topic");
 			//发送到topic
 			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
 				payRet.setEntrance(false);
 			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 			}
+			logger.info(cardNumber + "发送队列");
 			// 发送到队列
 			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
 				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
 			}
-		
+			logger.info(cardNumber + "1357");
 			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
-				Map<String, String> argstoali = new HashMap<>();
-				argstoali.put("parkName", payRet.getParkDesc());
-				argstoali.put("carNumber", payRet.getCardNumber());
-				argstoali.put("enterTime",
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
-				argstoali.put("exitTime",
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
-				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+				logger.info(cardNumber + "1359");
+				try {
+					Map<String, String> argstoali = new HashMap<>();
+					argstoali.put("parkName", payRet.getParkDesc());
+					argstoali.put("carNumber", payRet.getCardNumber());
+					argstoali.put("enterTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getEntranceDate()));
+					argstoali.put("exitTime",
+							new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(payRet.getExitDate()));
+					logger.info(cardNumber+"weixinoutargs:"+argstoali.toString());
+					ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(argstoali), "weixinOutInfo");
+				} catch (Exception e) {
+					// TODO: handle exception
+					logger.info(cardNumber+"发送微信出场通知错误："+e);
+				}
+				
 			}
-
+			logger.info(cardNumber + "1369");
 			if (payRet.getEntranceDate() == null) {
 
 				return Utility.createJsonMsg(1003, "无入场记录");
@@ -1379,6 +1396,7 @@ public class BarrierChargeController {
 			if (!isRealMonthUser) {
 				dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 			}
+			logger.info(cardNumber + "1380");
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				if (payRet.getChargeMoney() > 0) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
@@ -1841,7 +1859,7 @@ public class BarrierChargeController {
 						posChargeData.setPaidMoney(posChargeData.getChargeMoney());
 						posChargeData.setUnPaidMoney(0);
 						posChargeData.setPayType(9);
-						posChargeData.setOperatorId("工行");
+						posChargeData.setOperatorId("道闸");
 						if (tmpnn == 0) {
 							payRet = posChargeData;
 							tmpnn++;
@@ -1925,15 +1943,10 @@ public class BarrierChargeController {
 				if (parkcarauthority.getTemporary() != true&&shouldChargeMoney>0) {
 					dataMap.put("aT", "0");
 				}
-				else {
-					dataMap.put("aT", "1");
-				}
 				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
 					dataMap.put("aT", "0");
 				}
-				else {
-					dataMap.put("aT", "1");
-				}
+				
 				break;
 			default:
 				break;

@@ -899,7 +899,15 @@ public class PosChargeDataController {
 		List<PosChargeData> list=chargeSerivce.getByParkAuthority(userName);
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByParkAuthority(userName));
 	}
-
+	
+ 	@RequestMapping(value = "/getByCount", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+ 	@ResponseBody
+ 	public String getByCount(@RequestBody Map<String, Object> args) {
+ 		int low = (int) args.get("low");
+ 		int count = (int) args.get("count");
+ 		List<PosChargeData> posChargeDatas = chargeSerivce.getPage(low, count);
+ 		return Utility.createJsonMsg(1001, "success", posChargeDatas);
+ 	}
 
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })

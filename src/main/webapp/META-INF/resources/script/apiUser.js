@@ -6,7 +6,7 @@ apiUserApp.controller("apiUserCtrl", ['$scope', '$http',  '$modal', '$timeout', 
 	
 	$scope.userCount = 0;
 	$scope.currentPage = 1;
-	$scope.pageSize = 20;
+	$scope.pageSize = 100;
 	$scope.pageNumber = 0;
 	
 	$scope.refreshUser = function(){	
