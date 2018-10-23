@@ -151,10 +151,17 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.getByPlateNumberById(id);
 	}
 
+
 	@Override
-	public Monthuser selectById(int parkId, Date starttime, Date endtime, String platenumber) {
+	public List<Monthuser> getByPlateNumberBytype(String platenumber, int type, String owner, String certificatetype) {
 		// TODO Auto-generated method stub
-		return monthUserDao.selectById(parkId, starttime, endtime, platenumber);
+		return monthUserDao.getByPlateNumberBytype(platenumber, type, owner, certificatetype);
+	}
+
+	@Override
+	public Monthuser selectById(int parkId,int type,String owner, Date starttime, Date endtime, String platenumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.selectById(parkId, type,owner,starttime, endtime, platenumber);
 	}
 
 }

@@ -91,7 +91,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             return;
         }
         $http({
-            url:'getByCarnumberAuthority',
+            url:'getByCarNumber',
             method:'post',
             data:{"carNumber":$scope.searchText}
         }).success(function(response){

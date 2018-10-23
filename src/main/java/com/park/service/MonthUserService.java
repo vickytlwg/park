@@ -16,7 +16,7 @@ public interface  MonthUserService {
 	    
 	    Monthuser getByPlateNumberById(int id);
 	    
-	    Monthuser selectById(int parkId,Date starttime,Date endtime,String platenumber );
+	    Monthuser selectById(int parkId,int type,String owner,Date starttime,Date endtime,String platenumber );
 
 	    int insertSelective(Monthuser record);
 
@@ -29,6 +29,8 @@ public interface  MonthUserService {
 	    int getCount();
 	    
 	    int getCountByParkId(int parkId);
+	    
+	    List<Monthuser> getByPlateNumberBytype(String platenumber,int type,String owner,String certificatetype);
 	    
 	    List<Monthuser> getByStartAndCount(int start,int count);
 	    

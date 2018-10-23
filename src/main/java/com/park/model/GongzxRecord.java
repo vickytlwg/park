@@ -16,7 +16,14 @@ public class GongzxRecord {
 	private String picturePath="";
 	private String other="";
 	private String tradeNumber="";
+	private Date leaveTime;
 	
+	public Date getLeaveTime() {
+		return leaveTime;
+	}
+	public void setLeaveTime(Date leaveTime) {
+		this.leaveTime = leaveTime;
+	}
 	public String getTradeNumber() {
 		return tradeNumber;
 	}
