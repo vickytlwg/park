@@ -1,4 +1,4 @@
-<script src="/park/script/feeOperator.js?v=1.2"></script>
+<script src="/park/script/hardwareinfo.js?v=1.2"></script>
 <style>
 .page-list .pagination {
 	float: left;
@@ -37,8 +37,8 @@
 	width: 50px;
 }
 </style>
-<div class="content-wrapper" ng-app="feeOperatorApp"
-	ng-controller="feeOperatorCtrl">
+<div class="content-wrapper" ng-app="hardwareInfoApp"
+	ng-controller="hardwareInfoCtrl">
 	<section class="content-header">
 		<h1>收费人员管理</h1>
 

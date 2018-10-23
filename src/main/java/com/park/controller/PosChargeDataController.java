@@ -600,7 +600,99 @@ public class PosChargeDataController {
 		}
 		return "reconciliation";
 	}
+	//demo1
+	@RequestMapping(value = "/demo1", produces = { "application/json;charset=UTF-8" })
+	public String demo1(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
 
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo1";
+	}
+	//demo2
+	@RequestMapping(value = "/demo2", produces = { "application/json;charset=UTF-8" })
+	public String demo2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo2";
+	}	
+	//demo3
+	@RequestMapping(value = "/demo3", produces = { "application/json;charset=UTF-8" })
+	public String demo3(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo3";
+	}
 	// 新加页面
 	@RequestMapping(value = "/reconciliation2", produces = { "application/json;charset=UTF-8" })
 	public String reconciliation2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
