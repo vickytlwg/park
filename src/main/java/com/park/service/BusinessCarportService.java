@@ -8,6 +8,7 @@ import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
 import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
+import com.park.model.PosChargeData;
 
 public interface BusinessCarportService {
 

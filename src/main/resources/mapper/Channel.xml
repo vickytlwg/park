@@ -30,6 +30,13 @@
 		<result property="description" column="channel_description"/>
 	</resultMap> 
 	
+	<select id= "getByRangeDay" resultMap="ChannelMapper">
+		select channel.id,channel.parkId,park.name,hardware.mac,channelId,channelFlag,channel.date,channel.`status`,channel.description,isEffective,channel.isDeleted 
+		from channel LEFT JOIN park on channel.parkId = park.Id 
+		LEFT JOIN hardware on channel.id=hardware.id 
+		where parkId=#{parkId} and channel.date BETWEEN #{startDate} and #{endDate} limit 70000
+	</select>
+	
 	<select id="getChannels" resultMap="ChannelMapper">
 		select * from channel
 	</select>

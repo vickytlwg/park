@@ -109,22 +109,8 @@ public class PosChargeDataController {
 	private PosChargeDataService posChargeDataService;
 	
 	private double abcZongjine=0.0;
-	private double weixinZongjine=0.0;
-	private double zfbZongjine=0.0;
-	private double xjZongjine=0.0;
-	private double qtZongjine=0.0;
-	private double ylZongjine=0.0;
-	private double ghZongjine=0.0;
-	private double xj2Zongjine=0.0;
-	
 	private int abcZongBishu=0;
-	private int weixinZongBishu=0;
-	private int zfbZongBishu=0;
-	private int xjZongBishu=0;
-	private int qtZongBishu=0;
-	private int ylZongBishu=0;
-	private int ghZongBishu=0;
-	private int xj2ZongBishu=0;
+
 	
 	/*@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
@@ -184,23 +170,8 @@ public class PosChargeDataController {
 			Double unionPayAmount=0.0;
 			Double cbcAmount=0.0;
 			Double cashAmount2=0.0;
-			abcZongjine=0.0;
-			weixinZongjine=0.0;
-			zfbZongjine=0.0;
-			xjZongjine=0.0;
-			qtZongjine=0.0;
-			ylZongjine=0.0;
-			ghZongjine=0.0;
-			xj2Zongjine=0.0;
-			
+			abcZongjine=0.0;		
 			abcZongBishu=0;
-			weixinZongBishu=0;
-			zfbZongBishu=0;
-			xjZongBishu=0;
-			qtZongBishu=0;
-			ylZongBishu=0;
-			ghZongBishu=0;
-			xj2ZongBishu=0;
 			Map<String, Object> mapmap=null;
 			for (int i = 0; i <listparkId.size(); i++) {
 				int userId = listparkId.get(i).getId();
@@ -371,108 +342,43 @@ public class PosChargeDataController {
 					}
 					
 					abcZongBishu+=results2double;
-					zfbZongBishu+=resultszfbbsdouble;
-					weixinZongBishu+=resultswxbsdouble;
-					xjZongBishu+=resultsxjbsdouble;
-					qtZongBishu+=resultsqtbsdouble;
-					ylZongBishu+=resultsylbsdouble;
-					ghZongBishu+=resultsghbsdouble;
-					xj2ZongBishu+=resultsxj2bsdouble;
+					alipayCount+=resultszfbbsdouble;
+					wechartCount+=resultswxbsdouble;
+					cashCount+=resultsxjbsdouble;
+					otherCount+=resultsqtbsdouble;
+					unionPayCount+=resultsylbsdouble;
+					cbcCount+=resultsghbsdouble;
+					cashCount2+=resultsxj2bsdouble;
 				
 					abcZongjine+=results4double;
-					zfbZongjine+=resultszfbjedouble;
-					weixinZongjine+=resultswxjedouble;
-					xjZongjine+=resultsxjjedouble;
-					qtZongjine+=resultsqtjedouble;
-					ylZongjine+=resultsyljedouble;
-					ghZongjine+=resultsghjedouble;
-					xj2Zongjine+=resultsxj2jedouble;
+					alipayAmount+=resultszfbjedouble;
+					wechartAmount+=resultswxjedouble;
+					cashAmount+=resultsxjjedouble;
+					otherAmount+=resultsqtjedouble;
+					unionPayAmount+=resultsyljedouble;
+					cbcAmount+=resultsghjedouble;
+					cashAmount2+=resultsxj2jedouble;
 					
 					Map<String, Object> map222 = new HashMap<String , Object>();
 					map222.put("totalAmount", abcZongjine);
-					map222.put("alipayAmount", zfbZongjine);
-					map222.put("wechartAmount", weixinZongjine);
-					map222.put("cashAmount", xjZongjine);
-					map222.put("otherAmount", qtZongjine);
-					map222.put("unionPayAmount", ylZongjine);
-					map222.put("cbcAmount", ghZongjine);
-					map222.put("cashAmount2", xj2Zongjine);
+					map222.put("alipayAmount", alipayAmount);
+					map222.put("wechartAmount", wechartAmount);
+					map222.put("cashAmount", cashAmount);
+					map222.put("otherAmount", otherAmount);
+					map222.put("unionPayAmount", unionPayAmount);
+					map222.put("cbcAmount", cbcAmount);
+					map222.put("cashAmount2", cashAmount2);
 					
 					map222.put("totalCount", abcZongBishu);
-					map222.put("alipayCount", zfbZongBishu);
-					map222.put("wechartCount", weixinZongBishu);
-					map222.put("cashCount", xjZongBishu);
-					map222.put("otherCount", qtZongBishu);
-					map222.put("unionPayCount", ylZongBishu);
-					map222.put("cbcCount", ghZongBishu);
-					map222.put("cashCount2", xj2ZongBishu);
+					map222.put("alipayCount", alipayCount);
+					map222.put("wechartCount", wechartCount);
+					map222.put("cashCount", cashCount);
+					map222.put("otherCount", otherCount);
+					map222.put("unionPayCount", unionPayCount);
+					map222.put("cbcCount", cbcCount);
+					map222.put("cashCount2", cashCount2);
 					return map222;
 				}
-	
-	
-	//查询收费总笔数、收费总金额、各渠道收费统计
-		/*@RequestMapping(value = "/getByDateAndParkCount", produces = {"application/json;charset=utf-8" })
-		@ResponseBody
-		public String getByDateAndParkCount(@RequestBody Map<String, Object> args,HttpServletRequest request, HttpSession session) throws Exception{
-			int parkId=Integer.parseInt((String)args.get("parkId"));
-			String startDate=(String)args.get("startDate");
-			String endDate=(String)args.get("endDate");
-			Map<String, Object> retMap = new HashMap<String, Object>();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date parsedStartDay = null;
-			try {
-				parsedStartDay = sdf.parse(startDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			Date parsedEndDay = null;
-			try {
-				parsedEndDay = sdf.parse(endDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			int payTypezfb=0;
-			int payTypewx=1;
-			int payTypexj=2;
-			int payTypeqt=3;
-			int payTypeyl=4;
-			int payTypegh=5;
-			int payTypedj=9;
-			//查询收费总笔数、收费总金额、各渠道收费统计
-			String results2=posChargeDataService.getByDateAndParkCount2(parkId,startDate, endDate);
-			String resultszfbbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypezfb);
-			String resultswxbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypewx);
-			String resultsxjbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypexj);
-			String resultsqtbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeqt);
-			String resultsylbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeyl);
-			String resultsghbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypegh);
-			
-			String results4=posChargeDataService.getByDateAndParkCount4(parkId,startDate, endDate);
-			String resultszfbje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypezfb);
-			String resultswxje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypewx);
-			String resultsxjje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypexj);
-			String resultsqtje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeqt);
-			String resultsylje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeyl);
-			String resultsghje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypegh);
-			
-			retMap.put("totalAmount", results4==null?new BigDecimal("0"):new BigDecimal(results4));
-			retMap.put("alipayAmount", resultszfbje==null?new BigDecimal("0"):new BigDecimal(resultszfbje));
-			retMap.put("wechartAmount", resultswxje==null?new BigDecimal("0"):new BigDecimal(resultswxje));
-			retMap.put("cashAmount", resultsxjje==null?new BigDecimal("0"):new BigDecimal(resultsxjje));
-			retMap.put("unionPayAmount", resultsylje==null?new BigDecimal("0"):new BigDecimal(resultsylje));
-			retMap.put("cbcAmount", resultsghje==null?new BigDecimal("0"):new BigDecimal(resultsghje));
-			retMap.put("otherAmount", resultsqtje==null?new BigDecimal("0"):new BigDecimal(resultsqtje));
-			
-			retMap.put("totalCount", results2==null?new BigDecimal("0"):new BigDecimal(results2));
-			retMap.put("alipayCount", resultszfbbs==null?new BigDecimal("0"):new BigDecimal(resultszfbbs));
-			retMap.put("wechartCount", resultswxbs==null?new BigDecimal("0"):new BigDecimal(resultswxbs));
-			retMap.put("cashCount", resultsxjbs==null?new BigDecimal("0"):new BigDecimal(resultsxjbs));
-			retMap.put("unionPayCount", resultsylbs==null?new BigDecimal("0"):new BigDecimal(resultsylbs));
-			retMap.put("cbcCount", resultsghbs==null?new BigDecimal("0"):new BigDecimal(resultsghbs));
-			retMap.put("otherCount", resultsqtbs==null?new BigDecimal("0"):new BigDecimal(resultsqtbs));
-
-			return Utility.createJsonMsg(1001, "success", retMap);
-		}*/
 		
 		
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
@@ -1672,7 +1578,7 @@ public class PosChargeDataController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-
+	
 	@RequestMapping(value = "/getExcelByDay")
 	@ResponseBody
 	public void getExcelByDay(HttpServletRequest request, HttpServletResponse response)
