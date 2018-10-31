@@ -1,10 +1,12 @@
 package com.park.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.park.model.BusinessCarport;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 
@@ -42,5 +44,7 @@ public interface ChannelDAO {
 	public int deleteChannel(int id);
 	
 	public int deleteByParkId(@Param("parkId")Integer parkId);
+	
+	public List<ChannelDetail> getByRangeDay(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
 
 }

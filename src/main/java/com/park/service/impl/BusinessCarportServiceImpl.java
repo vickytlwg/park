@@ -22,6 +22,7 @@ import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
 import com.park.model.BusinessCarportStatus;
 import com.park.model.CarportStatusDetail;
+import com.park.model.Constants;
 import com.park.model.Hardware;
 import com.park.model.HardwareType;
 import com.park.model.Pos;
@@ -334,6 +335,4 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		}
 		return businessCarportStatuses;
 	}
-
-	
 }
