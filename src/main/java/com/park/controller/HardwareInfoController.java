@@ -36,14 +36,14 @@ public class HardwareInfoController {
 	private UserPagePermissionService pageService;
 	@Autowired
 	private AuthorityService authService;
-	
-	@RequestMapping(value="")
-	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+	//新加硬件信息页面
+	@RequestMapping(value = "/hardwareinfo", produces = {"application/json;charset=UTF-8"})
+	public String hardwareinfo(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
+		boolean isAdmin = false;
 		if(user != null){
 			modelMap.addAttribute("user", user);
-			boolean isAdmin = false;
 			if(user.getRole() == AuthUserRole.ADMIN.getValue())
 				isAdmin=true;
 			modelMap.addAttribute("isAdmin", isAdmin);
@@ -53,9 +53,10 @@ public class HardwareInfoController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "monthUser";
+			return "hardwareinfo";
 	}
 	
+
 	@RequestMapping(value="insert",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String  insert(@RequestBody Hardwareinfo hardwareinfo) {

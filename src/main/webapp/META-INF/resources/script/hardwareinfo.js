@@ -12,18 +12,22 @@ hardwareInfoApp
 						function($scope, $http, $uibModal, textModal, $timeout) {
 							$scope.feeOperatores = [];
 							$scope.checkedIndex = -1;
-							$scope.start = 0;
-							$scope.count = 100;
+							$scope.start = 2;
+							$scope.count = 2;
 							$scope.refreshFeeOperator = function() {
 								$http(
 										{
-											url : '/park/feeOperator/getByStartAndCount',
-											method : 'post',
-											params : {
-												start : $scope.start,
-												count : $scope.count
-											}
+											url : '/park/hardwareinfo/getAll',
+											method : 'get'
+											//dataType: 'json',
+											//contentType : 'application/json',
+											//params : {
+											//	start :2,
+											//	count : 2
+											//}
+										
 										}).success(function(response) {
+									console.log(response);
 									if (response.status == 1001) {
 										getInitail(response.body);
 									} else {
@@ -49,7 +53,6 @@ hardwareInfoApp
 							var getInitail = function(data) {
 								$scope.pagedata = data;
 								$scope.paginationConf.totalItems = data.length;
-
 								$scope.currentData = [];
 								var start = ($scope.paginationConf.currentPage - 1)
 										* $scope.paginationConf.itemsPerPage;
@@ -60,89 +63,89 @@ hardwareInfoApp
 								;
 								$scope.feeOperatores = $scope.currentData;
 							};
-							//$scope.searchByNameAndPhoneParkName = function() {
-							//	if ($scope.searchText == ""
-							//			|| $scope.searchText == undefined) {
-							//		textModal.open($scope, "提示", "请输入查询关键字");
-							//		return;
-							//	}
-							//	;
-							//	$http(
-							//			{
-							//				url : '/park/feeOperator/getByNameAndPhoneParkName',
-							//				method : 'post',
-							//				data : {
-							//					name : $scope.searchText,
-							//					phone : $scope.searchText,
-							//					parkName : $scope.searchText
-							//				}
-							//			}).success(function(response) {
-							//		if (response.status == 1001) {
-							//			getInitail(response.body);
-							//		} else {
-							//			textModal.open($scope, "错误", "数据请求失败");
-							//		}
-							//	}).error(function() {
-							//		textModal.open($scope, "错误", "数据请求失败");
-							//	});
-							//};
-							//$scope.operatorkeyup = function(e) {
-							//	var keycode = window.event ? e.keyCode
-							//			: e.which;
-							//	if (keycode == 13) {
-							//		$scope.searchByNameAndPhoneParkName();
-							//	}
-							//};
-							//$scope.insertFeeOperator = function() {
-							//	$uibModal
-							//			.open({
-							//				templateUrl : '/park/views/template/ucNewFeeOperator.html?v=1.2',
-							//				controller : 'feeOperatorModify',
-							//				scope : $scope,
-							//				resolve : {
-							//					index : function() {
-							//						return undefined;
-							//					}
-							//				}
-							//			});
-							//};
-							//$scope.updateFeeOperator = function() {
-							//	if ($scope.checkedIndex == -1) {
-							//		alert("请选择");
-							//		return;
-							//	}
-							//	$uibModal
-							//			.open({
-							//				templateUrl : '/park/views/template/ucNewFeeOperator.html?v=1.2',
-							//				controller : 'feeOperatorModify',
-							//				scope : $scope,
-							//				resolve : {
-							//					index : function() {
-							//						return $scope.checkedIndex;
-							//					}
-							//				}
-							//			});
-							//};
-							//$scope.deleteFeeOperator = function() {
-							//	if ($scope.checkedIndex == -1) {
-							//		alert("请选择");
-							//		return;
-							//	}
-							//	var id = $scope.feeOperatores[$scope.checkedIndex].id;
-							//	$http({
-							//		url : '/park/feeOperator/delete/' + id,
-							//		method : 'get'
-							//	}).success(function(response) {
-							//		if (response.status == 1001) {
-							//			textModal.open($scope, "成功", "操作成功");
-							//			$scope.refreshFeeOperator();
-							//		} else {
-							//			textModal.open($scope, "失败", "操作失败");
-							//		}
-							//	}).error(function() {
-							//		textModal.open($scope, "失败", "操作失败");
-							//	});
-							//};
+							$scope.searchByNameAndPhoneParkName = function() {
+								if ($scope.searchText == ""
+										|| $scope.searchText == undefined) {
+									textModal.open($scope, "提示", "请输入查询关键字");
+									return;
+								}
+								;
+								$http(
+										{
+											url : '/park/feeOperator/getByNameAndPhoneParkName',
+											method : 'post',
+											data : {
+												name : $scope.searchText,
+												phone : $scope.searchText,
+												parkName : $scope.searchText
+											}
+										}).success(function(response) {
+									if (response.status == 1001) {
+										getInitail(response.body);
+									} else {
+										textModal.open($scope, "错误", "数据请求失败");
+									}
+								}).error(function() {
+									textModal.open($scope, "错误", "数据请求失败");
+								});
+							};
+							$scope.operatorkeyup = function(e) {
+								var keycode = window.event ? e.keyCode
+										: e.which;
+								if (keycode == 13) {
+									$scope.searchByNameAndPhoneParkName();
+								}
+							};
+							$scope.insertFeeOperator = function() {
+								$uibModal
+										.open({
+											templateUrl : '/park/views/template/ucNewFeeOperator.html?v=1.2',
+											controller : 'feeOperatorModify',
+											scope : $scope,
+											resolve : {
+												index : function() {
+													return undefined;
+												}
+											}
+										});
+							};
+							$scope.updateFeeOperator = function() {
+								if ($scope.checkedIndex == -1) {
+									alert("请选择");
+									return;
+								}
+								$uibModal
+										.open({
+											templateUrl : '/park/views/template/ucNewFeeOperator.html?v=1.2',
+											controller : 'feeOperatorModify',
+											scope : $scope,
+											resolve : {
+												index : function() {
+													return $scope.checkedIndex;
+												}
+											}
+										});
+							};
+							$scope.deleteFeeOperator = function() {
+								if ($scope.checkedIndex == -1) {
+									alert("请选择");
+									return;
+								}
+								var id = $scope.feeOperatores[$scope.checkedIndex].id;
+								$http({
+									url : '/park/feeOperator/delete/' + id,
+									method : 'get'
+								}).success(function(response) {
+									if (response.status == 1001) {
+										textModal.open($scope, "成功", "操作成功");
+										$scope.refreshFeeOperator();
+									} else {
+										textModal.open($scope, "失败", "操作失败");
+									}
+								}).error(function() {
+									textModal.open($scope, "失败", "操作失败");
+								});
+							};
 							$scope.selectChange = function(index) {
 								if ($scope.feeOperatores[index].checked) {
 									$scope.checkedIndex = index;
@@ -179,13 +182,14 @@ hardwareInfoApp.controller("feeOperatorModify", function($scope, textModal,
 	$scope.streets = [];
 	$scope.getStreets = function() {
 		$http({
-			url : '/park/street/getByStartAndCount',
-			method : 'post',
-			params : {
-				start : 0,
-				count : 50
-			}
+			url : '/park/hardwareinfo/getAll',
+			method : 'get',
+			//params : {
+			//	start : 0,
+			//	count : 50
+			//}
 		}).success(function(response) {
+			console.log(response);
 			if (response.status == 1001) {
 				$scope.streets = response.body;
 			} else {
@@ -233,8 +237,8 @@ hardwareInfoApp.controller("feeOperatorModify", function($scope, textModal,
 
 });
 
-var feeOperatorService = angular.module("hardwareInfoApp");
-feeOperatorService.service('textModal', [ '$uibModal', function($uibModal) {
+var hardwareInfoService = angular.module("hardwareInfoApp");
+hardwareInfoService.service('textModal', [ '$uibModal', function($uibModal) {
 
 	this.open = function($scope, header, body) {
 		$scope.textShowModal = $uibModal.open({
@@ -258,7 +262,7 @@ feeOperatorService.service('textModal', [ '$uibModal', function($uibModal) {
 
 } ]);
 
-feeOperatorService.controller('textCtrl', function($scope, $uibModalInstance,
+hardwareInfoService.controller('textCtrl', function($scope, $uibModalInstance,
 		$http, msg) {
 	$scope.text = msg;
 	$scope.close = function() {

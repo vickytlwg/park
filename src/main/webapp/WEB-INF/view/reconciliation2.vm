@@ -42,7 +42,7 @@
 								<li class="recod"><a href="#"
 									style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>
 								</li>
-								<li class="recod"><a href="#"
+								<li class="recod"><a href="/park/pos/charge/demo1"
 									style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
 								</li>
 							</ul>
