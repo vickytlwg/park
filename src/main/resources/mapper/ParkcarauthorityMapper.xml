@@ -208,7 +208,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getByParkId" resultType="com.park.model.Parkcarauthority">
-  	select * from parkCarAuthority where parkId=#{parkId}
+  	select * from parkCarAuthority where parkId=#{parkId} order by id desc 
   </select>
   <select id="getByStartAndCount" resultType="com.park.model.Parkcarauthority">
   	select * from parkCarAuthority limit #{start},#{count}
