@@ -28,13 +28,16 @@ import com.park.model.AuthUserRole;
 import com.park.model.Monthuser;
 import com.park.model.Monthuserpark;
 import com.park.model.Page;
+import com.park.model.Park;
 import com.park.service.AuthorityService;
 import com.park.service.HardwareService;
 import com.park.service.MonthUserParkService;
 import com.park.service.MonthUserService;
+import com.park.service.ParkService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.UserParkService;
 import com.park.service.Utility;
+
 
 @Controller
 @RequestMapping("monthUser")
@@ -52,6 +55,8 @@ private UserParkService userParkService;
 
 @Autowired
 private UserPagePermissionService pageService;
+@Autowired
+private ParkService parkService;
 
 @RequestMapping(value="")
 public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
@@ -266,7 +271,6 @@ public String insertOrder(@RequestBody Monthuser monthUser){
 @ResponseBody
 public String insertOrderById(@RequestBody Monthuser monthUser){
 	Map<String, Object> result=new HashMap<>();
-	monthUser.setType(1);
 //	Date startd=monthUser.getStarttime();
 //	Date endd=monthUser.getEndtime();
 //	if (endd.getTime()-startd.getTime()>1000*60*60*24) {
@@ -277,15 +281,17 @@ public String insertOrderById(@RequestBody Monthuser monthUser){
 	int id=-1;
 	int num=monthUserService.insert(monthUser);
 	if (num==1) {
-		
 		int parkId=monthUser.getParkid();
+		int type=monthUser.getType();
+		String owner=monthUser.getOwner();
+		String cardnumber=monthUser.getCardnumber();
 		Date starttime=monthUser.getStarttime();
 		Date endtime=monthUser.getEndtime();
 		String platenumber=monthUser.getPlatenumber();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		String str=sdf.format(starttime);
 		String str2=sdf.format(endtime);
-		Monthuser monthUsers=monthUserService.selectById(parkId, starttime, endtime, platenumber);
+		Monthuser monthUsers=monthUserService.selectById(parkId,type,owner, starttime, endtime, platenumber);
 		id=monthUsers.getId();
 		result.put("id", id);
 		result.put("status", 1001);
@@ -313,6 +319,81 @@ public String delete(@PathVariable("id")int id){
 	return Utility.gson.toJson(result);
 }
 
+@RequestMapping(value = "getByPlateNumber", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
+@ResponseBody
+public String getByPlateNumber(@RequestBody Map<String, String> args, HttpSession session) {
+	String platenumber = args.get("platenumber");
+	String type=args.get("type");
+	int resultType=-1;
+	switch(type){
+	case "包":
+		resultType=0;
+		break;
+	case "包月":
+		resultType=0;
+		break;
+	case "包月用户":
+		resultType=0;
+		break;
+	case "预约":
+		resultType=1;
+		break;
+	case "预":
+		resultType=1;
+		break;
+	case "月卡":
+		resultType=2;
+		break;
+	case "月卡A":
+		resultType=2;
+		break;
+	case "月卡A1":
+		resultType=2;
+		break;
+	case "月卡A2":
+		resultType=3;
+		break;
+	case "月卡B":
+		resultType=4;
+		break;
+	case "月卡D":
+		resultType=5;
+		break;
+	case "月卡E":
+		resultType=6;
+		break;
+	}
+	String owner=args.get("owner");
+	String certificatetype=args.get("certificateType");
+	String username=args.get("username");
+	//String username = (String) session.getAttribute("username");
+	AuthUser user = authService.getUserByUsername(username);
+	List<Monthuser>  monthusers=monthUserService.getByPlateNumberBytype(platenumber, resultType,owner,certificatetype);
+	List<Monthuser>  monthusersResult=new ArrayList<>();
+	if (user.getRole() == AuthUserRole.ADMIN.getValue()){
+		monthusersResult=monthusers;
+	}
+	else {
+		List<Park> parkList=parkService.getParks();
+		parkList = parkService.filterPark(parkList, username);
+		for (Monthuser mm : monthusers) {
+			for (Park park : parkList) {
+				/*System.err.println("park"+park.toString());
+				System.err.println("mm"+mm.toString());*/
+				if (park.getId()==mm.getParkid().intValue()) {
+					monthusersResult.add(mm);
+				}
+			}}
+
+	}
+	System.out.println(monthusersResult);
+	return Utility.createJsonMsg(1001, "success", monthusersResult);
+}
+/**
+ * 删除预约
+ * @param args
+ * @return
+ */
 @RequestMapping(value="deleteByIdandnumber",method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 @ResponseBody
 public String deleteByIdandnumber(@RequestBody Map<String, Object> args){
@@ -342,6 +423,7 @@ public String deleteByIdandnumber(@RequestBody Map<String, Object> args){
 	}
 	return Utility.gson.toJson(result);
 }
+
 
 @RequestMapping(value="deleteByNameAndParkOrder",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 @ResponseBody

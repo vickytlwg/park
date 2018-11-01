@@ -75,6 +75,25 @@ public class HardwareController {
 	//	else
 	//		return "/login";
 	}
+	//新加硬件信息页面
+	@RequestMapping(value = "/hardwareinfo", produces = {"application/json;charset=UTF-8"})
+	public String hardwareinfo(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		boolean isAdmin = false;
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+			return "hardwareinfo";
+	}
 	
 	@RequestMapping(value = "/getHardwares", produces = {"application/json;charset=UTF-8"})
 	@ResponseBody

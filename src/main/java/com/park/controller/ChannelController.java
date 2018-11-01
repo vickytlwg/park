@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
+import com.park.model.BusinessCarport;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 import com.park.model.Hardware;
@@ -196,6 +198,31 @@ public class ChannelController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "channelDetail.xlsx", response);
 	}
+	
+	@RequestMapping(value = "/getExcelByParkDay")
+	@ResponseBody
+	public void getExcelByParkDay(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		String date = request.getParameter("date");
+		String parkId = request.getParameter("parkId");
+		List<ChannelDetail> channel = channelService.getExcelByParkDay(Integer.parseInt(parkId), date);
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers = { "id","停车场名", "通道编号", "MacId", "标志", "状态", "描述", "日期"};
+		SimpleDateFormat sFormat = new SimpleDateFormat("yyyyMMdd");
+		String filename = sFormat.format(new Date()) + "barrierdata.xlsx";
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "barrierdata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExceldataChannelData("道闸详情", headers, channel, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR + "barrierdata.xlsx", response);
+	}
+
+	
 	@RequestMapping(value = "/getChannelDetailByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String getChannelDetailByKeywords(@RequestBody Map<String, Object> args){	

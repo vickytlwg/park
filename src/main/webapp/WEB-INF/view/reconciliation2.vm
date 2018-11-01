@@ -36,8 +36,8 @@
 									href="/park/gongzx/record2"
 									style="background: url(/park/img/bak5a.png) no-repeat center center;">停车记录</a>
 								</li>
-								<li class="recod"><a href="#"
-									style="background: url(/park/img/bak3.png) no-repeat center center;">收费员业绩</a>
+								<li class="recod"><a href="/park/gongzx/reconciliation3"
+									style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
 								</li>
 								<li class="recod"><a href="#"
 									style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>

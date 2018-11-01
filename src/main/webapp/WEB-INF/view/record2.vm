@@ -44,7 +44,6 @@
 									<th><span >id</span></th>		
 										<th><span>车牌号</span></th>										
 										<th><span>卡号</span></th>
-										<th><span>到达时间</span></th>
 										<th><span>停车场编号</span></th>
 										<th><span>停车场名称</span></th>	
 										<th><span>停车类型</span></th>
@@ -53,6 +52,9 @@
 										<th><span>实付</span></th>	
 										<th><span>图片地址</span></th>
 										<th><span>其他</span></th>
+										<th><span>交易编号</span></th>
+										<th><span>进场时间</span></th>
+										<th><span>离场时间</span></th>
 				            </tr>
 				          <tbody id="channelBody"></tbody>
 				          	<tr  ng-repeat = "item in detail.items">
@@ -60,7 +62,6 @@
 				          		<td ng-bind="item.id"></td>
 				          		<td ng-bind="item.carNumber"></td>
 				          		<td ng-bind="item.cardNumber"></td>
-				          		<td ng-bind="item.arriveTime"></td>
 				          		<td ng-bind="item.parkId"></td>
 				          		<td ng-bind="item.parkName"></td>
 				          		<td ng-bind="item.stopType"></td>
@@ -69,6 +70,9 @@
 				          		<td ng-bind="item.realPay"></td>
 				          		<td ng-bind="item.picturePath"></td>
 				          		<td ng-bind="item.other"></td>
+				          		<td ng-bind="item.tradeNumber"></td>
+				          		<td ng-bind="item.arriveTime"></td>
+				          		<td ng-bind="item.leaveTime"></td>
 				          </table>
     					</div>
     		<tm-pagination conf="paginationConf"></tm-pagination>			

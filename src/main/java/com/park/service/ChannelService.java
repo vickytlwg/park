@@ -1,7 +1,10 @@
 package com.park.service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
+import com.park.model.BusinessCarport;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 
@@ -40,4 +43,8 @@ public interface ChannelService {
 	public void updateChannelDateByMac(String mac);
 	
 	public int deleteByParkId(Integer parkId);
+	
+	public List<ChannelDetail> getByRangeDay(int parkId,Date startDate,Date endDate);
+	
+	public List<ChannelDetail> getExcelByParkDay(int parkId,String date) throws ParseException;
 }

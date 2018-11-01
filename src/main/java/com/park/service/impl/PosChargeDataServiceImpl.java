@@ -2248,4 +2248,5 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.gongcount();
 	}
+
 }

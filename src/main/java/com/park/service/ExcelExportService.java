@@ -22,9 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.park.model.AccessDetail;
+import com.park.model.BusinessCarport;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
 import com.park.model.DataUsageCardDetail;
+import com.park.model.GongzxRecord;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
 import com.park.model.SingleParkInfo;
@@ -421,6 +423,219 @@ public class ExcelExportService {
 					XSSFCell cell13 = row1.createCell(12);				
 					cell13.setCellStyle(style2);
 					cell13.setCellValue(posdata.getDiscount());
+					
+				}
+				
+	}
+	
+	public void produceExceldataChannelData(String title, String[] headers, List<ChannelDetail> dataset,
+			XSSFWorkbook workbook) {
+		// 生成一个表格
+				XSSFSheet sheet = workbook.createSheet(title);
+				// 设置表格默认列宽度为25个字节
+				sheet.setDefaultColumnWidth(25);
+				// 生成一个样式
+				XSSFCellStyle style = workbook.createCellStyle();
+				// 设置这些样式
+				style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				// 生成一个字体
+				XSSFFont font = workbook.createFont();
+				font.setColor(HSSFColor.VIOLET.index);
+				font.setFontHeightInPoints((short) 12);
+				font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				// 把字体应用到当前的样式
+				style.setFont(font);
+
+				XSSFCellStyle style2 = workbook.createCellStyle();
+				style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+				style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+				// 生成另一个字体
+				XSSFFont font2 = workbook.createFont();
+				font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+				// 把字体应用到当前的样式
+				style2.setFont(font2);
+				
+				// 产生表格标题行
+				XSSFRow row = sheet.createRow(0);
+				for (int i = 0; i < headers.length; i++) {
+					XSSFCell cell = row.createCell(i);
+					cell.setCellStyle(style);
+					XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+					cell.setCellValue(text);
+				}
+				for(int j=0;j<dataset.size();j++){
+					XSSFRow row1 = sheet.createRow(j+1);
+					ChannelDetail channel=dataset.get(j);
+					
+					XSSFCell cell0 = row1.createCell(0);				
+					cell0.setCellStyle(style2);
+					cell0.setCellValue(channel.getId());
+					
+					XSSFCell cell1 = row1.createCell(1);				
+					cell1.setCellStyle(style2);
+					cell1.setCellValue(channel.getParkName());
+					
+					XSSFCell cell2 = row1.createCell(2);				
+					cell2.setCellStyle(style2);
+					cell2.setCellValue(channel.getChannelId());
+					
+					XSSFCell cell3 = row1.createCell(3);				
+					cell3.setCellStyle(style2);
+					if (channel.getMacId()!=null) {
+						cell3.setCellValue(channel.getMacId());
+					} else {
+						cell3.setCellValue("");
+					}
+					
+					XSSFCell cell4 = row1.createCell(4);				
+					cell4.setCellStyle(style2);
+					if (channel.getChannelFlag()!=null&&channel.getChannelFlag().equals("1")) {
+						cell4.setCellValue("入口");
+					}else {
+						cell4.setCellValue("出口");
+					}		
+					
+					XSSFCell cell5 = row1.createCell(5);				
+					cell5.setCellStyle(style2);
+					if (channel.getStatus()!=null&&channel.getStatus().equals("1")) {
+						cell5.setCellValue("可用");
+					}else {
+						cell5.setCellValue("不可用");
+					}
+					
+					XSSFCell cell7 = row1.createCell(5);				
+					cell7.setCellStyle(style2);
+					if (channel.getDescription()!=null) {
+						cell7.setCellValue(channel.getDescription());
+					}
+					else {
+						cell7.setCellValue("");
+					}
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					XSSFCell cell8 = row1.createCell(8);				
+					cell8.setCellStyle(style2);
+					cell8.setCellValue(sdf.format(channel.getDate()));
+					}
+				
+	}
+	
+	public void produceExceldataGongzx(String title, String[] headers, List<GongzxRecord> dataset,
+			XSSFWorkbook workbook) {
+		// 生成一个表格
+				XSSFSheet sheet = workbook.createSheet(title);
+				// 设置表格默认列宽度为25个字节
+				sheet.setDefaultColumnWidth(25);
+				// 生成一个样式
+				XSSFCellStyle style = workbook.createCellStyle();
+//				HSSFCellStyle cellStyle=workbook.createCellStyle(); 
+				// 设置这些样式
+				style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+				style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				// 生成一个字体
+				XSSFFont font = workbook.createFont();
+				font.setColor(HSSFColor.VIOLET.index);
+				font.setFontHeightInPoints((short) 12);
+				font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+				// 把字体应用到当前的样式
+				style.setFont(font);
+
+				XSSFCellStyle style2 = workbook.createCellStyle();
+				style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+				style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+				style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
+				style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
+				style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+				style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+				// 生成另一个字体
+				XSSFFont font2 = workbook.createFont();
+				font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+				// 把字体应用到当前的样式
+				style2.setFont(font2);
+				
+				// 产生表格标题行
+				XSSFRow row = sheet.createRow(0);
+				for (int i = 0; i < headers.length; i++) {
+					XSSFCell cell = row.createCell(i);
+					cell.setCellStyle(style);
+					XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+					cell.setCellValue(text);
+				}
+				for(int j=0;j<dataset.size();j++){
+					XSSFRow row1 = sheet.createRow(j+1);
+					GongzxRecord gongzxr=dataset.get(j);
+					
+					XSSFCell cell1 = row1.createCell(0);				
+					cell1.setCellStyle(style2);
+					cell1.setCellValue(gongzxr.getCarNumber());
+					
+					XSSFCell cell2 = row1.createCell(1);				
+					cell2.setCellStyle(style2);
+					cell2.setCellValue(gongzxr.getCardNumber());
+				
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					XSSFCell cell3 = row1.createCell(2);				
+					cell3.setCellStyle(style2);
+					cell3.setCellValue(sdf.format(gongzxr.getArriveTime()));
+					
+					XSSFCell cell4 = row1.createCell(3);				
+					cell4.setCellStyle(style2);
+					cell4.setCellValue(gongzxr.getParkId());
+				
+					XSSFCell cell5 = row1.createCell(4);				
+					cell5.setCellStyle(style2);
+					cell5.setCellValue(gongzxr.getParkName());
+					
+					XSSFCell cell6 = row1.createCell(5);				
+					cell6.setCellStyle(style2);
+					cell6.setCellValue(gongzxr.getStopType());
+				
+					XSSFCell cell7 = row1.createCell(6);				
+					cell7.setCellStyle(style2);
+					cell7.setCellValue(gongzxr.getShouldCharge());
+					
+					XSSFCell cell8 = row1.createCell(7);				
+					cell8.setCellStyle(style2);
+					cell8.setCellValue(gongzxr.getDiscount());
+				
+					XSSFCell cell9 = row1.createCell(8);				
+					cell9.setCellStyle(style2);
+					cell9.setCellValue(gongzxr.getRealPay());
+					
+					XSSFCell cell10 = row1.createCell(9);				
+					cell10.setCellStyle(style2);
+					cell10.setCellValue(gongzxr.getPicturePath());
+				
+					XSSFCell cell11 = row1.createCell(10);				
+					cell11.setCellStyle(style2);
+					cell11.setCellValue(gongzxr.getOther());
+					
+					XSSFCell cell12= row1.createCell(11);				
+					cell12.setCellStyle(style2);
+					cell12.setCellValue(gongzxr.getTradeNumber());
+					
+					XSSFCell cell13 = row1.createCell(12);				
+					cell13.setCellStyle(style2);
+					cell13.setCellValue(sdf.format(gongzxr.getLeaveTime()));
 					
 				}
 				

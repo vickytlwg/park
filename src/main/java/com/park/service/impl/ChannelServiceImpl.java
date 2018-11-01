@@ -1,5 +1,8 @@
 package com.park.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +16,7 @@ import com.park.dao.ChannelDAO;
 import com.park.dao.HardwareDAO;
 import com.park.model.Channel;
 import com.park.model.ChannelDetail;
+import com.park.model.Constants;
 import com.park.model.Hardware;
 import com.park.model.Status;
 import com.park.service.ChannelService;
@@ -140,6 +144,23 @@ public class ChannelServiceImpl implements ChannelService{
 	public int deleteByParkId(Integer parkId) {
 		// TODO Auto-generated method stub
 		return channelDAO.deleteByParkId(parkId);
+	}
+
+
+	@Override
+	public List<ChannelDetail> getByRangeDay(int parkId, Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return channelDAO.getByRangeDay(parkId, startDate, endDate);
+	}
+
+
+	@Override
+	public List<ChannelDetail> getExcelByParkDay(int parkId, String date) throws ParseException {
+		// TODO Auto-generated method stub
+		SimpleDateFormat sFormat = new SimpleDateFormat(Constants.DATEFORMAT);
+		Date startDate = sFormat.parse(date + " 00:00:00");
+		Date endDate = sFormat.parse(date + " 23:59:59");
+		return channelDAO.getByRangeDay(parkId, startDate, endDate);
 	}
 
 }

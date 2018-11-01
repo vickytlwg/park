@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.park.model.BusinessCarport;
 import com.park.model.BusinessCarportDetail;
+import com.park.model.PosChargeData;
 
 
 @Repository
@@ -42,4 +43,5 @@ public interface BusinessCarportDAO {
 	public int updateBusinessCarport(BusinessCarport businessCarport);
 	
 	public int deleteBusinessCarport(int id);
+	
 }

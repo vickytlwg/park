@@ -17,13 +17,19 @@
 		<result property="other" column="other" />
 		<result column="tradeNumber" property="tradeNumber" />
 	</resultMap>
+	
+	<select id= "getByRange" resultMap="GongzxRecordMapper">
+		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} and arriveTime between #{startDate} and #{endDate} limit 70000
+	</select>
+	
 	<select id="gongcount" resultType="int">
 		select count(*) from
 		gongzxrecord
 	</select>
 	<select id="getPageByParkId" resultMap="GongzxRecordMapper">
 		SELECT
-		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord
 		LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} order by id desc
 		limit #{start}, #{count}
@@ -41,7 +47,8 @@
 		realPay = #{realPay,jdbcType=DOUBLE},
 		picturePath = #{picturePath,jdbcType=VARCHAR},
 		other = #{other,jdbcType=VARCHAR},
-		tradeNumber = #{tradeNumber,jdbcType=VARCHAR}
+		tradeNumber = #{tradeNumber,jdbcType=VARCHAR},
+		leaveTime = #{leaveTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<insert id="insert" parameterType="com.park.model.GongzxRecord">
@@ -49,26 +56,26 @@
 		arriveTime, parkId, parkName,
 		stopType, shouldCharge, discount,
 		realPay, picturePath, other,
-		tradeNumber)
+		tradeNumber,leaveTime)
 		values (#{id,jdbcType=INTEGER}, #{carNumber,jdbcType=VARCHAR},
 		#{cardNumber,jdbcType=VARCHAR},
 		#{arriveTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=INTEGER}, #{parkName,jdbcType=VARCHAR},
 		#{stopType,jdbcType=VARCHAR}, #{shouldCharge,jdbcType=DOUBLE},
 		#{discount,jdbcType=DOUBLE},
 		#{realPay,jdbcType=DOUBLE}, #{picturePath,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR},
-		#{tradeNumber,jdbcType=VARCHAR})
+		#{tradeNumber,jdbcType=VARCHAR},#{leaveTime,jdbcType=TIMESTAMP)
 	</insert>
 	<select id="getByCarNumber" statementType="STATEMENT"
 		resultMap="GongzxRecordMapper">
 		SELECT
-		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where carNumber
 		like '%${carNumber}%' order by id desc limit 200
 	</select>
 	<select id="getByCarNumberAndPark" statementType="STATEMENT"
 		resultMap="GongzxRecordMapper">
 		SELECT
-		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord
 		LEFT JOIN park AS p ON parkId=p.id where carNumber like '%${carNumber}%'
 		and parkId= '${parkId}' order by id desc
@@ -77,5 +84,16 @@
 		resultMap="GongzxRecordMapper">
 		select * from gongzxrecord where parkName like
 		'%${parkName}%' order by id desc limit 500
+	</select>
+	<!-- 获取金额-->
+    <select id="getByDateAndParkCount" resultType="java.lang.String">
+	    select SUM(gongzxrecord.shouldCharge) AS totalAmount from gongzxrecord 
+	    where parkId=#{parkId} and leaveTime between #{startDate} and #{endDate} 
+    </select>
+	<select id="selectPosdataByParkAndRange" resultMap="GongzxRecordMapper">
+		<![CDATA[
+		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+		FROM gongzxrecord where leaveTime <= #{endDay} and leaveTime >= #{startDay} and parkId=#{parkId} order by id desc
+		]]>
 	</select>
 </mapper>

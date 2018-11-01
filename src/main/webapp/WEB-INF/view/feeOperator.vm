@@ -1,5 +1,4 @@
 <script src="/park/script/feeOperator.js?v=1.2"></script>
-<script src="/park/script/service/textModalService.js"></script>
 <style>
 .page-list .pagination {
 	float: left;

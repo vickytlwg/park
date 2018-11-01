@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.velocity.app.event.ReferenceInsertionEventHandler.referenceInsertExecutor;
 
 public class Monthuser {
+	
     private Integer id;
 
     private Integer type=0;

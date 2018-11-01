@@ -68,8 +68,9 @@ import com.park.service.PosService;
 import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
-import com.squareup.okhttp.Request;
+import com.util.Common;
 import com.util.HttpUtil;
+
 
 @Controller
 @RequestMapping("/pos/charge")
@@ -109,25 +110,16 @@ public class PosChargeDataController {
 	
 	private double abcZongjine=0.0;
 	private int abcZongBishu=0;
+
 	
-/*	@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
+	/*@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getDataDetail(@RequestBody Map<String, Object> args, HttpSession session) {
 		String userName = (String) session.getAttribute("username");
-		String startDateStr=args.get("startDate").toString();
-		String endDateStr=args.get("endDate").toString();
-		Map<String, Object> getBillDataMap=new HashMap<>();
-		getBillDataMap.put("username", userName);
-		getBillDataMap.put("startDate", startDateStr);
-		getBillDataMap.put("endDate", endDateStr);
-		args.put("username", userName);
-		String url = "http://localhost:8088/parkinfo/pos/charge/getParkByMoney";
-		//String getBillData="";
-		//getBillData=HttpUtil.postS(url,getBillDataMap);
-		//System.out.println(String.format("参数名称:%s,参数解释：%s",getBillData ,"初始化登录获取账单数据"));
-		return HttpUtil.postS(url, getBillDataMap);
-
+		args.put("username",userName);
+		String getBillData= HttpUtil.postS(Common.getDataDetailUrl,args);
+		return getBillData;
 	}*/
 	
 	//查询停车场总金额
@@ -178,7 +170,7 @@ public class PosChargeDataController {
 			Double unionPayAmount=0.0;
 			Double cbcAmount=0.0;
 			Double cashAmount2=0.0;
-			abcZongjine=0.0;
+			abcZongjine=0.0;		
 			abcZongBishu=0;
 			Map<String, Object> mapmap=null;
 			for (int i = 0; i <listparkId.size(); i++) {
@@ -387,71 +379,6 @@ public class PosChargeDataController {
 					map222.put("cashCount2", cashCount2);
 					return map222;
 				}
-	
-	
-	//查询收费总笔数、收费总金额、各渠道收费统计
-		/*@RequestMapping(value = "/getByDateAndParkCount", produces = {"application/json;charset=utf-8" })
-		@ResponseBody
-		public String getByDateAndParkCount(@RequestBody Map<String, Object> args,HttpServletRequest request, HttpSession session) throws Exception{
-			int parkId=Integer.parseInt((String)args.get("parkId"));
-			String startDate=(String)args.get("startDate");
-			String endDate=(String)args.get("endDate");
-			Map<String, Object> retMap = new HashMap<String, Object>();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date parsedStartDay = null;
-			try {
-				parsedStartDay = sdf.parse(startDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			Date parsedEndDay = null;
-			try {
-				parsedEndDay = sdf.parse(endDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			int payTypezfb=0;
-			int payTypewx=1;
-			int payTypexj=2;
-			int payTypeqt=3;
-			int payTypeyl=4;
-			int payTypegh=5;
-			int payTypedj=9;
-			//查询收费总笔数、收费总金额、各渠道收费统计
-			String results2=posChargeDataService.getByDateAndParkCount2(parkId,startDate, endDate);
-			String resultszfbbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypezfb);
-			String resultswxbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypewx);
-			String resultsxjbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypexj);
-			String resultsqtbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeqt);
-			String resultsylbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypeyl);
-			String resultsghbs=posChargeDataService.getByDateAndParkCount(parkId,startDate, endDate,payTypegh);
-			
-			String results4=posChargeDataService.getByDateAndParkCount4(parkId,startDate, endDate);
-			String resultszfbje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypezfb);
-			String resultswxje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypewx);
-			String resultsxjje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypexj);
-			String resultsqtje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeqt);
-			String resultsylje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypeyl);
-			String resultsghje=posChargeDataService.getByDateAndParkCount3(parkId,startDate, endDate,payTypegh);
-			
-			retMap.put("totalAmount", results4==null?new BigDecimal("0"):new BigDecimal(results4));
-			retMap.put("alipayAmount", resultszfbje==null?new BigDecimal("0"):new BigDecimal(resultszfbje));
-			retMap.put("wechartAmount", resultswxje==null?new BigDecimal("0"):new BigDecimal(resultswxje));
-			retMap.put("cashAmount", resultsxjje==null?new BigDecimal("0"):new BigDecimal(resultsxjje));
-			retMap.put("unionPayAmount", resultsylje==null?new BigDecimal("0"):new BigDecimal(resultsylje));
-			retMap.put("cbcAmount", resultsghje==null?new BigDecimal("0"):new BigDecimal(resultsghje));
-			retMap.put("otherAmount", resultsqtje==null?new BigDecimal("0"):new BigDecimal(resultsqtje));
-			
-			retMap.put("totalCount", results2==null?new BigDecimal("0"):new BigDecimal(results2));
-			retMap.put("alipayCount", resultszfbbs==null?new BigDecimal("0"):new BigDecimal(resultszfbbs));
-			retMap.put("wechartCount", resultswxbs==null?new BigDecimal("0"):new BigDecimal(resultswxbs));
-			retMap.put("cashCount", resultsxjbs==null?new BigDecimal("0"):new BigDecimal(resultsxjbs));
-			retMap.put("unionPayCount", resultsylbs==null?new BigDecimal("0"):new BigDecimal(resultsylbs));
-			retMap.put("cbcCount", resultsghbs==null?new BigDecimal("0"):new BigDecimal(resultsghbs));
-			retMap.put("otherCount", resultsqtbs==null?new BigDecimal("0"):new BigDecimal(resultsqtbs));
-
-			return Utility.createJsonMsg(1001, "success", retMap);
-		}*/
 		
 		
 	@RequestMapping(value = "/detail", produces = { "application/json;charset=UTF-8" })
@@ -600,7 +527,99 @@ public class PosChargeDataController {
 		}
 		return "reconciliation";
 	}
+	//demo1
+	@RequestMapping(value = "/demo1", produces = { "application/json;charset=UTF-8" })
+	public String demo1(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
 
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo1";
+	}
+	//demo2
+	@RequestMapping(value = "/demo2", produces = { "application/json;charset=UTF-8" })
+	public String demo2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo2";
+	}	
+	//demo3
+	@RequestMapping(value = "/demo3", produces = { "application/json;charset=UTF-8" })
+	public String demo3(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		List<Park> parkList = parkService.getParks();
+		if (username != null)
+			parkList = parkService.filterPark(parkList, username);
+		// List<Park> outsideparks = new ArrayList<>();
+		// List<Park> outsideparks = new ArrayList<>();
+		// for (Park park : parkList) {
+		// if (park.getType() == 3) {
+		// outsideparks.add(park);
+		// }
+		// }
+		// modelMap.addAttribute("parks", outsideparks);
+		modelMap.addAttribute("parks", parkList);
+		if (user != null) {
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin = true;
+			modelMap.addAttribute("isAdmin", isAdmin);
+
+			Set<Page> pages = pageService.getUserPage(user.getId());
+			for (Page page : pages) {
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "demo3";
+	}
 	// 新加页面
 	@RequestMapping(value = "/reconciliation2", produces = { "application/json;charset=UTF-8" })
 	public String reconciliation2(ModelMap modelMap, HttpServletRequest request, HttpSession session) {
@@ -931,7 +950,16 @@ public class PosChargeDataController {
 		int count = (int) args.get("count");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getPageArrearage(low, count));
 	}
-
+	
+	/*@RequestMapping(value = "/getByCount", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+ 	@ResponseBody
+ 	public String getByCount(@RequestBody Map<String, Object> args) {
+ 		int low = (int) args.get("low");
+ 		int count = (int) args.get("count");
+ 		List<PosChargeData> posChargeDatas = chargeSerivce.getPage(low, count);
+ 		return Utility.createJsonMsg(1001, "success", posChargeDatas);
+ 	}
+*/
 	@RequestMapping(value = "/getParkCarportStatusToday", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	public @ResponseBody String getParkCarportStatusToday(@RequestBody Map<String, Object> args) {
@@ -1550,7 +1578,7 @@ public class PosChargeDataController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "poschargedata.xlsx", response);
 	}
-
+	
 	@RequestMapping(value = "/getExcelByDay")
 	@ResponseBody
 	public void getExcelByDay(HttpServletRequest request, HttpServletResponse response)
