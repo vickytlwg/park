@@ -38,8 +38,13 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 	    };  
 	   dateInitial();
 	   
+	   //导出
 	   $scope.getExcelByParkDay=function(){
 	         $window.location.href="/park/getExcelByParkDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
+	    };
+	    //道闸导出全部
+	    $scope.getExcelByAllParkDay=function(){
+	         $window.location.href="/park/getExcelByAllParkDay";
 	    };
 	    
 	    $scope.selectedPark={};

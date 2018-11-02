@@ -29,6 +29,20 @@
 		<result property="status" column="channel_status" />
 		<result property="description" column="channel_description"/>
 	</resultMap> 
+	<select id= "getByRangeAllDay" resultMap="ChannelDetailMapper">
+		select channel.id,
+		channel.parkId,
+		park.name as parkName,
+		channel.macId,
+		hardware.mac,
+		channelId,
+		channelFlag,
+		channel.date,
+		channel.`status`,
+		channel.description 
+		from channel LEFT JOIN park on channel.parkId = park.Id 
+		LEFT JOIN hardware on channel.macId=hardware.id
+	</select>
 	
 	<select id= "getByRangeDay" resultMap="ChannelMapper">
 		select channel.id,channel.parkId,park.name,hardware.mac,channelId,channelFlag,channel.date,channel.`status`,channel.description,isEffective,channel.isDeleted 
