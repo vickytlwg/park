@@ -28,7 +28,7 @@
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body" style="padding: 0px;">
-						<div class="col-lg-12" style="padding-top: 15px;">
+						<!-- <div class="col-lg-12" style="padding-top: 15px;">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
 									<h3 class="panel-title">根据时间段与停车场导出Excel记录</h3>
@@ -59,7 +59,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						
 						<div class="btn-group" style="margin-left: 10px;">
 							<button #if(!$isAdmin) disabled#end id="refresh" type="button"
@@ -81,6 +81,9 @@
 								type="button" class="btn btn-danger"
 								style="border-radius: 25px; margin-right: 5px;">
 								<span class="glyphicon glyphicon-remove"></span> 删除
+							</button>
+							<button id="excelBtn" ng-click="getExcelByAllParkDay()"	
+								type="button" class="btn bg-purple">导出
 							</button>
 						</div>
 						<div style="display: inline-block;">

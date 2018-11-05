@@ -47,4 +47,5 @@ public interface ChannelDAO {
 	
 	public List<ChannelDetail> getByRangeDay(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
 
+	public List<ChannelDetail> getByRangeAllDay();
 }

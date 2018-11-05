@@ -163,4 +163,18 @@ public class ChannelServiceImpl implements ChannelService{
 		return channelDAO.getByRangeDay(parkId, startDate, endDate);
 	}
 
+
+	@Override
+	public List<ChannelDetail> getExcelByAllParkDay() throws ParseException {
+		// TODO Auto-generated method stub
+		return channelDAO.getByRangeAllDay();
+	}
+
+
+	@Override
+	public List<ChannelDetail> getByRangeAllDay() {
+		// TODO Auto-generated method stub
+		return channelDAO.getByRangeAllDay();
+	}
+
 }
