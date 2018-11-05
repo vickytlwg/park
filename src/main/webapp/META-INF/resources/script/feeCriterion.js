@@ -219,8 +219,8 @@ chargeApp.controller('modifyCrtl', function($scope, $modalInstance, $http,
 		url = 'modify';
 	} else {
 		$scope.tempCriterion.maxexpense = 9999;
-		$scope.tempCriterion.nightstarttime = '20:00';
-		$scope.tempCriterion.nightendtime = '08:00';
+		$scope.tempCriterion.nightstarttime = '24:00';
+		$scope.tempCriterion.nightendtime = '00:00';
 	}
 
 	$scope.loading = false;
@@ -271,8 +271,8 @@ chargeApp.controller('model4Crtl', function($scope, $modalInstance, $http,
         url = 'modify';
     } else {
         $scope.tempCriterion.maxexpense = 9999;
-        $scope.tempCriterion.nightstarttime = '20:00';
-        $scope.tempCriterion.nightendtime = '08:00';
+        $scope.tempCriterion.nightstarttime = '24:00';
+        $scope.tempCriterion.nightendtime = '00:00';
     }
 
     $scope.loading = false;
@@ -381,8 +381,8 @@ chargeApp.controller('model2Crtl', function($scope, $modalInstance, $http,
 		url = 'modify';
 	} else {
 		$scope.tempCriterion.maxexpense = 9999;
-		$scope.tempCriterion.nightstarttime = '20:00';
-		$scope.tempCriterion.nightendtime = '08:00';
+		$scope.tempCriterion.nightstarttime = '24:00';
+		$scope.tempCriterion.nightendtime = '00:00';
 		$scope.tempCriterion.type = 2;
 
 	}

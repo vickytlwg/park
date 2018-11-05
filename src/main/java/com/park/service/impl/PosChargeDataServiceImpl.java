@@ -1271,12 +1271,13 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		if (diff<=0) {
 			charge.setChargeMoney(0);
 			charge.setEntranceDate1(enterDate);
+			charge.setExitDate1(new Date());
 			return charge;
 		}
 		int leftMinuts=(int) (diff%(60*24));
 		int days=(int) (diff/(60*24));
 		double money=days*criterion.getMaxexpense();
-		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
+		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60-criterion.getFreemins()*1000*60);
 		charge.setEntranceDate1(newEnterTime);
 		if (charge.getIsLargeCar()) {
 			calExpenseLargeCarWithData(charge, exitDate, isQuery, park, criterion);
@@ -1434,7 +1435,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 				logger.info("redis获取poschargedataId:"+redisId);
 				charges.add(chargeDao.getById(Integer.parseInt(redisId)));
 				if (charges.get(0).isPaidCompleted()) {
-					charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+					charges.clear();
+					return charges;
 				}
 			}
 			else {

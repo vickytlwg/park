@@ -425,8 +425,18 @@ public class BarrierChargeController {
 				}
 				else {
 					num = chargeSerivce.insert(charge);
+					//清场
+					String redisId=jedisClient.get("P-"+park.getId()+"-"+cardNumber);
+					if (redisId!=null) {
+						PosChargeData posChargeDatatmp=chargeDao.getById(Integer.parseInt(redisId));
+						posChargeDatatmp.setChargeMoney(0);
+						posChargeDatatmp.setExitDate1(new Date());
+						posChargeDatatmp.setRejectReason("平台清场r");
+						chargeSerivce.update(posChargeDatatmp);
+					}
+					
 					jedisClient.set("carIn"+parkId+charge.getCardNumber(),String.valueOf(charge.getId()) , 120);
-					jedisClient.set("P-"+parkId+"-"+charge.getCardNumber(),String.valueOf(charge.getId()) , 259200);
+					jedisClient.set("P-"+parkId+"-"+charge.getCardNumber(),String.valueOf(charge.getId()) , 2592000);
 				}		
 			} catch (Exception e) {
 				// TODO: handle exception

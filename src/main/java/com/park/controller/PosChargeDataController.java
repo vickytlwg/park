@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -57,6 +58,7 @@ import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
+import com.park.service.JedisClient;
 /*import com.park.service.HttpUtil;*/
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
@@ -104,6 +106,9 @@ public class PosChargeDataController {
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
+	
+	@Resource(name="jedisClient")
+	private JedisClient jedisClient;
 	
 	@Autowired
 	private PosChargeDataService posChargeDataService;
@@ -1131,12 +1136,16 @@ public class PosChargeDataController {
 		}
 		posChargeData.setPaidCompleted(false);
 		posChargeData.setChargeMoney(0);
+		posChargeData.setChangeMoney(0);
 		posChargeData.setPaidMoney(0);
 		posChargeData.setDiscount(0.0);
 		posChargeData.setExitDate1(null);
 		int ret = posChargeDataService.update(posChargeData);
-		if (ret == 1)
+		if (ret == 1) {
+			jedisClient.set("P-"+posChargeData.getParkId()+"-"+posChargeData.getCardNumber(),String.valueOf(posChargeData.getId()) , 2592000);
 			return Utility.createJsonMsg(1001, "success");
+		}
+			
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
