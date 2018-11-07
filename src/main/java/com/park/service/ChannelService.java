@@ -47,4 +47,8 @@ public interface ChannelService {
 	public List<ChannelDetail> getByRangeDay(int parkId,Date startDate,Date endDate);
 	
 	public List<ChannelDetail> getExcelByParkDay(int parkId,String date) throws ParseException;
+	
+	public List<ChannelDetail> getByRangeAllDay();
+	
+	public List<ChannelDetail> getExcelByAllParkDay() throws ParseException;
 }

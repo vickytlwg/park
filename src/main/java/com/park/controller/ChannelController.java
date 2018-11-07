@@ -221,6 +221,25 @@ public class ChannelController {
 		}
 		Utility.download(docsPath + FILE_SEPARATOR + "barrierdata.xlsx", response);
 	}
+	
+	@RequestMapping(value = "/getExcelByAllParkDay")
+	@ResponseBody
+	public void getExcelByAllParkDay(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException, NumberFormatException, ParseException {
+		List<ChannelDetail> channel = channelService.getExcelByAllParkDay();
+		String docsPath = request.getSession().getServletContext().getRealPath("/");
+		final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+		String[] headers = { "id","停车场名", "通道编号", "MacId", "标志", "状态", "描述", "日期"};
+		OutputStream out = new FileOutputStream(docsPath + FILE_SEPARATOR + "barrierdata.xlsx");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		excelService.produceExcelAllChannelData("道闸详情", headers, channel, workbook);
+		try {
+			workbook.write(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Utility.download(docsPath + FILE_SEPARATOR + "barrierdata.xlsx", response);
+	}
 
 	
 	@RequestMapping(value = "/getChannelDetailByKeywords", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})

@@ -2,6 +2,7 @@ package com.park.controller;
 
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +17,9 @@ import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.Page;
 import com.park.service.AuthorityService;
+import com.park.service.JedisClient;
 import com.park.service.UserPagePermissionService;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 @Controller
 @RequestMapping("test1")
@@ -25,7 +28,25 @@ public class Test1Controller {
 	private UserPagePermissionService pageService;	
 	@Autowired
 	private AuthorityService authService;
+	@Resource(name="jedisClient")
+	private JedisClient jedisClient;
 	
+	@RequestMapping(value = "/redistest", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String redistest() {
+	
+	System.out.println(jedisClient.set("liu", "川A1LM97",60));
+	System.out.println(jedisClient.set("川A1LM97", "meng2",260));
+	System.out.println(jedisClient.set("liu3", "meng3",360));
+	System.out.println(jedisClient.get("liu"));
+	return null;
+	}
+	@RequestMapping(value = "/redistest2", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String redistest2() {
+
+	return null;
+	}
 	@RequestMapping(value = "/auditMap", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
 	public String auditMap(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");

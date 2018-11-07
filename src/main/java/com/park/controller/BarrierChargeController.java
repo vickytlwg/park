@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.Resource;
+
 import com.park.model.*;
 import com.park.service.*;
 import com.sun.istack.internal.logging.Logger;
@@ -59,6 +61,10 @@ public class BarrierChargeController {
 	SimilarCarNumberService similarCarNumberService;
 	@Autowired
 	ParkNoticeAuthorityService parkNoticeAuthorityService;
+	
+	@Resource(name="jedisClient")
+	private JedisClient jedisClient;
+	
 	private static Log logger = LogFactory.getLog(BarrierChargeController.class);
 
 	
@@ -181,7 +187,7 @@ public class BarrierChargeController {
 		String cardNumber = args.get("cardNumber");
 		cardNumber=cardNumber.trim();
 		logger.info("touch车辆" + cardNumber);
-
+		
 		boolean largeCar = Boolean.parseBoolean(args.get("largeCar"));
 		PosChargeData charge = new PosChargeData();
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -409,8 +415,37 @@ public class BarrierChargeController {
 			}
 
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-			int num = chargeSerivce.insert(charge);
+			int num=0;
+			//redis查询
+			try {
+				String redisStr=jedisClient.get("carIn"+parkId+charge.getCardNumber());			
+				if (redisStr!=null) {
+				num=1;	
+				logger.info("redis检测重复入场"+cardNumber+redisStr);
+				}
+				else {
+					num = chargeSerivce.insert(charge);
+					//清场
+					String redisId=jedisClient.get("P-"+park.getId()+"-"+cardNumber);
+					if (redisId!=null) {
+						PosChargeData posChargeDatatmp=chargeDao.getById(Integer.parseInt(redisId));
+						posChargeDatatmp.setChargeMoney(0);
+						posChargeDatatmp.setExitDate1(new Date());
+						posChargeDatatmp.setRejectReason("平台清场r");
+						chargeSerivce.update(posChargeDatatmp);
+					}
+					
+					jedisClient.set("carIn"+parkId+charge.getCardNumber(),String.valueOf(charge.getId()) , 120);
+					jedisClient.set("P-"+parkId+"-"+charge.getCardNumber(),String.valueOf(charge.getId()) , 2592000);
+				}		
+			} catch (Exception e) {
+				// TODO: handle exception
+				num = chargeSerivce.insert(charge);
+			}
+		
 			if (num == 1) {
+							
+				
 				//发送topic队列
 				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
 					charge.setEntrance(true);
@@ -463,6 +498,7 @@ public class BarrierChargeController {
 			List<PosChargeData> queryCharges = null;
 			String exitDate = (String) args.get("exitDate");
 			logger.info(cardNumber + "开始出场");
+			parkService.updateLeftPortCount(parkId, park.getPortLeftCount()+1);
 			if (monthuserNow!=null) {
 				realMonthUsers.add(monthuserNow);
 			}
@@ -597,9 +633,7 @@ public class BarrierChargeController {
 					}
 				//	posChargeData.setOperatorId("15minPaid");
 					chargeSerivce.update(posChargeData);
-
-				
-					
+									
 					return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 				}
 				// 超过了15分钟
@@ -652,9 +686,7 @@ public class BarrierChargeController {
 						chargeSerivce.update(posChargeData);
 					}
 				}
-				// if (payRet.getExitDate()==null) {
-				// payRet.setExitDate1(new Date());
-				// }
+
 				shouldChargeMoney=payRet.getChargeMoney();
 				num = chargeSerivce.update(payRet);
 			} else {
@@ -792,7 +824,7 @@ public class BarrierChargeController {
 				posChargeMacService.insertSelective(poschargemac);
 				logger.info(cardNumber + "出场成功!" + dataMap.toString());
 				
-				parkService.updateLeftPortCount(parkId, park.getPortLeftCount()+1);
+				
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			} else {
 				return Utility.createJsonMsg(1001, "ok");
@@ -1355,20 +1387,20 @@ public class BarrierChargeController {
 			default:
 				break;
 			}	
-			logger.info(cardNumber + "发送topic");
+			
 			//发送到topic
 			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
 				payRet.setEntrance(false);
 			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 			}
-			logger.info(cardNumber + "发送队列");
+	
 			// 发送到队列
 			if (ArrayUtils.contains(Constants.parkToQuene, parkId.intValue())) {
 				ActiveMqService.SendPosChargeData(JsonUtils.objectToJson(payRet));
 			}
-			logger.info(cardNumber + "1357");
+		
 			if (parknoticeauthority != null && parknoticeauthority.getWeixin() == true&&!queryCharges.isEmpty()) {
-				logger.info(cardNumber + "1359");
+				
 				try {
 					Map<String, String> argstoali = new HashMap<>();
 					argstoali.put("parkName", payRet.getParkDesc());

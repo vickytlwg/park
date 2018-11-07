@@ -36,7 +36,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 
 
     $scope.getExcelByParkAndDay=function(){
-         $window.location.href="getExcelByParkAndDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
+         $window.location.href="/park/getExcelByParkAndDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
      };
      
      $scope.selectedPark={};

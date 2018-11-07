@@ -13,13 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.tools.config.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.springframework.data.redis.core.types.RedisClientInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,7 @@ import com.park.service.AliParkFeeService;
 import com.park.service.ChargeDataService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeecriterionToParkService;
+import com.park.service.JedisClient;
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
 import com.park.service.OutsideParkInfoService;
@@ -91,6 +94,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	AliParkFeeService aliparkFeeService;
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
+	
+	@Resource(name="jedisClient")
+	private JedisClient jedisClient;
 
 	private static Log logger = LogFactory.getLog(PosChargeDataServiceImpl.class);
 
@@ -1264,12 +1270,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		long diff=(exitDate.getTime()-enterDateNew.getTime())/(1000*60);
 		if (diff<=0) {
 			charge.setChargeMoney(0);
+			charge.setEntranceDate1(enterDate);
+			charge.setExitDate1(new Date());
 			return charge;
 		}
 		int leftMinuts=(int) (diff%(60*24));
 		int days=(int) (diff/(60*24));
 		double money=days*criterion.getMaxexpense();
-		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
+		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60-criterion.getFreemins()*1000*60);
 		charge.setEntranceDate1(newEnterTime);
 		if (charge.getIsLargeCar()) {
 			calExpenseLargeCarWithData(charge, exitDate, isQuery, park, criterion);
@@ -1278,8 +1286,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			calExpenseSmallCarWithData(charge, exitDate, isQuery,park, criterion);
 		}
 		charge.setEntranceDate1(enterDate);
-		charge.setChargeMoney(charge.getChargeMoney()+money);
-		
+		charge.setChargeMoney(charge.getChargeMoney()+money);		
 		return charge;
 	}
 	// 按次
@@ -1421,7 +1428,24 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public List<PosChargeData> getDebtWithData(String cardNumber, List<Parktoalipark> parktoaliparks,
 			List<Monthuser> monthusers, Park park,Boolean isMultiFeeCtriterion,int carType) throws Exception {
-		List<PosChargeData> charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+		List<PosChargeData> charges = new ArrayList<>();
+		try {
+			String redisId=jedisClient.get("P-"+park.getId()+"-"+cardNumber);
+			if (redisId!=null) {
+				logger.info("redis获取poschargedataId:"+redisId);
+				charges.add(chargeDao.getById(Integer.parseInt(redisId)));
+				if (charges.get(0).isPaidCompleted()) {
+					charges.clear();
+					return charges;
+				}
+			}
+			else {
+				charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+			}
+		} catch (Exception e) {
+			charges = chargeDao.getDebtWithParkId(cardNumber, park.getId());
+		}
+	
 		logger.info(""+cardNumber+"取得未付款记录"+ charges.size()+"条");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
 		if (charges.isEmpty()) {
@@ -1475,6 +1499,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		if (!tmPosChargeDatas.isEmpty()) {
 			this.calExpensewithData(tmPosChargeDatas.get(0), new Date(), false, monthusers, park, criterion);
+			try {
+				jedisClient.del("P-"+park.getId()+"-"+cardNumber);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 		int tmpint = 0;
 		for (PosChargeData tmpcharge : tmPosChargeDatas) {
@@ -1842,16 +1871,16 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		int leftMinuts=(int) (diff%(60*24));
 		int days=(int) (diff/(60*24));
-	//	double money=days*criterion.getMaxexpense();
-	//	Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
+		double money=days*criterion.getMaxexpense();
+		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60);
 		//前三小时免费，3-5小时5元，5-12小时10元，12-24小时20元
-		if (diff<=2*60&&diff>0) {
+		if (diff<=criterion.getStep1capacity()&&diff>0) {
 			charge.setChargeMoney(criterion.getStep1price());
 		}
-		if (diff>2*60&&diff<=9*60) {
+		if (diff>criterion.getStep1capacity()&&diff<=criterion.getStep2capacity()) {
 			charge.setChargeMoney(criterion.getStep2price());
 		}
-		if (diff>10*60) {
+		if (diff>(criterion.getFreemins()+criterion.getStep1capacity()+criterion.getStep2capacity())) {
 			charge.setChargeMoney(criterion.getOnetimeexpense());
 		}
 	}
