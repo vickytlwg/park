@@ -269,3 +269,7 @@ hardwareInfoService.controller('textCtrl', function($scope, $uibModalInstance,
 		$uibModalInstance.close('cancel');
 	};
 });
+/*
+ * You may think you know what the above code does.
+ * But you dont. Trust me.
+ */
