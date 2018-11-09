@@ -16,10 +16,10 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         }
     };
  $scope.searchDate=new Date().format('yyyy-MM-dd');
- $scope.startDate=new Date().format('yyyy-MM-dd');
- $scope.endDate=new Date().format('yyyy-MM-dd');
+ $scope.startDate=new Date().format('yyyy-MM-dd hh:mm:ss');
+ $scope.endDate=new Date().format('yyyy-MM-dd hh:mm:ss');
       var dateInitial=function(){
-        $('.date').datepicker({
+        /*$('.date').datepicker({
             autoClose: true,
             dateFormat: "yyyy-mm-dd",
             days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
@@ -32,7 +32,20 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             weekStart: 1,
             yearSuffix: "年",
             isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}        
-        });
+        });*/
+    	  
+    	$('#date').datetimepicker({
+			format: 'YYYY-MM-DD',
+			locale: moment.locale('zh-cn')
+		});
+    	$('#date2').datetimepicker({
+  		   format: 'YYYY-MM-DD HH:mm:ss',
+  		   locale: moment.locale('zh-cn')
+  	 	});
+   	   	$('#date3').datetimepicker({
+  		   format: 'YYYY-MM-DD HH:mm:ss',
+  		   locale: moment.locale('zh-cn')
+  	 	});
     };  
    dateInitial();
 
@@ -128,10 +141,10 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
          $window.location.href="getExcelByDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate;
         };
     $scope.getExcelByParkAndDay=function(){
-         $window.location.href="getExcelByParkAndDay?date="+$scope.searchDate+"&parkId="+$('#park-select').val();
+         $window.location.href="getExcelByParkAndDay?date="+$("#date").val()+"&parkId="+$('#park-select').val();
      };
      $scope.getExcelByParkAndDayRange=function(){
-         $window.location.href="getExcelByParkAndDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate
+         $window.location.href="getExcelByParkAndDayRange?startDate="+$("#date2").val()+"&endDate="+$("#date3").val()
          +"&parkId="+$('#park-select2').val();
      };
      $scope.searchByParkName=function(){
