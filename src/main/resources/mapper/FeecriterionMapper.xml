@@ -37,6 +37,12 @@
     from feeCriterion
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="operatorValidationid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from feeCriterion
+    where id = #{id,jdbcType=INTEGER}
+  </select>
     <select id="get" resultMap="BaseResultMap">
   	select 
     <include refid="Base_Column_List" />

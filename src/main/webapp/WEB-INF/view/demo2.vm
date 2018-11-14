@@ -22,8 +22,11 @@
 <div class="content-wrapper" ng-app="outsideParkStatus1App"
      ng-controller="outsideParkStatus1Ctrl">
   <section class="content-header">
-    <h1>停车场交易概况
+    <h1 style="width:180px;">停车场交易概况
     </h1>
+    <button type="button" class="btn bg-purple" style="margin-left:200px;margin-top:-28px;">
+    	返回
+    </button>
   </section>
   <section class="content">
     <div class="row">

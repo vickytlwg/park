@@ -16,4 +16,6 @@ public interface FeeCriterionService {
 	FeeCriterion getById(Integer criterionId);
 	
 	List<FeeCriterion> getByKeyWords(String keyWords);
+	
+	List<FeeCriterion> operatorValidationid(int id);
 }
