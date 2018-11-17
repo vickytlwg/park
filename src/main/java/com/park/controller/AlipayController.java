@@ -633,8 +633,9 @@ public class AlipayController {
 		args.put("equipment_name", "包泊测试停车场-九比特");
 		args.put("out_parking_id", "206");
 		args.put("parking_address", "江苏省-南京市-江宁区 ");
-		args.put("longitude", "117.814557");
-		args.put("latitude", "32.067111");
+//		args.put("longitude", "117.814557");
+//		args.put("latitude", "32.067111");
+		args.put("parking_lot_type", "B0019060PW");
 		args.put("parking_start_time", "08:00:00");
 		args.put("parking_end_time", "18:00:00");
 		args.put("parking_number", "60");
@@ -649,7 +650,20 @@ public class AlipayController {
 		args.put("parking_name", "包泊测试停车场");
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkingInfoCreate(args));
 	}
-
+	@RequestMapping(value = "parkinfoInput", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String parkinfoInput(@RequestBody Map<String, String> args) throws AlipayApiException {
+		
+		return Utility.createJsonMsg("1001", "success",parkFeeService.parkingInfoInput(args));
+	}
+	@RequestMapping(value = "parkinfoUpdate", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String parkinfoUpdate(@RequestBody Map<String, String> args) throws AlipayApiException {
+		
+		return Utility.createJsonMsg("1001", "success",parkFeeService.parkingInfoUpdate2(args));
+	}
 	@RequestMapping(value = "testParkingEnterinfoSync", method = RequestMethod.GET, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody
