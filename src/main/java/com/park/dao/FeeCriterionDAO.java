@@ -21,5 +21,7 @@ public interface FeeCriterionDAO {
 	public FeeCriterion getById(Integer id);
 	
 	List<FeeCriterion> getByKeyWords(@Param("keywords")String keywords);
+	
+	List<FeeCriterion> operatorValidationid(@Param("id")int id);
 
 }
