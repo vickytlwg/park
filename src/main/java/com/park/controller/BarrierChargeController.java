@@ -429,12 +429,15 @@ public class BarrierChargeController {
 					String redisId=jedisClient.get("P-"+park.getId()+"-"+cardNumber);
 					if (redisId!=null) {
 						PosChargeData posChargeDatatmp=chargeDao.getById(Integer.parseInt(redisId));
-						posChargeDatatmp.setChargeMoney(0);
-						posChargeDatatmp.setExitDate1(new Date());
-						posChargeDatatmp.setPaidCompleted(true);
-						posChargeDatatmp.setOperatorId("redis");
-						posChargeDatatmp.setRejectReason("平台清场r");
-						chargeSerivce.update(posChargeDatatmp);
+						if (!posChargeDatatmp.isPaidCompleted()) {
+							posChargeDatatmp.setChargeMoney(0);
+							posChargeDatatmp.setExitDate1(new Date());
+							posChargeDatatmp.setPaidCompleted(true);
+							posChargeDatatmp.setOperatorId("redis");
+							posChargeDatatmp.setRejectReason("平台清场r");
+							chargeSerivce.update(posChargeDatatmp);
+						}
+						
 						jedisClient.del("P-"+parkId+"-"+charge.getCardNumber());
 						logger.info("重新入场 "+cardNumber+" id"+charge.getId());
 						
@@ -1111,12 +1114,15 @@ public class BarrierChargeController {
 					String redisId=jedisClient.get("P-"+park.getId()+"-"+cardNumber);
 					if (redisId!=null) {
 						PosChargeData posChargeDatatmp=chargeDao.getById(Integer.parseInt(redisId));
-						posChargeDatatmp.setChargeMoney(0);
-						posChargeDatatmp.setExitDate1(new Date());
-						posChargeDatatmp.setPaidCompleted(true);
-						posChargeDatatmp.setOperatorId("redis");
-						posChargeDatatmp.setRejectReason("平台清场r");
-						chargeSerivce.update(posChargeDatatmp);
+						if (!posChargeDatatmp.isPaidCompleted()) {
+							posChargeDatatmp.setChargeMoney(0);
+							posChargeDatatmp.setExitDate1(new Date());
+							posChargeDatatmp.setPaidCompleted(true);
+							posChargeDatatmp.setOperatorId("redis");
+							posChargeDatatmp.setRejectReason("平台清场r");
+							chargeSerivce.update(posChargeDatatmp);
+						}
+					
 						jedisClient.del("P-"+parkId+"-"+charge.getCardNumber());
 						logger.info("重新入场 "+cardNumber+" id"+charge.getId());
 						

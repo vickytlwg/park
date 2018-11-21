@@ -74,10 +74,11 @@ public class IndexController {
 
 			}
 			String redirectUrl=(String) session.getAttribute("redirectUrl");
-			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
-				redirectUrl=redirectUrl.substring(5);
-				return "redirect:"+redirectUrl;
-			}
+			//返回上一次访问的页面
+//			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
+//				redirectUrl=redirectUrl.substring(5);
+//				return "redirect:"+redirectUrl;
+//			}
 			return "redirect:platformShow2";
 		}else{
 			return "redirect:login";
