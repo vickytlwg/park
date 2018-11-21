@@ -39,9 +39,9 @@ public class ParkServletService extends Service {
 			url = new URL(baseUrl,
 					"http://220.248.75.46:29918/UserMgrService/ParkServletPort?wsdl");
 		} catch (MalformedURLException e) {
-			logger
-					.warning("Failed to create URL for the wsdl Location: 'http://220.248.75.46:29918/UserMgrService/ParkServletPort?wsdl', retrying as a local file");
-			logger.warning(e.getMessage());
+//			logger
+//					.warning("Failed to create URL for the wsdl Location: 'http://220.248.75.46:29918/UserMgrService/ParkServletPort?wsdl', retrying as a local file");
+//			logger.warning(e.getMessage());
 		}
 		PARKSERVLETSERVICE_WSDL_LOCATION = url;
 	}

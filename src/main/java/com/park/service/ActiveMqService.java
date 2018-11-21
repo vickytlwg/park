@@ -14,19 +14,18 @@ import com.park.model.QueueDataCharge;
 
 public class ActiveMqService {
 	private static Log logger=LogFactory.getLog(ActiveMqService.class);
-	public static void SendPosChargeData(String data){
-		
+	public static void SendPosChargeData(String data){		
 		Map<String, Object> args=new HashMap<>();
 		args.put("data", data);
 		logger.info("发送队列:"+data);
-		HttpUtil.post("http://parkserver.iotclouddashboard.com/parkServer/mq/poschargeData",args);
+		HttpUtil.okHttpPost("http://parkserver.iotclouddashboard.com/parkServer/mq/poschargeData",args);
 	}
 	public static void SendWithQueueName(String data,String queue){
 		Map<String, Object> args=new HashMap<>();
 		args.put("data", data);
 		logger.info("发送队列:"+data);
 		args.put("queue", queue);
-		HttpUtil.post("http://parkserver.iotclouddashboard.com/parkServer/mq/queueData",args);
+		HttpUtil.okHttpPost("http://parkserver.iotclouddashboard.com/parkServer/mq/queueData",args);
 	}
 	public static void SendTopicWithMac(PosChargeData data,String topic,String mac,int leftcount,int parkingType){
 		QueueDataCharge queueDataCharge=new QueueDataCharge();
@@ -70,6 +69,6 @@ public class ActiveMqService {
 		args.put("mac", mac);
 	
 		logger.info("发送topic:"+args);
-		HttpUtil.post("http://parkserver.iotclouddashboard.com/parkServer/mq/topicData",args);
+		HttpUtil.okHttpPost("http://parkserver.iotclouddashboard.com/parkServer/mq/topicData",args);
 	}
 }

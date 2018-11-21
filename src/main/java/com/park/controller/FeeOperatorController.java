@@ -90,6 +90,26 @@ public class FeeOperatorController {
 		}
 		return "feeOperator2";
 	}
+	
+	@RequestMapping(value="validationid",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public String Validationid(@RequestBody Map<String, Object> args) throws ParseException{
+		Map<String, Object> result=new HashMap<>();
+		int id=0;
+		id=Integer.parseInt(args.get("id").toString());
+		Double money=args.get("money")!=null?(double) args.get("money"):null;
+		Boolean needMoney=args.get("needMoney")!=null?(boolean)args.get("needMoney"):false;
+		List<FeeCriterion> feeCriterionid=feeCriterionService.operatorValidationid(id);
+				if (feeCriterionid.isEmpty()) {
+					result.put("status", 1002);
+				} else {
+					result.put("status", 1001);
+					result.put("message", "success");
+					result.put("body", feeCriterionid);
+				}
+		return Utility.gson.toJson(result);
+	}
+	
 	@RequestMapping(value="validation",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String Validation(@RequestBody Map<String, Object> args) throws ParseException{

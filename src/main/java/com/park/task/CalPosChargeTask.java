@@ -92,7 +92,7 @@ public class CalPosChargeTask {
 		String url="http://park.hfcsbc.cn:8080/parkScreenPMS/ReceiveParkNum.action?parkId=3401040062&total=70&Surplus="+a;
 		HttpUtil.get(url);
 	}
-	@Scheduled(cron="0 0/2 * * * ? ")
+	@Scheduled(cron="0 0/5 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
 		if (AdminArgs.isGuest) {
 			return;

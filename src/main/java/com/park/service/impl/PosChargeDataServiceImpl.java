@@ -41,6 +41,7 @@ import com.park.model.Parknoticeauthority;
 import com.park.model.Parktoalipark;
 import com.park.model.PosChargeData;
 import com.park.model.Posdata;
+import com.park.model.posdataReceive;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
 import com.park.service.ChargeDataService;
@@ -203,6 +204,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// System.out.println("获取poschargedata list前: "+new
 		// Date().getTime()+"\n");
 		List<PosChargeData> charges = chargeDao.getDebt(cardNumber);
+		
 		// System.out.println("获取poschargedata list后: "+new
 		// Date().getTime()+"\n");
 		List<PosChargeData> tmPosChargeDatas = new ArrayList<>();
@@ -1267,14 +1269,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			Boolean isQuery,Park park) throws Exception {
 		Date enterDate=charge.getEntranceDate();
 		Date enterDateNew=new Date(enterDate.getTime()+criterion.getFreemins()*1000*60);
-		long diff=(exitDate.getTime()-enterDateNew.getTime())/(1000*60);
+		long diff=(long) Math.ceil((exitDate.getTime()-enterDateNew.getTime())/(1000*60));
 		if (diff<=0) {
 			charge.setChargeMoney(0);
 			charge.setEntranceDate1(enterDate);
 			charge.setExitDate1(new Date());
 			return charge;
 		}
-		int leftMinuts=(int) (diff%(60*24));
+		int leftMinuts=(int) Math.ceil((diff%(60*24))) ;
 		int days=(int) (diff/(60*24));
 		double money=days*criterion.getMaxexpense();
 		Date newEnterTime=new Date(exitDate.getTime()-leftMinuts*1000*60-criterion.getFreemins()*1000*60);

@@ -47,6 +47,12 @@ public class FeeCriterionServiceImpl implements FeeCriterionService{
 		// TODO Auto-generated method stub
 		return criterionDAO.getByKeyWords(keyWords);
 	}
+
+	@Override
+	public List<FeeCriterion> operatorValidationid(int id) {
+		// TODO Auto-generated method stub
+		return criterionDAO.operatorValidationid(id);
+	}
 	
 	
 
