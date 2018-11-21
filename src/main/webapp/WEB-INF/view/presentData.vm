@@ -1,0 +1,327 @@
+<style>
+  .well {
+    min-height: 250px;
+    min-width: 1100px;
+  }
+
+  .panel .panel-body .row div {
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+    float: left;
+    height: 160px;
+    margin: 30px 0 0 35px;
+    position: relative;
+    text-align: center;
+    width: 150px;
+  }
+
+  .panel .panel-body .row div h2 {
+    background: #08b;
+    background-image: radial-gradient(transparent 30%, rgba(0, 0, 0, 0.2));
+    border: 0 solid rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .panel .panel-body .row div.folded:before, div.folded:after {
+    bottom: 26px;
+    box-shadow: 0 28px 8px rgba(0, 0, 0, 0.5);
+    content: "";
+    height: 28px;
+    position: absolute;
+    width: 48%;
+    z-index: -1;
+  }
+
+  .panel .panel-body .row div.folded:before {
+    left: 2%;
+    transform: rotate(-3deg);
+  }
+
+  .panel .panel-body .row div.folded:after {
+    right: 2%;
+    transform: rotate(3deg);
+  }
+
+  .panel .panel-body .row div.folded h2 {
+    border-width: 1px 1px 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    padding: 4px 20px;
+    position: absolute;
+    right: -14px;
+    top: 12px;
+  }
+
+  .panel .panel-body .row div.folded h3 {
+    /*     border-width: 1px 1px 2px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); */
+    margin: 0;
+    padding: 5px 5px;
+    position: absolute;
+    left: 25%;
+    top: 50%;
+  }
+  .panel .panel-body .row div.folded span {
+       /*     border-width: 1px 1px 2px;
+           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); */
+       margin: 0;
+       padding: 5px 5px;
+       position: absolute;
+       left: 70%;
+       top: 55%;
+     }
+
+  .panel .panel-body .row div.folded h2:after {
+    border-width: 7px;
+    border-style: solid;
+    border-color: #134 transparent transparent #134;
+    bottom: -15px;
+    content: "";
+    position: absolute;
+    right: -1px;
+  }
+
+</style>
+<!-- 如果这段代码好用，那它是Vicky写的。
+如果不好用，我不知道是谁写的。 -->
+<div class="content-wrapper" ng-app="presentDataApp"
+     ng-controller="presentDataCtrl" style="height:1200px">
+  <section class="content-header">
+    <h1>今日数据</h1>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12" style="padding: 0 5px 0 5px;">
+        <div class="box">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="folded"><h2>今日应收金额</h2>
+                  <h3>{{dayAmountMoney}}</h3></div>
+                <div class="folded"><h2>今日实收金额</h2><h3>{{dayRealMoney}}</h3><span>元</span></div>
+                <div class="folded"><h2>今日免费金额</h2><h3>{{dayAmountMoney}}</h3><span>元</span></div>
+                <div class="folded"><h2>今日欠费金额</h2><h3>{{(dayAmountMoney-dayRealMoney)}}</h3><span>元</span></div>
+                <div class="folded"><h2>今日交易次数</h2><h3>{{dayOutCount}}</h3><span>元</span></div>
+                <div class="folded"><h2>运营站点数</h2><h3>{{dayParkCount}}</h3><span>个</span></div>
+              </div>
+
+
+              <div class="container" style="height:280px;">
+                <div class="col-md-6">
+                  <div style="height:280px;" pie-chart e-data="edata"></div>
+                </div>
+                <div class="col-md-6" style="margin-top:20px;">
+                  <h4 style="margin-bottom:20px;">交易总额{{data.totalAmount}}元，总订单数{{data.totalCount}}笔。</h4>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/cash.png" alt="支付宝">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>现金</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.cashAmount2}}元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>现金</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.cashCount2}}笔</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/wechat.png" alt="支付宝">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>微信</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.wechartAmount}}元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>微信</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.wechartCount}}笔</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/alipay.png" alt="支付宝">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>支付宝</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.alipayAmount}}元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>支付宝</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.alipayCount}}笔</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/huishang.png" alt="支付宝">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>徽商银行</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.otherAmount}}元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>徽商银行</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.otherCount}}笔</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/ICBC.png" alt="支付宝">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>工商银行</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.cbcAmount}}元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>工商银行</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span>{{data.cbcCount}}笔</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!--<div>-->
+            <!--<table-->
+                <!--class="table table-bordered table-hover table-condensed table-striped text-center"-->
+                <!--style="font-size: 12px">-->
+
+              <!--<tr class="info" style="height: 30px; line-height: 30px;">-->
+                <!--&lt;!&ndash;<th><span><input type="checkbox"/></span></th>&ndash;&gt;-->
+                <!--<th><span>ID</span></th>-->
+                <!--<th><span>停车场名称</span></th>-->
+                <!--<th><span>SIM卡号</span></th>-->
+                <!--<th><span>SIM卡状态</span></th>-->
+                <!--<th><span>类型</span></th>-->
+                <!--<th><span>MAC地址</span></th>-->
+                <!--<th><span>当月流量</span></th>-->
+                <!--<th><span>硬件版本</span></th>-->
+                <!--<th><span>硬件状态</span></th>-->
+                <!--<th><span>软件版本</span></th>-->
+                <!--<th><span>信号质量</span></th>-->
+                <!--<th><span>机箱温度</span></th>-->
+                <!--<th><span>安装时间</span></th>-->
+                <!--<th><span>其他</span></th>-->
+
+              <!--</tr>-->
+
+              <!--<tr ng-repeat="feeOperator in feeOperatores"-->
+                  <!--ng-click="selectChange($index)">-->
+                <!--&lt;!&ndash;<td><input type="checkbox" ng-model="feeOperator.checked"/></td>&ndash;&gt;-->
+                <!--<td ng-bind="feeOperator.id"></td>-->
+                <!--<td ng-bind="feeOperator.parkname"></td>-->
+                <!--<td ng-bind="feeOperator.simnumber"></td>-->
+                <!--<td ng-bind="feeOperator.simstatus"></td>-->
+                <!--<td ng-bind="feeOperator.type"></td>-->
+                <!--<td ng-bind="feeOperator.mac"></td>-->
+                <!--<td ng-bind="feeOperator.flow"></td>-->
+                <!--<td ng-bind="feeOperator.macversion"></td>-->
+                <!--<td ng-bind="feeOperator.macstatus"></td>-->
+                <!--<td ng-bind="feeOperator.softversion"></td>-->
+                <!--<td ng-bind="feeOperator.signalstatus"></td>-->
+                <!--&lt;!&ndash;<td ng-if="feeOperator.signstatus==false">未签到</td>&ndash;&gt;-->
+                <!--&lt;!&ndash;<td ng-if="feeOperator.signstatus==true">已签到</td>&ndash;&gt;-->
+                <!--<td ng-bind="feeOperator.temperature"></td>-->
+                <!--<td ng-bind="feeOperator.installtime"></td>-->
+                <!--<td ng-bind="feeOperator.other"></td>-->
+              <!--</tr>-->
+            <!--</table>-->
+            <!--<tm-pagination conf="paginationConf"></tm-pagination>-->
+
+          <!--</div>-->
+          <div>
+            <table class="table table-bordered table-hover table-condensed table-striped text-center"
+            style="font-size: 12px">
+              <tr>
+                <td>市</td>
+                <td>应收额</td>
+                <td>实收额</td>
+                <td>欠费</td>
+                <td>入场数</td>
+                <td>出场数</td>
+                <td>经营中心</td>
+                <td>街道数</td>
+                <td>站点总数</td>
+                <td>在线站点</td>
+                <td>总泊位</td>
+                <td>在线泊位</td>
+                <td>剩余泊位</td>
+              </tr>
+              <tr ng-repeat="zoneCenter in zoneCenters">
+                <td><a href='#'>{{zoneCenter.zonename|limitTo:5}}</a></td>
+                <td>{{zoneCenter.amountmoney}}</td>
+                <td>{{zoneCenter.realmoney}}</td>
+                <td>{{(zoneCenter.amountmoney-zoneCenter.realmoney)>0?(zoneCenter.amountmoney-zoneCenter.realmoney):0}}</td>
+                <td>{{zoneCenter.entrancecount}}</td>
+                <td>{{zoneCenter.outcount}}</td>
+                <td>{{zoneCenter.areacount}}</td>
+                <td>{{zoneCenter.streetcount}}</td>
+                <td>{{zoneCenter.parkcount}}</td>
+                <td>{{zoneCenter.onlineparkcount}}</td>
+                <td>{{zoneCenter.carportcount}}</td>
+                <td>{{zoneCenter.onlinecarportcount}}</td>
+                <td>{{zoneCenter.carportleftcount>0?zoneCenter.carportleftcount:0}}</td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+
+
+<script src="/park/script/presentData.js?v=1.2"></script>
+<script type="text/javascript" src="/park/assets/js/echarts.js"></script>

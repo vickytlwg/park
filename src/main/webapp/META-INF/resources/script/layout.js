@@ -52,7 +52,8 @@
         $('#tcdsj').show();
         /*$('#tcdsj').show();*/
         $('#tcdsj').show();
-        $('#jrsj').show();
+        //$('#jrsj').show();
+        $('#presentData').show();
         $('#jrsj2').show();
         // $('#s').show();
         // $('#q').show();
@@ -94,9 +95,9 @@
         $('#luneichange').addClass("hhhh");
         $('#tcdsj').show();
         $('#tcdsj').show();
-        $('#jrsj').show();
+        //$('#jrsj').show();
+        $('#presentData').show();
         $('#jrsj2').show();
-
         // $('#s').show();
         // $('#q').show();
         // $('#ld').show();
