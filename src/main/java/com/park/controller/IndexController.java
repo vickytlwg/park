@@ -74,10 +74,11 @@ public class IndexController {
 
 			}
 			String redirectUrl=(String) session.getAttribute("redirectUrl");
-			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
-				redirectUrl=redirectUrl.substring(5);
-				return "redirect:"+redirectUrl;
-			}
+			//返回上一次访问的页面
+//			if (redirectUrl!=null&&!redirectUrl.contains("login")&&redirectUrl.length()>7) {
+//				redirectUrl=redirectUrl.substring(5);
+//				return "redirect:"+redirectUrl;
+//			}
 			return "redirect:platformShow2";
 		}else{
 			return "redirect:login";
@@ -298,6 +299,24 @@ public class IndexController {
 			}
 		}
 		return "platformShow";
+	}
+	//new page
+	@RequestMapping("/presentData")
+	public String presentData(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+		String username = (String) session.getAttribute("username");
+		AuthUser user = authService.getUserByUsername(username);
+		if(user != null){
+			modelMap.addAttribute("user", user);
+			boolean isAdmin = false;
+			if(user.getRole() == AuthUserRole.ADMIN.getValue())
+				isAdmin=true;
+			modelMap.addAttribute("isAdmin", isAdmin);			
+			Set<Page> pages = pageService.getUserPage(user.getId()); 
+			for(Page page : pages){
+				modelMap.addAttribute(page.getPageKey(), true);
+			}
+		}
+		return "presentData";
 	}
 	@RequestMapping("/outsideParkStatus2")
 	public String outsideParkStatus2(ModelMap modelMap,HttpSession session){

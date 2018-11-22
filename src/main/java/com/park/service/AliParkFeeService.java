@@ -297,6 +297,121 @@ public class AliParkFeeService {
 		AlipayEcoMycarParkingParkinglotinfoCreateResponse response = alipayClient.execute(request);
 		return response;
 	}
+	
+	//录入停车场信息
+	public AlipayEcoMycarParkingParkinglotinfoCreateResponse parkingInfoInput(Map<String, String> args) throws AlipayApiException {
+		AlipayEcoMycarParkingParkinglotinfoCreateRequest request = new AlipayEcoMycarParkingParkinglotinfoCreateRequest();
+		String out_parking_id=args.get("out_parking_id");
+		String parking_address=args.get("parking_address");
+		String parking_lot_type=args.get("parking_lot_type");
+		String parking_poiid=args.get("parking_poiid");
+		String parking_mobile=args.get("parking_mobile");
+		String pay_type=args.get("pay_type");
+		String shopingmall_id=args.get("shopingmall_id");
+		String parking_fee_description=args.get("parking_fee_description");
+		String parking_name	=args.get("parking_name");
+		String time_out	=args.get("time_out");
+		String agent_id	=args.get("agent_id");
+		String mchnt_id	=args.get("mchnt_id");
+		request.setBizContent("{" +
+				"\"out_parking_id\":\""
+				+ out_parking_id
+				+ "\"," +
+				"\"parking_address\":\""
+				+ parking_address
+				+ "\"," +
+				"\"parking_lot_type\":\""
+				+ parking_lot_type
+				+ "\"," +
+				"\"parking_poiid\":\""
+				+ parking_poiid
+				+ "\"," +
+				"\"parking_mobile\":\""
+				+ parking_mobile
+				+ "\"," +
+				"\"pay_type\":\""
+				+ pay_type
+				+ "\"," +
+				"\"shopingmall_id\":\""
+				+ shopingmall_id
+				+ "\"," +
+				"\"parking_fee_description\":\""
+				+ parking_fee_description
+				+ "\"," +
+				"\"parking_name\":\""
+				+ parking_name
+				+ "\"," +
+				"\"time_out\":\""
+				+ time_out
+				+ "\"," +
+				"\"agent_id\":\""
+				+ agent_id
+				+ "\"," +
+				"\"mchnt_id\":\""
+				+ mchnt_id
+				+ "\"" +
+				"  }");
+		AlipayEcoMycarParkingParkinglotinfoCreateResponse response = alipayClient.execute(request);
+		return response;
+	}
+	
+	//录入停车场信息
+		public AlipayEcoMycarParkingParkinglotinfoUpdateResponse  parkingInfoUpdate2(Map<String, String> args) throws AlipayApiException {
+			AlipayEcoMycarParkingParkinglotinfoUpdateRequest  request = new AlipayEcoMycarParkingParkinglotinfoUpdateRequest ();
+			String parking_id=args.get("parking_id");
+			String parking_address=args.get("parking_address");
+			String parking_lot_type=args.get("parking_lot_type");
+			String parking_poiid=args.get("parking_poiid");
+			String parking_mobile=args.get("parking_mobile");
+			String pay_type=args.get("pay_type");
+			String shopingmall_id=args.get("shopingmall_id");
+			String parking_fee_description=args.get("parking_fee_description");
+			String parking_name	=args.get("parking_name");
+			String time_out	=args.get("time_out");
+			String agent_id	=args.get("agent_id");
+			String mchnt_id	=args.get("mchnt_id");
+			request.setBizContent("{" +
+					"\"parking_id\":\""
+					+ parking_id
+					+ "\"," +
+					"\"parking_address\":\""
+					+ parking_address
+					+ "\"," +
+					"\"parking_lot_type\":\""
+					+ parking_lot_type
+					+ "\"," +
+					"\"parking_poiid\":\""
+					+ parking_poiid
+					+ "\"," +
+					"\"parking_mobile\":\""
+					+ parking_mobile
+					+ "\"," +
+					"\"pay_type\":\""
+					+ pay_type
+					+ "\"," +
+					"\"shopingmall_id\":\""
+					+ shopingmall_id
+					+ "\"," +
+					"\"parking_fee_description\":\""
+					+ parking_fee_description
+					+ "\"," +
+					"\"parking_name\":\""
+					+ parking_name
+					+ "\"," +
+					"\"time_out\":\""
+					+ time_out
+					+ "\"," +
+					"\"agent_id\":\""
+					+ agent_id
+					+ "\"," +
+					"\"mchnt_id\":\""
+					+ mchnt_id
+					+ "\"" +
+					"  }");
+			AlipayEcoMycarParkingParkinglotinfoUpdateResponse response = alipayClient.execute(request);
+			return response;
+		}
+	
 	//停车场信息修改
 	public AlipayEcoMycarParkingParkinglotinfoUpdateResponse parkingInfoUpdate(Map<String, String> args) throws AlipayApiException{
 		AlipayEcoMycarParkingParkinglotinfoUpdateRequest request = new AlipayEcoMycarParkingParkinglotinfoUpdateRequest();
