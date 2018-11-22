@@ -2253,4 +2253,35 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return chargeDao.gongcount();
 	}
 
+	//主平台今日数据统计
+	@Override
+	public List<Park> getParkByCountMoney(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return chargeDao.getParkByCountMoney(map);
+	}
+
+	@Override
+	public String getByDateAndParkCountPay2(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCountPay2(startDate, endDate);
+	}
+
+	@Override
+	public String getByDateAndParkCountPay4(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCountPay4(startDate, endDate);
+	}
+
+	@Override
+	public String getByDateAndParkCountPay(String startDate, String endDate, int payType) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCountPay(startDate, endDate, payType);
+	}
+
+	@Override
+	public String getByDateAndParkCountPay3(String startDate, String endDate, int payType) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByDateAndParkCountPay3(startDate, endDate, payType);
+	}
+
 }

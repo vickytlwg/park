@@ -13,6 +13,16 @@ import com.park.model.Park;
 
 @Repository
 public interface PosChargeDataDAO {
+	
+	public List<Park> getParkByCountMoney(Map<String, Object> map);
+	
+	//查询收费总笔数、收费总金额、各渠道收费统计
+	public String getByDateAndParkCountPay2(@Param("startDate")String startDate,@Param("endDate")String endDate);
+	public String getByDateAndParkCountPay4(@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//各渠道收费统计
+	public String getByDateAndParkCountPay(@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
+	public String getByDateAndParkCountPay3(@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
+	
 	public List<Park> getParkByMoney(Map<String, Object> map);
 	
 	//查询收费总笔数、收费总金额、各渠道收费统计
@@ -21,12 +31,6 @@ public interface PosChargeDataDAO {
 	//各渠道收费统计
 	public String getByDateAndParkCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
 	public String getByDateAndParkCount3(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
-
-	
-	//收费统计
-	/*public int getByDateAndParkCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
-	
-	public double getChannelCharge(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);*/
 	
 	public PosChargeData getById(int id);
 
