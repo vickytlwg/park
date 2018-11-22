@@ -76,13 +76,12 @@ app.service('getDataService', ['$http', '$q', function ($http, $q) {
 //    });
 //    return promise;
 //  };
-  var getParkChargeByTime = function (username, startDate, endDate) {
+  var getParkChargeByTime = function (startDate, endDate) {
     var deferred = $q.defer();
     $http({
-      url: '/park/pos/charge/getParkByMoney',
+      url: '/park/pos/charge/getParkByCountMoney',
       method: 'post',
       data: {
-        'username': "bishuiwan",
         'startDate': startDate,
         'endDate': endDate
       }
