@@ -605,13 +605,13 @@ public class AlipayController {
 
 	@RequestMapping(value = "testset", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String testset() throws AlipayApiException {
+	public String testset(@RequestBody Map<String, String> arg) throws AlipayApiException {
 		Map<String, String> args = new HashMap<>();
 		String str1 = "https%3a%2f%2fopenauth.alipay.com%2foauth2%2fpublicAppAuthorize.htm%3fapp_id%3d2015101400439228%26scope%3dauth_user%26redirect_uri%3d";
 		String str2 = "https%3a%2f%2fwww.iotclouddashboard.com%2falipay%2fparkingPayH5";
-		args.put("merchant_name", "智慧停车场");
-		args.put("merchant_service_phone", "13668378107");
-		args.put("account_no", "78947414@qq.com");
+		args.put("merchant_name", "包泊停车场");
+		args.put("merchant_service_phone", "13813966110");
+		args.put("account_no", "xuling19820224@sina.com");
 		args.put("interface_url", str2);
 		return Utility.createJsonMsg("1001", "success", parkFeeService.parkConfigSet(args));
 	}
