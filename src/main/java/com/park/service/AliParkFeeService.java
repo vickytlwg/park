@@ -28,10 +28,10 @@ import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.park.model.Constants;
 @Service
 public class AliParkFeeService {
-	public String APP_PRIVATE_KEY=Constants.alipayPrivateKey;
-	public String ALIPAY_PUBLIC_KEY=Constants.alipayPublicKey;
+	public String APP_PRIVATE_KEY=Constants.alipayPrivateKey5;
+	public String ALIPAY_PUBLIC_KEY=Constants.alipayPublicKey5;
 	String URL = "https://openapi.alipay.com/gateway.do";
-	String APP_ID = Constants.alipayAppId;
+	String APP_ID = Constants.alipayAppId5;
 	String FORMAT = "json";
 	String CHARSET = "UTF-8";
 	String SIGN_TYPE = "RSA";

@@ -194,6 +194,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 			if (tmpcharge.getExitDate() == null) {
 				this.calExpense(tmpcharge, new Date(), false);
+		
 			}
 		}
 		return charges;
@@ -1148,7 +1149,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.getByCardNumberAndPort(cardNumber, portNumber);
 	}
-
+	
 	@Override
 	public void calExpenseType1(PosChargeData charge, Date exitDate, Boolean isQuery) throws ParseException {
 		// TODO Auto-generated method stub
@@ -2126,7 +2127,31 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
-
+		
+		if (criterion.getType() == 4) {//24小时
+			newFeeCalcExpense4(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		//三个计费阶段
+		if (criterion.getType()==6) {
+			newFeeCalcExpense6(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";
