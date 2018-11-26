@@ -14,7 +14,7 @@ body {
 	width: 800px;
 	height: 500px;
 	margin: 7% auto;
-	background: rgba(204, 204, 204, 0.90);
+	background: rgba(204, 204, 204, 0.8);
 	box-shadow: 8px 5px 15px #000;
 }
 
@@ -54,4 +54,7 @@ body {
 
 body, html {
 	min-height: 0
+}
+#footer div p a{
+	color:#fff;
 }

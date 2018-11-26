@@ -74,7 +74,11 @@
 	</select>
 	
 	<select id="getParkById" resultMap="ParkMapper">
-		select * from park where id = #{id}
+		select p1.id,streetId,name,portCount,channelCount,portLeftCount,feeCriterionId,status,isfree,floor,type,position,date,
+		isDeleted,longitude,latitude,alias,mapAddr,contact,number,description,pictureUri,u2.parkId as parkId  
+		from park p1 
+		LEFT JOIN userPark u2 on p1.id=u2.parkId
+		where p1.id = #{id} GROUP BY p1.id
 	</select>		
 	<select id="getOutsideParkByStreetId" resultMap="ParkMapper">
 		select * from park where type=3 and streetId=#{streetId}
