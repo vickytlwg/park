@@ -125,7 +125,7 @@ public class FeeOperatorController {
 		String posNum=(String) args.get("posNum");
 		Double money=args.get("money")!=null?(double) args.get("money"):null;
 		Boolean needMoney=args.get("needMoney")!=null?(boolean)args.get("needMoney"):false;
-		logger.info("validation"+account+"-"+passwd+"-"+posNum+money);
+		logger.info("validation:"+account+"-"+passwd+"-"+posNum+"-"+money);
 		List<Feeoperator> feeoperators=feeOperatorService.operatorValidation(account, passwd);
 		result.put("parkName", "");
 		result.put("carportsCount", 0);
@@ -154,6 +154,7 @@ public class FeeOperatorController {
 				result.put("feeCriterion", feeCriterion);
 				operator.setSignstatus(true);
 				if (money!=null) {
+					logger.info(account+"设置金额"+money);
 					operator.setMoney((int) (money*100));
 				}
 				feeOperatorService.updateByPrimaryKeySelective(operator);

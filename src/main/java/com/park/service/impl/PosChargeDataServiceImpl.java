@@ -269,6 +269,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public PosChargeData pay(String cardNumber, double money) throws Exception {
 		double theMoney = money;
+		synchronized (this) {
+			
+		
 		List<PosChargeData> charges = this.getCharges(cardNumber);
 		// for (PosChargeData charge : charges) {
 		// if (money >= charge.getUnPaidMoney()) {
@@ -280,7 +283,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		int count = charges.size();
 		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
-
+		
 		// Outsideparkinfo
 		// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 		if (money >= 0) {
@@ -303,6 +306,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		this.update(lastCharge);
 		return lastCharge;
+		}
 	}
 	
 	@Override
@@ -1559,7 +1563,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		charge.setChargeMoney(expense + charge.getChargeMoney());
 		
-		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"calExpenseSmallCarWithData费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1599,7 +1603,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 //		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
 //			charge.setChargeMoney(criterion.getMaxexpense() * 2);
 //		}
-		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"calExpenseLargeCarWithData费用"+charge.getChargeMoney());
 	}
 
 	@Override

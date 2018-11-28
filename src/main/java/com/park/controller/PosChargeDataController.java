@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -106,6 +108,11 @@ public class PosChargeDataController {
 
 	@Resource(name = "jedisClient")
 	private JedisClient jedisClient;
+	
+	
+	private static Log logger = LogFactory.getLog(PosChargeDataController.class);
+	
+	
 
 	@Autowired
 	private PosChargeDataService posChargeDataService;
@@ -1652,7 +1659,7 @@ public class PosChargeDataController {
 		double money = (double) args.get("money");
 		String exitDate = (String) args.get("exitDate");
 		String operatorId = (String) args.get("operatorId");
-
+		logger.info("exitAndPay-"+cardNumber+"-"+money);
 		PosChargeData payRet = null;
 
 		Date eDate = new Date();

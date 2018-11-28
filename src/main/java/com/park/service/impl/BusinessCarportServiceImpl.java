@@ -167,8 +167,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 				Jpush.SendPushToAudiences(audiences,"carportStatusChanged");
 			} catch (Exception e) {
 				// TODO: handle exception
-			}
-		
+			}		
 		}
 		
 		
