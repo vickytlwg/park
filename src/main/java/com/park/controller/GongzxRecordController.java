@@ -195,6 +195,11 @@ public class GongzxRecordController {
 	@ResponseBody
 	public String getByCarNumber(@RequestBody Map<String, Object> args) {
 		String carNumber = (String) args.get("carNumber");
+		if(carNumber!=null){
+			List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+		}else{
+			return Utility.createJsonMsg(1002, "flase");
+		}
 		List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
 		return Utility.createJsonMsg(1001, "success", querygongzx);
 	}
