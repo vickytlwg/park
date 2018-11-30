@@ -92,10 +92,28 @@
 
 
 
-									<div class="row" style="padding-top: 5px">
-
+									<div class="row" style="padding-top: 10px">
 										<div class="col-lg-1 text-center">
-											<label class="label-control"> 时间段:</label>
+											<label class="label-control" style="padding-top: 8px;"> 停车场:</label>
+										</div>
+										<div class="col-lg-3">
+											<select style="display: none" id="get_Park"
+												class="form-control"
+												style="padding:1px;font-size:14px;height:35px"
+												id="searchPark"> #foreach( $park in $parks)
+												<option value=$park.id>$park.name</option> #end
+											</select> <select class="form-control"
+												style="padding: 1px; font-size: 14px; height: 35px"
+												ng-options="park1.name for park1 in selectParks"
+												ng-model="selectedPark"> #if($isAdmin)
+												<option value=-1>所有停车场</option>#end
+											</select>
+										</div>
+									</div>
+									<br/>
+									<div class="row" style="padding-top: 5px">
+										<div class="col-lg-1 text-center">
+											<label class="label-control" style="padding-top: 8px;"> 时间段:</label>
 										</div>
 										<div class="col-md-2">
 											<input type="text" id="date1" ng-model="startDate"
@@ -117,27 +135,7 @@
 											<button id="excelBtn" ng-click="getExcelByParkAndDayRange()"
 												type="button" class="btn btn-info">导出</button>
 										</div>
-										<div class="col-lg-3">
-											<select style="display: none" id="get_Park"
-												class="form-control"
-												style="padding:1px;font-size:14px;height:35px"
-												id="searchPark"> #foreach( $park in $parks)
-												<option value=$park.id>$park.name</option> #end
-											</select> <select class="form-control"
-												style="padding: 1px; font-size: 14px; height: 35px"
-												ng-options="park1.name for park1 in selectParks"
-												ng-model="selectedPark"> #if($isAdmin)
-												<option value=-1>所有停车场</option>#end
-											</select>
-										</div>
-										<!-- <div class="col-md-1" hidden>
-										<button  type="button" class="btn btn-info" ng-click="getExcelByDayRange()" style="float:left">所有停车场
-                                        </button>
-                                </div> -->
-
 									</div>
-
-
 
 								</div>
 

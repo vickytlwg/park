@@ -31,8 +31,28 @@
 		SELECT
 		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord
-		LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} order by id desc
+		LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} order by arriveTime desc
 		limit #{start}, #{count}
+	</select>
+	<!-- 用户名等于 admin查询记录-->
+	<select id="getPageByPark" resultMap="GongzxRecordMapper">
+		SELECT
+			au.username,g.id,carNumber,cardNumber,arriveTime,g.parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+			FROM gongzxrecord as g
+			left join userPark as up on g.parkId=up.parkId
+			left join userRole as ur on up.userId=ur.userId
+			left join authUsers as au on ur.userId=au.id 
+			order by arriveTime desc	
+	</select>
+	<!-- 用户名不等于 admin查询记录-->
+	<select id="getPageByParkusername" resultMap="GongzxRecordMapper">
+		SELECT
+				au.username,g.id,carNumber,cardNumber,arriveTime,g.parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+				FROM gongzxrecord as g
+		left join userPark as up on g.parkId=up.parkId
+		left join userRole as ur on up.userId=ur.userId
+		left join authUsers as au on ur.userId=au.id
+		where au.username=#{username} order by id desc
 	</select>
 	<select id="update" parameterType="com.park.model.GongzxRecord">
 		update gongzxrecord

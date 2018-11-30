@@ -15,9 +15,17 @@ import com.park.model.PosChargeData;
 public interface GongzxRecordDao {
 	public int gongcount();
 	
+	public List<GongzxRecord> getByParkusername(String userName);
+	
 	public List<GongzxRecord> getByParkAuthority(String userName);
 	
+	public List<GongzxRecord> getByParkadmin(String userName);
+	
 	public List<GongzxRecord> getPageByParkId(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count);
+	
+	public List<GongzxRecord> getPageByPark(@Param("username")String username,@Param("start")int start,@Param("count")int count);
+	
+	public List<GongzxRecord> getPageByParkusername(@Param("username")String username,@Param("start")int start,@Param("count")int count);
 	
 	public List<GongzxRecord> getByCarNumber(@Param("carNumber")String carNumber);
 	
