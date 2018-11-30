@@ -136,13 +136,13 @@ public class GongzxRecordController {
 		return "record2";
 	}
 	
-	//停车记录查询
+	//停车记录查询(获取总记录数)
 	@RequestMapping(value = "/gongCount", method = RequestMethod.GET, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String gongCount() {
 		int gongcount = gongzxRecordService.gongcount();
 		return Utility.createJsonMsg(1001, "success", gongcount);
 	}
-	//根据用户名权限查询分页
+	//根据用户名权限分页查询
 	@RequestMapping(value = "/gongpage", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String gongpage(@RequestBody Map<String, Object> args, HttpSession session) {
 		@SuppressWarnings("unused")
@@ -150,10 +150,19 @@ public class GongzxRecordController {
 		@SuppressWarnings("unused")
 		int count = (int) args.get("count");
 		String userName = (String) session.getAttribute("username");
-		List<GongzxRecord> list=gongzxRecordService.getByParkAuthority(userName);
-		return Utility.createJsonMsg(1001, "success", gongzxRecordService.getByParkAuthority(userName));
+		List<GongzxRecord> list=null;
+		if(userName.equals("admin")){
+			//查询等于admin停车记录
+			list=gongzxRecordService.getByParkadmin(userName);
+		}else{
+			//查询不等于admin停车记录
+			list=gongzxRecordService.getByParkusername(userName);
+		}
+		//List<GongzxRecord> list=gongzxRecordService.getByParkAuthority(userName);
+		return Utility.createJsonMsg(1001, "success", list);
 	}
 	
+	//根据parkId查询记录分页
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args, HttpSession session) {
@@ -163,11 +172,12 @@ public class GongzxRecordController {
 		List<GongzxRecord> gongzxRecord = gongzxRecordService.getPageByParkId(parkId, start, count);
 		if (gongzxRecord.isEmpty()) {
 			return Utility.createJsonMsg(1001, "success",
-					posdataService.selectPosdataByPageAndPark(parkId, start, count));
+					gongzxRecordService.getPageByParkId(parkId, start, count));
 		}
 		return Utility.createJsonMsg(1001, "success", gongzxRecord);
 	}
-	//停车记录根据用户权限查车牌号
+	
+	//车牌号查停车记录
 	@RequestMapping(value = "getByCarnumberAuthority", method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -195,6 +205,11 @@ public class GongzxRecordController {
 	@ResponseBody
 	public String getByCarNumber(@RequestBody Map<String, Object> args) {
 		String carNumber = (String) args.get("carNumber");
+		if(carNumber!=null){
+			List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+		}else{
+			return Utility.createJsonMsg(1002, "false");
+		}
 		List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
 		return Utility.createJsonMsg(1001, "success", querygongzx);
 	}

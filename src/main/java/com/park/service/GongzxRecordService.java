@@ -12,9 +12,17 @@ import com.park.model.PosChargeData;
 public interface GongzxRecordService {
 	public int gongcount();
 	
+	public List<GongzxRecord> getByParkusername(String userName);
+	
 	public List<GongzxRecord> getByParkAuthority(String userName);
 	
+	public List<GongzxRecord> getByParkadmin(String userName);
+	
 	public List<GongzxRecord> getPageByParkId(int parkId,int start,int count);
+	
+	public List<GongzxRecord> getPageByPark(String username,int start,int count);
+	
+	public List<GongzxRecord> getPageByParkusername(String username,int start,int count);
 	
 	public List<GongzxRecord> getByCarNumber(String carNumber);
 	

@@ -80,7 +80,7 @@ public class FeeOperatroServiceImpl implements FeeOperatorService {
 		for (Feeoperator feeoperator : feeoperators) {
 			if (feeoperator.getSignstatus()==true) {
 				feeoperator.setSignstatus(false);
-				updateByPrimaryKey(feeoperator);
+				updateByPrimaryKeySelective(feeoperator);
 			}
 		}
 	}

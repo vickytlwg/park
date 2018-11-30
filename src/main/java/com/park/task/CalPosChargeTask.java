@@ -102,7 +102,7 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0 23 * * ? ")
 	public void out(){
-		feeOperatorService.operatorsLogout();
+	//	feeOperatorService.operatorsLogout();
 //		List<PosChargeData> charges = chargeService.getUnCompleted();		
 //		for(PosChargeData charge : charges){
 //			Date now = new Date();

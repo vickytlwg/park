@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,6 +57,10 @@ public class FeeOperatorController {
 	private ParkService parkService;
 	@Autowired 
 	private FeeCriterionService feeCriterionService;
+	
+	private static Log logger = LogFactory.getLog(FeeOperatorController.class);
+	
+	
 	@RequestMapping(value="")
 	public String index(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
@@ -119,6 +125,7 @@ public class FeeOperatorController {
 		String posNum=(String) args.get("posNum");
 		Double money=args.get("money")!=null?(double) args.get("money"):null;
 		Boolean needMoney=args.get("needMoney")!=null?(boolean)args.get("needMoney"):false;
+		logger.info("validation:"+account+"-"+passwd+"-"+posNum+"-"+money);
 		List<Feeoperator> feeoperators=feeOperatorService.operatorValidation(account, passwd);
 		result.put("parkName", "");
 		result.put("carportsCount", 0);
@@ -147,6 +154,7 @@ public class FeeOperatorController {
 				result.put("feeCriterion", feeCriterion);
 				operator.setSignstatus(true);
 				if (money!=null) {
+					logger.info(account+"设置金额"+money);
 					operator.setMoney((int) (money*100));
 				}
 				feeOperatorService.updateByPrimaryKeySelective(operator);

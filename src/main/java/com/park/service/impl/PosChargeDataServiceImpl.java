@@ -194,6 +194,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 			if (tmpcharge.getExitDate() == null) {
 				this.calExpense(tmpcharge, new Date(), false);
+		
 			}
 		}
 		return charges;
@@ -268,6 +269,9 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	@Override
 	public PosChargeData pay(String cardNumber, double money) throws Exception {
 		double theMoney = money;
+		synchronized (this) {
+			
+		
 		List<PosChargeData> charges = this.getCharges(cardNumber);
 		// for (PosChargeData charge : charges) {
 		// if (money >= charge.getUnPaidMoney()) {
@@ -279,7 +283,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		int count = charges.size();
 		PosChargeData lastCharge = charges.get(0);
 		money -= lastCharge.getUnPaidMoney();
-
+		
 		// Outsideparkinfo
 		// outsideparkinfo=outsideParkInfoService.getByParkidAndDate(lastCharge.getParkId());
 		if (money >= 0) {
@@ -302,6 +306,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// outsideParkInfoService.updateByPrimaryKeySelective(outsideparkinfo);
 		this.update(lastCharge);
 		return lastCharge;
+		}
 	}
 	
 	@Override
@@ -1148,7 +1153,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		// TODO Auto-generated method stub
 		return chargeDao.getByCardNumberAndPort(cardNumber, portNumber);
 	}
-
+	
 	@Override
 	public void calExpenseType1(PosChargeData charge, Date exitDate, Boolean isQuery) throws ParseException {
 		// TODO Auto-generated method stub
@@ -1558,7 +1563,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		charge.setChargeMoney(expense + charge.getChargeMoney());
 		
-		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"calExpenseSmallCarWithData费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -1598,7 +1603,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 //		if (charge.getChargeMoney() > (criterion.getMaxexpense() * 2)) {
 //			charge.setChargeMoney(criterion.getMaxexpense() * 2);
 //		}
-		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"费用"+charge.getChargeMoney());
+		logger.info(charge.getCardNumber()+" "+charge.getEntranceDate()+" "+exitDate+"calExpenseLargeCarWithData费用"+charge.getChargeMoney());
 	}
 
 	@Override
@@ -2126,7 +2131,31 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			}
 			return;
 		}
-
+		
+		if (criterion.getType() == 4) {//24小时
+			newFeeCalcExpense4(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		//三个计费阶段
+		if (criterion.getType()==6) {
+			newFeeCalcExpense6(charge, criterion, exitDate, isQuery,park);
+			if (isRealMonthUser) {
+				charge.setChargeMoney(0);
+				charge.setUnPaidMoney(0);
+			}
+			if (!isQuery) {
+				this.update(charge);
+			}
+			return;
+		}
+		
 		String startTime = new SimpleDateFormat(Constants.DATEFORMAT).format(charge.getEntranceDate());
 		String endTime = new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate);
 		String nightStartHour = "20";

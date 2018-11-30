@@ -16,8 +16,8 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         }
     };
  $scope.searchDate=new Date().format('yyyy-MM-dd');
- $scope.startDate=new Date().format('yyyy-MM-dd hh:mm:ss');
- $scope.endDate=new Date().format('yyyy-MM-dd hh:mm:ss');
+ $scope.startDate=new Date().format('yyyy-MM-dd 00:00:00');
+ $scope.endDate=new Date().format('yyyy-MM-dd 23:59:59');
       var dateInitial=function(){
         /*$('.date').datepicker({
             autoClose: true,
@@ -216,6 +216,24 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             textModal.open($scope, "错误", "获取计费信息错误: " + +response.status);
 
         });
+        
+        /*$http.post('gongpage', {
+            low : ($scope.detail.page.index - 1) * $scope.detail.page.size,
+            count : $scope.detail.page.size
+        }).success(function(response) {
+            $scope.detail.loading = false;
+
+            if (response.status == 1001) {
+                $scope.detail.items = [];
+                 getInitail(response.body);
+            } else
+                textModal.open($scope, "错误", "获取计费信息错误:" + response.status);
+
+        }).error(function(response) {
+            $scope.detail.loading = false;
+            textModal.open($scope, "错误", "获取计费信息错误: " + +response.status);
+
+        });*/
     };
 
     //init page

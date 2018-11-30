@@ -774,7 +774,7 @@
         $('#showPicture').html(modal.get());
         modal.show();
       });
-      tr.append('<tr><td><a href="#">修改</a></td><td>|</td><td><a href="#">删除</a></td></tr>');
+      //tr.append('<tr><td><a href="#">修改</a></td><td>|</td><td><a href="#">删除</a></td></tr>');
       parkBody.append(tr);
     }
   };
