@@ -143,7 +143,7 @@
 								class="table table-hover table-bordered table-striped table-condensed text-center"
 								id='channelTable' style="font-size: 12px">
 								<tr class="info" style="height: 30px; line-height: 30px;">
-									<th><span style=""><input type="checkbox" /></th>
+									<th hidden><span style=""><input type="checkbox" /></span></th>
 									<th><span>id</span></th>
 									<th><span>车牌</span></th>
 									<th><span>停车场名</span></th>
@@ -162,7 +162,7 @@
 								</tr>
 								<tbody id="channelBody"></tbody>
 								<tr ng-repeat="item in detail.items">
-									<td><input type="checkbox" ng-model="item.checked" /></td>
+									<td hidden><input type="checkbox" ng-model="item.checked" /></td>
 									<td ng-bind="item.id"></td>
 									<td ng-bind="item.cardNumber"></td>
 									<td ng-bind="item.parkDesc"></td>
