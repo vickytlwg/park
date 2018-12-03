@@ -29,18 +29,34 @@ public class GongzxRecordServiceImpl implements GongzxRecordService{
 	@Autowired
 	ParkService parkService;
 
+	//查询总记录数
 	@Override
 	public int gongcount() {
 		// TODO Auto-generated method stub
 		return gongzxrecorddao.gongcount();
 	}
 	
+	//根据parkId查询记录分页
 	@Override
 	public List<GongzxRecord> getPageByParkId(int parkId, int start, int count) {
 		// TODO Auto-generated method stub
 		return gongzxrecorddao.getPageByParkId(parkId, start, count);
 	}
-
+	
+	//用户名等于 admin查询记录
+	@Override
+	public List<GongzxRecord> getPageByPark(String username, int start, int count) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.getPageByPark(username, start, count);
+	}
+	
+	//用户名不等于 admin查询记录
+	@Override
+	public List<GongzxRecord> getPageByParkusername(String username, int start, int count) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.getPageByParkusername(username, start, count);
+	}
+	
 	@Override
 	public List<GongzxRecord> getByParkAuthority(String userName) {
 		// TODO Auto-generated method stub
@@ -58,6 +74,37 @@ public class GongzxRecordServiceImpl implements GongzxRecordService{
 		}
 		return gongzxRecord;
 	}
+
+	//查等于admin记录
+	@Override
+	public List<GongzxRecord> getByParkadmin(String userName) {
+		// TODO Auto-generated method stub
+		List<Park> parkList = parkService.getParks();
+		if (userName != null)
+			parkList = parkService.filterPark(parkList, userName);
+		int num = 120 / parkList.size();
+		if (num < 1) {
+			num = 2;
+		}
+		List<GongzxRecord> tmgongzxRecord = getPageByPark(userName, 0, num);
+			
+		return tmgongzxRecord;
+	}
+	//查不等于admin记录
+	@Override
+	public List<GongzxRecord> getByParkusername(String userName) {
+		List<Park> parkList = parkService.getParks();
+		if (userName != null)
+			parkList = parkService.filterPark(parkList, userName);
+		int num = 120 / parkList.size();
+		if (num < 1) {
+			num = 2;
+		}
+		
+		List<GongzxRecord> tmgongzxRecord = getPageByParkusername(userName, 0, num);
+		return tmgongzxRecord;
+	}
+
 
 
 	@Override

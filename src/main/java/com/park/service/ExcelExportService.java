@@ -738,7 +738,12 @@ public class ExcelExportService {
 					
 					XSSFCell cell13 = row1.createCell(12);				
 					cell13.setCellStyle(style2);
-					cell13.setCellValue(sdf.format(gongzxr.getLeaveTime()));
+/*					cell13.setCellValue(sdf.format(gongzxr.getLeaveTime()));*/
+					if (gongzxr.getLeaveTime()!=null) {
+						cell13.setCellValue(sdf.format(gongzxr.getLeaveTime()));
+					} else {
+						cell13.setCellValue("");
+					}
 					
 				}
 				

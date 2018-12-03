@@ -1,83 +1,82 @@
-<script src="/park/script/service/textModalService.js"></script>
-<link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<script src="/park/script/tm.pagination.js"></script>
-<script src="/park/script/reconciliation.js"></script>
-<script src="/park/script/datepicker.js"></script>
-<link rel="stylesheet" type="text/css" href="/park/css/button.css" />
+<link rel="stylesheet" type="text/css" href="/park/css/button.css"/>
 
 
 <div class="content-wrapper" ng-app="feeDetailApp"
-	ng-controller="feeDetailCtrl">
-	<section class="content-header">
-		<h1>
-			财务对账 <small></small>
-		</h1>
-	</section>
-	<section class="content">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="box">
-					<div class="box-body" style="height: 580px">
-						<div class="menu_img">
-							<ul class="imglist"
-								style="height: 600px; width: 900px; margin-top: 40px;">
-								<li class="recod"><a href="/park/pos/charge/record"
-									style="background: url(/park/img/bak1a.png) no-repeat center center;">停车记录</a>
-								<li class="recod"><a href="/park/pos/charge/flowbill"
-									style="background: url(/park/img/bak2a.png) no-repeat center center;">财务流水账单</a>
-								</li>
-								<li class="recod"><a href="/park/pos/charge/reconciliation"
-									style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
-								</li>
-								<li class="recod"><a href="/park/lepay/record/"
-									style="background: url(/park/img/bak4a.png) no-repeat center center;">第三方支付</a>
-								</li>
-								<li class="recod"><a
-									href="/park/gongzx/record2"
-									style="background: url(/park/img/bak5a.png) no-repeat center center;">停车记录</a>
-								</li>
-								<li class="recod"><a href="/park/gongzx/reconciliation3"
-									style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
-								</li>
-								<li class="recod"><a href="#"
-									style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>
-								</li>
-								<li class="recod"><a href="/park/pos/charge/demo1"
-									style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+     ng-controller="feeDetailCtrl">
+  <section class="content-header">
+    <h1>
+      财务对账
+      <small></small>
+    </h1>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body" style="height: 600px">
+            <h4 style="padding:2% 0 0 40%">九比特相关记录</h4>
+            <div class="menu_img">
+              <ul class="imglist">
+                <li class="recod"><a href="/park/pos/charge/record"
+                                     style="background: url(/park/img/bak1a.png) no-repeat center center;">停车记录</a>
+                <li class="recod"><a href="/park/pos/charge/flowbill"
+                                     style="background: url(/park/img/bak2a.png) no-repeat center center;">财务流水账单</a>
+                </li>
+                <li class="recod"><a href="/park/pos/charge/reconciliation"
+                                     style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
+                </li>
+                <li class="recod"><a href="/park/lepay/record/"
+                                     style="background: url(/park/img/bak4a.png) no-repeat center center;">第三方支付</a>
+                </li>
+              </ul>
+            </div>
+            <h4 style="padding:2% 0 0 40%">第三方相关记录</h4>
+            <div class="menu_img">
+              <ul class="imglist">
+                <li class="recod"><a
+                    href="/park/gongzx/record2"
+                    style="background: url(/park/img/bak5a.png) no-repeat center center;">停车记录</a>
+                </li>
+                <li class="recod"><a href="/park/gongzx/reconciliation3"
+                                     style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
+                </li>
+                <li class="recod"><a href="#"
+                                     style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>
+                </li>
+                <li class="recod"><a href="/park/pos/charge/demo1"
+                                     style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-
-
-	</section>
+  </section>
 </div>
 
-<script type="text/ng-template" id="myModalTest"> 
-	<!-- 模态框（Modal） -->
-   <div class="modal-dialog">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" 
-               data-dismiss="modal" aria-hidden="true" ng-click="texta()">
-                  &times;
-            </button>
-            <h4 class="modal-title" >  yyy     
-            </h4>
-         </div>
-         <div class="modal-body">
-			{{textaaa}}
-         </div>
-         <div class="modal-footer">
-      		<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">
-				关闭
-            </button>          
-         </div>
-      </div><!-- /.modal-content -->
-</div><!-- /.modal -->
+<script type="text/ng-template" id="myModalTest">
+  <!-- 模态框（Modal） -->
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true" ng-click="texta()">
+          &times;
+        </button>
+        <h4 class="modal-title"> yyy
+        </h4>
+      </div>
+      <div class="modal-body">
+        {{textaaa}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">
+          关闭
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal -->
 </script>
