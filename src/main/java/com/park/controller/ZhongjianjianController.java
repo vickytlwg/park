@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.PosChargeData;
+import com.park.service.HttpUtil;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 
@@ -54,7 +55,7 @@ public class ZhongjianjianController {
 		String parkingName =(String) args.get("parkingName");
 		String happenTime =(String) args.get("happenTime");
 		String parkingActId =(String) args.get("parkingActId");
-	
+		Map<String, Object> argMap=new HashMap<>();
 		if (evt.equals("evt.car.in")) {
 			PosChargeData chargeData=new PosChargeData();
 			chargeData.setCardNumber(plateNumber);
@@ -63,8 +64,23 @@ public class ZhongjianjianController {
 			chargeData.setParkDesc(parkingName);
 			chargeData.setUrl(picUrlIn);
 			posChargeDataService.insert(chargeData);
+			
+			//南阳推送
+			argMap.put("plateNumber", plateNumber);
+			argMap.put("parkName", parkingName);
+			argMap.put("parkId", parkingCode);
+			argMap.put("portNumber", 2);
+			argMap.put("entranceTime", happenTime);
+			logger.info("evtnanyang"+argMap);
+			HttpUtil.post("http://henanguanchao.com/v1/StreetParking/ReportEntrance", argMap);
 		}
 		if (evt.equals("evt.car.out")) {
+			//南阳
+			argMap.put("id", parkingCode);
+			argMap.put("count", 100);
+			HttpUtil.post("http://henanguanchao.com/v1/StreetParking/ReportEntrance", argMap);
+			
+			
 			String timeOut =(String) args.get("timeOut");
 			PosChargeData posChargeData=posChargeDataService.getByCardNumberAndPark(plateNumber, 308).get(0);
 			if (posChargeData!=null) {

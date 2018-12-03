@@ -39,6 +39,7 @@ import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
+import com.park.model.ParkStatusInfo;
 import com.park.model.Street;
 import com.park.service.AreaService;
 import com.park.service.AuthorityService;
@@ -142,6 +143,30 @@ public class ParkController {
 		ret.put("status", 1001);
 		ret.put("body", park);
 		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
+	
+	@RequestMapping(value = "/getParkStatusInfo", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkStatusInfo() {
+		ParkStatusInfo parkStatusInfo=new ParkStatusInfo();
+		Map<String,Integer> online=new HashMap<>();
+		online.put("0", 21);
+		online.put("1", 25);
+		online.put("2", 40);
+		
+		Map<String,Integer> typeCount=new HashMap<>();
+		typeCount.put("0", 50);
+		typeCount.put("1", 55);
+		typeCount.put("2", 60);
+		
+		parkStatusInfo.setOnline(online);
+		parkStatusInfo.setTypeCount(typeCount);
+		parkStatusInfo.setTotalCount(150);
+		parkStatusInfo.setOnlineCount(120);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		ret.put("body", parkStatusInfo);
 		return Utility.gson.toJson(ret);
 	}
 	@RequestMapping(value = "/getParkByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
