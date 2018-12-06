@@ -1,4 +1,5 @@
 (function($) {
+
     $.fn.layout = {};
     //	$.fn.layout.cheweiguanli=function(){
     //		if($('p#shenfen').text().trim()!="管理员")

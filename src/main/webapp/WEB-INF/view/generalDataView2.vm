@@ -65,8 +65,8 @@
 					</div>
 					<div class="col-xs-8">
 						<p>今日订单数</p>
-						<h3 style="margin-bottom:0px;">
-							{{dayOutCount}} <small>笔</small>
+						<h3 style="margin-bottom:0px;" ng-bind="dayOutCount">
+							<small>笔</small>
 						</h3>
 					</div>
 				</div>
@@ -76,8 +76,8 @@
 					</div>
 					<div class="col-xs-8">
 						<p>在线停车场</p>
-						<h3 style="margin-bottom:0px;">
-							{{dayParkCount}} <small>个</small>
+						<h3 style="margin-bottom:0px;" ng-bind="dayParkCount">
+							<small>个</small>
 						</h3>
 					</div>
 				</div>
@@ -87,8 +87,8 @@
 					</div>
 					<div class="col-xs-8">
 						<p>在线泊位数</p>
-						<h3 style="margin-bottom:0px;">
-							{{dayCarportCount}} <small>个</small>
+						<h3 style="margin-bottom:0px;" ng-bind="dayCarportCount">
+							<small>个</small>
 						</h3>
 					</div>
 				</div>
