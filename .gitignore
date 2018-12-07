@@ -7,3 +7,4 @@
 /.classpath
 /.externalToolBuilders
 /.idea
+/.src/main/resources/conf/jdbc.properties

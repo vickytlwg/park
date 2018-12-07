@@ -14,7 +14,7 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-body" style="height: 600px">
-            <h4 style="padding:2% 0 0 40%">九比特相关记录</h4>
+            <h4 style="padding:2% 0 0 40%">自有停车场平台数据</h4>
             <div class="menu_img">
               <ul class="imglist">
                 <li class="recod"><a href="/park/pos/charge/record"
@@ -30,7 +30,7 @@
                 </li>
               </ul>
             </div>
-            <h4 style="padding:2% 0 0 40%">第三方相关记录</h4>
+            <h4 style="padding:2% 0 0 40%">第三方平台数据</h4>
             <div class="menu_img">
               <ul class="imglist">
                 <li class="recod"><a

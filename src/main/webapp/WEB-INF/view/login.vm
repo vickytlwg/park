@@ -56,7 +56,7 @@
         </form>
     </div>
 </div>
- <div class="row" id="footer" style="padding-left:30%">
+ <div class="row" id="footer" style="padding-left:35%">
         <div class="col-md-12">
             <p>
             <a href="#">2016 © 河南观潮智能科技有限公司 </a>
@@ -64,9 +64,7 @@
             <a href="#"> 隐私政策 </a>
             | 
             <a href="#"> 服务条款 </a>
-            |
-            <a href="http://www.miitbeian.gov.cn"
-                target="_blank"> 苏ICP备15036890号 </a>
+            
             </p>
         </div>
     </div>

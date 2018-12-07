@@ -181,7 +181,7 @@
                   </div>
                   <div class="panel-split hidddiv"></div>
                   <div class="panel-middle hidddiv">
-                    <span class="panel-value ">{{dayAmountMoney}}</span>&nbsp;元
+                    <span class="panel-value " ng-bind="dayAmountMoney"></span>&nbsp;元
                   </div>
                   <div class="panel-bottom hidddiv">
                     <p>
