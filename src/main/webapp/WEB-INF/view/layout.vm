@@ -226,8 +226,8 @@
             <li id="presentData" #if(!$isAdmin && !$park_platformShow)
                 hidden#end><a href="/park/presentData"><i
                 class="fa fa-file-text-o"></i>今日数据</a></li>
-            <li id="jrsj2" #if(!$isAdmin && !$park_platformShow2) hidden#end><a
-                href="/park/platformShow2"><i class="fa fa-file-text-o"></i>停车云数据</a></li>
+            <li id="jrsj2" #if(!$isAdmin && !$park_clouddata) hidden#end><a
+                href="/park/clouddata"><i class="fa fa-file-text-o"></i>停车云数据</a></li>
             <li id="udpcs" #if(!$isAdmin && !$park_feeOperator_2) hidden#end><a
                 href="/park/udp/"><i class="fa fa-file-text-o"></i>UDP测试</a></li>
           </ul>
