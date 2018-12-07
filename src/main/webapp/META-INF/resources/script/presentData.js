@@ -60,22 +60,6 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
   getParkChargeByTime();
 }]);
 app.service('getDataService', ['$http', '$q', function ($http, $q) {
-//  var getZoneCenter = function () {
-//    var deferred = $q.defer();
-//    var promise = deferred.promise;
-//    $http({
-//      url: "/park/zoneCenter/getByStartAndCount",
-//      method: 'post',
-//      params: {
-//        start: 0,
-//        count: 100
-//      }
-//    }).success(function (response) {
-//      console.log(response);
-//      deferred.resolve(response.body);
-//    });
-//    return promise;
-//  };
   var getParkChargeByTime = function (startDate, endDate) {
     var deferred = $q.defer();
     $http({
@@ -109,109 +93,8 @@ app.service('getDataService', ['$http', '$q', function ($http, $q) {
     });
     return promise;
   };
-//  var getArea = function (zoneid) {
-//    var deferred = $q.defer();
-//    var promise = deferred.promise;
-//    $http({
-//      url: '/park/area/getByZoneCenterId/' + zoneid,
-//      method: 'get',
-//    }).success(function (response) {
-//      if (response.status == 1001) {
-//        console.log(response);
-//        deferred.resolve(response.body);
-//      }
-//    }).error(function () {
-//      deferred.reject("error");
-//    });
-//    return promise;
-//  };
-//  var getAreaInfo = function (zoneid) {
-//    var deferred = $q.defer();
-//    var promise = deferred.promise;
-//    $http({
-//      url: '/park/outsideParkInfo/areaInfo/' + zoneid,
-//      method: 'get',
-//    }).success(function (response) {
-//      if (response.status == 1001) {
-//        console.log(response);
-//        deferred.resolve(response.body);
-//      }
-//    }).error(function () {
-//      deferred.reject("error");
-//    });
-//    return promise;
-//  };
-//  var getStreetInfo = function (areaid) {
-//    var deferred = $q.defer();
-//    var promise = deferred.promise;
-//    $http({
-//      url: '/park/outsideParkInfo/streetInfo/' + areaid,
-//      method: 'get',
-//    }).success(function (response) {
-//      if (response.status == 1001) {
-//        console.log(response);
-//        deferred.resolve(response.body);
-//      }
-//    }).error(function () {
-//      deferred.reject("error");
-//    });
-//    return promise;
-//  };
-//  var getParkInfo = function (streetid) {
-//    var deferred = $q.defer();
-//    var promise = deferred.promise;
-//    $http({
-//      url: '/park/outsideParkInfo/parkInfo/' + streetid,
-//      method: 'get',
-//    }).success(function (response) {
-//      if (response.status == 1001) {
-//        console.log(response);
-//        deferred.resolve(response.body);
-//      }
-//    }).error(function () {
-//      deferred.reject("error");
-//    });
-//    return promise;
-//  };
-/*  var getStreetByAreaId = function (areaid) {
-    var deferred = $q.defer();
-    var promise = deferred.promise;
-    $http({
-      url: "/park/street/getByAreaid/" + areaid,
-      method: 'get'
-    }).success(function (response) {
-      if (response.status == 1001) {
-        console.log(response);
-        deferred.resolve(response.body);
-      }
-    });
-    return promise;
-  };*/
-
-/*  var getOutsideParkByStreetId = function (streetId) {
-    var deferred = $q.defer();
-    var promise = deferred.promise;
-    $http({
-      url: "/park/getOutsideParkByStreetId/" + streetId,
-      method: 'get'
-    }).success(function (response) {
-      if (response.status == 1001) {
-        console.log(response);
-        deferred.resolve(response.body);
-      }
-    });
-    return promise;
-  };*/
-
   return {
-    //getZoneCenter: getZoneCenter,
     getZoneCenterInfo: getZoneCenterInfo,
-    //getAreaInfo: getAreaInfo,
-    //getStreetInfo: getStreetInfo,
-    //getParkInfo: getParkInfo,
-    //getAreaByZoneId: getArea,
-    //getStreetByAreaId: getStreetByAreaId,
-    //getOutsideParkByStreetId: getOutsideParkByStreetId,
     getParkChargeByTime: getParkChargeByTime
   };
 }]);
