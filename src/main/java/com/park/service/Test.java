@@ -45,7 +45,10 @@ public class Test {
 		sck.close();
 
 	}
-
+	public String ddd() {
+	//	float a=1.2;
+		return null;
+	}
 	public void main333(String[] args) {
 		try {
 			// 1.创建客户端Socket，指定服务器地址和端口

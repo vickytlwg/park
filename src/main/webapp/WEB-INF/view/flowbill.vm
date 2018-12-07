@@ -94,6 +94,7 @@
 									<td ng-if="item.paidCompleted==true&&item.payType==1">微信</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==2">现金</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==3">工行</td>
+									<td ng-if="item.paidCompleted==true&&item.payType==4">app</td>
 									<td ng-if="item.paidCompleted==true&&item.payType==9">现金</td>
 									<td ng-bind="item.rejectReason"></td>
 									<td ng-if="item.url!=''"><a href={{item.url}}
