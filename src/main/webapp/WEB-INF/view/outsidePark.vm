@@ -765,8 +765,8 @@ label {
 	function check() {
 		var a = document.getElementById("portCount").value;
 		var b = document.getElementById("portLeftCount").value;
-		if (parseInt(a) > parseInt(b)) {
-			alert("车位数不能大于剩余车位数！");
+		if (parseInt(a) < parseInt(b)) {
+			alert("剩余车位数不能大于车位数！");
 		}
 	}
 </script>
