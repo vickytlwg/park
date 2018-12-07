@@ -39,6 +39,7 @@ import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.ParkDetail;
 import com.park.model.ParkNews;
+import com.park.model.ParkStatusInfo;
 import com.park.model.Street;
 import com.park.service.AreaService;
 import com.park.service.AuthorityService;
@@ -142,6 +143,89 @@ public class ParkController {
 		ret.put("status", 1001);
 		ret.put("body", park);
 		ret.put("message", "get park success");
+		return Utility.gson.toJson(ret);
+	}
+	
+	@RequestMapping(value = "/getParkStatusInfo", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+	@ResponseBody
+	public String getParkStatusInfo() {
+		ParkStatusInfo parkStatusInfo=new ParkStatusInfo();
+		int totalCount=0;
+		int onlineCount=0;
+		Map<String,Integer> online=new HashMap<>();
+		online.put("0", 0);
+		online.put("1", 0);
+		online.put("2", 0);
+		online.put("3", 0);
+//		online.put("4", 0);
+//		online.put("5", 0);
+		Map<String,Integer> typeCount=new HashMap<>();
+		typeCount.put("0", 0);
+		typeCount.put("1", 0);
+		typeCount.put("2", 0);
+		typeCount.put("3", 0);
+//		typeCount.put("4", 0);
+//		typeCount.put("5", 0);
+		List<Park> parks=parkService.getParks();
+		for (Park park : parks) {
+			totalCount++;
+			boolean onlinetmp=false;
+			if (new Date().getTime()-park.getDate().getTime()<1000*60*5) {
+				onlineCount++;
+				onlinetmp=true;
+			}
+			switch (park.getType()) {
+			case 0:
+				typeCount.put("0", typeCount.get("0")+1);
+				if (onlinetmp) {
+					online.put("0", online.get("0")+1);
+				}
+				break;
+			case 1:
+				typeCount.put("1", typeCount.get("1")+1);
+				if (onlinetmp) {
+					online.put("1", online.get("1")+1);
+				}
+				break;
+			case 2:
+				typeCount.put("2", typeCount.get("2")+1);
+				if (onlinetmp) {
+					online.put("2", online.get("2")+1);
+				}
+				break;
+			case 3:
+				typeCount.put("3", typeCount.get("3")+1);
+				if (onlinetmp) {
+					online.put("3", online.get("3")+1);
+				}
+				break;
+//			case 4:
+//				typeCount.put("4", typeCount.get("4")+1);
+//				if (onlinetmp) {
+//					online.put("4", online.get("4")+1);
+//				}
+//				break;
+//			case 5:
+//				typeCount.put("5", typeCount.get("5")+1);
+//				if (onlinetmp) {
+//					online.put("5", online.get("5")+1);
+//				}
+//				break;
+			default:
+				break;
+			}
+		}
+		
+		
+		
+		
+		parkStatusInfo.setOnline(online);
+		parkStatusInfo.setTypeCount(typeCount);
+		parkStatusInfo.setTotalCount(totalCount);
+		parkStatusInfo.setOnlineCount(onlineCount);
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("status", 1001);
+		ret.put("body", parkStatusInfo);
 		return Utility.gson.toJson(ret);
 	}
 	@RequestMapping(value = "/getParkByMac", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})

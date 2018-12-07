@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -34,6 +35,7 @@ import com.alipay.api.request.AlipayEcoMycarParkingVehicleQueryRequest;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCreateRequest;
+import com.alipay.api.request.AlipayTradePayRequest;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
@@ -75,10 +77,10 @@ public class AlipayController {
 	
 	private static Log logger = LogFactory.getLog(AlipayController.class);
 	
-	public String APP_PRIVATE_KEY = Constants.alipayPrivateKey5;
-	public String ALIPAY_PUBLIC_KEY = Constants.alipayPublicKey5;
+	public String APP_PRIVATE_KEY = Constants.alipayPrivateKey;
+	public String ALIPAY_PUBLIC_KEY = Constants.alipayPublicKey;
 	String URL = "https://openapi.alipay.com/gateway.do";
-	String APP_ID = Constants.alipayAppId5;
+	String APP_ID = Constants.alipayAppId;
 	String FORMAT = "json";
 	String CHARSET = "UTF-8";
 	String SIGN_TYPE = "RSA";
@@ -202,6 +204,21 @@ public class AlipayController {
 //
 //		return "alipayh5/index";
 //	}
+	@RequestMapping(value = "payerweima", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String payerweima() {
+		AlipayTradePayRequest request = new AlipayTradePayRequest(); 
+		request.setBizContent("{" +
+				" out_trade_no:"+"20150320010101001"+"," +
+				" scene:"+"bar_code"+"," +
+				" auth_code:"+"28763443825664394"+"," +
+				" subject:"+"停车费"+"," +
+				" store_id:"+"NJ_001"+"," +
+				" timeout_express:"+"2m"+"," +
+				" total_amount:"+"88.88" +
+				" }");
+		return null;
+	}
 	@RequestMapping(value = "notifyJSPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
 	public String notifyJSPay(HttpServletRequest request) {
