@@ -18,23 +18,12 @@
 	               <!--  <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:580px">
-	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;margin-top:100px;" >
-	                			<li class="recod">
-	                				<a href="/park/repair" style="background: url(/park/img/bak1a.png) no-repeat center center;">工单管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/dataUsage" style="background: url(/park/img/bak2a.png) no-repeat center center;">流量卡管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/chart" style="background: url(/park/img/bak3.png) no-repeat center center;">流量图</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/flow" style="background: url(/park/img/bak4a.png) no-repeat center center;">流量诊断</a>
-	                			</li>
-	                		</ul>
-	                	</div>
+	                <div class="box-body" style="height:580px;padding: 150px 100px">
+										<a href="/park/repair"><button class="button park" style="vertical-align:middle"><span>工单管理 </span></button></a>
+										<a href="/park/dataUsage"><button class="button charge" style="vertical-align:middle"><span>流量卡管理 </span></button></a>
+										<a href="/park/chart"><button class="button hardware" style="vertical-align:middle"><span>流量图 </span></button></a>
+										<a href="/park/flow"><button class="button poscharge" style="vertical-align:middle"><span>流量诊断 </span></button></a>
+
 	                </div>
 
 	            </div>

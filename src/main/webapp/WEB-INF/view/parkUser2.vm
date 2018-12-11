@@ -19,17 +19,11 @@
 	                  <h3 class="box-title"></h3>
 	                </div> -->
 					<!-- /.box-header -->
-					<div class="box-body" style="height: 580px">
-						<div class="menu_img">
-							<ul class="imglist" style="height: 600px; width: 900px;margin-top:100px;">
-								<li class="recod"><a href="/park/parkUsers" style="background: url(/park/img/bak1a.png) no-repeat center center;">添加用户</a></li>
-								<li class="recod"><a href="/park/page/permission/roles" style="background: url(/park/img/bak2a.png) no-repeat center center;">角色管理</a>
-								</li>
-								<li class="recod"><a
-									href="/park/page/permission/role/allocate" style="background: url(/park/img/bak3.png) no-repeat center center;">权限管理</a></li>
-								<li class="recod"><a href="#" style="background: url(/park/img/bak4a.png) no-repeat center center;">更多信息</a></li>
-							</ul>
-						</div>
+					<div class="box-body" style="height: 580px;padding: 150px 100px">
+						<a href="/park/parkUsers"><button class="button park" style="vertical-align:middle"><span>添加用户 </span></button></a>
+						<a href="/park/page/permission/roles"><button class="button charge" style="vertical-align:middle"><span>角色管理 </span></button></a>
+						<a href="/park/page/permission/role/allocate"><button class="button hardware" style="vertical-align:middle"><span>权限管理 </span></button></a>
+						<a href="#"><button class="button poscharge" style="vertical-align:middle"><span>更多信息 </span></button></a>
 					</div>
 				</div>
 			</div>

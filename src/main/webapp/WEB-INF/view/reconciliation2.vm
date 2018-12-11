@@ -15,39 +15,16 @@
         <div class="box">
           <div class="box-body" style="height: 600px">
             <h4 style="padding:2% 0 0 40%">自有停车场平台数据</h4>
-            <div class="menu_img">
-              <ul class="imglist">
-                <li class="recod"><a href="/park/pos/charge/record"
-                                     style="background: url(/park/img/bak1a.png) no-repeat center center;">停车记录</a>
-                <li class="recod"><a href="/park/pos/charge/flowbill"
-                                     style="background: url(/park/img/bak2a.png) no-repeat center center;">财务流水账单</a>
-                </li>
-                <li class="recod"><a href="/park/pos/charge/reconciliation"
-                                     style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
-                </li>
-                <li class="recod"><a href="/park/lepay/record/"
-                                     style="background: url(/park/img/bak4a.png) no-repeat center center;">第三方支付</a>
-                </li>
-              </ul>
-            </div>
+            <a href="/park/pos/charge/record" style="padding-left: 100px"><button class="button park" style="vertical-align:middle;"><span>停车记录 </span></button></a>
+            <a href="/park/pos/charge/flowbill"><button class="button charge" style="vertical-align:middle"><span>财务流水账单 </span></button></a>
+            <a href="/park/pos/charge/reconciliation"><button class="button hardware" style="vertical-align:middle"><span>财务对账 </span></button></a>
+            <a href="/park/lepay/record"><button class="button poscharge" style="vertical-align:middle"><span>第三方支付 </span></button></a>
+
             <h4 style="padding:2% 0 0 40%">第三方平台数据</h4>
-            <div class="menu_img">
-              <ul class="imglist">
-                <li class="recod"><a
-                    href="/park/gongzx/record2"
-                    style="background: url(/park/img/bak5a.png) no-repeat center center;">停车记录</a>
-                </li>
-                <li class="recod"><a href="/park/gongzx/reconciliation3"
-                                     style="background: url(/park/img/bak3.png) no-repeat center center;">财务对账</a>
-                </li>
-                <li class="recod"><a href="#"
-                                     style="background: url(/park/img/bak4a.png) no-repeat center center;">支付数据</a>
-                </li>
-                <li class="recod"><a href="/park/pos/charge/demo1"
-                                     style="background: url(/park/img/bak5a.png) no-repeat center center;">更多信息</a>
-                </li>
-              </ul>
-            </div>
+            <a href="/park/gongzx/record2" style="padding-left: 100px"><button class="button charge" style="vertical-align:middle"><span>停车记录 </span></button></a>
+            <a href="/park/gongzx/reconciliation3"><button class="button hardware" style="vertical-align:middle"><span>财务对账 </span></button></a>
+            <a href="#"><button class="button poscharge" style="vertical-align:middle"><span>支付数据 </span></button></a>
+            <a href="/park/pos/charge/demo1"><button class="button park" style="vertical-align:middle"><span>更多信息 </span></button></a>
           </div>
         </div>
       </div>
@@ -79,4 +56,10 @@
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal -->
+</script>
+<script>
+  $(document).ready(function(){
+    $.fn.park.initial();
+  });
+
 </script>

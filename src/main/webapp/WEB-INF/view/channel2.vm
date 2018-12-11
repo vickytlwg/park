@@ -18,35 +18,15 @@
 	               <!--  <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:580px">
-	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;width:900px;margin-top:40px;">
-	                			<li class="recod">
-	                				<a href="/park/channel" style="background: url(/park/img/bak1a.png) no-repeat center center;">车流量探测器</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/barrier/" style="background: url(/park/img/bak2a.png) no-repeat center center;">闸机管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/leftParkingCard" style="background: url(/park/img/bak3.png) no-repeat center center;">诱导屏管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/businessCarportAngular" style="background: url(/park/img/bak4a.png) no-repeat center center;">地磁管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/feeOperator" style="background: url(/park/img/bak5a.png) no-repeat center center;">地锁管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/feeOperator/2" style="background: url(/park/img/bak3.png) no-repeat center center;">高位视频桩</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/hardware" style="background: url(/park/img/bak4a.png) no-repeat center center;">硬件设备管理</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/hardwareinfo/hardwareinfo" style="background: url(/park/img/bak5a.png) no-repeat center center;">设备查询</a>
-	                			</li>
-	                		</ul>
-	                	</div>
+	                <div class="box-body" style="height:580px;padding: 50px 100px">
+										<a href="/park/channel"><button class="button park" style="vertical-align:middle"><span>车流量探测器 </span></button></a>
+										<a href="/park/barrier/"><button class="button charge" style="vertical-align:middle"><span>闸机管理 </span></button></a>
+										<a href="/park/leftParkingCard"><button class="button hardware" style="vertical-align:middle"><span>诱导屏管理 </span></button></a>
+										<a href="/park/businessCarportAngular"><button class="button poscharge" style="vertical-align:middle"><span>地磁管理 </span></button></a>
+										<a href="/park/hardware"><button class="button charge" style="vertical-align:middle"><span>硬件设备管理 </span></button></a>
+										<a href="/park/hardwareinfo/hardwareinfo"><button class="button hardware" style="vertical-align:middle"><span>设备查询 </span></button></a>
+										<a href="#"><button class="button poscharge" style="vertical-align:middle"><span>地锁管理 </span></button></a>
+										<a href="#"><button class="button park" style="vertical-align:middle"><span>高位视频桩 </span></button></a>
 	                </div>
 	            </div>
             </div>

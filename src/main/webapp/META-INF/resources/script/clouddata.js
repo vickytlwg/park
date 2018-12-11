@@ -35,6 +35,7 @@ cloudApp.service("httpService", function ($http, $q) {
         method: "post",
         data: angular.toJson(data)
       }).success(function (response) {
+        console.log(response);
         if (response.status == 1001) {
           deferred.resolve(response.body);
         } else {
@@ -77,7 +78,13 @@ cloudApp.controller("getdataCtrl", ["$scope", '$interval', "httpService2", funct
       $scope.processData(result);
     });
   }, 6000);
-
+  var getOnlineData = function () {
+    httpService.getOnlineData().then(function (result) {
+      $scope.data = result;
+      console.log($scope.data);
+    });
+  };
+  getOnlineData();
 
 }]);
 cloudApp.service("httpService2", ['$http', '$q', function ($http, $q) {
@@ -94,6 +101,7 @@ cloudApp.service("httpService2", ['$http', '$q', function ($http, $q) {
           count: 100
         }
       }).success(function (response) {
+        console.log(response);
         if (response.status == 1001) {
           deferred.resolve(response.body);
         }
@@ -109,6 +117,25 @@ cloudApp.service("httpService2", ['$http', '$q', function ($http, $q) {
         method: "post",
         data: angular.toJson(data)
       }).success(function (response) {
+        console.log(response);
+        if (response.status == 1001) {
+          deferred.resolve(response.body);
+        } else {
+          deferred.reject(response);
+        }
+      }).error(function () {
+        deferred.reject();
+      });
+      return promise;
+    },
+    getOnlineData: function () {
+      var deferred = $q.defer();
+      var promise = deferred.promise;
+      $http({
+        url: "/park/getParkStatusInfo",
+        method: "get"
+      }).success(function (response) {
+        console.log(response);
         if (response.status == 1001) {
           deferred.resolve(response.body);
         } else {
