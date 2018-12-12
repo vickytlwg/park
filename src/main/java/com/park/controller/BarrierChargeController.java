@@ -315,6 +315,42 @@ public class BarrierChargeController {
 				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
 			}
 			
+	
+
+			dataMap.put("cT", "in");
+			charge.setCardNumber(cardNumber);
+			charge.setParkId(parkId);
+
+			// 判断包月车已入场
+
+			Boolean isMonthUserCarIn = false;
+			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
+				for (Monthuser tmMonthuser : realMonthUsers) {
+					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
+							isMonthUserCarIn = true;
+						}
+
+					}
+				}
+				monthuserNow.setPlatecolor("多车包月入场");
+				if (isMonthUserCarIn) {
+					charge.setParkDesc(park.getName() + "-包月转临停");
+					monthuserNow.setPlatecolor("包月转为临停");
+					dataMap.put("uT", "0");
+					monthUserType=9;
+					try {
+						dataMap.remove("ds");
+						dataMap.remove("eD");
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+				}
+				monthUserService.updateByPrimaryKeySelective(monthuserNow);
+			}
+
+			
 			switch (monthUserType) {
 			case 0:
 				charge.setParkDesc(park.getName() + "-包月车");
@@ -381,39 +417,9 @@ public class BarrierChargeController {
 			default:
 				break;
 			}
-
-			dataMap.put("cT", "in");
-			charge.setCardNumber(cardNumber);
-			charge.setParkId(parkId);
-
-			// 判断包月车已入场
-
-			Boolean isMonthUserCarIn = false;
-			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
-				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
-						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
-							isMonthUserCarIn = true;
-						}
-
-					}
-				}
-				monthuserNow.setPlatecolor("多车包月入场");
-				if (isMonthUserCarIn) {
-					charge.setParkDesc(park.getName() + "-包月转临停");
-					monthuserNow.setPlatecolor("包月转为临停");
-					dataMap.put("uT", "0");
-					try {
-						dataMap.remove("ds");
-						dataMap.remove("eD");
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-
-				}
-				monthUserService.updateByPrimaryKeySelective(monthuserNow);
-			}
-
+			
+			
+			
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num=0;
 			//redis查询
@@ -724,7 +730,10 @@ public class BarrierChargeController {
 			case 1:
 				charge.setParkDesc(park.getName() + "-预约");
 				if (parkcarauthority.getYuyue() != true) {
-					dataMap.put("aT", "0");
+					if (payRet.getChargeMoney()>0) {
+						dataMap.put("aT", "0");	
+					}
+					
 
 				}
 				break;
