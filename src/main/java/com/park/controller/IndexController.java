@@ -52,7 +52,7 @@ public class IndexController {
 					modelMap.addAttribute(page.getPageKey(), true);
 				}
 			}
-			return "platformShow2";
+			return "clouddata";
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class IndexController {
 //				redirectUrl=redirectUrl.substring(5);
 //				return "redirect:"+redirectUrl;
 //			}
-			return "redirect:platformShow2";
+			return "redirect:clouddata";
 		}else{
 			return "redirect:login";
 		}	
@@ -106,7 +106,7 @@ public class IndexController {
 				redirectUrl=redirectUrl.substring(5);
 				return "redirect:"+redirectUrl;
 			}
-			return "platformShow2";
+			return "clouddata";
 		}else{
 			return "login";
 		}	
@@ -336,8 +336,8 @@ public class IndexController {
 		}
 		return "outsideParkStatus2";
 	}
-	@RequestMapping("/platformShow2")
-	public String platformShow2(ModelMap modelMap, HttpServletRequest request, HttpSession session){
+	@RequestMapping("/clouddata")
+	public String clouddata(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 		String username = (String) session.getAttribute("username");
 		AuthUser user = authService.getUserByUsername(username);
 		if(user != null){
@@ -351,7 +351,7 @@ public class IndexController {
 				modelMap.addAttribute(page.getPageKey(), true);
 			}
 		}
-		return "platformShow2";
+		return "clouddata";
 	}
 	@RequestMapping("/platformShowbk")
 	public String platformShowbk(ModelMap modelMap, HttpServletRequest request, HttpSession session){

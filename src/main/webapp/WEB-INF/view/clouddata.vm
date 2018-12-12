@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/park/script/utility.js"></script>
 
 <script type="text/javascript"
-        src="/park/script/platformshow2angular.js?v=1.2"></script>
+        src="/park/script/clouddata.js?v=1.2"></script>
 <script type="text/javascript" src="/park/script/map2.js?v=1.1"></script>
 <style>
   .anchorBL {
@@ -73,7 +73,7 @@
   <section class="content-header">
     <h1>云平台</h1>
   </section>
-  <section class="content" ng-app="parkBigDataApp">
+  <section class="content" ng-app="cloudDataApp">
     <div class="row">
       <div class="col-md-12">
         <div class="box">
@@ -114,10 +114,12 @@
                       <img src="dist/img/park.png" style="margin: 10px 0 5px 35px;"/>
                     </div>
                     <div class="col-xs-8">
-                      <p>在线停车场</p>
-                      <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="dayParkCount"></h3>
-
+                      <p>在线停车场 / 总停车场</p>
+                      <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="data.onlineCount"></h3>
+                      <small>个</small>&nbsp;&nbsp;<span style="font-size: 20px">/</span>&nbsp;&nbsp;
+                      <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="data.totalCount"></h3>
                       <small>个</small>
+
                     </div>
                   </div>
                   <div class="row">

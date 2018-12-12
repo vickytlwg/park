@@ -1,4 +1,4 @@
-<script src="/park/script/outsidePark.js?v=1.7"></script>
+<script src="/park/script/outsidePark.js?v=1.4"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 <script src="https://use.fontawesome.com/a416e9e97f.js"></script>
 
@@ -6,7 +6,6 @@
   .form-group label {
     float: right;
   }
-
 </style>
 <div class="content-wrapper">
   <section class="content-header">
@@ -157,7 +156,7 @@ label {
 
         <form class='form-horizontal' id='searchMacForm' role='form'>
           <div class='form-group'>
-            <label class='col-sm-2 control-label' for='Tt'>位置</label>
+            <label class='col-sm-2 control-label' for='locationKeyWords'>位置</label>
             <div class='col-sm-8'>
               <input type='text' class='form-control' id='locationKeyWords'
                      placeholder='地址关键字'>
@@ -197,20 +196,20 @@ label {
             <div class="panel-body">
               <div class='form-group'>
                 <div class="col-sm-2">
-                  <span class="required">*</span>
-                  <label class='control-label' for='parkName'>名称</label>
+                  <span class="required">*</span> <label class='control-label'
+                                                         for='parkName'>名称</label>
                 </div>
                 <div class='col-sm-2'>
-                  <input type='text' class='form-control' id='parkName'
+                  <input type='text' class='form-control' id='parkName' required
                          placeholder='请输入名称'>
                 </div>
                 <div class="col-sm-1" style="padding-right: 0;">
-                  <span class="required">*</span>
-                  <label class=' control-label' for='portCount'>车位数</label>
+                  <span class="required">*</span> <label class=' control-label'
+                                                         for='portCount'>车位数</label>
                 </div>
                 <div class='col-sm-2'>
-                  <input type='text' class='form-control' id='portCount'
-                         placeholder='请输入车位数'>
+                  <input type='number' class='form-control' id='portCount'
+                         placeholder='请输入车位数' required>
                 </div>
                 <div class="col-sm-1 ">
                   <label style="display: none" class='control-label'
@@ -233,11 +232,11 @@ label {
 
                 <div class="col-sm-2 ">
                   <label class=' control-label' style="float: right"
-                         for='leftPortCount'>剩余车位</label>
+                         for='portLeftCount'>剩余车位</label>
                 </div>
                 <div class='col-sm-2'>
-                  <input type='text' class='form-control' id='portLeftCount'
-                         placeholder='请输入剩余车位数'>
+                  <input type='number' class='form-control' id='portLeftCount'
+                         onblur="check()" placeholder='请输入剩余车位数' required>
 
                 </div>
                 <div class="col-sm-1" style="padding: 0px;">
@@ -320,16 +319,16 @@ label {
               <span class="required" style="float: left">*</span>
               <h3 class="panel-title" style="display: inline;">隶属信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3>
               <div class='checkbox' style="display: inline;">
-                <label> <span class="required">*</span> <input type="checkbox" id="isPositionChange"
-                               ng-model="isPositionChange"> 更改隶属收费信息</input>
+                <label> <span class="required">*</span> <input
+                    type="checkbox" checked="checked" id="isPositionChange"
+                    ng-model="isPositionChange"> 更改隶属收费信息
                 </label>
               </div>
             </div>
             <div class="panel-body">
               <div class='form-group'>
                 <div class="col-sm-1" style="padding: 0;">
-                  <span class="required">*</span>
-                  <label class='control-label'>市</label>
+                  <span class="required">*</span> <label class='control-label'>市</label>
                 </div>
                 <div class='col-sm-2'>
                   <select id="zoneCenterId" class="form-control"
@@ -338,8 +337,7 @@ label {
                           ng-model="zoneCenterId" ng-change="getAreas()"></select>
                 </div>
                 <div class="col-sm-1 ">
-                  <span class="required">*</span>
-                  <label class='control-label'>区</label>
+                  <span class="required">*</span> <label class='control-label'>区</label>
                 </div>
                 <div class='col-sm-2'>
                   <select id="areaId" class="form-control"
@@ -348,9 +346,8 @@ label {
                           ng-model="areaId" ng-change="getStreets()"></select>
                 </div>
                 <div class="col-sm-1 ">
-                  <span class="required">*</span>
-                  <label class='control-label'>路段</label><input hidden
-                                                                   id="tmpStreetId" type='text'>
+                  <span class="required">*</span> <label class='control-label'>路段</label><input
+                    hidden id="tmpStreetId" type='text'>
                 </div>
                 <div class='col-sm-2'>
                   <select id="streetid" class="form-control"
@@ -361,10 +358,6 @@ label {
               </div>
             </div>
           </div>
-
-
-          <!-- 					<div id='addParkResult'></div>
- -->
         </form>
 
       </div>
@@ -373,7 +366,7 @@ label {
         <button type='button' class='btn btn-default' id="modalCloseBtn"
                 data-dismiss='modal' ng-click="clearPosition()">关闭
         </button>
-        <button id="submitParkBtn" type='button' class='btn btn-primary'>提交</button>
+        <button id="submitParkBtn" type='button' class='btn btn-primary' onmouseenter="check()">提交</button>
       </div>
 
     </div>
@@ -456,8 +449,8 @@ label {
                   </label>
                 </div>
                 <div class='checkbox' hidden>
-                  <label style="float: left;" hidden> <input type='checkbox'
-                                                             id='temporary10'>临停0费</input>
+                  <label style="float: left;" hidden> <input
+                      type='checkbox' id='temporary10'>临停0费</input>
                   </label>
                 </div>
               </div>
@@ -632,9 +625,8 @@ label {
               </div>
               <div class='col-sm-3'>
                 <div class='checkbox'>
-                  <label
-                      style="float: left;"> <input type='checkbox'
-                                                   id='alipay'>支付宝通知</input>
+                  <label style="float: left;"> <input type='checkbox'
+                                                      id='alipay'>支付宝通知</input>
                   </label>
                 </div>
               </div>
@@ -772,11 +764,29 @@ label {
 <div id='showErrorMessage'></div>
 
 <div id='showPicture'></div>
+<script>
+  function check() {
+    var a = document.getElementById("portCount").value;
+    var b = document.getElementById("portLeftCount").value;
+    var c = document.getElementById("parkName").value;
+    var d = document.getElementById("isPositionChange").checked;
+    if (a == '') {
+      alert("车位数不能为空！")
+    }
+    if (c == '') {
+      alert("停车场名称不能为空！")
+    }
+    if (parseInt(a) < parseInt(b)) {
+      alert("剩余车位数不能大于车位数！");
+    }
+    if(d=true){
+      console.log(d);
 
+    }
+  }
+</script>
 <script>
   $(document).ready(function () {
     $.fn.park.initial();
   });
-  $('label[required]').after('<span style="color:red">*</span>');
-  //$('select[required]').before('<span style="color:red">*</span>');
 </script>

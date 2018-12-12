@@ -15,23 +15,11 @@
 	               <!--  <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:580px">
-	                	<div class="menu_img" >
-	                		<ul class="imglist" style="height:600px;min-width:900px;margin-top:100px;" >
-	                			<li class="recod">
-	                				<a href="/park/parkingInfo" style="background: url(/park/img/bak1a.png) no-repeat center center;">今日数据</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/outsideParkStatusAdmin" style="background: url(/park/img/bak2a.png) no-repeat center center;">今日停车分析</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/pos/carportUsage" style="background: url(/park/img/bak3.png) no-repeat center center;">车位使用分析</a>
-	                			</li>
-	                			<li class="recod">
-	                				<a href="/park/qhq_carportstatus" style="background: url(/park/img/bak4a.png) no-repeat center center;">车位状态图</a>
-	                			</li>
-	                		</ul>
-	                	</div>
+	                <div class="box-body" style="height:580px;padding: 150px 100px">
+										<a href="/park/parkingInfo"><button class="button park" style="vertical-align:middle"><span>今日数据 </span></button></a>
+										<a href="/park/outsideParkStatusAdmin"><button class="button charge" style="vertical-align:middle"><span>今日停车分析 </span></button></a>
+										<a href="/park/pos/carportUsage"><button class="button hardware" style="vertical-align:middle"><span>车位使用分析 </span></button></a>
+										<a href="/park/qhq_carportstatus"><button class="button poscharge" style="vertical-align:middle"><span>车位状态图 </span></button></a>
 	                </div>
 
 	            </div>
