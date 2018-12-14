@@ -96,7 +96,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
     $scope.selectParks = [];
     var getSelectData = function() {
         var options = $('#get_Park').get(0).options;
-        console.log("options-----"+options);
+        //console.log("options-----"+options);
         for (var i = 0; i < options.length; i++) {
             var item = {
                 value : $(options[i]).val(),
@@ -105,7 +105,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
              $scope.selectParks.push(item);
         };
         $scope.selectedPark=$scope.selectParks[0];
-        console.log("$scope.selectedPark-----"+$scope.selectedPark);
+        //console.log("$scope.selectedPark-----"+$scope.selectedPark);
     };
     getSelectData();
     

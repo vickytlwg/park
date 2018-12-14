@@ -115,13 +115,7 @@
 		$.fn.loader.removeLoader($('#userDiv')); 
 		userBody.html('');
 		data = data["body"];
-/*		console.log("data---iiii--");
-		console.log("data.body---iiii--"+data.body);
-		console.log("data-----"+data);
-		console.log("data-----"+data.length);*/
-//		var cc = jQuery.parseJSON(data);
-//		console.log("data------cc----"+cc);
-		console.log("data-----"+data.length);
+		//console.log("data-----"+data.length);
 		
 		for(var i = 0; i < data.length; i++){
 			var tr = $("<tr></tr>");

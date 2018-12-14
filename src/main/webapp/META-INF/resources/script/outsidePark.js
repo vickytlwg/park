@@ -547,9 +547,8 @@
 
 
   /**bind submit button of adding and updating park */
-  var bindSubmitParkBtnClick = function () {
+  bindSubmitParkBtnClick= function () {
 
-    $('#submitParkBtn').on('click', $(this), function () {
       var url = '';
       var parkFields = getAddParkFormValue();
       if (parkFields['id'] != undefined && parkFields['id'] != null) {
@@ -582,7 +581,6 @@
           setTimeout('$("#addParkResult").html("");', 3000);
         }
       });
-    });
   };
 
   var getAddParkFormValue = function () {
@@ -594,7 +592,7 @@
     }
 
     parkFields['name'] = $('input#parkName').val();
-    console.log($('select#streetid').val());
+    //console.log($('select#streetid').val());
     if ($('select#streetid').val()) {
       parkFields['streetId'] = $('select#streetid').val().split(':')[1];
     }
@@ -713,9 +711,7 @@
       else {
         tr.append('<td >' + '' + '</td>');
       }
-      /*			tr.append('<td>' + data[i]['channelCount']+ '</td>');
-       */
-      tr.append('<td>' + data[i]['portCount'] + '</td>');
+       tr.append('<td>' + data[i]['portCount'] + '</td>');
       tr.append('<td>' + data[i]['portLeftCount'] + '</td>');
       var feeCriterionId = data[i]['feeCriterionId'];
       var feeCriterionName = data[i]['feeCriterionName'];
@@ -755,12 +751,16 @@
         type = '其它';
       tr.attr('parkType', data[i]['type']);
       tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
-      //tr.append('<td hidden longitude='+ data[i]['longitude'] +' latitude=' + data[i]['latitude'] + ' >' + data[i]['position']+ '</td>');
       tr.append('<td>' + data[i]['date'] + '</td>');
-      if (i % 2 == 0) {
-        //		tr.addClass('success');
-      } else {
-        //		tr.addClass('active');
+      //console.log(data[i]['date']);
+      var stringTime =(new Date(data[i]['date'])).valueOf();
+      //console.log(stringTime);
+      var compareWithDate=(new Date()).valueOf();
+      //console.log(compareWithDate);
+      if(stringTime < (compareWithDate-2*60*1000)||stringTime > (compareWithDate+2*60*1000)){
+        tr.append('<td>' + '离线'+ '</td>');
+      }else{
+        tr.append('<td>' + '在线'+ '</td>');
       }
 
       var picUri = data[i]['pictureUri'];
