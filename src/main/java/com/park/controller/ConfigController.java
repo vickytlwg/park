@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -23,7 +24,9 @@ import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 @Controller
 @RequestMapping("config")
 public class ConfigController {
-
+	
+	@Value("#{prop.ActiveMqUrl}")
+	private String url;
 	@RequestMapping("layout")
 	@ResponseBody
 	public String layout(HttpServletRequest request,HttpServletResponse response){
@@ -32,7 +35,7 @@ public class ConfigController {
 	//	 aLayoutViewResolver.setLayoutUrl("layout2.vm");
 		WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
 		
-		webApplicationContext.getBeanDefinitionNames();
+	//	webApplicationContext.getBeanDefinitionNames();
 	//	org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver aLayoutViewResolver=(VelocityLayoutViewResolver) webApplicationContext.getBean("viewResolver");
 	//	aLayoutViewResolver.setLayoutUrl("layout2.vm"); 
 		StringBuilder dd=new StringBuilder();
@@ -41,16 +44,18 @@ public class ConfigController {
 		for (int i = 0; i < aaa.length; i++) {
 			dd.append(aaa[i]);
 			dd.append("\r\n");
+			System.out.println(aaa[i]);
 		}
-	 org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver aLayoutViewResolver=(VelocityLayoutViewResolver) webApplicationContext.getBean("viewResolver");
-		
-		 aLayoutViewResolver.clearCache();
-		 aLayoutViewResolver.setLayoutUrl("layout2.vm");
+//	 org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver aLayoutViewResolver=(VelocityLayoutViewResolver) webApplicationContext.getBean("viewResolver");
+//		
+//		 aLayoutViewResolver.clearCache();
+//		 aLayoutViewResolver.setLayoutUrl("layout2.vm");
 		
 		//ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext(),"org.springframework.web.servlet.FrameworkServlet.CONTEXT");
 		//ApplicationContext ac = new FileSystemXmlApplicationContext("classpath:conf/spring-mvc.xml");
 		ApplicationContext context=(ApplicationContext) request.getSession().getServletContext().getAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT.spring");
 		Enumeration<Object> fff=request.getSession().getServletContext().getAttributeNames();
+		
 		for(Enumeration e=fff;e.hasMoreElements();){
 		    String thisName=e.nextElement().toString();
 			System.out.println("jieguo: "+thisName);
@@ -64,4 +69,10 @@ public class ConfigController {
 		}
 		return webApplicationContext.getBeanDefinitionCount()+";;"+context.getBeanDefinitionCount()+ee.toString();
 	}
+	
+	@RequestMapping("getvalue")
+	@ResponseBody String getvalue() {
+		return url;
+	}
+	
 }

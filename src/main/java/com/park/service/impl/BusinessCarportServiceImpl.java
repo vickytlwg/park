@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,8 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 	@Autowired
 	private PosChargeDataService poschargeDataService;
 
+	@Value("#{prop.jpush}")
+	private boolean isjsush;
 	
 	private static Log logger = LogFactory.getLog(BusinessCarportServiceImpl.class);
 
@@ -157,7 +160,7 @@ public class BusinessCarportServiceImpl implements BusinessCarportService{
 		BusinessCarport carport = businessCarportDAO.getBusinessCarportByMacId(macId);
 		carport.setStatus(status);
 		//发送jpush请求
-		if (isPush) {
+		if (isPush&&isjsush) {
 			List<Pos> poses=posService.getByParkId(carport.getParkId());
 			List<String> audiences=new ArrayList<>();
 			for (Pos pos : poses) {
