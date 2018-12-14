@@ -592,7 +592,7 @@
     }
 
     parkFields['name'] = $('input#parkName').val();
-    console.log($('select#streetid').val());
+    //console.log($('select#streetid').val());
     if ($('select#streetid').val()) {
       parkFields['streetId'] = $('select#streetid').val().split(':')[1];
     }
@@ -752,11 +752,11 @@
       tr.attr('parkType', data[i]['type']);
       tr.append('<td data=' + data[i]['type'] + ' >' + type + '</td>');
       tr.append('<td>' + data[i]['date'] + '</td>');
-      console.log(data[i]['date']);
+      //console.log(data[i]['date']);
       var stringTime =(new Date(data[i]['date'])).valueOf();
-      console.log(stringTime);
+      //console.log(stringTime);
       var compareWithDate=(new Date()).valueOf();
-      console.log(compareWithDate);
+      //console.log(compareWithDate);
       if(stringTime < (compareWithDate-2*60*1000)||stringTime > (compareWithDate+2*60*1000)){
         tr.append('<td>' + '离线'+ '</td>');
       }else{

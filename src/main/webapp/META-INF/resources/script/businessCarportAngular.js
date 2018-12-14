@@ -80,14 +80,14 @@ function($scope, $http, $modal,$timeout,$interval) {
         }
     };
     $scope.addData = function() {
-        console.log($scope.checked);
+        //console.log($scope.checked);
            var getdata=$http({
             method:'get',
             url:'/park/getBusinessCarportDetail',
             headers:{"token":"6f13b8f3-cc3f-4e2a-a5b4-01b9cf6b40ca-1458491724564"},
             params:{low:0,count:1000,parkId:109}
           }).success(function(data){
-            console.log(data);
+            //console.log(data);
         });
     };
 }])

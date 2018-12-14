@@ -84,7 +84,6 @@
                 data_info = new Array(parkdata.length);
                 for (var i = 0; i < parkdata.length; i++) {
                     var tmpdata = {};
-                    //      console.log(parkdata[i].name + '\n');
                     var tmparray = new Array(4);
                     tmparray[0] = parkdata[i].longitude;
                     tmparray[1] = parkdata[i].latitude;

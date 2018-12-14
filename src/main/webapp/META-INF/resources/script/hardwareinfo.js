@@ -27,7 +27,7 @@ hardwareInfoApp
 											//}
 										
 										}).success(function(response) {
-									console.log(response);
+									//console.log(response);
 									if (response.status == 1001) {
 										getInitail(response.body);
 									} else {
@@ -189,7 +189,7 @@ hardwareInfoApp.controller("feeOperatorModify", function($scope, textModal,
 			//	count : 50
 			//}
 		}).success(function(response) {
-			console.log(response);
+			//console.log(response);
 			if (response.status == 1001) {
 				$scope.streets = response.body;
 			} else {

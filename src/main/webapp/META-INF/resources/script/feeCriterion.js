@@ -86,7 +86,7 @@ chargeApp.controller("feeCriterionCtrl", ['$scope','$http','textModal','$modal',
             .get('getCount')
             .success(
               function (response) {
-                console.log(response);
+                //console.log(response);
                 if (response.status == 1001) {
                   $scope.paginationConf.totalItems = response.body;
                 }
@@ -103,7 +103,7 @@ chargeApp.controller("feeCriterionCtrl", ['$scope','$http','textModal','$modal',
             method: 'post',
             data: angular.toJson(data)
           }).success(function (response) {
-            console.log(response);
+            //console.log(response);
             $scope.criterion.items = response.body;
           });
         };
