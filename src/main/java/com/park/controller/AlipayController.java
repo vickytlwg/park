@@ -46,6 +46,7 @@ import com.alipay.api.response.AlipayEcoMycarParkingVehicleQueryResponse;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradeCreateResponse;
+import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
@@ -54,6 +55,7 @@ import com.park.model.Constants;
 import com.park.model.Njcarfeerecord;
 import com.park.model.Park;
 import com.park.model.PosChargeData;
+import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
 import com.park.service.AlipayrecordService;
 import com.park.service.ParkService;
@@ -204,20 +206,61 @@ public class AlipayController {
 //
 //		return "alipayh5/index";
 //	}
-	@RequestMapping(value = "payerweima", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@RequestMapping(value = "barcodePay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String payerweima() {
+	public String payerweima(Map<String, Object> args) throws Exception {
+		logger.info("barcodepayin"+args);
+		Map<String, Object> result = new HashMap<>();
+		String auth_code=(String) args.get("authCode");
+		String mac=(String) args.get("mac");
+		int poschargeId=(int) args.get("posChargeId");
+		
+		PosChargeData posChargeData=poschargedataService.getById(poschargeId);
+		if (posChargeData==null) {
+			return Utility.createJsonMsg(1002, "pochargeId不存在");
+		}
+		double chargeMoney=0.0;
+		if (!posChargeData.isPaidCompleted()) {
+			List<PosChargeData> charges = poschargedataService.queryDebt(posChargeData.getCardNumber(), new Date());
+			chargeMoney=charges.get(0).getChargeMoney();
+		}
+		else {
+			chargeMoney=posChargeData.getChargeMoney();
+		}
+		
+		String out_trade_no = new Date().getTime() + "barcodePay";
 		AlipayTradePayRequest request = new AlipayTradePayRequest(); 
+		request.setNotifyUrl("http://www.iotclouddashboard.com/park/alipay3/barcodePay");
 		request.setBizContent("{" +
-				" out_trade_no:"+"20150320010101001"+"," +
+				" out_trade_no:"+out_trade_no+"," +
 				" scene:"+"bar_code"+"," +
-				" auth_code:"+"28763443825664394"+"," +
-				" subject:"+"停车费"+"," +
-				" store_id:"+"NJ_001"+"," +
+				" auth_code:"+auth_code+"," +
+				" subject:"+posChargeData.getParkDesc()+"-停车费"+"," +
+				" store_id:"+mac+"," +
 				" timeout_express:"+"2m"+"," +
-				" total_amount:"+"88.88" +
+				" total_amount:"+chargeMoney +
 				" }");
-		return null;
+		AlipayTradePayResponse response = alipayClient.execute(request);
+		
+		Alipayrecord alipayrecord = new Alipayrecord();
+		alipayrecord.setOutTradeNo(out_trade_no);
+		alipayrecord.setAlitradeno(response.getTradeNo());
+		alipayrecord.setPoschargeid(poschargeId);
+		alipayrecord.setUserid(mac);
+		//alipayrecord.setParkingid(posChargeData.getParkId());
+		alipayrecord.setDate(new Date());
+		alipayrecord.setStatus("0");
+		alipayrecord.setMoney(chargeMoney);
+		alipayrecordService.insertSelective(alipayrecord);
+		
+		if(response.isSuccess()){
+			result.put("status", 1001);
+			result.put("body", response.getTradeNo());
+			} else {
+			result.put("status", 1002);
+			}
+		logger.info("barcodePayreturn:"+result);
+		return Utility.gson.toJson(result);
 	}
 	@RequestMapping(value = "notifyJSPay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
@@ -263,6 +306,39 @@ public class AlipayController {
 
 		Map<String, String> result = new HashMap<>();
 		return Utility.createJsonMsg(1001, "ok");
+	}
+	@RequestMapping(value = "notifyUrlBarcode", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	@ResponseBody
+	public String notifyUrlBarcode(HttpServletRequest request) {
+		String trade_status = request.getParameter("trade_status");
+		String trade_no = request.getParameter("trade_no");
+		String receipt_amount = request.getParameter("receipt_amount");
+		String out_trade_no = request.getParameter("out_trade_no");
+		logger.info("notifyUrlBarcode:" + out_trade_no+receipt_amount+trade_no);
+		
+		if (trade_status.equals("TRADE_SUCCESS")) {
+			
+			//通知
+			ActiveMqService.SendWithQueueName(out_trade_no,"barcodeAlipay");
+			
+			List<Alipayrecord> alipayrecords = alipayrecordService.getByOutTradeNO(out_trade_no);
+			Alipayrecord alipayrecord = alipayrecords.get(0);
+			PosChargeData lastCharge = poschargedataService.getById(alipayrecord.getPoschargeid());	
+			lastCharge.setChargeMoney(Double.parseDouble(receipt_amount));
+			lastCharge.setPaidCompleted(true);
+			lastCharge.setPayType(0);
+			lastCharge.setExitDate1(new Date());
+			poschargedataService.update(lastCharge);
+			
+			
+			
+			alipayrecord.setStatus("1");
+			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
+			alipayrecord.setAlitradeno(trade_no);
+			alipayrecordService.updateByPrimaryKeySelective(alipayrecord);
+			
+		}
+		return "success";
 	}
 	@RequestMapping(value = "notifyUrl", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody

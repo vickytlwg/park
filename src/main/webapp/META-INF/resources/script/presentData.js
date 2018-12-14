@@ -24,17 +24,17 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
   getDataService.getZoneCenterInfo().then(function (result) {
     $scope.zoneCenters = result;
     $scope.processData(result);
-    console.log($scope.dayOnlineCarportCount + "  " + $scope.dayOutCount);
+    //console.log($scope.dayOnlineCarportCount + "  " + $scope.dayOutCount);
   });
   startDate = new Date().format('yyyy-MM-dd 00:00:00');
-  console.log(startDate);
+  //console.log(startDate);
   endDate = new Date().format('yyyy-MM-dd hh:mm:ss');
-  console.log(endDate);
+  //console.log(endDate);
   /*根据时分秒获得金额统计*/
   var getParkChargeByTime = function () {
     getDataService.getParkChargeByTime(startDate, endDate).then(function (result) {
       $scope.data = result['body'];
-      console.log($scope.data);
+      //console.log($scope.data);
       var fakeData = {
         'status': 0,
         'data': [{
@@ -70,7 +70,7 @@ app.service('getDataService', ['$http', '$q', function ($http, $q) {
         'endDate': endDate
       }
     }).success(function (response) {
-      console.log(response);
+      //console.log(response);
       deferred.resolve(response);
     });
     return deferred.promise;
@@ -87,7 +87,7 @@ app.service('getDataService', ['$http', '$q', function ($http, $q) {
       }
     }).success(function (response) {
       if (response.status == 1001) {
-        console.log(response);
+        //console.log(response);
         deferred.resolve(response.body);
       }
     });

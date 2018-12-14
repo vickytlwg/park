@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -46,10 +47,13 @@ public class CalPosChargeTask {
 	private JavaBeanXml javaBeanXml;
 	@Autowired
 	YanchengDataService yanchengDataService;
-
+	
+	@Value("#{prop.isNinebit}")
+	private boolean isNinebit;
+	
 	@Scheduled(cron="0 0 18/1  * * ? ")
 	public void cal(){	
-		if (AdminArgs.isGuest) {
+		if (isNinebit) {
 			return;
 		}
 		List<PosChargeData> charges = chargeService.getUnCompleted();
@@ -94,7 +98,7 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0/5 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
-		if (AdminArgs.isGuest) {
+		if (isNinebit) {
 			return;
 		}
 		javaBeanXml.updateParkFromXml();
@@ -102,7 +106,7 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0 23 * * ? ")
 	public void out(){
-		feeOperatorService.operatorsLogout();
+//		feeOperatorService.operatorsLogout();
 //		List<PosChargeData> charges = chargeService.getUnCompleted();		
 //		for(PosChargeData charge : charges){
 //			Date now = new Date();

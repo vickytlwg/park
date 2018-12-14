@@ -26,7 +26,7 @@ controller("generalDataViewCtrl",['$scope','getDataService',function($scope,getD
      getDataService.getZoneCenterInfo().then(function(result){
       $scope.zoneCenters=result;
       $scope.processData(result);
-    console.log($scope.dayOnlineCarportCount+"  "+$scope.dayOutCount);
+    //console.log($scope.dayOnlineCarportCount+"  "+$scope.dayOutCount);
   });
 }]).
 service('getDataService',['$http','$q',function($http,$q){    
