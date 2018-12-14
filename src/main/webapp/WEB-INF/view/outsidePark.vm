@@ -1,4 +1,4 @@
-<script src="/park/script/outsidePark.js?v=1.4"></script>
+<script src="/park/script/outsidePark.js?v=1.0"></script>
 <script src="/park/script/outsideParkAngular.js" type="text/javascript"></script>
 <script src="https://use.fontawesome.com/a416e9e97f.js"></script>
 
@@ -106,22 +106,15 @@
                   <th><span>Id</span></th>
                   <th><span>名称</span></th>
                   <th><span>所属街道</span></th>
-                  <!-- 										<th><span>进出口数</span></th>
- -->
                   <th><span>车位数</span></th>
                   <th><span>剩余车位</span></th>
                   <th><span>计费标准</span></th>
                   <th><span>状态</span></th>
-                  <!-- 										<th><span>免费</span></th>
- -->
                   <th><span>类型</span></th>
-                  <!-- 										<th><span>位置</span></th>
- -->
                   <th><span>日期</span></th>
+                  <th><span>在线状态</span></th>
                   <th><span>图片</span></th>
-                  <!--<th style="width: 80px;"><span>操作</span></th>-->
                 </tr>
-
                 <tbody id="parkBody"></tbody>
               </table>
             </div>
@@ -320,7 +313,7 @@ label {
               <h3 class="panel-title" style="display: inline;">隶属信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3>
               <div class='checkbox' style="display: inline;">
                 <label> <span class="required">*</span> <input
-                    type="checkbox" checked="checked" id="isPositionChange"
+                    type="checkbox" id="isPositionChange"
                     ng-model="isPositionChange"> 更改隶属收费信息
                 </label>
               </div>
@@ -366,7 +359,7 @@ label {
         <button type='button' class='btn btn-default' id="modalCloseBtn"
                 data-dismiss='modal' ng-click="clearPosition()">关闭
         </button>
-        <button id="submitParkBtn" type='button' class='btn btn-primary' onmouseenter="check()">提交</button>
+        <button type='button' class='btn btn-primary' onmouseenter="check()" onclick="bindSubmitParkBtnClick()" >提交</button>
       </div>
 
     </div>

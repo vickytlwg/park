@@ -1,5 +1,4 @@
 var outsideParkApp = angular.module("outsideParkApp", ['ui.bootstrap']);
-var outsideParkApp2 = angular.module("outsideParkApp2", ['ui.bootstrap']);
 outsideParkApp.controller("outsideParkCtrl", function($scope, $http, $timeout, $q,$modal, getPositionData) {
    
     getPositionData.getZoneCenter().then(function(result) {
@@ -19,7 +18,7 @@ outsideParkApp.controller("outsideParkCtrl", function($scope, $http, $timeout, $
         $scope.areas = [];
         $scope.streets = [];
         $scope.zoneCenterId = -1;
-        $scope.isPositionChange = false;
+        $scope.isPositionChange = true;
     };
 
     $scope.getZoneCenter = function() {
@@ -70,40 +69,6 @@ outsideParkApp.controller("outsideParkCtrl", function($scope, $http, $timeout, $
             return;
         streetToZoneCenter();
     });
-});
-outsideParkApp2.controller("showTextSetController",function($scope, $http, $timeout, $q, carAuthorityService){
-    
-});
-outsideParkApp2.controller("authoritySetController",function($scope, $http, $timeout, $q, carAuthorityService){
-    
-});
-outsideParkApp2.controller("textAuthorityController",function($scope, $http, $timeout, $q, $modal){
-    
-      $scope.textShowSet = function() {
-        $modal.open({
-            templateUrl : 'showTextSetAnguar',
-            controller : 'showTextSetController',
-            scope : $scope,
-            resolve : {
-                index : function() {
-                    return undefined;
-                }
-            }
-        });
-
-    };
-    $scope.authoritySet = function() {
-         $modal.open({
-            templateUrl : 'parkAuthoritySetAnguar',
-            controller : 'authoritySetController',
-            scope : $scope,
-            resolve : {
-                index : function() {
-                    return undefined;
-                }
-            }
-        });
-    };
 });
 outsideParkApp.factory("getPositionData", function($http, $q) {
     var getZoneCenter = function() {
@@ -201,84 +166,4 @@ outsideParkApp.factory("getPositionData", function($http, $q) {
     };
 
 });
-outsideParkApp2.service("textSetService", function($http, $q) {
-    return {
-        insert : function(data) {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-            $http({
-                url : "/park/parkShowText/insert",
-                method : 'post',
-                data : angular.toJson(data)
-            }).success(function(response) {
-                deferred.resolve(response);
-            });
-            return promise;
-        },
-        update : function(data) {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-            $http({
-                url : "/park/parkShowText/update",
-                method : 'post',
-                data : angular.toJson(data)
-            }).success(function(response) {
-                deferred.resolve(response);
-            });
-            return promise;
-        },
-        delete : function(data) {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-            $http({
-                url : "/park/parkShowText/delete",
-                method : 'post',
-                data : angular.toJson(data)
-            }).success(function(response) {
-                deferred.resolve(response);
-            });
-            return promise;
-        }
-    };
-    });
 
-outsideParkApp2.service("carAuthorityService", function($http, $q) {
-        return {
-            insert : function(data) {
-                var deferred = $q.defer();
-                var promise = deferred.promise;
-                $http({
-                    url : "/park/carAuthority/insert",
-                    method : 'post',
-                    data : angular.toJson(data)
-                }).success(function(response) {
-                    deferred.resolve(response);
-                });
-                return promise;
-            },
-            update : function(data) {
-                var deferred = $q.defer();
-                var promise = deferred.promise;
-                $http({
-                    url : "/park/carAuthority/update",
-                    method : 'post',
-                    data : angular.toJson(data)
-                }).success(function(response) {
-                    deferred.resolve(response);
-                });
-                return promise;
-            },
-            delete : function(data) {
-                var deferred = $q.defer();
-                var promise = deferred.promise;
-                $http({
-                    url : "/park/carAuthority/delete",
-                    method : 'post',
-                    data : angular.toJson(data)
-                }).success(function(response) {
-                    deferred.resolve(response);
-                });
-                return promise;
-            },
-        };
-    });
