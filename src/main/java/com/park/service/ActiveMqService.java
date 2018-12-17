@@ -24,7 +24,7 @@ public class ActiveMqService {
 		Map<String, Object> args=new HashMap<>();
 		args.put("data", data);
 		logger.info("发送队列:"+data);
-	//	HttpUtil.okHttpPost(url+"/mq/poschargeData",args);
+		HttpUtil.okHttpPost("http://parkserver.iotclouddashboard.com/parkServer/mq/poschargeData",args);
 	}
 	public static void SendWithQueueName(String data,String queue){
 		Map<String, Object> args=new HashMap<>();

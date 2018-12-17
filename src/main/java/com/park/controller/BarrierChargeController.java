@@ -414,7 +414,10 @@ public class BarrierChargeController {
 				}
 				break;
 			case 9:
-				charge.setParkDesc(park.getName() + "-临停车");
+				if (!charge.getParkDesc().contains("包月转为临停")) {
+					charge.setParkDesc(park.getName() + "-临停车");
+				}
+				
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
 				}
@@ -2809,6 +2812,7 @@ public class BarrierChargeController {
 			}
 			if (payRet.getOther2()!=null&&payRet.getOther2().equals("工行免密")) {
 				dataMap.put("my","0.0");
+				dataMap.put("aT", "1");
 				logger.info(cardNumber+"免密开闸");
 				payRet.setPayType(7);
 			}

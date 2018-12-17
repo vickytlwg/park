@@ -1395,8 +1395,19 @@ public class PosChargeDataController {
 		if (charge.getEntranceDate() == null) {
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		}
+		//redis
+		try {
+			String redisStr=jedisClient.get("carIn"+parkId+charge.getCardNumber());			
+			if (redisStr!=null) {			
+			logger.info("redis检测重复入场"+charge.getCardNumber()+redisStr);
+			return Utility.createJsonMsg(1002, "一分钟内重复入场");
+			}}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 		int ret = chargeSerivce.insert(charge);
 		if (ret == 1) {
+			jedisClient.set("carIn"+parkId+charge.getCardNumber(),String.valueOf(charge.getId()) , 60);
 			List<Parktoalipark> parktoaliparks = parkToAliparkService.getByParkId(parkId);
 			if (!parktoaliparks.isEmpty()) {
 				Parktoalipark parktoalipark = parktoaliparks.get(0);
