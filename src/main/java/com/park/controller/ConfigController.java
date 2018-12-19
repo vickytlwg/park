@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 public class ConfigController {
 	
 	@Value("#{prop.ActiveMqUrl}")
-	private String url;
+	private static String url;
 	@RequestMapping("layout")
 	@ResponseBody
 	public String layout(HttpServletRequest request,HttpServletResponse response){

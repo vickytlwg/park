@@ -62,6 +62,10 @@ public class BarrierChargeController {
 	@Autowired
 	ParkNoticeAuthorityService parkNoticeAuthorityService;
 	
+	
+	@Autowired
+	ParkCarAuthority2Service parkcarauthority2Service;
+	
 	@Resource(name="jedisClient")
 	private JedisClient jedisClient;
 	
@@ -227,6 +231,7 @@ public class BarrierChargeController {
 		if (!monthusers.isEmpty()) {
 			isMonthUser = true;
 			for (Monthuser tmpMonthuser : monthusers) {
+				logger.info(cardNumber+"月卡id:"+tmpMonthuser.getId());
 				Long diff = (tmpMonthuser.getEndtime().getTime() - (new Date()).getTime());
 				monthuserNow = tmpMonthuser;
 				if (tmpMonthuser.getType() == 0) {// 月卡
@@ -289,6 +294,7 @@ public class BarrierChargeController {
 		
 		Parknoticeauthority parknoticeauthority = parkNoticeAuthorityService
 				.getByParkId(parkId).get(0);
+		Parkcarauthority2 parkcarauthority2=parkcarauthority2Service.selectByPark(parkId);
 		// 入口硬件
 		if (channelFlag == 1) {
 			if (largeCar == true) {
@@ -408,17 +414,31 @@ public class BarrierChargeController {
 				}
 				break;
 			case 9:
-				charge.setParkDesc(park.getName() + "-临停车");
+				if (!charge.getParkDesc().contains("包月转为临停")) {
+					charge.setParkDesc(park.getName() + "-临停车");
+				}
+				
 				if (parkcarauthority.getTemporary() != true) {
 					dataMap.put("aT", "0");
-
 				}
+				if (parkcarauthority2!=null) {
+					logger.info("临停数量"+parkcarauthority2.getCount());
+					if (parkcarauthority2.getCount()>=parkcarauthority2.getMaxcount()) {
+						dataMap.put("aT", "0");
+						logger.info(park.getId()+"-"+cardNumber+"-临停数量达到限制");
+					}
+					else {
+						parkcarauthority2.setCount(parkcarauthority2.getCount()+1);
+						parkcarauthority2Service.updateByPrimaryKey(parkcarauthority2);
+					}
+				}
+				
+				
 				break;
 			default:
 				break;
 			}
-			
-			
+						
 			
 			charge.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int num=0;
@@ -785,6 +805,12 @@ public class BarrierChargeController {
 				if (parkcarauthority.getTemporary0()!=true&&shouldChargeMoney<0.1) {
 					dataMap.put("aT", "0");
 				}
+				
+				if (parkcarauthority2!=null) {
+					parkcarauthority2.setCount((parkcarauthority2.getCount()-1)<0?0:(parkcarauthority2.getCount()-1));
+					parkcarauthority2Service.updateByPrimaryKeySelective(parkcarauthority2);
+				}
+				
 				break;
 			default:
 				break;
@@ -2786,6 +2812,7 @@ public class BarrierChargeController {
 			}
 			if (payRet.getOther2()!=null&&payRet.getOther2().equals("工行免密")) {
 				dataMap.put("my","0.0");
+				dataMap.put("aT", "1");
 				logger.info(cardNumber+"免密开闸");
 				payRet.setPayType(7);
 			}
