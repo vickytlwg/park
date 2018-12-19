@@ -756,10 +756,10 @@ label {
 		var a = document.getElementById("portCount").value;
 		var b = document.getElementById("portLeftCount").value;
 		var c = document.getElementById("parkName").value;
-		var d = document.getElementById("isPositionChange").checked;
-		var e = document.getElementById("zoneCenterId").value;
-		var f = document.getElementById("areaId").value;
-		var g = document.getElementById("streetid").value;
+//		var d = document.getElementById("isPositionChange").checked;
+//		var e = document.getElementById("zoneCenterId").value;
+//		var f = document.getElementById("areaId").value;
+//		var g = document.getElementById("streetid").value;
 		if (a == '') {
 			alert("车位数不能为空！")
 		}
@@ -769,12 +769,12 @@ label {
 		if (parseInt(a) < parseInt(b)) {
 			alert("剩余车位数不能大于车位数！");
 		}
-		if (d != true) {
-			alert("请更改隶属信息噢，否则会引起内部错误！");
-		}
-		if (e === '?' || f === '?' || g === '?') {
-			alert("请填写市/区/路段相关隶属信息！")
-		}
+//		if (d != true) {
+//			alert("请更改隶属信息噢，否则会引起内部错误！");
+//		}
+//		if (e === '?' || f === '?' || g === '?') {
+//			alert("请填写市/区/路段相关隶属信息！")
+//		}
 	}
 </script>
 <script>
