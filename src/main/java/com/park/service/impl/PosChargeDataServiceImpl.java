@@ -1622,7 +1622,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		for (Monthuser monthuser : monthusers) {
 			if (monthuser.getType() == 0) {
 				Long diff = (monthuser.getEndtime().getTime() - (new Date()).getTime());
-				if (diff > 0) {
+				if (diff > 0&&monthuser.getPlatenumber().equals(charge.getCardNumber())) {
 					isMonthUser = true;
 					monthuserUse = monthuser;
 					isRealMonthUser = true;
@@ -1648,7 +1648,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					monthuserUse.getCardnumber());
 
 			for (Monthuser monthuser : monthuserss) {
-				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+				if (isMultiCarsOneCarport && isRealMonthUser && monthuser.getPlatecolor() != null
 						&& monthuser.getPlatecolor().contains("包月出场")) {
 					String[] datas = monthuser.getPlatecolor().split("#");
 					try {

@@ -1586,6 +1586,68 @@ public class PosChargeDataController {
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
+	@RequestMapping(value = "/commonQuery", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String commonQuery(@RequestBody Map<String, Object> args) throws Exception {
+		String carNumber = (String) args.get("carNumber");
+		int parkId = (int) args.get("parkId");
+		String exitDate = (String) args.get("exitDate");
+		Park park=parkService.getParkById(parkId);
+		FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+		List<PosChargeData> queryCharges = null;
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			try {
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, eDate, parkId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		} else {
+			try {
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, new Date(),parkId);
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		}
+		if (queryCharges.isEmpty()) {
+			List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(carNumber, 1, parkId);
+			if (posChargeDataList.isEmpty()) {				
+				return Utility.createJsonMsg(1002, "没有获取到数据", queryCharges);
+			}
+			PosChargeData posChargeData = posChargeDataList.get(0);
+			if (posChargeData.getExitDate()!=null) {
+				return Utility.createJsonMsg(1002, "没有未支付数据", queryCharges);
+			}
+			
+			Date payDate = new Date();
+			long diff = new Date().getTime() - payDate.getTime();
+			if (diff < 1000 * 60 * 15) {
+				return Utility.createJsonMsg(1001, "已在15分钟内支付", queryCharges);
+			}else {
+				Date incomeDate = new Date(payDate.getTime() - (long) (feeCriterion.getFreemins() - 15) * 1000 * 60);
+				
+				PosChargeData charge2 = new PosChargeData();
+				charge2.setCardNumber(carNumber);
+				charge2.setParkId(park.getId());
+				charge2.setOperatorId("超时15分钟");
+				charge2.setParkDesc(posChargeData.getParkDesc());
+				charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+				int num = chargeSerivce.insert(charge2);
+				jedisClient.del("P-"+parkId+"-"+carNumber);
+				jedisClient.set("P-"+parkId+"-"+carNumber,String.valueOf(charge2.getId()) , 2592000);
+				if (num != 1) {
+					logger.info(carNumber+"未成功重新入场");
+					return Utility.createJsonMsg(1002, "未成功重新入场", queryCharges);
+				}
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, new Date(),parkId);
+				logger.info(carNumber+"重新入场获取计费");
+			}
+		}
+		
+		
+		return Utility.createJsonMsg(1001, "success", queryCharges);
+	}
+	
 	@RequestMapping(value = "/getArrearageByCardNumber", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
 	@ResponseBody

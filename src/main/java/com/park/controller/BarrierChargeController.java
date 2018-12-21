@@ -414,7 +414,7 @@ public class BarrierChargeController {
 				}
 				break;
 			case 9:
-				if (!charge.getParkDesc().contains("包月转为临停")) {
+				if (!charge.getParkDesc().contains("包月转临停")) {
 					charge.setParkDesc(park.getName() + "-临停车");
 				}
 				
@@ -483,7 +483,7 @@ public class BarrierChargeController {
 							
 				
 				//发送topic队列
-				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())||park.getDescription().contains("本地计费")) {
 					charge.setEntrance(true);
 					ActiveMqService.SendTopicWithMac(charge,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 					}
@@ -648,16 +648,14 @@ public class BarrierChargeController {
 				}
 				
 				Date payDate = new Date();
-				if (posChargeData.getPayType() == 0) {
+				if (posChargeData.getPayType() == 0||posChargeData.getPayType() == 1) {
 					List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
 					if (alipayrecords.isEmpty()) {
 						// dataMap.put("my", "0.0");
-						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+						payDate = new Date();
 					}
 					payDate = alipayrecords.get(0).getDate();
-				} else if (posChargeData.getPayType() == 1) {
-					payDate = posChargeData.getExitDate();
-				}
+				} 
 				if (payDate == null) {
 					payDate = new Date();
 				}
@@ -702,7 +700,9 @@ public class BarrierChargeController {
 						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
 					}
 					// 重新查询未缴费
-					queryCharges = chargeSerivce.getDebt(cardNumber);
+					//queryCharges = chargeSerivce.getDebt(cardNumber);
+					queryCharges=chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
 				}
 			}
 			
@@ -825,7 +825,7 @@ public class BarrierChargeController {
 				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
 			}
 			//发送到topic
-			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())||park.getDescription().contains("本地计费")) {
 				payRet.setEntrance(false);
 			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 			}
@@ -874,13 +874,28 @@ public class BarrierChargeController {
 //				poschargemac.setMacidout((int) info.get("macId"));
 //				poschargemac.setPoschargeid(payRet.getId());
 //				posChargeMacService.updateByPosChargeId(poschargemac);
+				if (isRealMonthUser&&isMultiCarsOneCarport) {
+					for (Monthuser tmpMonthuser : monthusers) {
+						if (tmpMonthuser.getType()==0&&tmpMonthuser.getPlatecolor()!=null&&tmpMonthuser.getPlatecolor().equals("多车包月入场")) {
+							tmpMonthuser.setPlatecolor("出场完结");
+							monthUserService.updateByPrimaryKey(tmpMonthuser);
+						}
+					}
+				}
+				if (isRealMonthUser&&isMultiCarsOneCarport) {
+					for (Monthuser tmpMonthuser : monthusers) {
+						if (tmpMonthuser.getType()==0&&tmpMonthuser.getPlatecolor()!=null&&tmpMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+							tmpMonthuser.setPlatecolor("出场完结");
+							monthUserService.updateByPrimaryKey(tmpMonthuser);
+						}
+					}
+				}
+				
 				Poschargemac poschargemac = new Poschargemac();
 				poschargemac.setMacidout((int) info.get("macId"));
 				poschargemac.setPoschargeid(payRet.getId());
 				posChargeMacService.insertSelective(poschargemac);
-				logger.info(cardNumber + "出场成功!" + dataMap.toString());
-				
-				
+				logger.info(cardNumber + "出场成功!" + dataMap.toString());				
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			} else {
 				return Utility.createJsonMsg(1001, "ok");
