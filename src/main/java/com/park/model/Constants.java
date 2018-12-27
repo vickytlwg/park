@@ -35,7 +35,7 @@ public class  Constants{
 	public static PosChargeDataService poschargeSerivce=null;
 	public static ParkService parkService=new ParkServiceImpl();
 	//给工商发送的队列
-	public static int[] parkToQuene={224,260,267,268,358};
+	public static int[] parkToQuene={224,260,267,268,358,352,354};
 	//发送给自己
 	public static int[] ToQuenePark={4,334,258,355,182,248,352,368};
 	//美凯龙

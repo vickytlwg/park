@@ -111,6 +111,48 @@ public class BarrierChargeController {
 	public String touchtest(@RequestBody String aString) {
 		return aString;
 	}
+	@RequestMapping(value = "/file/upload/pictureWithUrl", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public String touchedPictureWithUrl(@RequestBody Map<String, String> args){
+		String mac = args.get("mac");
+		String cardNumber = args.get("cardNumber");
+		String base64img=args.get("base64img");
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
+			dataMap.put("status", 1002);
+			return Utility.gson.toJson(dataMap);
+		}
+		Map<String, Object> info = infos.get(0);
+		if (info == null) {
+			dataMap.put("status", 1002);
+			return Utility.gson.toJson(dataMap);
+		}
+		String url=FileUploadService.imgBase64Upload(base64img);
+		int channelFlag = (int) info.get("channelFlag");
+		Integer parkId = (Integer) info.get("parkID");
+		List<PosChargeData> posChargeDatas=chargeSerivce.getByCardNumberAndPark(cardNumber, parkId);
+		if (posChargeDatas.isEmpty()) {
+			dataMap.put("status", 1002);
+			dataMap.put("message", "没有记录");
+			return Utility.gson.toJson(dataMap);
+		}
+		
+		if (channelFlag == 1) {
+			dataMap.put("status", 1001);
+			dataMap.put("message", "入口成功");
+			dataMap.put("body", url);
+			posChargeDatas.get(0).setUrl(url);
+			
+		}else {
+			dataMap.put("status", 1001);
+			dataMap.put("message", "出口成功");
+			dataMap.put("body", url);
+			posChargeDatas.get(0).setOutUrl(url);
+		}
+		chargeSerivce.update(posChargeDatas.get(0));
+		return Utility.gson.toJson(dataMap);
+	}
 	@RequestMapping(value = "/file/upload/touchedPicture", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public void touchedPictureUrl(@RequestBody Map<String, String> args){
@@ -332,7 +374,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -342,7 +384,7 @@ public class BarrierChargeController {
 				monthuserNow.setPlatecolor("多车包月入场");
 				if (isMonthUserCarIn) {
 					charge.setParkDesc(park.getName() + "-包月转临停");
-					monthuserNow.setPlatecolor("包月转为临停");
+					monthuserNow.setPlatecolor("包月转临停");
 					dataMap.put("uT", "0");
 					monthUserType=9;
 					try {

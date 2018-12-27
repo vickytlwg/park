@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alipay.api.AlipayApiException;
 import com.jpush.Jpush;
 import com.park.dao.CarportStatusDetailDAO;
+import com.park.model.Alipayrecord;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
 import com.park.model.CarportStatusDetail;
@@ -54,6 +55,7 @@ import com.park.model.PosChargeDataSimple;
 import com.park.model.Posdata;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
+import com.park.service.AlipayrecordService;
 import com.park.service.AuthorityService;
 import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
@@ -106,6 +108,9 @@ public class PosChargeDataController {
 	@Autowired
 	ParkToAliparkService parkToAliparkService;
 
+	@Autowired
+	AlipayrecordService alipayrecordService;
+	
 	@Resource(name = "jedisClient")
 	private JedisClient jedisClient;
 	
@@ -1620,6 +1625,17 @@ public class PosChargeDataController {
 			}
 			
 			Date payDate = new Date();
+			if (posChargeData.getPayType() == 0||posChargeData.getPayType() == 1) {
+				List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
+				if (alipayrecords.isEmpty()) {
+					payDate = new Date();
+				}
+				payDate = alipayrecords.get(0).getDate();
+			} 
+			if (payDate == null) {
+				payDate = new Date();
+			}
+			
 			long diff = new Date().getTime() - payDate.getTime();
 			if (diff < 1000 * 60 * 15) {
 				return Utility.createJsonMsg(1001, "已在15分钟内支付", queryCharges);

@@ -1636,47 +1636,47 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		}
 		logger.info(charge.getCardNumber()+" 是否月卡:"+isRealMonthUser+" 计费标准:"+criterion.getName());
 		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
-				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
+				&& monthuserUse.getPlatecolor().equals("包月转临停")) {
 			isRealMonthUser = false;
 			monthuserUse.setPlatecolor("出场完结");
 			monthUserService.updateByPrimaryKeySelective(monthuserUse);
 		}
-		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
-				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
-			isRealMonthUser = false;
-			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
-					monthuserUse.getCardnumber());
-
-			for (Monthuser monthuser : monthuserss) {
-				if (isMultiCarsOneCarport && isRealMonthUser && monthuser.getPlatecolor() != null
-						&& monthuser.getPlatecolor().contains("包月出场")) {
-					String[] datas = monthuser.getPlatecolor().split("#");
-					try {
-						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
-						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
-						exitDate = dateout;
-						charge.setRejectReason("临停转包月");
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					monthuser.setPlatecolor("出场完结");
-					monthUserService.updateByPrimaryKeySelective(monthuser);
-					monthuserUse.setPlatecolor("出场完结");
-					for (Monthuser strMonthUser : monthuserss) {
-						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
-							monthuserUse.setPlatecolor(
-									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-							strMonthUser.setPlatecolor("临停恢复为包月");
-							monthUserService.updateByPrimaryKeySelective(strMonthUser);
-							break;
-						}
-					}
-					monthUserService.updateByPrimaryKeySelective(monthuserUse);
-					break;
-				}
-			}
-
-		}
+//		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+//				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
+//			isRealMonthUser = false;
+//			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
+//					monthuserUse.getCardnumber());
+//
+//			for (Monthuser monthuser : monthuserss) {
+//				if (isMultiCarsOneCarport && isRealMonthUser && monthuser.getPlatecolor() != null
+//						&& monthuser.getPlatecolor().contains("包月出场")) {
+//					String[] datas = monthuser.getPlatecolor().split("#");
+//					try {
+//						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
+//						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
+//						exitDate = dateout;
+//						charge.setRejectReason("临停转包月");
+//					} catch (Exception e) {
+//						// TODO: handle exception
+//					}
+//					monthuser.setPlatecolor("出场完结");
+//					monthUserService.updateByPrimaryKeySelective(monthuser);
+//					monthuserUse.setPlatecolor("出场完结");
+//					for (Monthuser strMonthUser : monthuserss) {
+//						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
+//							monthuserUse.setPlatecolor(
+//									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//							strMonthUser.setPlatecolor("临停恢复为包月");
+//							monthUserService.updateByPrimaryKeySelective(strMonthUser);
+//							break;
+//						}
+//					}
+//					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+//					break;
+//				}
+//			}
+//
+//		}
 		if (isRealMonthUser) {
 			logger.info(charge.getCardNumber()+"月卡结算完毕!");
 			charge.setChargeMoney(0);
@@ -1688,15 +1688,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					monthuserUse.setPlatecolor("出场完结");
 					List<Monthuser> monthuserss = monthUserService.getByUsernameAndPark(monthuserUse.getOwner(),
 							monthuserUse.getParkid());
-					for (Monthuser monthuser : monthuserss) {
-						if (monthuser.getPlatecolor().equals("包月转为临停")) {
-							monthuser.setPlatecolor("临停恢复为包月");
-							monthuserUse.setPlatecolor(
-									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-							monthUserService.updateByPrimaryKeySelective(monthuser);
-							break;
-						}
-					}
+//					for (Monthuser monthuser : monthuserss) {
+//						if (monthuser.getPlatecolor().equals("包月转为临停")) {
+//							monthuser.setPlatecolor("临停恢复为包月");
+//							monthuserUse.setPlatecolor(
+//									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//							monthUserService.updateByPrimaryKeySelective(monthuser);
+//							break;
+//						}
+//					}
 					monthUserService.updateByPrimaryKeySelective(monthuserUse);
 				}
 				this.update(charge);
@@ -2043,42 +2043,42 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			monthuserUse.setPlatecolor("出场完结");
 			monthUserService.updateByPrimaryKeySelective(monthuserUse);
 		}
-		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
-				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
-			isRealMonthUser = false;
-			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
-					monthuserUse.getCardnumber());
-
-			for (Monthuser monthuser : monthuserss) {
-				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
-						&& monthuser.getPlatecolor().contains("包月出场")) {
-					String[] datas = monthuser.getPlatecolor().split("#");
-					try {
-						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
-						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
-						exitDate = dateout;
-						charge.setRejectReason("临停转包月");
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					monthuser.setPlatecolor("出场完结");
-					monthUserService.updateByPrimaryKeySelective(monthuser);
-					monthuserUse.setPlatecolor("出场完结");
-					for (Monthuser strMonthUser : monthuserss) {
-						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
-							monthuserUse.setPlatecolor(
-									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-							strMonthUser.setPlatecolor("临停恢复为包月");
-							monthUserService.updateByPrimaryKeySelective(strMonthUser);
-							break;
-						}
-					}
-					monthUserService.updateByPrimaryKeySelective(monthuserUse);
-					break;
-				}
-			}
-
-		}
+//		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+//				&& monthuserUse.getPlatecolor().equals("临停恢复为包月")) {
+//			isRealMonthUser = false;
+//			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserUse.getParkid(),
+//					monthuserUse.getCardnumber());
+//
+//			for (Monthuser monthuser : monthuserss) {
+//				if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
+//						&& monthuser.getPlatecolor().contains("包月出场")) {
+//					String[] datas = monthuser.getPlatecolor().split("#");
+//					try {
+//						Date dateout = new SimpleDateFormat(Constants.DATEFORMAT).parse(datas[1]);
+//						charge.setExitDate1(dateout);// 更改出场时间为原先包月车的出场时间
+//						exitDate = dateout;
+//						charge.setRejectReason("临停转包月");
+//					} catch (Exception e) {
+//						// TODO: handle exception
+//					}
+//					monthuser.setPlatecolor("出场完结");
+//					monthUserService.updateByPrimaryKeySelective(monthuser);
+//					monthuserUse.setPlatecolor("出场完结");
+//					for (Monthuser strMonthUser : monthuserss) {
+//						if (strMonthUser.getPlatecolor().contains("包月转为临停")) {
+//							monthuserUse.setPlatecolor(
+//									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//							strMonthUser.setPlatecolor("临停恢复为包月");
+//							monthUserService.updateByPrimaryKeySelective(strMonthUser);
+//							break;
+//						}
+//					}
+//					monthUserService.updateByPrimaryKeySelective(monthuserUse);
+//					break;
+//				}
+//			}
+//
+//		}
 		if (isRealMonthUser) {
 			charge.setChargeMoney(0);
 			charge.setUnPaidMoney(0);
@@ -2089,15 +2089,15 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					monthuserUse.setPlatecolor("出场完结");
 					List<Monthuser> monthuserss = monthUserService.getByUsernameAndPark(monthuserUse.getOwner(),
 							monthuserUse.getParkid());
-					for (Monthuser monthuser : monthuserss) {
-						if (monthuser.getPlatecolor().equals("包月转为临停")) {
-							monthuser.setPlatecolor("临停恢复为包月");
-							monthuserUse.setPlatecolor(
-									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
-							monthUserService.updateByPrimaryKeySelective(monthuser);
-							break;
-						}
-					}
+//					for (Monthuser monthuser : monthuserss) {
+//						if (monthuser.getPlatecolor().equals("包月转为临停")) {
+//							monthuser.setPlatecolor("临停恢复为包月");
+//							monthuserUse.setPlatecolor(
+//									"包月出场#" + new SimpleDateFormat(Constants.DATEFORMAT).format(new Date()));
+//							monthUserService.updateByPrimaryKeySelective(monthuser);
+//							break;
+//						}
+//					}
 					monthUserService.updateByPrimaryKeySelective(monthuserUse);
 				}
 				this.update(charge);
