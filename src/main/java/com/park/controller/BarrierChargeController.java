@@ -1,6 +1,5 @@
 package com.park.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -324,10 +323,11 @@ public class BarrierChargeController {
 		}
 		// 判断是否有多个车
 		List<Monthuser> realMonthUsers = new ArrayList<>();
-		if (monthuserNow != null && monthuserNow.getCardnumber() != null && !monthuserNow.getCardnumber().equals("")) {
+		if (monthuserNow != null && monthuserNow.getCardnumber() != null && !monthuserNow.getCardnumber().trim().equals("")) {
 			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserNow.getParkid(),
 					monthuserNow.getCardnumber());
 			for (Monthuser monthuser : monthuserss) {
+				logger.info(cardNumber+"多个车"+monthuser.getId());
 				if (monthuser.getType().intValue() == 0) {
 					realMonthUsers.add(monthuser);
 				}
@@ -374,7 +374,8 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
+						logger.info(cardNumber+"同车位已经入场Id"+tmMonthuser.getId());
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -598,11 +599,9 @@ public class BarrierChargeController {
 			}
 
 			if (exitDate != null) {
-				// Date eDate = new
-				// SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+
 				try {
-					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
-					// Date().getTime()+"\n");
+					
 					// queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
 					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
 							isMultiFeeCtriterion, monthUserType);
@@ -902,10 +901,11 @@ public class BarrierChargeController {
 			if (!isRealMonthUser) {
 				dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 			}
-			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
+			if (isMultiCarsOneCarport &&payRet.getParkDesc().contains("包月转临停")) {
 				if (payRet.getChargeMoney() > 0) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 					dataMap.put("uT", "0");
+					dataMap.put("aT", "0");
 				}
 			}
 			
@@ -924,14 +924,7 @@ public class BarrierChargeController {
 						}
 					}
 				}
-				if (isRealMonthUser&&isMultiCarsOneCarport) {
-					for (Monthuser tmpMonthuser : monthusers) {
-						if (tmpMonthuser.getType()==0&&tmpMonthuser.getPlatecolor()!=null&&tmpMonthuser.getPlatecolor().equals("临停恢复为包月")) {
-							tmpMonthuser.setPlatecolor("出场完结");
-							monthUserService.updateByPrimaryKey(tmpMonthuser);
-						}
-					}
-				}
+	
 				
 				Poschargemac poschargemac = new Poschargemac();
 				poschargemac.setMacidout((int) info.get("macId"));
@@ -1159,7 +1152,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场")) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -1834,7 +1827,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -2477,7 +2470,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}

@@ -253,6 +253,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			tmpint++;
 			if (tmpint > 1) {
 				tmpcharge.setChargeMoney(0);
+				tmpcharge.setPaidCompleted(true);
 				tmpcharge.setRejectReason("平台清场");
 				update(tmpcharge);
 			}
@@ -625,14 +626,14 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 
 		}
 		int tmpint = 0;
-		for (PosChargeData tmpcharge : tmPosChargeDatas) {
-			tmpint++;
-			if (tmpint > 1) {
-				tmpcharge.setChargeMoney(0);
-				tmpcharge.setRejectReason("平台清场");
-				update(tmpcharge);
-			}
-		}
+//		for (PosChargeData tmpcharge : tmPosChargeDatas) {
+//			tmpint++;
+//			if (tmpint > 1) {
+//				tmpcharge.setChargeMoney(0);
+//				tmpcharge.setRejectReason("平台清场");
+//				update(tmpcharge);
+//			}
+//		}
 		return tmPosChargeDatas;
 	}
 
@@ -1361,6 +1362,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		double step2Price = criterion.getStep3price();
 		int step1Minutes = 15;
 		int step2minutes = 60;
+		step1Minutes=criterion.getTimeoutpriceinterval();
+		step2minutes=criterion.getTimeoutpriceinterval2();
 		if (charge.getIsLargeCar()) {
 			step1Price = criterion.getStep1pricelarge();
 			step2Price = criterion.getStep3pricelarge();
@@ -1374,12 +1377,23 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 					&& Integer.parseInt(startd) < Integer.parseInt(nightStartHour)) {
 				long diffs = endDate.getTime() - startDate.getTime();
 				double hours = Math.ceil((double) diffs / (1000 * 60 * step1Minutes));
-				money += hours * step1Price;
+				if (hours * step1Price>criterion.getMaxexpense()) {
+					money+=criterion.getMaxexpense();
+				}
+				else {
+					money += hours * step1Price;
+				}
+				
 				logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + hours * step1Price);
 			} else {
 				long diffs = endDate.getTime() - startDate.getTime();
 				double hours = Math.ceil((double) diffs / (1000 * 60 * step2minutes));
-				money += hours * step2Price;
+				if (hours * step1Price>criterion.getMaxexpense()) {
+					money+=criterion.getMaxexpense();
+				}
+				else {
+					money += hours * step1Price;
+				}
 				logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + hours * step2Price);
 			}
 			logger.info("计费**车牌号:" + charge.getCardNumber() + "累积费用:" + money);
@@ -1518,6 +1532,7 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			if (tmpint > 1) {
 				tmpcharge.setChargeMoney(0);
 				tmpcharge.setExitDate1(new Date());
+				tmpcharge.setPaidCompleted(true);
 				tmpcharge.setRejectReason("平台清场");
 				update(tmpcharge);
 			}

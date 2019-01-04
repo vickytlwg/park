@@ -3,6 +3,7 @@ package com.park.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -19,6 +20,7 @@ import com.park.model.PosChargeData;
 import com.park.service.HttpUtil;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 @RequestMapping("zjj")
@@ -58,6 +60,7 @@ public class ZhongjianjianController {
 		String happenTime =(String) args.get("happenTime");
 		String parkingActId =(String) args.get("parkingActId");
 		Map<String, Object> argMap=new HashMap<>();
+		Map<String, Object> result=new HashMap<>();
 		if (evt.equals("evt.car.in")) {
 			PosChargeData chargeData=new PosChargeData();
 			chargeData.setCardNumber(plateNumber);
@@ -78,17 +81,28 @@ public class ZhongjianjianController {
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportEntrance", argMap);
 		}
 		if (evt.equals("evt.car.out")) {
+			List<PosChargeData> posChargeDatas=posChargeDataService.getByCardNumberAndPark(plateNumber, 308);
+			
+			if (posChargeDatas.isEmpty()) {
+				logger.info(plateNumber+"无入场记录");
+				result.put("errorcode", 0);
+				result.put("message", "无入场记录");
+				return Utility.gson.toJson(result);
+			}
+			PosChargeData posChargeData=posChargeDatas.get(0);
 			
 			argMap.put("plateNumber", plateNumber);
 			argMap.put("parkName", parkingName);
 			argMap.put("parkId", 308);
-			argMap.put("entranceTime", happenTime);
+			argMap.put("entranceTime", new SimpleDateFormat(Constants.DATEFORMAT).format(posChargeData.getEntranceDate()));
 			String picUrlOut =(String) args.get("picUrlOut");
 			argMap.put("imagePath", picUrlOut);
 			String exitTime=(String)args.get("timeOut");
 			argMap.put("exitTime", exitTime);
+			
+			
 			//南阳
-			int diff=(int) ((new SimpleDateFormat(Constants.DATEFORMAT).parse(exitTime).getTime()-new SimpleDateFormat(Constants.DATEFORMAT).parse(happenTime).getTime())/(1000*60));
+			int diff=(int) ((new SimpleDateFormat(Constants.DATEFORMAT).parse(exitTime).getTime()-posChargeData.getEntranceDate().getTime())/(1000*60));
 			//argMap.put("count", 100);
 			argMap.put("diffTime", diff);
 			argMap.put("plateNumber", plateNumber);
@@ -97,7 +111,7 @@ public class ZhongjianjianController {
 			
 		//	String timeOut =(String) args.get("timeOut");
 			
-			PosChargeData posChargeData=posChargeDataService.getByCardNumberAndPark(plateNumber, 308).get(0);
+			
 			try {
 				if (posChargeData!=null) {
 					posChargeDataService.getDebt(plateNumber);
@@ -105,11 +119,13 @@ public class ZhongjianjianController {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			
 		
 		}
-		Map<String, Object> result=new HashMap<>();
+
 		result.put("errorcode", 0);
 		result.put("message", "成功");
 		return Utility.gson.toJson(result);
+		
 	}
 }
