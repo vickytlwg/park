@@ -199,11 +199,19 @@ label {
                                      <label class='control-label' for='parkType'>类型</label>
                                 </div>
                                 <div class='col-sm-2'>
+                                    <!--<select class='form-control' id='parkType'>-->
+                                    <!--<option value=3>路边停车场</option>-->
+                                    <!--<option value=4>充电桩</option>-->
+                                    <!--<option value=2>其它</option>-->
+                                <!--</select>-->
                                     <select class='form-control' id='parkType'>
-                                    <option value=3>路边停车场</option>
-                                    <option value=4>充电桩</option>
-                                    <option value=2>其它</option>
-                                </select>
+                                        <option value=1>经营性停车场</option>
+                                        <option value=2>路边停车场</option>
+                                        <option value=3>诱导数据发布停车场</option>
+                                        <option value=4>第三方经营性停车场</option>
+                                        <option value=5>政府单位停车场</option>
+                                        <option value=6>其它</option>
+                                    </select>
                                 </div>
 
                             </div>
