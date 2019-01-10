@@ -99,7 +99,7 @@
 		 park.longitude, park.latitude, park.alias, park.mapAddr, park.position, park.date,
 		  park.contact, park.number, park.pictureUri, park.description,park.streetId,street.name as streetName 
 		  from park left join feeCriterion on park.feeCriterionId = feeCriterion.id	
-		  left join street on street.id=park.streetId where park.type=3
+		  left join street on street.id=park.streetId 
 		order by id  limit #{low}, #{count}
 	</select>
 	
@@ -111,7 +111,7 @@
 		select count(*) from park
 	</select>
 	<select id="getOutsideParkCount"  resultType="int">
-		select count(*) from park where type=3
+		select count(*) from park 
 	</select>
 	<select id="getLastPark" resultMap="ParkMapper">
 		select * from park order by id desc limit 1;

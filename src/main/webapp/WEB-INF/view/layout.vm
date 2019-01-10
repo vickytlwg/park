@@ -161,7 +161,7 @@ li:hover {
 						onclick="window.history.go(-2)">
 						<span>返回</span>
 					</button>
-					<button type="button" class="btn btn-primary">
+					<button type="button" class="btn btn-primary" onclick="location.href='/park/login'">
 						<a href="/park/login" style="color: #ffffff"> <i
 							class="fa fa-sign-out" aria-hidden="true"></i> <span
 							style="font-weight: bold">退出</span>

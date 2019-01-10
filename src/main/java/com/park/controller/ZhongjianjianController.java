@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.park.model.Constants;
+import com.park.model.Park;
 import com.park.model.PosChargeData;
 import com.park.service.HttpUtil;
+import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -27,6 +29,8 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 public class ZhongjianjianController {
 	@Autowired
 	PosChargeDataService posChargeDataService;
+	@Autowired
+	ParkService parkService;
 
 	private static Log logger = LogFactory.getLog(ZhongjianjianController.class);
 	@RequestMapping(value = "/carIn", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
@@ -59,29 +63,37 @@ public class ZhongjianjianController {
 		String parkingName =(String) args.get("parkingName");
 		String happenTime =(String) args.get("happenTime");
 		String parkingActId =(String) args.get("parkingActId");
+		String berthCode=(String) args.get("berthCode");
 		Map<String, Object> argMap=new HashMap<>();
 		Map<String, Object> result=new HashMap<>();
+		
+		Park park=parkService.getParkById(Integer.valueOf(parkingCode));
+		
 		if (evt.equals("evt.car.in")) {
 			PosChargeData chargeData=new PosChargeData();
 			chargeData.setCardNumber(plateNumber);
 			chargeData.setEntranceDate(timeIn);
-			chargeData.setParkId(308);
+			chargeData.setParkId(Integer.valueOf(parkingCode));
 			chargeData.setParkDesc(parkingName);
+			chargeData.setPortNumber(berthCode);
 			chargeData.setUrl(picUrlIn);
 			posChargeDataService.insert(chargeData);
 			
 			//南阳推送
 			argMap.put("plateNumber", plateNumber);
 			argMap.put("parkName", parkingName);
-			argMap.put("parkId", 308);
-			argMap.put("portNumber", 2);
+			argMap.put("parkId", Integer.valueOf(parkingCode));
+			argMap.put("portNumber", berthCode);
 			argMap.put("entranceTime", happenTime);
 			argMap.put("imagePath", picUrlIn);
+			argMap.put("orderSN", String.valueOf(chargeData.getId()));
 			logger.info("evtnanyangin"+argMap);
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportEntrance", argMap);
+			parkService.updateLeftPortCount(park.getId(), (park.getPortLeftCount()-1)<0?0:(park.getPortLeftCount()-1));			
+
 		}
 		if (evt.equals("evt.car.out")) {
-			List<PosChargeData> posChargeDatas=posChargeDataService.getByCardNumberAndPark(plateNumber, 308);
+			List<PosChargeData> posChargeDatas=posChargeDataService.getByCardNumberAndPark(plateNumber, Integer.valueOf(parkingCode));
 			
 			if (posChargeDatas.isEmpty()) {
 				logger.info(plateNumber+"无入场记录");
@@ -93,24 +105,23 @@ public class ZhongjianjianController {
 			
 			argMap.put("plateNumber", plateNumber);
 			argMap.put("parkName", parkingName);
-			argMap.put("parkId", 308);
+			argMap.put("portNumber", berthCode);
+			argMap.put("parkId", Integer.valueOf(parkingCode));
 			argMap.put("entranceTime", new SimpleDateFormat(Constants.DATEFORMAT).format(posChargeData.getEntranceDate()));
 			String picUrlOut =(String) args.get("picUrlOut");
 			argMap.put("imagePath", picUrlOut);
 			String exitTime=(String)args.get("timeOut");
 			argMap.put("exitTime", exitTime);
+			argMap.put("orderSN", String.valueOf(posChargeData.getId()));
 			
 			
 			//南阳
 			int diff=(int) ((new SimpleDateFormat(Constants.DATEFORMAT).parse(exitTime).getTime()-posChargeData.getEntranceDate().getTime())/(1000*60));
-			//argMap.put("count", 100);
 			argMap.put("diffTime", diff);
 			argMap.put("plateNumber", plateNumber);
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportExit", argMap);
 			logger.info("evtnanyangout"+argMap);
-			
-		//	String timeOut =(String) args.get("timeOut");
-			
+			parkService.updateLeftPortCount(park.getId(), park.getPortLeftCount()+1);			
 			
 			try {
 				if (posChargeData!=null) {
