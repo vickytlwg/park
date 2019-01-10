@@ -204,7 +204,6 @@ label {
                                     <option value=4>充电桩</option>
                                     <option value=2>其它</option>
                                 </select>
-
                                 </div>
 
                             </div>
