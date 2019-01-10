@@ -3,8 +3,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>停车云</title>
-<link rel="shortcut icon" href="/park/img/logo-ninebit.png">
-<link rel="Bookmark" href="/park/img/logo-ninebit.png">
+<link rel="shortcut icon" href="/park/img/logo.png">
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -115,7 +114,7 @@ li:hover {
 
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 	<div class="wrapper">
 		<!-- Main Header -->
 		<header class="main-header">
@@ -191,7 +190,7 @@ li:hover {
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel">
 					<div class="pull-left image">
-						<img src="/park/img/logo-ninebit.png" class="img-circle"
+						<img src="/park/img/admin.png" class="img-circle"
 							alt="User Image">
 					</div>
 					<div class="pull-left info">
