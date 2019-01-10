@@ -1,6 +1,5 @@
 package com.park.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,6 +109,48 @@ public class BarrierChargeController {
 	@ResponseBody
 	public String touchtest(@RequestBody String aString) {
 		return aString;
+	}
+	@RequestMapping(value = "/file/upload/pictureWithUrl", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public String touchedPictureWithUrl(@RequestBody Map<String, String> args){
+		String mac = args.get("mac");
+		String cardNumber = args.get("cardNumber");
+		String base64img=args.get("base64img");
+		Map<String, Object> dataMap = new TreeMap<String, Object>();
+		List<Map<String, Object>> infos = hardwareService.getInfoByMac(mac);
+		if (infos.isEmpty()) {
+			dataMap.put("status", 1002);
+			return Utility.gson.toJson(dataMap);
+		}
+		Map<String, Object> info = infos.get(0);
+		if (info == null) {
+			dataMap.put("status", 1002);
+			return Utility.gson.toJson(dataMap);
+		}
+		String url=FileUploadService.imgBase64Upload(base64img);
+		int channelFlag = (int) info.get("channelFlag");
+		Integer parkId = (Integer) info.get("parkID");
+		List<PosChargeData> posChargeDatas=chargeSerivce.getByCardNumberAndPark(cardNumber, parkId);
+		if (posChargeDatas.isEmpty()) {
+			dataMap.put("status", 1002);
+			dataMap.put("message", "没有记录");
+			return Utility.gson.toJson(dataMap);
+		}
+		
+		if (channelFlag == 1) {
+			dataMap.put("status", 1001);
+			dataMap.put("message", "入口成功");
+			dataMap.put("body", url);
+			posChargeDatas.get(0).setUrl(url);
+			
+		}else {
+			dataMap.put("status", 1001);
+			dataMap.put("message", "出口成功");
+			dataMap.put("body", url);
+			posChargeDatas.get(0).setOutUrl(url);
+		}
+		chargeSerivce.update(posChargeDatas.get(0));
+		return Utility.gson.toJson(dataMap);
 	}
 	@RequestMapping(value = "/file/upload/touchedPicture", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
@@ -282,10 +323,11 @@ public class BarrierChargeController {
 		}
 		// 判断是否有多个车
 		List<Monthuser> realMonthUsers = new ArrayList<>();
-		if (monthuserNow != null && monthuserNow.getCardnumber() != null && !monthuserNow.getCardnumber().equals("")) {
+		if (monthuserNow != null && monthuserNow.getCardnumber() != null && !monthuserNow.getCardnumber().trim().equals("")) {
 			List<Monthuser> monthuserss = monthUserService.getByParkAndPort(monthuserNow.getParkid(),
 					monthuserNow.getCardnumber());
 			for (Monthuser monthuser : monthuserss) {
+				logger.info(cardNumber+"多个车"+monthuser.getId());
 				if (monthuser.getType().intValue() == 0) {
 					realMonthUsers.add(monthuser);
 				}
@@ -332,7 +374,8 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
+						logger.info(cardNumber+"同车位已经入场Id"+tmMonthuser.getId());
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -342,7 +385,7 @@ public class BarrierChargeController {
 				monthuserNow.setPlatecolor("多车包月入场");
 				if (isMonthUserCarIn) {
 					charge.setParkDesc(park.getName() + "-包月转临停");
-					monthuserNow.setPlatecolor("包月转为临停");
+					monthuserNow.setPlatecolor("包月转临停");
 					dataMap.put("uT", "0");
 					monthUserType=9;
 					try {
@@ -414,7 +457,7 @@ public class BarrierChargeController {
 				}
 				break;
 			case 9:
-				if (!charge.getParkDesc().contains("包月转为临停")) {
+				if (!charge.getParkDesc().contains("包月转临停")) {
 					charge.setParkDesc(park.getName() + "-临停车");
 				}
 				
@@ -483,7 +526,7 @@ public class BarrierChargeController {
 							
 				
 				//发送topic队列
-				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+				if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())||park.getDescription().contains("本地计费")) {
 					charge.setEntrance(true);
 					ActiveMqService.SendTopicWithMac(charge,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 					}
@@ -556,11 +599,9 @@ public class BarrierChargeController {
 			}
 
 			if (exitDate != null) {
-				// Date eDate = new
-				// SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+
 				try {
-					// System.out.println("出场时间为空,将要进行getDebt计算: "+new
-					// Date().getTime()+"\n");
+					
 					// queryCharges = chargeSerivce.getDebt(cardNumber, eDate);
 					queryCharges = chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
 							isMultiFeeCtriterion, monthUserType);
@@ -648,16 +689,14 @@ public class BarrierChargeController {
 				}
 				
 				Date payDate = new Date();
-				if (posChargeData.getPayType() == 0) {
+				if (posChargeData.getPayType() == 0||posChargeData.getPayType() == 1) {
 					List<Alipayrecord> alipayrecords = alipayrecordService.getByPosChargeId(posChargeData.getId());
 					if (alipayrecords.isEmpty()) {
 						// dataMap.put("my", "0.0");
-						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
+						payDate = new Date();
 					}
 					payDate = alipayrecords.get(0).getDate();
-				} else if (posChargeData.getPayType() == 1) {
-					payDate = posChargeData.getExitDate();
-				}
+				} 
 				if (payDate == null) {
 					payDate = new Date();
 				}
@@ -702,7 +741,9 @@ public class BarrierChargeController {
 						return Utility.createJsonMsgWithoutMsg(1003, dataMap);
 					}
 					// 重新查询未缴费
-					queryCharges = chargeSerivce.getDebt(cardNumber);
+					//queryCharges = chargeSerivce.getDebt(cardNumber);
+					queryCharges=chargeSerivce.getDebtWithData(cardNumber, parktoaliparks, realMonthUsers, park,
+							isMultiFeeCtriterion, monthUserType);
 				}
 			}
 			
@@ -825,7 +866,7 @@ public class BarrierChargeController {
 				ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
 			}
 			//发送到topic
-			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())) {
+			if (ArrayUtils.contains(Constants.ToQuenePark, parkId.intValue())||park.getDescription().contains("本地计费")) {
 				payRet.setEntrance(false);
 			ActiveMqService.SendTopicWithMac(payRet,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 			}
@@ -860,10 +901,11 @@ public class BarrierChargeController {
 			if (!isRealMonthUser) {
 				dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 			}
-			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
+			if (isMultiCarsOneCarport &&payRet.getParkDesc().contains("包月转临停")) {
 				if (payRet.getChargeMoney() > 0) {
 					dataMap.put("my", String.valueOf(payRet.getChargeMoney()));
 					dataMap.put("uT", "0");
+					dataMap.put("aT", "0");
 				}
 			}
 			
@@ -874,13 +916,21 @@ public class BarrierChargeController {
 //				poschargemac.setMacidout((int) info.get("macId"));
 //				poschargemac.setPoschargeid(payRet.getId());
 //				posChargeMacService.updateByPosChargeId(poschargemac);
+				if (isRealMonthUser&&isMultiCarsOneCarport) {
+					for (Monthuser tmpMonthuser : monthusers) {
+						if (tmpMonthuser.getType()==0&&tmpMonthuser.getPlatecolor()!=null&&tmpMonthuser.getPlatecolor().equals("多车包月入场")) {
+							tmpMonthuser.setPlatecolor("出场完结");
+							monthUserService.updateByPrimaryKey(tmpMonthuser);
+						}
+					}
+				}
+	
+				
 				Poschargemac poschargemac = new Poschargemac();
 				poschargemac.setMacidout((int) info.get("macId"));
 				poschargemac.setPoschargeid(payRet.getId());
 				posChargeMacService.insertSelective(poschargemac);
-				logger.info(cardNumber + "出场成功!" + dataMap.toString());
-				
-				
+				logger.info(cardNumber + "出场成功!" + dataMap.toString());				
 				return Utility.createJsonMsgWithoutMsg(1001, dataMap);
 			} else {
 				return Utility.createJsonMsg(1001, "ok");
@@ -1102,7 +1152,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场")) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -1777,7 +1827,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}
@@ -2420,7 +2470,7 @@ public class BarrierChargeController {
 			Boolean isMonthUserCarIn = false;
 			if (isMultiCarsOneCarport && isRealMonthUser && realMonthUsers.size() > 1) {
 				for (Monthuser tmMonthuser : realMonthUsers) {
-					if (tmMonthuser.getPlatecolor().equals("多车包月入场") || tmMonthuser.getPlatecolor().equals("临停恢复为包月")) {
+					if (tmMonthuser.getPlatecolor()!=null&&tmMonthuser.getPlatecolor().equals("多车包月入场") ) {
 						if (!tmMonthuser.getPlatenumber().equals(cardNumber)) {
 							isMonthUserCarIn = true;
 						}

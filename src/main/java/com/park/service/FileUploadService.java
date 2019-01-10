@@ -14,8 +14,7 @@ import com.park.model.Constants;
 public class FileUploadService {
 
 	public static String imgBase64Upload(String base64img){
-Decoder decoder=Base64.getDecoder();
-		
+		Decoder decoder=Base64.getDecoder();		
 		// Base64解码      
         byte[] imageByte = null;
         try {
