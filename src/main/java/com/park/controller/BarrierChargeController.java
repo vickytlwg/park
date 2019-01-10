@@ -17,6 +17,7 @@ import com.park.model.*;
 import com.park.service.*;
 import com.sun.istack.internal.logging.Logger;
 
+import org.apache.activemq.artemis.core.protocol.core.impl.wireformat.SessionSendMessage;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -224,6 +225,24 @@ public class BarrierChargeController {
 		}else {
 			List<PosChargeData> queryCharges = chargeSerivce.getDebt(cardNumber);
 		}
+	}
+	
+	public void CarInSendMq(int parkId,PosChargeData posChargeData,Park park,List<Parktoalipark> parktoaliparks ) {
+		
+		//贵州队列发送
+		if (parkId==334) {
+			Map<String, String> guiyang = new HashMap<>();
+			guiyang.put("parkId", "f664ebf8-e89c-4c8d-8559-94bce30f42de");
+			guiyang.put("type", "in");
+	//		guiyang.put("plateNum", cardNumber);
+			guiyang.put("enterTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			ActiveMqService.SendWithQueueName(JsonUtils.objectToJson(guiyang), "guizhou");
+		}
+		
+		
+	}
+	public void CarOutSendMq() {
+		
 	}
 	@RequestMapping(value = "touched", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
@@ -474,9 +493,7 @@ public class BarrierChargeController {
 						parkcarauthority2.setCount(parkcarauthority2.getCount()+1);
 						parkcarauthority2Service.updateByPrimaryKey(parkcarauthority2);
 					}
-				}
-				
-				
+				}								
 				break;
 			default:
 				break;
@@ -530,10 +547,7 @@ public class BarrierChargeController {
 					charge.setEntrance(true);
 					ActiveMqService.SendTopicWithMac(charge,String.valueOf(parkId), mac,park.getPortLeftCount(),monthUserType);
 					}
-//				Poschargemac poschargemac = new Poschargemac();
-//				poschargemac.setMacidenter((int) info.get("macId"));
-//				poschargemac.setPoschargeid(charge.getId());
-//				posChargeMacService.insertSelective(poschargemac);
+
 				try {
 
 					if (!parktoaliparks.isEmpty()) {

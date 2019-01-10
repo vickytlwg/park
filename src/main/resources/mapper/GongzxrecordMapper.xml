@@ -27,6 +27,9 @@
     from gongzxrecord
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByTradeNumber" resultMap="BaseResultMap" >
+  select * from gongzxrecord where tradeNumber = #{tradeNumber} limit 1
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from gongzxrecord
     where id = #{id,jdbcType=INTEGER}
@@ -196,4 +199,6 @@
       leaveTime = #{leavetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
 </mapper>

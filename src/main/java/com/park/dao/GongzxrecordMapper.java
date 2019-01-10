@@ -1,5 +1,9 @@
 package com.park.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.park.model.Gongzxrecord2;
 
 public interface GongzxrecordMapper {
@@ -14,4 +18,6 @@ public interface GongzxrecordMapper {
     int updateByPrimaryKeySelective(Gongzxrecord2 record);
 
     int updateByPrimaryKey(Gongzxrecord2 record);
+    
+    List<Gongzxrecord2> selectByTradeNumber(@Param("tradeNumber")String tradeNumber);
 }
