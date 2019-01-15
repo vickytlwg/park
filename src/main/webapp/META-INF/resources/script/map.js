@@ -35,7 +35,7 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
                 width : 90,     // 信息窗口宽度
                 height: 100,     // 信息窗口高度
                 title : "停车场信息:" , // 信息窗口标题
-                enableMessage:true,//设置允许信息窗发送短息
+                enableMessage:true//设置允许信息窗发送短息
                };
     function addClickHandler(content,marker){
         marker.addEventListener("click",function(e){
