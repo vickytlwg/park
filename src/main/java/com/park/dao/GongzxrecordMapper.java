@@ -1,5 +1,11 @@
 package com.park.dao;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.park.model.GongzxRecord;
 import com.park.model.Gongzxrecord2;
 
 public interface GongzxrecordMapper {
@@ -14,4 +20,6 @@ public interface GongzxrecordMapper {
     int updateByPrimaryKeySelective(Gongzxrecord2 record);
 
     int updateByPrimaryKey(Gongzxrecord2 record);
+    
+	public List<Gongzxrecord2> getByParkDatetime(@Param("startDate")Date startDate,@Param("endDate")Date endDate);
 }

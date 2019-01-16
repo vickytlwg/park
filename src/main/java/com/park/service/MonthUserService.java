@@ -30,6 +30,8 @@ public interface  MonthUserService {
 	    
 	    int getCountByParkId(int parkId);
 	    
+	    List<Monthuser> getByPlateNumberAndParkId(int parkId,String platenumber);
+	    
 	    List<Monthuser> getByPlateNumberBytype(String platenumber,int type,String owner,String certificatetype);
 	    
 	    List<Monthuser> getByStartAndCount(int start,int count);

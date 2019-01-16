@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.park.model.PosChargeData;
-
 import com.park.model.Park;
 
 @Repository
@@ -41,6 +40,8 @@ public interface PosChargeDataDAO {
 	public List<PosChargeData> getByParkIdAndCardNumber(@Param("parkId")int parkId,@Param("cardNumber")String cardNumber);
 	
 	public List<PosChargeData> getByCardNumberAndPark(@Param("cardNumber")String cardNumber,@Param("parkId")int parkId);
+	
+	public List<PosChargeData> getByCardNumberAndParkName(@Param("cardNumber")String cardNumber,@Param("parkName")String parkName,@Param("parkId")int parkId);
 	
 	public List<PosChargeData> getPageByParkId(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count);
 	
@@ -87,6 +88,10 @@ public interface PosChargeDataDAO {
 	public List<PosChargeData> getByCardNumberAndPort(@Param("cardNumber")String cardNumber,@Param("portNumber")Integer portNumber);
 	
 	public List<PosChargeData> getByParkName(@Param("parkName")String parkName);
+	
+	public List<PosChargeData> getByCarNumberAndPN(@Param("cardNumber")String cardNumber,@Param("parkName")String parkName);
+	
+	public List<PosChargeData> getByParkDatetime(@Param("cardNumber")String cardNumber,@Param("startDate")String startDate,@Param("endDate")String endDate);
 	
 	public Map<String, Object> calInByParkAndRange(@Param("parkId")int parkId,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
 	

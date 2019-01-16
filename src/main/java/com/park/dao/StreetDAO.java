@@ -6,9 +6,13 @@ import org.apache.ibatis.annotations.Param;
 
 import com.park.model.Street;
 
+
 public interface StreetDAO {
 	
     int deleteByPrimaryKey(Integer id);
+    
+    //多选删除
+    int deleteByPrimaryKeyId(int[] array);
 
     int insert(Street record);
 

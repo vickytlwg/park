@@ -73,36 +73,53 @@ function($scope,$http,$uibModal,textModal,$timeout){
             }
         });
     };
+    
+    //删除多条
     $scope.deleteStreet=function(){
-        if($scope.checkedIndex==-1){
+    	if($scope.checkedIndex==-1){
             alert("请选择");
             return;
         }
-        var id=$scope.streets[$scope.checkedIndex].id;
-        $http({
-            url:'/park/street/delete/'+id,
-            method:'get'
-        }).success(function(response){
-            if(response.status==1001)
-            {
-                textModal.open($scope, "成功","操作成功");
-                $scope.refreshStreet();
-            }
-            else{
-                textModal.open($scope, "失败","操作失败");
-            }
-        }).error(function(){
-             textModal.open($scope, "失败","操作失败");
-        });
+    	var id = $scope.users[$scope.checkedIndex].id;
+        /*if($scope.selected[0]==""||$scope.selected.length==0){
+            alert("请选择");
+            return;
+        }
+	        	id=$scope.selected;*/
+/*	        	console.log(id);*/
+	        	$http({
+	                url:'/park/street/deleteAll/'+id,
+	                method:'get'
+	            }).success(function(response){
+	                if(response.status==1001)
+	                {
+	                	textModal.open($scope, "成功","删除成功");
+	                    $scope.refreshStreet();
+	                }else{
+	                    textModal.open($scope, "失败","删除失败");
+	                }
+	            }).error(function(){
+	                 textModal.open($scope, "失败","操作失败");
+	            });
     };
+    //多选checkbox框
+    /*$scope.selected = [];
+    $scope.deleteSelection = function ($event, id) {
+        var checkbox = $event.target;
+        var checked = checkbox.checked;
+        if (checked) {
+            $scope.selected.push(id);
+        }else{
+        	var idx = $scope.selected.indexOf(id) ;
+			$scope.selected.splice(idx,1) ;
+        }
+    }
+    $scope.isSelected = function(id){
+         return $scope.selected.indexOf(id)>=0;
+    }*/
+    
+    //删除一条
     $scope.selectChange=function(index){
-          
-           if($scope.streets[index].checked){
-               $scope.streets[index].checked=false;
-           }
-           else{
-               $scope.streets[index].checked=true;
-           }
         if($scope.streets[index].checked){
             $scope.checkedIndex = index;
             return;
@@ -174,7 +191,7 @@ streetApp.controller("streetModify",function($scope, textModal,$modalInstance, $
                    $scope.result="";
                     
                     $modalInstance.close('ok');
-               },2000);
+               },500);
                                         
                $scope.$parent.refreshStreet();
               

@@ -21,6 +21,8 @@ public interface GongzxRecordDao {
 	
 	public List<GongzxRecord> getByParkadmin(String userName);
 	
+	public List<GongzxRecord> getByParkDatetime(@Param("carNumber")String carNumber,@Param("startDate")Date startDate,@Param("endDate")Date endDate);
+	
 	public List<GongzxRecord> getPageByParkId(@Param("parkId")int parkId,@Param("start")int start,@Param("count")int count);
 	
 	public List<GongzxRecord> getPageByPark(@Param("username")String username,@Param("start")int start,@Param("count")int count);
@@ -28,6 +30,8 @@ public interface GongzxRecordDao {
 	public List<GongzxRecord> getPageByParkusername(@Param("username")String username,@Param("start")int start,@Param("count")int count);
 	
 	public List<GongzxRecord> getByCarNumber(@Param("carNumber")String carNumber);
+	
+	public List<GongzxRecord> getByCarNumberAndPN(@Param("carNumber")String carNumber,@Param("parkName")String parkName);
 	
 	public List<GongzxRecord> getByCarNumberAndPark(@Param("carNumber")String carNumber,@Param("parkId")int parkId);
 	

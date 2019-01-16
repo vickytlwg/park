@@ -276,6 +276,17 @@
   	order by monthUser.id desc
   </select>
   
+  <select id="getByPlateNumberAndParkId" resultType="com.park.model.Monthuser">
+  	select monthUser.id as id,monthUser.parkId as parkid,monthUser.type as type,
+  	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,
+  	monthUser.platecolor as platecolor,monthUser.certificatetype as certificatetype,monthUser.certificatenumber as certificatenumber,
+  	monthUser.starttime as starttime,monthUser.endtime as endtime,monthUser.payment as payment,monthUser.status as status
+  	from monthUser where 
+	monthUser.parkId=#{parkId} and 
+  	monthUser.platenumber like '%${platenumber}%'  
+  	order by monthUser.id desc
+  </select>
+  
     <select id="getByUsernameAndPark" resultType="com.park.model.Monthuser">
   	select monthUser.id as id,monthUser.parkId as parkid,park.name as parkname,monthUser.type as type,
   	monthUser.cardnumber as cardnumber,monthUser.owner as owner,monthUser.platenumber as platenumber,

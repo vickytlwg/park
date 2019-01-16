@@ -69,4 +69,17 @@ public class StreetServiceImpl implements StreetService {
 		return streetDao.getByArea(areaId);
 	}
 
+
+	@Override
+	public int deleteByPrimaryKeyId(String array) {
+		// TODO Auto-generated method stub
+		String[] idss=array.split(",");
+		int[] id=new int[idss.length];
+		for(int i=0;i<idss.length;i++){
+			id[i]=Integer.parseInt(idss[i]);
+		}
+		int count=streetDao.deleteByPrimaryKeyId(id);
+		return count;
+	}
+
 }

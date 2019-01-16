@@ -5,7 +5,10 @@ import java.util.List;
 import com.park.model.Street;
 
 public interface StreetService {
-	 int deleteByPrimaryKey(Integer id);
+	 	int deleteByPrimaryKey(Integer id);
+	 	
+	 	//多选删除
+	 	int deleteByPrimaryKeyId(String array);
 
 	    int insert(Street record);
 

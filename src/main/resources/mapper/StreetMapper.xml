@@ -25,6 +25,12 @@
     delete from street
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  	<update id="deleteByPrimaryKeyId" parameterType="java.lang.Integer">
+		delete from street where id in  
+		 <foreach collection="array" item="item" index="index" 
+		  open="(" separator="," close=")">#{item} 
+		 </foreach>
+	</update>
   <insert id="insert" parameterType="com.park.model.Street" >
     insert into street (id, number, name, 
       areaId, type, contact, 

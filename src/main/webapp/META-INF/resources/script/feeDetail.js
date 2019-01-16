@@ -16,10 +16,10 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         }
     };
  $scope.searchDate=new Date().format('yyyy-MM-dd');
- $scope.startDate=new Date().format('yyyy-MM-dd');
- $scope.endDate=new Date().format('yyyy-MM-dd');
+ $scope.startDate=new Date().format('yyyy-MM-dd 00:00:00');
+ $scope.endDate=new Date().format('yyyy-MM-dd 23:59:59');
       var dateInitial=function(){
-        $('.date').datepicker({
+        /*$('.date').datepicker({
             autoClose: true,
             dateFormat: "yyyy-mm-dd",
             days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
@@ -32,7 +32,15 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             weekStart: 1,
             yearSuffix: "年",
             isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}        
-        });
+        });*/
+    	  $('#date1').datetimepicker({
+     		   format: 'YYYY-MM-DD HH:mm:ss',
+     		   locale: moment.locale('zh-cn')
+     	 	});
+      	   $('#date2').datetimepicker({
+     		   format: 'YYYY-MM-DD HH:mm:ss',
+     		   locale: moment.locale('zh-cn')
+     	 	});
     };  
    dateInitial();
      $scope.paginationConf = {
@@ -91,9 +99,11 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             return;
         }
         $http({
-            url:'getByCardnumberAuthority',
+            url:'getByCarNumberAndPN',
             method:'post',
-            data:{"cardNumber":$scope.searchText}
+            data:{"cardNumber":$scope.searchText,
+            	"parkName":$scope.searchText,
+            	"parkId":parseInt($('#park-select').val())}
         }).success(function(response){
             if(response.status==1001){
                getInitail(response.body);
@@ -107,6 +117,37 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 			$scope.searchByCardnumber();
 		}
 	};
+	
+	$scope.searchcardNumber="";
+	$scope.searchDateTime=function(){
+		if($scope.searchcardNumber==""||$scope.searchcardNumber==undefined){
+			alert("车牌号不能为空！");
+            return;
+        }else if($scope.startDate==""||$scope.startDate==undefined){
+        	alert("进场时间不能为空！");
+        	return;
+        }
+    	$http({
+    		url:'/park/pos/charge/getByParkDatetime',
+	    	method:'post',
+	    	data:{"cardNumber":$scope.searchcardNumber,
+	    			"startDate":$("#date1").val(),
+	    			"endDate":$("#date2").val()
+	    		}
+    	}).success(function(response){
+            if(response.status==1001){
+                getInitail(response.body);
+            }
+        });
+    };
+    $scope.carnumberkeyup = function(e) {
+		var keycode = window.event ? e.keyCode
+				: e.which;
+		if (keycode == 13) {
+			$scope.searchDateTime();
+		}
+	};
+	
     $scope.getExcelByDay=function(){  
          $window.location.href="getExcelByDay?date="+$scope.searchDate;
         };

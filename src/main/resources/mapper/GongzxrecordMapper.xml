@@ -21,6 +21,12 @@
     id, carNumber, cardNumber, arriveTime, parkId, parkName, stopType, shouldCharge, 
     discount, realPay, picturePath, other, tradeNumber, leaveTime
   </sql>
+  <select id="getByParkDatetime" resultMap="BaseResultMap">
+		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+		from gongzxrecord
+		LEFT JOIN park AS p ON parkId=p.id where arriveTime between #{startDate} and #{endDate} order by leaveTime desc
+		
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
