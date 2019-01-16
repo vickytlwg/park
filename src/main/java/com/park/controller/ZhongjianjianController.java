@@ -1,7 +1,7 @@
 package com.park.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,6 @@ import com.park.service.HttpUtil;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 @RequestMapping("zjj")
@@ -65,7 +64,10 @@ public class ZhongjianjianController {
 		String parkingActId =(String) args.get("parkingActId");
 		String berthCode=(String) args.get("berthCode");
 		Map<String, Object> argMap=new HashMap<>();
+		Map<String, Object> argMap2=new HashMap<>();
 		Map<String, Object> result=new HashMap<>();
+		
+		
 		
 		Park park=parkService.getParkById(Integer.valueOf(parkingCode));
 		
@@ -89,8 +91,11 @@ public class ZhongjianjianController {
 			argMap.put("orderSN", String.valueOf(chargeData.getId()));
 			logger.info("evtnanyangin"+argMap);
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportEntrance", argMap);
-			parkService.updateLeftPortCount(park.getId(), (park.getPortLeftCount()-1)<0?0:(park.getPortLeftCount()-1));			
-
+			int leftcount=(park.getPortLeftCount()-1)<0?0:(park.getPortLeftCount()-1);
+			parkService.updateLeftPortCount(park.getId(), leftcount>park.getPortCount()?park.getPortCount():leftcount);	
+			argMap2.put("id", park.getId());
+			argMap2.put("count",(park.getPortLeftCount()-1)<0?0:(park.getPortLeftCount()-1));
+			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportParkingSpace", argMap2);
 		}
 		if (evt.equals("evt.car.out")) {
 			List<PosChargeData> posChargeDatas=posChargeDataService.getByCardNumberAndPark(plateNumber, Integer.valueOf(parkingCode));
@@ -118,22 +123,30 @@ public class ZhongjianjianController {
 			//南阳
 			int diff=(int) ((new SimpleDateFormat(Constants.DATEFORMAT).parse(exitTime).getTime()-posChargeData.getEntranceDate().getTime())/(1000*60));
 			argMap.put("diffTime", diff);
+			Date exitDate=new Date();
+			if (diff<0) {
+				exitDate=posChargeData.getEntranceDate();
+				posChargeData.setOther2("高桩视频人工审核");
+				posChargeDataService.update(posChargeData);
+			}
 			argMap.put("plateNumber", plateNumber);
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportExit", argMap);
 			logger.info("evtnanyangout"+argMap);
 			parkService.updateLeftPortCount(park.getId(), park.getPortLeftCount()+1);			
+			argMap2.put("id", park.getId());
+			argMap2.put("count",(park.getPortLeftCount()+1)>park.getPortCount()?park.getPortCount():(park.getPortLeftCount()+1));
 			
 			try {
 				if (posChargeData!=null) {
-					posChargeDataService.getDebt(plateNumber);
+					posChargeDataService.queryDebtWithParkId(posChargeData.getCardNumber(), exitDate, posChargeData.getParkId());
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
-			}
-			
-		
+			}					
 		}
-
+		
+		
+		HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportParkingSpace", argMap2);
 		result.put("errorcode", 0);
 		result.put("message", "成功");
 		return Utility.gson.toJson(result);
