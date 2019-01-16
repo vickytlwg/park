@@ -22,6 +22,8 @@ import com.park.service.HttpUtil;
 import com.park.service.ParkService;
 import com.park.service.PosChargeDataService;
 import com.park.service.Utility;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 @Controller
 @RequestMapping("zjj")
@@ -123,12 +125,16 @@ public class ZhongjianjianController {
 			//南阳
 			int diff=(int) ((new SimpleDateFormat(Constants.DATEFORMAT).parse(exitTime).getTime()-posChargeData.getEntranceDate().getTime())/(1000*60));
 			argMap.put("diffTime", diff);
+			posChargeData.setExitDate(exitTime);
 			Date exitDate=new Date();
 			if (diff<0) {
 				exitDate=posChargeData.getEntranceDate();
-				posChargeData.setOther2("高桩视频人工审核");
-				posChargeDataService.update(posChargeData);
+				posChargeData.setOther2("高桩视频人工审核");				
+				posChargeData.setExitDate1(exitDate);
+				argMap.put("exitTime", new SimpleDateFormat(Constants.DATEFORMAT).format(exitDate));
 			}
+			
+			posChargeDataService.update(posChargeData);
 			argMap.put("plateNumber", plateNumber);
 			HttpUtil.postNanyang("http://henanguanchao.com/v1/StreetParking/ReportExit", argMap);
 			logger.info("evtnanyangout"+argMap);
