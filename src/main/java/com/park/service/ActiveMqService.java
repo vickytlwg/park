@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.park.controller.BarrierChargeController;
 import com.park.model.AdminArgs;
@@ -13,6 +15,10 @@ import com.park.model.PosChargeData;
 import com.park.model.QueueDataCharge;
 
 public class ActiveMqService {
+	
+	@Value("#{prop.ActiveMqUrl}")
+	private String url;
+	
 	private static Log logger=LogFactory.getLog(ActiveMqService.class);
 	public static void SendPosChargeData(String data){		
 		Map<String, Object> args=new HashMap<>();

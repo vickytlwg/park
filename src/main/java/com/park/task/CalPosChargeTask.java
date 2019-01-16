@@ -53,7 +53,7 @@ public class CalPosChargeTask {
 	
 	@Scheduled(cron="0 0 18/1  * * ? ")
 	public void cal(){	
-		if (isNinebit) {
+		if (!isNinebit) {
 			return;
 		}
 		List<PosChargeData> charges = chargeService.getUnCompleted();
@@ -98,7 +98,7 @@ public class CalPosChargeTask {
 	}
 	@Scheduled(cron="0 0/5 * * * ? ")
 	public void parkUpdateFromXml() throws DocumentException{
-		if (isNinebit) {
+		if (!isNinebit) {
 			return;
 		}
 		javaBeanXml.updateParkFromXml();

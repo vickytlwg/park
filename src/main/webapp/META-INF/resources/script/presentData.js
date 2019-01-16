@@ -16,11 +16,10 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
       $scope.dayOnlineCarportCount += value.onlinecarportcount;
       $scope.dayCarportLeftCount += value.carportleftcount;
       $scope.dayOutCount += value.outcount;
+      $scope.dayAmountMoney=parseInt($scope.dayAmountMoney);
     });
   };
-//  $scope.toParkInfo = function () {
-//    parent.location.href = "/park/parkingInfo/";
-//  };
+
   getDataService.getZoneCenterInfo().then(function (result) {
     $scope.zoneCenters = result;
     $scope.processData(result);
@@ -34,6 +33,7 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
   var getParkChargeByTime = function () {
     getDataService.getParkChargeByTime(startDate, endDate).then(function (result) {
       $scope.data = result['body'];
+      $scope.data.totalAmount=parseInt($scope.data.totalAmount);
       //console.log($scope.data);
       var fakeData = {
         'status': 0,

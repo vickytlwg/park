@@ -135,6 +135,7 @@ public class WeiPayController {
 					posChargeData.setPaidCompleted(true);
 					posChargeData.setPaidMoney(0);
 					posChargeData.setRejectReason("微信支付清场");
+					posChargeData.setPayType(1);
 					poschargedataService.update(posChargeData);
 				}
 			}

@@ -1,17 +1,18 @@
 <script type="text/javascript"
         src="http://api.map.baidu.com/api?v=2.0&ak=c7A2jm3enN7T0s5V8QbDHx85"></script>
 <script type="text/javascript"
-        src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
-<script type="text/javascript"
         src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
 <script type="text/javascript"
         src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
 <link rel="stylesheet"
-      href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
+      href="/park/css/SearchInfoWindow_min.css?v=0.6"/>
 <script type="text/javascript" src="/park/script/web_js.js"></script>
 <script type="text/javascript"
         src="/park/script/jquery.SuperSlide.2.1.1.js"></script>
-<script src="/park/script/map.js?v=2.3" type="text/javascript"></script>
+<script src="/park/script/map.js?v=0.7" type="text/javascript"></script>
+<script src="/park/plugins/InfoBox_min.js"></script>
+<script src="/park/plugins/SearchInfoWindow_min.js?v=0.5"></script>
+
 <link rel="stylesheet" href="/park/css/jquery.jscrollpane.css"
       type="text/css">
 
@@ -75,6 +76,20 @@
   input::-webkit-input-placeholder {
     color: #fff;
   }
+.infoBoxContent{font-size:20px;}
+.infoBoxContent .title{background:#c7d9bc no-repeat;height:34px;width:270px;}
+.infoBoxContent .title strong{font-size:16px;line-height:34px;padding:0 10px 0 15px;}
+.infoBoxContent .title .price{color:#FFFF00;}
+.infoBoxContent .list{width:270px;height:150px;}
+.infoBoxContent .list ul{margin:0;padding:5px;list-style:none;}
+.infoBoxContent .list ul li {float:left;width:255px;border-bottom:solid 1px #4FA5FC;padding:5px 0;}
+.infoBoxContent .list ul .last{border:none;}
+.infoBoxContent .list ul img{width:53px;height:42px;margin-right:5px;}
+.infoBoxContent .list ul p{padding:0;margin:0;}
+.infoBoxContent .left{float:left;padding-left: 15px;
+}
+.infoBoxContent .rmb{float:right;color:#EB6100;font-size:20px;font-weight:bold;padding-right: 15px;}
+.infoBoxContent a{color:#0041D9;text-decoration:none;}
 </style>
 <div class="content-wrapper">
   <section class="content-header">

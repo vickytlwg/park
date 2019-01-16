@@ -136,45 +136,64 @@ public class NjparkController {
 	@RequestMapping(value="carLeave",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String carLeave(@RequestBody Map<String, Object> args) throws ParseException{
+		logger.info("carleave:"+args.toString());
 		Njcarfeerecord njcarfeerecord=new Njcarfeerecord();
-		GongzxRecord gongzxRecord=new GongzxRecord();
+		Gongzxrecord2 gongzxRecord2=new Gongzxrecord2();
 	//	njcarfeerecord.setTradedate(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("tradeDate")));
 		njcarfeerecord.setCarnumber((String) args.get("carNumber"));
-		gongzxRecord.setCardNumber(njcarfeerecord.getCarnumber());
+		gongzxRecord2.setCarnumber(njcarfeerecord.getCarnumber());
+		
+		logger.info((String) args.get("leaveTime"));
 		njcarfeerecord.setCartype(args.get("carType")!=null?(String) args.get("carType"):"");
 		
 		try {
 			njcarfeerecord.setArrivetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("arriveTime")));
 		} catch (Exception e) {
 			// TODO: handle exception
-			njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
-		}		
+		//	njcarfeerecord.setArrivetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String) args.get("arriveTime")));
+		}
+		
+		njcarfeerecord.setLeavetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String) args.get("leaveTime")));
+		
 		njcarfeerecord.setParkid((int)args.get("parkId"));
 		njcarfeerecord.setParkname(args.get("parkName")!=null?(String) args.get("parkName"):"");
 		njcarfeerecord.setTradenumber((String) args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
 		njcarfeerecord.setStoptype((String) args.get("stopType")!=null?(String) args.get("stopType"):"");
-		njcarfeerecord.setPaidmoney(args.get("paidMoney")!=null?(int)args.get("paidMoney"):0);
+		njcarfeerecord.setPaidmoney(args.get("realPay")!=null?(int)args.get("realPay"):0);
 		njcarfeerecord.setPicturepath(args.get("picturePath")!=null?(String) args.get("picturePath"):"");
 		
-		gongzxRecord.setParkId(njcarfeerecord.getParkid());
-		gongzxRecord.setArriveTime(njcarfeerecord.getArrivetime());
-		gongzxRecord.setParkName(njcarfeerecord.getParkname());
-		gongzxRecord.setStopType(njcarfeerecord.getStoptype());
-		gongzxRecord.setRealPay(Double.valueOf(String.valueOf(njcarfeerecord.getPaidmoney())));
-		gongzxRecord.setPicturePath(njcarfeerecord.getPicturepath());
-		gongzxRecordService.insert(gongzxRecord);
+		gongzxRecord2.setParkid(njcarfeerecord.getParkid());
+		gongzxRecord2.setArrivetime(njcarfeerecord.getArrivetime());
+		gongzxRecord2.setLeavetime(njcarfeerecord.getLeavetime());
+		gongzxRecord2.setParkname(njcarfeerecord.getParkname());
+		gongzxRecord2.setStoptype(njcarfeerecord.getStoptype());
+		gongzxRecord2.setRealpay(Double.valueOf(String.valueOf(njcarfeerecord.getPaidmoney())));
+		gongzxRecord2.setPicturepath(njcarfeerecord.getPicturepath());
 		
+//		gongzxRecordService.insert(gongzxRecord);
+	//	logger.info("test:"+gongzxRecord2);
+		gongzxrecordMapper.insertSelective(gongzxRecord2);
+		
+		List<Gongzxrecord2> selectrecord2s=gongzxrecordMapper.selectByTradeNumber(njcarfeerecord.getTradenumber());
+		
+		if (selectrecord2s.isEmpty()) {
+			return Utility.createJsonMsg(1002, "无入场信息");
+		}
+		
+		Gongzxrecord2 selectrecord2=selectrecord2s.get(0);
+		selectrecord2.setLeavetime(njcarfeerecord.getLeavetime());
 		List<Njcarfeerecord> njcarfeeSelecteds=njcarFeeRecordService.selectByTradeNumber(args.get("tradeNumber")!=null?(String) args.get("tradeNumber"):"");
 		if (njcarfeeSelecteds.isEmpty()) {
 			return Utility.createJsonMsg(1002, "无入场信息");
 		}
 		njcarfeerecord=njcarfeeSelecteds.get(0);
+		gongzxrecordMapper.updateByPrimaryKey(selectrecord2);
+		
 		try {
 			njcarfeerecord.setLeavetime(new SimpleDateFormat(Constants.DATEFORMAT).parse((String)args.get("leaveTime")));
 		} catch (Exception e) {
 			// TODO: handle exception
 			njcarfeerecord.setLeavetime(new SimpleDateFormat("yyyyMMddHHmmss").parse((String)args.get("leaveTime")));
-
 			
 		}
 		njcarfeerecord.setShouldcharge(args.get("shouldCharge")!=null?(int) args.get("shouldCharge"):0);

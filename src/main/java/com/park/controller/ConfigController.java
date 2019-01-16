@@ -25,8 +25,13 @@ import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 @RequestMapping("config")
 public class ConfigController {
 	
+	
+	private static String url;
+	
 	@Value("#{prop.ActiveMqUrl}")
-	private String url;
+	public void seturl(String activeurl) {
+		url=activeurl;
+	}
 	@RequestMapping("layout")
 	@ResponseBody
 	public String layout(HttpServletRequest request,HttpServletResponse response){
@@ -72,6 +77,7 @@ public class ConfigController {
 	
 	@RequestMapping("getvalue")
 	@ResponseBody String getvalue() {
+		
 		return url;
 	}
 	

@@ -68,14 +68,6 @@
 	color: rgba(0, 0, 0, 0.15)
 }
 
-/* .small-box:hover {
-	text-decoration: none;
-	color: #000
-}
-
-.small-box:hover .icon {
-	font-size: 95px
-} */
 
 @media ( max-width :767px) {
 	.small-box {

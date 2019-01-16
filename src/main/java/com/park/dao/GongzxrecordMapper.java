@@ -21,5 +21,5 @@ public interface GongzxrecordMapper {
 
     int updateByPrimaryKey(Gongzxrecord2 record);
     
-	public List<Gongzxrecord2> getByParkDatetime(@Param("startDate")Date startDate,@Param("endDate")Date endDate);
+    List<Gongzxrecord2> selectByTradeNumber(@Param("tradeNumber")String tradeNumber);
 }

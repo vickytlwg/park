@@ -76,6 +76,7 @@ public String index(ModelMap modelMap, HttpServletRequest request, HttpSession s
 	}
 	return "monthUser";
 }
+
 @RequestMapping(value="order")
 public String indexOrder(ModelMap modelMap, HttpServletRequest request, HttpSession session){
 	String username = (String) session.getAttribute("username");

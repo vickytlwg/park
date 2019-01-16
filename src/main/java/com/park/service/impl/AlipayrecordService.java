@@ -105,71 +105,77 @@ public class AlipayrecordService implements com.park.service.AlipayrecordService
 		AlipayChargeInfo alipayChargeInfo=new AlipayChargeInfo();
 		alipayChargeInfo.setAlipayClient(alipayClient);
 		alipayChargeInfo.setServiceProvideId("2088721707329444");
-		if (!charges.isEmpty()&&charges.get(0).getParkDesc()!=null&&charges.get(0).getParkDesc().contains("美凯龙")) {
-			charges.clear();
-		}
-		if (charges.isEmpty()) {//查找红星美凯龙的支付信息
-			alipayChargeInfo.setServiceProvideId("2088821579783141");
-			List<Njcarfeerecord> njcarfeerecords=njCarFeeRecordService.selectByCarNumber(carNumber);
-			if (njcarfeerecords.isEmpty()) {
-				alipayChargeInfo.setValidate(false);
-				return alipayChargeInfo;
-			}
-			Njcarfeerecord njcarfeerecord=njcarfeerecords.get(0);
-			String parkKey = "c1648ccf33314dc384155896cf4d00b9";
-			if (njcarfeerecord.getParkname().contains("家乐福")) {
-				parkKey = "ff8993a40b3a4249924f34044403b5bf";
-				alipayChargeInfo.setAlipayClient(alipayClient2);
-			}
-			Map<String, Object> data = null;
-			String orderCreate = "";
-			try {
-				data = hongxingService.getFeeByCarNumber(carNumber, parkKey);
-			} catch (Exception e) {
-				// TODO: handle exception
-				alipayChargeInfo.setValidate(false);
-				return alipayChargeInfo;
-			}
-			if (data == null) {
-				alipayChargeInfo.setValidate(false);
-				return alipayChargeInfo;
-			}
-			logger.info("红星费用:"+data.toString());
-			try {
-				String code = hongxingService.creatPayOrder((String) data.get("orderNo"), parkKey);
-				if (code == null) {
-					alipayChargeInfo.setValidate(false);
-					return alipayChargeInfo;
-				}
-				orderCreate = code;
-			} catch (Exception e) {
-				alipayChargeInfo.setValidate(false);
-				return alipayChargeInfo;
-			}
-			PosChargeData lastCharge = new PosChargeData();
-			lastCharge.setRejectReason(orderCreate);
-			lastCharge.setCardNumber(carNumber);
-			lastCharge.setParkId(3);
-			lastCharge.setParkDesc("美凯龙停车场");
-			lastCharge.setChargeMoney((double) data.get("totalAmount"));
-			if (njcarfeerecord.getParkname().contains("家乐福")) {
-				lastCharge.setParkId(217);
-				lastCharge.setParkDesc("家乐福停车场");
-				lastCharge.setChargeMoney((double) data.get("totalAmount"));
-			}
-			String enterTimeStr = ((String) data.get("enterTime")).replace("/", "-");
-			lastCharge.setEntranceDate(enterTimeStr);
-		//	lastCharge.setExitDate1(new Date());
-			lastCharge.setOperatorId((String) data.get("orderNo"));
-			poschargedataService.insert(lastCharge);
-		//	charges = poschargedataService.queryDebt(carNumber, new Date());
-		//	lastCharge = charges.get(0);
-			alipayChargeInfo.setPosChargeData(lastCharge);
-			
-			
+//		if (!charges.isEmpty()&&charges.get(0).getParkDesc()!=null&&charges.get(0).getParkDesc().contains("美凯龙")) {
+//			charges.clear();
+//		}
+//		if (charges.isEmpty()) {//查找红星美凯龙的支付信息
+//			alipayChargeInfo.setServiceProvideId("2088821579783141");
+//			List<Njcarfeerecord> njcarfeerecords=njCarFeeRecordService.selectByCarNumber(carNumber);
+//			if (njcarfeerecords.isEmpty()) {
+//				alipayChargeInfo.setValidate(false);
+//				return alipayChargeInfo;
+//			}
+//			Njcarfeerecord njcarfeerecord=njcarfeerecords.get(0);
+//			String parkKey = "c1648ccf33314dc384155896cf4d00b9";
+//			if (njcarfeerecord.getParkname().contains("家乐福")) {
+//				parkKey = "ff8993a40b3a4249924f34044403b5bf";
+//				alipayChargeInfo.setAlipayClient(alipayClient2);
+//			}
+//			Map<String, Object> data = null;
+//			String orderCreate = "";
+//			try {
+//				data = hongxingService.getFeeByCarNumber(carNumber, parkKey);
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//				alipayChargeInfo.setValidate(false);
+//				return alipayChargeInfo;
+//			}
+//			if (data == null) {
+//				alipayChargeInfo.setValidate(false);
+//				return alipayChargeInfo;
+//			}
+//			logger.info("红星费用:"+data.toString());
+//			try {
+//				String code = hongxingService.creatPayOrder((String) data.get("orderNo"), parkKey);
+//				if (code == null) {
+//					alipayChargeInfo.setValidate(false);
+//					return alipayChargeInfo;
+//				}
+//				orderCreate = code;
+//			} catch (Exception e) {
+//				alipayChargeInfo.setValidate(false);
+//				return alipayChargeInfo;
+//			}
+//			PosChargeData lastCharge = new PosChargeData();
+//			lastCharge.setRejectReason(orderCreate);
+//			lastCharge.setCardNumber(carNumber);
+//			lastCharge.setParkId(3);
+//			lastCharge.setParkDesc("美凯龙停车场");
+//			lastCharge.setChargeMoney((double) data.get("totalAmount"));
+//			if (njcarfeerecord.getParkname().contains("家乐福")) {
+//				lastCharge.setParkId(217);
+//				lastCharge.setParkDesc("家乐福停车场");
+//				lastCharge.setChargeMoney((double) data.get("totalAmount"));
+//			}
+//			String enterTimeStr = ((String) data.get("enterTime")).replace("/", "-");
+//			lastCharge.setEntranceDate(enterTimeStr);
+//		//	lastCharge.setExitDate1(new Date());
+//			lastCharge.setOperatorId((String) data.get("orderNo"));
+//			poschargedataService.insert(lastCharge);
+//		//	charges = poschargedataService.queryDebt(carNumber, new Date());
+//		//	lastCharge = charges.get(0);
+//			alipayChargeInfo.setPosChargeData(lastCharge);
+//			
+//			
+//		}
+//		else {
+//			alipayChargeInfo.setPosChargeData(charges.get(0));
+//		}
+		if (!charges.isEmpty()) {
+			alipayChargeInfo.setPosChargeData(charges.get(0));
 		}
 		else {
-			alipayChargeInfo.setPosChargeData(charges.get(0));
+			alipayChargeInfo.setValidate(false);
 		}
 		return alipayChargeInfo;
 	}
