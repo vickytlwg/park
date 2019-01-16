@@ -93,9 +93,11 @@
 								</tr>
 
 								<tbody id="parkBody"></tbody>
-								<tr ng-repeat="street in streets"
-									ng-click="selectChange($index)">
-									<td><input type="checkbox" ng-model="street.checked" /></td>
+								<tr ng-repeat="street in streets">
+									<td><input type="checkbox" ng-model="street.checked" 
+										ng-click="selectChange($index)" /></td>
+									<!-- <td><input type="checkbox" ng-model="street.checked" 
+										ng-click="deleteSelection($event,street.id)" ng-checked="isSelected(street.id)" /></td>	 -->
 									<td ng-bind="street.id"></td>
 									<td ng-bind="street.number"></td>
 									<td ng-bind="street.name"></td>
@@ -106,7 +108,6 @@
 									<td ng-bind="street.phone"></td>
 									<td ng-bind="street.date"></td>
 									<td ng-bind="street.other"></td>
-
 								</tr>
 							</table>
 						</div>

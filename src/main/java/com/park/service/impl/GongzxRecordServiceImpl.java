@@ -194,4 +194,16 @@ public class GongzxRecordServiceImpl implements GongzxRecordService{
 		return gongzxrecorddao.selectPosdataByParkAndRange(startDay, endDay, parkId);
 	}
 
+	@Override
+	public List<GongzxRecord> getByParkDatetime(String carNumber,Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.getByParkDatetime(carNumber,startDate, endDate);
+	}
+
+	@Override
+	public List<GongzxRecord> getByCarNumberAndPN(String carNumber, String parkName) {
+		// TODO Auto-generated method stub
+		return gongzxrecorddao.getByCarNumberAndPN(carNumber, parkName);
+	}
+
 }

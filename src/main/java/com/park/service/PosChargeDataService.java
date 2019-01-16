@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.park.model.FeeCriterion;
 import com.park.model.Monthuser;
@@ -52,6 +51,8 @@ public interface PosChargeDataService {
 	public List<PosChargeData> getPageArrearage(int low, int count);
 	
 	public List<PosChargeData> getByCardNumberAndPark(String cardNumber,Integer parkId);
+	
+	public List<PosChargeData> getByCardNumberAndParkName(String cardNumber,String parkName, Integer parkId);
 	
 	public List<PosChargeData> getPageArrearageByParkId(int parkId,int start,int count);
 	
@@ -132,6 +133,10 @@ public interface PosChargeDataService {
 	public Map<String, Object> calOutByParkAndRange(int parkId, Date startDate, Date endDate);
 	
 	public List<PosChargeData> getByCardNumber(String cardNumber);
+	
+	public List<PosChargeData> getByCarNumberAndPN(String cardNumber,String parkName);
+	
+	public List<PosChargeData> getByParkDatetime(String cardNumber,String startDate,String endDate);
 	
 	public List<PosChargeData> getByParkName(String parkName);
 	

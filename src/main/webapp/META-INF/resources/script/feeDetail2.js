@@ -16,10 +16,10 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         }
     };
  $scope.searchDate=new Date().format('yyyy-MM-dd');
- $scope.startDate=new Date().format('yyyy-MM-dd');
- $scope.endDate=new Date().format('yyyy-MM-dd');
+ $scope.startDate=new Date().format('yyyy-MM-dd hh:mm:ss');
+ $scope.endDate=new Date().format('yyyy-MM-dd hh:mm:ss');
       var dateInitial=function(){
-        $('.date').datepicker({
+        /*$('.date').datepicker({
             autoClose: true,
             dateFormat: "yyyy-mm-dd",
             days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
@@ -32,7 +32,15 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             weekStart: 1,
             yearSuffix: "年",
             isDisabled: function(date){return date.valueOf() > Date.now() ? true : false;}        
-        });
+        });*/
+    	  $('#date1').datetimepicker({
+      		   format: 'YYYY-MM-DD HH:mm:ss',
+      		   locale: moment.locale('zh-cn')
+      	 	});
+       	   $('#date2').datetimepicker({
+      		   format: 'YYYY-MM-DD HH:mm:ss',
+      		   locale: moment.locale('zh-cn')
+      	 	});
     };  
    dateInitial();
      $scope.paginationConf = {
@@ -86,14 +94,14 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         $scope.detail.getPage2();
     };
     $scope.searchText="";
-    $scope.searchByCarnumber=function(){
+    $scope.searchByCarNumberAndPN=function(){
         if($scope.searchText==""||$scope.searchText==undefined){
             return;
         }
         $http({
-            url:'getByCarNumber',
+            url:'getByCarNumberAndPN',
             method:'post',
-            data:{"carNumber":$scope.searchText}
+            data:{"carNumber":$scope.searchText,"parkName":$scope.searchText}
         }).success(function(response){
             if(response.status==1001){
                getInitail(response.body);
@@ -104,9 +112,56 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
-			$scope.searchByCarnumber();
+			$scope.searchByCarNumberAndPN();
 		}
 	};
+	
+/*	$scope.searchcarNumber="";
+	$scope.searchBysearchcarNumber=function(){
+        if($scope.searchcarNumber==""||$scope.searchcarNumber==undefined){
+            return;
+        }
+        $http({
+            url:'/park/gongzx/getByParkDatetime',
+            method:'post',
+            data:{"carNumber":$scope.searchcarNumber,
+	            	"startDate":$("#date1").val(),
+	    			"endDate":$("#date2").val()
+    			}
+        }).success(function(response){
+            if(response.status==1001){
+                getInitail(response.body);
+            }
+        });
+    };
+    
+  $scope.searchBysearchcarNumberKeyup = function (e) {
+    var keycode = window.event ? e.keyCode
+        : e.which;
+    if (keycode == 13) {
+      $scope.searchBysearchcarNumber();
+    }
+  };*/
+	
+	$scope.searchcarNumber="";
+	$scope.searchDateTime=function(){
+		if($scope.searchcarNumber==""||$scope.searchcarNumber==undefined){
+			alert("车牌号不能为空！");
+            return;
+        }
+    	$http({
+    		url:'/park/gongzx/getByParkDatetime',
+	    	method:'post',
+	    	data:{"carNumber":$scope.searchcarNumber,
+	    			"startDate":$("#date1").val(),
+	    			"endDate":$("#date2").val()
+	    		}
+    	}).success(function(response){
+            if(response.status==1001){
+                getInitail(response.body);
+            }
+        });
+    };
 	
     $scope.getExcelByDay=function(){  
          $window.location.href="getExcelByDay?date="+$scope.searchDate;
@@ -121,7 +176,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
          $window.location.href="getExcelByParkAndDayRange?startDate="+$scope.startDate+"&endDate="+$scope.endDate
          +"&parkId="+$('#park-select2').val();
      };
-     $scope.searchByParkName=function(){
+     /*$scope.searchByParkName=function(){
         if($scope.searchParkNameText==""||$scope.searchParkNameText==undefined){
             return;
         }
@@ -134,14 +189,14 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
                  getInitail(response.body);
             }
         });
-    };
-    $scope.parknamekeyup = function(e) {
+    };*/
+    /*$scope.parknamekeyup = function(e) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
 			$scope.searchByParkName();
 		}
-	};
+	};*/
     //first page
     $scope.detail.firstPage = function() {
         if ($scope.detail.page.index <= 1)

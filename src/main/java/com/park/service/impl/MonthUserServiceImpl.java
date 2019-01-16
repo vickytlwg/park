@@ -164,4 +164,10 @@ public class MonthUserServiceImpl implements MonthUserService {
 		return monthUserDao.selectById(parkId, type,owner,starttime, endtime, platenumber);
 	}
 
+	@Override
+	public List<Monthuser> getByPlateNumberAndParkId(int parkId, String platenumber) {
+		// TODO Auto-generated method stub
+		return monthUserDao.getByPlateNumberAndParkId(parkId, platenumber);
+	}
+
 }

@@ -199,18 +199,34 @@ public class GongzxRecordController {
 		return Utility.createJsonMsg(1001, "success", gongzxRecord);
 	}
 	
-	//停车记录车牌号查
-	@RequestMapping(value = "/getByCarNumber", method = RequestMethod.POST, produces = {
+	//停车记录根据车牌号查
+		@RequestMapping(value = "/getByCarNumber", method = RequestMethod.POST, produces = {
+		"application/json;charset=UTF-8" })
+		@ResponseBody
+		public String getByCarNumber(@RequestBody Map<String, Object> args) {
+			String carNumber = (String) args.get("carNumber");
+			if(carNumber!=null){
+				List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+			}else{
+				return Utility.createJsonMsg(1002, "false");
+			}
+			List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+			return Utility.createJsonMsg(1001, "success", querygongzx);
+		}
+	
+	//停车记录根据车牌号或停车场查
+	@RequestMapping(value = "/getByCarNumberAndPN", method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
 	@ResponseBody
-	public String getByCarNumber(@RequestBody Map<String, Object> args) {
+	public String getByCarNumberAndPN(@RequestBody Map<String, Object> args) {
 		String carNumber = (String) args.get("carNumber");
-		if(carNumber!=null){
-			List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+		String parkName=(String)args.get("parkName");
+		if(carNumber!=null||parkName!=null){
+			List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumberAndPN(carNumber,parkName);
 		}else{
 			return Utility.createJsonMsg(1002, "false");
 		}
-		List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumber(carNumber);
+		List<GongzxRecord> querygongzx = gongzxRecordService.getByCarNumberAndPN(carNumber,parkName);
 		return Utility.createJsonMsg(1001, "success", querygongzx);
 	}
 	//停车记录停车场名查
@@ -287,5 +303,28 @@ public class GongzxRecordController {
 			time += oneDay;
 		}
 		return Utility.gson.toJson(comparemap);
+	}
+	
+	//第三方停车记录根据车牌号时间段查询
+	@RequestMapping(value = "/getByParkDatetime", method = RequestMethod.POST, produces = {
+	"application/json;charset=utf-8" })
+	@ResponseBody
+	public String getByParkDatetime(@RequestBody Map<String, Object> args) throws ParseException{
+		String carNumber=(String)args.get("carNumber");
+		String startDatestr = (String) args.get("startDate");
+		String endDatestr = (String) args.get("endDate");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date startDate = sdf.parse(startDatestr);
+		Date endDate = sdf.parse(endDatestr);
+		List<GongzxRecord> gongzxRecords = gongzxRecordService.getByParkDatetime(carNumber,startDate, endDate);
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		if (gongzxRecords.isEmpty()) {
+			retMap.put("status", 1002);
+		} else {
+			retMap.put("status", 1001);
+			retMap.put("message", "success");
+			retMap.put("body", gongzxRecords);
+		}
+		return Utility.gson.toJson(retMap);
 	}
 }

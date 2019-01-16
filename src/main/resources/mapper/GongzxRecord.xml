@@ -22,7 +22,12 @@
 		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where parkId=#{parkId} and arriveTime between #{startDate} and #{endDate} limit 70000
 	</select>
-	
+	<select id="getByParkDatetime" resultMap="GongzxRecordMapper">
+		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+		from gongzxrecord
+		LEFT JOIN park AS p ON parkId=p.id where carNumber=#{carNumber} and arriveTime between #{startDate} and #{endDate} order by leaveTime desc
+		
+  </select>
 	<select id="gongcount" resultType="int">
 		select count(*) from
 		gongzxrecord
@@ -91,6 +96,13 @@
 		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where carNumber
 		like '%${carNumber}%' order by id desc limit 200
+	</select>
+	<select id="getByCarNumberAndPN" statementType="STATEMENT"
+		resultMap="GongzxRecordMapper">
+		SELECT
+		gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
+		FROM gongzxrecord LEFT JOIN park AS p ON parkId=p.id where carNumber
+		like '%${carNumber}%' or parkName like '%${parkName}%' order by id desc limit 200
 	</select>
 	<select id="getByCarNumberAndPark" statementType="STATEMENT"
 		resultMap="GongzxRecordMapper">

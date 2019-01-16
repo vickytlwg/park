@@ -101,6 +101,21 @@ public class StreetController {
 		}
 		return Utility.gson.toJson(result);
 	}
+	//多选删除
+	@RequestMapping(value="deleteAll/{id}",method=RequestMethod.GET,produces={"application/json;charset=utf-8"})
+	@ResponseBody
+	public Object deleteAll(@PathVariable("id")String id){
+		Map<String, Object> result=new HashMap<>();
+		int deleteByPrimaryKeyId = streetService.deleteByPrimaryKeyId(id);
+		if(deleteByPrimaryKeyId>=1){
+			result.put("status", 1001);
+		}
+		else{
+			result.put("status", 1002);
+		}
+		return Utility.gson.toJson(result);
+	}
+	
 	@RequestMapping(value="update",method=RequestMethod.POST,produces={"application/json;charset=utf-8"})
 	@ResponseBody
 	public String update(@RequestBody Street steet){

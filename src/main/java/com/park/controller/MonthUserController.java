@@ -320,6 +320,24 @@ public String delete(@PathVariable("id")int id){
 	return Utility.gson.toJson(result);
 }
 
+@RequestMapping(value = "getByPlateNumberAndParkId", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
+@ResponseBody
+public String getByPlateNumberAndParkId(@RequestBody Map<String, String> args) {
+	Map<String, Object> result=new HashMap<>();
+	int parkId=Integer.parseInt(args.get("parkId"));
+	String platenumber = args.get("platenumber");
+	List<Monthuser> monthusersResult=monthUserService.getByPlateNumberAndParkId(parkId, platenumber);
+	if(monthusersResult.isEmpty()){
+		result.put("status", 1002);
+		result.put("message", "failed");
+	}else{
+		result.put("status", 1001);
+		result.put("body", monthusersResult);
+		result.put("message", "succes");
+	}
+	return Utility.gson.toJson(result);
+}
+
 @RequestMapping(value = "getByPlateNumber", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8" })
 @ResponseBody
 public String getByPlateNumber(@RequestBody Map<String, String> args, HttpSession session) {

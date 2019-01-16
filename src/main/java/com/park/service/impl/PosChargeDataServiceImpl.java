@@ -2332,4 +2332,22 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		return chargeDao.getByDateAndParkCountPay3(startDate, endDate, payType);
 	}
 
+	@Override
+	public List<PosChargeData> getByCarNumberAndPN(String cardNumber, String parkName) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByCarNumberAndPN(cardNumber, parkName);
+	}
+
+	@Override
+	public List<PosChargeData> getByCardNumberAndParkName(String cardNumber, String parkName, Integer parkId) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByCardNumberAndParkName(cardNumber, parkName, parkId);
+	}
+
+	@Override
+	public List<PosChargeData> getByParkDatetime(String cardNumber, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByParkDatetime(cardNumber, startDate, endDate);
+	}
+
 }
