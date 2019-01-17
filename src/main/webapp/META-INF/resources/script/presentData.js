@@ -52,6 +52,9 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
         }, {
           'value': $scope.data.cbcAmount,
           'name': '工商银行'
+        },{
+          'value': $scope.data.appAmount,
+          'name': 'APP'
         }]
       };
       $scope.edata = fakeData.data;

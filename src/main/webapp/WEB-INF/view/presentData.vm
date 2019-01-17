@@ -138,7 +138,28 @@
                   <div class="media">
                     <div class="media-left">
                       <a href="#"> <img class="media-object"
-                                        src="/park/img/wechat.png" alt="支付宝">
+                                        src="/park/img/app.png" alt="app">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      <div class="col-md-3">
+                        <p>APP</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span ng-bind="data.appAmount">元</span>
+                      </div>
+                      <div class="col-md-3">
+                        <p>APP</p>
+                      </div>
+                      <div class="col-md-2">
+                        <span ng-bind="data.appCount">笔</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <a href="#"> <img class="media-object"
+                                        src="/park/img/huishang.png" alt="支付宝">
                       </a>
                     </div>
                     <div class="media-body">
