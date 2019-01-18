@@ -93,8 +93,9 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
         $scope.detail.page.index--;
         $scope.detail.getPage();
     };
+    
     $scope.searchText="";
-    $scope.searchByCardnumber=function(){
+    $scope.searchText=function(){
         if($scope.searchText==""||$scope.searchText==undefined){
             return;
         }
@@ -110,11 +111,11 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
-    $scope.carnumberkeyup = function(e) {
+    $scope.cardNumberAndParkIdkeyup = function(e) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
-			$scope.searchByCardnumber();
+			$scope.searchText();
 		}
 	};
 	
@@ -140,7 +141,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
-    $scope.carnumberkeyup = function(e) {
+    $scope.cardNumberkeyup = function(e) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
