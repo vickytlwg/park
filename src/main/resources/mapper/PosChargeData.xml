@@ -131,7 +131,7 @@ FROM posChargeData LEFT JOIN park AS p ON parkId=p.id where parkId= '${parkId}' 
  	<select id="getByParkDatetime" statementType="STATEMENT" resultMap="PosChargeDataMapper">
 		SELECT posChargeData.id,cardNumber,parkId,parkDesc,portNumber,isEntrance,isLargeCar,entranceDate,exitDate,url,operatorId,chargeMoney,paidMoney,unPaidMoney,givenMoney,changeMoney,isOneTimeExpense,paidCompleted,discount,discountType,other,other2,outUrl
 FROM posChargeData 
-		LEFT JOIN park AS p ON parkId=p.id where cardNumber='${cardNumber}' and entranceDate between '${startDate}' and '${endDate}' order by entranceDate desc
+		LEFT JOIN park AS p ON parkId=p.id where cardNumber like '%${cardNumber}%' and entranceDate between '${startDate}' and '${endDate}' order by entranceDate desc
   </select>
  	
  	<select id="getByCardNumberAndPort"  resultMap="PosChargeDataMapper">
