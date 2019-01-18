@@ -1,6 +1,6 @@
 <script src="/park/script/service/textModalService.js"></script>
 <!-- <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet"> -->
-<script src="/park/script/feeDetail.js?v=1.2"></script>
+<script src="/park/script/feeDetail.js?v=1.1"></script>
 <!-- <script src="/park/script/datepicker.js"></script> -->
 <link href="/park/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 <script src="/park/script/moment-with-locales.min.js"></script>
@@ -72,7 +72,7 @@
 					</select>
 				</div>
                <div style="display:inline-block;margin-left: 10px;">
-                <input type="search" ng-model="searchText" ng-keyup="cardNumberAndParkIdkeyup($event)" class="form-control"
+                <input type="search" ng-model="searchText" ng-keyup="carnumberByParkidkeyup($event)" class="form-control"
                        placeholder="输入查询条件" style="width:90px;" />
               </div>
               <!-- <div style="display:inline-block">
@@ -85,7 +85,7 @@
 									style="float: right; padding-top: 10px;"> 查询条件:</label>
 							</div>
 							<div class="col-md-2">
-								<input type="text" ng-model="searchcardNumber" ng-keyup="cardNumberkeyup($event)" class="form-control"  
+								<input type="text" ng-model="searchcardNumber" class="form-control"  
 								placeholder="车牌号"/>
 							</div>
 							<div class="col-md-2">
