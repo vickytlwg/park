@@ -125,13 +125,13 @@
                         <p>现金</p>
                       </div>
                       <div class="col-md-2">
-                        <span ng-bind="data.cashAmount2">元</span>
+                        <span ng-bind="cashAmount">元</span>
                       </div>
                       <div class="col-md-3">
                         <p>现金</p>
                       </div>
                       <div class="col-md-2">
-                        <span ng-bind="data.cashCount2">笔</span>
+                        <span ng-bind="cashCount">笔</span>
                       </div>
                     </div>
                   </div>

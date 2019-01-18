@@ -34,6 +34,9 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
     getDataService.getParkChargeByTime(startDate, endDate).then(function (result) {
       $scope.data = result['body'];
       $scope.data.totalAmount=parseInt($scope.data.totalAmount);
+      $scope.cashAmount=$scope.data.cashAmount+$scope.data.cashAmount2;
+      $scope.cashCount=$scope.data.cashCount+$scope.data.cashCount2;
+
       //console.log($scope.data);
       var fakeData = {
         'status': 0,

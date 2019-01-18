@@ -110,7 +110,7 @@ function($scope, $http,$window, textModal,textModalTest, $uibModal, $timeout) {
             }
         });
     };
-    $scope.carnumberkeyup = function(e) {
+    $scope.carnumberByParkidkeyup = function(e) {
 		var keycode = window.event ? e.keyCode
 				: e.which;
 		if (keycode == 13) {
