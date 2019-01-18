@@ -138,91 +138,175 @@ public class PosChargeDataController {
 	private int xj2ZongBishu = 0;
 	private int appZongBishu = 0;
 
-	/*
-	 * @RequestMapping(value = "/getDataDetail",method = RequestMethod.POST,
-	 * produces = { "application/json;charset=UTF-8" })
-	 * 
-	 * @ResponseBody public String getDataDetail(@RequestBody Map<String, Object>
-	 * args, HttpSession session) { String userName = (String)
-	 * session.getAttribute("username"); args.put("username",userName); String
-	 * getBillData= HttpUtil.postS(Common.getDataDetailUrl,args); return
-	 * getBillData; }
+	
+	/*@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+	@ResponseBody
+	public String getDataDetail(@RequestBody Map<String, Object> args, HttpSession session) {
+		String userName = (String) session.getAttribute("username");
+		args.put("username",userName);
+		String getBillData= HttpUtil.postS(Common.getParkDataDetailUrl,args);
+		return getBillData;
+	}
 	 */
 	
 	//主平台今日数据统计调用
 	// 查询停车场总金额
 		@RequestMapping(value = "/getParkByCountMoney", produces = { "application/json;charset=utf-8" })
 		@ResponseBody
-		public Object getParkByCountMoney(@RequestBody Map<String, Object> args) throws Exception {
+		public Object getParkByCountMoney(@RequestBody Map<String, Object> args,HttpSession session) throws Exception {
 			@SuppressWarnings("unused")
-			Map<String, Object> retMap = new HashMap<String, Object>();
-			Object startDateObj = args.get("startDate");
-			Object endDateObj = args.get("endDate");
-			String startDate = String.valueOf(startDateObj);
-			String endDate = String.valueOf(endDateObj);
 			Map<String, Object> map = new HashMap<String, Object>();
 			Map<String, Object> map2 = new HashMap<String, Object>();
-			map.put("startDate", startDate);
-			map.put("endDate", endDate);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date parsedStartDay = null;
-			try {
-				parsedStartDay = sdf.parse(startDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			Date parsedEndDay = null;
-			try {
-				parsedEndDay = sdf.parse(endDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			
-			int totalCount = 0;
-			int alipayCount = 0;
-			int wechartCount = 0;
-			int cashCount = 0;
-			int otherCount = 0;
-			int unionPayCount = 0;
-			int cbcCount = 0;
-			int cashCount2 = 0;
-			int appCount = 0;
-
-			float totalAmount = 0;
-			float alipayAmount = 0;
-			float wechartAmount = 0;
-			float cashAmount = 0;
-			float otherAmount = 0;
-			float unionPayAmount = 0;
-			float cbcAmount = 0;
-			float cashAmount2 = 0;
-			float appAmount = 0;
-
-			abcZongjine = 0;
-			weixinZongjine = 0;
-			zfbZongjine = 0;
-			xjZongjine = 0;
-			qtZongjine = 0;
-			ylZongjine = 0;
-			ghZongjine = 0;
-			xj2Zongjine = 0;
-			appZongjine = 0;
-
-			abcZongBishu = 0;
-			weixinZongBishu = 0;
-			zfbZongBishu = 0;
-			xjZongBishu = 0;
-			qtZongBishu = 0;
-			ylZongBishu = 0;
-			ghZongBishu = 0;
-			xj2ZongBishu = 0;
-			appZongBishu = 0;
-			
 			Map<String, Object> mapmap = null;
-			map2.put("startDate", startDate);
-			map2.put("endDate", endDate);
-			mapmap = getByDateAndParkCountPay(map2);
-			return Utility.createJsonMsg(1001, "success", mapmap);
+			String userName = (String)session.getAttribute("username");
+			Object usernameObj = args.get("username");
+			String username = String.valueOf(userName);
+			AuthUser user = authService.getUserByUsername(username);
+			if (username == null)
+				return null;
+			if (user.getRole() == AuthUserRole.ADMIN.getValue()) {
+				Object startDateObj = args.get("startDate");
+				Object endDateObj = args.get("endDate");
+				/*String username = String.valueOf(userName);*/
+				String startDate = String.valueOf(startDateObj);
+				String endDate = String.valueOf(endDateObj);
+				
+				/*map.put("username", username);*/
+				map.put("startDate", startDate);
+				map.put("endDate", endDate);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date parsedStartDay = null;
+				try {
+					parsedStartDay = sdf.parse(startDate + " 00:00:00");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				Date parsedEndDay = null;
+				try {
+					parsedEndDay = sdf.parse(endDate + " 00:00:00");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				int totalCount = 0;
+				int alipayCount = 0;
+				int wechartCount = 0;
+				int cashCount = 0;
+				int otherCount = 0;
+				int unionPayCount = 0;
+				int cbcCount = 0;
+				int cashCount2 = 0;
+				int appCount = 0;
+
+				float totalAmount = 0;
+				float alipayAmount = 0;
+				float wechartAmount = 0;
+				float cashAmount = 0;
+				float otherAmount = 0;
+				float unionPayAmount = 0;
+				float cbcAmount = 0;
+				float cashAmount2 = 0;
+				float appAmount = 0;
+
+				abcZongjine = 0;
+				weixinZongjine = 0;
+				zfbZongjine = 0;
+				xjZongjine = 0;
+				qtZongjine = 0;
+				ylZongjine = 0;
+				ghZongjine = 0;
+				xj2Zongjine = 0;
+				appZongjine = 0;
+
+				abcZongBishu = 0;
+				weixinZongBishu = 0;
+				zfbZongBishu = 0;
+				xjZongBishu = 0;
+				qtZongBishu = 0;
+				ylZongBishu = 0;
+				ghZongBishu = 0;
+				xj2ZongBishu = 0;
+				appZongBishu = 0;
+				
+				map2.put("startDate", startDate);
+				map2.put("endDate", endDate);
+				mapmap = getByDateAndParkCountPay(map2);
+				System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
+				return Utility.createJsonMsg(1001, "success", mapmap);
+			}else{
+				Object startDateObj = args.get("startDate");
+				Object endDateObj = args.get("endDate");
+				String startDate = String.valueOf(startDateObj);
+				String endDate = String.valueOf(endDateObj);
+				map.put("username", username);
+				map.put("startDate", startDate);
+				map.put("endDate", endDate);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date parsedStartDay = null;
+				try {
+					parsedStartDay = sdf.parse(startDate + " 00:00:00");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				Date parsedEndDay = null;
+				try {
+					parsedEndDay = sdf.parse(endDate + " 00:00:00");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				List<Park> listparkId = chargeSerivce.getParkByMoney(map);
+				int totalCount = 0;
+				int alipayCount = 0;
+				int wechartCount = 0;
+				int cashCount = 0;
+				int otherCount = 0;
+				int unionPayCount = 0;
+				int cbcCount = 0;
+				int cashCount2 = 0;
+				int appCount = 0;
+
+				float totalAmount = 0;
+				float alipayAmount = 0;
+				float wechartAmount = 0;
+				float cashAmount = 0;
+				float otherAmount = 0;
+				float unionPayAmount = 0;
+				float cbcAmount = 0;
+				float cashAmount2 = 0;
+				float appAmount = 0;
+
+				abcZongjine = 0;
+				weixinZongjine = 0;
+				zfbZongjine = 0;
+				xjZongjine = 0;
+				qtZongjine = 0;
+				ylZongjine = 0;
+				ghZongjine = 0;
+				xj2Zongjine = 0;
+				appZongjine = 0;
+
+				abcZongBishu = 0;
+				weixinZongBishu = 0;
+				zfbZongBishu = 0;
+				xjZongBishu = 0;
+				qtZongBishu = 0;
+				ylZongBishu = 0;
+				ghZongBishu = 0;
+				xj2ZongBishu = 0;
+				appZongBishu = 0;
+				for (int i = 0; i < listparkId.size(); i++) {
+					int userId = listparkId.get(i).getId();
+					int parkId = listparkId.get(i).getParkId();
+					map2.put("parkId", parkId);
+					map2.put("startDate", startDate);
+					map2.put("endDate", endDate);
+					mapmap = getByDateAndParkCount(map2);
+					System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
+				}
+				return Utility.createJsonMsg(1001, "success", mapmap);
+			}
+		
 		}
 		
 		//主平台今日数据统计调用
@@ -321,6 +405,7 @@ public class PosChargeDataController {
 			retMap.put("unionPayCount", resultsylbs == null ? new BigDecimal("0") : new BigDecimal(resultsylbs));
 			retMap.put("cbcCount", resultsghbs == null ? new BigDecimal("0") : new BigDecimal(resultsghbs));
 			retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
+			retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
 			retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
 
 			int results2IntCount = 0;
