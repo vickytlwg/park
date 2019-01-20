@@ -208,7 +208,7 @@ public class AlipayController {
 //	}
 	@RequestMapping(value = "barcodePay", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	@ResponseBody
-	public String payerweima(Map<String, Object> args) throws Exception {
+	public String payerweima(@RequestBody Map<String, Object> args) throws Exception {
 		logger.info("barcodepayin"+args);
 		Map<String, Object> result = new HashMap<>();
 		String auth_code=(String) args.get("authCode");
@@ -221,7 +221,7 @@ public class AlipayController {
 		}
 		double chargeMoney=0.0;
 		if (!posChargeData.isPaidCompleted()) {
-			List<PosChargeData> charges = poschargedataService.queryDebt(posChargeData.getCardNumber(), new Date());
+			List<PosChargeData> charges = poschargedataService.queryDebtWithParkId(posChargeData.getCardNumber(), new Date(),posChargeData.getParkId());
 			chargeMoney=charges.get(0).getChargeMoney();
 		}
 		else {
@@ -230,18 +230,21 @@ public class AlipayController {
 		
 		String out_trade_no = new Date().getTime() + "barcodePay";
 		AlipayTradePayRequest request = new AlipayTradePayRequest(); 
-		request.setNotifyUrl("http://www.iotclouddashboard.com/park/alipay3/barcodePay");
+		request.setNotifyUrl("https://www.iotclouddashboard.com/park/alipay3/barcodePay");
 		request.setBizContent("{" +
-				" out_trade_no:"+out_trade_no+"," +
-				" scene:"+"bar_code"+"," +
-				" auth_code:"+auth_code+"," +
-				" subject:"+posChargeData.getParkDesc()+"-停车费"+"," +
-				" store_id:"+mac+"," +
-				" timeout_express:"+"2m"+"," +
-				" total_amount:"+chargeMoney +
-				" }");
+				"\"out_trade_no\":\""+out_trade_no
+				+ "\"," +
+				"\"scene\":\"bar_code\"," +
+				"\"auth_code\":\":"+auth_code
+				+ "\"," +
+				"\"subject\":\""+posChargeData.getParkDesc()+posChargeData.getCardNumber()+"停车费"
+				+ "\"," +
+				"\"total_amount\":"
+				+ chargeMoney +
+				"}");
+		logger.info("发送参数"+request.getBizContent());
 		AlipayTradePayResponse response = alipayClient.execute(request);
-		
+		logger.info(poschargeId+":"+response.getBody());
 		Alipayrecord alipayrecord = new Alipayrecord();
 		alipayrecord.setOutTradeNo(out_trade_no);
 		alipayrecord.setAlitradeno(response.getTradeNo());
@@ -258,6 +261,7 @@ public class AlipayController {
 			result.put("body", response.getTradeNo());
 			} else {
 			result.put("status", 1002);
+			result.put("body", response.getSubMsg());
 			}
 		logger.info("barcodePayreturn:"+result);
 		return Utility.gson.toJson(result);
