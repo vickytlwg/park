@@ -2309,27 +2309,27 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	}
 
 	@Override
-	public String getByDateAndParkCountPay2(String startDate, String endDate) {
+	public String getByDateAndParkCountPayzbs(String startDate, String endDate) {
 		// TODO Auto-generated method stub
-		return chargeDao.getByDateAndParkCountPay2(startDate, endDate);
+		return chargeDao.getByDateAndParkCountPayzbs(startDate, endDate);
 	}
 
 	@Override
-	public String getByDateAndParkCountPay4(String startDate, String endDate) {
+	public String getByDateAndParkCountPayzje(String startDate, String endDate) {
 		// TODO Auto-generated method stub
-		return chargeDao.getByDateAndParkCountPay4(startDate, endDate);
+		return chargeDao.getByDateAndParkCountPayzje(startDate, endDate);
 	}
 
 	@Override
-	public String getByDateAndParkCountPay(String startDate, String endDate, int payType) {
+	public String getByDateAndParkCountPayTypebs(String startDate, String endDate, int payType) {
 		// TODO Auto-generated method stub
-		return chargeDao.getByDateAndParkCountPay(startDate, endDate, payType);
+		return chargeDao.getByDateAndParkCountPayTypebs(startDate, endDate, payType);
 	}
 
 	@Override
-	public String getByDateAndParkCountPay3(String startDate, String endDate, int payType) {
+	public String getByDateAndParkCountPayTypeje(String startDate, String endDate, int payType) {
 		// TODO Auto-generated method stub
-		return chargeDao.getByDateAndParkCountPay3(startDate, endDate, payType);
+		return chargeDao.getByDateAndParkCountPayTypeje(startDate, endDate, payType);
 	}
 
 	@Override
@@ -2348,6 +2348,30 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 	public List<PosChargeData> getByParkDatetime(String cardNumber, String startDate, String endDate) {
 		// TODO Auto-generated method stub
 		return chargeDao.getByParkDatetime(cardNumber, startDate, endDate);
+	}
+
+	@Override
+	public String getByParkTransactionTimesCount(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByParkTransactionTimesCount(startDate, endDate);
+	}
+	
+	@Override
+	public String getByTransactionTimesCount(int parkId, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByTransactionTimesCount(parkId, startDate, endDate);
+	}
+
+	@Override
+	public String getByParkpaidMoneyjine(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getByParkpaidMoneyjine(startDate, endDate);
+	}
+	
+	@Override
+	public String getBypaidMoneyjine(int parkId,String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return chargeDao.getBypaidMoneyjine(parkId, startDate, endDate);
 	}
 
 }
