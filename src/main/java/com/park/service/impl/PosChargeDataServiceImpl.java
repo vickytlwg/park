@@ -2056,8 +2056,8 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 		 * isRealMonthUser=false; break; } } } }
 		 */
 
-		if (isMultiCarsOneCarport && isRealMonthUser && monthuserUse.getPlatecolor() != null
-				&& monthuserUse.getPlatecolor().equals("包月转为临停")) {
+		if (isMultiCarsOneCarport&& monthuserUse.getPlatecolor() != null
+				&& monthuserUse.getPlatecolor().equals("包月转临停")) {
 			isRealMonthUser = false;
 			monthuserUse.setPlatecolor("出场完结");
 			monthUserService.updateByPrimaryKeySelective(monthuserUse);

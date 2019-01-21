@@ -1831,6 +1831,16 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
+	
+	@RequestMapping(value = "/getArrearageById", method = RequestMethod.POST, produces = {
+	"application/json;charset=UTF-8" })
+@ResponseBody
+public String getArrearageById(@RequestBody Map<String, Object> args) {
+String id = (String) args.get("orderId");
+PosChargeData queryCharges = chargeSerivce.getById(Integer.parseInt(id));
+
+return Utility.createJsonMsg(1001, "success", queryCharges);
+}
 
 	@RequestMapping(value = "/getArrearageByCardNumberSimple", method = RequestMethod.POST, produces = {
 			"application/json;charset=UTF-8" })
