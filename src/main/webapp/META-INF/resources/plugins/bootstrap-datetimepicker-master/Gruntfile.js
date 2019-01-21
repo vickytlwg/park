@@ -21,5 +21,5 @@ module.exports = (grunt) => {
     }
   })
 
-  grunt.registerTask('default', ['jshint', 'versioncheck'])
+  grunt.registerTask('default', ['jshint', 'versioncheck']}
 }
