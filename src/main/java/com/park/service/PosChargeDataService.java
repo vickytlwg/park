@@ -16,18 +16,24 @@ import com.park.model.PosChargeData;
 public interface PosChargeDataService {
 	public List<Park> getParkByCountMoney(Map<String, Object> map);
 	
+	//主平台
 	//查询收费总笔数、收费总金额、各渠道收费统计
-	public String getByDateAndParkCountPay2(String startDate,String endDate);
-	public String getByDateAndParkCountPay4(String startDate,String endDate);
+	public String getByDateAndParkCountPayzbs(String startDate,String endDate);
+	public String getByDateAndParkCountPayzje(String startDate,String endDate);
+	public String getByParkTransactionTimesCount(String startDate,String endDate);
+	public String getByParkpaidMoneyjine(String startDate,String endDate);
 	//各渠道收费统计
-	public String getByDateAndParkCountPay(String startDate,String endDate,int payType);
-	public String getByDateAndParkCountPay3(String startDate,String endDate,int payType);
+	public String getByDateAndParkCountPayTypebs(String startDate,String endDate,int payType);
+	public String getByDateAndParkCountPayTypeje(String startDate,String endDate,int payType);
 	
 	public List<Park> getParkByMoney(Map<String, Object> map);
 	
+	//子平台
 	//查询收费总笔数、收费总金额、各渠道收费统计
 	public String getByDateAndParkCount2(int parkId,String startDate,String endDate);
 	public String getByDateAndParkCount4(int parkId,String startDate,String endDate);
+	public String getByTransactionTimesCount(int parkId,String startDate,String endDate);
+	public String getBypaidMoneyjine(int parkId,String startDate,String endDate);
 	//各渠道收费统计
 	public String getByDateAndParkCount(int parkId,String startDate,String endDate,int payType);
 	public String getByDateAndParkCount3(int parkId,String startDate,String endDate,int payType);
