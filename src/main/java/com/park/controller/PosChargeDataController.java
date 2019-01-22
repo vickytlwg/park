@@ -105,6 +105,10 @@ public class PosChargeDataController {
 
 	private static Log logger = LogFactory.getLog(PosChargeDataController.class);
 
+	
+	PayTypeUtil payTypeUtilByZI = null;
+	/*PayTypeUtil payTypeUtilByZHU = null;*/
+	
 	@Autowired
 	private PosChargeDataService posChargeDataService;
 
@@ -115,7 +119,6 @@ public class PosChargeDataController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> maps = new HashMap<String, Object>();
 		Map<String, Object> mapmap = null;
-		PayTypeUtil payTypeUtil=new PayTypeUtil();
 		String userName = (String)session.getAttribute("username");
 		Object usernameObj = args.get("username");
 		String username = String.valueOf(userName);
@@ -145,7 +148,7 @@ public class PosChargeDataController {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-
+			PayTypeUtil payTypeUtil=new PayTypeUtil();
 			maps.put("startDate", startDate);
 			maps.put("endDate", endDate);
 			mapmap = getByDateAndParkCountPay(maps);
@@ -174,6 +177,7 @@ public class PosChargeDataController {
 				e.printStackTrace();
 			}
 			List<Park> listparkId = chargeSerivce.getParkByMoney(map);
+			payTypeUtilByZI=new PayTypeUtil();
 			for (int i = 0; i < listparkId.size(); i++) {
 				int userId = listparkId.get(i).getId();
 				int parkId = listparkId.get(i).getParkId();
@@ -214,24 +218,24 @@ public class PosChargeDataController {
 
 		// 查询收费总笔数、收费总金额、各渠道收费统计
 		String resultszbs = chargeSerivce.getByDateAndParkCountPayzbs(startDate, endDate);
-		String resultszfbbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypezfb());
-		String resultswxbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypewx());
-		String resultsxjbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypexj());
-		String resultsqtbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypeqt());
-		String resultsylbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypeyl());
-		String resultsghbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypegh());
-		String resultsxj2bs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypexj2());
-		String resultsappbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.getPayTypeapp());
+		String resultszfbbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypewx);
+		String resultsxjbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypexj);
+		String resultsqtbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeqt);
+		String resultsylbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeyl);
+		String resultsghbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypegh);
+		String resultsxj2bs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypexj2);
+		String resultsappbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeapp);
 
 		String resultszje = chargeSerivce.getByDateAndParkCountPayzje(startDate, endDate);
-		String resultszfbje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypezfb());
-		String resultswxje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypewx());
-		String resultsxjje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypexj());
-		String resultsqtje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypeqt());
-		String resultsylje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypeyl());
-		String resultsghje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypegh());
-		String resultsxj2je = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypexj2());
-		String resultsappje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypeUtil.getPayTypeapp());
+		String resultszfbje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2je = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeapp);
 		String resultspaidAmount = chargeSerivce.getByParkpaidMoneyjine(startDate, endDate);
 
 		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
@@ -314,7 +318,6 @@ public class PosChargeDataController {
 		@SuppressWarnings("unused")
 		Map<String, Object> retMap = new HashMap<String, Object>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
-		PayTypeUtil payTypeUtil=new PayTypeUtil();
 		Object usernameObj = args.get("username");
 		Object startDateObj = args.get("startDate");
 		Object endDateObj = args.get("endDate");
@@ -359,7 +362,6 @@ public class PosChargeDataController {
 	@ResponseBody
 	public Map<String, Object> getByDateAndParkCount(@RequestBody Map<String, Object> args) throws Exception {
 		Map<String, Object> retMap = new HashMap<String, Object>();
-		PayTypeUtil payTypeUtil=new PayTypeUtil();
 		int parkId = 0;
 		Object parkIdObj = args.get("parkId");
 		String parkIdStr = parkIdObj.toString();
@@ -380,27 +382,26 @@ public class PosChargeDataController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		// 查询收费总笔数、收费总金额、各渠道收费统计
 		String resultszbs = chargeSerivce.getByDateAndParkCountzbs(parkId, startDate, endDate);
-		String resultszfbbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypezfb());
-		String resultswxbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypewx());
-		String resultsxjbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypexj());
-		String resultsqtbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypeqt());
-		String resultsylbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypeyl());
-		String resultsghbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypegh());
-		String resultsxj2bs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypexj2());
-		String resultsappbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, payTypeUtil.getPayTypeapp());
+		String resultszfbbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2bs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeapp);
 
 		String resultszje = chargeSerivce.getByDateAndParkCountzje(parkId, startDate, endDate);
-		String resultszfbje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypezfb());
-		String resultswxje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypewx());
-		String resultsxjje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypexj());
-		String resultsqtje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypeqt());
-		String resultsylje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypeyl());
-		String resultsghje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypegh());
-		String resultsxj2je = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypexj2());
-		String resultsappje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, payTypeUtil.getPayTypeapp());
+		String resultszfbje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2je = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeapp);
 		String resultspaidAmount = chargeSerivce.getBypaidMoneyjine(parkId,startDate, endDate);
 
 		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
@@ -425,53 +426,53 @@ public class PosChargeDataController {
 		retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
 
 		//渠道笔数获取
-		List<Integer> ListPayTypeInt = payTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
+		List<Integer> ListPayTypeInt = PayTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
 						resultsqtbs, resultsylbs, resultsghbs, resultsxj2bs, resultsappbs);
-		payTypeUtil.ZongBishu += ListPayTypeInt.get(0);
-		payTypeUtil.zfbZongBishu += ListPayTypeInt.get(1);
-		payTypeUtil.weixinZongBishu += ListPayTypeInt.get(2);
-		payTypeUtil.xjZongBishu += ListPayTypeInt.get(3);
-		payTypeUtil.qtZongBishu += ListPayTypeInt.get(4);
-		payTypeUtil.ylZongBishu += ListPayTypeInt.get(5);
-		payTypeUtil.ghZongBishu += ListPayTypeInt.get(6);
-		payTypeUtil.xj2ZongBishu += ListPayTypeInt.get(7);
-		payTypeUtil.appZongBishu += ListPayTypeInt.get(8);
+		payTypeUtilByZI.ZongBishu+= ListPayTypeInt.get(0);
+		payTypeUtilByZI.zfbZongBishu += ListPayTypeInt.get(1);
+		payTypeUtilByZI.weixinZongBishu += ListPayTypeInt.get(2);
+		payTypeUtilByZI.xjZongBishu += ListPayTypeInt.get(3);
+		payTypeUtilByZI.qtZongBishu += ListPayTypeInt.get(4);
+		payTypeUtilByZI.ylZongBishu += ListPayTypeInt.get(5);
+		payTypeUtilByZI.ghZongBishu += ListPayTypeInt.get(6);
+		payTypeUtilByZI.xj2ZongBishu += ListPayTypeInt.get(7);
+		payTypeUtilByZI.appZongBishu += ListPayTypeInt.get(8);
 
 		//金额获取
-		List<Float> ListPayTypeFloat=payTypeUtil.PayTypejeFloat(resultszje, resultszfbje, resultswxje, resultsxjje,
+		List<Float> ListPayTypeFloat=PayTypeUtil.PayTypejeFloat(resultszje, resultszfbje, resultswxje, resultsxjje,
 						resultsqtje, resultsylje, resultsghje, resultsxj2je, resultsappje, resultspaidAmount);
-		payTypeUtil.Zongjine += ListPayTypeFloat.get(0);
-		payTypeUtil.zfbZongjine += ListPayTypeFloat.get(1);
-		payTypeUtil.weixinZongjine += ListPayTypeFloat.get(2);
-		payTypeUtil.xjZongjine += ListPayTypeFloat.get(3);
-		payTypeUtil.qtZongjine += ListPayTypeFloat.get(4);
-		payTypeUtil.ylZongjine += ListPayTypeFloat.get(5);
-		payTypeUtil.ghZongjine += ListPayTypeFloat.get(6);
-		payTypeUtil.xj2Zongjine += ListPayTypeFloat.get(7);
-		payTypeUtil.appZongjine += ListPayTypeFloat.get(8);
-		payTypeUtil.paidMoneyjine += ListPayTypeFloat.get(9);
+		payTypeUtilByZI.Zongjine += ListPayTypeFloat.get(0);
+		payTypeUtilByZI.zfbZongjine += ListPayTypeFloat.get(1);
+		payTypeUtilByZI.weixinZongjine += ListPayTypeFloat.get(2);
+		payTypeUtilByZI.xjZongjine += ListPayTypeFloat.get(3);
+		payTypeUtilByZI.qtZongjine += ListPayTypeFloat.get(4);
+		payTypeUtilByZI.ylZongjine += ListPayTypeFloat.get(5);
+		payTypeUtilByZI.ghZongjine += ListPayTypeFloat.get(6);
+		payTypeUtilByZI.xj2Zongjine += ListPayTypeFloat.get(7);
+		payTypeUtilByZI.appZongjine += ListPayTypeFloat.get(8);
+		payTypeUtilByZI.paidMoneyjine += ListPayTypeFloat.get(9);
 
 		Map<String, Object> mapCount = new HashMap<String, Object>();
-		mapCount.put("totalAmount", payTypeUtil.Zongjine);
-		mapCount.put("alipayAmount", payTypeUtil.zfbZongjine);
-		mapCount.put("wechartAmount", payTypeUtil.weixinZongjine);
-		mapCount.put("cashAmount", payTypeUtil.xjZongjine);
-		mapCount.put("otherAmount", payTypeUtil.qtZongjine);
-		mapCount.put("unionPayAmount", payTypeUtil.ylZongjine);
-		mapCount.put("cbcAmount", payTypeUtil.ghZongjine);
-		mapCount.put("cashAmount2", payTypeUtil.xj2Zongjine);
-		mapCount.put("appAmount", payTypeUtil.appZongjine);
-		mapCount.put("paidAmount", payTypeUtil.paidMoneyjine);
+		mapCount.put("totalAmount", payTypeUtilByZI.Zongjine);
+		mapCount.put("alipayAmount", payTypeUtilByZI.zfbZongjine);
+		mapCount.put("wechartAmount", payTypeUtilByZI.weixinZongjine);
+		mapCount.put("cashAmount", payTypeUtilByZI.xjZongjine);
+		mapCount.put("otherAmount", payTypeUtilByZI.qtZongjine);
+		mapCount.put("unionPayAmount", payTypeUtilByZI.ylZongjine);
+		mapCount.put("cbcAmount", payTypeUtilByZI.ghZongjine);
+		mapCount.put("cashAmount2", payTypeUtilByZI.xj2Zongjine);
+		mapCount.put("appAmount", payTypeUtilByZI.appZongjine);
+		mapCount.put("paidAmount", payTypeUtilByZI.paidMoneyjine);
 
-		mapCount.put("totalCount", payTypeUtil.ZongBishu);
-		mapCount.put("alipayCount", payTypeUtil.zfbZongBishu);
-		mapCount.put("wechartCount", payTypeUtil.weixinZongBishu);
-		mapCount.put("cashCount", payTypeUtil.xjZongBishu);
-		mapCount.put("otherCount", payTypeUtil.qtZongBishu);
-		mapCount.put("unionPayCount", payTypeUtil.ylZongBishu);
-		mapCount.put("cbcCount", payTypeUtil.ghZongBishu);
-		mapCount.put("cashCount2", payTypeUtil.xj2ZongBishu);
-		mapCount.put("appCount", payTypeUtil.appZongBishu);
+		mapCount.put("totalCount", payTypeUtilByZI.ZongBishu);
+		mapCount.put("alipayCount", payTypeUtilByZI.zfbZongBishu);
+		mapCount.put("wechartCount", payTypeUtilByZI.weixinZongBishu);
+		mapCount.put("cashCount", payTypeUtilByZI.xjZongBishu);
+		mapCount.put("otherCount", payTypeUtilByZI.qtZongBishu);
+		mapCount.put("unionPayCount", payTypeUtilByZI.ylZongBishu);
+		mapCount.put("cbcCount", payTypeUtilByZI.ghZongBishu);
+		mapCount.put("cashCount2", payTypeUtilByZI.xj2ZongBishu);
+		mapCount.put("appCount", payTypeUtilByZI.appZongBishu);
 		return mapCount;
 	}
 
