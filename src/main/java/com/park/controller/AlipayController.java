@@ -235,14 +235,14 @@ public class AlipayController {
 				"\"out_trade_no\":\""+out_trade_no
 				+ "\"," +
 				"\"scene\":\"bar_code\"," +
-				"\"auth_code\":\":"+auth_code
+				"\"auth_code\":"+auth_code
 				+ "\"," +
 				"\"subject\":\""+posChargeData.getParkDesc()+posChargeData.getCardNumber()+"停车费"
 				+ "\"," +
 				"\"total_amount\":"
 				+ chargeMoney +
 				"}");
-		logger.info("发送参数"+request.getBizContent());
+		logger.info("发送参数:"+request.getBizContent());
 		AlipayTradePayResponse response = alipayClient.execute(request);
 		logger.info(poschargeId+":"+response.getBody());
 		Alipayrecord alipayrecord = new Alipayrecord();
