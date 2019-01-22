@@ -1388,11 +1388,11 @@ public class PosChargeDataServiceImpl implements PosChargeDataService {
 			} else {
 				long diffs = endDate.getTime() - startDate.getTime();
 				double hours = Math.ceil((double) diffs / (1000 * 60 * step2minutes));
-				if (hours * step1Price>criterion.getMaxexpense()) {
+				if (hours * step2Price>criterion.getMaxexpense()) {
 					money+=criterion.getMaxexpense();
 				}
 				else {
-					money += hours * step1Price;
+					money += hours * step2Price;
 				}
 				logger.info("计费**车牌号:" + charge.getCardNumber() + "费用:" + hours * step2Price);
 			}
