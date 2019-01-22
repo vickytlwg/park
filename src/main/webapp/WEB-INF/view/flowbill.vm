@@ -1,6 +1,6 @@
 <script src="/park/script/service/textModalService.js"></script>
 <link href="/park/plugins/datepicker/datepicker.css" rel="stylesheet">
-<script src="/park/script/feeDetail.js?v=1.0"></script>
+<script src="/park/script/flowbill.js?v=1.0"></script>
 <script src="/park/script/datepicker.js"></script>
 <style>
 .page-list .pagination {

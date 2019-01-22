@@ -111,7 +111,7 @@
     <header class="main-header">
         <!-- Logo -->
         <a href="#" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>N</b>BT</span> <!-- logo for regular state and mobile devices -->
+            <span class="logo-mini"></span> <!-- logo for regular state and mobile devices -->
             <span id="onlyforcss" class="logo-lg"><b>停车云</b></span>
         </a>
 
@@ -193,7 +193,7 @@
                         </span>
                     </a>
                 </li>
-                <li class="treeview" hidden>
+                <li class="treeview">
                     <a href="/park/parkBigData">
                         <i class="fa fa-map"></i> <span>停车大数据</span>
                         <span class="pull-right-container">
