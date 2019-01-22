@@ -237,27 +237,6 @@ public class PosChargeDataController {
 		String resultsxj2je = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypexj2);
 		String resultsappje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeapp);
 		String resultspaidAmount = chargeSerivce.getByParkpaidMoneyjine(startDate, endDate);
-
-		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
-		retMap.put("alipayAmount", resultszfbje == null ? new BigDecimal("0") : new BigDecimal(resultszfbje));
-		retMap.put("wechartAmount", resultswxje == null ? new BigDecimal("0") : new BigDecimal(resultswxje));
-		retMap.put("cashAmount", resultsxjje == null ? new BigDecimal("0") : new BigDecimal(resultsxjje));
-		retMap.put("unionPayAmount", resultsylje == null ? new BigDecimal("0") : new BigDecimal(resultsylje));
-		retMap.put("cbcAmount", resultsghje == null ? new BigDecimal("0") : new BigDecimal(resultsghje));
-		retMap.put("otherAmount", resultsqtje == null ? new BigDecimal("0") : new BigDecimal(resultsqtje));
-		retMap.put("cashAmount2", resultsxj2je == null ? new BigDecimal("0") : new BigDecimal(resultsxj2je));
-		retMap.put("appAmount", resultsappje == null ? new BigDecimal("0") : new BigDecimal(resultsappje));
-		retMap.put("paidAmount", resultspaidAmount == null ? new BigDecimal("0") : new BigDecimal(resultspaidAmount));
-
-		retMap.put("totalCount", resultszbs == null ? new BigDecimal("0") : new BigDecimal(resultszbs));
-		retMap.put("alipayCount", resultszfbbs == null ? new BigDecimal("0") : new BigDecimal(resultszfbbs));
-		retMap.put("wechartCount", resultswxbs == null ? new BigDecimal("0") : new BigDecimal(resultswxbs));
-		retMap.put("cashCount", resultsxjbs == null ? new BigDecimal("0") : new BigDecimal(resultsxjbs));
-		retMap.put("unionPayCount", resultsylbs == null ? new BigDecimal("0") : new BigDecimal(resultsylbs));
-		retMap.put("cbcCount", resultsghbs == null ? new BigDecimal("0") : new BigDecimal(resultsghbs));
-		retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
-		retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
-		retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
 		
 		//渠道笔数获取
 		List<Integer> ListPayTypeInt = payTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
@@ -403,27 +382,6 @@ public class PosChargeDataController {
 		String resultsxj2je = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypexj2);
 		String resultsappje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeapp);
 		String resultspaidAmount = chargeSerivce.getBypaidMoneyjine(parkId,startDate, endDate);
-
-		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
-		retMap.put("alipayAmount", resultszfbje == null ? new BigDecimal("0") : new BigDecimal(resultszfbje));
-		retMap.put("wechartAmount", resultswxje == null ? new BigDecimal("0") : new BigDecimal(resultswxje));
-		retMap.put("cashAmount", resultsxjje == null ? new BigDecimal("0") : new BigDecimal(resultsxjje));
-		retMap.put("unionPayAmount", resultsylje == null ? new BigDecimal("0") : new BigDecimal(resultsylje));
-		retMap.put("cbcAmount", resultsghje == null ? new BigDecimal("0") : new BigDecimal(resultsghje));
-		retMap.put("otherAmount", resultsqtje == null ? new BigDecimal("0") : new BigDecimal(resultsqtje));
-		retMap.put("cashAmount2", resultsxj2je == null ? new BigDecimal("0") : new BigDecimal(resultsxj2je));
-		retMap.put("appAmount", resultsappje == null ? new BigDecimal("0") : new BigDecimal(resultsappje));
-		retMap.put("paidAmount", resultspaidAmount == null ? new BigDecimal("0") : new BigDecimal(resultspaidAmount));
-
-		retMap.put("totalCount", resultszbs == null ? new BigDecimal("0") : new BigDecimal(resultszbs));
-		retMap.put("alipayCount", resultszfbbs == null ? new BigDecimal("0") : new BigDecimal(resultszfbbs));
-		retMap.put("wechartCount", resultswxbs == null ? new BigDecimal("0") : new BigDecimal(resultswxbs));
-		retMap.put("cashCount", resultsxjbs == null ? new BigDecimal("0") : new BigDecimal(resultsxjbs));
-		retMap.put("unionPayCount", resultsylbs == null ? new BigDecimal("0") : new BigDecimal(resultsylbs));
-		retMap.put("cbcCount", resultsghbs == null ? new BigDecimal("0") : new BigDecimal(resultsghbs));
-		retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
-		retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
-		retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
 
 		//渠道笔数获取
 		List<Integer> ListPayTypeInt = PayTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
