@@ -16,26 +16,30 @@ public interface PosChargeDataDAO {
 	public List<Park> getParkByCountMoney(Map<String, Object> map);
 	
 	//主平台
-	//查询收费总笔数、收费总金额、各渠道收费统计
+	//统计总笔数
 	public String getByDateAndParkCountPayzbs(@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//统计总金额
 	public String getByDateAndParkCountPayzje(@Param("startDate")String startDate,@Param("endDate")String endDate);
-	public String getByParkTransactionTimesCount(@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//统计实收金额
 	public String getByParkpaidMoneyjine(@Param("startDate")String startDate,@Param("endDate")String endDate);
-	//各渠道收费统计
+	//统计各渠道笔数
 	public String getByDateAndParkCountPayTypebs(@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
+	//统计各渠道金额
 	public String getByDateAndParkCountPayTypeje(@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
 	
 	public List<Park> getParkByMoney(Map<String, Object> map);
 	
 	//子平台
-	//查询收费总笔数、收费总金额、各渠道收费统计
-	public String getByDateAndParkCount2(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
-	public String getByDateAndParkCount4(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
-	public String getByTransactionTimesCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//统计总笔数
+	public String getByDateAndParkCountzbs(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//统计总金额
+	public String getByDateAndParkCountzje(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
+	//(主平台的)统计实收金额
 	public String getBypaidMoneyjine(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate);
-	//各渠道收费统计
-	public String getByDateAndParkCount(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
-	public String getByDateAndParkCount3(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
+	//统计各渠道笔数
+	public String getByDateAndParkCountbs(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
+	//统计各渠道金额
+	public String getByDateAndParkCountje(@Param("parkId")int parkId,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("payType")int payType);
 	
 	public PosChargeData getById(int id);
 
