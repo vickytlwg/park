@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,23 +37,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.AlipayApiException;
 import com.jpush.Jpush;
-import com.park.dao.CarportStatusDetailDAO;
 import com.park.model.AuthUser;
 import com.park.model.AuthUserRole;
-import com.park.model.CarportStatusDetail;
 import com.park.model.Constants;
 import com.park.model.FeeCriterion;
 import com.park.model.Feeoperator;
-import com.park.model.GongzxRecord;
 import com.park.model.Monthuser;
-import com.park.model.Outsideparkinfo;
 import com.park.model.Page;
 import com.park.model.Park;
 import com.park.model.Parktoalipark;
 import com.park.model.Pos;
 import com.park.model.PosChargeData;
 import com.park.model.PosChargeDataSimple;
-import com.park.model.Posdata;
 import com.park.service.ActiveMqService;
 import com.park.service.AliParkFeeService;
 import com.park.service.AuthorityService;
@@ -60,10 +56,8 @@ import com.park.service.ExcelExportService;
 import com.park.service.FeeCriterionService;
 import com.park.service.FeeOperatorService;
 import com.park.service.JedisClient;
-/*import com.park.service.HttpUtil;*/
 import com.park.service.JsonUtils;
 import com.park.service.MonthUserService;
-import com.park.service.OutsideParkInfoService;
 import com.park.service.ParkService;
 import com.park.service.ParkToAliparkService;
 import com.park.service.PosChargeDataService;
@@ -71,8 +65,6 @@ import com.park.service.PosService;
 import com.park.service.PosdataService;
 import com.park.service.UserPagePermissionService;
 import com.park.service.Utility;
-import com.util.Common;
-import com.util.HttpUtil;
 import com.util.PayTypeUtil;
 
 @Controller
@@ -110,245 +102,39 @@ public class PosChargeDataController {
 
 	@Resource(name = "jedisClient")
 	private JedisClient jedisClient;
-	
-	
-	private static Log logger = LogFactory.getLog(PosChargeDataController.class);
-	
-	
 
+	private static Log logger = LogFactory.getLog(PosChargeDataController.class);
+
+	
+	PayTypeUtil payTypeUtilByZI = null;
+	/*PayTypeUtil payTypeUtilByZHU = null;*/
+	
 	@Autowired
 	private PosChargeDataService posChargeDataService;
 
-	private float abcZongjine = 0;
-	private float weixinZongjine = 0;
-	private float zfbZongjine = 0;
-	private float xjZongjine = 0;
-	private float qtZongjine = 0;
-	private float ylZongjine = 0;
-	private float ghZongjine = 0;
-	private float xj2Zongjine = 0;
-	private float appZongjine = 0;
-	private float paidMoneyjine=0;
-
-	private int abcZongBishu = 0;
-	private int weixinZongBishu = 0;
-	private int zfbZongBishu = 0;
-	private int xjZongBishu = 0;
-	private int qtZongBishu = 0;
-	private int ylZongBishu = 0;
-	private int ghZongBishu = 0;
-	private int xj2ZongBishu = 0;
-	private int appZongBishu = 0;
-/*	private int transactionTimes=0;*/
-	
-	/*@RequestMapping(value = "/getDataDetail",method = RequestMethod.POST, produces = {
-	"application/json;charset=UTF-8" })
+	//主平台今日数据统计
+	@RequestMapping(value = "/getParkByCountMoney", produces = { "application/json;charset=utf-8" })
 	@ResponseBody
-	public String getDataDetail(@RequestBody Map<String, Object> args, HttpSession session) {
-		String userName = (String) session.getAttribute("username");
-		args.put("username",userName);
-		String getBillData= HttpUtil.postS(Common.getParkDataDetailUrl,args);
-		return getBillData;
-	}
-	 */
-	
-	//主平台今日数据统计调用
-	// 查询停车场总金额
-		@RequestMapping(value = "/getParkByCountMoney", produces = { "application/json;charset=utf-8" })
-		@ResponseBody
-		public Object getParkByCountMoney(@RequestBody Map<String, Object> args,HttpSession session) throws Exception {
-			@SuppressWarnings("unused")
-			Map<String, Object> map = new HashMap<String, Object>();
-			Map<String, Object> maps = new HashMap<String, Object>();
-			Map<String, Object> mapmap = null;
-			String userName = (String)session.getAttribute("username");
-			Object usernameObj = args.get("username");
-			String username = String.valueOf(userName);
-			AuthUser user = authService.getUserByUsername(username);
-			if (username == null)
-				return null;
-			if (user.getRole() == AuthUserRole.ADMIN.getValue()) {
-				Object startDateObj = args.get("startDate");
-				Object endDateObj = args.get("endDate");
-				/*String username = String.valueOf(userName);*/
-				String startDate = String.valueOf(startDateObj);
-				String endDate = String.valueOf(endDateObj);
-				
-				/*map.put("username", username);*/
-				map.put("startDate", startDate);
-				map.put("endDate", endDate);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date parsedStartDay = null;
-				try {
-					parsedStartDay = sdf.parse(startDate + " 00:00:00");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				Date parsedEndDay = null;
-				try {
-					parsedEndDay = sdf.parse(endDate + " 00:00:00");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				int totalCount = 0;
-				int alipayCount = 0;
-				int wechartCount = 0;
-				int cashCount = 0;
-				int otherCount = 0;
-				int unionPayCount = 0;
-				int cbcCount = 0;
-				int cashCount2 = 0;
-				int appCount = 0;
-				/*int transactionTimesCount=0;*///交易次数
-
-				float totalAmount = 0;
-				float alipayAmount = 0;
-				float wechartAmount = 0;
-				float cashAmount = 0;
-				float otherAmount = 0;
-				float unionPayAmount = 0;
-				float cbcAmount = 0;
-				float cashAmount2 = 0;
-				float appAmount = 0;
-				float paidAmount=0;//实收金额
-				
-				abcZongjine = 0;
-				weixinZongjine = 0;
-				zfbZongjine = 0;
-				xjZongjine = 0;
-				qtZongjine = 0;
-				ylZongjine = 0;
-				ghZongjine = 0;
-				xj2Zongjine = 0;
-				appZongjine = 0;
-				paidMoneyjine=0;
-
-				abcZongBishu = 0;
-				weixinZongBishu = 0;
-				zfbZongBishu = 0;
-				xjZongBishu = 0;
-				qtZongBishu = 0;
-				ylZongBishu = 0;
-				ghZongBishu = 0;
-				xj2ZongBishu = 0;
-				appZongBishu = 0;
-				/*transactionTimes=0;*/
-				
-				maps.put("startDate", startDate);
-				maps.put("endDate", endDate);
-				mapmap = getByDateAndParkCountPay(maps);
-				System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
-				return Utility.createJsonMsg(1001, "success", mapmap);
-			}else{
-				Object startDateObj = args.get("startDate");
-				Object endDateObj = args.get("endDate");
-				String startDate = String.valueOf(startDateObj);
-				String endDate = String.valueOf(endDateObj);
-				map.put("username", username);
-				map.put("startDate", startDate);
-				map.put("endDate", endDate);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date parsedStartDay = null;
-				try {
-					parsedStartDay = sdf.parse(startDate + " 00:00:00");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				Date parsedEndDay = null;
-				try {
-					parsedEndDay = sdf.parse(endDate + " 00:00:00");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				List<Park> listparkId = chargeSerivce.getParkByMoney(map);
-				int totalCount = 0;
-				int alipayCount = 0;
-				int wechartCount = 0;
-				int cashCount = 0;
-				int otherCount = 0;
-				int unionPayCount = 0;
-				int cbcCount = 0;
-				int cashCount2 = 0;
-				int appCount = 0;
-				/*int transactionTimesCount=0;*///交易次数
-
-				float totalAmount = 0;
-				float alipayAmount = 0;
-				float wechartAmount = 0;
-				float cashAmount = 0;
-				float otherAmount = 0;
-				float unionPayAmount = 0;
-				float cbcAmount = 0;
-				float cashAmount2 = 0;
-				float appAmount = 0;
-				float paidAmount=0;//实收金额
-
-				abcZongjine = 0;
-				weixinZongjine = 0;
-				zfbZongjine = 0;
-				xjZongjine = 0;
-				qtZongjine = 0;
-				ylZongjine = 0;
-				ghZongjine = 0;
-				xj2Zongjine = 0;
-				appZongjine = 0;
-				paidMoneyjine=0;
-
-				abcZongBishu = 0;
-				weixinZongBishu = 0;
-				zfbZongBishu = 0;
-				xjZongBishu = 0;
-				qtZongBishu = 0;
-				ylZongBishu = 0;
-				ghZongBishu = 0;
-				xj2ZongBishu = 0;
-				appZongBishu = 0;
-				/*transactionTimes=0;*/
-
-				for (int i = 0; i < listparkId.size(); i++) {
-					int userId = listparkId.get(i).getId();
-					int parkId = listparkId.get(i).getParkId();
-					maps.put("parkId", parkId);
-					maps.put("startDate", startDate);
-					maps.put("endDate", endDate);
-					mapmap = getByDateAndParkCount(maps);
-					System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
-				}
-				return Utility.createJsonMsg(1001, "success", mapmap);
-			}
-		
-		}
-		
-		//主平台今日数据统计调用
-		// 查询收费总笔数、收费总金额、各渠道收费统计
-		@RequestMapping(value = "/getByDateAndParkCountPay", produces = { "application/json;charset=utf-8" })
-		@ResponseBody
-		public Map<String, Object> getByDateAndParkCountPay(@RequestBody Map<String, Object> args) throws Exception {
-			String startDate = (String) args.get("startDate");
-			String endDate = (String) args.get("endDate");
-			float totalAmount = 0;
-			float alipayAmount = 0;
-			float wechartAmount = 0;
-			float cashAmount = 0;
-			float otherAmount = 0;
-			float unionPayAmount = 0;
-			float cbcAmount = 0;
-			float cashAmount2 = 0;
-			float appAmount = 0;
-			float paidAmount=0;//实收金额
-
-			int totalCount = 0;
-			int alipayCount = 0;
-			int wechartCount = 0;
-			int cashCount = 0;
-			int otherCount = 0;
-			int unionPayCount = 0;
-			int cbcCount = 0;
-			int cashCount2 = 0;
-			int appCount = 0;
-			/*int transactionTimesCount=0;//交易次数
-*/
-			Map<String, Object> retMap = new HashMap<String, Object>();
+	public Object getParkByCountMoney(@RequestBody Map<String, Object> args,HttpSession session) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> maps = new HashMap<String, Object>();
+		Map<String, Object> mapmap = null;
+		String userName = (String)session.getAttribute("username");
+		Object usernameObj = args.get("username");
+		String username = String.valueOf(userName);
+		AuthUser user = authService.getUserByUsername(username);
+		if (username == null)
+			return null;
+		if (user.getRole() == AuthUserRole.ADMIN.getValue()) {
+			//判断登录的是管理员用户
+			Object startDateObj = args.get("startDate");
+			Object endDateObj = args.get("endDate");
+			/*String username = String.valueOf(userName);*/
+			String startDate = String.valueOf(startDateObj);
+			String endDate = String.valueOf(endDateObj);
+			/*map.put("username", username);*/
+			map.put("startDate", startDate);
+			map.put("endDate", endDate);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date parsedStartDay = null;
 			try {
@@ -362,206 +148,176 @@ public class PosChargeDataController {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			/*//支付宝类型
-			int payTypezfb=0;
-			//微信类型
-			int payTypewx=1;
-			//现金类型
-			int payTypexj=2;
-			//工行类型
-			int payTypegh=3;
-			//app类型
-			int payTypeapp=4;
-			//银联类型
-			int payTypeyl=5;
-			//其他类型
-			int payTypeqt=6;
-			//现金2类型
-			int payTypexj2=9;*/
-			PayTypeUtil payTypes=new PayTypeUtil();
-
-			// 查询收费总笔数、收费总金额、各渠道收费统计
-			String resultszbs = chargeSerivce.getByDateAndParkCountPayzbs(startDate, endDate);
-			String resultszfbbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypezfb());
-			String resultswxbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypewx());
-			String resultsxjbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypexj());
-			String resultsqtbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypeqt());
-			String resultsylbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypeyl());
-			String resultsghbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypegh());
-			String resultsxj2bs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypexj2());
-			String resultsappbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypes.getPayTypeapp());
-			/*String resultstransactionTimesCount = chargeSerivce.getByParkTransactionTimesCount(startDate, endDate);*/
-			
-			String resultszje = chargeSerivce.getByDateAndParkCountPayzje(startDate, endDate);
-			String resultszfbje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypezfb());
-			String resultswxje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypewx());
-			String resultsxjje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypexj());
-			String resultsqtje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypeqt());
-			String resultsylje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypeyl());
-			String resultsghje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypegh());
-			String resultsxj2je = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypexj2());
-			String resultsappje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, payTypes.getPayTypeapp());
-			String resultspaidAmount = chargeSerivce.getByParkpaidMoneyjine(startDate, endDate);
-
-			retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
-			retMap.put("alipayAmount", resultszfbje == null ? new BigDecimal("0") : new BigDecimal(resultszfbje));
-			retMap.put("wechartAmount", resultswxje == null ? new BigDecimal("0") : new BigDecimal(resultswxje));
-			retMap.put("cashAmount", resultsxjje == null ? new BigDecimal("0") : new BigDecimal(resultsxjje));
-			retMap.put("unionPayAmount", resultsylje == null ? new BigDecimal("0") : new BigDecimal(resultsylje));
-			retMap.put("cbcAmount", resultsghje == null ? new BigDecimal("0") : new BigDecimal(resultsghje));
-			retMap.put("otherAmount", resultsqtje == null ? new BigDecimal("0") : new BigDecimal(resultsqtje));
-			retMap.put("cashAmount2", resultsxj2je == null ? new BigDecimal("0") : new BigDecimal(resultsxj2je));
-			retMap.put("appAmount", resultsappje == null ? new BigDecimal("0") : new BigDecimal(resultsappje));
-			retMap.put("paidAmount", resultspaidAmount == null ? new BigDecimal("0") : new BigDecimal(resultspaidAmount));
-			
-			retMap.put("totalCount", resultszbs == null ? new BigDecimal("0") : new BigDecimal(resultszbs));
-			retMap.put("alipayCount", resultszfbbs == null ? new BigDecimal("0") : new BigDecimal(resultszfbbs));
-			retMap.put("wechartCount", resultswxbs == null ? new BigDecimal("0") : new BigDecimal(resultswxbs));
-			retMap.put("cashCount", resultsxjbs == null ? new BigDecimal("0") : new BigDecimal(resultsxjbs));
-			retMap.put("unionPayCount", resultsylbs == null ? new BigDecimal("0") : new BigDecimal(resultsylbs));
-			retMap.put("cbcCount", resultsghbs == null ? new BigDecimal("0") : new BigDecimal(resultsghbs));
-			retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
-			retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
-			retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
-			/*retMap.put("transactionTimesCount", resultstransactionTimesCount == null ? new BigDecimal("0") : new BigDecimal(resultstransactionTimesCount));*/
-			
-			int resultszbsIntCount = 0;
-			if (resultszbs != null) {
-				resultszbsIntCount = Integer.parseInt(resultszbs);
+			PayTypeUtil payTypeUtil=new PayTypeUtil();
+			maps.put("startDate", startDate);
+			maps.put("endDate", endDate);
+			mapmap = getByDateAndParkCountPay(maps);
+			System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
+			return Utility.createJsonMsg(1001, "success", mapmap);
+		}else{
+			//判断登录的用户是子账户
+			Object startDateObj = args.get("startDate");
+			Object endDateObj = args.get("endDate");
+			String startDate = String.valueOf(startDateObj);
+			String endDate = String.valueOf(endDateObj);
+			map.put("username", username);
+			map.put("startDate", startDate);
+			map.put("endDate", endDate);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date parsedStartDay = null;
+			try {
+				parsedStartDay = sdf.parse(startDate + " 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			int resultszfbbsInt = 0;
-			if (resultszfbbs != null) {
-				resultszfbbsInt = Integer.parseInt(resultszfbbs);
+			Date parsedEndDay = null;
+			try {
+				parsedEndDay = sdf.parse(endDate + " 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
-			int resultswxbsInt = 0;
-			if (resultswxbs != null) {
-				resultswxbsInt = Integer.parseInt(resultswxbs);
+			List<Park> listparkId = chargeSerivce.getParkByMoney(map);
+			payTypeUtilByZI=new PayTypeUtil();
+			for (int i = 0; i < listparkId.size(); i++) {
+				int userId = listparkId.get(i).getId();
+				int parkId = listparkId.get(i).getParkId();
+				maps.put("parkId", parkId);
+				maps.put("startDate", startDate);
+				maps.put("endDate", endDate);
+				mapmap = getByDateAndParkCount(maps);
+				System.out.println(String.format("打印参数信息====参数名称：%s", mapmap));
 			}
-			int resultsxjbsInt = 0;
-			if (resultsxjbs != null) {
-				resultsxjbsInt = Integer.parseInt(resultsxjbs);
-			}
-			int resultsqtbsInt = 0;
-			if (resultsqtbs != null) {
-				resultsqtbsInt = Integer.parseInt(resultsqtbs);
-			}
-			int resultsylbsInt = 0;
-			if (resultsylbs != null) {
-				resultsylbsInt = Integer.parseInt(resultsylbs);
-			}
-			int resultsghbsInt = 0;
-			if (resultsghbs != null) {
-				resultsghbsInt = Integer.parseInt(resultsghbs);
-			}
-			int resultsxj2bsInt = 0;
-			if (resultsxj2bs != null) {
-				resultsxj2bsInt = Integer.parseInt(resultsxj2bs);
-			}
-			int resultsappbsInt = 0;
-			if (resultsappbs != null) {
-				resultsappbsInt = Integer.parseInt(resultsappbs);
-			}
-			/*int resultstransactionTimesCountInt = 0;
-			if (resultstransactionTimesCount != null) {
-				resultstransactionTimesCountInt = Integer.parseInt(resultstransactionTimesCount);
-			}*/
-
-			float resultszjeFloatAmount = 0;
-			if (resultszje != null) {
-				resultszjeFloatAmount = Float.parseFloat(resultszje);
-			}
-			float resultszfbjeFloat = 0;
-			if (resultszfbje != null) {
-				resultszfbjeFloat = Float.parseFloat(resultszfbje);
-			}
-			float resultswxjeFloat = 0;
-			if (resultswxje != null) {
-				resultswxjeFloat = Float.parseFloat(resultswxje);
-			}
-			float resultsxjjeFloat = 0;
-			if (resultsxjje != null) {
-				resultsxjjeFloat = Float.parseFloat(resultsxjje);
-			}
-			float resultsqtjeFloat = 0;
-			if (resultsqtje != null) {
-				resultsqtjeFloat = Float.parseFloat(resultsqtje);
-			}
-			float resultsyljeFloat = 0;
-			if (resultsylje != null) {
-				resultsyljeFloat = Float.parseFloat(resultsylje);
-			}
-			float resultsghjeFloat = 0;
-			if (resultsghje != null) {
-				resultsghjeFloat = Float.parseFloat(resultsghje);
-			}
-			float resultsxj2jeFloat = 0;
-			if (resultsxj2je != null) {
-				resultsxj2jeFloat = Float.parseFloat(resultsxj2je);
-			}
-			float resultsappjeFloat = 0;
-			if (resultsappje != null) {
-				resultsappjeFloat = Float.parseFloat(resultsappje);
-			}
-			float resultspaidAmountFloat = 0;
-			if (resultspaidAmount != null) {
-				resultspaidAmountFloat = Float.parseFloat(resultspaidAmount);
-			}
-
-			abcZongBishu += resultszbsIntCount;
-			zfbZongBishu += resultszfbbsInt;
-			weixinZongBishu += resultswxbsInt;
-			xjZongBishu += resultsxjbsInt;
-			qtZongBishu += resultsqtbsInt;
-			ylZongBishu += resultsylbsInt;
-			ghZongBishu += resultsghbsInt;
-			xj2ZongBishu += resultsxj2bsInt;
-			appZongBishu += resultsappbsInt;
-			/*transactionTimes +=resultstransactionTimesCountInt;*/
-
-			abcZongjine += resultszjeFloatAmount;
-			zfbZongjine += resultszfbjeFloat;
-			weixinZongjine += resultswxjeFloat;
-			xjZongjine += resultsxjjeFloat;
-			qtZongjine += resultsqtjeFloat;
-			ylZongjine += resultsyljeFloat;
-			ghZongjine += resultsghjeFloat;
-			xj2Zongjine += resultsxj2jeFloat;
-			appZongjine += resultsappjeFloat;
-			paidMoneyjine +=resultspaidAmountFloat;
-
-			Map<String, Object> mapCount = new HashMap<String, Object>();
-			mapCount.put("totalAmount", abcZongjine);
-			mapCount.put("alipayAmount", zfbZongjine);
-			mapCount.put("wechartAmount", weixinZongjine);
-			mapCount.put("cashAmount", xjZongjine);
-			mapCount.put("otherAmount", qtZongjine);
-			mapCount.put("unionPayAmount", ylZongjine);
-			mapCount.put("cbcAmount", ghZongjine);
-			mapCount.put("cashAmount2", xj2Zongjine);
-			mapCount.put("appAmount", appZongjine);
-			mapCount.put("paidAmount", paidMoneyjine);
-
-			mapCount.put("totalCount", abcZongBishu);
-			mapCount.put("alipayCount", zfbZongBishu);
-			mapCount.put("wechartCount", weixinZongBishu);
-			mapCount.put("cashCount", xjZongBishu);
-			mapCount.put("otherCount", qtZongBishu);
-			mapCount.put("unionPayCount", ylZongBishu);
-			mapCount.put("cbcCount", ghZongBishu);
-			mapCount.put("cashCount2", xj2ZongBishu);
-			mapCount.put("appCount", appZongBishu);
-			/*mapCount.put("transactionTimesCount", transactionTimes);*/
-			return mapCount;
+			return Utility.createJsonMsg(1001, "success", mapmap);
 		}
+
+	}
+
+	//主平台今日数据统计调用
+	// 查询收费总笔数、收费总金额、各渠道收费统计
+	@SuppressWarnings("static-access")
+	@RequestMapping(value = "/getByDateAndParkCountPay", produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public Map<String, Object> getByDateAndParkCountPay(@RequestBody Map<String, Object> args) throws Exception {
+		String startDate = (String) args.get("startDate");
+		String endDate = (String) args.get("endDate");
+		PayTypeUtil payTypeUtil=new PayTypeUtil();
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDate + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Date parsedEndDay = null;
+		try {
+			parsedEndDay = sdf.parse(endDate + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		// 查询收费总笔数、收费总金额、各渠道收费统计
+		String resultszbs = chargeSerivce.getByDateAndParkCountPayzbs(startDate, endDate);
+		String resultszfbbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypewx);
+		String resultsxjbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypexj);
+		String resultsqtbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeqt);
+		String resultsylbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeyl);
+		String resultsghbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypegh);
+		String resultsxj2bs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypexj2);
+		String resultsappbs = chargeSerivce.getByDateAndParkCountPayTypebs(startDate, endDate, payTypeUtil.payTypeapp);
+
+		String resultszje = chargeSerivce.getByDateAndParkCountPayzje(startDate, endDate);
+		String resultszfbje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2je = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappje = chargeSerivce.getByDateAndParkCountPayTypeje(startDate, endDate, PayTypeUtil.payTypeapp);
+		String resultspaidAmount = chargeSerivce.getByParkpaidMoneyjine(startDate, endDate);
+
+		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
+		retMap.put("alipayAmount", resultszfbje == null ? new BigDecimal("0") : new BigDecimal(resultszfbje));
+		retMap.put("wechartAmount", resultswxje == null ? new BigDecimal("0") : new BigDecimal(resultswxje));
+		retMap.put("cashAmount", resultsxjje == null ? new BigDecimal("0") : new BigDecimal(resultsxjje));
+		retMap.put("unionPayAmount", resultsylje == null ? new BigDecimal("0") : new BigDecimal(resultsylje));
+		retMap.put("cbcAmount", resultsghje == null ? new BigDecimal("0") : new BigDecimal(resultsghje));
+		retMap.put("otherAmount", resultsqtje == null ? new BigDecimal("0") : new BigDecimal(resultsqtje));
+		retMap.put("cashAmount2", resultsxj2je == null ? new BigDecimal("0") : new BigDecimal(resultsxj2je));
+		retMap.put("appAmount", resultsappje == null ? new BigDecimal("0") : new BigDecimal(resultsappje));
+		retMap.put("paidAmount", resultspaidAmount == null ? new BigDecimal("0") : new BigDecimal(resultspaidAmount));
+
+		retMap.put("totalCount", resultszbs == null ? new BigDecimal("0") : new BigDecimal(resultszbs));
+		retMap.put("alipayCount", resultszfbbs == null ? new BigDecimal("0") : new BigDecimal(resultszfbbs));
+		retMap.put("wechartCount", resultswxbs == null ? new BigDecimal("0") : new BigDecimal(resultswxbs));
+		retMap.put("cashCount", resultsxjbs == null ? new BigDecimal("0") : new BigDecimal(resultsxjbs));
+		retMap.put("unionPayCount", resultsylbs == null ? new BigDecimal("0") : new BigDecimal(resultsylbs));
+		retMap.put("cbcCount", resultsghbs == null ? new BigDecimal("0") : new BigDecimal(resultsghbs));
+		retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
+		retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
+		retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
+		
+		//渠道笔数获取
+		List<Integer> ListPayTypeInt = payTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
+				resultsqtbs, resultsylbs, resultsghbs, resultsxj2bs, resultsappbs);
+		payTypeUtil.ZongBishu += ListPayTypeInt.get(0);
+		payTypeUtil.zfbZongBishu += ListPayTypeInt.get(1);
+		payTypeUtil.weixinZongBishu += ListPayTypeInt.get(2);
+		payTypeUtil.xjZongBishu += ListPayTypeInt.get(3);
+		payTypeUtil.qtZongBishu += ListPayTypeInt.get(4);
+		payTypeUtil.ylZongBishu += ListPayTypeInt.get(5);
+		payTypeUtil.ghZongBishu += ListPayTypeInt.get(6);
+		payTypeUtil.xj2ZongBishu += ListPayTypeInt.get(7);
+		payTypeUtil.appZongBishu += ListPayTypeInt.get(8);
+
+		//金额获取
+		List<Float> ListPayTypeFloat=payTypeUtil.PayTypejeFloat(resultszje, resultszfbje, resultswxje, resultsxjje,
+				resultsqtje, resultsylje, resultsghje, resultsxj2je, resultsappje, resultspaidAmount);
+		payTypeUtil.Zongjine += ListPayTypeFloat.get(0);
+		payTypeUtil.zfbZongjine += ListPayTypeFloat.get(1);
+		payTypeUtil.weixinZongjine += ListPayTypeFloat.get(2);
+		payTypeUtil.xjZongjine += ListPayTypeFloat.get(3);
+		payTypeUtil.qtZongjine += ListPayTypeFloat.get(4);
+		payTypeUtil.ylZongjine += ListPayTypeFloat.get(5);
+		payTypeUtil.ghZongjine += ListPayTypeFloat.get(6);
+		payTypeUtil.xj2Zongjine += ListPayTypeFloat.get(7);
+		payTypeUtil.appZongjine += ListPayTypeFloat.get(8);
+		payTypeUtil.paidMoneyjine += ListPayTypeFloat.get(9);
+
+		Map<String, Object> mapCount = new HashMap<String, Object>();
+		mapCount.put("totalAmount", payTypeUtil.Zongjine);
+		mapCount.put("alipayAmount", payTypeUtil.zfbZongjine);
+		mapCount.put("wechartAmount", payTypeUtil.weixinZongjine);
+		mapCount.put("cashAmount", payTypeUtil.xjZongjine);
+		mapCount.put("otherAmount", payTypeUtil.qtZongjine);
+		mapCount.put("unionPayAmount", payTypeUtil.ylZongjine);
+		mapCount.put("cbcAmount", payTypeUtil.ghZongjine);
+		mapCount.put("cashAmount2", payTypeUtil.xj2Zongjine);
+		mapCount.put("appAmount", payTypeUtil.appZongjine);
+		mapCount.put("paidAmount", payTypeUtil.paidMoneyjine);
+
+		mapCount.put("totalCount", payTypeUtil.ZongBishu);
+		mapCount.put("alipayCount", payTypeUtil.zfbZongBishu);
+		mapCount.put("wechartCount", payTypeUtil.weixinZongBishu);
+		mapCount.put("cashCount", payTypeUtil.xjZongBishu);
+		mapCount.put("otherCount", payTypeUtil.qtZongBishu);
+		mapCount.put("unionPayCount", payTypeUtil.ylZongBishu);
+		mapCount.put("cbcCount", payTypeUtil.ghZongBishu);
+		mapCount.put("cashCount2", payTypeUtil.xj2ZongBishu);
+		mapCount.put("appCount", payTypeUtil.appZongBishu);
+		return mapCount;
+	}
 	
 	
-	//子平台首页统计调用
-	// 查询停车场总金额
+	//子平台首页统计
 	@RequestMapping(value = "/getParkByMoney", produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public Object getParkByMoney(@RequestBody Map<String, Object> args) throws Exception {
 		@SuppressWarnings("unused")
 		Map<String, Object> retMap = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
 		Object usernameObj = args.get("username");
 		Object startDateObj = args.get("startDate");
 		Object endDateObj = args.get("endDate");
@@ -569,7 +325,6 @@ public class PosChargeDataController {
 		String startDate = String.valueOf(startDateObj);
 		String endDate = String.valueOf(endDateObj);
 		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> map2 = new HashMap<String, Object>();
 		map.put("username", username);
 		map.put("startDate", startDate);
 		map.put("endDate", endDate);
@@ -587,52 +342,6 @@ public class PosChargeDataController {
 			e.printStackTrace();
 		}
 		List<Park> listparkId = chargeSerivce.getParkByMoney(map);
-		int totalCount = 0;
-		int alipayCount = 0;
-		int wechartCount = 0;
-		int cashCount = 0;
-		int otherCount = 0;
-		int unionPayCount = 0;
-		int cbcCount = 0;
-		int cashCount2 = 0;
-		int appCount = 0;
-		/*int transactionTimesCount=0;//交易次数
-*/
-		float totalAmount = 0;
-		float alipayAmount = 0;
-		float wechartAmount = 0;
-		float cashAmount = 0;
-		float otherAmount = 0;
-		float unionPayAmount = 0;
-		float cbcAmount = 0;
-		float cashAmount2 = 0;
-		float appAmount = 0;
-		float paidAmount=0;//实收金额
-		
-		/*
-		 * abcZongjine=0.0; abcZongBishu=0;
-		 */
-		abcZongjine = 0;
-		weixinZongjine = 0;
-		zfbZongjine = 0;
-		xjZongjine = 0;
-		qtZongjine = 0;
-		ylZongjine = 0;
-		ghZongjine = 0;
-		xj2Zongjine = 0;
-		appZongjine = 0;
-		paidMoneyjine=0;
-
-		abcZongBishu = 0;
-		weixinZongBishu = 0;
-		zfbZongBishu = 0;
-		xjZongBishu = 0;
-		qtZongBishu = 0;
-		ylZongBishu = 0;
-		ghZongBishu = 0;
-		xj2ZongBishu = 0;
-		appZongBishu = 0;
-		/*transactionTimes=0;*/
 		Map<String, Object> mapmap = null;
 		for (int i = 0; i < listparkId.size(); i++) {
 			int userId = listparkId.get(i).getId();
@@ -645,12 +354,14 @@ public class PosChargeDataController {
 		}
 		return Utility.createJsonMsg(1001, "success", mapmap);
 	}
-	
+
 	//子平台首页统计调用
+	@SuppressWarnings("static-access")
 	// 查询收费总笔数、收费总金额、各渠道收费统计
 	@RequestMapping(value = "/getByDateAndParkCount", produces = { "application/json;charset=utf-8" })
 	@ResponseBody
 	public Map<String, Object> getByDateAndParkCount(@RequestBody Map<String, Object> args) throws Exception {
+		Map<String, Object> retMap = new HashMap<String, Object>();
 		int parkId = 0;
 		Object parkIdObj = args.get("parkId");
 		String parkIdStr = parkIdObj.toString();
@@ -658,29 +369,6 @@ public class PosChargeDataController {
 		parkId = Integer.parseInt(args.get("parkId").toString());
 		String startDate = (String) args.get("startDate");
 		String endDate = (String) args.get("endDate");
-		float totalAmount = 0;
-		float alipayAmount = 0;
-		float wechartAmount = 0;
-		float cashAmount = 0;
-		float otherAmount = 0;
-		float unionPayAmount = 0;
-		float cbcAmount = 0;
-		float cashAmount2 = 0;
-		float appAmount = 0;
-		float paidAmount=0;//实收金额
-
-		int totalCount = 0;
-		int alipayCount = 0;
-		int wechartCount = 0;
-		int cashCount = 0;
-		int otherCount = 0;
-		int unionPayCount = 0;
-		int cbcCount = 0;
-		int cashCount2 = 0;
-		int appCount = 0;
-		/*int transactionTimesCount=0;//交易次数
-*/
-		Map<String, Object> retMap = new HashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date parsedStartDay = null;
 		try {
@@ -694,47 +382,28 @@ public class PosChargeDataController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		/*//支付宝类型
-		int payTypezfb=0;
-		//微信类型
-		int payTypewx=1;
-		//现金类型
-		int payTypexj=2;
-		//工行类型
-		int payTypegh=3;
-		//app类型
-		int payTypeapp=4;
-		//银联类型
-		int payTypeyl=5;
-		//其他类型
-		int payTypeqt=6;
-		//现金2类型
-		int payTypexj2=9;*/
-		PayTypeUtil payTypes=new PayTypeUtil();
-
 		// 查询收费总笔数、收费总金额、各渠道收费统计
-		String resultszbs = chargeSerivce.getByDateAndParkCount2(parkId, startDate, endDate);
-		String resultszfbbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypezfb());
-		String resultswxbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypewx());
-		String resultsxjbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypexj());
-		String resultsqtbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypeqt());
-		String resultsylbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypeyl());
-		String resultsghbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypegh());
-		String resultsxj2bs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypexj2());
-		String resultsappbs = chargeSerivce.getByDateAndParkCount(parkId, startDate, endDate, payTypes.getPayTypeapp());
-		/*String resultstransactionTimesCount = chargeSerivce.getByTransactionTimesCount(parkId,startDate, endDate);*/
-		
-		String resultszje = chargeSerivce.getByDateAndParkCount4(parkId, startDate, endDate);
-		String resultszfbje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypezfb());
-		String resultswxje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypewx());
-		String resultsxjje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypexj());
-		String resultsqtje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypeqt());
-		String resultsylje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypeyl());
-		String resultsghje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypegh());
-		String resultsxj2je = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypexj2());
-		String resultsappje = chargeSerivce.getByDateAndParkCount3(parkId, startDate, endDate, payTypes.getPayTypeapp());
+		String resultszbs = chargeSerivce.getByDateAndParkCountzbs(parkId, startDate, endDate);
+		String resultszfbbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2bs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappbs = chargeSerivce.getByDateAndParkCountbs(parkId, startDate, endDate, PayTypeUtil.payTypeapp);
+
+		String resultszje = chargeSerivce.getByDateAndParkCountzje(parkId, startDate, endDate);
+		String resultszfbje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypezfb);
+		String resultswxje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypewx);
+		String resultsxjje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypexj);
+		String resultsqtje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeqt);
+		String resultsylje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeyl);
+		String resultsghje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypegh);
+		String resultsxj2je = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypexj2);
+		String resultsappje = chargeSerivce.getByDateAndParkCountje(parkId, startDate, endDate, PayTypeUtil.payTypeapp);
 		String resultspaidAmount = chargeSerivce.getBypaidMoneyjine(parkId,startDate, endDate);
-		
+
 		retMap.put("totalAmount", resultszje == null ? new BigDecimal("0") : new BigDecimal(resultszje));
 		retMap.put("alipayAmount", resultszfbje == null ? new BigDecimal("0") : new BigDecimal(resultszfbje));
 		retMap.put("wechartAmount", resultswxje == null ? new BigDecimal("0") : new BigDecimal(resultswxje));
@@ -745,7 +414,7 @@ public class PosChargeDataController {
 		retMap.put("cashAmount2", resultsxj2je == null ? new BigDecimal("0") : new BigDecimal(resultsxj2je));
 		retMap.put("appAmount", resultsappje == null ? new BigDecimal("0") : new BigDecimal(resultsappje));
 		retMap.put("paidAmount", resultspaidAmount == null ? new BigDecimal("0") : new BigDecimal(resultspaidAmount));
-		
+
 		retMap.put("totalCount", resultszbs == null ? new BigDecimal("0") : new BigDecimal(resultszbs));
 		retMap.put("alipayCount", resultszfbbs == null ? new BigDecimal("0") : new BigDecimal(resultszfbbs));
 		retMap.put("wechartCount", resultswxbs == null ? new BigDecimal("0") : new BigDecimal(resultswxbs));
@@ -755,134 +424,55 @@ public class PosChargeDataController {
 		retMap.put("otherCount", resultsqtbs == null ? new BigDecimal("0") : new BigDecimal(resultsqtbs));
 		retMap.put("cashCount2", resultsxj2bs == null ? new BigDecimal("0") : new BigDecimal(resultsxj2bs));
 		retMap.put("appCount", resultsappbs == null ? new BigDecimal("0") : new BigDecimal(resultsappbs));
-		/*retMap.put("transactionTimesCount", resultstransactionTimesCount == null ? new BigDecimal("0") : new BigDecimal(resultstransactionTimesCount));*/
-		
-		int resultszbsIntCount = 0;
-		if (resultszbs != null) {
-			resultszbsIntCount = Integer.parseInt(resultszbs);
-		}
-		int resultszfbbsInt = 0;
-		if (resultszfbbs != null) {
-			resultszfbbsInt = Integer.parseInt(resultszfbbs);
-		}
-		int resultswxbsInt = 0;
-		if (resultswxbs != null) {
-			resultswxbsInt = Integer.parseInt(resultswxbs);
-		}
-		int resultsxjbsInt = 0;
-		if (resultsxjbs != null) {
-			resultsxjbsInt = Integer.parseInt(resultsxjbs);
-		}
-		int resultsqtbsInt = 0;
-		if (resultsqtbs != null) {
-			resultsqtbsInt = Integer.parseInt(resultsqtbs);
-		}
-		int resultsylbsInt = 0;
-		if (resultsylbs != null) {
-			resultsylbsInt = Integer.parseInt(resultsylbs);
-		}
-		int resultsghbsInt = 0;
-		if (resultsghbs != null) {
-			resultsghbsInt = Integer.parseInt(resultsghbs);
-		}
-		int resultsxj2bsInt = 0;
-		if (resultsxj2bs != null) {
-			resultsxj2bsInt = Integer.parseInt(resultsxj2bs);
-		}
-		int resultsappbsInt = 0;
-		if (resultsappbs != null) {
-			resultsappbsInt = Integer.parseInt(resultsappbs);
-		}
-		/*int resultstransactionTimesCountInt = 0;
-		if (resultstransactionTimesCount != null) {
-			resultstransactionTimesCountInt = Integer.parseInt(resultstransactionTimesCount);
-		}*/
 
-		float resultszjeFloatAmount = 0;
-		if (resultszje != null) {
-			resultszjeFloatAmount = Float.parseFloat(resultszje);
-		}
-		float resultszfbjeFloat = 0;
-		if (resultszfbje != null) {
-			resultszfbjeFloat = Float.parseFloat(resultszfbje);
-		}
-		float resultswxjeFloat = 0;
-		if (resultswxje != null) {
-			resultswxjeFloat = Float.parseFloat(resultswxje);
-		}
-		float resultsxjjeFloat = 0;
-		if (resultsxjje != null) {
-			resultsxjjeFloat = Float.parseFloat(resultsxjje);
-		}
-		float resultsqtjeFloat = 0;
-		if (resultsqtje != null) {
-			resultsqtjeFloat = Float.parseFloat(resultsqtje);
-		}
-		float resultsyljeFloat = 0;
-		if (resultsylje != null) {
-			resultsyljeFloat = Float.parseFloat(resultsylje);
-		}
-		float resultsghjeFloat = 0;
-		if (resultsghje != null) {
-			resultsghjeFloat = Float.parseFloat(resultsghje);
-		}
-		float resultsxj2jeFloat = 0;
-		if (resultsxj2je != null) {
-			resultsxj2jeFloat = Float.parseFloat(resultsxj2je);
-		}
-		float resultsappjeFloat = 0;
-		if (resultsappje != null) {
-			resultsappjeFloat = Float.parseFloat(resultsappje);
-		}
-		float resultspaidAmountFloat = 0;
-		if (resultspaidAmount != null) {
-			resultspaidAmountFloat = Float.parseFloat(resultspaidAmount);
-		}
+		//渠道笔数获取
+		List<Integer> ListPayTypeInt = PayTypeUtil.PayTypebsInt(resultszbs, resultszfbbs, resultswxbs, resultsxjbs, 
+						resultsqtbs, resultsylbs, resultsghbs, resultsxj2bs, resultsappbs);
+		payTypeUtilByZI.ZongBishu+= ListPayTypeInt.get(0);
+		payTypeUtilByZI.zfbZongBishu += ListPayTypeInt.get(1);
+		payTypeUtilByZI.weixinZongBishu += ListPayTypeInt.get(2);
+		payTypeUtilByZI.xjZongBishu += ListPayTypeInt.get(3);
+		payTypeUtilByZI.qtZongBishu += ListPayTypeInt.get(4);
+		payTypeUtilByZI.ylZongBishu += ListPayTypeInt.get(5);
+		payTypeUtilByZI.ghZongBishu += ListPayTypeInt.get(6);
+		payTypeUtilByZI.xj2ZongBishu += ListPayTypeInt.get(7);
+		payTypeUtilByZI.appZongBishu += ListPayTypeInt.get(8);
 
-		abcZongBishu += resultszbsIntCount;
-		zfbZongBishu += resultszfbbsInt;
-		weixinZongBishu += resultswxbsInt;
-		xjZongBishu += resultsxjbsInt;
-		qtZongBishu += resultsqtbsInt;
-		ylZongBishu += resultsylbsInt;
-		ghZongBishu += resultsghbsInt;
-		xj2ZongBishu += resultsxj2bsInt;
-		appZongBishu += resultsappbsInt;
-		/*transactionTimes +=resultstransactionTimesCountInt;*/
-
-		abcZongjine += resultszjeFloatAmount;
-		zfbZongjine += resultszfbjeFloat;
-		weixinZongjine += resultswxjeFloat;
-		xjZongjine += resultsxjjeFloat;
-		qtZongjine += resultsqtjeFloat;
-		ylZongjine += resultsyljeFloat;
-		ghZongjine += resultsghjeFloat;
-		xj2Zongjine += resultsxj2jeFloat;
-		appZongjine += resultsappjeFloat;
-		paidMoneyjine +=resultspaidAmountFloat;
+		//金额获取
+		List<Float> ListPayTypeFloat=PayTypeUtil.PayTypejeFloat(resultszje, resultszfbje, resultswxje, resultsxjje,
+						resultsqtje, resultsylje, resultsghje, resultsxj2je, resultsappje, resultspaidAmount);
+		payTypeUtilByZI.Zongjine += ListPayTypeFloat.get(0);
+		payTypeUtilByZI.zfbZongjine += ListPayTypeFloat.get(1);
+		payTypeUtilByZI.weixinZongjine += ListPayTypeFloat.get(2);
+		payTypeUtilByZI.xjZongjine += ListPayTypeFloat.get(3);
+		payTypeUtilByZI.qtZongjine += ListPayTypeFloat.get(4);
+		payTypeUtilByZI.ylZongjine += ListPayTypeFloat.get(5);
+		payTypeUtilByZI.ghZongjine += ListPayTypeFloat.get(6);
+		payTypeUtilByZI.xj2Zongjine += ListPayTypeFloat.get(7);
+		payTypeUtilByZI.appZongjine += ListPayTypeFloat.get(8);
+		payTypeUtilByZI.paidMoneyjine += ListPayTypeFloat.get(9);
 
 		Map<String, Object> mapCount = new HashMap<String, Object>();
-		mapCount.put("totalAmount", abcZongjine);
-		mapCount.put("alipayAmount", zfbZongjine);
-		mapCount.put("wechartAmount", weixinZongjine);
-		mapCount.put("cashAmount", xjZongjine);
-		mapCount.put("otherAmount", qtZongjine);
-		mapCount.put("unionPayAmount", ylZongjine);
-		mapCount.put("cbcAmount", ghZongjine);
-		mapCount.put("cashAmount2", xj2Zongjine);
-		mapCount.put("appAmount", appZongjine);
-		mapCount.put("paidAmount", paidMoneyjine);
+		mapCount.put("totalAmount", payTypeUtilByZI.Zongjine);
+		mapCount.put("alipayAmount", payTypeUtilByZI.zfbZongjine);
+		mapCount.put("wechartAmount", payTypeUtilByZI.weixinZongjine);
+		mapCount.put("cashAmount", payTypeUtilByZI.xjZongjine);
+		mapCount.put("otherAmount", payTypeUtilByZI.qtZongjine);
+		mapCount.put("unionPayAmount", payTypeUtilByZI.ylZongjine);
+		mapCount.put("cbcAmount", payTypeUtilByZI.ghZongjine);
+		mapCount.put("cashAmount2", payTypeUtilByZI.xj2Zongjine);
+		mapCount.put("appAmount", payTypeUtilByZI.appZongjine);
+		mapCount.put("paidAmount", payTypeUtilByZI.paidMoneyjine);
 
-		mapCount.put("totalCount", abcZongBishu);
-		mapCount.put("alipayCount", zfbZongBishu);
-		mapCount.put("wechartCount", weixinZongBishu);
-		mapCount.put("cashCount", xjZongBishu);
-		mapCount.put("otherCount", qtZongBishu);
-		mapCount.put("unionPayCount", ylZongBishu);
-		mapCount.put("cbcCount", ghZongBishu);
-		mapCount.put("cashCount2", xj2ZongBishu);
-		mapCount.put("appCount", appZongBishu);
-		/*mapCount.put("transactionTimesCount", transactionTimes);*/
+		mapCount.put("totalCount", payTypeUtilByZI.ZongBishu);
+		mapCount.put("alipayCount", payTypeUtilByZI.zfbZongBishu);
+		mapCount.put("wechartCount", payTypeUtilByZI.weixinZongBishu);
+		mapCount.put("cashCount", payTypeUtilByZI.xjZongBishu);
+		mapCount.put("otherCount", payTypeUtilByZI.qtZongBishu);
+		mapCount.put("unionPayCount", payTypeUtilByZI.ylZongBishu);
+		mapCount.put("cbcCount", payTypeUtilByZI.ghZongBishu);
+		mapCount.put("cashCount2", payTypeUtilByZI.xj2ZongBishu);
+		mapCount.put("appCount", payTypeUtilByZI.appZongBishu);
 		return mapCount;
 	}
 
@@ -1219,7 +809,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/getByParkAndRange", method = RequestMethod.POST, produces = {
-			"application/json;charset=utf-8" })
+	"application/json;charset=utf-8" })
 	@ResponseBody
 	public String getByParkAndRange(@RequestBody Map<String, Object> args) {
 		int parkId = Integer.parseInt((String) args.get("parkId"));
@@ -1252,7 +842,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/getParkChargeByRange", method = RequestMethod.POST, produces = {
-			"application/json;charset=utf-8" })
+	"application/json;charset=utf-8" })
 	@ResponseBody
 	public String getParkChargeByRange(@RequestBody Map<String, Object> args) {
 		int parkId = Integer.parseInt((String) args.get("parkId"));
@@ -1292,7 +882,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/getParkRecordsCountByRange", method = RequestMethod.POST, produces = {
-			"application/json;charset=utf-8" })
+	"application/json;charset=utf-8" })
 	@ResponseBody
 	public String getParkRecordsCountByRange(@RequestBody Map<String, Object> args) {
 		int parkId = Integer.parseInt((String) args.get("parkId"));
@@ -1332,7 +922,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "getByCardnumber", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByCardnumber(@RequestBody Map<String, String> args) {
 		String cardNumber = args.get("cardNumber");
@@ -1340,7 +930,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "getByCardnumberAuthority", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByCardnumberAuthority(@RequestBody Map<String, String> args, HttpSession session) {
 		String cardNumber = args.get("cardNumber");
@@ -1359,7 +949,7 @@ public class PosChargeDataController {
 		}
 		return Utility.createJsonMsg(1001, "success", posChargeDatas);
 	}
-	
+
 	@RequestMapping(value = "getByCarNumberAndPN", method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
 	@ResponseBody
@@ -1369,43 +959,43 @@ public class PosChargeDataController {
 		String parkName = args.get("parkName");
 		return Utility.createJsonMsg(1001, "success", chargeSerivce.getByCardNumberAndParkName(cardNumber, parkName,parkId));
 	}
-	
-		//停车记录根据车牌号时间段查询
-		@RequestMapping(value = "/getByParkDatetime", method = RequestMethod.POST, produces = {
-		"application/json;charset=utf-8" })
-		@ResponseBody
-		public String getByParkDatetime(@RequestBody Map<String, Object> args) throws ParseException{
-			Map<String, Object> retMap = new HashMap<String, Object>();
-			String cardNumber=(String)args.get("cardNumber");
-			String startDate = (String) args.get("startDate");
-			String endDate = (String) args.get("endDate");
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date parsedStartDay = null;
-			try {
-				parsedStartDay = sdf.parse(startDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			Date parsedEndDay = null;
-			try {
-				parsedEndDay = sdf.parse(endDate + " 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			if(cardNumber!=null||startDate!=null){
-				List<PosChargeData> posChargeDatas = chargeSerivce.getByParkDatetime(cardNumber,startDate, endDate);
-				retMap.put("status", 1001);
-				retMap.put("message", "success");
-				retMap.put("body", posChargeDatas);
-			}else{
-				retMap.put("status", 1002);
-				retMap.put("message", "failed");
-			}
-			return Utility.gson.toJson(retMap);
+
+	//停车记录根据车牌号时间段查询
+	@RequestMapping(value = "/getByParkDatetime", method = RequestMethod.POST, produces = {
+	"application/json;charset=utf-8" })
+	@ResponseBody
+	public String getByParkDatetime(@RequestBody Map<String, Object> args) throws ParseException{
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		String cardNumber=(String)args.get("cardNumber");
+		String startDate = (String) args.get("startDate");
+		String endDate = (String) args.get("endDate");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date parsedStartDay = null;
+		try {
+			parsedStartDay = sdf.parse(startDate + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		Date parsedEndDay = null;
+		try {
+			parsedEndDay = sdf.parse(endDate + " 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(cardNumber!=null||startDate!=null){
+			List<PosChargeData> posChargeDatas = chargeSerivce.getByParkDatetime(cardNumber,startDate, endDate);
+			retMap.put("status", 1001);
+			retMap.put("message", "success");
+			retMap.put("body", posChargeDatas);
+		}else{
+			retMap.put("status", 1002);
+			retMap.put("message", "failed");
+		}
+		return Utility.gson.toJson(retMap);
+	}
 
 	@RequestMapping(value = "getByCardnumberAndPort", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByCardnumberAndPort(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
@@ -1429,7 +1019,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "getByParkName", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getByParkName(@RequestBody Map<String, String> args) {
 		String parkName = args.get("parkName");
@@ -1437,7 +1027,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "deleteByParkIdAndDate", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String deleteByParkIdAndDate(@RequestBody Map<String, String> args) {
 		int parkId = Integer.parseInt(args.get("parkId"));
@@ -1480,7 +1070,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/pageByParkId", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String pageByParkId(@RequestBody Map<String, Object> args, HttpSession session) {
 		// String username = (String) session.getAttribute("username");
 		int parkId = (int) args.get("parkId");
@@ -1495,7 +1085,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/pageArrearage", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String pageArrearage(@RequestBody Map<String, Object> args) {
 		int low = (int) args.get("low");
 		int count = (int) args.get("count");
@@ -1512,7 +1102,7 @@ public class PosChargeDataController {
 	 * return Utility.createJsonMsg(1001, "success", posChargeDatas); }
 	 */
 	@RequestMapping(value = "/getParkCarportStatusToday", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String getParkCarportStatusToday(@RequestBody Map<String, Object> args) {
 		int parkId = (int) args.get("parkId");
 		List<PosChargeData> resultData = new ArrayList<>();
@@ -1527,7 +1117,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/getParkCarportStatusTodaySimple", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String getParkCarportStatusTodaySimple(@RequestBody Map<String, Object> args) {
 		int parkId = (int) args.get("parkId");
 		Date tmpdate = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365);
@@ -1554,7 +1144,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/pageArrearageByParkId", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String pageArrearageByParkId(@RequestBody Map<String, Object> args) {
 		int parkId = (int) args.get("parkId");
 		int start = (int) args.get("start");
@@ -1563,7 +1153,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST }, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String get(@RequestParam(value = "cardNumber", required = false) String cardNumber) {
 		List<PosChargeData> charges = null;
 		if (cardNumber != null) {
@@ -1672,7 +1262,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/rollbackExit", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String rollbackExit(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("plateNumber");
 		int id = (int) args.get("id");
@@ -1701,7 +1291,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/updatePayType", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String updatePayType(@RequestBody Map<String, Object> args) {
 		int chargeId = (int) args.get("chargeId");
@@ -1718,7 +1308,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/updateWithPlateNumber", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String updateWithPlateNumber(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("plateNumber");
@@ -1760,7 +1350,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/updateEDate", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String updateEDate(@RequestBody Map<String, String> args) throws ParseException {
 		String carNumber = args.get("carNumber");
 		String entranceDate = args.get("entranceDate");
@@ -1798,6 +1388,66 @@ public class PosChargeDataController {
 		else
 			return Utility.createJsonMsg(1002, "failed");
 	}
+	
+	@RequestMapping(value = "/commonQuery", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
+	public @ResponseBody String commonQuery(@RequestBody Map<String, Object> args) throws Exception {
+		String carNumber = (String) args.get("carNumber");
+		int parkId = (int) args.get("parkId");
+		String exitDate = (String) args.get("exitDate");
+		Park park=parkService.getParkById(parkId);
+		FeeCriterion feeCriterion=feeCriterionService.getById(park.getFeeCriterionId());
+		List<PosChargeData> queryCharges = null;
+		if (exitDate != null) {
+			Date eDate = new SimpleDateFormat(Constants.DATEFORMAT).parse(exitDate);
+			try {
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, eDate, parkId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		} else {
+			try {
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, new Date(),parkId);
+			} catch (Exception e) {
+				return Utility.createJsonMsg(1002, "请先绑定停车场计费标准");
+			}
+		}
+		if (queryCharges.isEmpty()) {
+			List<PosChargeData> posChargeDataList = chargeSerivce.getLastRecordWithPark(carNumber, 1, parkId);
+			if (posChargeDataList.isEmpty()) {				
+				return Utility.createJsonMsg(1002, "没有获取到数据", queryCharges);
+			}
+			PosChargeData posChargeData = posChargeDataList.get(0);
+			if (posChargeData.getExitDate()!=null) {
+				return Utility.createJsonMsg(1002, "没有未支付数据", queryCharges);
+			}
+
+			Date payDate = new Date();
+			long diff = new Date().getTime() - payDate.getTime();
+			if (diff < 1000 * 60 * 15) {
+				return Utility.createJsonMsg(1001, "已在15分钟内支付", queryCharges);
+			}else {
+				Date incomeDate = new Date(payDate.getTime() - (long) (feeCriterion.getFreemins() - 15) * 1000 * 60);
+
+				PosChargeData charge2 = new PosChargeData();
+				charge2.setCardNumber(carNumber);
+				charge2.setParkId(park.getId());
+				charge2.setOperatorId("超时15分钟");
+				charge2.setParkDesc(posChargeData.getParkDesc());
+				charge2.setEntranceDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(incomeDate));
+				int num = chargeSerivce.insert(charge2);
+				jedisClient.del("P-"+parkId+"-"+carNumber);
+				jedisClient.set("P-"+parkId+"-"+carNumber,String.valueOf(charge2.getId()) , 2592000);
+				if (num != 1) {
+					logger.info(carNumber+"未成功重新入场");
+					return Utility.createJsonMsg(1002, "未成功重新入场", queryCharges);
+				}
+				queryCharges = chargeSerivce.queryDebtWithParkId(carNumber, new Date(),parkId);
+				logger.info(carNumber+"重新入场获取计费");
+			}
+		}
+		return Utility.createJsonMsg(1001, "success", queryCharges);
+	}
 
 	@RequestMapping(value = "/query", method = RequestMethod.POST, produces = { "application/json;charset=UTF-8" })
 	public @ResponseBody String query(@RequestBody Map<String, Object> args) throws ParseException {
@@ -1823,7 +1473,7 @@ public class PosChargeDataController {
 	}
 
 	@RequestMapping(value = "/getArrearageByCardNumber", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getArrearageByCardNumber(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
@@ -1831,19 +1481,19 @@ public class PosChargeDataController {
 
 		return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
-	
+
 	@RequestMapping(value = "/getArrearageById", method = RequestMethod.POST, produces = {
 	"application/json;charset=UTF-8" })
-@ResponseBody
-public String getArrearageById(@RequestBody Map<String, Object> args) {
-String id = (String) args.get("orderId");
-PosChargeData queryCharges = chargeSerivce.getById(Integer.parseInt(id));
+	@ResponseBody
+	public String getArrearageById(@RequestBody Map<String, Object> args) {
+		String id = (String) args.get("orderId");
+		PosChargeData queryCharges = chargeSerivce.getById(Integer.parseInt(id));
 
-return Utility.createJsonMsg(1001, "success", queryCharges);
-}
+		return Utility.createJsonMsg(1001, "success", queryCharges);
+	}
 
 	@RequestMapping(value = "/getArrearageByCardNumberSimple", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getArrearageByCardNumberSimple(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
@@ -1861,7 +1511,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/queryCurrent", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String queryCurrent(@RequestBody Map<String, Object> args) throws ParseException {
 		String cardNumber = (String) args.get("cardNumber");
 		String exitDate = (String) args.get("exitDate");
@@ -1952,7 +1602,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/getInfoByCardNumber", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String getInfoByCardNumber(@RequestBody Map<String, Object> args) throws Exception {
 		String cardNumber = (String) args.get("cardNumber");
 		Map<String, Object> result = new HashMap<>();
@@ -1964,30 +1614,30 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 		PosChargeData lastCharge = charges.get(0);
 		double charge = (lastCharge.getChargeMoney() - lastCharge.getPaidMoney()) > 0
 				? (lastCharge.getChargeMoney() - lastCharge.getPaidMoney())
-				: 0;
-		result.put("deposit", lastCharge.getPaidMoney());
-		result.put("charge", charge);
-		result.put("chargeId", lastCharge.getId());
-		Feeoperator feeoperator = feeOperatorService.getOperatorByAccount(lastCharge.getOperatorId()).get(0);
-		if (feeoperator == null) {
-			result.put("status", 1002);
-			return Utility.gson.toJson(result);
-		}
-		result.put("operatorName", feeoperator.getName());
-		result.put("operatorPhone", feeoperator.getPhone());
-		Park park = parkService.getParkById(lastCharge.getParkId());
-		FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
-		if (feeCriterion == null) {
-			result.put("status", 1002);
-			return Utility.gson.toJson(result);
-		}
-		result.put("feeCriterion", feeCriterion.getExplaination());
-		result.put("status", 1001);
-		return Utility.gson.toJson(result);
+						: 0;
+				result.put("deposit", lastCharge.getPaidMoney());
+				result.put("charge", charge);
+				result.put("chargeId", lastCharge.getId());
+				Feeoperator feeoperator = feeOperatorService.getOperatorByAccount(lastCharge.getOperatorId()).get(0);
+				if (feeoperator == null) {
+					result.put("status", 1002);
+					return Utility.gson.toJson(result);
+				}
+				result.put("operatorName", feeoperator.getName());
+				result.put("operatorPhone", feeoperator.getPhone());
+				Park park = parkService.getParkById(lastCharge.getParkId());
+				FeeCriterion feeCriterion = feeCriterionService.getById(park.getFeeCriterionId());
+				if (feeCriterion == null) {
+					result.put("status", 1002);
+					return Utility.gson.toJson(result);
+				}
+				result.put("feeCriterion", feeCriterion.getExplaination());
+				result.put("status", 1001);
+				return Utility.gson.toJson(result);
 	}
 
 	@RequestMapping(value = "/pushInfoFromWechat", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String pushInfoFromWechat(@RequestBody Map<String, Object> args) throws Exception {
 		Integer chargeId = (Integer) args.get("chargeId");
 		Map<String, Object> result = new HashMap<>();
@@ -2015,7 +1665,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/rejectReason", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String rejectReason(@RequestBody Map<String, Object> args) {
 		String cardNumber = (String) args.get("cardNumber");
 		String rejectReason = (String) args.get("rejectReason");
@@ -2056,7 +1706,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/getFeeOperatorChargeData", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String getFeeOperatorChargeData(@RequestBody Map<String, String> args) throws ParseException {
 		String startDay = (String) args.get("startDay");
@@ -2100,7 +1750,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/hardwareRecord", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	@ResponseBody
 	public String hardwareRecord(@RequestBody Map<String, Object> args) throws Exception {
 
@@ -2173,7 +1823,7 @@ return Utility.createJsonMsg(1001, "success", queryCharges);
 	}
 
 	@RequestMapping(value = "/getPayTypeCountByRange", method = RequestMethod.POST, produces = {
-			"application/json;charset=UTF-8" })
+	"application/json;charset=UTF-8" })
 	public @ResponseBody String getPayTypeCountByRange(@RequestBody Map<String, Object> args) throws ParseException {
 		String startDate = (String) args.get("startDate");
 		String endDate = (String) args.get("endDate");

@@ -64,6 +64,18 @@ app.controller("presentDataCtrl", ['$scope', 'getDataService', function ($scope,
     });
   };
   getParkChargeByTime();
+
+  var getOnlineData = function () {
+    getDataService.getOnlineData().then(function (result) {
+      $scope.parkCountdata = result;
+      if(parkCountdata.totalCount<0){
+        $parkCountdata.totalCount=0;
+      }
+      //console.log($scope.data);
+    });
+  };
+  getOnlineData();
+
 }]);
 app.service('getDataService', ['$http', '$q', function ($http, $q) {
   var getParkChargeByTime = function (startDate, endDate) {
@@ -99,9 +111,28 @@ app.service('getDataService', ['$http', '$q', function ($http, $q) {
     });
     return promise;
   };
+  var getOnlineData= function () {
+    var deferred = $q.defer();
+    var promise = deferred.promise;
+    $http({
+      url: "/park/getParkStatusInfo",
+      method: "get"
+    }).success(function (response) {
+      //console.log(response);
+      if (response.status == 1001) {
+        deferred.resolve(response.body);
+      } else {
+        deferred.reject(response);
+      }
+    }).error(function () {
+      deferred.reject();
+    });
+    return promise;
+  }
   return {
     getZoneCenterInfo: getZoneCenterInfo,
-    getParkChargeByTime: getParkChargeByTime
+    getParkChargeByTime: getParkChargeByTime,
+    getOnlineData:getOnlineData
   };
 }]);
 app.directive('pieChart', function($window) {

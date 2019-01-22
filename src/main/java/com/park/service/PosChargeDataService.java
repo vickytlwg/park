@@ -17,26 +17,30 @@ public interface PosChargeDataService {
 	public List<Park> getParkByCountMoney(Map<String, Object> map);
 	
 	//主平台
-	//查询收费总笔数、收费总金额、各渠道收费统计
+	//统计总笔数
 	public String getByDateAndParkCountPayzbs(String startDate,String endDate);
+	//统计总金额
 	public String getByDateAndParkCountPayzje(String startDate,String endDate);
-	public String getByParkTransactionTimesCount(String startDate,String endDate);
+	//统计实收金额
 	public String getByParkpaidMoneyjine(String startDate,String endDate);
-	//各渠道收费统计
+	//统计各渠道笔数
 	public String getByDateAndParkCountPayTypebs(String startDate,String endDate,int payType);
+	//统计各渠道金额
 	public String getByDateAndParkCountPayTypeje(String startDate,String endDate,int payType);
 	
 	public List<Park> getParkByMoney(Map<String, Object> map);
 	
 	//子平台
-	//查询收费总笔数、收费总金额、各渠道收费统计
-	public String getByDateAndParkCount2(int parkId,String startDate,String endDate);
-	public String getByDateAndParkCount4(int parkId,String startDate,String endDate);
-	public String getByTransactionTimesCount(int parkId,String startDate,String endDate);
+	//统计总笔数
+	public String getByDateAndParkCountzbs(int parkId,String startDate,String endDate);
+	//统计总金额
+	public String getByDateAndParkCountzje(int parkId,String startDate,String endDate);
+	//(主平台的)统计实收金额
 	public String getBypaidMoneyjine(int parkId,String startDate,String endDate);
-	//各渠道收费统计
-	public String getByDateAndParkCount(int parkId,String startDate,String endDate,int payType);
-	public String getByDateAndParkCount3(int parkId,String startDate,String endDate,int payType);
+	//统计各渠道笔数
+	public String getByDateAndParkCountbs(int parkId,String startDate,String endDate,int payType);
+	//统计各渠道金额
+	public String getByDateAndParkCountje(int parkId,String startDate,String endDate,int payType);
 	
 	public PosChargeData getById(int id);		
 	
