@@ -25,7 +25,7 @@
 	<select id="getByParkDatetime" resultMap="GongzxRecordMapper">
 		SELECT gongzxrecord.id,carNumber,cardNumber,arriveTime,parkId,parkName,stopType,shouldCharge,discount,realPay,picturePath,other,tradeNumber,leaveTime 
 		from gongzxrecord
-		LEFT JOIN park AS p ON parkId=p.id where carNumber=#{carNumber} and arriveTime between #{startDate} and #{endDate} order by leaveTime desc
+		LEFT JOIN park AS p ON parkId=p.id where carNumber like '%${carNumber}%' and arriveTime between #{startDate} and #{endDate} order by leaveTime desc
 		
   </select>
 	<select id="gongcount" resultType="int">

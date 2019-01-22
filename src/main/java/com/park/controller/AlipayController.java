@@ -228,14 +228,14 @@ public class AlipayController {
 			chargeMoney=posChargeData.getChargeMoney();
 		}
 		
-		String out_trade_no = new Date().getTime() + "barcodePay";
+		String out_trade_no = new Date().getTime() + "-"+mac;
 		AlipayTradePayRequest request = new AlipayTradePayRequest(); 
-		request.setNotifyUrl("https://www.iotclouddashboard.com/park/alipay3/barcodePay");
+		request.setNotifyUrl("https://www.iotclouddashboard.com/park/alipay3/notifyUrlBarcode");
 		request.setBizContent("{" +
 				"\"out_trade_no\":\""+out_trade_no
 				+ "\"," +
 				"\"scene\":\"bar_code\"," +
-				"\"auth_code\":"+auth_code
+				"\"auth_code\":\""+auth_code
 				+ "\"," +
 				"\"subject\":\""+posChargeData.getParkDesc()+posChargeData.getCardNumber()+"停车费"
 				+ "\"," +
@@ -320,6 +320,7 @@ public class AlipayController {
 		String out_trade_no = request.getParameter("out_trade_no");
 		logger.info("notifyUrlBarcode:" + out_trade_no+receipt_amount+trade_no);
 		
+		
 		if (trade_status.equals("TRADE_SUCCESS")) {
 			
 			//通知
@@ -332,9 +333,7 @@ public class AlipayController {
 			lastCharge.setPaidCompleted(true);
 			lastCharge.setPayType(0);
 			lastCharge.setExitDate1(new Date());
-			poschargedataService.update(lastCharge);
-			
-			
+			poschargedataService.update(lastCharge);					
 			
 			alipayrecord.setStatus("1");
 			alipayrecord.setMoney(Double.parseDouble(receipt_amount));
