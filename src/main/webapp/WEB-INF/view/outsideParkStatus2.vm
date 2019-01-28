@@ -15,11 +15,11 @@
 	               <!--  <div class="box-header">
 	                  <h3 class="box-title"></h3>
 	                </div> --><!-- /.box-header -->
-	                <div class="box-body" style="height:580px;padding: 150px 100px">
+	                <div class="box-body" style="height:580px;padding: 10% 20%">
 										<a href="/park/parkingInfo"><button class="button park" style="vertical-align:middle"><span>今日数据 </span></button></a>
 										<a href="/park/outsideParkStatusAdmin"><button class="button charge" style="vertical-align:middle"><span>今日停车分析 </span></button></a>
-										<a href="/park/pos/carportUsage"><button class="button hardware" style="vertical-align:middle"><span>车位使用分析 </span></button></a>
-										<a href="/park/qhq_carportstatus"><button class="button poscharge" style="vertical-align:middle"><span>车位状态图 </span></button></a>
+										<a href="javascript:void(0);" class="disabled"><button class="button hardware disabled" style="vertical-align:middle"><span>车位使用分析 </span></button></a>
+						<!--/park/pos/carportUsage-->
 	                </div>
 
 	            </div>

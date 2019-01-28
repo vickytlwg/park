@@ -18,7 +18,7 @@
 <script src="/park/plugins/SearchInfoWindow_min.js?v=0.5"></script>
 <script type="text/javascript"
         src="/park/script/clouddata.js?v=1.2"></script>
-<script type="text/javascript" src="/park/script/map2.js?v=1.2"></script>
+<script type="text/javascript" src="/park/script/map2.js?v=0.2"></script>
 <style>
   .anchorBL {
     display: none;
@@ -132,7 +132,7 @@
                     </div>
                     <div class="col-xs-8">
                       <p>在线停车场 / 总停车场</p>
-                      <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="data.onlineCount"></h3>
+                      <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="data.totalCount"></h3>
                       <small>个</small>&nbsp;&nbsp;<span style="font-size: 20px">/</span>&nbsp;&nbsp;
                       <h3 style="margin-bottom: 0px;display: inline-block" ng-bind="data.totalCount"></h3>
                       <small>个</small>

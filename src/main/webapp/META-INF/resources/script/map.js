@@ -17,7 +17,7 @@
 
     var mapInitial=function(){
         map = new BMap.Map("parkmap");
-        point = new BMap.Point(118.800016,32.064245);
+        point = new BMap.Point(112.537091,33.003344);
         map.centerAndZoom(point, 12);
         map.setMinZoom(11);
         map.setMaxZoom(14);     
@@ -35,14 +35,14 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
                 width : 90,     // 信息窗口宽度
                 height: 100,     // 信息窗口高度
                 title : "停车场信息:" , // 信息窗口标题
-                enableMessage:true//设置允许信息窗发送短息
+                enableMessage:true,//设置允许信息窗发送短息
                };
     function addClickHandler(content,marker){
         marker.addEventListener("click",function(e){
             var infoWindow = new BMapLib.SearchInfoWindow(map,content,
                     {
-                        width: 270, //宽度
-                        height: 190, //高度
+                        width: 390, //宽度
+                        height: 420, //高度
                         panel : "panel", //检索结果面板
                         enableAutoPan : true, //自动平移
                         enableSendToPhone: true, //是否显示发送到手机按钮
@@ -106,20 +106,19 @@ cr.addCopyright({id: 1, content: content, bounds: bs});
                     var tmparray=new Array(4);
                     tmparray[0]=parkdata[i].longitude;
                     tmparray[1]=parkdata[i].latitude;
-                      var v_html ="<div class='infoBoxContent'><div class='title'><strong><a href=/park/outsideParkStatusAdminWithPark/" +parkdata[i].id+"/ target=_blank/>"+parkdata[i].name+"</strong></div>";
-                        //v_html += '<a href=/park/outsideParkStatusAdminWithPark/' +parkdata[i].id+'/ target=_blank/>'+ parkdata[i].name +'</a>'+ '<i class="i pointer" onclick="closeTip()"></i></h4>';
-                  v_html +="<div class='list'><ul><li><div class='left'><a target='_blank' href='#'>车位数</a></div><div class='rmb'>"+parkdata[i].portCount+"</div></li>";
-                  v_html +="<li><div class='left'><a target='_blank' href='#'>剩余车位</a></div><div class='rmb'>"+parkdata[i].portLeftCount+"</div></li>";
-                  v_html +="<li><div class='left'><a target='_blank' href='#'>今日应收金额</a></div><div class='rmb'>"+1200+"</div></li>";
-                  v_html +="<li><div class='left'><a target='_blank' href='#'>总订单数</a></div><div class='rmb'>"+230+"</div></li>";
-                        v_html += "</ul></div></div>";
+                      var v_html = '<div id="tipsjt"></div>';
+                        v_html += '    <h4 class="font14 green relative">'+'<a href=/park/outsideParkStatusAdminWithPark/' +parkdata[i].id+'/ target=_blank/>'+ parkdata[i].name +'</a>'+ '<i class="i pointer" onclick="closeTip()"></i></h4>';
+                        v_html += "<img style='float:right;margin:4px;margin-top:10px' id='imgDemo' src='http://onz6nkuxs.bkt.clouddn.com/timg.jpg'  height='304' title='停车场'/>";
+                        v_html += '<p class="font14">空余车位：<b class="red">' + parkdata[i].portLeftCount + '</b> 个' + (parkdata[i].portLeftCount > 0 ? '<a href="#" class="but_b back_orange font18 radius_3 absolute reservation" style="right:10px;" pid="' + i+ '"><i class="i"></i>预定</a>' : '') + '</p>';
+                        v_html += '<p class="green font14">收费标准：</p> ';
+                        v_html += '  <div class="color_9">';
                     tmparray[2]= v_html;
                     tmparray[3]= parkdata[i].portLeftCount;
                     data_info[i]=tmparray;
                     
                 }
                 showparks();
-            },
+            }
         });
     };
 

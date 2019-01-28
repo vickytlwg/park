@@ -122,24 +122,8 @@
                role="button"> <span class="sr-only">Toggle navigation</span>
             </a>
             <div class="btn-group pull-right" style="margin-top: 3px;">
-                <button type="button" class="btn btn-primary" id="luwai">
-                    <a href="#"> <i class="fa fa-road"></i> <span>路外停车</span>
-                    </a>
-                </button>
-                <button type="button" class="btn btn-primary" id="lunei">
-                    <a href="#"> <i class="glyphicon fa fa-car"></i>
-                        <span>路内停车</span>
-                    </a>
-                </button>
-
-                <button type="button" class="btn btn-primary">
-                    <a href="/park/parkmap" style="color: #ffffff"> <i class="fa fa-codepen"></i>
-                        <span>诱导平台</span>
-                    </a>
-                </button>
-
                 <button type="button" class="btn btn-primary"
-                        onclick="window.history.go(-2)">
+                        onclick="window.history.go(-1)">
                     <span>返回</span>
                 </button>
                 <button type="button" class="btn btn-primary" onclick="location.href='/park/login'">
@@ -193,7 +177,7 @@
                         </span>
                     </a>
                 </li>
-                <li class="treeview">
+                <li class="treeview" hidden>
                     <a href="/park/parkBigData">
                         <i class="fa fa-map"></i> <span>停车大数据</span>
                         <span class="pull-right-container">

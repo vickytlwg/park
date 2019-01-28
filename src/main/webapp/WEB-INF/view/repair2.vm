@@ -21,8 +21,10 @@
 	                <div class="box-body" style="height:580px;padding: 150px 100px">
 										<a href="/park/repair"><button class="button park" style="vertical-align:middle"><span>工单管理 </span></button></a>
 										<a href="/park/dataUsage"><button class="button charge" style="vertical-align:middle"><span>流量卡管理 </span></button></a>
-										<a href="/park/chart"><button class="button hardware" style="vertical-align:middle"><span>流量图 </span></button></a>
-										<a href="/park/flow"><button class="button poscharge" style="vertical-align:middle"><span>流量诊断 </span></button></a>
+										<a href="javascript:void(0);"><button class="button hardware" style="vertical-align:middle"><span>流量图 </span></button></a>
+						<!--/park/chart-->
+										<a href="javascript:void(0);"><button class="button poscharge" style="vertical-align:middle"><span>流量诊断 </span></button></a>
+						<!--/park/flow-->
 
 	                </div>
 

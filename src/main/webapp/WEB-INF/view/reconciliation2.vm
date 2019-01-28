@@ -1,8 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/park/css/button.css"/>
 
-
-<div class="content-wrapper" ng-app="feeDetailApp"
-     ng-controller="feeDetailCtrl">
+<div class="content-wrapper">
   <section class="content-header">
     <h1>
       财务对账
@@ -13,18 +11,11 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <div class="box-body" style="height: 600px">
-            <h4 style="padding:2% 0 0 40%">自有停车场平台数据</h4>
+          <div class="box-body" style="height: 600px;padding-top: 10%">
             <a href="/park/pos/charge/record" style="padding-left: 100px"><button class="button park" style="vertical-align:middle;"><span>停车记录 </span></button></a>
             <a href="/park/pos/charge/flowbill"><button class="button charge" style="vertical-align:middle"><span>财务流水账单 </span></button></a>
             <a href="/park/pos/charge/reconciliation"><button class="button hardware" style="vertical-align:middle"><span>财务对账 </span></button></a>
             <a href="/park/lepay/record"><button class="button poscharge" style="vertical-align:middle"><span>第三方支付 </span></button></a>
-
-            <h4 style="padding:2% 0 0 40%">第三方平台数据</h4>
-            <a href="/park/gongzx/record2" style="padding-left: 100px"><button class="button charge" style="vertical-align:middle"><span>停车记录 </span></button></a>
-            <a href="/park/gongzx/reconciliation3"><button class="button hardware" style="vertical-align:middle"><span>财务对账 </span></button></a>
-            <a href="#"><button class="button poscharge" style="vertical-align:middle"><span>支付数据 </span></button></a>
-            <a href="/park/pos/charge/demo1"><button class="button park" style="vertical-align:middle"><span>更多信息 </span></button></a>
           </div>
         </div>
       </div>
@@ -33,33 +24,3 @@
 
   </section>
 </div>
-
-<script type="text/ng-template" id="myModalTest">
-  <!-- 模态框（Modal） -->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close"
-                data-dismiss="modal" aria-hidden="true" ng-click="texta()">
-          &times;
-        </button>
-        <h4 class="modal-title"> yyy
-        </h4>
-      </div>
-      <div class="modal-body">
-        {{textaaa}}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">
-          关闭
-        </button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal -->
-</script>
-<script>
-  $(document).ready(function(){
-    $.fn.park.initial();
-  });
-
-</script>
